@@ -1,3 +1,4 @@
+import * as check from '#check'
 import * as files from '#files'
 import std from '#std'
 import path from 'path'
@@ -16,13 +17,22 @@ class Registry {
     }
 }
 
-const GeneratorRegistry = new Registry()
+let GeneratorRegistry: Registry | undefined
 
-files.walkDirectory(path.join(__dirname, 'generators')).forEach(file => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const generator: ImplementationGenerator = require(file).default
-    std.log(`Adding generator "${generator.id}"`)
-    GeneratorRegistry.add(generator)
-})
+function loadRegistry() {
+    if (check.isUndefined(GeneratorRegistry)) {
+        std.log('Loading generators ...')
+        GeneratorRegistry = new Registry()
+        for (const file of files.walkDirectory(path.join(__dirname, 'generators'))) {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const generator: ImplementationGenerator = require(file).default
+            std.log(`Adding generator "${generator.id}"`)
+            GeneratorRegistry.add(generator)
+        }
+        std.log('Generators loaded ...')
+    }
 
-export default GeneratorRegistry
+    return GeneratorRegistry
+}
+
+export default loadRegistry

@@ -1101,6 +1101,7 @@ export type TechnologyPluginBuilder = {
 ```typescript linenums="1"
 export type TechnologyPlugin = {
     assign: (node: Node) => {[technology: string]: TechnologyTemplate}[]
+    implement: (name: string, type: NodeType) => NodeTypeMap
 }
 ```
 

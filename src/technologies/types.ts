@@ -7,7 +7,6 @@ export type TechnologyPluginBuilder = {
     build(graph: Graph): TechnologyPlugin
 }
 
-// TODO: update docs
 export type TechnologyPlugin = {
     assign: (node: Node) => TechnologyTemplateMap[]
     implement: (name: string, type: NodeType) => NodeTypeMap

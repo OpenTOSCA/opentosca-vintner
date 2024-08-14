@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
+import {TOSCA_SIMPLE_PROFILE_FILE} from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
@@ -168,13 +169,12 @@ export default class Loader {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
         if (check.isUndefined(this.serviceTemplate.node_types)) this.serviceTemplate.node_types = {}
 
-        const lib = path.join(this.dir, 'lib')
-        if (!files.exists(lib)) return
+        const candidates = [TOSCA_SIMPLE_PROFILE_FILE]
 
-        for (const file of [
-            path.join(files.ASSETS_DIR, 'tosca-simple-profile.yaml'),
-            ...files.walkDirectory(lib, {extensions: ['yaml', 'yml']}),
-        ]) {
+        const lib = path.join(this.dir, 'lib')
+        if (files.exists(lib)) candidates.push(...files.walkDirectory(lib, {extensions: ['yaml', 'yml']}))
+
+        for (const file of candidates) {
             const template = files.loadYAML<ServiceTemplate>(file)
             if (check.isUndefined(template.tosca_definitions_version)) continue
 
@@ -186,12 +186,14 @@ export default class Loader {
                 if (Object.hasOwn(this.serviceTemplate.node_types, name))
                     throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
 
-                if (type.derived_from === name) throw new Error(`Node type "${name}" is derived from itself ...`)
-
                 type._loaded = true
                 type._file = file
                 this.serviceTemplate.node_types[name] = type
             }
+        }
+
+        for (const [name, type] of Object.entries(this.serviceTemplate.node_types)) {
+            if (type.derived_from === name) throw new Error(`Node type "${name}" is derived from itself...`)
         }
     }
 }
