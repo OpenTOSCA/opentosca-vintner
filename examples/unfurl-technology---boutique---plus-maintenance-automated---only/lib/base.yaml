@@ -465,7 +465,6 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: LoadBalancer
                                     - name: apply manifest
-                                      ansible.builtin.shell: |
-                                          kubectl apply -f {{ manifest.path }}
+                                      ansible.builtin.shell: kubectl apply -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash

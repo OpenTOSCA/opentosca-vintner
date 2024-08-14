@@ -605,9 +605,11 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                                     - name: apply manifest
-                                      ansible.builtin.shell: |
-                                          kubectl apply -f {{ manifest.path }}
-                                          kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s
+                                      ansible.builtin.shell: kubectl apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
@@ -663,8 +665,7 @@ node_types:
                                                           PORT: '"{{ SELF.application_port }}"'
                                                           DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
                                     - name: apply compose
-                                      ansible.builtin.shell: |
-                                          docker compose -f {{ compose.path }} up -d
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
                             playbookArgs:

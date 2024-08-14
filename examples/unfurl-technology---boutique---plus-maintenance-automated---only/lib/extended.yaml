@@ -1200,9 +1200,11 @@ node_types:
                                                       app: '{{ SELF.dbms_name }}'
                                                   type: ClusterIP
                                     - name: apply manifest
-                                      ansible.builtin.shell: |
-                                          kubectl apply -f {{ manifest.path }}
-                                          kubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s
+                                      ansible.builtin.shell: kubectl apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s
                                       args:
                                           executable: /usr/bin/bash
                                     - name: give DBMS some time
@@ -1277,8 +1279,7 @@ node_types:
                                                       environment:
                                                           MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}'
                                     - name: apply compose
-                                      ansible.builtin.shell: |
-                                          docker compose -f {{ compose.path }} up -d
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
                                     - name: give DBMS some time
@@ -1688,10 +1689,15 @@ node_types:
                                                                     - echo
                                                                     - "'done'"
                                     - name: apply manifest
-                                      ansible.builtin.shell: |
-                                          kubectl apply -f {{ manifest.path }}
-                                          kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}
-                                          #kubectl delete -f {{ manifest.path }}
+                                      ansible.builtin.shell: kubectl apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: cleanup
+                                      ansible.builtin.shell: kubectl delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
