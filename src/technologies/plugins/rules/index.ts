@@ -66,7 +66,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     // Ensure that implementation is not generated and, hence, not removed when writing back the newly generated implementations
                     if (isGenerated(existing)) {
                         throw new Error(
-                            `Implementation "${implementationName}" can not be generated but exists generated`
+                            `Implementation "${implementationName}" can not be generated but exists only generated and not manually defined`
                         )
                     }
 

@@ -38,7 +38,7 @@ node_types:
     container.application:
         derived_from: root
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
 
         properties:
             application_name:
@@ -70,7 +70,7 @@ node_types:
     logging.agent:
         derived_from: software.application
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
 
     ###################################################
     #
@@ -81,7 +81,7 @@ node_types:
     monitoring.agent:
         derived_from: software.application
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
 
     ###################################################
     #
@@ -92,7 +92,7 @@ node_types:
     security.agent:
         derived_from: software.application
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
 
     ###################################################
     #
@@ -331,12 +331,12 @@ node_types:
                                                     curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
                                                     apt-get update
                                                     apt-get install caddy -y
-    
+
                                                     echo > /etc/caddy/Caddyfile
                                                     echo ":80 {" >> /etc/caddy/Caddyfile
                                                     echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
                                                     echo "}" >> /etc/caddy/Caddyfile
-    
+
                                                     systemctl reload caddy
                                                 destination: /tmp/install-ingress.sh
                                           remote-exec:

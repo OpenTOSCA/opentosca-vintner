@@ -41,3 +41,12 @@ export function isImplementation(type: string) {
 export function isGenerated(type: NodeType) {
     return check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_GENERATED] === 'true'
 }
+
+export function isAbstract(type: NodeType) {
+    return check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_ABSTRACT] === 'true'
+}
+
+export function isGenerate(type: NodeType) {
+    if (check.isUndefined(type.metadata)) return true
+    return type.metadata[METADATA.VINTNER_GENERATE] !== 'false'
+}

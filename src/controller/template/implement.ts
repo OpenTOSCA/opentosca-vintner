@@ -6,11 +6,12 @@ import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import std from '#std'
-import {METADATA} from '#technologies/plugins/rules/types'
 import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
     GENERATION_NOTICE,
+    isAbstract,
+    isGenerate,
     isGenerated,
     isImplementation,
 } from '#technologies/utils'
@@ -21,8 +22,6 @@ import path from 'path'
 export type TemplateImplementOptions = {
     dir: string
 }
-
-// TODO: has no implementation check? if nothing can be generated and if it does not already exists?
 
 export default async function (options: TemplateImplementOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
@@ -67,8 +66,10 @@ export default async function (options: TemplateImplementOptions) {
                 if (isImplementation(name)) return false
 
                 // Ignore manual ignored types
-                // TODO: include this somehow in rule, e.g. "rule.abstract"?
-                if (check.isDefined(type.metadata)) return type.metadata[METADATA.VINTNER_GENERATE] !== 'false'
+                if (!isGenerate(type)) return false
+
+                // Ignore abstract types
+                if (isAbstract(type)) return false
 
                 // Otherwise include
                 return true

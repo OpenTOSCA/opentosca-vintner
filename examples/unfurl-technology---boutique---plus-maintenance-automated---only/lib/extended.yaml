@@ -46,7 +46,7 @@ node_types:
     gcp.service:
         derived_from: root
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
 
         properties:
             env_platform:

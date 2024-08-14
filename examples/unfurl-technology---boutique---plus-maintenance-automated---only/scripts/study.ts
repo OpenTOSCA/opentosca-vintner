@@ -1,11 +1,11 @@
 import * as check from '#check'
 import controller from '#controller'
 import * as files from '#files'
+import Graph from '#graph/graph'
+import Loader from '#graph/loader'
 import * as utils from '#utils'
+import {UnexpectedError} from '#utils/error'
 import path from 'path'
-import Graph from '../../../src/graph/graph'
-import Loader from '../../../src/graph/loader'
-import {UnexpectedError} from '../../../src/utils/error'
 
 const examplesDir = path.join('..', '..')
 
