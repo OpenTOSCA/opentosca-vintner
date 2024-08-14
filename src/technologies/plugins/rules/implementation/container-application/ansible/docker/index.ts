@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/implementatio
 import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::docker::docker.engine',
+    id: 'container.application::ansible::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -46,37 +46,12 @@ const plugin: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            name: 'touch compose',
-                                            register: 'compose',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.application_name }}.compose.yaml',
-                                            },
-                                        },
-                                        {
-                                            name: 'create compose',
-                                            'ansible.builtin.copy': {
-                                                dest: '{{ compose.path }}',
-                                                content: '{{ manifest | to_yaml }}',
-                                            },
-                                            vars: {
-                                                manifest: {
-                                                    name: '{{ SELF.application_name }}',
-                                                    services: {
-                                                        application: {
-                                                            container_name: '{{ SELF.application_name }}',
-                                                            image: '{{ SELF.application_image }}',
-                                                            network_mode: 'host',
-                                                            environment: mapProperties(type, {format: 'map'}),
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d\n',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            name: 'start container',
+                                            'community.docker.docker_container': {
+                                                name: '{{ SELF.application_name }}',
+                                                image: '{{ SELF.application_image }}',
+                                                network_mode: 'host',
+                                                env: mapProperties(type, {format: 'map'}),
                                             },
                                         },
                                     ],

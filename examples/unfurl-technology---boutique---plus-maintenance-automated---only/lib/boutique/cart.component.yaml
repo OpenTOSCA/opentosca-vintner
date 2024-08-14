@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     cart.component:
-        derived_from: dotnet.application
+        derived_from: container.application
 
         properties:
             application_name:

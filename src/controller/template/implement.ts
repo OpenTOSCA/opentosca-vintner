@@ -5,11 +5,17 @@ import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import std from '#std'
 import {METADATA} from '#technologies/plugins/rules/implementation/types'
-import {GENERATION_MARK_REGEX, GENERATION_MARK_TEXT, GENERATION_NOTICE, isType} from '#technologies/utils'
+import {
+    GENERATION_MARK_REGEX,
+    GENERATION_MARK_TEXT,
+    GENERATION_NOTICE,
+    isGenerated,
+    isImplementation,
+} from '#technologies/utils'
 import * as utils from '#utils'
 import _ from 'lodash'
-import * as console from 'node:console'
 import path from 'path'
 
 export type TemplateImplementOptions = {
@@ -21,55 +27,60 @@ export type TemplateImplementOptions = {
 export default async function (options: TemplateImplementOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
 
-    // TODO: rework so that we dont need to craft path to service template here
     const template = await new Loader(path.join(options.dir, 'variable-service-template.yaml')).load()
     const graph = new Graph(template)
 
     const lib = path.join(options.dir, 'lib')
     if (!files.exists(lib)) return
-
-    // TODO: migrate so that we dont need walkDirectory
     for (const file of files.walkDirectory(lib, {extensions: ['yaml', 'yml']})) {
-        console.log(file)
+        std.log(`processing file "${file}"`)
 
         const templateString = files.loadFile(file)
         const templateData: ServiceTemplate = files.loadYAML<ServiceTemplate>(file)
-        if (check.isUndefined(templateData.tosca_definitions_version)) continue
-        if (templateData.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3) continue
 
-        if (check.isUndefined(templateData.node_types)) continue
-
-        const types = Object.entries(templateData.node_types)
-
-        // TODO: or get the one without some specific metadata? or without some?
-        const [name, type] = utils.first(types)
-
-        // TODO: get rid of this
-        //const generate = templateData.metadata[METADATA.VINTNER_GENERATE]
-        //if (check.isUndefined(generate)) continue
-
-        // TODO: get rid of this in favor of metadata VINTNER_GENERATED? (currently also not needed)
-        if (isType(name)) {
-            console.log('ignoring', {name})
+        if (check.isUndefined(templateData.tosca_definitions_version)) {
+            std.log(
+                `ignoring file "${file}" since has no TOSCA Definitions Version and, hence, most likely is not a TOSCA Service Template`
+            )
             continue
         }
 
-        if (check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_IMPLEMENTED] === 'true') {
-            console.log('implemented', {name})
+        if (templateData.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3) {
+            std.log(
+                `ignoring file "${file}" since TOSCA Definitions Version "${template.tosca_definitions_version}" is not supported`
+            )
             continue
         }
 
-        // TODO: filter abstract types?
-
-        console.log('generating', {name})
-
+        if (check.isUndefined(templateData.node_types)) {
+            std.log(`ignoring file "${file}" since it does not define Node Types`)
+            continue
+        }
         const implementations: {[key: string]: NodeType} = {}
-        for (const plugin of graph.plugins.technology) {
-            // TODO: check that there are no collisions?
-            _.merge(implementations, plugin.implement(name, type))
-        }
 
-        console.log('generated', Object.keys(implementations))
+        Object.entries(templateData.node_types)
+            .filter(([name, type]) => {
+                // Ignore generated implementations
+                if (isGenerated(type)) return false
+
+                // Ignore manual modeled implementations
+                if (isImplementation(name)) return false
+
+                // Ignore manual ignored types
+                // TODO: include this somehow in rule, e.g. "rule.abstract"?
+                if (check.isDefined(type.metadata)) return type.metadata[METADATA.VINTNER_GENERATE] !== 'false'
+
+                // Otherwise include
+                return true
+            })
+            .forEach(([name, type]) => {
+                std.log(`processing node type "${name}"`)
+                for (const plugin of graph.plugins.technology) {
+                    // TODO: check that there are no collisions?
+                    _.merge(implementations, plugin.implement(name, type))
+                }
+            })
+
         if (utils.isEmpty(implementations)) continue
 
         const replaceString =

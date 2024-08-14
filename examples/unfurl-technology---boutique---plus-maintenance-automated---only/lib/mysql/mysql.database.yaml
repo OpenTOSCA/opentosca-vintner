@@ -78,9 +78,15 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
 
-    # TODO: mysql.database::docker::mysql.dbms::docker.engine
-    # TODO: mysql.database::terraform::mysql.dbms::kubernetes
-    # TODO: mysql.database::kubernetes::mysql.dbms::kubernetes
+    ###################################################
+    #
+    # Terraform Kubernetes
+    #
+    ###################################################
+
+    # TODO:  mysql.database::terraform::mysql.dbms::kubernetes
+    mysql.database::terraform::mysql.dbms::kubernetes:
+        derived_from: mysql.database
 
     ###################################################
     #
@@ -438,3 +444,13 @@ node_types:
                                 - --key-file={{ SELF.os_ssh_key_file }}
                                 - --user={{ SELF.os_ssh_user }}
                     delete: exit 0
+
+    ###################################################
+    #
+    # Docker Docker
+    #
+    ###################################################
+
+    # TODO:  mysql.database::docker::mysql.dbms::docker.engine
+    mysql.database::docker::mysql.dbms::docker.engine:
+        derived_from: mysql.database

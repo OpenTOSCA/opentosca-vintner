@@ -2,11 +2,37 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/implementatio
 import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::kubernetes::kubernetes',
+    id: 'container.application::ansible::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,
             metadata: {...generatedMetadata()},
+            properties: {
+                k8s_host: {
+                    type: 'string',
+                    default: {
+                        get_input: 'k8s_host',
+                    },
+                },
+                k8s_ca_cert_file: {
+                    type: 'string',
+                    default: {
+                        get_input: 'k8s_ca_cert_file',
+                    },
+                },
+                k8s_client_cert_file: {
+                    type: 'string',
+                    default: {
+                        get_input: 'k8s_client_cert_file',
+                    },
+                },
+                k8s_client_key_file: {
+                    type: 'string',
+                    default: {
+                        get_input: 'k8s_client_key_file',
+                    },
+                },
+            },
             attributes: {
                 application_address: {
                     type: 'string',
@@ -22,25 +48,29 @@ const plugin: ImplementationGenerator = {
                             implementation: {
                                 primary: 'Ansible',
                                 operation_host: 'ORCHESTRATOR',
+                                environment: {
+                                    K8S_AUTH_HOST: {
+                                        eval: '.::k8s_host',
+                                    },
+                                    K8S_AUTH_SSL_CA_CERT: {
+                                        eval: '.::k8s_ca_cert_file',
+                                    },
+                                    K8S_AUTH_CERT_FILE: {
+                                        eval: '.::k8s_client_cert_file',
+                                    },
+                                    K8S_AUTH_KEY_FILE: {
+                                        eval: '.::k8s_client_key_file',
+                                    },
+                                },
                             },
                             inputs: {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'touch manifest',
-                                            register: 'manifest',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.application_name }}.application.manifest.yaml',
-                                            },
-                                        },
-                                        {
-                                            name: 'create manifest',
-                                            'ansible.builtin.copy': {
-                                                dest: '{{ manifest.path }}',
-                                                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
-                                            },
-                                            vars: {
-                                                deployment: {
+                                            name: 'create deployment',
+                                            'kubernetes.core.k8s': {
+                                                wait: true,
+                                                definition: {
                                                     apiVersion: 'apps/v1',
                                                     kind: 'Deployment',
                                                     metadata: {
@@ -77,7 +107,12 @@ const plugin: ImplementationGenerator = {
                                                         },
                                                     },
                                                 },
-                                                service: {
+                                            },
+                                        },
+                                        {
+                                            name: 'create service',
+                                            'kubernetes.core.k8s': {
+                                                definition: {
                                                     apiVersion: 'v1',
                                                     kind: 'Service',
                                                     metadata: {
@@ -98,14 +133,6 @@ const plugin: ImplementationGenerator = {
                                                         type: 'ClusterIP',
                                                     },
                                                 },
-                                            },
-                                        },
-                                        {
-                                            name: 'apply manifest',
-                                            'ansible.builtin.shell':
-                                                'kubectl apply -f {{ manifest.path }}\nkubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s\n',
-                                            args: {
-                                                executable: '/usr/bin/bash',
                                             },
                                         },
                                     ],

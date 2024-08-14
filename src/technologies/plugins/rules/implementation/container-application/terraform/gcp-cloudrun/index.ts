@@ -6,7 +6,7 @@ import {
 } from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::terraform::gcp.cloudrun',
+    id: 'container.application::terraform::gcp.cloudrun',
     generate: (name, type) => {
         return {
             derived_from: name,

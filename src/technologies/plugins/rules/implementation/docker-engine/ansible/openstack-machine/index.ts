@@ -1,8 +1,8 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
-import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
+import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::ansible::docker.engine',
+    id: 'docker.engine::ansible::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -19,12 +19,6 @@ const plugin: ImplementationGenerator = {
                     default: {
                         get_input: 'os_ssh_key_file',
                     },
-                },
-            },
-            attributes: {
-                application_address: {
-                    type: 'string',
-                    default: '127.0.0.1',
                 },
             },
             interfaces: {
@@ -46,12 +40,11 @@ const plugin: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            name: 'start container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                image: '{{ SELF.application_image }}',
-                                                network_mode: 'host',
-                                                env: mapProperties(type, {format: 'map'}),
+                                            name: 'install docker',
+                                            'ansible.builtin.shell':
+                                                'curl -sSL https://get.docker.com | sh\nsudo groupadd -f docker\nsudo usermod -aG docker {{ SELF.os_ssh_user }}\n',
+                                            args: {
+                                                executable: '/usr/bin/bash',
                                             },
                                         },
                                     ],

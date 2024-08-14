@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     currency.component:
-        derived_from: node.application
+        derived_from: container.application
 
         properties:
             application_name:

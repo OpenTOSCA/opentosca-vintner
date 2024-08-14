@@ -1,4 +1,7 @@
 import * as assert from '#assert'
+import * as check from '#check'
+import {NodeType} from '#spec/node-type'
+import {METADATA} from '#technologies/plugins/rules/implementation/types'
 
 export const TYPE_DELIMITER = '::'
 
@@ -31,6 +34,10 @@ export function destructType(type: string) {
     return {component, technology, hosting}
 }
 
-export function isType(type: string) {
+export function isImplementation(type: string) {
     return type.includes(TYPE_DELIMITER)
+}
+
+export function isGenerated(type: NodeType) {
+    return check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_GENERATED] === 'true'
 }

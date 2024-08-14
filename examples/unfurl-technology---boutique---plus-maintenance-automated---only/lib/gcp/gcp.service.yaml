@@ -6,6 +6,14 @@ imports:
 node_types:
     gcp.service:
         derived_from: root
+        metadata:
+            vintner_generate: 'false'
+
+        properties:
+            gcp_service:
+                type: string
+                # Unfurl does not accept if there is a default only at the child
+                default: 'must-be-overridden'
 
         capabilities:
             host:

@@ -5,10 +5,11 @@ import Node from '#graph/node'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
+import std from '#std'
 import registry from '#technologies/plugins/rules/implementation'
 import {METADATA} from '#technologies/plugins/rules/implementation/types'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
-import {constructType} from '#technologies/utils'
+import {constructType, isGenerated} from '#technologies/utils'
 import * as utils from '#utils'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
@@ -47,14 +48,38 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             for (const rule of rules) {
                 assert.isArray(rule.hosting)
                 if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
-                const generator = registry.get(constructType(rule.component, technology, rule.hosting))
-                if (check.isUndefined(generator)) continue
+                const implementationName = constructType(name, technology, rule.hosting)
 
+                const generatorName = constructType(rule.component, technology, rule.hosting)
+                const generator = registry.get(generatorName)
+
+                // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
+                if (check.isUndefined(generator)) {
+                    const existing = this.graph.inheritance.getNodeType(implementationName)
+
+                    if (check.isUndefined(existing)) {
+                        throw new Error(
+                            `Implementation "${implementationName}" can not be generated and does not exist`
+                        )
+                    }
+
+                    // Ensure that implementation is not generated and, hence, not removed when writing back the newly generated implementations
+                    if (isGenerated(existing)) {
+                        throw new Error(
+                            `Implementation "${implementationName}" can not be generated but exists generated`
+                        )
+                    }
+
+                    std.log(`Implementation "${implementationName}" can not be generated but exists manually defined`)
+                    continue
+                }
+
+                std.log(`Generating implementation "${implementationName}" based on generator "${generatorName}"`)
                 const implementation = generator.generate(name, type)
                 assert.isDefined(implementation.metadata)
                 assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
 
-                types[constructType(name, technology, rule.hosting)] = implementation
+                types[implementationName] = implementation
             }
         }
 

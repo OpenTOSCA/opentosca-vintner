@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/implementatio
 import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::terraform::kubernetes',
+    id: 'container.application::terraform::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,

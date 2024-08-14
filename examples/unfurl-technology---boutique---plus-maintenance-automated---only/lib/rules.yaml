@@ -1,16 +1,16 @@
 ansible:
     # Software
-    - component: software.application
+    - component: container.application
       hosting: docker.engine
       weight: 0.5
       comment: Docker is more specialized.
 
-    - component: software.application
+    - component: container.application
       hosting: kubernetes
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    - component: software.application
+    - component: container.application
       hosting: gcp.cloudrun
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
@@ -84,17 +84,17 @@ ansible:
 
 terraform:
     # Software
-    - component: software.application
+    - component: container.application
       hosting: docker.engine
       weight: 0.5
       comment: Docker is more specialized.
 
-    - component: software.application
+    - component: container.application
       hosting: kubernetes
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    - component: software.application
+    - component: container.application
       hosting: gcp.cloudrun
       weight: 1
       comment: Terraform provides a declarative module.
@@ -171,7 +171,7 @@ terraform:
 
 kubernetes:
     # Software
-    - component: software.application
+    - component: container.application
       hosting: kubernetes
       weight: 1
       comment: Kubernetes is the underlying technology.
@@ -198,7 +198,7 @@ kubernetes:
 
 docker:
     # Software
-    - component: software.application
+    - component: container.application
       hosting: docker.engine
       weight: 1
       comment: Docker is the underlying technology.

@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     advertisement.component:
-        derived_from: java.application
+        derived_from: container.application
 
         properties:
             application_name:

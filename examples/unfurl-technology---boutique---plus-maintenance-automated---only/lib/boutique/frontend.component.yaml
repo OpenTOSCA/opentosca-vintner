@@ -29,7 +29,7 @@ node_types:
     ###################################################
 
     frontend.component:
-        derived_from: go.application
+        derived_from: container.application
 
         properties:
             application_name:

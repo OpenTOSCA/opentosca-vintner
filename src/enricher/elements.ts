@@ -16,7 +16,6 @@ export class ElementEnricher {
         this.enrichTechnologies()
     }
 
-    // TODO: split this into enrichTechnologies and enrichImplementations (and introduce plugin.implement)
     private enrichTechnologies() {
         for (const node of this.graph.nodes) {
             // Get all possible technology assignments
@@ -36,19 +35,17 @@ export class ElementEnricher {
                 // Assign each possible technology assignment
                 candidates.forEach(it => this.graph.addTechnology(node, it))
             } else {
-                // Continue if e.g. no rules at all exists
+                // Continue if, e.g., no rules at all exists (for backwards compatibility and testing purposed)
                 if (utils.isEmpty(this.graph.plugins.technology)) continue
 
                 // Do not override manual assigned technologies but enrich them with an implementation
                 const enriched: TechnologyTemplateMap[] = []
-
                 node.technologies.forEach(technology => {
                     const filtered = candidates.filter(map => utils.firstKey(map) === technology.name)
                     if (utils.isEmpty(filtered))
                         throw new Error(`${node.Display} has no implementation for ${technology.display}`)
                     enriched.push(...filtered)
                 })
-
                 this.graph.replaceTechnologies(node, enriched)
             }
         }

@@ -12,9 +12,6 @@ node_types:
 
     security.agent:
         derived_from: software.application
-        metadata:
-            vintner_implemented: 'true'
-
         requirements:
             - host:
                   capability: tosca.capabilities.Compute

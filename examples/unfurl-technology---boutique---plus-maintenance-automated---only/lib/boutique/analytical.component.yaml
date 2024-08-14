@@ -13,7 +13,7 @@ node_types:
     ###################################################
 
     analytical.component:
-        derived_from: python.application
+        derived_from: container.application
 
         properties:
             application_name:

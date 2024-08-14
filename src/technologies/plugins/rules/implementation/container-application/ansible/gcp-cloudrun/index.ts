@@ -6,7 +6,7 @@ import {
 } from '#technologies/plugins/rules/implementation/utils'
 
 const plugin: ImplementationGenerator = {
-    id: 'software.application::ansible::gcp.cloudrun',
+    id: 'container.application::ansible::gcp.cloudrun',
     generate: (name, type) => {
         return {
             derived_from: name,
