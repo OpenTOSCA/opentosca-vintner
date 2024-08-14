@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
 import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
 
-const plugin: ImplementationGenerator = {
+const generator: ImplementationGenerator = {
     id: 'docker.engine::ansible::openstack.machine',
     generate: (name, type) => {
         return {
@@ -41,8 +41,21 @@ const plugin: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'install docker',
-                                            'ansible.builtin.shell':
-                                                'curl -sSL https://get.docker.com | sh\nsudo groupadd -f docker\nsudo usermod -aG docker {{ SELF.os_ssh_user }}\n',
+                                            'ansible.builtin.shell': 'curl -sSL https://get.docker.com | sh',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        {
+                                            name: 'add docker group',
+                                            'ansible.builtin.shell': 'groupadd -f docker',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        {
+                                            name: 'add user to docker group',
+                                            'ansible.builtin.shell': 'usermod -aG docker {{ SELF.os_ssh_user }}',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
@@ -64,4 +77,4 @@ const plugin: ImplementationGenerator = {
     },
 }
 
-export default plugin
+export default generator

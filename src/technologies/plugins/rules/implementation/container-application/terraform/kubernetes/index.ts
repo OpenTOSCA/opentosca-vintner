@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
 import {generatedMetadata, mapProperties} from '#technologies/plugins/rules/implementation/utils'
 
-const plugin: ImplementationGenerator = {
+const generator: ImplementationGenerator = {
     id: 'container.application::terraform::kubernetes',
     generate: (name, type) => {
         return {
@@ -168,4 +168,4 @@ const plugin: ImplementationGenerator = {
     },
 }
 
-export default plugin
+export default generator

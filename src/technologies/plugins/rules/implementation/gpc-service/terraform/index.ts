@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/implementation/types'
 import {generatedMetadata} from '#technologies/plugins/rules/implementation/utils'
 
-const plugin: ImplementationGenerator = {
+const generator: ImplementationGenerator = {
     id: 'gcp.service::terraform',
     generate: (name, type) => {
         return {
@@ -81,4 +81,4 @@ const plugin: ImplementationGenerator = {
     },
 }
 
-export default plugin
+export default generator

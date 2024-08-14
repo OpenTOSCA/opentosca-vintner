@@ -81,7 +81,10 @@ export default async function (options: TemplateImplementOptions) {
                 }
             })
 
-        if (utils.isEmpty(implementations)) continue
+        if (utils.isEmpty(implementations)) {
+            std.log(`no implementations must be written`)
+            continue
+        }
 
         const replaceString =
             '\n\n' +
@@ -91,10 +94,17 @@ export default async function (options: TemplateImplementOptions) {
             `\n\n` +
             utils.indent(files.toYAML(implementations))
 
-        const resultString = GENERATION_MARK_REGEX.test(templateString)
-            ? templateString.trimEnd().replace(GENERATION_MARK_REGEX, replaceString)
-            : templateString.trimEnd() + replaceString
+        const resultString =
+            (GENERATION_MARK_REGEX.test(templateString)
+                ? templateString.trimEnd().replace(GENERATION_MARK_REGEX, replaceString)
+                : templateString.trimEnd() + replaceString
+            ).trimEnd() + '\n'
 
-        files.storeFile(file, resultString.trimEnd() + '\n')
+        if (templateString === resultString) {
+            std.log('implementations did not change')
+            continue
+        }
+
+        files.storeFile(file, resultString)
     }
 }
