@@ -96,6 +96,10 @@ node_types:
                 type: string
                 default: 'required-but-not-used'
 
+            ENV_PLATFORM:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::env_platform'}
+
             disable_profiler:
                 type: string
                 default: 1

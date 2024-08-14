@@ -14,6 +14,10 @@ node_types:
         derived_from: root
 
         properties:
+            env_platform:
+                type: string
+                default: gcp
+
             gcp_region:
                 type: string
 
@@ -45,6 +49,10 @@ node_types:
             vintner_generate: 'false'
 
         properties:
+            env_platform:
+                type: string
+                default: gcp
+
             gcp_service:
                 type: string
                 # Unfurl does not accept if there is a default only at the child
@@ -67,6 +75,11 @@ node_types:
 
     docker.engine:
         derived_from: root
+
+        properties:
+            env_platform:
+                type: string
+                default: {eval: '.::.requirements::[.name=host]::.target::env_platform'}
 
         attributes:
             management_address:
@@ -92,6 +105,10 @@ node_types:
         derived_from: root
 
         properties:
+            env_platform:
+                type: string
+                default: kubernetes
+
             k8s_host:
                 type: string
 
@@ -124,6 +141,10 @@ node_types:
         derived_from: root
 
         properties:
+            env_platform:
+                type: string
+                default: openstack
+
             os_region_name:
                 type: string
 
@@ -164,6 +185,10 @@ node_types:
     openstack.machine:
         derived_from: compute
         properties:
+            env_platform:
+                type: string
+                default: openstack
+
             ports:
                 type: list
                 entry_schema:
