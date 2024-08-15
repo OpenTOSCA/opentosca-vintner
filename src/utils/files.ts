@@ -23,7 +23,7 @@ import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
 export const TECHNOLOGIES_DIR = path.resolve(ASSETS_DIR, 'technologies')
-export const TOSCA_SIMPLE_PROFILE_FILE = path.join(ASSETS_DIR, 'tosca-simple-profile.yaml')
+export const PROFILES_DIR = path.resolve(ASSETS_DIR, 'profiles')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 export const SCRIPTS_DIR = path.resolve(ASSETS_DIR, 'scripts')
 export const TMP_PREFIX = 'opentosca-vintner--'
