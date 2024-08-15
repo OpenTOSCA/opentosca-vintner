@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
+import {TECHNOLOGIES_DIR} from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
@@ -24,13 +25,34 @@ export type TemplateImplementOptions = {
 }
 
 export default async function (options: TemplateImplementOptions) {
+    /**
+     * Defaults
+     */
     assert.isDefined(options.dir, 'Directory not defined')
 
+    /**
+     * Lib
+     */
+    const lib = path.join(options.dir, 'lib')
+
+    /**
+     * Init
+     */
+    files.createDirectory(lib)
+    files.copy(path.join(TECHNOLOGIES_DIR, 'types.yaml'), path.join(lib, 'types.yaml'), {overwrite: false})
+    files.copy(path.join(TECHNOLOGIES_DIR, 'base.yaml'), path.join(lib, 'base.yaml'))
+    files.copy(path.join(TECHNOLOGIES_DIR, 'extended.yaml'), path.join(lib, 'extended.yaml'))
+    files.copy(path.join(TECHNOLOGIES_DIR, 'rules.yaml'), path.join(lib, 'rules.yaml'))
+
+    /**
+     * Graph
+     */
     const template = await new Loader(path.join(options.dir, 'variable-service-template.yaml')).load()
     const graph = new Graph(template)
 
-    const lib = path.join(options.dir, 'lib')
-    if (!files.exists(lib)) return
+    /**
+     * Implement
+     */
     for (const file of files.walkDirectory(lib, {extensions: ['yaml', 'yml']})) {
         std.log(`processing file "${file}"`)
 

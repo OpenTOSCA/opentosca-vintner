@@ -20,6 +20,7 @@ import xml2js from 'xml2js'
 import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
+export const TECHNOLOGIES_DIR = path.resolve(ASSETS_DIR, 'technologies')
 export const TOSCA_SIMPLE_PROFILE_FILE = path.join(ASSETS_DIR, 'tosca-simple-profile.yaml')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 export const SCRIPTS_DIR = path.resolve(ASSETS_DIR, 'scripts')
@@ -90,9 +91,12 @@ export function loadYAML<T>(file: string) {
     return yaml.load(loadFile(file)) as T
 }
 
-export function storeFile(file: string, data: string, options?: {onlyIfChanged?: boolean}) {
+export function storeFile(file: string, data: string, options: {onlyIfChanged?: boolean; overwrite?: boolean} = {}) {
+    options.onlyIfChanged = options.onlyIfChanged ?? false
+    options.overwrite = options.overwrite ?? true
+
     // Write file only if changed, e.g., to prevent updating the file mtime
-    if (options?.onlyIfChanged) {
+    if (options.onlyIfChanged) {
         if (exists(file)) {
             if (crypto.checksum({content: data}) == crypto.checksum({content: loadFile(file)})) {
                 return
@@ -104,7 +108,11 @@ export function storeFile(file: string, data: string, options?: {onlyIfChanged?:
     return file
 }
 
-export function storeYAML(file: string, data: any | string, options: {notice?: boolean} = {}) {
+export function storeYAML(file: string, data: any | string, options: {notice?: boolean; overwrite?: boolean} = {}) {
+    options.notice = options.notice ?? false
+
+    const resolved = path.resolve(file)
+
     const notice = `
 ###################################################
 #
@@ -119,17 +127,20 @@ export function storeYAML(file: string, data: any | string, options: {notice?: b
         output = notice + output
     }
 
-    fss.writeFileSync(path.resolve(file), output)
-    return file
+    if (!options.overwrite) {
+        if (exists(resolved)) return
+    }
+
+    storeFile(resolved, output, {overwrite: options.overwrite})
 }
 
 export function storeJSON(file: string, data: any | string) {
-    fss.writeFileSync(path.resolve(file), check.isString(data) ? data : toJSON(data))
+    storeFile(path.resolve(file), check.isString(data) ? data : toJSON(data))
     return file
 }
 
 export function storeENV(file: string, data: any | string) {
-    fss.writeFileSync(path.resolve(file), check.isString(data) ? data : toENV(data))
+    storeFile(path.resolve(file), check.isString(data) ? data : toENV(data))
     return file
 }
 
@@ -176,8 +187,10 @@ export function toENV(obj: {[key: string]: string | number | boolean}) {
         .join(`\n`)
 }
 
-export function copy(source: string, target: string) {
-    fse.copySync(path.resolve(source), path.resolve(target))
+export function copy(source: string, target: string, options: {overwrite?: boolean} = {}) {
+    options.overwrite = options.overwrite ?? true
+
+    fse.copySync(path.resolve(source), path.resolve(target), {overwrite: options.overwrite})
 }
 
 export async function sync(source: string, target: string) {
@@ -216,6 +229,7 @@ export function listFiles(directory: string, options: {extensions?: string[]} = 
 /**
  * Recursively walks through directory and return absolute path of each found file
  */
+// TODO: can we make this faster?
 export function walkDirectory(directory: string, options: {extensions?: string[]} = {}): string[] {
     const files: string[] = []
 
