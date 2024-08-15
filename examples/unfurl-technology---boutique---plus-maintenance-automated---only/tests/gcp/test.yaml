@@ -1,0 +1,20 @@
+replace:
+    # The selection of Terraform and Ansible is random since they have the same quality assigned for mysql.database ...
+    - - mysql.database::terraform::mysql
+      - mysql.database::ansible::mysql
+
+    - - mysql.database::ansible::mysql
+      - mysql.database::terraform::mysql
+
+merge:
+    topology_template:
+        node_templates:
+            analytical_component:
+                type: analytical.component::terraform::gcp.cloudrun
+                properties:
+                    optional_analytical_feature: false
+                    premium_analytical_feature: false
+                requirements:
+                    - checkout: checkout_component
+                    - recommendation: recommendation_component
+                    - host: gcp_cloudrun

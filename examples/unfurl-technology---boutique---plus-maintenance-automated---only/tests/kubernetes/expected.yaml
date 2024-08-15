@@ -1,0 +1,206 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
+        k8s_host:
+            type: string
+
+        k8s_ca_cert_file:
+            type: string
+
+        k8s_client_cert_file:
+            type: string
+
+        k8s_client_key_file:
+            type: string
+
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_component:
+            type: frontend.component::kubernetes::kubernetes
+            requirements:
+                - checkout: checkout_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - recommendation: recommendation_component
+                - advertisement: advertisement_component
+                - host: kubernetes_runtime
+
+        frontend_ingress:
+            type: ingress::kubernetes::kubernetes
+            requirements:
+                - application: frontend_component
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_component:
+            type: checkout.component::kubernetes::kubernetes
+            requirements:
+                - email: email_component
+                - payment: payment_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_component:
+            type: email.component::kubernetes::kubernetes
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_component:
+            type: payment.component::kubernetes::kubernetes
+            properties:
+                optional_payment_feature: false
+                premium_payment_feature: false
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_component:
+            type: currency.component::kubernetes::kubernetes
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_component:
+            type: shipping.component::kubernetes::kubernetes
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_component:
+            type: cart.component::kubernetes::kubernetes
+            requirements:
+                - database: cart_database
+                - host: kubernetes_runtime
+
+        cart_database:
+            type: mysql.database::terraform::mysql.dbms::kubernetes
+            properties:
+                database_name: cart-database
+                database_user: cart-user
+                database_password: {get_input: database_password}
+            requirements:
+                - host: cart_dbms
+
+        cart_dbms:
+            type: mysql.dbms::kubernetes::kubernetes
+            properties:
+                dbms_name: cart-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_component:
+            type: product.component::kubernetes::kubernetes
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_component:
+            type: recommendation.component::kubernetes::kubernetes
+            requirements:
+                - product: product_component
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_component:
+            type: advertisement.component::kubernetes::kubernetes
+            requirements:
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Analytical
+        #
+        ###################################################
+
+        analytical_component:
+            type: analytical.component::kubernetes::kubernetes
+            properties:
+                optional_analytical_feature: false
+                premium_analytical_feature: false
+            requirements:
+                - checkout: checkout_component
+                - recommendation: recommendation_component
+                - host: kubernetes_runtime
+
+        ###################################################
+        #
+        # Kubernetes
+        #
+        ###################################################
+
+        kubernetes_runtime:
+            type: kubernetes
+            properties:
+                k8s_host: {get_input: k8s_host}
+                k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
+                k8s_client_cert_file: {get_input: k8s_client_cert_file}
+                k8s_client_key_file: {get_input: k8s_client_key_file}
