@@ -312,7 +312,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::ansible::os:
+    shop.component::ansible::os.compute:
         derived_from: shop.component
 
         properties:
@@ -453,7 +453,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::ansible::gcp:
+    shop.component::ansible::gcp.app_engine:
         derived_from: shop.component
 
         properties:
@@ -532,7 +532,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::terraform::gcp:
+    shop.component::terraform::gcp.app_engine:
         derived_from: shop.component
 
         properties:

@@ -86,7 +86,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database::ansible::gcp:
+    mysql.database::ansible::gcp.cloud_sql:
         derived_from: mysql.database
 
         properties:
@@ -129,7 +129,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database::terraform::gcp:
+    mysql.database::terraform::gcp.cloud_sql:
         derived_from: mysql.database
 
         properties:
@@ -207,7 +207,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database::terraform::mysql:
+    mysql.database::terraform::mysql.dbms:
         derived_from: mysql.database
 
         interfaces:
@@ -278,7 +278,7 @@ node_types:
     #
     ###################################################
 
-    mysql.database::ansible::mysql:
+    mysql.database::ansible::mysql.dbms:
         derived_from: mysql.database
         interfaces:
             Standard:

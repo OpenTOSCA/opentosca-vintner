@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms::gcp.cloudsql',
+    id: 'mysql.database::terraform::mysql.dbms.dbms::gcp.cloudsql',
     generate: (name, type) => {
         return {
             derived_from: name,

@@ -32,7 +32,7 @@ node_types:
     #
     ###################################################
 
-    gcp.app_engine::ansible::gcp:
+    gcp.app_engine::ansible:
         derived_from: gcp.app_engine
         interfaces:
             Standard:
@@ -84,7 +84,7 @@ node_types:
     #
     ###################################################
 
-    gcp.app_engine::terraform::gcp:
+    gcp.app_engine::terraform:
         derived_from: gcp.app_engine
         interfaces:
             Standard:

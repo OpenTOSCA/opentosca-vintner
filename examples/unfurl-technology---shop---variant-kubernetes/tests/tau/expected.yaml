@@ -44,7 +44,7 @@ topology_template:
                 - host: kubernetes
 
         database:
-            type: mysql.database::ansible::mysql
+            type: mysql.database::ansible::mysql.dbms
             properties:
                 database_name: unfurl-technology
             requirements:

@@ -46,7 +46,7 @@ node_types:
     #
     ###################################################
 
-    mysql.dbms::ansible::os:
+    mysql.dbms::ansible::os.compute:
         derived_from: mysql.dbms
 
         properties:

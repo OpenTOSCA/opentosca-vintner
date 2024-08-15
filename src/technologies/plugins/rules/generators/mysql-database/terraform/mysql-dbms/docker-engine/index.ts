@@ -7,7 +7,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms::docker.engine',
+    id: 'mysql.database::terraform::mysql.dbms.dbms::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,
