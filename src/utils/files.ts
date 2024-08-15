@@ -1,5 +1,7 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import * as crypto from '#crypto'
+import std from '#std'
 import Queue from '#utils/queue'
 import archiver from 'archiver'
 import axios from 'axios'
@@ -88,7 +90,12 @@ export function loadFile(file: string) {
 }
 
 export function loadYAML<T>(file: string) {
-    return yaml.load(loadFile(file)) as T
+    try {
+        return yaml.load(loadFile(file)) as T
+    } catch (e) {
+        std.log(`Could not load yaml file "${file}"`)
+        throw e
+    }
 }
 
 export function storeFile(file: string, data: string, options: {onlyIfChanged?: boolean; overwrite?: boolean} = {}) {
@@ -219,17 +226,21 @@ export function listDirectories(directory: string): string[] {
 
 export function listFiles(directory: string, options: {extensions?: string[]} = {}): string[] {
     options.extensions = options.extensions ?? []
+
     return fss
         .readdirSync(directory, {withFileTypes: true})
         .filter(dirent => dirent.isFile())
         .map(dirent => dirent.name.toString())
-        .filter(it => (utils.isEmpty(options.extensions) ? true : options.extensions!.some(ext => !it.endsWith(ext))))
+        .filter(it => {
+            assert.isDefined(options.extensions)
+            if (utils.isEmpty(options.extensions)) return true
+            return options.extensions.some(ext => it.endsWith(ext))
+        })
 }
 
 /**
  * Recursively walks through directory and return absolute path of each found file
  */
-// TODO: can we make this faster?
 export function walkDirectory(directory: string, options: {extensions?: string[]} = {}): string[] {
     const files: string[] = []
 
