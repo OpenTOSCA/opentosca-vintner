@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    ARTIFACT_SOURCE_ARCHIVE,
     AnsibleOrchestratorOperation,
     GCPProviderCredentials,
     MetadataGenerated,
@@ -10,7 +11,6 @@ import {
 
 // TODO: application_address etc
 // TODO: this is hardcoded to node
-// TODO: rename "artifact_tar"?
 
 const generator: ImplementationGenerator = {
     id: 'software.application::ansible::gcp.appengine',
@@ -58,7 +58,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'extract deployment artifact in working directory',
                                             unarchive: {
-                                                src: UnfurlArtifactFile('artifact_tar'),
+                                                src: UnfurlArtifactFile(ARTIFACT_SOURCE_ARCHIVE),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },

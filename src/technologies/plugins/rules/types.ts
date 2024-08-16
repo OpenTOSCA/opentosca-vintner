@@ -18,3 +18,5 @@ export type ImplementationGenerator = {
     id: string
     generate: (name: string, type: NodeType) => NodeType
 }
+
+export type AnsibleTask = {name: string} & {[key: string]: any}

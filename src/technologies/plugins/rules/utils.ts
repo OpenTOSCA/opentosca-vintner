@@ -1,10 +1,11 @@
 import * as assert from '#assert'
+import * as check from '#check'
+import {MANAGEMENT_INTERFACE, MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 import {METADATA, PROPERTIES} from './types'
 
-// TODO: does not consider inherited types
-
+// TODO: consider inherited types
 export function mapProperties(
     type: NodeType,
     options: {quote?: boolean; format?: 'map' | 'list' | 'ini'; ignore?: string[]} = {}
@@ -229,6 +230,17 @@ export function AnsibleOrchestratorOperation() {
     }
 }
 
+export function AnsibleHostOperationPlaybookArgs() {
+    return ['--become', '--key-file={{ SELF.os_ssh_key_file }}', '--user={{ SELF.os_ssh_user }}']
+}
+
+export function AnsibleWaitForSSHTask() {
+    return {
+        name: 'wait for ssh',
+        wait_for_connection: null,
+    }
+}
+
 export function TerraformStandardOperations() {
     return {
         Standard: {
@@ -249,5 +261,51 @@ export function TerraformStandardOperations() {
 }
 
 export function UnfurlArtifactFile(name: string) {
-    return `{{ 'project' | get_dir }}/ensemble/{{ SELF.${name}.attributes.file }}`
+    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::${name}::.file | eval }}`
+}
+
+export function ApplicationDirectory() {
+    return {
+        application_directory: {
+            type: 'string',
+            default: {concat: ['/var/lib/', {get_property: ['SELF', 'application_name']}]},
+        },
+    }
+}
+
+export const ARTIFACT_SOURCE_ARCHIVE = 'source_archive'
+
+export function getOperation(type: NodeType, operation: MANAGEMENT_OPERATIONS) {
+    return type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation]
+}
+
+export function hasOperation(type: NodeType, operation: MANAGEMENT_OPERATIONS) {
+    return check.isDefined(getOperation(type, operation))
+}
+
+// TODO: support that operation is a path to a file, e.g., via artifact types ...
+
+export function AnsibleCopyOperationTask(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
+    const content = getOperation(type, operation)
+    assert.isDefined(content, `Node type "${name}" is missing the standard start operation`)
+    assert.isString(content)
+
+    return {
+        name: 'copy management operation',
+        'ansible.builtin.copy': {
+            dest: `{{ SELF.application_directory }}/.vintner/${operation}.sh`,
+            content,
+            mode: '0755',
+        },
+    }
+}
+
+export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
+    return {
+        name: 'call management operation',
+        'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
+        args: {
+            chdir: '{{ SELF.application_directory }}',
+        },
+    }
 }

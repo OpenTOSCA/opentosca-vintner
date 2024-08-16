@@ -1,6 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostOperation,
+    AnsibleHostOperationPlaybookArgs,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -63,11 +64,7 @@ const generator: ImplementationGenerator = {
                                         },
                                     ],
                                 },
-                                playbookArgs: [
-                                    '--become',
-                                    '--key-file={{ SELF.os_ssh_key_file }}',
-                                    '--user={{ SELF.os_ssh_user }}',
-                                ],
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
                         delete: 'exit 0',

@@ -48,9 +48,9 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             for (const rule of rules) {
                 assert.isArray(rule.hosting)
                 if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
-                const implementationName = constructType(name, technology, rule.hosting)
+                const implementationName = constructType({component: name, technology, hosting: rule.hosting})
 
-                const generatorName = constructType(rule.component, technology, rule.hosting)
+                const generatorName = constructType({component: rule.component, technology, hosting: rule.hosting})
                 const generator = loadRegistry().get(generatorName)
 
                 // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
@@ -111,7 +111,9 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                             [technology]: {
                                 conditions: it,
                                 weight: rule.weight,
-                                assign: rule.assign ?? constructType(node.getType().name, technology, rule.hosting),
+                                assign:
+                                    rule.assign ??
+                                    constructType({component: node.getType().name, technology, hosting: rule.hosting}),
                             },
                         })
                     })
@@ -120,7 +122,9 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         [technology]: {
                             conditions: rule.conditions,
                             weight: rule.weight,
-                            assign: rule.assign ?? constructType(node.getType().name, technology, rule.hosting),
+                            assign:
+                                rule.assign ??
+                                constructType({component: node.getType().name, technology, hosting: rule.hosting}),
                         },
                     })
                 }

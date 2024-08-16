@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    ARTIFACT_SOURCE_ARCHIVE,
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
@@ -10,7 +11,6 @@ import {
 
 // TODO: application_address etc
 // TODO: this is hardcoded to node
-// TODO: rename "artifact_zip"?
 
 const generator: ImplementationGenerator = {
     id: 'software.application::terraform::gcp.appengine',
@@ -119,7 +119,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             bucket: '${google_storage_bucket.bucket.name}',
                                             name: 'object.zip',
-                                            source: UnfurlArtifactFile('artifact_zip'),
+                                            source: UnfurlArtifactFile(ARTIFACT_SOURCE_ARCHIVE),
                                         },
                                     ],
                                 },

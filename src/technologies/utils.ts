@@ -3,8 +3,6 @@ import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {METADATA} from '#technologies/plugins/rules/types'
 
-export const TYPE_DELIMITER = '::'
-
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 
 export const GENERATION_MARK_REGEX = new RegExp(
@@ -20,22 +18,40 @@ export const GENERATION_NOTICE = `
 ################################################################
 `.trim()
 
-export function constructType(component: string, technology: string, hosting: string[] = []) {
-    return [component, technology, ...hosting].join(TYPE_DELIMITER)
+export type TypeData = {component: string; technology: string; artifact?: string; hosting?: string[]}
+
+export function constructType(data: TypeData) {
+    let output = data.component + '::' + data.technology
+
+    if (check.isDefined(data.artifact)) {
+        output += '#' + data.artifact
+    }
+
+    if (check.isDefined(data.hosting)) {
+        output += '@' + data.hosting.join('->')
+    }
+
+    return output
 }
 
-export function destructType(type: string) {
-    const [component, technology, ...hosting] = type.split(TYPE_DELIMITER)
+export function destructType(type: string): TypeData {
+    const [componentTypeArtifactPart, hostingPart] = type.split('@')
+    const [componentTechnologyPart, artifact] = componentTypeArtifactPart.split('#')
+    const [component, technology] = componentTechnologyPart.split('::')
 
     assert.isDefined(component)
     assert.isDefined(technology)
-    assert.isDefined(hosting)
 
-    return {component, technology, hosting}
+    return {
+        component,
+        technology,
+        artifact,
+        hosting: hostingPart ? hostingPart.split('->') : undefined,
+    }
 }
 
 export function isImplementation(type: string) {
-    return type.includes(TYPE_DELIMITER)
+    return type.includes('::')
 }
 
 export function isGenerated(type: NodeType) {

@@ -28,7 +28,8 @@ export default class Technology extends Element {
         this.raw = data.raw
         this.container = data.container
         this.index = data.index
-        this.assign = data.raw.assign ?? constructType(this.container.getType().name, this.name)
+        this.assign =
+            data.raw.assign ?? constructType({component: this.container.getType().name, technology: this.name})
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false

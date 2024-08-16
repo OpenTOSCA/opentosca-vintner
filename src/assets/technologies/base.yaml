@@ -28,7 +28,11 @@ node_types:
     software.application:
         derived_from: root
         metadata:
-            vintner_generate: 'false'
+            vintner_abstract: 'true'
+
+        properties:
+            application_name:
+                type: string
 
         requirements:
             - host:
@@ -161,3 +165,73 @@ node_types:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+
+# https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_ARTIFACT_DEF
+
+artifact_types:
+    ###################################################
+    #
+    # Root
+    #
+    ###################################################
+
+    root:
+        derived_from: tosca.entity.Root
+
+    ###################################################
+    #
+    # Source Archive
+    #
+    ###################################################
+
+    source.archive:
+        derived_from: root
+        description: Note, must be a zip file.
+
+    ###################################################
+    #
+    # Apt Package
+    #
+    ###################################################
+
+    apt.package:
+        derived_from: root
+        properties:
+            version:
+                type: string
+                required: false
+            key:
+                type: string
+                required: false
+            source:
+                type: string
+                required: false
+            dependencies:
+                type: string
+                required: false
+            env:
+                type: string
+                required: false
+
+    ###################################################
+    #
+    # Docker Image
+    #
+    ###################################################
+
+    docker.image:
+        derived_from: root
+        # TODO: add auth
+
+interface_types:
+    root:
+        derived_from: tosca.entity.Root
+
+    management:
+        derived_from: root
+        operations:
+            create:
+            configure:
+            start:
+            stop:
+            delete:

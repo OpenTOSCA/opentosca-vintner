@@ -703,7 +703,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::terraform::os:
+    shop.component::terraform::os.machine:
         derived_from: shop.component
 
         properties:
