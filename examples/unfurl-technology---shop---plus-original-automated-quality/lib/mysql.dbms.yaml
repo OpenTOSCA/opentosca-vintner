@@ -335,6 +335,9 @@ node_types:
                                           - containerPort: '{{ SELF.application_port }}'
                                             name: mysql
 
+    mysql.dbms.expose:
+        derived_from: tosca.nodes.Root
+
     mysql.dbms.expose::kubernetes::kubernetes:
         derived_from: unfurl.nodes.K8sRawResource
         properties:
