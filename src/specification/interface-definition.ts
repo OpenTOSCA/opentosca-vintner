@@ -8,7 +8,7 @@ export type InterfaceDefinition = {
     inputs?: {[key: string]: any}
 }
 
-export type OperationDefinition = {[key: string]: any}
+export type OperationDefinition = {[key: string]: any} | string
 
 export const MANAGEMENT_INTERFACE = 'management'
 

@@ -197,21 +197,26 @@ artifact_types:
     apt.package:
         derived_from: root
         properties:
-            version:
+            repository:
                 type: string
                 required: false
+                description: 'name of the repository (required if source is set)'
             key:
                 type: string
                 required: false
+                description: 'URL of the apt key which signs the apt repository (required if source is set)'
             source:
                 type: string
                 required: false
+                description: 'source of the repository'
             dependencies:
                 type: string
                 required: false
+                description: 'Comma separated list of apt packages that are additionally installed'
             env:
                 type: string
-                required: false
+                default: ''
+                description: 'Space separated env variables'
 
     ###################################################
     #
