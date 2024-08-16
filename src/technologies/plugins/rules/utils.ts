@@ -247,3 +247,7 @@ export function TerraformStandardOperations() {
         },
     }
 }
+
+export function UnfurlArtifactFile(name: string) {
+    return `{{ 'project' | get_dir }}/ensemble/{{ SELF.${name}.attributes.file }}`
+}

@@ -95,8 +95,18 @@ node_types:
                 default: 'appengine.googleapis.com'
         requirements:
             - build:
-                  capability: tosca.capabilities.DependsOn
+                  capability: tosca.capabilities.Root
                   relationship: tosca.relationships.DependsOn
+            - reporting:
+                  capability: tosca.capabilities.Root
+                  relationship: tosca.relationships.DependsOn
+
+    gcp.appenginereporting:
+        derived_from: gcp.service
+        properties:
+            gcp_service:
+                type: string
+                default: 'appenginereporting.googleapis.com'
 
     gcp.cloudbuild:
         derived_from: gcp.service

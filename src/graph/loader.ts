@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
 import {PROFILES_DIR} from '#files'
-import {ServiceTemplate} from '#spec/service-template'
+import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
@@ -178,12 +178,8 @@ export default class Loader {
             const template = files.loadYAML<ServiceTemplate>(file)
             if (check.isUndefined(template.tosca_definitions_version)) continue
 
-            // TODO: unfurl ...
-            /*
             if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
                 throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
-
-             */
 
             if (check.isUndefined(template.node_types)) continue
             for (const [name, type] of Object.entries(template.node_types)) {

@@ -154,7 +154,7 @@ topology_template:
             type: openstack.machine
             properties:
                 - machine: unfurl-technology-shop-vm
-                - ports: [80, 9100]
+                - ports: [80]
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
@@ -192,6 +192,10 @@ topology_template:
             requirements:
                 - host: gcp_provider
                 - build: gcp_cloudbuild
+                - reporting: gcp_appenginereporting
+
+        gcp_appenginereporting:
+            type: gcp.appenginereporting
 
         gcp_cloudbuild:
             type: gcp.cloudbuild

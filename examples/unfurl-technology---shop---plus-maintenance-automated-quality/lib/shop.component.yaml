@@ -13,6 +13,8 @@ node_types:
         properties:
             application_name:
                 type: string
+                metadata:
+                    vintner_ignore: true
 
             DB_DIALECT:
                 type: string
@@ -34,21 +36,31 @@ node_types:
 
             optional_feature:
                 type: boolean
+                metadata:
+                    vintner_name: FEATURE_OPTIONAL
 
             premium_feature:
                 type: boolean
+                metadata:
+                    vintner_name: FEATURE_PREMIUM
 
             artifact_tar:
                 type: string
                 default: {eval: '.artifacts::artifact_tar '}
+                metadata:
+                    vintner_ignore: true
 
             artifact_zip:
                 type: string
                 default: {eval: '.artifacts::artifact_zip '}
+                metadata:
+                    vintner_ignore: true
 
             artifact_docker:
                 type: string
                 default: {eval: '.artifacts::artifact_docker '}
+                metadata:
+                    vintner_ignore: true
 
         artifacts:
             artifact_tar:
@@ -472,268 +484,6 @@ node_types:
                                 - --key-file={{ SELF.os_ssh_key_file }}
                                 - --user={{ SELF.os_ssh_user }}
                                 - --ssh-common-args="-o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-
-    ###################################################
-    #
-    # Ansible GCP
-    #
-    ###################################################
-
-    shop.component::ansible::gcp.appengine:
-        derived_from: shop.component
-
-        properties:
-            gcp_service_account_file:
-                type: string
-                default: {get_input: gcp_service_account_file}
-
-            gcp_region:
-                type: string
-                default: {get_input: gcp_region}
-
-            gcp_project:
-                type: string
-                default: {get_input: gcp_project}
-
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: Activate service account
-                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-
-                                    - name: Create working directory
-                                      tempfile:
-                                          state: directory
-                                      register: tempdir_info
-
-                                    - name: Extract deployment artifact in working directory
-                                      unarchive:
-                                          src: "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_tar.attributes.file }}"
-                                          dest: '{{ tempdir_info.path }}'
-
-                                    # https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=node.js
-                                    - name: Configure app yaml
-                                      copy:
-                                          dest: '{{ tempdir_info.path }}/app.yaml'
-                                          content: |
-                                              runtime: nodejs18
-                                              service: {{ SELF.application_name }}
-                                              instance_class: F1
-                                              env_variables:
-                                                  DB_DIALECT: {{ SELF.DB_DIALECT}}
-                                                  DB_NAME: {{ SELF.DB_NAME }}
-                                                  DB_USERNAME: {{ SELF.DB_USERNAME }}
-                                                  DB_PASSWORD: {{ SELF.DB_PASSWORD }}
-                                                  DB_ADDRESS: {{ SELF.DB_ADDRESS }}
-                                                  DB_PORT: {{ SELF.DB_PORT }}
-                                                  FEATURE_OPTIONAL: {{ SELF.optional_feature }}
-                                                  FEATURE_PREMIUM: {{ SELF.premium_feature }}
-
-                                    # https://cloud.google.com/sdk/gcloud/reference/app/deploy
-                                    - name: Create App
-                                      shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet'
-
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: Activate service account
-                                      shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}'
-
-                                    # https://cloud.google.com/sdk/gcloud/reference/app/deploy
-                                    - name: Create App
-                                      shell: 'gcloud app services delete {{ SELF.application_name }} --quiet'
-
-    ###################################################
-    #
-    # Terraform GCP
-    #
-    ###################################################
-
-    shop.component::terraform::gcp.appengine:
-        derived_from: shop.component
-
-        properties:
-            gcp_service_account_file:
-                type: string
-                default: {get_input: gcp_service_account_file}
-
-            gcp_region:
-                type: string
-                default: {get_input: gcp_region}
-
-            gcp_project:
-                type: string
-                default: {get_input: gcp_project}
-
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    tfvars: |
-                        project = "{{ SELF.gcp_project }}"
-                        region = "{{ SELF.gcp_region }}"
-                        credentials = "{{ SELF.gcp_service_account_file }}"
-
-                        db_dialect="{{ SELF.DB_DIALECT}}"
-                        db_name="{{ SELF.DB_NAME }}"
-                        db_username="{{ SELF.DB_USERNAME }}"
-                        db_password="{{ SELF.DB_PASSWORD }}"
-                        db_address="{{ SELF.DB_ADDRESS }}"
-                        db_port="{{ SELF.DB_PORT }}"
-
-                        feature_optional="{{ SELF.optional_feature }}"
-                        feature_premium="{{ SELF.premium_feature }}"
-
-                        application_name = "{{ SELF.application_name }}"
-                        artifact = "{{ 'project' | get_dir }}/ensemble/{{ SELF.artifact_zip.attributes.file }}"
-                    main: |
-                        terraform {
-                           required_providers {
-                             google = {
-                               source = "hashicorp/google"
-                               version = "4.67.0"
-                             }
-                           }
-                         }
-
-                         provider "google" {
-                           project = var.project
-                           region = var.region
-                           credentials = var.credentials
-                         }
-
-                         variable "credentials" {
-                           type        = string
-                         }
-
-                         variable "project" {
-                           type        = string
-                         }
-
-                         variable "region" {
-                           type        = string
-                         }
-
-                         variable "artifact" {
-                           type        = string
-                         }
-
-                         variable "application_name" {
-                           type        = string
-                         }
-
-                         variable "db_dialect" {
-                           type        = string
-                         }
-
-                         variable "db_name" {
-                           type        = string
-                         }
-
-                         variable "db_username" {
-                           type        = string
-                         }
-
-                         variable "db_password" {
-                           type        = string
-                         }
-
-                         variable "db_address" {
-                           type        = string
-                         }
-
-                         variable "db_port" {
-                           type        = number
-                         }
-
-                         variable "feature_optional" {
-                           type        = string
-                         }
-
-                         variable "feature_premium" {
-                           type        = string
-                         }
-
-                         variable "try" {
-                           type = string
-                           default = "8"
-                         }
-
-                         resource "google_app_engine_standard_app_version" "app" {
-                           version_id      = "v1"
-                           service         = var.application_name
-                           runtime         = "nodejs18"
-
-                           entrypoint {
-                             shell = "node ./index.js"
-                           }
-
-                           deployment {
-                             zip {
-                               source_url = "https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}"
-                             }
-                           }
-
-                           env_variables = {
-                             DB_DIALECT  = var.db_dialect
-                             DB_NAME     = var.db_name
-                             DB_USERNAME = var.db_username
-                             DB_PASSWORD = var.db_password
-                             DB_ADDRESS  = var.db_address
-                             DB_PORT     = var.db_port
-                             FEATURE_OPTIONAL    = var.feature_optional
-                             FEATURE_PREMIUM     = var.feature_premium
-                           }
-
-                           delete_service_on_destroy = true
-                           service_account = google_service_account.custom_service_account.email
-                         }
-
-                         resource "google_storage_bucket" "bucket" {
-                           name     = "${var.project}-${var.application_name}-${var.try}"
-                           location = "EU"
-                         }
-
-                         resource "google_storage_bucket_object" "object" {
-                           name   = "object-${var.try}.zip"
-                           bucket = google_storage_bucket.bucket.name
-                           source = var.artifact
-                         }
-
-                         resource "google_service_account" "custom_service_account" {
-                           account_id   = "${var.application_name}-account-${var.try}"
-                           display_name = "Custom Service Account"
-                         }
-
-                         resource "google_project_iam_member" "gae_api" {
-                           project = google_service_account.custom_service_account.project
-                           role    = "roles/compute.networkUser"
-                           member  = "serviceAccount:${google_service_account.custom_service_account.email}"
-                         }
-
-                         resource "google_project_iam_member" "storage_viewer" {
-                           project = google_service_account.custom_service_account.project
-                           role    = "roles/storage.objectViewer"
-                           member  = "serviceAccount:${google_service_account.custom_service_account.email}"
-                         }
 
     ###################################################
     #

@@ -158,7 +158,7 @@ const generator: ImplementationGenerator = {
                                                 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
                                         },
                                         {
-                                            name: 'create app',
+                                            name: 'delete app',
                                             'ansible.builtin.shell':
                                                 'gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet',
                                         },
