@@ -1,16 +1,16 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    ARTIFACT_SOURCE_ARCHIVE,
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
     TerraformStandardOperations,
     UnfurlArtifactFile,
+    getOperation,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 // TODO: application_address etc
-// TODO: this is hardcoded to node
 
 const generator: ImplementationGenerator = {
     id: 'software.application::terraform::gcp.appengine',
@@ -71,11 +71,12 @@ const generator: ImplementationGenerator = {
                                             ],
                                             entrypoint: [
                                                 {
-                                                    shell: 'node ./index.js',
+                                                    // TODO: "node index.js"? its currently "npm start"
+                                                    shell: getOperation(name, type, MANAGEMENT_OPERATIONS.START),
                                                 },
                                             ],
                                             env_variable: mapProperties(type, {format: 'map'}),
-                                            runtime: 'nodejs18',
+                                            runtime: '{{ SELF.application_language }}',
                                             service: '{{ SELF.application_name }}',
                                             service_account: '${google_service_account.custom_service_account.email}',
                                             version_id: 'v1',
@@ -119,7 +120,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             bucket: '${google_storage_bucket.bucket.name}',
                                             name: 'object.zip',
-                                            source: UnfurlArtifactFile(ARTIFACT_SOURCE_ARCHIVE),
+                                            source: UnfurlArtifactFile('source_archive'),
                                         },
                                     ],
                                 },

@@ -1,7 +1,6 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {AnsibleTask, ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    ARTIFACT_SOURCE_ARCHIVE,
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
     AnsibleHostOperation,
@@ -51,7 +50,7 @@ const generator: ImplementationGenerator = {
             },
         ]
 
-        if (hasOperation(type, MANAGEMENT_OPERATIONS.CONFIGURE)) {
+        if (hasOperation(name, type, MANAGEMENT_OPERATIONS.CONFIGURE)) {
             configure.push({
                 ...AnsibleCopyOperationTask(name, type, MANAGEMENT_OPERATIONS.CONFIGURE),
             })
@@ -84,15 +83,6 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        // TODO: extract this to own component?!
-                                        {
-                                            name: 'Install Node.js',
-                                            'ansible.builtin.shell':
-                                                'if [ ! -f /usr/bin/node ]; then\n    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\\\n    sudo apt-get install -y nodejs\nfi\n',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
                                         {
                                             name: 'create application directory',
                                             'ansible.builtin.file': {
@@ -103,7 +93,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'extract deployment artifact in application directory',
                                             unarchive: {
-                                                src: UnfurlArtifactFile(ARTIFACT_SOURCE_ARCHIVE),
+                                                src: UnfurlArtifactFile('source_archive'),
                                                 dest: '{{ SELF.application_directory }}',
                                             },
                                         },
@@ -158,7 +148,12 @@ const generator: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(name, type, MANAGEMENT_OPERATIONS.START),
+                                            name: 'copy management operation',
+                                            'ansible.builtin.copy': {
+                                                dest: `{{ SELF.application_directory }}/.vintner/start.sh`,
+                                                content: '{{ ".artifacts::source_archive::entry_point" | eval }}',
+                                                mode: '0755',
+                                            },
                                         },
                                         {
                                             name: 'start service',

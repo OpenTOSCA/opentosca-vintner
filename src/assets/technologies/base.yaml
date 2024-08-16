@@ -34,7 +34,23 @@ node_types:
             application_name:
                 type: string
 
+            application_language:
+                type: string
+
         requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+
+    ###################################################
+    #
+    # Software Runtime
+    #
+    ###################################################
+
+    software.runtime:
+        derived_from: software.application
+        capabilities:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
@@ -186,7 +202,7 @@ artifact_types:
 
     source.archive:
         derived_from: root
-        description: Note, must be a zip file.
+        description: 'application packaged as zip archive'.
 
     ###################################################
     #
@@ -197,6 +213,10 @@ artifact_types:
     apt.package:
         derived_from: root
         properties:
+            script:
+                type: string
+                required: false
+                description: 'URL of an installation script'
             repository:
                 type: string
                 required: false
@@ -227,6 +247,7 @@ artifact_types:
     docker.image:
         derived_from: root
         # TODO: add auth
+        # file contains repo/image:tag
 
 interface_types:
     root:

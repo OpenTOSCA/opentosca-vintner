@@ -273,28 +273,28 @@ export function ApplicationDirectory() {
     }
 }
 
-export const ARTIFACT_SOURCE_ARCHIVE = 'source_archive'
-
-export function getOperation(type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    return type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation]
+// TODO: this is limited to types only and can not access the management operations defined at a node template
+export function getOperation(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
+    const definition = type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation]
+    assert.isDefined(definition, `Node type "${name}" is missing the standard start operation`)
+    assert.isString(definition)
+    return definition
 }
 
-export function hasOperation(type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    return check.isDefined(getOperation(type, operation))
+export function hasOperation(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
+    return check.isDefined(type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation])
 }
 
 // TODO: support that operation is a path to a file, e.g., via artifact types ...
 
 export function AnsibleCopyOperationTask(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    const content = getOperation(type, operation)
-    assert.isDefined(content, `Node type "${name}" is missing the standard start operation`)
-    assert.isString(content)
+    const definition = getOperation(name, type, operation)
 
     return {
         name: 'copy management operation',
         'ansible.builtin.copy': {
             dest: `{{ SELF.application_directory }}/.vintner/${operation}.sh`,
-            content,
+            content: definition,
             mode: '0755',
         },
     }

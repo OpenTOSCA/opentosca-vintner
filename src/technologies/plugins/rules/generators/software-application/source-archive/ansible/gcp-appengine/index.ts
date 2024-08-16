@@ -1,6 +1,5 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    ARTIFACT_SOURCE_ARCHIVE,
     AnsibleOrchestratorOperation,
     GCPProviderCredentials,
     MetadataGenerated,
@@ -10,7 +9,6 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 // TODO: application_address etc
-// TODO: this is hardcoded to node
 
 const generator: ImplementationGenerator = {
     id: 'software.application::ansible::gcp.appengine',
@@ -58,7 +56,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'extract deployment artifact in working directory',
                                             unarchive: {
-                                                src: UnfurlArtifactFile(ARTIFACT_SOURCE_ARCHIVE),
+                                                src: UnfurlArtifactFile('source_archive'),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },
@@ -79,7 +77,7 @@ const generator: ImplementationGenerator = {
                                             },
                                             vars: {
                                                 manifest: {
-                                                    runtime: 'nodejs18',
+                                                    runtime: '{{ SELF.application_language }}',
                                                     service: '{{ SELF.application_name }}',
                                                     instance_class: 'F1',
                                                     env_variables: mapProperties(type, {format: 'map'}),

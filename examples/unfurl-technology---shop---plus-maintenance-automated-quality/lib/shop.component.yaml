@@ -57,19 +57,13 @@ node_types:
             source_archive:
                 type: source.archive
                 file: files/shop.source.zip
+                properties:
+                    entry_point:
 
         requirements:
             - database:
                   capability: tosca.capabilities.Endpoint.Database
                   relationship: tosca.relationships.ConnectsTo
-
-        # TODO: is this part of the template?
-        interfaces:
-            management:
-                type: Management
-                operations:
-                    configure: /usr/bin/npm ci
-                    start: /usr/bin/npm start
 
     ###################################################
     #

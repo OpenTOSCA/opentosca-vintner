@@ -108,8 +108,8 @@ topology_template:
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
-                - host: virtual_machine
-                - host: gcp_runtime
+                - host: node_runtime
+                - host: gcp_appengine
                 - host: kubernetes
 
         shop_ingress:
@@ -149,6 +149,11 @@ topology_template:
         # Virtual Machine
         #
         ###################################################
+
+        node_runtime:
+            type: node.runtime
+            requirements:
+                - host: virtual_machine
 
         virtual_machine:
             type: openstack.machine

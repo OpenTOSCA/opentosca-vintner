@@ -34,6 +34,12 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
+                                            name: 'run setup script',
+                                            'ansible.builtin.shell':
+                                                'curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -',
+                                            when: '".artifacts::apt_package::script" | eval != None',
+                                        },
+                                        {
                                             name: 'add apt key',
                                             'ansible.builtin.apt_key': {
                                                 url: '{{ ".artifacts::apt_package::key" | eval }}',
