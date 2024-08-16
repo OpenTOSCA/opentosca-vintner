@@ -52,6 +52,14 @@ ansible:
           - mysql.dbms
           - gcp.cloudsql
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
+
+    - component: mysql.database
+      hosting:
+          - mysql.dbms
+          - openstack.machine
+      weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     # DBMS
     - component: mysql.dbms
@@ -64,9 +72,16 @@ ansible:
       weight: 0.5
       comment: Kubernetes is more specialized.
 
+    # TODO. still state that eg Terraform is more specialized? google.cloud is way more limited in contrast to the terraform gcp module? also applies then to the other use cases where ansible is used in the context of gcp
     - component: mysql.dbms
       hosting: gcp.cloudsql
       weight: 1
+      comment: Primary use case due to the specialization of Ansible.
+
+    - component: mysql.dbms
+      hosting: openstack.machine
+      weight: 1
+      comment: Primary use case due to the specialization of Ansible.
 
     # Ingress
     - component: ingress
@@ -138,6 +153,13 @@ terraform:
       weight: 1
       comment: Terraform provides a declarative module.
 
+    - component: mysql.database
+      hosting:
+          - mysql.dbms
+          - openstack.machine
+      weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+
     # DBMS
     - component: mysql.dbms
       hosting: docker.engine
@@ -153,6 +175,13 @@ terraform:
       hosting: gcp.cloudsql
       weight: 1
       comment: Terraform provides a declarative module.
+
+    - component: mysql.dbms
+      hosting:
+          - mysql.dbms
+          - openstack.machine
+      weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     # Ingress
     - component: ingress

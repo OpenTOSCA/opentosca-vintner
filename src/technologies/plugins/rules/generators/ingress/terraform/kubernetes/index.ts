@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'ingress::terraform::kubernetes',
@@ -19,20 +24,7 @@ const generator: ImplementationGenerator = {
                 },
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

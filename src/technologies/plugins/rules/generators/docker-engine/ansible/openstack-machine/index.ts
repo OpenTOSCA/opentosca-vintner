@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleHostOperation,
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'docker.engine::ansible::openstack.machine',
@@ -16,11 +21,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'HOST',
-                                environment: {
-                                    ANSIBLE_HOST_KEY_CHECKING: 'False',
-                                },
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {

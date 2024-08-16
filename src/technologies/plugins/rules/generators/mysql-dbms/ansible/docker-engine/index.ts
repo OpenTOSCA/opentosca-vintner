@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleHostOperation,
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.dbms::ansible::docker.engine',
@@ -14,9 +19,21 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
+                    default: '127.0.0.1',
+                },
+                application_port: {
+                    type: 'string',
+                    default: 3306,
+                },
+                management_address: {
+                    type: 'string',
                     default: {
-                        concat: ['localhost', ':', '{{ SELF.application_port }}'],
+                        eval: '.::.requirements::[.name=host]::.target::management_address',
                     },
+                },
+                management_port: {
+                    type: 'integer',
+                    default: 3306,
                 },
             },
             interfaces: {
@@ -24,11 +41,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'HOST',
-                                environment: {
-                                    ANSIBLE_HOST_KEY_CHECKING: 'False',
-                                },
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {

@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, OpenstackProviderCredentials} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackProviderCredentials,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'openstack.machine::ansible',
@@ -16,8 +21,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                                 environment: {
                                     OS_AUTH_TYPE: {
                                         eval: '.::os_auth_type',
@@ -96,8 +100,7 @@ const generator: ImplementationGenerator = {
                         },
                         delete: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {

@@ -199,3 +199,51 @@ export function KubernetesCredentials() {
         },
     }
 }
+
+export function AnsibleHostEndpointCapability() {
+    return {
+        endpoint: {
+            type: 'unfurl.capabilities.Endpoint.Ansible',
+            properties: {
+                connection: 'ssh',
+                host: {eval: '.parent::management_address'},
+            },
+        },
+    }
+}
+
+export function AnsibleHostOperation() {
+    return {
+        primary: 'Ansible',
+        operation_host: 'HOST',
+        environment: {
+            ANSIBLE_HOST_KEY_CHECKING: 'False',
+        },
+    }
+}
+
+export function AnsibleOrchestratorOperation() {
+    return {
+        primary: 'Ansible',
+        operation_host: 'ORCHESTRATOR',
+    }
+}
+
+export function TerraformStandardOperations() {
+    return {
+        Standard: {
+            operations: {
+                configure: {
+                    implementation: {
+                        primary: 'Terraform',
+                    },
+                },
+                delete: {
+                    implementation: {
+                        primary: 'Terraform',
+                    },
+                },
+            },
+        },
+    }
+}

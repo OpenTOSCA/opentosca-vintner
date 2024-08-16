@@ -7,7 +7,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::ansible::mysql.dbms::docker.engine',
+    id: 'mysql.database::ansible::mysql.dbms::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,

@@ -4,6 +4,7 @@ import {
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
+    TerraformStandardOperations,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -27,20 +28,7 @@ const generator: ImplementationGenerator = {
                 },
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

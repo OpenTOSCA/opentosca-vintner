@@ -1,9 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleHostEndpointCapability,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
+    TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
@@ -40,31 +42,10 @@ const generator: ImplementationGenerator = {
                 },
             },
             capabilities: {
-                endpoint: {
-                    type: 'unfurl.capabilities.Endpoint.Ansible',
-                    properties: {
-                        connection: 'ssh',
-                        host: {
-                            eval: '.parent::management_address',
-                        },
-                    },
-                },
+                ...AnsibleHostEndpointCapability(),
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

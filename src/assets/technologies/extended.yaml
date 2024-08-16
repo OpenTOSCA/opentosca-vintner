@@ -73,6 +73,38 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
+    gcp.cloudrun:
+        derived_from: gcp.service
+        properties:
+            gcp_service:
+                type: string
+                default: 'run.googleapis.com'
+
+    gcp.cloudsql:
+        derived_from: gcp.service
+        properties:
+            gcp_service:
+                type: string
+                default: 'sqladmin.googleapis.com'
+
+    gcp.appengine:
+        derived_from: gcp.service
+        properties:
+            gcp_service:
+                type: string
+                default: 'appengine.googleapis.com'
+        requirements:
+            - build:
+                  capability: tosca.capabilities.DependsOn
+                  relationship: tosca.relationships.DependsOn
+
+    gcp.cloudbuild:
+        derived_from: gcp.service
+        properties:
+            gcp_service:
+                type: string
+                default: 'cloudbuild.googleapis.com'
+
     ###################################################
     #
     # Docker Engine

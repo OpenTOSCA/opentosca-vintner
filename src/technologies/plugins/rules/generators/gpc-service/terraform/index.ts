@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    GCPProviderCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'gcp.service::terraform',
@@ -10,17 +15,11 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {...GCPProviderCredentials()},
+            properties: {
+                ...GCPProviderCredentials(),
+            },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

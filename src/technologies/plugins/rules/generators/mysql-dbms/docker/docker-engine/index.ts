@@ -1,5 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleHostEndpointCapability,
+    AnsibleHostOperation,
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.dbms::docker::docker.engine',
@@ -32,26 +38,14 @@ const generator: ImplementationGenerator = {
                 },
             },
             capabilities: {
-                endpoint: {
-                    type: 'unfurl.capabilities.Endpoint.Ansible',
-                    properties: {
-                        connection: 'ssh',
-                        host: {
-                            eval: '.parent::management_address',
-                        },
-                    },
-                },
+                ...AnsibleHostEndpointCapability(),
             },
             interfaces: {
                 Standard: {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'HOST',
-                                environment: {
-                                    ANSIBLE_HOST_KEY_CHECKING: 'False',
-                                },
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {

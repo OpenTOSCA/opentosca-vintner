@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleHostOperation,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -27,11 +28,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'HOST',
-                                environment: {
-                                    ANSIBLE_HOST_KEY_CHECKING: 'False',
-                                },
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {

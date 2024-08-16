@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    GCPProviderCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.database::ansible::mysql.dbms::gcp.cloudsql',
@@ -18,8 +23,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                                 environment: {
                                     GCP_SERVICE_ACCOUNT_FILE: {
                                         eval: '.::gcp_service_account_file',

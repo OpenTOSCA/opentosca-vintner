@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils'
 
 // TODO: some syntax error at create-user
 
@@ -20,8 +25,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {

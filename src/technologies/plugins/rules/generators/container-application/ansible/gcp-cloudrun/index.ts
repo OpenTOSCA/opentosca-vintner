@@ -1,5 +1,6 @@
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
+    AnsibleOrchestratorOperation,
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
@@ -25,8 +26,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {
@@ -147,8 +147,7 @@ const generator: ImplementationGenerator = {
                         },
                         delete: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {

@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleOrchestratorOperation,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
@@ -29,8 +30,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                                 environment: {
                                     K8S_AUTH_HOST: {
                                         eval: '.::k8s_host',

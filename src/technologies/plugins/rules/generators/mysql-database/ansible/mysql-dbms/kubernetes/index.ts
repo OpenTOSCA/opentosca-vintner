@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.database::ansible::mysql.dbms::kubernetes',
@@ -18,8 +23,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {

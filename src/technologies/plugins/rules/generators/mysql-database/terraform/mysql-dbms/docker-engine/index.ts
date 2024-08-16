@@ -4,10 +4,11 @@ import {
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
+    TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms.dbms::docker.engine',
+    id: 'mysql.database::terraform::mysql.dbms::docker.engine',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -20,20 +21,7 @@ const generator: ImplementationGenerator = {
                 ...OpenstackMachineHost(),
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {
@@ -58,7 +46,8 @@ const generator: ImplementationGenerator = {
                                     mysql: [
                                         {
                                             remote: {
-                                                port: 3306,
+                                                host: '{{ HOST.application_address }}',
+                                                port: '{{ HOST.application_port }}',
                                             },
                                         },
                                     ],

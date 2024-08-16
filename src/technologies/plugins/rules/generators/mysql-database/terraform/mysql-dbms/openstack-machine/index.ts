@@ -1,13 +1,14 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms::gcp.cloudsql',
+    id: 'mysql.database::terraform::mysql.dbms::openstack.machine',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -16,9 +17,9 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...GCPProviderCredentials(),
+                ...OpenstackMachineCredentials(),
+                ...OpenstackMachineHost(),
             },
-
             interfaces: {
                 ...TerraformStandardOperations(),
                 defaults: {
@@ -28,50 +29,67 @@ const generator: ImplementationGenerator = {
                                 {
                                     required_providers: [
                                         {
-                                            google: {
-                                                source: 'hashicorp/google',
-                                                version: '5.39.1',
-                                            },
                                             mysql: {
                                                 source: 'petoju/mysql',
                                                 version: '3.0.48',
+                                            },
+                                            ssh: {
+                                                source: 'AndrewChubatiuk/ssh',
+                                                version: '0.2.3',
                                             },
                                         },
                                     ],
                                 },
                             ],
+                            data: {
+                                ssh_tunnel: {
+                                    mysql: [
+                                        {
+                                            remote: {
+                                                host: '{{ HOST.application_address }}',
+                                                port: '{{ HOST.application_port }}',
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
                             provider: {
-                                google: [
-                                    {
-                                        credentials: '{{ SELF.gcp_service_account_file }}',
-                                        project: '{{ SELF.gcp_project }}',
-                                        region: '{{ SELF.gcp_region }}',
-                                    },
-                                ],
                                 mysql: [
                                     {
-                                        endpoint: '{{ HOST.management_address }}',
+                                        endpoint: '${data.ssh_tunnel.mysql.local.address}',
                                         password: '{{ HOST.dbms_password }}',
                                         username: 'root',
                                     },
                                 ],
+                                ssh: [
+                                    {
+                                        auth: {
+                                            private_key: {
+                                                content: '${file(pathexpand("{{ SELF.os_ssh_key_file }}"))}',
+                                            },
+                                        },
+                                        server: {
+                                            host: '{{ HOST.management_address }}',
+                                            port: 22,
+                                        },
+                                        user: '{{ SELF.os_ssh_user }}',
+                                    },
+                                ],
                             },
                             resource: {
-                                google_sql_database: {
+                                mysql_database: {
                                     database: [
                                         {
                                             name: '{{ SELF.database_name }}',
-                                            instance: '{{ HOST.dbms_name }}',
                                         },
                                     ],
                                 },
-                                google_sql_user: {
+                                mysql_user: {
                                     user: [
                                         {
                                             host: '%',
-                                            instance: '{{ HOST.dbms_name }}',
-                                            name: '{{ SELF.database_name }}',
-                                            password: '{{ SELF.database_password }}',
+                                            plaintext_password: '{{ SELF.database_password }}',
+                                            user: '{{ SELF.database_user }}',
                                         },
                                     ],
                                 },
@@ -82,7 +100,7 @@ const generator: ImplementationGenerator = {
                                             host: '%',
                                             table: '*',
                                             privileges: ['ALL'],
-                                            user: '${google_sql_user.user.name}',
+                                            user: '${mysql_user.user.user}',
                                         },
                                     ],
                                 },

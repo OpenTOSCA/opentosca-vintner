@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    GCPProviderCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'mysql.dbms::terraform::gcp.cloudsql',
@@ -36,20 +41,7 @@ const generator: ImplementationGenerator = {
                 },
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     outputs: {
                         application_address: 'application_address',

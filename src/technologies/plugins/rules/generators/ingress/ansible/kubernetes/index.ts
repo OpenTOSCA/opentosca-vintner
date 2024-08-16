@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'ingress::ansible::kubernetes',
@@ -18,14 +23,12 @@ const generator: ImplementationGenerator = {
                     default: 'not implemented',
                 },
             },
-
             interfaces: {
                 Standard: {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                                 environment: {
                                     K8S_AUTH_HOST: {
                                         eval: '.::k8s_host',

@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, mapProperties} from '#technologies/plugins/rules/utils'
+import {
+    AnsibleOrchestratorOperation,
+    MetadataGenerated,
+    MetadataUnfurl,
+    mapProperties,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'container.application::kubernetes::kubernetes',
@@ -23,8 +28,7 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                primary: 'Ansible',
-                                operation_host: 'ORCHESTRATOR',
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {

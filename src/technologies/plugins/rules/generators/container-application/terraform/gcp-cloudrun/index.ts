@@ -4,6 +4,7 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
+    TerraformStandardOperations,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -21,20 +22,7 @@ const generator: ImplementationGenerator = {
                 ...GCPProviderCredentials(),
             },
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     outputs: {
                         application_address: 'application_address',

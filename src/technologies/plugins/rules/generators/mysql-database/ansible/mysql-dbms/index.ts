@@ -1,13 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleHostOperation,
+    AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::ansible::mysql.dbms::docker.engine',
+    id: 'mysql.database::ansible::mysql.dbms',
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -23,36 +23,18 @@ const generator: ImplementationGenerator = {
                     operations: {
                         create: {
                             implementation: {
-                                ...AnsibleHostOperation(),
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'wait for ssh',
-                                            wait_for_connection: null,
-                                        },
-                                        {
-                                            name: 'install pip',
-                                            apt: {
-                                                name: 'python3-pip',
-                                                state: 'present',
-                                            },
-                                        },
-                                        {
-                                            name: 'install pymysql',
-                                            pip: {
-                                                name: 'pymysql',
-                                                state: 'present',
-                                            },
-                                        },
-                                        {
                                             name: 'create database',
                                             'community.mysql.mysql_db': {
                                                 name: '{{ SELF.database_name }}',
-                                                login_host: '{{ HOST.application_address }}',
+                                                login_host: '{{ HOST.management_address }}',
                                                 login_password: '{{ HOST.dbms_password }}',
-                                                login_port: '{{ HOST.application_port }}',
+                                                login_port: '{{ HOST.management_port }}',
                                                 login_user: 'root',
                                             },
                                         },
@@ -63,19 +45,14 @@ const generator: ImplementationGenerator = {
                                                 password: '{{ SELF.database_password }}',
                                                 host: '%',
                                                 priv: '*.*:ALL',
-                                                login_host: '{{ HOST.application_address }}',
+                                                login_host: '{{ HOST.management_address }}',
                                                 login_password: '{{ HOST.dbms_password }}',
-                                                login_port: '{{ HOST.application_port }}',
+                                                login_port: '{{ HOST.management_port }}',
                                                 login_user: 'root',
                                             },
                                         },
                                     ],
                                 },
-                                playbookArgs: [
-                                    '--become',
-                                    '--key-file={{ SELF.os_ssh_key_file }}',
-                                    '--user={{ SELF.os_ssh_user }}',
-                                ],
                             },
                         },
                         delete: 'exit 0',

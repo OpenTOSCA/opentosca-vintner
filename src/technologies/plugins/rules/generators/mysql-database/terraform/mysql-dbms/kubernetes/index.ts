@@ -1,10 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
-// TODO: mysql.database::terraform::mysql.dbms.dbms::kubernetes
+// TODO: mysql.database::terraform::mysql.dbms::kubernetes
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms.dbms::kubernetes',
+    id: 'mysql.database::terraform::mysql.dbms::kubernetes',
     generate: (name, type) => {
         return {
             derived_from: name,

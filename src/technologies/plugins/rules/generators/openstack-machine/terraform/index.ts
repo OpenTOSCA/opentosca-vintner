@@ -1,5 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, MetadataUnfurl, OpenstackProviderCredentials} from '#technologies/plugins/rules/utils'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackProviderCredentials,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     id: 'openstack.machine::terraform',
@@ -12,20 +17,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...OpenstackProviderCredentials()},
             interfaces: {
-                Standard: {
-                    operations: {
-                        configure: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                        delete: {
-                            implementation: {
-                                primary: 'Terraform',
-                            },
-                        },
-                    },
-                },
+                ...TerraformStandardOperations(),
                 defaults: {
                     outputs: {
                         management_address: 'management_address',
