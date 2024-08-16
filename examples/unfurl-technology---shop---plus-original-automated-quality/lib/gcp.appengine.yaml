@@ -7,7 +7,7 @@ node_types:
     #
     ###################################################
 
-    gcp.app_engine:
+    gcp.appengine:
         derived_from: tosca.nodes.Root
         properties:
             gcp_service_account_file:
@@ -32,8 +32,8 @@ node_types:
     #
     ###################################################
 
-    gcp.app_engine::ansible:
-        derived_from: gcp.app_engine
+    gcp.appengine::ansible:
+        derived_from: gcp.appengine
         interfaces:
             Standard:
                 operations:
@@ -84,8 +84,8 @@ node_types:
     #
     ###################################################
 
-    gcp.app_engine::terraform:
-        derived_from: gcp.app_engine
+    gcp.appengine::terraform:
+        derived_from: gcp.appengine
         interfaces:
             Standard:
                 operations:

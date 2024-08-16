@@ -4,20 +4,20 @@ ansible:
       weight: 1
 
     - component: shop.component
-      host: gcp.app_engine
+      host: gcp.appengine
       weight: 0.5
 
     - component: os.compute
       weight: 0.5
 
-    - component: gcp.app_engine
+    - component: gcp.appengine
       weight: 0.5
 
-    - component: gcp.cloud_sql
+    - component: gcp.cloudsql
       weight: 0.5
 
     - component: mysql.database
-      host: gcp.cloud_sql
+      host: gcp.cloudsql
       weight: 0.5
 
     - component: mysql.database
@@ -34,20 +34,20 @@ terraform:
       weight: 0
 
     - component: shop.component
-      host: gcp.app_engine
+      host: gcp.appengine
       weight: 1
 
     - component: os.compute
       weight: 1
 
-    - component: gcp.app_engine
+    - component: gcp.appengine
       weight: 1
 
-    - component: gcp.cloud_sql
+    - component: gcp.cloudsql
       weight: 1
 
     - component: mysql.database
-      host: gcp.cloud_sql
+      host: gcp.cloudsql
       weight: 1
 
     - component: mysql.database

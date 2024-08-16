@@ -456,7 +456,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::ansible::gcp.app_engine:
+    shop.component::ansible::gcp.appengine:
         derived_from: shop.component
 
         properties:
@@ -535,7 +535,7 @@ node_types:
     #
     ###################################################
 
-    shop.component::terraform::gcp.app_engine:
+    shop.component::terraform::gcp.appengine:
         derived_from: shop.component
 
         properties:

@@ -129,10 +129,10 @@ topology_template:
                       conditions: {not: {variability_input: medium}}
 
         gcp_dbms:
-            type: gcp.cloud_sql
+            type: gcp.cloudsql
             properties:
                 - instance_name: unfurl-technology
                 - root_password: {get_input: database_password}
 
         gcp_runtime:
-            type: gcp.app_engine
+            type: gcp.appengine

@@ -7,7 +7,7 @@ node_types:
     #
     ###################################################
 
-    gcp.cloud_sql:
+    gcp.cloudsql:
         derived_from: tosca.nodes.Root
         properties:
             instance_name:
@@ -46,8 +46,8 @@ node_types:
     #
     ###################################################
 
-    gcp.cloud_sql::terraform:
-        derived_from: gcp.cloud_sql
+    gcp.cloudsql::terraform:
+        derived_from: gcp.cloudsql
         interfaces:
             Standard:
                 operations:
@@ -158,8 +158,8 @@ node_types:
     #
     ###################################################
 
-    gcp.cloud_sql::ansible:
-        derived_from: gcp.cloud_sql
+    gcp.cloudsql::ansible:
+        derived_from: gcp.cloudsql
         interfaces:
             Standard:
                 operations:
