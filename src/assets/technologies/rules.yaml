@@ -5,32 +5,42 @@
 ###################################################
 
 ansible:
-    # Container
-    - component: container.application
-      hosting:
-          - docker.engine
-          - virtual.machine
-      weight: 0.5
-      comment: Docker is more specialized.
-
-    - component: container.application
-      hosting: kubernetes
-      weight: 0.5
-      comment: Kubernetes is more specialized.
-
-    - component: container.application
-      hosting: gcp.cloudrun
-      weight: 0
-      comment: Custom module with imperative parts, while Terraform provides a declarative module.
-
     # Software
     - component: software.application
       hosting: virtual.machine
+      artifact: source.archive
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
     - component: software.application
+      hosting: virtual.machine
+      artifact: apt.package
+      weight: 1
+      comment: Primary use case due to the specialization of Ansible.
+
+    - component: software.application
+      hosting:
+          - docker.engine
+          - virtual.machine
+      artifact: docker.image
+      weight: 0.5
+      comment: Docker is more specialized.
+
+    - component: software.application
+      hosting: kubernetes
+      artifact: docker.image
+      weight: 0.5
+      comment: Kubernetes is more specialized.
+
+    - component: software.application
+      hosting: gcp.cloudrun
+      artifact: docker.image
+      weight: 0
+      comment: Custom module with imperative parts, while Terraform provides a declarative module.
+
+    - component: software.application
       hosting: gcp.appengine
+      artifact: source.archive
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
@@ -116,32 +126,42 @@ ansible:
       weight: 1
 
 terraform:
-    # Container
-    - component: container.application
-      hosting:
-          - docker.engine
-          - virtual.machine
-      weight: 0.5
-      comment: Docker is more specialized.
-
-    - component: container.application
-      hosting: kubernetes
-      weight: 0.5
-      comment: Kubernetes is more specialized.
-
-    - component: container.application
-      hosting: gcp.cloudrun
-      weight: 1
-      comment: Terraform provides a declarative module.
-
     # Software
     - component: software.application
       hosting: virtual.machine
+      artifact: apt.package
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     - component: software.application
+      hosting: virtual.machine
+      artifact: source.archive
+      weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+
+    - component: software.application
+      hosting:
+          - docker.engine
+          - virtual.machine
+      artifact: docker.image
+      weight: 0.5
+      comment: Docker is more specialized.
+
+    - component: software.application
+      hosting: kubernetes
+      artifact: docker.image
+      weight: 0.5
+      comment: Kubernetes is more specialized.
+
+    - component: software.application
       hosting: gcp.cloudrun
+      artifact: docker.image
+      weight: 1
+      comment: Terraform provides a declarative module.
+
+    - component: software.application
+      hosting: gcp.appengine
+      artifact: source.archive
       weight: 1
       comment: Terraform provides a declarative module.
 
@@ -229,9 +249,10 @@ terraform:
       comment: Terraform provides a declarative module.
 
 kubernetes:
-    # Container
-    - component: container.application
+    # Software
+    - component: software.application
       hosting: kubernetes
+      artifact: docker.image
       weight: 1
       comment: Kubernetes is the underlying technology.
 
@@ -256,11 +277,12 @@ kubernetes:
       comment: Kubernetes is the underlying technology.
 
 docker:
-    # Container
-    - component: container.application
+    # Software
+    - component: software.application
       hosting:
           - docker.engine
           - virtual.machine
+      artifact: docker.image
       weight: 1
       comment: Docker is the underlying technology.
 
