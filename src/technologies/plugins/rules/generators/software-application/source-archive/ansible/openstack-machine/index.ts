@@ -1,6 +1,7 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
-import {AnsibleTask, ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleAssertOperationTask,
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
     AnsibleHostOperation,
@@ -11,7 +12,6 @@ import {
     MetadataUnfurl,
     OpenstackMachineCredentials,
     UnfurlArtifactFile,
-    hasOperation,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -32,34 +32,11 @@ WantedBy=multi-user.target
 // TODO: inherit management operations
 // TODO: inherit artifacts
 
-// TODO: assert artifact is zip file
+// TODO: assert artifact is zip file (cant do that during generation only during run)
 
 const generator: ImplementationGenerator = {
     id: 'software.component::ansible#source.archive@openstack.machine',
     generate: (name, type) => {
-        const configure: AnsibleTask[] = [
-            {
-                ...AnsibleWaitForSSHTask(),
-            },
-            {
-                name: 'create .env file',
-                copy: {
-                    dest: '{{ SELF.application_directory }}/.env',
-                    content: mapProperties(type, {format: 'ini'}),
-                },
-            },
-        ]
-
-        if (hasOperation(name, type, MANAGEMENT_OPERATIONS.CONFIGURE)) {
-            configure.push({
-                ...AnsibleCopyOperationTask(name, type, MANAGEMENT_OPERATIONS.CONFIGURE),
-            })
-
-            configure.push({
-                ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
-            })
-        }
-
         return {
             derived_from: name,
             metadata: {
@@ -131,7 +108,24 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: configure,
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            name: 'create .env file',
+                                            copy: {
+                                                dest: '{{ SELF.application_directory }}/.env',
+                                                content: mapProperties(type, {format: 'ini'}),
+                                            },
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                        },
+                                    ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
@@ -148,12 +142,10 @@ const generator: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            name: 'copy management operation',
-                                            'ansible.builtin.copy': {
-                                                dest: `{{ SELF.application_directory }}/.vintner/start.sh`,
-                                                content: '{{ ".artifacts::source_archive::entry_point" | eval }}',
-                                                mode: '0755',
-                                            },
+                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.START),
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
                                             name: 'start service',

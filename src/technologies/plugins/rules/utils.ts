@@ -1,6 +1,5 @@
 import * as assert from '#assert'
-import * as check from '#check'
-import {MANAGEMENT_INTERFACE, MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 import {METADATA, PROPERTIES} from './types'
@@ -273,30 +272,31 @@ export function ApplicationDirectory() {
     }
 }
 
-// TODO: this is limited to types only and can not access the management operations defined at a node template
-export function getOperation(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    const definition = type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation]
-    assert.isDefined(definition, `Node type "${name}" is missing the standard start operation`)
-    assert.isString(definition)
-    return definition
-}
-
-export function hasOperation(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    return check.isDefined(type.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation])
+export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
+    return {
+        name: 'assert management operation',
+        'ansible.builtin.fail': {
+            dest: `Management operation "${operation}" missing`,
+        },
+        when: `SELF._management_${operation} is None`,
+    }
 }
 
 // TODO: support that operation is a path to a file, e.g., via artifact types ...
-
-export function AnsibleCopyOperationTask(name: string, type: NodeType, operation: MANAGEMENT_OPERATIONS) {
-    const definition = getOperation(name, type, operation)
-
+export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'copy management operation',
         'ansible.builtin.copy': {
             dest: `{{ SELF.application_directory }}/.vintner/${operation}.sh`,
-            content: definition,
+            content: `
+#! /usr/bin/bash
+set -e
+
+{{ SELF._management_${operation} }}
+`.trimStart(),
             mode: '0755',
         },
+        when: `SELF._management_${operation}`,
     }
 }
 
@@ -307,5 +307,6 @@ export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
         args: {
             chdir: '{{ SELF.application_directory }}',
         },
+        when: `SELF._management_${operation}`,
     }
 }

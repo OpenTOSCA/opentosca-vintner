@@ -37,10 +37,68 @@ node_types:
             application_language:
                 type: string
 
+            _management_create:
+                type: string
+                metadata:
+                    vintner_ignore: true
+                default:
+                    eval:
+                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
+                        args:
+                            - Management
+                            - create
+
+            _management_configure:
+                type: string
+                metadata:
+                    vintner_ignore: true
+                default:
+                    eval:
+                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
+                        args:
+                            - Management
+                            - configure
+
+            _management_start:
+                type: string
+                metadata:
+                    vintner_ignore: true
+                default:
+                    eval:
+                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
+                        args:
+                            - Management
+                            - start
+
+            _management_stop:
+                type: string
+                metadata:
+                    vintner_ignore: true
+                default:
+                    eval:
+                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
+                        args:
+                            - Management
+                            - stop
+
+            _management_delete:
+                type: string
+                metadata:
+                    vintner_ignore: true
+                default:
+                    eval:
+                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
+                        args:
+                            - Management
+                            - delete
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+
+        interfaces:
+            Management:
+                type: management
 
     ###################################################
     #
@@ -200,6 +258,8 @@ artifact_types:
     #
     ###################################################
 
+    # Expects that management.start is defined
+    # management.configure is optional
     source.archive:
         derived_from: root
         description: 'application packaged as zip archive'.
@@ -244,10 +304,11 @@ artifact_types:
     #
     ###################################################
 
+    # file contains repo/image:tag
     docker.image:
         derived_from: root
         # TODO: add auth
-        # file contains repo/image:tag
+
 
 interface_types:
     root:

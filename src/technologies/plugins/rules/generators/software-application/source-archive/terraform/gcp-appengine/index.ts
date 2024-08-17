@@ -6,7 +6,6 @@ import {
     MetadataUnfurl,
     TerraformStandardOperations,
     UnfurlArtifactFile,
-    getOperation,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -72,7 +71,7 @@ const generator: ImplementationGenerator = {
                                             entrypoint: [
                                                 {
                                                     // TODO: "node index.js"? its currently "npm start"
-                                                    shell: getOperation(name, type, MANAGEMENT_OPERATIONS.START),
+                                                    shell: `{{ SELF._management_${MANAGEMENT_OPERATIONS.START} }}`,
                                                 },
                                             ],
                                             env_variable: mapProperties(type, {format: 'map'}),
