@@ -11,7 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
-    hosting: ['openstack.machine'],
+    hosting: ['virtual.machine'],
 
     generate: (name, type) => {
         return {

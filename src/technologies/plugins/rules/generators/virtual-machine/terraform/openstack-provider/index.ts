@@ -8,7 +8,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'openstack.machine',
+    component: 'virtual.machine',
     technology: 'terraform',
     hosting: ['openstack.provider'],
 

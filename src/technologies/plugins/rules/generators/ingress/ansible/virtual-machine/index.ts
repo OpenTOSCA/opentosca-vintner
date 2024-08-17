@@ -8,9 +8,9 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'docker.engine',
+    component: 'ingress',
     technology: 'ansible',
-    hosting: ['openstack.machine'],
+    hosting: ['virtual.machine'],
 
     generate: (name, type) => {
         return {
@@ -20,6 +20,15 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {...OpenstackMachineCredentials()},
+            attributes: {
+                // TODO: implement this
+                application_address: {
+                    type: 'string',
+                    default: {
+                        eval: '.::.requirements::[.name=host]::.target::application_address',
+                    },
+                },
+            },
             interfaces: {
                 Standard: {
                     operations: {
@@ -35,22 +44,24 @@ const generator: ImplementationGenerator = {
                                             wait_for_connection: null,
                                         },
                                         {
-                                            name: 'install docker',
-                                            'ansible.builtin.shell': 'curl -sSL https://get.docker.com | sh',
+                                            name: 'install caddy',
+                                            'ansible.builtin.shell':
+                                                "apt install -y debian-keyring debian-archive-keyring apt-transport-https curl\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list\napt-get update\napt-get install caddy -y\n",
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
                                         },
                                         {
-                                            name: 'add docker group',
-                                            'ansible.builtin.shell': 'groupadd -f docker',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            name: 'configure caddy',
+                                            'ansible.builtin.copy': {
+                                                dest: '/etc/caddy/Caddyfile',
+                                                content:
+                                                    ':80 {\n        reverse_proxy localhost:{{ SELF.application_port }}\n}\n',
                                             },
                                         },
                                         {
-                                            name: 'add user to docker group',
-                                            'ansible.builtin.shell': 'usermod -aG docker {{ SELF.os_ssh_user }}',
+                                            name: 'restart caddy',
+                                            'ansible.builtin.shell': 'systemctl reload caddy',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
