@@ -6,8 +6,13 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+// Currently not in use. Also validates rules collision constraint.
+
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::ansible::mysql.dbms',
+    component: 'mysql.database',
+    technology: 'ansible',
+    hosting: ['mysql.dbms'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

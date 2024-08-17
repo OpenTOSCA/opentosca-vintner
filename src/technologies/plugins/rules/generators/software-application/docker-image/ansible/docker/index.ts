@@ -9,7 +9,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::ansible::docker.engine',
+    component: 'software.application',
+    technology: 'ansible',
+    artifact: 'docker.image',
+    hosting: ['docker.engine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

@@ -23,7 +23,7 @@ ansible:
 
     # Software
     - component: software.application
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -34,7 +34,7 @@ ansible:
 
     # Docker Engine
     - component: docker.engine
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -63,7 +63,7 @@ ansible:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
+          - virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -85,13 +85,13 @@ ansible:
       comment: Primary use case due to the specialization of Ansible.
 
     - component: mysql.dbms
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
     # Ingress
     - component: ingress
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -101,8 +101,9 @@ ansible:
       comment: Kubernetes is more specialized.
 
     # Virtual Machine
-    - component: openstack.machine
+    - component: virtual.machine
       weight: 0.5
+      hosting: openstack.provider
       comment: Terraform is more specialized.
 
     # GCP Service
@@ -128,7 +129,7 @@ terraform:
 
     # Software
     - component: software.application
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
@@ -139,7 +140,7 @@ terraform:
 
     # Docker Engine
     - component: docker.engine
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
@@ -168,7 +169,7 @@ terraform:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - openstack.machine
+          - virtual.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
@@ -191,13 +192,13 @@ terraform:
     - component: mysql.dbms
       hosting:
           - mysql.dbms
-          - openstack.machine
+          - virtual.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     # Ingress
     - component: ingress
-      hosting: openstack.machine
+      hosting: virtual.machine
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
@@ -207,8 +208,9 @@ terraform:
       comment: Kubernetes is more specialized.
 
     # Virtual Machine
-    - component: openstack.machine
+    - component: virtual.machine
       weight: 1
+      hosting: openstack.provider
       comment: Terraform provides a declarative module.
 
     # GCP Service

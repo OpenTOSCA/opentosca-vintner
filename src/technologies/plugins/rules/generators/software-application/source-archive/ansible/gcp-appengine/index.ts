@@ -11,7 +11,11 @@ import {
 // TODO: application_address etc
 
 const generator: ImplementationGenerator = {
-    id: 'software.application::ansible::gcp.appengine',
+    component: 'software.component',
+    technology: 'ansible',
+    artifact: 'source.archive',
+    hosting: ['gcp.appengine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

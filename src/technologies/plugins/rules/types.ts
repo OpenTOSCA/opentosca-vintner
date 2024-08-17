@@ -1,4 +1,6 @@
+import * as check from '#check'
 import {NodeType} from '#spec/node-type'
+import {constructType} from '#technologies/utils'
 
 export enum METADATA {
     VINTNER_GENERATE = 'vintner_generate',
@@ -15,8 +17,26 @@ export enum PROPERTIES {
 }
 
 export type ImplementationGenerator = {
-    id: string
+    technology: string
+    component: string
+    artifact?: string
+    hosting?: string[]
     generate: (name: string, type: NodeType) => NodeType
 }
 
-export type AnsibleTask = {name: string} & {[key: string]: any}
+export abstract class ImplementationGenerator2 {
+    private _id: string | undefined
+    get id() {
+        if (check.isUndefined(this._id)) {
+            this._id = constructType(this)
+        }
+        return this._id
+    }
+
+    abstract technology: string
+    abstract component: string
+    abstract artifact?: string
+    abstract hosting?: string[]
+
+    abstract generate(name: string, type: NodeType): NodeType
+}

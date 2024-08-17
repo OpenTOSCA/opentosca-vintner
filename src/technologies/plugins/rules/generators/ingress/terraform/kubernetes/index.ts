@@ -7,7 +7,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'ingress::terraform::kubernetes',
+    component: 'ingress',
+    technology: 'terraform',
+    hosting: ['kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

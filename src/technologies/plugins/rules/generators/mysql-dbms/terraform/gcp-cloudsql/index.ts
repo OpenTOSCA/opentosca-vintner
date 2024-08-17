@@ -7,7 +7,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.dbms::terraform::gcp.cloudsql',
+    component: 'mysql.dbms',
+    technology: 'terraform',
+    hosting: ['gcp.cloudsql'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

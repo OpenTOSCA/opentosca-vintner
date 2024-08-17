@@ -7,7 +7,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::ansible::mysql.dbms::kubernetes',
+    component: 'mysql.database',
+    technology: 'ansible',
+    hosting: ['mysql.dbms', 'kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

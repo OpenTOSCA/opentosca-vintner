@@ -8,7 +8,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::terraform::kubernetes',
+    component: 'software.application',
+    technology: 'terraform',
+    artifact: 'docker.image',
+    hosting: ['kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

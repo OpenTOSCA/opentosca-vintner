@@ -9,7 +9,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'software.component::ansible#apt.package@openstack.machine',
+    component: 'software.component',
+    technology: 'ansible',
+    artifact: 'apt.package',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

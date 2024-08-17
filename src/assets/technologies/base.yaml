@@ -18,6 +18,43 @@ node_types:
 
     root:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    ###################################################
+    #
+    # Cloud Provider
+    #
+    ###################################################
+
+    cloud.provider:
+        derived_from: root
+        metadata:
+            vintner_abstract: 'true'
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+    ###################################################
+    #
+    # Cloud Service
+    #
+    ###################################################
+
+    cloud.service:
+        derived_from: root
+        metadata:
+            vintner_abstract: 'true'
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
 
     ###################################################
     #
@@ -32,9 +69,6 @@ node_types:
 
         properties:
             application_name:
-                type: string
-
-            application_language:
                 type: string
 
             _management_create:
@@ -91,6 +125,7 @@ node_types:
                         args:
                             - Management
                             - delete
+
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -102,30 +137,17 @@ node_types:
 
     ###################################################
     #
-    # Software Runtime
+    # Service Application
     #
     ###################################################
 
-    software.runtime:
+    service.application:
         derived_from: software.application
-        capabilities:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
-    ###################################################
-    #
-    # Container Application
-    #
-    ###################################################
-
-    container.application:
-        derived_from: root
         metadata:
             vintner_abstract: 'true'
 
         properties:
-            application_name:
+            application_language:
                 type: string
 
             application_port:
@@ -134,58 +156,84 @@ node_types:
             application_protocol:
                 type: string
 
-            application_image:
-                type: string
-
         attributes:
             application_address:
                 type: string
 
             application_endpoint:
                 type: string
-                default: {concat: [{eval: '.::application_protocol'}, '://', {eval: '.::application_address'}, ':', {eval: '.::application_port'}]}
+                default: { concat: [ { eval: '.::application_protocol' }, '://', { eval: '.::application_address' }, ':', { eval: '.::application_port' } ] }
+
 
     ###################################################
     #
-    # Logging Agent
+    # Software Runtime
     #
     ###################################################
 
-    logging.agent:
+    software.runtime:
         derived_from: software.application
         metadata:
             vintner_abstract: 'true'
+        capabilities:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
 
     ###################################################
     #
-    # Monitoring Agent
+    # Virtual Machine
     #
     ###################################################
 
-    monitoring.agent:
-        derived_from: software.application
-        metadata:
-            vintner_abstract: 'true'
-
-    ###################################################
-    #
-    # Security Agent
-    #
-    ###################################################
-
-    security.agent:
-        derived_from: software.application
-        metadata:
-            vintner_abstract: 'true'
-
-    ###################################################
-    #
-    # Compute
-    #
-    ###################################################
-
-    compute:
+    virtual.machine:
         derived_from: root
+
+        properties:
+            machine_name:
+                type: string
+
+            image:
+                type: string
+                default: Ubuntu 22.04
+
+            ports:
+                type: list
+                entry_schema:
+                    type: integer
+
+            flavor:
+                type: string
+                default: m1.medium
+
+            network:
+                type: string
+
+            ssh_user:
+                type: string
+
+            ssh_key_name:
+                type: string
+
+            ssh_key_file:
+                type: string
+
+        attributes:
+            management_address:
+                type: string
+
+            application_address:
+                type: string
+                default: {eval: '.::management_address'}
+
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection: ssh
+                    host: {eval: '.parent::management_address'}
 
     ###################################################
     #
@@ -195,15 +243,23 @@ node_types:
 
     database:
         derived_from: root
+        metadata:
+            vintner_abstract: 'true'
 
     relational.database:
         derived_from: database
+        metadata:
+            vintner_abstract: 'true'
 
     dbms:
         derived_from: root
+        metadata:
+            vintner_abstract: 'true'
 
     relational.dbms:
         derived_from: dbms
+        metadata:
+            vintner_abstract: 'true'
 
     ###################################################
     #
@@ -258,8 +314,6 @@ artifact_types:
     #
     ###################################################
 
-    # Expects that management.start is defined
-    # management.configure is optional
     source.archive:
         derived_from: root
         description: 'application packaged as zip archive'.

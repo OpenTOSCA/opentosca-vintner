@@ -1,6 +1,7 @@
 import * as check from '#check'
 import * as files from '#files'
 import std from '#std'
+import {constructType} from '#technologies/utils'
 import path from 'path'
 import {ImplementationGenerator} from './types'
 
@@ -12,27 +13,29 @@ class Registry {
     }
 
     add(generator: ImplementationGenerator) {
-        if (this.generators.has(generator.id)) throw new Error(`Generator "${generator.id}" already registered`)
-        this.generators.set(generator.id, generator)
+        const id = constructType(generator)
+        std.log(`Adding generator "${id}"`)
+
+        if (this.generators.has(id)) throw new Error(`Generator "${id}" already registered`)
+        this.generators.set(id, generator)
     }
 }
 
-let GeneratorRegistry: Registry | undefined
+let registry: Registry | undefined
 
 function loadRegistry() {
-    if (check.isUndefined(GeneratorRegistry)) {
+    if (check.isUndefined(registry)) {
         std.log('Loading generators ...')
-        GeneratorRegistry = new Registry()
+        registry = new Registry()
         for (const file of files.walkDirectory(path.join(__dirname, 'generators'))) {
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const generator: ImplementationGenerator = require(file).default
-            std.log(`Adding generator "${generator.id}"`)
-            GeneratorRegistry.add(generator)
+            registry.add(generator)
         }
-        std.log('Generators loaded ...')
+        std.log(`${registry.generators.size} generators loaded ...`)
     }
 
-    return GeneratorRegistry
+    return registry
 }
 
 export default loadRegistry

@@ -33,7 +33,9 @@ node_types:
 
     # expects a source.archive
     node.application:
-        derived_from: software.application
+        derived_from: service.application
+        metadata:
+            vintner_abstract: 'true'
         properties:
             application_language:
                 type: string
@@ -74,7 +76,9 @@ node_types:
 
     # expects a source.archive
     python.application:
-        derived_from: software.application
+        derived_from: service.application
+        metadata:
+            vintner_abstract: 'true'
         interfaces:
             management:
                 type: Management
@@ -89,7 +93,9 @@ node_types:
     ###################################################
 
     binary.application:
-        derived_from: software.application
+        derived_from: service.application
+        metadata:
+            vintner_abstract: 'true'
         interfaces:
             management:
                 type: Management
@@ -103,10 +109,9 @@ node_types:
     ###################################################
 
     gcp.provider:
-        derived_from: root
-
+        derived_from: cloud.provider
         properties:
-            env_platform:
+            _hosting:
                 type: string
                 default: gcp
 
@@ -118,10 +123,6 @@ node_types:
 
             gcp_project:
                 type: string
-
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
 
         interfaces:
             Standard:
@@ -136,12 +137,11 @@ node_types:
     ###################################################
 
     gcp.service:
-        derived_from: root
+        derived_from: cloud.service
         metadata:
             vintner_abstract: 'true'
-
         properties:
-            env_platform:
+            _hosting:
                 type: string
                 default: gcp
 
@@ -149,15 +149,6 @@ node_types:
                 type: string
                 # Unfurl does not accept if there is a default only at the child
                 default: 'must-be-overridden'
-
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
-
-        requirements:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
 
     gcp.cloudrun:
         derived_from: gcp.service
@@ -208,12 +199,16 @@ node_types:
     ###################################################
 
     docker.engine:
-        derived_from: root
+        derived_from: software.runtime
 
         properties:
-            env_platform:
+            application_name:
                 type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::env_platform'}
+                default: docker
+
+            _hosting:
+                type: string
+                default: docker
 
         attributes:
             management_address:
@@ -236,10 +231,9 @@ node_types:
     ###################################################
 
     kubernetes:
-        derived_from: root
-
+        derived_from: cloud.service
         properties:
-            env_platform:
+            _hosting:
                 type: string
                 default: kubernetes
 
@@ -272,10 +266,9 @@ node_types:
     ###################################################
 
     openstack.provider:
-        derived_from: root
-
+        derived_from: cloud.provider
         properties:
-            env_platform:
+            _hosting:
                 type: string
                 default: openstack
 
@@ -300,60 +293,11 @@ node_types:
             os_application_credential_secret:
                 type: string
 
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
-
         interfaces:
             Standard:
                 operations:
                     create: exit 0
                     delete: exit 0
-
-    ###################################################
-    #
-    # Openstack Machine
-    #
-    ###################################################
-
-    openstack.machine:
-        derived_from: compute
-        properties:
-            env_platform:
-                type: string
-                default: openstack
-
-            ports:
-                type: list
-                entry_schema:
-                    type: integer
-
-            machine:
-                type: string
-
-            flavor:
-                type: string
-                default: 'm1.medium'
-
-            os_network:
-                type: string
-
-        attributes:
-            management_address:
-                type: string
-
-            application_address:
-                type: string
-                default: {eval: '.::management_address'}
-
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
-            endpoint:
-                type: unfurl.capabilities.Endpoint.Ansible
-                properties:
-                    connection: ssh
-                    host: {eval: '.parent::management_address'}
 
     ###################################################
     #

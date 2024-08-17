@@ -7,7 +7,9 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'gcp.service::ansible',
+    component: 'gcp.service',
+    technology: 'ansible',
+
     generate: (name, type) => {
         return {
             derived_from: name,

@@ -8,7 +8,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::ansible::kubernetes',
+    component: 'software.application',
+    technology: 'ansible',
+    artifact: 'docker.image',
+    hosting: ['kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

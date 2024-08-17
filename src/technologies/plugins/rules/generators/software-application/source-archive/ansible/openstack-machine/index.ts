@@ -35,7 +35,11 @@ WantedBy=multi-user.target
 // TODO: assert artifact is zip file (cant do that during generation only during run)
 
 const generator: ImplementationGenerator = {
-    id: 'software.component::ansible#source.archive@openstack.machine',
+    component: 'software.component',
+    technology: 'ansible',
+    artifact: 'source.archive',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

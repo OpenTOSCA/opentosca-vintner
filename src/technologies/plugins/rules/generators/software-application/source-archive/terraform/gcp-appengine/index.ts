@@ -12,7 +12,11 @@ import {
 // TODO: application_address etc
 
 const generator: ImplementationGenerator = {
-    id: 'software.application::terraform::gcp.appengine',
+    component: 'software.component',
+    technology: 'terraform',
+    artifact: 'source.archive',
+    hosting: ['gcp.appengine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

@@ -4,7 +4,10 @@ import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technol
 // TODO: mysql.database::terraform::mysql.dbms::kubernetes
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms::kubernetes',
+    component: 'mysql.database',
+    technology: 'terraform',
+    hosting: ['mysql.dbms', 'kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

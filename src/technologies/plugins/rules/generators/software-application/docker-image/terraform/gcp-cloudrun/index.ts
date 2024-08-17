@@ -9,7 +9,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::terraform::gcp.cloudrun',
+    component: 'software.application',
+    technology: 'terraform',
+    artifact: 'docker.image',
+    hosting: ['gcp.cloudrun'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

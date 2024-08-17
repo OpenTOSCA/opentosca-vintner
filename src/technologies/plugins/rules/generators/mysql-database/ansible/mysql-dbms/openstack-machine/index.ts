@@ -8,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::ansible::mysql.dbms::openstack.machine',
+    component: 'mysql.database',
+    technology: 'ansible',
+    hosting: ['mysql.dbms', 'openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

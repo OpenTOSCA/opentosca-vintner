@@ -8,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'docker.engine::ansible::openstack.machine',
+    component: 'docker.engine',
+    technology: 'ansible',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

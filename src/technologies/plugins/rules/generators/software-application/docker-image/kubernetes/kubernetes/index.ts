@@ -7,7 +7,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::kubernetes::kubernetes',
+    component: 'software.application',
+    technology: 'kubernetes',
+    artifact: 'docker.image',
+    hosting: ['kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

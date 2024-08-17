@@ -8,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.dbms::ansible::docker.engine',
+    component: 'mysql.dbms',
+    technology: 'ansible',
+    hosting: ['docker.engine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

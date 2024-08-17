@@ -1,3 +1,4 @@
+import * as files from '#files'
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
@@ -9,7 +10,11 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'container.application::ansible::gcp.cloudrun',
+    component: 'software.application',
+    technology: 'ansible',
+    artifact: 'docker.image',
+    hosting: ['gcp.cloudrun'],
+
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -137,8 +142,13 @@ const generator: ImplementationGenerator = {
                                         },
                                     ],
                                 },
-                                resultTemplate:
-                                    '- name: SELF\n  attributes:\n    application_address: "{{ outputs.application_address }}"\n    application_endpoint: "{{ outputs.application_endpoint }}"\n',
+                                resultTemplate: files.toYAML({
+                                    name: 'SELF',
+                                    attributes: {
+                                        application_address: '{{ outputs.application_address | trim }}',
+                                        application_endpoint: '{{ outputs.application_endpoint | trim }}',
+                                    },
+                                }),
                             },
                             outputs: {
                                 application_address: null,

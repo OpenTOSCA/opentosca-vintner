@@ -9,7 +9,10 @@ import {
 // TODO: some syntax error at create-user
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::kubernetes::mysql.dbms::kubernetes',
+    component: 'mysql.database',
+    technology: 'kubernetes',
+    hosting: ['mysql.dbms', 'kubernetes'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

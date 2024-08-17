@@ -49,7 +49,10 @@ systemctl restart mysql
 `
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.dbms::terraform::openstack.machine',
+    component: 'mysql.dbms',
+    technology: 'terraform',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

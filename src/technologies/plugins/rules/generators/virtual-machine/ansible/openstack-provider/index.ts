@@ -1,13 +1,18 @@
+import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineCredentials,
     OpenstackProviderCredentials,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'openstack.machine::ansible',
+    component: 'virtual.machine',
+    technology: 'ansible',
+    hosting: ['openstack.provider'],
+
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -15,7 +20,10 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {...OpenstackProviderCredentials()},
+            properties: {
+                ...OpenstackProviderCredentials(),
+                ...OpenstackMachineCredentials(),
+            },
             interfaces: {
                 Standard: {
                     operations: {
@@ -52,13 +60,13 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'Create security group',
                                             'openstack.cloud.security_group': {
-                                                name: '{{ SELF.machine }}',
+                                                name: '{{ SELF.machine_name }}',
                                             },
                                         },
                                         {
                                             name: 'Open ports',
                                             'openstack.cloud.security_group_rule': {
-                                                security_group: '{{ SELF.machine }}',
+                                                security_group: '{{ SELF.machine_name }}',
                                                 protocol: 'tcp',
                                                 port_range_min: '{{ item }}',
                                                 port_range_max: '{{ item }}',
@@ -72,12 +80,12 @@ const generator: ImplementationGenerator = {
                                             name: 'Create VM',
                                             'openstack.cloud.server': {
                                                 state: 'present',
-                                                name: '{{ SELF.machine }}',
-                                                image: 'Ubuntu 22.04',
+                                                name: '{{ SELF.machine_name }}',
+                                                image: '{{ SELF.image_name }}',
                                                 key_name: 'default',
                                                 flavor: '{{ SELF.flavor }}',
-                                                network: '{{ SELF.os_network }}',
-                                                security_groups: "{{ 'default,' + SELF.machine }}",
+                                                network: '{{ SELF.network }}',
+                                                security_groups: "{{ 'default,' + SELF.machine_name }}",
                                                 auto_ip: false,
                                                 timeout: 360,
                                             },
@@ -91,8 +99,12 @@ const generator: ImplementationGenerator = {
                                         },
                                     ],
                                 },
-                                resultTemplate:
-                                    '- name: SELF\n  attributes:\n    management_address: "{{ outputs.management_address | trim }}"\n',
+                                resultTemplate: files.toYAML({
+                                    name: 'SELF',
+                                    attributes: {
+                                        management_address: '{{ outputs.management_address | trim }}',
+                                    },
+                                }),
                             },
                             outputs: {
                                 management_address: null,
@@ -109,7 +121,7 @@ const generator: ImplementationGenerator = {
                                             name: 'Delete VM',
                                             'openstack.cloud.server': {
                                                 state: 'absent',
-                                                name: '{{ SELF.machine }}',
+                                                name: '{{ SELF.machine_name }}',
                                                 delete_fip: true,
                                                 timeout: 360,
                                             },
@@ -118,7 +130,7 @@ const generator: ImplementationGenerator = {
                                             name: 'Delete security group',
                                             'openstack.cloud.security_group': {
                                                 state: 'absent',
-                                                name: '{{ SELF.machine }}',
+                                                name: '{{ SELF.machine_name }}',
                                             },
                                         },
                                     ],

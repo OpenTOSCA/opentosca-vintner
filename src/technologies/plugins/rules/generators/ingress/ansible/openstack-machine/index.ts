@@ -8,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'ingress::ansible::openstack.machine',
+    component: 'ingress',
+    technology: 'ansible',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

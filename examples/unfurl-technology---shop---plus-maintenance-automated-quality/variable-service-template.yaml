@@ -156,9 +156,10 @@ topology_template:
                 - host: virtual_machine
 
         virtual_machine:
-            type: openstack.machine
+            type: virtual.machine
             properties:
-                - machine: unfurl-technology-shop-vm
+                - machine_name: unfurl-technology-shop-vm
+                - image: Ubuntu 22.04
                 - ports: [80]
                 - flavor:
                       value: m1.medium
@@ -166,11 +167,10 @@ topology_template:
                 - flavor:
                       value: m1.large
                       conditions: {equal: [{variability_input: tier}, LARGE]}
-                - os_network: {get_input: os_network}
-                - os_ssh_key_name: {get_input: os_ssh_key_name}
-                - os_ssh_user: {get_input: os_ssh_user}
-                - os_ssh_key_file: {get_input: os_ssh_key_file}
-                - os_region_name: {get_input: os_region_name}
+                - network: {get_input: os_network}
+                - ssh_user: {get_input: os_ssh_user}
+                - ssh_key_name: {get_input: os_ssh_key_name}
+                - ssh_key_file: {get_input: os_ssh_key_file}
             requirements:
                 - host: openstack
 

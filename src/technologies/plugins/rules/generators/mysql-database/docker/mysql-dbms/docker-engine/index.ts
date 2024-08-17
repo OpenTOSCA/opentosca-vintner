@@ -4,7 +4,10 @@ import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#t
 // TODO:  mysql.database::docker::mysql.dbms::docker.engine
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::docker::mysql.dbms::docker.engine',
+    component: 'mysql.database',
+    technology: 'docker',
+    hosting: ['mysql.dbms', 'docker.engine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

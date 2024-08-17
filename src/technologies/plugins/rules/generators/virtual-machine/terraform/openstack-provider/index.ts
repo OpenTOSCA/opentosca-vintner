@@ -2,12 +2,16 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineCredentials,
     OpenstackProviderCredentials,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'openstack.machine::terraform',
+    component: 'openstack.machine',
+    technology: 'terraform',
+    hosting: ['openstack.provider'],
+
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -15,7 +19,10 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {...OpenstackProviderCredentials()},
+            properties: {
+                ...OpenstackProviderCredentials(),
+                ...OpenstackMachineCredentials(),
+            },
             interfaces: {
                 ...TerraformStandardOperations(),
                 defaults: {
@@ -59,12 +66,12 @@ const generator: ImplementationGenerator = {
                                     machine: [
                                         {
                                             flavor_name: '{{ SELF.flavor }}',
-                                            image_name: 'Ubuntu 22.04',
+                                            image_name: '{{ SELF.image }}',
                                             key_pair: 'default',
-                                            name: '{{ SELF.machine }}',
+                                            name: '{{ SELF.machine_name }}',
                                             network: [
                                                 {
-                                                    name: '{{ SELF.os_network }}',
+                                                    name: '{{ SELF.network }}',
                                                 },
                                             ],
                                             security_groups: [
@@ -91,7 +98,7 @@ const generator: ImplementationGenerator = {
                                 openstack_networking_secgroup_v2: {
                                     ports: [
                                         {
-                                            name: '{{ SELF.machine }}',
+                                            name: '{{ SELF.machine_name }}',
                                         },
                                     ],
                                 },

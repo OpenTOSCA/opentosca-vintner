@@ -8,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'docker.engine::terraform::openstack.machine',
+    component: 'docker.engine',
+    technology: 'terraform',
+    hosting: ['openstack.machine'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

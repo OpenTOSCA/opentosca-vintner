@@ -7,7 +7,9 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'gcp.service::terraform',
+    component: 'gcp.service',
+    technology: 'terraform',
+
     generate: (name, type) => {
         return {
             derived_from: name,

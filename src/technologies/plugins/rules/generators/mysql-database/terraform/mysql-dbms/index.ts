@@ -7,8 +7,13 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
+// Currently not in use. And also violates rule collision constraint.
+
 const generator: ImplementationGenerator = {
-    id: 'mysql.database::terraform::mysql.dbms',
+    component: 'mysql.database',
+    technology: 'terraform',
+    hosting: ['mysql.dbms'],
+
     generate: (name, type) => {
         return {
             derived_from: name,

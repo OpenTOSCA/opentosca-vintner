@@ -1,3 +1,4 @@
+import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
@@ -7,7 +8,10 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    id: 'mysql.dbms::ansible::gcp.cloudsql',
+    component: 'mysql.dbms',
+    technology: 'ansible',
+    hosting: ['gcp.cloudsql'],
+
     generate: (name, type) => {
         return {
             derived_from: name,
@@ -100,8 +104,12 @@ const generator: ImplementationGenerator = {
                                         },
                                     ],
                                 },
-                                resultTemplate:
-                                    '- name: SELF\n  attributes:\n    application_address: "{{ outputs.application_address }}"\n',
+                                resultTemplate: files.toYAML({
+                                    name: 'SELF',
+                                    attributes: {
+                                        application_address: '{{ outputs.application_address }}',
+                                    },
+                                }),
                             },
                             outputs: {
                                 application_address: null,
