@@ -7,7 +7,9 @@
 ansible:
     # Container
     - component: container.application
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 0.5
       comment: Docker is more specialized.
 
@@ -43,6 +45,7 @@ ansible:
       hosting:
           - mysql.dbms
           - docker.engine
+          - virtual.machine
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -69,7 +72,9 @@ ansible:
 
     # DBMS
     - component: mysql.dbms
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 0.5
       comment: Docker is more specialized.
 
@@ -113,7 +118,9 @@ ansible:
 terraform:
     # Container
     - component: container.application
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 0.5
       comment: Docker is more specialized.
 
@@ -149,6 +156,7 @@ terraform:
       hosting:
           - mysql.dbms
           - docker.engine
+          - virtual.machine
       weight: 1
       comment: Terraform provides a declarative module.
 
@@ -175,7 +183,9 @@ terraform:
 
     # DBMS
     - component: mysql.dbms
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 0.5
       comment: Docker is more specialized.
 
@@ -248,7 +258,9 @@ kubernetes:
 docker:
     # Container
     - component: container.application
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 1
       comment: Docker is the underlying technology.
 
@@ -257,11 +269,14 @@ docker:
       hosting:
           - mysql.dbms
           - docker.engine
+          - virtual.machine
       weight: 0
       comment: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS
     - component: mysql.dbms
-      hosting: docker.engine
+      hosting:
+          - docker.engine
+          - virtual.machine
       weight: 1
       comment: Docker is the underlying technology.

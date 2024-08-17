@@ -10,7 +10,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
-    hosting: ['mysql.dbms', 'docker.engine'],
+    hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {

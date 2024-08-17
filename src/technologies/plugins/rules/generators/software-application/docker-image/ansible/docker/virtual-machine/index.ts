@@ -5,12 +5,14 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
+    mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'mysql.dbms',
+    component: 'software.application',
     technology: 'ansible',
-    hosting: ['docker.engine'],
+    artifact: 'docker.image',
+    hosting: ['docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {
@@ -24,20 +26,6 @@ const generator: ImplementationGenerator = {
                 application_address: {
                     type: 'string',
                     default: '127.0.0.1',
-                },
-                application_port: {
-                    type: 'string',
-                    default: 3306,
-                },
-                management_address: {
-                    type: 'string',
-                    default: {
-                        eval: '.::.requirements::[.name=host]::.target::management_address',
-                    },
-                },
-                management_port: {
-                    type: 'integer',
-                    default: 3306,
                 },
             },
             interfaces: {
@@ -57,12 +45,10 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'start container',
                                             'community.docker.docker_container': {
-                                                name: '{{ SELF.dbms_name }}',
-                                                image: '{{ SELF.dbms_image }}',
+                                                name: '{{ SELF.application_name }}',
+                                                image: '{{ SELF.application_image }}',
                                                 network_mode: 'host',
-                                                env: {
-                                                    MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}',
-                                                },
+                                                env: mapProperties(type, {format: 'map'}),
                                             },
                                         },
                                     ],

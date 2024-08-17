@@ -14,7 +14,7 @@ const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'docker',
     artifact: 'docker.image',
-    hosting: ['docker.engine'],
+    hosting: ['docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {

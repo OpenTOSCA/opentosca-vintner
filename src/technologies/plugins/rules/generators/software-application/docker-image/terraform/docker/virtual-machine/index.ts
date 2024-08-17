@@ -1,17 +1,18 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleHostEndpointCapability,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
     TerraformStandardOperations,
+    mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'mysql.dbms',
+    component: 'software.application',
     technology: 'terraform',
-    hosting: ['docker.engine'],
+    artifact: 'docker.image',
+    hosting: ['docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {
@@ -29,23 +30,6 @@ const generator: ImplementationGenerator = {
                     type: 'string',
                     default: '127.0.0.1',
                 },
-                application_port: {
-                    type: 'integer',
-                    default: 3306,
-                },
-                management_address: {
-                    type: 'string',
-                    default: {
-                        eval: '.::.requirements::[.name=host]::.target::management_address',
-                    },
-                },
-                management_port: {
-                    type: 'integer',
-                    default: 3306,
-                },
-            },
-            capabilities: {
-                ...AnsibleHostEndpointCapability(),
             },
             interfaces: {
                 ...TerraformStandardOperations(),
@@ -87,17 +71,17 @@ const generator: ImplementationGenerator = {
                                 docker_container: {
                                     application: [
                                         {
-                                            name: '{{ SELF.dbms_name }}',
+                                            env: mapProperties(type, {format: 'ini', quote: false}),
                                             image: '${docker_image.image.image_id}',
+                                            name: '{{ SELF.application_name }}',
                                             network_mode: 'host',
-                                            env: ['MYSQL_ROOT_PASSWORD={{ SELF.dbms_password }}'],
                                         },
                                     ],
                                 },
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ SELF.dbms_image }}',
+                                            name: '{{ SELF.application_image }}',
                                         },
                                     ],
                                 },

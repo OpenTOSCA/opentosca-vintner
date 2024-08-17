@@ -11,7 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'docker',
-    hosting: ['docker.engine'],
+    hosting: ['docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {
