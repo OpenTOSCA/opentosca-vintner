@@ -108,7 +108,7 @@ topology_template:
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
-                - host: node_runtime
+                - host: virtual_machine
                 - host: gcp_appengine
                 - host: kubernetes
             artifacts:

@@ -199,59 +199,16 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return maps
     }
 
-    // TODO: refactor this
-
     private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
         console.log({node: node.name, hosting, history})
 
-        if (hosting[0] === '*') {
-            const search = hosting[1]
-            // Must be defined. To model "on any hosting" simply do not model hosting.
-            assert.isDefined(search)
+        const asterix = hosting[0] === '*'
+        const search = asterix ? hosting[1] : hosting[0]
+        // Must be defined. To model "on any hosting" simply do not model hosting.
+        assert.isDefined(search)
 
-            for (const host of node.hosts) {
-                if (host.getType().isA(search)) {
-                    // Deep copy since every child call changes the state of history
-                    const historyCopy = utils.copy(history)
-                    historyCopy.push({node_presence: host.name})
-
-                    // Deep copy since every child call changes the state of hosting
-                    const hostingCopy = utils.copy(hosting)
-
-                    // Remove * and search
-                    hostingCopy.shift()
-                    hostingCopy.shift()
-
-                    // Done if no more hosting must be found
-                    if (utils.isEmpty(hostingCopy)) {
-                        output.push(historyCopy)
-                        continue
-                    }
-
-                    // Recursive search
-                    this.search(host, hostingCopy, historyCopy, output)
-                } else {
-                    // Deep copy since every child call changes the state of history
-                    const historyCopy = utils.copy(history)
-                    historyCopy.push({node_presence: host.name})
-
-                    // Deep copy since every child call changes the state of hosting
-                    const hostingCopy = utils.copy(hosting)
-
-                    // Recursive search
-                    this.search(host, hostingCopy, historyCopy, output)
-                }
-            }
-        } else {
-            // Searching for next hosting
-            const search = hosting.shift()
-            // Must be defined since else we would have aborted in the parent call
-            assert.isDefined(search)
-
-            // Conditional recursive breadth-first search
-            for (const host of node.hosts) {
-                if (host.getType().isA(search)) continue
-
+        for (const host of node.hosts) {
+            if (host.getType().isA(search)) {
                 // Deep copy since every child call changes the state of history
                 const historyCopy = utils.copy(history)
                 historyCopy.push({node_presence: host.name})
@@ -259,11 +216,29 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 // Deep copy since every child call changes the state of hosting
                 const hostingCopy = utils.copy(hosting)
 
+                // Remove * since we found next host
+                if (asterix) hostingCopy.shift()
+
+                // Remove search
+                hostingCopy.shift()
+
                 // Done if no more hosting must be found
                 if (utils.isEmpty(hostingCopy)) {
                     output.push(historyCopy)
                     continue
                 }
+
+                // Recursive search
+                this.search(host, hostingCopy, historyCopy, output)
+            }
+
+            if (asterix) {
+                // Deep copy since every child call changes the state of history
+                const historyCopy = utils.copy(history)
+                historyCopy.push({node_presence: host.name})
+
+                // Deep copy since every child call changes the state of hosting
+                const hostingCopy = utils.copy(hosting)
 
                 // Recursive search
                 this.search(host, hostingCopy, historyCopy, output)
