@@ -47,7 +47,13 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             for (const rule of rules) {
                 assert.isArray(rule.hosting)
+
+                /**
+                 * Note, we do not need to check for a present type here (also we cannot since artifact might be attached to the node template).
+                 * Such a check is conducted during assignment.
+                 */
                 if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
+
                 const implementationName = constructType({component: name, technology, hosting: rule.hosting})
 
                 const generatorName = constructType({component: rule.component, technology, hosting: rule.hosting})
@@ -100,12 +106,54 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
                 if (!node.getType().isA(rule.component)) continue
 
+                // TODO: add this condition
+                let artifactCondition: LogicExpression | undefined
+                if (check.isDefined(rule.artifact)) {
+                    // TODO: check if node template has artifact
+
+                    // Check for artifact in template
+                    const artifactsByTemplate = (node.artifactsMap.get(rule.artifact) ?? []).filter(it => {
+                        if (it.getType().isA(rule.artifact!)) {
+                            // TODO: check naming convention
+                            return true
+                        }
+                        return false
+                    })
+                    const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
+
+                    // Check for artifact in type
+                    const hasArtifactInType = this.graph.inheritance.hasArtifact(node.getType().name, rule.artifact)
+
+                    // Ignore if artifact not found
+                    if (!hasArtifactInTemplate && !hasArtifactInType) continue
+
+                    if (hasArtifactInTemplate) {
+                        /**
+                         * Case: hasArtifactInTemplate
+                         *
+                         * Add condition checking if any artifact is present (note, at max one can be present)
+                         */
+                        artifactCondition = {or: artifactsByTemplate.map(it => it.presenceCondition)}
+                    } else {
+                        /**
+                         * Case: hasArtifactInType
+                         *
+                         * Artifacts in types are always present.
+                         * Hence, nothing to do.
+                         */
+                    }
+                }
+
+                // TODO: rule.conditions
+
                 // TODO: merge then and else block
                 if (rule.hosting.length !== 0) {
                     const output: LogicExpression[][] = []
                     this.search(node, utils.copy(rule.hosting), [], output)
                     output.forEach(it => {
                         assert.isArray(rule.hosting)
+
+                        if (check.isDefined(artifactCondition)) it.push(artifactCondition)
 
                         maps.push({
                             [technology]: {
@@ -120,7 +168,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 } else {
                     maps.push({
                         [technology]: {
-                            conditions: rule.conditions,
+                            conditions: artifactCondition,
                             weight: rule.weight,
                             assign:
                                 rule.assign ??

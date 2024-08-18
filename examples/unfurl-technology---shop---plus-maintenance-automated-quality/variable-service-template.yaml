@@ -111,6 +111,17 @@ topology_template:
                 - host: node_runtime
                 - host: gcp_appengine
                 - host: kubernetes
+            artifacts:
+                - container_image:
+                      type: container.image
+                      file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
+                      conditions: {node_presence: kubernetes}
+
+                - source_archive:
+                      type: source.archive
+                      file: files/shop.source.zip
+                      # TODO: here would be default_alternative with scope by container and not just by name good!
+                      conditions: {nor: {node_presence: kubernetes}}
 
         shop_ingress:
             type: ingress
@@ -132,7 +143,7 @@ topology_template:
                 - database_user: unfurl-technology-shop-user
                 - database_password: {get_input: database_password}
             requirements:
-                - host: cart_dbms
+                - host: mysql_dbms
 
         mysql_dbms:
             type: mysql.dbms

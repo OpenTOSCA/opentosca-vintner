@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import Artifact from '#graph/artifact'
 import {bratify} from '#graph/utils'
@@ -99,10 +98,16 @@ export default class Type extends Element {
         return bratify(this.container.types.filter(it => it !== this))
     }
 
-    // Currently only supported for nodes
     isA(name: string) {
-        assert.isNode(this.container)
-        return this.graph.inheritance.isNodeType(this.name, name)
+        if (this.container.isNode()) {
+            return this.graph.inheritance.isNodeType(this.name, name)
+        }
+
+        if (this.container.isArtifact()) {
+            return this.graph.inheritance.isArtifactType(this.name, name)
+        }
+
+        throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
     isType() {

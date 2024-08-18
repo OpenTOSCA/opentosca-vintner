@@ -68,6 +68,11 @@ export default class Artifact extends Element {
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.artifactSemanticPruning
     }
 
+    getType() {
+        if (this.types.length > 1) throw new Error(`${this.Display} has more than one type`)
+        return this.types[0]
+    }
+
     getTypeSpecificConditionWrapper() {
         return this.graph.getTypeSpecificConditions()?.artifact_types?.[this.raw.type]
     }

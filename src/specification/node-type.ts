@@ -1,3 +1,4 @@
+import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {InterfaceDefinition} from './interface-definition'
 
 /**
@@ -17,6 +18,7 @@ export type NodeType = {
     capabilities?: {[key: string]: CapabilityDefinition}
     requirements?: {[key: string]: RequirementDefinition}
     interfaces?: {[key: string]: InterfaceDefinition}
+    artifacts?: {[key: string]: ArtifactDefinition}
     _loaded?: boolean
     _file?: string
 }
