@@ -6,6 +6,8 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: we assume that dbms is exposed
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
@@ -51,6 +53,7 @@ const generator: ImplementationGenerator = {
                                         region: '{{ SELF.gcp_region }}',
                                     },
                                 ],
+                                // TODO: could also use GCP CloudSQL connection support, see https://registry.terraform.io/providers/petoju/mysql/latest/docs#gcp-cloudsql-connection
                                 mysql: [
                                     {
                                         endpoint: '{{ HOST.management_address }}',

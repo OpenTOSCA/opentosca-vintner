@@ -60,6 +60,7 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
+                                        // https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_sql_instance_module.html
                                         {
                                             name: 'create a instance',
                                             register: 'instance_info',
@@ -85,6 +86,7 @@ const generator: ImplementationGenerator = {
                                                 project: '{{ SELF.gcp_project }}',
                                             },
                                         },
+                                        // https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_sql_user_module.html
                                         {
                                             name: 'set root password',
                                             'google.cloud.gcp_sql_user': {

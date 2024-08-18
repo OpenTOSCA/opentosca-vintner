@@ -6,7 +6,7 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// Currently not in use. Also validates rules collision constraint.
+// Note, currently not in use.
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

@@ -7,7 +7,7 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-// Currently not in use. And also violates rule collision constraint.
+// Note, currently not in use.
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

@@ -6,6 +6,8 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: we assume that dbms is exposed
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
@@ -37,6 +39,7 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
+                                        // https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_sql_database_module.html
                                         {
                                             name: 'create a database',
                                             'google.cloud.gcp_sql_database': {

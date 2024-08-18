@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
 
-// TODO:  mysql.database::docker::mysql.dbms::docker.engine
+// TODO:  implement this
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
-// TODO: mysql.database::terraform::mysql.dbms::kubernetes
+// TODO: implement this
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

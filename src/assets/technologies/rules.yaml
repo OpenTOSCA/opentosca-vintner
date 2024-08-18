@@ -100,7 +100,7 @@ ansible:
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    # TODO. still state that eg Terraform is more specialized? google.cloud is way more limited in contrast to the terraform gcp module? also applies then to the other use cases where ansible is used in the context of gcp
+    # TODO: still state that eg Terraform is more specialized? google.cloud is way more limited in contrast to the terraform gcp module? also applies then to the other use cases where ansible is used in the context of gcp
     - component: mysql.dbms
       hosting: gcp.cloudsql
       weight: 1

@@ -48,6 +48,7 @@ const generator: ImplementationGenerator = {
                                                 suffix: '{{ SELF.application_name }}.service.yaml',
                                             },
                                         },
+                                        // https://cloud.google.com/run/docs/reference/yaml/v1
                                         {
                                             name: 'create service',
                                             'ansible.builtin.copy': {
@@ -91,6 +92,7 @@ const generator: ImplementationGenerator = {
                                                 },
                                             },
                                         },
+                                        // https://cloud.google.com/sdk/gcloud/reference/run/services/replace
                                         {
                                             name: 'apply service',
                                             'ansible.builtin.shell':
@@ -103,6 +105,7 @@ const generator: ImplementationGenerator = {
                                                 suffix: '{{ SELF.application_name }}.policy.yaml',
                                             },
                                         },
+                                        // https://cloud.google.com/run/docs/authenticating/public
                                         {
                                             name: 'fill policy',
                                             'ansible.builtin.copy': {
@@ -125,6 +128,7 @@ const generator: ImplementationGenerator = {
                                             'ansible.builtin.shell':
                                                 'gcloud run services set-iam-policy {{ SELF.application_name }} {{ policy.path }} --region {{ SELF.gcp_region }} --quiet',
                                         },
+                                        // https://cloud.google.com/sdk/gcloud/reference/run/services/describe
                                         {
                                             name: 'describe service',
                                             register: 'service_description',
@@ -167,6 +171,7 @@ const generator: ImplementationGenerator = {
                                             'ansible.builtin.shell':
                                                 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
                                         },
+                                        // https://cloud.google.com/sdk/gcloud/reference/run/services/delete
                                         {
                                             name: 'delete app',
                                             'ansible.builtin.shell':
