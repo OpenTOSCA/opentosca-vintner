@@ -8,6 +8,7 @@ tags:
 # EDMM Compliance Specification 1.0 Release Candidate
 
 This document specifies how to achieve EDMM compliance when modeling and gives additional insights.
+This document does not specify how to achieve EDMM compatibility on a technical level.
 The specification is under active development and is not backwards compatible with any previous versions.
 
 ## General
@@ -90,6 +91,5 @@ The specification is under active development and is not backwards compatible wi
     1. Number of workarounds
     1. Usage of deprecated or not recommended features
     1. More specialized node type, e.g., `software.application` vs `service.application`.
-
    
 --8<-- "acd.md"
