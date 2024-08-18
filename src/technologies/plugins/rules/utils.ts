@@ -259,8 +259,8 @@ export function TerraformStandardOperations() {
     }
 }
 
-export function UnfurlArtifactFile(name: string) {
-    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::${name}::.file | eval }}`
+export function SourceArchiveFile() {
+    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}`
 }
 
 export function ApplicationDirectory() {
@@ -296,7 +296,7 @@ export function AnsibleUnarchiveSourceArchiveTask() {
     return {
         name: 'extract deployment artifact in application directory',
         unarchive: {
-            src: UnfurlArtifactFile('source_archive'),
+            src: SourceArchiveFile(),
             dest: '{{ SELF.application_directory }}',
         },
     }
@@ -338,12 +338,7 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
         name: 'copy management operation',
         'ansible.builtin.copy': {
             dest: `{{ SELF.application_directory }}/.vintner/${operation}.sh`,
-            content: `
-#! /usr/bin/bash
-set -e
-
-{{ SELF._management_${operation} }}
-`.trimStart(),
+            content: Operation(operation),
             mode: '0755',
         },
         when: `SELF._management_${operation}`,
@@ -359,4 +354,13 @@ export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
         },
         when: `SELF._management_${operation}`,
     }
+}
+
+export function Operation(operation: MANAGEMENT_OPERATIONS) {
+    return `
+#! /usr/bin/bash
+set -e
+
+{{ SELF._management_${operation} }}
+`.trimStart()
 }

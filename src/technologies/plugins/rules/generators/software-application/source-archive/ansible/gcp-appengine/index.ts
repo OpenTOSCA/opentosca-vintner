@@ -4,7 +4,7 @@ import {
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
-    UnfurlArtifactFile,
+    SourceArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -60,7 +60,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'extract deployment artifact in working directory',
                                             unarchive: {
-                                                src: UnfurlArtifactFile('source_archive'),
+                                                src: SourceArchiveFile(),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },

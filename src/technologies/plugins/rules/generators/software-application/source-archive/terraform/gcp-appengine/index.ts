@@ -4,8 +4,8 @@ import {
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
+    SourceArchiveFile,
     TerraformStandardOperations,
-    UnfurlArtifactFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -123,7 +123,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             bucket: '${google_storage_bucket.bucket.name}',
                                             name: 'object.zip',
-                                            source: UnfurlArtifactFile('source_archive'),
+                                            source: SourceArchiveFile(),
                                         },
                                     ],
                                 },

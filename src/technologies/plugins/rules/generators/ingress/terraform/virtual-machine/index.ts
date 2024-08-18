@@ -35,7 +35,7 @@ const generator: ImplementationGenerator = {
                         main: {
                             resource: {
                                 terraform_data: {
-                                    os: [
+                                    vm: [
                                         {
                                             connection: [
                                                 {
