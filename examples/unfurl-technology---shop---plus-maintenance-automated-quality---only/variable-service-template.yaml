@@ -69,8 +69,8 @@ topology_template:
         inputs:
             env:
                 type: string
-            medium:
-                type: boolean
+            tier:
+                type: string
             premium_feature:
                 type: boolean
             optional_feature:
@@ -84,7 +84,8 @@ topology_template:
         ###################################################
 
         shop:
-            type: shop.component
+            type:
+                - shop.component: {}
             persistent: true
             properties:
                 - application_name: unfurl-technology-shop
@@ -121,7 +122,7 @@ topology_template:
                       type: source.archive
                       file: files/shop.source.zip
                       # TODO: here would be default_alternative with scope by container and not just by name good!
-                      conditions: {nor: {node_presence: kubernetes}}
+                      conditions: {not: {node_presence: kubernetes}}
 
         shop_ingress:
             type: ingress

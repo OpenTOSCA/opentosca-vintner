@@ -29,7 +29,29 @@ export default class Node extends Element {
     readonly propertiesMap: Map<String, Property[]> = new Map()
     readonly technologies: Technology[] = []
 
-    readonly technologyRequired: boolean
+    get technologyRequired() {
+        /**
+         * If an empty technology array has been modeled, then the node requires a technology
+         *
+         if (check.isDefined(data.raw.technology)) {
+         assert.isArray(data.raw.technology, `Technology of ${this.display} not normalized`)
+         this.technologyRequired = utils.isEmpty(data.raw.technology)
+         } else {
+         this.technologyRequired = false
+         }
+         */
+
+        /**
+         * If type is abstract, then no technology is required
+        const type = this.graph.inheritance.getNodeType(this.getType().name)
+        assert.isDefined(type, `Node type "${type} does not exist`)
+        return !isAbstract(type)
+         */
+
+        // TODO: implemet this
+
+        return false
+    }
 
     readonly weight: number = 1
 
@@ -39,16 +61,6 @@ export default class Node extends Element {
         this.name = data.name
         this.raw = data.raw
         this.conditions = utils.toList(data.raw.conditions)
-
-        /**
-         * If an empty technology array has been modeled, then the node requires a technology
-         */
-        if (check.isDefined(data.raw.technology)) {
-            assert.isArray(data.raw.technology, `Technology of ${this.display} not normalized`)
-            this.technologyRequired = utils.isEmpty(data.raw.technology)
-        } else {
-            this.technologyRequired = false
-        }
 
         /**
          * Get weight

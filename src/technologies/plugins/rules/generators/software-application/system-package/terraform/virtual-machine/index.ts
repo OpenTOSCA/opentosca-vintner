@@ -6,7 +6,7 @@ import {MetadataGenerated} from '#technologies/plugins/rules/utils'
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'terraform',
-    artifact: 'apt.package',
+    artifact: 'software.package',
     hosting: ['virtual.machine'],
 
     generate: (name, type) => {

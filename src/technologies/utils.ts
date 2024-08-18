@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {METADATA} from '#technologies/plugins/rules/types'
+import * as utils from '#utils'
 
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 
@@ -21,19 +22,22 @@ export const GENERATION_NOTICE = `
 export type TypeData = {component: string; technology: string; artifact?: string; hosting?: string[]}
 
 export function constructType(data: TypeData) {
-    let output = data.component + '::' + data.technology
+    let output = data.component
 
     if (check.isDefined(data.artifact)) {
         output += '#' + data.artifact
     }
 
-    if (check.isDefined(data.hosting)) {
+    output += '::' + data.technology
+
+    if (check.isDefined(data.hosting) && !utils.isEmpty(data.hosting)) {
         output += '@' + data.hosting.join('->')
     }
 
     return output
 }
 
+// TODO: update this (and use regex)
 export function destructType(type: string): TypeData {
     const [componentTypeArtifactPart, hostingPart] = type.split('@')
     const [componentTechnologyPart, artifact] = componentTypeArtifactPart.split('#')

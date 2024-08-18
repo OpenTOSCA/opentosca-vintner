@@ -151,7 +151,7 @@ export default class Normalizer {
     }
 
     private normalizeTypes(template: TypeContainerTemplate) {
-        assert.isDefined(template.type, `${utils.stringify(template)} has no type`)
+        assert.isDefined(template.type)
 
         if (check.isArray(template.type)) return
 

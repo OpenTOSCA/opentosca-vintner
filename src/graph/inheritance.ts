@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
+import {ARTIFACT_TYPE_ROOT, ArtifactType} from '#spec/artifact-type'
 import {NODE_TYPE_ROOT, NodeType} from '#spec/node-type'
 
 /**
@@ -14,7 +15,7 @@ export default class Inheritance {
     }
 
     hasArtifact(node: string, artifact: string) {
-        const walker = this.Walker(node)
+        const walker = this.NodeTypeWalker(node)
 
         while (walker.has()) {
             const next = walker.get()
@@ -47,10 +48,15 @@ export default class Inheritance {
         return Object.keys(this.graph.serviceTemplate.node_types ?? {}).includes(name)
     }
 
-    // TODO: implement this with inheritance
-    // TODO: we need to load artifact types!
     isArtifactType(is: string, question: string) {
-        return is === question
+        const walker = this.ArtifactTypeWalker(is)
+
+        while (walker.has()) {
+            const next = walker.get()
+            if (next.name === question) return true
+        }
+
+        return false
     }
 
     // TODO: use Walker once tested
@@ -74,7 +80,7 @@ export default class Inheritance {
         return false
     }
 
-    private Walker(start: string) {
+    private NodeTypeWalker(start: string) {
         const types = Object.entries(this.graph.serviceTemplate.node_types ?? {}).map(([name, type]) => ({
             name,
             type,
@@ -83,9 +89,9 @@ export default class Inheritance {
         let current: {name: string; type: NodeType} | undefined
 
         const has = () => {
-            if (check.isDefined(current) && current.name === NODE_TYPE_ROOT) return false
+            if (check.isDefined(current) && [NODE_TYPE_ROOT, ARTIFACT_TYPE_ROOT].includes(current.name)) return false
             const next = peek()
-            return check.isUndefined(next)
+            return check.isDefined(next)
         }
 
         const peek = () => {
@@ -94,9 +100,48 @@ export default class Inheritance {
         }
 
         const get = () => {
-            assert.isDefined(current, `Current is not defined`)
             const next = peek()
-            assert.isDefined(next, `Node type "${current.type.derived_from}" has no definition`)
+            assert.isDefined(
+                next,
+                `Node type "${check.isDefined(current) ? current.type.derived_from : start}" has no definition`
+            )
+            current = next
+            return next
+        }
+
+        return {
+            peek,
+            has,
+            get,
+        }
+    }
+
+    // TODO: DRY
+    private ArtifactTypeWalker(start: string) {
+        const types = Object.entries(this.graph.serviceTemplate.artifact_types ?? {}).map(([name, type]) => ({
+            name,
+            type,
+        }))
+
+        let current: {name: string; type: ArtifactType} | undefined
+
+        const has = () => {
+            if (check.isDefined(current) && [ARTIFACT_TYPE_ROOT].includes(current.name)) return false
+            const next = peek()
+            return check.isDefined(next)
+        }
+
+        const peek = () => {
+            if (check.isUndefined(current)) return types.find(it => it.name === start)
+            return types.find(it => it.name === current!.type.derived_from)
+        }
+
+        const get = () => {
+            const next = peek()
+            assert.isDefined(
+                next,
+                `Artifact type "${check.isDefined(current) ? current.type.derived_from : start}" has no definition`
+            )
             current = next
             return next
         }

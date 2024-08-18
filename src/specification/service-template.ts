@@ -2,6 +2,7 @@
  * Service Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969451}
  */
+import {ArtifactType} from '#spec/artifact-type'
 import {ImportDefinition} from '#spec/import-definition'
 import {NodeType} from '#spec/node-type'
 import {GroupType} from './group-type'
@@ -23,4 +24,5 @@ export type ServiceTemplate = {
     topology_template?: TopologyTemplate
     node_types?: {[key: string]: NodeType}
     group_types?: {[key: string]: GroupType}
+    artifact_types?: {[key: string]: ArtifactType}
 }

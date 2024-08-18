@@ -54,13 +54,25 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                  */
                 if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
 
-                const implementationName = constructType({component: name, technology, hosting: rule.hosting})
+                const implementationName = constructType({
+                    component: name,
+                    technology,
+                    artifact: rule.artifact,
+                    hosting: rule.hosting,
+                })
 
-                const generatorName = constructType({component: rule.component, technology, hosting: rule.hosting})
+                const generatorName = constructType({
+                    component: rule.component,
+                    technology,
+                    artifact: rule.artifact,
+                    hosting: rule.hosting,
+                })
                 const generator = loadRegistry().get(generatorName)
 
                 // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
                 if (check.isUndefined(generator)) {
+                    std.log(`Generator "${generatorName}" does not exist`)
+
                     const existing = this.graph.inheritance.getNodeType(implementationName)
 
                     if (check.isUndefined(existing)) {
@@ -112,13 +124,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     // TODO: check if node template has artifact
 
                     // Check for artifact in template
-                    const artifactsByTemplate = (node.artifactsMap.get(rule.artifact) ?? []).filter(it => {
-                        if (it.getType().isA(rule.artifact!)) {
-                            // TODO: check naming convention
-                            return true
-                        }
-                        return false
-                    })
+                    const artifactsByTemplate = node.artifacts.filter(it => it.getType().isA(rule.artifact!))
+                    // TODO: check naming convention?
                     const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
 
                     // Check for artifact in type
@@ -161,7 +168,12 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                                 weight: rule.weight,
                                 assign:
                                     rule.assign ??
-                                    constructType({component: node.getType().name, technology, hosting: rule.hosting}),
+                                    constructType({
+                                        component: node.getType().name,
+                                        technology,
+                                        artifact: rule.artifact,
+                                        hosting: rule.hosting,
+                                    }),
                             },
                         })
                     })
@@ -172,7 +184,12 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                             weight: rule.weight,
                             assign:
                                 rule.assign ??
-                                constructType({component: node.getType().name, technology, hosting: rule.hosting}),
+                                constructType({
+                                    component: node.getType().name,
+                                    technology,
+                                    artifact: rule.artifact,
+                                    hosting: rule.hosting,
+                                }),
                         },
                     })
                 }

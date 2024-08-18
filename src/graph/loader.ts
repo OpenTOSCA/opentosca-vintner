@@ -52,9 +52,9 @@ export default class Loader {
         await this.loadTechnologyPluginBuilders()
 
         /**
-         * Load node types
+         * Load types
          */
-        await this.loadNodeTypes()
+        await this.loadTypes()
 
         return this.serviceTemplate
     }
@@ -165,9 +165,10 @@ export default class Loader {
         this.serviceTemplate.topology_template.variability.plugins.technology = builders
     }
 
-    private async loadNodeTypes() {
+    private async loadTypes() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
         if (check.isUndefined(this.serviceTemplate.node_types)) this.serviceTemplate.node_types = {}
+        if (check.isUndefined(this.serviceTemplate.artifact_types)) this.serviceTemplate.artifact_types = {}
 
         const candidates = files.walkDirectory(PROFILES_DIR, {extensions: ['yaml', 'yml']})
 
@@ -181,19 +182,37 @@ export default class Loader {
             if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
                 throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
 
-            if (check.isUndefined(template.node_types)) continue
-            for (const [name, type] of Object.entries(template.node_types)) {
-                if (Object.hasOwn(this.serviceTemplate.node_types, name))
-                    throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
+            // TODO: load all types (and clean loaded ones)
 
-                type._loaded = true
-                type._file = file
-                this.serviceTemplate.node_types[name] = type
+            if (check.isDefined(template.node_types)) {
+                for (const [name, type] of Object.entries(template.node_types)) {
+                    if (Object.hasOwn(this.serviceTemplate.node_types, name))
+                        throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
+
+                    type._loaded = true
+                    type._file = file
+                    this.serviceTemplate.node_types[name] = type
+                }
+            }
+
+            if (check.isDefined(template.artifact_types)) {
+                for (const [name, type] of Object.entries(template.artifact_types)) {
+                    if (Object.hasOwn(this.serviceTemplate.artifact_types, name))
+                        throw new Error(`Artifact type "${name}" duplicated in service template "${file}"`)
+
+                    type._loaded = true
+                    type._file = file
+                    this.serviceTemplate.artifact_types[name] = type
+                }
             }
         }
 
         for (const [name, type] of Object.entries(this.serviceTemplate.node_types)) {
             if (type.derived_from === name) throw new Error(`Node type "${name}" is derived from itself...`)
+        }
+
+        for (const [name, type] of Object.entries(this.serviceTemplate.artifact_types)) {
+            if (type.derived_from === name) throw new Error(`Artifact type "${name}" is derived from itself...`)
         }
     }
 }

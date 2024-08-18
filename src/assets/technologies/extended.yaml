@@ -55,10 +55,6 @@ node_types:
 
     python.runtime:
         derived_from: software.runtime
-        properties:
-            application_language:
-                type: string
-                default: python3
         artifacts:
             software_package:
                 type: software.package
@@ -79,6 +75,10 @@ node_types:
         derived_from: service.application
         metadata:
             vintner_abstract: 'true'
+        properties:
+            application_language:
+                type: string
+                default: python3
         interfaces:
             management:
                 type: Management
@@ -110,6 +110,8 @@ node_types:
 
     gcp.provider:
         derived_from: cloud.provider
+        metadata:
+            vintner_abstract: 'true'
         properties:
             _hosting:
                 type: string
@@ -232,6 +234,9 @@ node_types:
 
     kubernetes:
         derived_from: cloud.service
+        metadata:
+            vintner_abstract: 'true'
+
         properties:
             _hosting:
                 type: string
@@ -267,6 +272,9 @@ node_types:
 
     openstack.provider:
         derived_from: cloud.provider
+        metadata:
+            vintner_abstract: 'true'
+
         properties:
             _hosting:
                 type: string

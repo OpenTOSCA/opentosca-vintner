@@ -6,7 +6,7 @@ import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#t
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'docker',
-    hosting: ['mysql.dbms', 'docker.engine'],
+    hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {

@@ -10,7 +10,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'ingress',
     technology: 'terraform',
-    hosting: ['kubernetes'],
+    hosting: ['virtual.machine'],
 
     generate: (name, type) => {
         return {

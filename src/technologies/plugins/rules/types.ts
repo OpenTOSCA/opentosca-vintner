@@ -24,6 +24,7 @@ export type ImplementationGenerator = {
     generate: (name: string, type: NodeType) => NodeType
 }
 
+// TODO: migrate or delete this
 export abstract class ImplementationGenerator2 {
     private _id: string | undefined
     get id() {

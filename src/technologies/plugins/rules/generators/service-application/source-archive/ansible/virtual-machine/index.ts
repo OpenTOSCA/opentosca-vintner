@@ -18,6 +18,8 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: does ExecStart work?
+
 const service = `
 [Unit]
 After=network.target
@@ -33,7 +35,7 @@ WantedBy=multi-user.target
 `
 
 const generator: ImplementationGenerator = {
-    component: 'service.component',
+    component: 'service.application',
     technology: 'ansible',
     artifact: 'source.archive',
     hosting: ['virtual.machine'],

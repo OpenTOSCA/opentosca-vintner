@@ -50,7 +50,11 @@ export function mapProperties(
 }
 
 export function SecureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
-    assert.isDefined(type.properties)
+    // TODO: enable assert but currently this breaks software application implementation generation
+    // assert.isDefined(type.properties)
+
+    if (!type.properties) return {}
+    if (!type.properties[PROPERTIES.APPLICATION_PROTOCOL]) return {}
 
     const definition = type.properties[PROPERTIES.APPLICATION_PROTOCOL]
     assert.isDefined(definition)
@@ -341,18 +345,19 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
             content: Operation(operation),
             mode: '0755',
         },
-        when: `SELF._management_${operation}`,
+        when: `SELF._management_${operation} != None`,
     }
 }
 
 export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'call management operation',
+        // TODO: does this work?
         'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
         args: {
             chdir: '{{ SELF.application_directory }}',
         },
-        when: `SELF._management_${operation}`,
+        when: `SELF._management_${operation} != None`,
     }
 }
 
