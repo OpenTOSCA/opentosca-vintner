@@ -97,6 +97,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 assert.isDefined(implementation.metadata)
                 assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
 
+                // TODO: next: THIS HAS COLLISIONS
                 types[implementationName] = implementation
             }
         }
