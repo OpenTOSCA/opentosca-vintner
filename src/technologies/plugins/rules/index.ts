@@ -199,7 +199,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return maps
     }
 
-    // TODO: support * as hosting
+    // TODO: refactor this
 
     private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
         console.log({node: node.name, hosting, history})
@@ -215,15 +215,18 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     const historyCopy = utils.copy(history)
                     historyCopy.push({node_presence: host.name})
 
-                    // Done if no more hosting must be found
-                    output.push(historyCopy)
-
                     // Deep copy since every child call changes the state of hosting
                     const hostingCopy = utils.copy(hosting)
+
+                    // Remove * and search
                     hostingCopy.shift()
                     hostingCopy.shift()
 
-                    if (utils.isEmpty(hostingCopy)) continue
+                    // Done if no more hosting must be found
+                    if (utils.isEmpty(hostingCopy)) {
+                        output.push(historyCopy)
+                        continue
+                    }
 
                     // Recursive search
                     this.search(host, hostingCopy, historyCopy, output)
@@ -247,20 +250,20 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             // Conditional recursive breadth-first search
             for (const host of node.hosts) {
-                if (!host.getType().isA(search)) continue
+                if (host.getType().isA(search)) continue
 
                 // Deep copy since every child call changes the state of history
                 const historyCopy = utils.copy(history)
                 historyCopy.push({node_presence: host.name})
 
+                // Deep copy since every child call changes the state of hosting
+                const hostingCopy = utils.copy(hosting)
+
                 // Done if no more hosting must be found
-                if (utils.isEmpty(hosting)) {
+                if (utils.isEmpty(hostingCopy)) {
                     output.push(historyCopy)
                     continue
                 }
-
-                // Deep copy since every child call changes the state of hosting
-                const hostingCopy = utils.copy(hosting)
 
                 // Recursive search
                 this.search(host, hostingCopy, historyCopy, output)
