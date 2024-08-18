@@ -19,8 +19,8 @@ node_types:
     node.runtime:
         derived_from: software.runtime
         artifacts:
-            apt_package:
-                type: apt.package
+            software_package:
+                type: software.package
                 file: nodejs
                 properties:
                     setup: https://deb.nodesource.com/setup_18.x
@@ -32,7 +32,7 @@ node_types:
     ###################################################
 
     # expects a source.archive
-    node.application:
+    node.service.application:
         derived_from: service.application
         metadata:
             vintner_abstract: 'true'
@@ -60,8 +60,8 @@ node_types:
                 type: string
                 default: python3
         artifacts:
-            apt_package:
-                type: apt.package
+            software_package:
+                type: software.package
                 file: python-is-python3
                 properties:
                     dependencies:
@@ -75,7 +75,7 @@ node_types:
     ###################################################
 
     # expects a source.archive
-    python.application:
+    python.service.application:
         derived_from: service.application
         metadata:
             vintner_abstract: 'true'
@@ -92,7 +92,7 @@ node_types:
     #
     ###################################################
 
-    binary.application:
+    binary.service.application:
         derived_from: service.application
         metadata:
             vintner_abstract: 'true'

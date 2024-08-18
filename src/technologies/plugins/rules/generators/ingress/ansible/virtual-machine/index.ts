@@ -2,6 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleWaitForSSHTask,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -40,8 +41,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'wait for ssh',
-                                            wait_for_connection: null,
+                                            ...AnsibleWaitForSSHTask(),
                                         },
                                         {
                                             name: 'install caddy',

@@ -5,16 +5,16 @@
 ###################################################
 
 ansible:
-    # Software
+    # Software Application
     - component: software.application
       hosting: virtual.machine
       artifact: source.archive
-      weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      weight: 0.5
+      comment: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 
     - component: software.application
       hosting: virtual.machine
-      artifact: apt.package
+      artifact: software.package
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -22,19 +22,19 @@ ansible:
       hosting:
           - docker.engine
           - virtual.machine
-      artifact: docker.image
+      artifact: container.image
       weight: 0.5
       comment: Docker is more specialized.
 
     - component: software.application
       hosting: kubernetes
-      artifact: docker.image
+      artifact: container.image
       weight: 0.5
       comment: Kubernetes is more specialized.
 
     - component: software.application
       hosting: gcp.cloudrun
-      artifact: docker.image
+      artifact: container.image
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
@@ -43,6 +43,13 @@ ansible:
       artifact: source.archive
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
+
+    # Service Application
+    - component: service.application
+      hosting: virtual.machine
+      artifact: source.archive
+      weight: 1
+      comment: Primary use case due to the specialization of Ansible. Special integration for systemd.
 
     # Docker Engine
     - component: docker.engine
@@ -129,7 +136,7 @@ terraform:
     # Software
     - component: software.application
       hosting: virtual.machine
-      artifact: apt.package
+      artifact: software.package
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
@@ -143,19 +150,19 @@ terraform:
       hosting:
           - docker.engine
           - virtual.machine
-      artifact: docker.image
+      artifact: container.image
       weight: 0.5
       comment: Docker is more specialized.
 
     - component: software.application
       hosting: kubernetes
-      artifact: docker.image
+      artifact: container.image
       weight: 0.5
       comment: Kubernetes is more specialized.
 
     - component: software.application
       hosting: gcp.cloudrun
-      artifact: docker.image
+      artifact: container.image
       weight: 1
       comment: Terraform provides a declarative module.
 
@@ -164,6 +171,13 @@ terraform:
       artifact: source.archive
       weight: 1
       comment: Terraform provides a declarative module.
+
+    # Service Application
+    - component: service.application
+      hosting: virtual.machine
+      artifact: source.archive
+      weight: 0
+      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     # Docker Engine
     - component: docker.engine
@@ -252,7 +266,7 @@ kubernetes:
     # Software
     - component: software.application
       hosting: kubernetes
-      artifact: docker.image
+      artifact: container.image
       weight: 1
       comment: Kubernetes is the underlying technology.
 
@@ -282,7 +296,7 @@ docker:
       hosting:
           - docker.engine
           - virtual.machine
-      artifact: docker.image
+      artifact: container.image
       weight: 1
       comment: Docker is the underlying technology.
 

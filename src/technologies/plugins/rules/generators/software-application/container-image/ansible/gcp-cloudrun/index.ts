@@ -12,7 +12,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'docker.image',
+    artifact: 'container.image',
     hosting: ['gcp.cloudrun'],
 
     generate: (name, type) => {
@@ -72,7 +72,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: '{{ SELF.application_image }}',
+                                                                        image: '{{ ".artifacts::container_image::file" | eval }}',
                                                                         ports: [
                                                                             {
                                                                                 name: 'http1',

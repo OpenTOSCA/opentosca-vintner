@@ -2,14 +2,14 @@
 
 ## Software Applications
 
-1. A `software.application` node template always requires a `source.archive`, `apt.package`, or `docker.image` deployment artifact.
+1. A `software.application` node template always requires a `source.archive`, `software.package`, or `container.image` deployment artifact.
 1. A `software.application` node template with an `source.archive` artifact definition always requires the `management.start` operation. 
 1. A `software.application` node template can optionally have the `management.configure` operation.
 1. A `software.application` node template can have conditional artifact definitions. A node type cannot have conditional artifact definitions. 
 
 1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `openstack.machine` or `gcp.appengine` node template as host.
-1. A `software.application` node template with a `apt.package` deployment artifact implicitly requires an `openstack.machine` node template as host.
-1. A `software.application` node template with a `docker.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kuberntes` node template as host.
+1. A `software.application` node template with a `software.package` deployment artifact implicitly requires an `openstack.machine` node template as host.
+1. A `software.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kuberntes` node template as host.
 
 1. A _built-in_ `software.application` node template defines its management operations in its node type, e.g., `node.application`.
 1. A _custom_ `software.application` node template defines its management operations in its node template, e.g., `shop.component` derived from `node.application`.

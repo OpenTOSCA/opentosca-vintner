@@ -272,6 +272,56 @@ export function ApplicationDirectory() {
     }
 }
 
+export function AnsibleCreateApplicationDirectoryTask() {
+    return {
+        name: 'create application directory',
+        'ansible.builtin.file': {
+            path: '{{ SELF.application_directory }}',
+            state: 'directory',
+        },
+    }
+}
+
+export function AnsibleDeleteApplicationDirectoryTask() {
+    return {
+        name: 'delete application directory',
+        'ansible.builtin.file': {
+            path: '{{ SELF.application_directory }}',
+            state: 'absent',
+        },
+    }
+}
+
+export function AnsibleCopySourceArchiveTask() {
+    return {
+        name: 'extract deployment artifact in application directory',
+        unarchive: {
+            src: UnfurlArtifactFile('source_archive'),
+            dest: '{{ SELF.application_directory }}',
+        },
+    }
+}
+
+export function AnsibleCreateVintnerDirectory() {
+    return {
+        name: 'create vintner directory',
+        'ansible.builtin.file': {
+            path: '{{ SELF.application_directory }}/.vintner',
+            state: 'directory',
+        },
+    }
+}
+
+export function AnsibleCreateApplicationEnvironment(type: NodeType) {
+    return {
+        name: 'create .env file',
+        copy: {
+            dest: '{{ SELF.application_directory }}/.env',
+            content: mapProperties(type, {format: 'ini'}),
+        },
+    }
+}
+
 export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'assert management operation',

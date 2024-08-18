@@ -3,6 +3,7 @@ import {
     AnsibleHostEndpointCapability,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleWaitForSSHTask,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -55,8 +56,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'Wait for ssh',
-                                            wait_for_connection: null,
+                                            ...AnsibleWaitForSSHTask(),
                                         },
                                         {
                                             name: 'Installing mysql',

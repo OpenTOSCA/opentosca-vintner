@@ -11,7 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'terraform',
-    artifact: 'docker.image',
+    artifact: 'container.image',
     hosting: ['docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
@@ -81,7 +81,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ SELF.application_image }}',
+                                            name: '{{ ".artifacts::container_image::file" | eval }}',
                                         },
                                     ],
                                 },
