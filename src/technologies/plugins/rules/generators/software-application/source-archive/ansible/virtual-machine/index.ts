@@ -22,7 +22,7 @@ const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
     artifact: 'source.archive',
-    hosting: ['virtual.machine'],
+    hosting: ['*', 'virtual.machine'],
 
     generate: (name, type) => {
         return {

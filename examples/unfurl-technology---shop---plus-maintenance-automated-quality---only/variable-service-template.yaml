@@ -84,8 +84,7 @@ topology_template:
         ###################################################
 
         shop:
-            type:
-                - shop.component: {}
+            type: shop.component
             persistent: true
             properties:
                 - application_name: unfurl-technology-shop

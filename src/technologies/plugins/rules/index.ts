@@ -199,30 +199,72 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return maps
     }
 
+    // TODO: support * as hosting
+
     private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
-        // Searching for next hosting
-        const search = hosting.shift()
-        // Must be defined since else we would have aborted in the parent call
-        assert.isDefined(search)
+        console.log({node: node.name, hosting, history})
 
-        // Conditional recursive breadth-first search
-        const hosts = node.hosts.filter(it => it.getType().isA(search))
-        for (const host of hosts) {
-            // Deep copy since every child call changes the state of history
-            const historyCopy = utils.copy(history)
-            historyCopy.push({node_presence: host.name})
+        if (hosting[0] === '*') {
+            const search = hosting[1]
+            // Must be defined. To model "on any hosting" simply do not model hosting.
+            assert.isDefined(search)
 
-            // Done if no more hosting must be found
-            if (utils.isEmpty(hosting)) {
-                output.push(historyCopy)
-                continue
+            for (const host of node.hosts) {
+                if (host.getType().isA(search)) {
+                    // Deep copy since every child call changes the state of history
+                    const historyCopy = utils.copy(history)
+                    historyCopy.push({node_presence: host.name})
+
+                    // Done if no more hosting must be found
+                    output.push(historyCopy)
+
+                    // Deep copy since every child call changes the state of hosting
+                    const hostingCopy = utils.copy(hosting)
+                    hostingCopy.shift()
+                    hostingCopy.shift()
+
+                    if (utils.isEmpty(hostingCopy)) continue
+
+                    // Recursive search
+                    this.search(host, hostingCopy, historyCopy, output)
+                } else {
+                    // Deep copy since every child call changes the state of history
+                    const historyCopy = utils.copy(history)
+                    historyCopy.push({node_presence: host.name})
+
+                    // Deep copy since every child call changes the state of hosting
+                    const hostingCopy = utils.copy(hosting)
+
+                    // Recursive search
+                    this.search(host, hostingCopy, historyCopy, output)
+                }
             }
+        } else {
+            // Searching for next hosting
+            const search = hosting.shift()
+            // Must be defined since else we would have aborted in the parent call
+            assert.isDefined(search)
 
-            // Deep copy since every child call changes the state of hosting
-            const hostingCopy = utils.copy(hosting)
+            // Conditional recursive breadth-first search
+            for (const host of node.hosts) {
+                if (!host.getType().isA(search)) continue
 
-            // Recursive search
-            this.search(host, hostingCopy, historyCopy, output)
+                // Deep copy since every child call changes the state of history
+                const historyCopy = utils.copy(history)
+                historyCopy.push({node_presence: host.name})
+
+                // Done if no more hosting must be found
+                if (utils.isEmpty(hosting)) {
+                    output.push(historyCopy)
+                    continue
+                }
+
+                // Deep copy since every child call changes the state of hosting
+                const hostingCopy = utils.copy(hosting)
+
+                // Recursive search
+                this.search(host, hostingCopy, historyCopy, output)
+            }
         }
     }
 }

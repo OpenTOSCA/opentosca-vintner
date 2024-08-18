@@ -257,6 +257,13 @@ The following links are used in publications.
 - https://vintner.opentosca.org/variability4tosca/guides/modes
 
 
+## Typical Reasons for UNSAT 
+
+1. Technology constraint; can be disabled by `technology_constraint: false`
+1. Artifact constraint; can be disabled by `required_artifact_constraint: false`
+1. Required incoming relation constraint; can be disabled by `required_incoming_relation_constraint: false`
+
+
 ## Limitations
 
 We briefly discuss limitations of our prototypical implementation.

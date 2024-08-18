@@ -7,13 +7,17 @@
 ansible:
     # Software Application
     - component: software.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: source.archive
       weight: 0.5
       comment: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 
     - component: software.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: software.package
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
@@ -46,7 +50,9 @@ ansible:
 
     # Service Application
     - component: service.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: source.archive
       weight: 1
       comment: Primary use case due to the specialization of Ansible. Special integration for systemd.
@@ -135,13 +141,17 @@ ansible:
 terraform:
     # Software
     - component: software.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: software.package
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     - component: software.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: source.archive
       # TODO: set this 0.5 since at the end we only call shell scripts on remote target as Ansible also does!
       weight: 0
@@ -175,7 +185,9 @@ terraform:
 
     # Service Application
     - component: service.application
-      hosting: virtual.machine
+      hosting:
+          - '*'
+          - virtual.machine
       artifact: source.archive
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
