@@ -1,5 +1,8 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleCallOperationTask,
+    AnsibleCopyOperationTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
@@ -85,6 +88,75 @@ const generator: ImplementationGenerator = {
                                             environment:
                                                 '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}',
                                         },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
+                        configure: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
+                        start: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.START),
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
+                        stop: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                        },
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -99,6 +171,12 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                        },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
                                             name: 'uninstall package',

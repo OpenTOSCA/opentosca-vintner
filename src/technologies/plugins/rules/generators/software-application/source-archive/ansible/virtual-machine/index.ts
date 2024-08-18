@@ -4,13 +4,13 @@ import {
     AnsibleAssertOperationTask,
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
-    AnsibleCopySourceArchiveTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleCreateApplicationEnvironment,
     AnsibleCreateVintnerDirectory,
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleUnarchiveSourceArchiveTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -52,7 +52,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleCopySourceArchiveTask(),
+                                            ...AnsibleUnarchiveSourceArchiveTask(),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),
@@ -108,6 +108,9 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
+                                        {
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.START),
+                                        },
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -122,6 +125,9 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),

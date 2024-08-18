@@ -292,7 +292,7 @@ export function AnsibleDeleteApplicationDirectoryTask() {
     }
 }
 
-export function AnsibleCopySourceArchiveTask() {
+export function AnsibleUnarchiveSourceArchiveTask() {
     return {
         name: 'extract deployment artifact in application directory',
         unarchive: {

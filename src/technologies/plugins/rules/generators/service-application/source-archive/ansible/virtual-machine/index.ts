@@ -4,13 +4,13 @@ import {
     AnsibleAssertOperationTask,
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
-    AnsibleCopySourceArchiveTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleCreateApplicationEnvironment,
     AnsibleCreateVintnerDirectory,
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleUnarchiveSourceArchiveTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -66,7 +66,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleCopySourceArchiveTask(),
+                                            ...AnsibleUnarchiveSourceArchiveTask(),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),
@@ -163,10 +163,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
                                             name: 'stop service',
@@ -191,10 +191,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
                                             name: 'delete systemd service',

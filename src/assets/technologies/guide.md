@@ -3,25 +3,38 @@
 ## Software Applications
 
 1. A `software.application` node template always requires a `source.archive`, `software.package`, or `container.image` deployment artifact.
-1. A `software.application` node template with an `source.archive` artifact definition always requires the `management.start` operation. 
-1. A `software.application` node template can optionally have the `management.configure` operation.
+1. A `software.application` node template with an `source.archive` artifact definition always requires the `management.start` operation and the `management.stop` operation. 
 1. A `software.application` node template can have conditional artifact definitions. A node type cannot have conditional artifact definitions. 
 
-1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `openstack.machine` or `gcp.appengine` node template as host.
-1. A `software.application` node template with a `software.package` deployment artifact implicitly requires an `openstack.machine` node template as host.
-1. A `software.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kuberntes` node template as host.
+1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `virtual.machine` or `gcp.appengine` node template as host.
+1. A `software.application` node template with a `software.package` deployment artifact implicitly requires an `virtual.machine` node template as host.
+1. A `software.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
 
 1. A _built-in_ `software.application` node template defines its management operations in its node type, e.g., `node.application`.
 1. A _custom_ `software.application` node template defines its management operations in its node template, e.g., `shop.component` derived from `node.application`.
-1. A `sofware.application` node template or node type can only define inline `bash` scripts as management operations (they are executed in the context of the deployment artifact).
 
 
 ## Service Applications
 
-1. A `service.application` node template on a `openstack.machine` host is started as `systemd service`.
+1. A `service.application` node template on a `virtual.machine` host is started as `systemd service`.
+1. A `service.appcliation` always requires a  `source.archive` deployment artifact. 
+1. A `service.application` does not require a `management.stop` operation.
+
+
+## Management Operation 
+
+1. A management operation is an inline `bash` script, which is executed in the root of the application directory.
+
+## Application Directory
+
+1. A `software.application` node template hosted on a `virtual.machine` node template has its own dedicated application directory.
+1. `.vintner` is a reserved directory in the application directory.
+
+## Deployment Artifact
+
+1. A `source.archive` deployment artifact is extracted into the application directory.
 
 
 ## Technology Rules
 
-1. Collisions of technology rules of the same technology for the same variant are not permitted. There must not be a _more specific_ rule. For example, there must not be a generic rule for `software.application` node templates in combination with a rule for `software.application` node templates that also has a restriction on `source.archive`.
-
+1. Technology rules might collide. The effective rule is selected base don the quality (and count).
