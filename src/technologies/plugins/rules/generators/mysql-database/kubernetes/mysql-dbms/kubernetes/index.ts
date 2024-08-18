@@ -8,6 +8,8 @@ import {
 
 // TODO: some syntax error at create-user
 
+// TODO: does not use k8s auth
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'kubernetes',

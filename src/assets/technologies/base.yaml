@@ -182,6 +182,17 @@ node_types:
 
     ###################################################
     #
+    # Container Runtime
+    #
+    ###################################################
+
+    container.runtime:
+        derived_from: software.runtime
+        metadata:
+            vintner_abstract: 'true'
+
+    ###################################################
+    #
     # Virtual Machine
     #
     ###################################################

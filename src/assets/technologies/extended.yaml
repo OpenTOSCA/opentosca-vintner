@@ -199,7 +199,7 @@ node_types:
     ###################################################
 
     docker.engine:
-        derived_from: software.runtime
+        derived_from: container.runtime
 
         properties:
             application_name:

@@ -143,6 +143,7 @@ terraform:
     - component: software.application
       hosting: virtual.machine
       artifact: source.archive
+      # TODO: set this 0.5 since at the end we only call shell scripts on remote target as Ansible also does!
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
