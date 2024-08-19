@@ -79,6 +79,15 @@ artifact_types:
         derived_from: root
         # TODO: add auth
 
+    ###################################################
+    #
+    # Virtual Machine Image
+    #
+    ###################################################
+
+    virtual.machine.image:
+        derived_from: root
+
 interface_types:
     root:
         derived_from: tosca.entity.Root
@@ -285,10 +294,6 @@ node_types:
         properties:
             machine_name:
                 type: string
-
-            image:
-                type: string
-                default: Ubuntu 22.04
 
             ports:
                 type: list

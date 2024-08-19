@@ -81,7 +81,7 @@ const generator: ImplementationGenerator = {
                                             'openstack.cloud.server': {
                                                 state: 'present',
                                                 name: '{{ SELF.machine_name }}',
-                                                image: '{{ SELF.image_name }}',
+                                                image: '{{  ".artifacts::image::file | eval }}',
                                                 key_name: 'default',
                                                 flavor: '{{ SELF.flavor }}',
                                                 network: '{{ SELF.network }}',

@@ -110,24 +110,24 @@ topology_template:
                 - database: database
                 - host: virtual_machine
                 - host: gcp_appengine
-                - host: kubernetes
+                - host: kubernetes_cluster
             artifacts:
                 - container_image:
                       type: container.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
-                      conditions: {node_presence: kubernetes}
+                      conditions: {node_presence: kubernetes_cluster}
 
                 - source_archive:
                       type: source.archive
                       file: files/shop.source.zip
                       # TODO: here would be default_alternative with scope by container and not just by name good!
-                      conditions: {not: {node_presence: kubernetes}}
+                      conditions: {not: {node_presence: kubernetes_cluster}}
 
         shop_ingress:
             type: ingress
             requirements:
                 - application: shop
-                - host: kubernetes
+                - host: kubernetes_cluster
                 - host: virtual_machine
 
         ###################################################
@@ -152,7 +152,7 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
-                - host: kubernetes
+                - host: kubernetes_cluster
                 - host: gcp_cloudsql
 
         ###################################################
@@ -183,9 +183,13 @@ topology_template:
                 - ssh_key_name: {get_input: os_ssh_key_name}
                 - ssh_key_file: {get_input: os_ssh_key_file}
             requirements:
-                - host: openstack
+                - host: openstack_provider
+            artifacts:
+                - image:
+                      type: virtual.machine.image
+                      file: Ubuntu 22.04
 
-        openstack:
+        openstack_provider:
             type: openstack.provider
             conditions: {equal: [{variability_input: env}, STATIC]}
             properties:
@@ -237,11 +241,16 @@ topology_template:
         #
         ###################################################
 
-        kubernetes:
-            type: kubernetes
+        kubernetes_cluster:
+            type: kubernetes.cluster
             conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - k8s_host: {get_input: k8s_host}
                 - k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
                 - k8s_client_cert_file: {get_input: k8s_client_cert_file}
                 - k8s_client_key_file: {get_input: k8s_client_key_file}
+            requirements:
+                - host: kubernetes_provider
+
+        kubernetes_provider:
+            type: kubernetes.provider

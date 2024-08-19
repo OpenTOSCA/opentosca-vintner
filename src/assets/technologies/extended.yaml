@@ -231,11 +231,10 @@ node_types:
 
     ###################################################
     #
-    # Kubernetes
+    # Kubernetes Cluster
     #
     ###################################################
 
-    # TODO: cloud.service requires a hosting ...
     kubernetes.cluster:
         derived_from: cloud.service
         metadata:
