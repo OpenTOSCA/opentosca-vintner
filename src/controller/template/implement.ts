@@ -22,17 +22,21 @@ import path from 'path'
 
 export type TemplateImplementOptions = {
     dir: string
+    orchestrator: string
 }
 
 export default async function (options: TemplateImplementOptions) {
     /**
-     * Defaults
+     * Orchestrator
      */
-    assert.isDefined(options.dir, 'Directory not defined')
+    options.orchestrator = options.orchestrator ?? 'unfurl'
+    if (options.orchestrator !== 'unfurl')
+        throw new Error(`Orchestrator "${options.orchestrator}" not supported. Currently we only support "unfurl".`)
 
     /**
      * Lib
      */
+    assert.isDefined(options.dir, 'Directory not defined')
     const lib = path.join(options.dir, 'lib')
 
     /**

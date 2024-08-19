@@ -516,6 +516,7 @@ template
     .command('implement')
     .description('implement node types')
     .requiredOption('--dir <string>', 'path to service template directory')
+    .option('--orchestrator [string]', 'the orchestrator for which node type should be implemented', 'unfurl')
     .action(
         hae.exit(async options => {
             await Controller.template.implement(options)
