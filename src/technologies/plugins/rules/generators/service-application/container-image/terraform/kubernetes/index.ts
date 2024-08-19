@@ -12,6 +12,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     artifact: 'container.image',
     hosting: ['kubernetes.cluster'],
+    weight: 0.5,
+    comment: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {

@@ -7,6 +7,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
+    weight: 1,
+    comment: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

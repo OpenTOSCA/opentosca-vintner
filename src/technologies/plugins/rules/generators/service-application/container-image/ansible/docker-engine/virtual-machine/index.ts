@@ -14,6 +14,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     artifact: 'container.image',
     hosting: ['docker.engine', 'virtual.machine'],
+    weight: 0.5,
+    comment: 'Docker is more specialized.',
 
     generate: (name, type) => {
         return {

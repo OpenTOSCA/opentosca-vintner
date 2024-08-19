@@ -12,6 +12,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
     hosting: ['mysql.dbms', 'gcp.cloudsql'],
+    weight: 1,
+    comment: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

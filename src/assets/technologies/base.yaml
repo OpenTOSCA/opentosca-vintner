@@ -40,7 +40,7 @@ artifact_types:
     #
     ###################################################
 
-    software.package:
+    system.package:
         derived_from: root
         properties:
             script:

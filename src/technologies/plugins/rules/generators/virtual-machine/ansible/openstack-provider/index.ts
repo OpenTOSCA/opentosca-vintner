@@ -12,6 +12,8 @@ const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'ansible',
     hosting: ['openstack.provider'],
+    weight: 0.5,
+    comment: 'Terraform is more specialized.',
 
     generate: (name, type) => {
         return {

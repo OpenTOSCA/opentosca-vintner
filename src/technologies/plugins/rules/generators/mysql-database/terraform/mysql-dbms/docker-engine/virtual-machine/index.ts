@@ -13,6 +13,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
+    weight: 1,
+    comment: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

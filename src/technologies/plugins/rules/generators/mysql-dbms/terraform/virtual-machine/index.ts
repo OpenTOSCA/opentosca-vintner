@@ -52,6 +52,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
     hosting: ['virtual.machine'],
+    weight: 0,
+    comment: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
 
     generate: (name, type) => {
         return {

@@ -23,7 +23,7 @@ node_types:
         derived_from: software.runtime
         artifacts:
             software_package:
-                type: software.package
+                type: system.package
                 file: nodejs
                 properties:
                     setup: https://deb.nodesource.com/setup_18.x
@@ -60,7 +60,7 @@ node_types:
         derived_from: software.runtime
         artifacts:
             software_package:
-                type: software.package
+                type: system.package
                 file: python-is-python3
                 properties:
                     dependencies:

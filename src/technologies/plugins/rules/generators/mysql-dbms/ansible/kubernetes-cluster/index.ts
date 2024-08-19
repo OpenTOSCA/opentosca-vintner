@@ -10,6 +10,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
     hosting: ['kubernetes.cluster'],
+    weight: 0.5,
+    comment: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {

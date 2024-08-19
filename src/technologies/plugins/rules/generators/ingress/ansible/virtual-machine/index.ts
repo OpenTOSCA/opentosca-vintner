@@ -12,6 +12,8 @@ const generator: ImplementationGenerator = {
     component: 'ingress',
     technology: 'ansible',
     hosting: ['virtual.machine'],
+    weight: 1,
+    comment: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

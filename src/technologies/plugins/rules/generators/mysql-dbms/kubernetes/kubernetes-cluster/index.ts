@@ -12,6 +12,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'kubernetes',
     hosting: ['kubernetes.cluster'],
+    weight: 1,
+    comment: 'Kubernetes is the underlying technology.',
 
     generate: (name, type) => {
         return {

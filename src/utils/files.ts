@@ -117,6 +117,7 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
 
 export function storeYAML(file: string, data: any | string, options: {notice?: boolean; overwrite?: boolean} = {}) {
     options.notice = options.notice ?? false
+    options.overwrite = options.overwrite ?? true
 
     const resolved = path.resolve(file)
 

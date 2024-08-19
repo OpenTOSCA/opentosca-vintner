@@ -13,6 +13,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     artifact: 'container.image',
     hosting: ['gcp.cloudrun'],
+    weight: 1,
+    comment: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

@@ -13,6 +13,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'compose',
     hosting: ['docker.engine', 'virtual.machine'],
+    weight: 1,
+    comment: 'Docker is the underlying technology.',
 
     generate: (name, type) => {
         return {

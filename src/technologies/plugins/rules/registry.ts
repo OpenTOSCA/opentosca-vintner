@@ -1,7 +1,9 @@
 import * as check from '#check'
 import * as files from '#files'
+import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import std from '#std'
 import {constructRuleName} from '#technologies/utils'
+import * as utils from '#utils'
 import path from 'path'
 import {ImplementationGenerator} from './types'
 
@@ -18,6 +20,28 @@ class Registry {
 
         if (this.generators.has(id)) throw new Error(`Generator "${id}" already registered`)
         this.generators.set(id, generator)
+    }
+
+    get rules(): TechnologyAssignmentRulesMap {
+        const map: TechnologyAssignmentRulesMap = {}
+
+        for (const generator of this.generators.values()) {
+            if (check.isUndefined(map[generator.technology])) {
+                map[generator.technology] = []
+            }
+
+            map[generator.technology].push(
+                utils.copy({
+                    component: generator.component,
+                    artifact: generator.artifact,
+                    hosting: generator.hosting,
+                    weight: generator.weight,
+                    comment: generator.comment,
+                })
+            )
+        }
+
+        return map
     }
 }
 

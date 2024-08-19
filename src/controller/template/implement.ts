@@ -7,6 +7,7 @@ import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import std from '#std'
+import registry from '#technologies/plugins/rules/registry'
 import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
@@ -46,7 +47,7 @@ export default async function (options: TemplateImplementOptions) {
     files.copy(path.join(TECHNOLOGIES_DIR, 'types.yaml'), path.join(lib, 'types.yaml'), {overwrite: false})
     files.copy(path.join(TECHNOLOGIES_DIR, 'base.yaml'), path.join(lib, 'base.yaml'))
     files.copy(path.join(TECHNOLOGIES_DIR, 'extended.yaml'), path.join(lib, 'extended.yaml'))
-    files.copy(path.join(TECHNOLOGIES_DIR, 'rules.yaml'), path.join(lib, 'rules.yaml'))
+    files.storeYAML(path.join(lib, 'rules.yaml'), registry().rules, {notice: true})
 
     /**
      * Graph

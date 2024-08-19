@@ -13,6 +13,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
     hosting: ['virtual.machine'],
+    weight: 1,
+    comment: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

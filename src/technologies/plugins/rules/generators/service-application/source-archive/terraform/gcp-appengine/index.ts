@@ -16,6 +16,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     artifact: 'source.archive',
     hosting: ['gcp.appengine'],
+    weight: 1,
+    comment: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

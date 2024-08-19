@@ -11,6 +11,8 @@ const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'terraform',
     hosting: ['openstack.provider'],
+    weight: 1,
+    comment: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

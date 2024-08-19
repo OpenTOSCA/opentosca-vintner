@@ -1623,7 +1623,7 @@ topology_template:
                             - node_presence: virtual_machine
                               _generated: true
                         weight: 1
-                        assign: node.runtime#software.package::ansible@*->virtual.machine
+                        assign: node.runtime#system.package::ansible@*->virtual.machine
                   - terraform:
                         conditions:
                             - and:
@@ -1639,7 +1639,7 @@ topology_template:
                             - node_presence: virtual_machine
                               _generated: true
                         weight: 0
-                        assign: node.runtime#software.package::terraform@*->virtual.machine
+                        assign: node.runtime#system.package::terraform@*->virtual.machine
               conditions:
                   - host_presence: SELF
                     _generated: true

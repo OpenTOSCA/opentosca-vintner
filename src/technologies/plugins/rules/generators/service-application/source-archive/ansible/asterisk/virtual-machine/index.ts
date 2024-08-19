@@ -39,6 +39,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     artifact: 'source.archive',
     hosting: ['*', 'virtual.machine'],
+    weight: 1,
+    comment: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
 
     generate: (name, type) => {
         return {

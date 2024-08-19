@@ -14,6 +14,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     artifact: 'container.image',
     hosting: ['gcp.cloudrun'],
+    weight: 0,
+    comment: 'Custom module with imperative parts, while Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

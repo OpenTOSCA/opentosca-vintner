@@ -14,6 +14,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'kubernetes',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
+    weight: 0,
+    comment: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
         return {

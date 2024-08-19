@@ -22,6 +22,12 @@ export type ImplementationGenerator = {
     artifact?: string
     hosting?: string[]
     generate: (name: string, type: NodeType) => NodeType
+
+    // TODO: this
+    weight: number
+
+    // TODO: this
+    comment: string
 }
 
 // TODO: migrate or delete this

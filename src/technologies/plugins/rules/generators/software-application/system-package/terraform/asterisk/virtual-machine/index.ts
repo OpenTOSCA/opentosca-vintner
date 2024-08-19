@@ -6,8 +6,10 @@ import {MetadataGenerated} from '#technologies/plugins/rules/utils'
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'terraform',
-    artifact: 'software.package',
+    artifact: 'system.package',
     hosting: ['*', 'virtual.machine'],
+    weight: 0,
+    comment: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
 
     generate: (name, type) => {
         return {

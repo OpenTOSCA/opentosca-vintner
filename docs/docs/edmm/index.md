@@ -28,11 +28,11 @@ The specification is under active development and is not backwards compatible wi
 
 ## Software Applications
 
-1. A `software.application` node template always requires a `source.archive`, `software.package`, or `container.image` deployment artifact.
+1. A `software.application` node template always requires a `source.archive`, `system.package`, or `container.image` deployment artifact.
 1. A `software.application` node template with an `source.archive` deployment artifact always requires the `start` operation and the `stop` operation. 
 
 1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `virtual.machine` or `gcp.appengine` node template as host.
-1. A `software.application` node template with a `software.package` deployment artifact implicitly requires an `virtual.machine` node template as host.
+1. A `software.application` node template with a `system.package` deployment artifact implicitly requires an `virtual.machine` node template as host.
 1. A `software.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
 
 

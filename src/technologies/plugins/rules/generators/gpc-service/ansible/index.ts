@@ -9,6 +9,8 @@ import {
 const generator: ImplementationGenerator = {
     component: 'gcp.service',
     technology: 'ansible',
+    weight: 1,
+    comment: 'Ansible provides a declarative module',
 
     generate: (name, type) => {
         return {

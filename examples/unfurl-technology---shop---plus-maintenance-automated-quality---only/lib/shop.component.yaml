@@ -57,571 +57,7 @@ node_types:
     #
     ################################################################
 
-    shop.component~software.application#source.archive::ansible@*->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            application_directory:
-                type: string
-                default:
-                    concat:
-                        - /var/lib/
-                        - get_property:
-                              - SELF
-                              - application_name
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: create application directory
-                                      ansible.builtin.file:
-                                          path: '{{ SELF.application_directory }}'
-                                          state: directory
-                                    - name: extract deployment artifact in application directory
-                                      unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
-                                          dest: '{{ SELF.application_directory }}'
-                                    - name: create vintner directory
-                                      ansible.builtin.file:
-                                          path: '{{ SELF.application_directory }}/.vintner'
-                                          state: directory
-                                    - name: create .env file
-                                      copy:
-                                          dest: '{{ SELF.application_directory }}/.env'
-                                          content:
-                                              - DB_DIALECT="{{ SELF.DB_DIALECT }}"
-                                              - DB_NAME="{{ SELF.DB_NAME }}"
-                                              - DB_USERNAME="{{ SELF.DB_USERNAME }}"
-                                              - DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
-                                              - DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
-                                              - DB_PORT="{{ SELF.DB_PORT }}"
-                                              - FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
-                                              - FEATURE_PREMIUM="{{ SELF.premium_feature }}"
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_create }}
-                                          mode: '0755'
-                                      when: SELF._management_create != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/create.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_create != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    configure:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_configure }}
-                                          mode: '0755'
-                                      when: SELF._management_configure != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_configure != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    start:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "start" missing
-                                      when: SELF._management_start is None
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_start }}
-                                          mode: '0755'
-                                      when: SELF._management_start != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/start.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_start != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    stop:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
-                                      when: SELF._management_stop is None
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_stop }}
-                                          mode: '0755'
-                                      when: SELF._management_stop != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_stop != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_delete }}
-                                          mode: '0755'
-                                      when: SELF._management_delete != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_delete != None
-                                    - name: delete application directory
-                                      ansible.builtin.file:
-                                          path: '{{ SELF.application_directory }}'
-                                          state: absent
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-    shop.component~software.application#software.package::ansible@*->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: run setup script
-                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -
-                                      when: '".artifacts::software_package::script" | eval != None'
-                                    - name: add apt key
-                                      ansible.builtin.apt_key:
-                                          url: '{{ ".artifacts::software_package::key" | eval }}'
-                                          keyring: /usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg
-                                          state: present
-                                      when: '".artifacts::software_package::key" | eval != None'
-                                    - name: add apt repository
-                                      ansible.builtin.apt_repository:
-                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}
-                                          filename: '{{ ".artifacts::software_package::repository" | eval }}'
-                                          state: present
-                                      when: '".artifacts::software_package::source" | eval != None'
-                                    - name: update apt cache
-                                      ansible.builtin.apt:
-                                          update_cache: 'yes'
-                                    - name: install dependencies
-                                      ansible.builtin.apt:
-                                          name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}'
-                                          state: present
-                                      when: '".artifacts::software_package::dependencies" | eval != None'
-                                    - name: install package
-                                      ansible.builtin.apt:
-                                          name: '{{ ".artifacts::software_package::file" | eval }}'
-                                          state: present
-                                      environment: '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}'
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_create }}
-                                          mode: '0755'
-                                      when: SELF._management_create != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/create.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_create != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    configure:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_configure }}
-                                          mode: '0755'
-                                      when: SELF._management_configure != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_configure != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    start:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_start }}
-                                          mode: '0755'
-                                      when: SELF._management_start != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/start.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_start != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    stop:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_stop }}
-                                          mode: '0755'
-                                      when: SELF._management_stop != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_stop != None
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: copy management operation
-                                      ansible.builtin.copy:
-                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
-                                          content: |
-                                              #! /usr/bin/bash
-                                              set -e
-    
-                                              {{ SELF._management_delete }}
-                                          mode: '0755'
-                                      when: SELF._management_delete != None
-                                    - name: call management operation
-                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
-                                      args:
-                                          chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_delete != None
-                                    - name: uninstall package
-                                      ansible.builtin.apt:
-                                          name: '{{ ".artifacts::software_package::file | eval }}'
-                                          state: absent
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-    shop.component~software.application#container.image::ansible@docker.engine->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-        attributes:
-            application_address:
-                type: string
-                default: 127.0.0.1
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: start container
-                                      community.docker.docker_container:
-                                          name: '{{ SELF.application_name }}'
-                                          image: '{{ ".artifacts::container_image::file" | eval }}'
-                                          network_mode: host
-                                          env:
-                                              DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
-                                              DB_NAME: '"{{ SELF.DB_NAME }}"'
-                                              DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
-                                              DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
-                                              DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
-                                              DB_PORT: '"{{ SELF.DB_PORT }}"'
-                                              FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
-                                              FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    delete: exit 0
-    shop.component~software.application#container.image::ansible@kubernetes:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            k8s_host:
-                type: string
-                default:
-                    get_input: k8s_host
-            k8s_ca_cert_file:
-                type: string
-                default:
-                    get_input: k8s_ca_cert_file
-            k8s_client_cert_file:
-                type: string
-                default:
-                    get_input: k8s_client_cert_file
-            k8s_client_key_file:
-                type: string
-                default:
-                    get_input: k8s_client_key_file
-        attributes:
-            application_address:
-                type: string
-                default:
-                    eval: .::application_name
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                            environment:
-                                K8S_AUTH_HOST:
-                                    eval: .::k8s_host
-                                K8S_AUTH_SSL_CA_CERT:
-                                    eval: .::k8s_ca_cert_file
-                                K8S_AUTH_CERT_FILE:
-                                    eval: .::k8s_client_cert_file
-                                K8S_AUTH_KEY_FILE:
-                                    eval: .::k8s_client_key_file
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: create deployment
-                                      kubernetes.core.k8s:
-                                          wait: true
-                                          definition:
-                                              apiVersion: apps/v1
-                                              kind: Deployment
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  selector:
-                                                      matchLabels:
-                                                          app: '{{ SELF.application_name }}'
-                                                  template:
-                                                      metadata:
-                                                          labels:
-                                                              app: '{{ SELF.application_name }}'
-                                                      spec:
-                                                          containers:
-                                                              - image: '{{ ".artifacts::container_image::file" | eval }}'
-                                                                name: '{{ SELF.application_name }}'
-                                                                env:
-                                                                    - name: DB_DIALECT
-                                                                      value: '"{{ SELF.DB_DIALECT }}"'
-                                                                    - name: DB_NAME
-                                                                      value: '"{{ SELF.DB_NAME }}"'
-                                                                    - name: DB_USERNAME
-                                                                      value: '"{{ SELF.DB_USERNAME }}"'
-                                                                    - name: DB_PASSWORD
-                                                                      value: '"{{ SELF.DB_PASSWORD }}"'
-                                                                    - name: DB_ADDRESS
-                                                                      value: '"{{ SELF.DB_ADDRESS }}"'
-                                                                    - name: DB_PORT
-                                                                      value: '"{{ SELF.DB_PORT }}"'
-                                                                    - name: FEATURE_OPTIONAL
-                                                                      value: '"{{ SELF.optional_feature }}"'
-                                                                    - name: FEATURE_PREMIUM
-                                                                      value: '"{{ SELF.premium_feature }}"'
-                                                                ports:
-                                                                    - containerPort: '{{ SELF.application_port }}'
-                                    - name: create service
-                                      kubernetes.core.k8s:
-                                          definition:
-                                              apiVersion: v1
-                                              kind: Service
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  ports:
-                                                      - name: '{{ SELF.application_protocol }}'
-                                                        port: '{{ SELF.application_port }}'
-                                                        targetPort: '{{ SELF.application_port }}'
-                                                  selector:
-                                                      app: '{{ SELF.application_name }}'
-                                                  type: ClusterIP
-                    delete: exit 0
-    shop.component~software.application#container.image::ansible@gcp.cloudrun:
+    shop.component~service.application#container.image::ansible@gcp.cloudrun:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -738,7 +174,110 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    shop.component~software.application#source.archive::ansible@gcp.appengine:
+    shop.component~service.application#container.image::ansible@kubernetes.cluster:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        attributes:
+            application_address:
+                type: string
+                default:
+                    eval: .::application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                            environment:
+                                K8S_AUTH_HOST:
+                                    eval: .::k8s_host
+                                K8S_AUTH_SSL_CA_CERT:
+                                    eval: .::k8s_ca_cert_file
+                                K8S_AUTH_CERT_FILE:
+                                    eval: .::k8s_client_cert_file
+                                K8S_AUTH_KEY_FILE:
+                                    eval: .::k8s_client_key_file
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: create deployment
+                                      kubernetes.core.k8s:
+                                          wait: true
+                                          definition:
+                                              apiVersion: apps/v1
+                                              kind: Deployment
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  selector:
+                                                      matchLabels:
+                                                          app: '{{ SELF.application_name }}'
+                                                  template:
+                                                      metadata:
+                                                          labels:
+                                                              app: '{{ SELF.application_name }}'
+                                                      spec:
+                                                          containers:
+                                                              - image: '{{ ".artifacts::container_image::file" | eval }}'
+                                                                name: '{{ SELF.application_name }}'
+                                                                env:
+                                                                    - name: DB_DIALECT
+                                                                      value: '"{{ SELF.DB_DIALECT }}"'
+                                                                    - name: DB_NAME
+                                                                      value: '"{{ SELF.DB_NAME }}"'
+                                                                    - name: DB_USERNAME
+                                                                      value: '"{{ SELF.DB_USERNAME }}"'
+                                                                    - name: DB_PASSWORD
+                                                                      value: '"{{ SELF.DB_PASSWORD }}"'
+                                                                    - name: DB_ADDRESS
+                                                                      value: '"{{ SELF.DB_ADDRESS }}"'
+                                                                    - name: DB_PORT
+                                                                      value: '"{{ SELF.DB_PORT }}"'
+                                                                    - name: FEATURE_OPTIONAL
+                                                                      value: '"{{ SELF.optional_feature }}"'
+                                                                    - name: FEATURE_PREMIUM
+                                                                      value: '"{{ SELF.premium_feature }}"'
+                                                                ports:
+                                                                    - containerPort: '{{ SELF.application_port }}'
+                                    - name: create service
+                                      kubernetes.core.k8s:
+                                          definition:
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  ports:
+                                                      - name: '{{ SELF.application_protocol }}'
+                                                        port: '{{ SELF.application_port }}'
+                                                        targetPort: '{{ SELF.application_port }}'
+                                                  selector:
+                                                      app: '{{ SELF.application_name }}'
+                                                  type: ClusterIP
+                    delete: exit 0
+    shop.component~service.application#source.archive::ansible@gcp.appengine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -817,6 +356,57 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
+    shop.component~service.application#container.image::ansible@docker.engine->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: start container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          image: '{{ ".artifacts::container_image::file" | eval }}'
+                                          network_mode: host
+                                          env:
+                                              DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                              DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                              DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                              DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                              DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                              DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                              FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                              FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete: exit 0
     shop.component~service.application#source.archive::ansible@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -1058,29 +648,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~software.application#software.package::terraform@*->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-        properties: {}
-    shop.component~software.application#source.archive::terraform@*->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-    shop.component~software.application#container.image::terraform@docker.engine->virtual.machine:
+    shop.component~software.application#source.archive::ansible@*->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1094,14 +662,420 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
-            os_ssh_host:
+            application_directory:
                 type: string
                 default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-        attributes:
-            application_address:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      unarchive:
+                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content:
+                                              - DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                              - DB_NAME="{{ SELF.DB_NAME }}"
+                                              - DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                              - DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                              - DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                              - DB_PORT="{{ SELF.DB_PORT }}"
+                                              - FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                              - FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_create }}
+                                          mode: '0755'
+                                      when: SELF._management_create != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_create != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_configure }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_configure != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start is None
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_start }}
+                                          mode: '0755'
+                                      when: SELF._management_start != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_start != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop is None
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_stop }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_stop != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_delete }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_delete != None
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    shop.component~software.application#system.package::ansible@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
                 type: string
-                default: 127.0.0.1
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -
+                                      when: '".artifacts::software_package::script" | eval != None'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::software_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::software_package::key" | eval != None'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}
+                                          filename: '{{ ".artifacts::software_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::software_package::source" | eval != None'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::software_package::dependencies" | eval != None'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_create }}
+                                          mode: '0755'
+                                      when: SELF._management_create != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_create != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_configure }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_configure != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_start }}
+                                          mode: '0755'
+                                      when: SELF._management_start != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_start != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_stop }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_stop != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_delete }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_delete != None
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file | eval }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    shop.component~service.application#container.image::terraform@gcp.cloudrun:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            gcp_service_account_file:
+                type: string
+                default:
+                    get_input: gcp_service_account_file
+            gcp_region:
+                type: string
+                default:
+                    get_input: gcp_region
+            gcp_project:
+                type: string
+                default:
+                    get_input: gcp_project
         interfaces:
             Standard:
                 operations:
@@ -1112,46 +1086,63 @@ node_types:
                         implementation:
                             primary: Terraform
             defaults:
+                outputs:
+                    application_address: application_address
+                    application_endpoint: application_endpoint
                 inputs:
                     main:
                         terraform:
                             - required_providers:
-                                  - docker:
-                                        source: kreuzwerker/docker
-                                        version: 3.0.2
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
                         provider:
-                            docker:
-                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
-                                  ssh_opts:
-                                      - '-i'
-                                      - '{{ SELF.os_ssh_key_file }}'
-                                      - '-o'
-                                      - IdentitiesOnly=yes
-                                      - '-o'
-                                      - BatchMode=yes
-                                      - '-o'
-                                      - UserKnownHostsFile=/dev/null
-                                      - '-o'
-                                      - StrictHostKeyChecking=no
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        output:
+                            application_address:
+                                - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
+                            application_endpoint:
+                                - value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
                         resource:
-                            docker_container:
+                            google_cloud_run_v2_service:
                                 application:
-                                    - env:
-                                          - DB_DIALECT={{ SELF.DB_DIALECT }}
-                                          - DB_NAME={{ SELF.DB_NAME }}
-                                          - DB_USERNAME={{ SELF.DB_USERNAME }}
-                                          - DB_PASSWORD={{ SELF.DB_PASSWORD }}
-                                          - DB_ADDRESS={{ SELF.DB_ADDRESS }}
-                                          - DB_PORT={{ SELF.DB_PORT }}
-                                          - FEATURE_OPTIONAL={{ SELF.optional_feature }}
-                                          - FEATURE_PREMIUM={{ SELF.premium_feature }}
-                                      image: ${docker_image.image.image_id}
+                                    - ingress: INGRESS_TRAFFIC_ALL
+                                      location: '{{ SELF.gcp_region }}'
                                       name: '{{ SELF.application_name }}'
-                                      network_mode: host
-                            docker_image:
-                                image:
-                                    - name: '{{ ".artifacts::container_image::file" | eval }}'
-    shop.component~software.application#container.image::terraform@kubernetes:
+                                      template:
+                                          - containers:
+                                                - image: '{{ ".artifacts::container_image::file" | eval }}'
+                                                  ports:
+                                                      - name: http1
+                                                        container_port: '{{ SELF.application_port }}'
+                                                  env:
+                                                      - name: DB_DIALECT
+                                                        value: '"{{ SELF.DB_DIALECT }}"'
+                                                      - name: DB_NAME
+                                                        value: '"{{ SELF.DB_NAME }}"'
+                                                      - name: DB_USERNAME
+                                                        value: '"{{ SELF.DB_USERNAME }}"'
+                                                      - name: DB_PASSWORD
+                                                        value: '"{{ SELF.DB_PASSWORD }}"'
+                                                      - name: DB_ADDRESS
+                                                        value: '"{{ SELF.DB_ADDRESS }}"'
+                                                      - name: DB_PORT
+                                                        value: '"{{ SELF.DB_PORT }}"'
+                                                      - name: FEATURE_OPTIONAL
+                                                        value: '"{{ SELF.optional_feature }}"'
+                                                      - name: FEATURE_PREMIUM
+                                                        value: '"{{ SELF.premium_feature }}"'
+                            google_cloud_run_service_iam_binding:
+                                application:
+                                    - location: '{{ SELF.gcp_region }}'
+                                      members:
+                                          - allUsers
+                                      role: roles/run.invoker
+                                      service: '{{ SELF.application_name }}'
+    shop.component~service.application#container.image::terraform@kubernetes.cluster:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1250,91 +1241,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    shop.component~software.application#container.image::terraform@gcp.cloudrun:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                outputs:
-                    application_address: application_address
-                    application_endpoint: application_endpoint
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - google:
-                                        source: hashicorp/google
-                                        version: 5.39.1
-                        provider:
-                            google:
-                                - credentials: '{{ SELF.gcp_service_account_file }}'
-                                  project: '{{ SELF.gcp_project }}'
-                                  region: '{{ SELF.gcp_region }}'
-                        output:
-                            application_address:
-                                - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
-                            application_endpoint:
-                                - value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
-                        resource:
-                            google_cloud_run_v2_service:
-                                application:
-                                    - ingress: INGRESS_TRAFFIC_ALL
-                                      location: '{{ SELF.gcp_region }}'
-                                      name: '{{ SELF.application_name }}'
-                                      template:
-                                          - containers:
-                                                - image: '{{ ".artifacts::container_image::file" | eval }}'
-                                                  ports:
-                                                      - name: http1
-                                                        container_port: '{{ SELF.application_port }}'
-                                                  env:
-                                                      - name: DB_DIALECT
-                                                        value: '"{{ SELF.DB_DIALECT }}"'
-                                                      - name: DB_NAME
-                                                        value: '"{{ SELF.DB_NAME }}"'
-                                                      - name: DB_USERNAME
-                                                        value: '"{{ SELF.DB_USERNAME }}"'
-                                                      - name: DB_PASSWORD
-                                                        value: '"{{ SELF.DB_PASSWORD }}"'
-                                                      - name: DB_ADDRESS
-                                                        value: '"{{ SELF.DB_ADDRESS }}"'
-                                                      - name: DB_PORT
-                                                        value: '"{{ SELF.DB_PORT }}"'
-                                                      - name: FEATURE_OPTIONAL
-                                                        value: '"{{ SELF.optional_feature }}"'
-                                                      - name: FEATURE_PREMIUM
-                                                        value: '"{{ SELF.premium_feature }}"'
-                            google_cloud_run_service_iam_binding:
-                                application:
-                                    - location: '{{ SELF.gcp_region }}'
-                                      members:
-                                          - allUsers
-                                      role: roles/run.invoker
-                                      service: '{{ SELF.application_name }}'
-    shop.component~software.application#source.archive::terraform@gcp.appengine:
+    shop.component~service.application#source.archive::terraform@gcp.appengine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1421,12 +1328,105 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
+    shop.component~service.application#container.image::terraform@docker.engine->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                        provider:
+                            docker:
+                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
+                                  ssh_opts:
+                                      - '-i'
+                                      - '{{ SELF.os_ssh_key_file }}'
+                                      - '-o'
+                                      - IdentitiesOnly=yes
+                                      - '-o'
+                                      - BatchMode=yes
+                                      - '-o'
+                                      - UserKnownHostsFile=/dev/null
+                                      - '-o'
+                                      - StrictHostKeyChecking=no
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - DB_DIALECT={{ SELF.DB_DIALECT }}
+                                          - DB_NAME={{ SELF.DB_NAME }}
+                                          - DB_USERNAME={{ SELF.DB_USERNAME }}
+                                          - DB_PASSWORD={{ SELF.DB_PASSWORD }}
+                                          - DB_ADDRESS={{ SELF.DB_ADDRESS }}
+                                          - DB_PORT={{ SELF.DB_PORT }}
+                                          - FEATURE_OPTIONAL={{ SELF.optional_feature }}
+                                          - FEATURE_PREMIUM={{ SELF.premium_feature }}
+                                      image: ${docker_image.image.image_id}
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ ".artifacts::container_image::file" | eval }}'
     shop.component~service.application#source.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
         properties: {}
-    shop.component~software.application#container.image::kubernetes@kubernetes:
+    shop.component~software.application#source.archive::terraform@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+    shop.component~software.application#system.package::terraform@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+        properties: {}
+    shop.component~service.application#container.image::kubernetes@kubernetes.cluster:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1518,7 +1518,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    shop.component~software.application#container.image::docker@docker.engine->virtual.machine:
+    shop.component~service.application#container.image::compose@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
