@@ -1,6 +1,6 @@
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
-import {constructType} from '#technologies/utils'
+import {constructRuleName} from '#technologies/utils'
 
 export enum METADATA {
     VINTNER_GENERATE = 'vintner_generate',
@@ -29,7 +29,7 @@ export abstract class ImplementationGenerator2 {
     private _id: string | undefined
     get id() {
         if (check.isUndefined(this._id)) {
-            this._id = constructType(this)
+            this._id = constructRuleName(this)
         }
         return this._id
     }

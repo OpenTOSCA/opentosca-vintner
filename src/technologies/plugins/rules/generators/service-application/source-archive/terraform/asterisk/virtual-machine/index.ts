@@ -7,7 +7,7 @@ const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'terraform',
     artifact: 'source.archive',
-    hosting: ['virtual.machine'],
+    hosting: ['*', 'virtual.machine'],
 
     generate: (name, type) => {
         return {

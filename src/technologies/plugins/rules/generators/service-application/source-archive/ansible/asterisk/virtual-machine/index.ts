@@ -1,21 +1,44 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleAssertOperationTask,
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
+    AnsibleCreateApplicationDirectoryTask,
+    AnsibleCreateApplicationEnvironment,
+    AnsibleCreateVintnerDirectory,
+    AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleUnarchiveSourceArchiveTask,
     AnsibleWaitForSSHTask,
+    ApplicationDirectory,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: does ExecStart work?
+
+const service = `
+[Unit]
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=. /.vintner/start.sh
+WorkingDirectory={{ SELF.application_directory }}
+EnvironmentFile={{ SELF.application_directory }}/.env
+
+[Install]
+WantedBy=multi-user.target
+`
+
 const generator: ImplementationGenerator = {
-    component: 'software.application',
+    component: 'service.application',
     technology: 'ansible',
-    artifact: 'software.package',
-    hosting: ['virtual.machine'],
+    artifact: 'source.archive',
+    hosting: ['*', 'virtual.machine'],
 
     generate: (name, type) => {
         return {
@@ -26,6 +49,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...OpenstackMachineCredentials(),
+                ...ApplicationDirectory(),
             },
             interfaces: {
                 Standard: {
@@ -41,58 +65,35 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'run setup script',
-                                            'ansible.builtin.shell':
-                                                'curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -',
-                                            when: '".artifacts::software_package::script" | eval != None',
+                                            ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            name: 'add apt key',
-                                            'ansible.builtin.apt_key': {
-                                                url: '{{ ".artifacts::software_package::key" | eval }}',
-                                                keyring:
-                                                    '/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::software_package::key" | eval != None',
+                                            ...AnsibleUnarchiveSourceArchiveTask(),
                                         },
                                         {
-                                            name: 'add apt repository',
-                                            'ansible.builtin.apt_repository': {
-                                                repo: 'deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}',
-                                                filename: '{{ ".artifacts::software_package::repository" | eval }}',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::software_package::source" | eval != None',
-                                        },
-                                        {
-                                            name: 'update apt cache',
-                                            'ansible.builtin.apt': {
-                                                update_cache: 'yes',
-                                            },
-                                        },
-                                        {
-                                            name: 'install dependencies',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::software_package::dependencies" | eval != None',
-                                        },
-                                        {
-                                            name: 'install package',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::file" | eval }}',
-                                                state: 'present',
-                                            },
-                                            environment:
-                                                '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}',
+                                            ...AnsibleCreateVintnerDirectory(),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                        },
+                                        {
+                                            name: 'create service',
+                                            copy: {
+                                                dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
+                                                content: service,
+                                            },
+                                        },
+                                        {
+                                            name: 'enable service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'stopped',
+                                                enabled: 'yes',
+                                                daemon_reload: 'yes',
+                                            },
                                         },
                                     ],
                                 },
@@ -108,6 +109,9 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            ...AnsibleCreateApplicationEnvironment(type),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
@@ -131,10 +135,19 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
+                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.START),
+                                        },
+                                        {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.START),
+                                            name: 'start service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'started',
+                                                enabled: 'yes',
+                                                daemon_reload: 'yes',
+                                            },
                                         },
                                     ],
                                 },
@@ -156,6 +169,13 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                        },
+                                        {
+                                            name: 'stop service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'stopped',
+                                            },
                                         },
                                     ],
                                 },
@@ -179,11 +199,20 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
-                                            name: 'uninstall package',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::file | eval }}',
+                                            name: 'delete systemd service',
+                                            'ansible.builtin.file': {
+                                                path: '/etc/systemd/system/{{ SELF.application_name }}.service',
                                                 state: 'absent',
                                             },
+                                        },
+                                        {
+                                            name: 'reload daemon',
+                                            'ansible.builtin.systemd': {
+                                                daemon_reload: true,
+                                            },
+                                        },
+                                        {
+                                            ...AnsibleDeleteApplicationDirectoryTask(),
                                         },
                                     ],
                                 },

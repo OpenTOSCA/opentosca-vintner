@@ -9,7 +9,7 @@ import std from '#std'
 import loadRegistry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
-import {constructType, isGenerated} from '#technologies/utils'
+import {constructImplementationName, constructRuleName, isGenerated} from '#technologies/utils'
 import * as utils from '#utils'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
@@ -54,14 +54,18 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                  */
                 if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
 
-                const implementationName = constructType({
-                    component: name,
-                    technology,
-                    artifact: rule.artifact,
-                    hosting: rule.hosting,
+                const implementationName = constructImplementationName({
+                    type: name,
+                    rule: {
+                        component: rule.component,
+                        technology,
+                        artifact: rule.artifact,
+                        hosting: rule.hosting,
+                    },
                 })
 
-                const generatorName = constructType({
+                // TODO: rename generators to rules?!
+                const generatorName = constructRuleName({
                     component: rule.component,
                     technology,
                     artifact: rule.artifact,
@@ -97,7 +101,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 assert.isDefined(implementation.metadata)
                 assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
 
-                // TODO: next: THIS HAS COLLISIONS
+                if (check.isDefined(types[implementationName]))
+                    throw new Error(`Implementation "${implementationName}" already generated`)
                 types[implementationName] = implementation
             }
         }
@@ -154,6 +159,16 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
                 // TODO: rule.conditions
 
+                const implementationName = constructImplementationName({
+                    type: node.getType().name,
+                    rule: {
+                        component: rule.component,
+                        technology,
+                        artifact: rule.artifact,
+                        hosting: rule.hosting,
+                    },
+                })
+
                 // TODO: merge then and else block
                 if (rule.hosting.length !== 0) {
                     const output: LogicExpression[][] = []
@@ -167,14 +182,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                             [technology]: {
                                 conditions: it,
                                 weight: rule.weight,
-                                assign:
-                                    rule.assign ??
-                                    constructType({
-                                        component: node.getType().name,
-                                        technology,
-                                        artifact: rule.artifact,
-                                        hosting: rule.hosting,
-                                    }),
+                                assign: rule.assign ?? implementationName,
                             },
                         })
                     })
@@ -183,14 +191,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         [technology]: {
                             conditions: artifactCondition,
                             weight: rule.weight,
-                            assign:
-                                rule.assign ??
-                                constructType({
-                                    component: node.getType().name,
-                                    technology,
-                                    artifact: rule.artifact,
-                                    hosting: rule.hosting,
-                                }),
+                            assign: rule.assign ?? implementationName,
                         },
                     })
                 }
@@ -201,10 +202,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
-        console.log({node: node.name, hosting, history})
-
-        const asterix = hosting[0] === '*'
-        const search = asterix ? hosting[1] : hosting[0]
+        const asterisk = hosting[0] === '*'
+        const search = asterisk ? hosting[1] : hosting[0]
         // Must be defined. To model "on any hosting" simply do not model hosting.
         assert.isDefined(search)
 
@@ -218,7 +217,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 const hostingCopy = utils.copy(hosting)
 
                 // Remove * since we found next host
-                if (asterix) hostingCopy.shift()
+                if (asterisk) hostingCopy.shift()
 
                 // Remove search
                 hostingCopy.shift()
@@ -233,7 +232,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 this.search(host, hostingCopy, historyCopy, output)
             }
 
-            if (asterix) {
+            if (asterisk) {
                 // Deep copy since every child call changes the state of history
                 const historyCopy = utils.copy(history)
                 historyCopy.push({node_presence: host.name})

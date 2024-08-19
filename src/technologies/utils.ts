@@ -1,4 +1,3 @@
-import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {METADATA} from '#technologies/plugins/rules/types'
@@ -19,9 +18,14 @@ export const GENERATION_NOTICE = `
 ################################################################
 `.trim()
 
-export type TypeData = {component: string; technology: string; artifact?: string; hosting?: string[]}
+// TODO: introduce a real Rule object
+export type RuleData = {component: string; technology: string; artifact?: string; hosting?: string[]}
 
-export function constructType(data: TypeData) {
+export function constructImplementationName(data: {type: string; rule: RuleData}) {
+    return `${data.type}~${constructRuleName(data.rule)}`
+}
+
+export function constructRuleName(data: RuleData) {
     let output = data.component
 
     if (check.isDefined(data.artifact)) {
@@ -37,24 +41,8 @@ export function constructType(data: TypeData) {
     return output
 }
 
-// TODO: update this (and use regex)
-export function destructType(type: string): TypeData {
-    const [componentTypeArtifactPart, hostingPart] = type.split('@')
-    const [componentTechnologyPart, artifact] = componentTypeArtifactPart.split('#')
-    const [component, technology] = componentTechnologyPart.split('::')
-
-    assert.isDefined(component)
-    assert.isDefined(technology)
-
-    return {
-        component,
-        technology,
-        artifact,
-        hosting: hostingPart ? hostingPart.split('->') : undefined,
-    }
-}
-
 export function isImplementation(type: string) {
+    // TODO: replace this with proper regex match
     return type.includes('::')
 }
 

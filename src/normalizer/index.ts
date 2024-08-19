@@ -283,14 +283,8 @@ export default class Normalizer {
                 /**
                  * "host" is replaced in favor of "hosting"
                  */
-                if (check.isDefined(rule.host)) {
-                    if (check.isDefined(rule.hosting))
-                        throw new Error(`Technology rule must not define both "host" and "hosting"`)
-
-                    assert.isString(rule.host)
-                    rule.hosting = [rule.host]
-                    delete rule.host
-                }
+                if (check.isDefined((rule as any).host))
+                    throw new Error(`Technology rule must not define "host" but "hosting"`)
 
                 /**
                  * Ensure that hosting is always an array

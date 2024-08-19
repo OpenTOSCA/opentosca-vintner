@@ -6,6 +6,9 @@
 
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+metadata:
+    vintner_orchestrator: unfurl
+
 imports:
     - base.yaml
 
@@ -398,7 +401,7 @@ node_types:
     #
     ################################################################
 
-    node.runtime#source.archive::ansible@*->virtual.machine:
+    node.runtime~software.application#source.archive::ansible@*->virtual.machine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -601,7 +604,206 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.runtime#container.image::ansible@docker.engine->virtual.machine:
+    node.runtime~software.application#software.package::ansible@*->virtual.machine:
+        derived_from: node.runtime
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -
+                                      when: '".artifacts::software_package::script" | eval != None'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::software_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::software_package::key" | eval != None'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}
+                                          filename: '{{ ".artifacts::software_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::software_package::source" | eval != None'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::software_package::dependencies" | eval != None'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_create }}
+                                          mode: '0755'
+                                      when: SELF._management_create != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_create != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_configure }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_configure != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_start }}
+                                          mode: '0755'
+                                      when: SELF._management_start != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_start != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_stop }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_stop != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_delete }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_delete != None
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file | eval }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    node.runtime~software.application#container.image::ansible@docker.engine->virtual.machine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -644,7 +846,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    node.runtime#container.image::ansible@kubernetes:
+    node.runtime~software.application#container.image::ansible@kubernetes:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -731,7 +933,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    node.runtime#container.image::ansible@gcp.cloudrun:
+    node.runtime~software.application#container.image::ansible@gcp.cloudrun:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -832,7 +1034,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    node.runtime#source.archive::ansible@gcp.appengine:
+    node.runtime~software.application#source.archive::ansible@gcp.appengine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -903,7 +1105,29 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    node.runtime#container.image::terraform@docker.engine->virtual.machine:
+    node.runtime~software.application#software.package::terraform@*->virtual.machine:
+        derived_from: node.runtime
+        metadata:
+            vintner_generated: 'true'
+        properties: {}
+    node.runtime~software.application#source.archive::terraform@*->virtual.machine:
+        derived_from: node.runtime
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+    node.runtime~software.application#container.image::terraform@docker.engine->virtual.machine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -966,7 +1190,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::container_image::file" | eval }}'
-    node.runtime#container.image::terraform@kubernetes:
+    node.runtime~software.application#container.image::terraform@kubernetes:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -1049,7 +1273,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    node.runtime#container.image::terraform@gcp.cloudrun:
+    node.runtime~software.application#container.image::terraform@gcp.cloudrun:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -1117,7 +1341,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: '{{ SELF.application_name }}'
-    node.runtime#source.archive::terraform@gcp.appengine:
+    node.runtime~software.application#source.archive::terraform@gcp.appengine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -1196,7 +1420,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
-    node.runtime#container.image::kubernetes@kubernetes:
+    node.runtime~software.application#container.image::kubernetes@kubernetes:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -1272,7 +1496,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    node.runtime#container.image::docker@docker.engine->virtual.machine:
+    node.runtime~software.application#container.image::docker@docker.engine->virtual.machine:
         derived_from: node.runtime
         metadata:
             vintner_generated: 'true'
@@ -1330,7 +1554,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    python.runtime#source.archive::ansible@*->virtual.machine:
+    python.runtime~software.application#source.archive::ansible@*->virtual.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1533,7 +1757,206 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime#container.image::ansible@docker.engine->virtual.machine:
+    python.runtime~software.application#software.package::ansible@*->virtual.machine:
+        derived_from: python.runtime
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -
+                                      when: '".artifacts::software_package::script" | eval != None'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::software_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::software_package::key" | eval != None'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}
+                                          filename: '{{ ".artifacts::software_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::software_package::source" | eval != None'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::software_package::dependencies" | eval != None'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_create }}
+                                          mode: '0755'
+                                      when: SELF._management_create != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_create != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_configure }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_configure != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_start }}
+                                          mode: '0755'
+                                      when: SELF._management_start != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_start != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_stop }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_stop != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_delete }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_delete != None
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file | eval }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    python.runtime~software.application#container.image::ansible@docker.engine->virtual.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1576,7 +1999,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    python.runtime#container.image::ansible@kubernetes:
+    python.runtime~software.application#container.image::ansible@kubernetes:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1663,7 +2086,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    python.runtime#container.image::ansible@gcp.cloudrun:
+    python.runtime~software.application#container.image::ansible@gcp.cloudrun:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1764,7 +2187,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    python.runtime#source.archive::ansible@gcp.appengine:
+    python.runtime~software.application#source.archive::ansible@gcp.appengine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1835,7 +2258,29 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    python.runtime#container.image::terraform@docker.engine->virtual.machine:
+    python.runtime~software.application#software.package::terraform@*->virtual.machine:
+        derived_from: python.runtime
+        metadata:
+            vintner_generated: 'true'
+        properties: {}
+    python.runtime~software.application#source.archive::terraform@*->virtual.machine:
+        derived_from: python.runtime
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+    python.runtime~software.application#container.image::terraform@docker.engine->virtual.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1898,7 +2343,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::container_image::file" | eval }}'
-    python.runtime#container.image::terraform@kubernetes:
+    python.runtime~software.application#container.image::terraform@kubernetes:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1981,7 +2426,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    python.runtime#container.image::terraform@gcp.cloudrun:
+    python.runtime~software.application#container.image::terraform@gcp.cloudrun:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2049,7 +2494,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: '{{ SELF.application_name }}'
-    python.runtime#source.archive::terraform@gcp.appengine:
+    python.runtime~software.application#source.archive::terraform@gcp.appengine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2128,7 +2573,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
-    python.runtime#container.image::kubernetes@kubernetes:
+    python.runtime~software.application#container.image::kubernetes@kubernetes:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2204,7 +2649,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    python.runtime#container.image::docker@docker.engine->virtual.machine:
+    python.runtime~software.application#container.image::docker@docker.engine->virtual.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2262,7 +2707,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    gcp.cloudrun::ansible:
+    gcp.cloudrun~gcp.service::ansible:
         derived_from: gcp.cloudrun
         metadata:
             vintner_generated: 'true'
@@ -2298,7 +2743,7 @@ node_types:
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
                     delete: exit 0
-    gcp.cloudrun::terraform:
+    gcp.cloudrun~gcp.service::terraform:
         derived_from: gcp.cloudrun
         metadata:
             vintner_generated: 'true'
@@ -2344,7 +2789,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    gcp.cloudsql::ansible:
+    gcp.cloudsql~gcp.service::ansible:
         derived_from: gcp.cloudsql
         metadata:
             vintner_generated: 'true'
@@ -2380,7 +2825,7 @@ node_types:
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
                     delete: exit 0
-    gcp.cloudsql::terraform:
+    gcp.cloudsql~gcp.service::terraform:
         derived_from: gcp.cloudsql
         metadata:
             vintner_generated: 'true'
@@ -2426,7 +2871,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    gcp.appengine::ansible:
+    gcp.appengine~gcp.service::ansible:
         derived_from: gcp.appengine
         metadata:
             vintner_generated: 'true'
@@ -2462,7 +2907,7 @@ node_types:
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
                     delete: exit 0
-    gcp.appengine::terraform:
+    gcp.appengine~gcp.service::terraform:
         derived_from: gcp.appengine
         metadata:
             vintner_generated: 'true'
@@ -2508,7 +2953,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    gcp.appenginereporting::ansible:
+    gcp.appenginereporting~gcp.service::ansible:
         derived_from: gcp.appenginereporting
         metadata:
             vintner_generated: 'true'
@@ -2544,7 +2989,7 @@ node_types:
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
                     delete: exit 0
-    gcp.appenginereporting::terraform:
+    gcp.appenginereporting~gcp.service::terraform:
         derived_from: gcp.appenginereporting
         metadata:
             vintner_generated: 'true'
@@ -2590,7 +3035,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    gcp.cloudbuild::ansible:
+    gcp.cloudbuild~gcp.service::ansible:
         derived_from: gcp.cloudbuild
         metadata:
             vintner_generated: 'true'
@@ -2626,7 +3071,7 @@ node_types:
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
                     delete: exit 0
-    gcp.cloudbuild::terraform:
+    gcp.cloudbuild~gcp.service::terraform:
         derived_from: gcp.cloudbuild
         metadata:
             vintner_generated: 'true'
@@ -2672,7 +3117,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    docker.engine#source.archive::ansible@*->virtual.machine:
+    docker.engine~software.application#source.archive::ansible@*->virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -2877,7 +3322,206 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine#container.image::ansible@docker.engine->virtual.machine:
+    docker.engine~software.application#software.package::ansible@*->virtual.machine:
+        derived_from: docker.engine
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -
+                                      when: '".artifacts::software_package::script" | eval != None'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::software_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::software_package::key" | eval != None'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}
+                                          filename: '{{ ".artifacts::software_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::software_package::source" | eval != None'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::software_package::dependencies" | eval != None'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_create }}
+                                          mode: '0755'
+                                      when: SELF._management_create != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_create != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_configure }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_configure != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_start }}
+                                          mode: '0755'
+                                      when: SELF._management_start != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_start != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_stop }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_stop != None
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |
+                                              #! /usr/bin/bash
+                                              set -e
+    
+                                              {{ SELF._management_delete }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != None
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                      when: SELF._management_delete != None
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::software_package::file | eval }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    docker.engine~software.application#container.image::ansible@docker.engine->virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -2922,7 +3566,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    docker.engine#container.image::ansible@kubernetes:
+    docker.engine~software.application#container.image::ansible@kubernetes:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3013,7 +3657,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    docker.engine#container.image::ansible@gcp.cloudrun:
+    docker.engine~software.application#container.image::ansible@gcp.cloudrun:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3118,7 +3762,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    docker.engine#source.archive::ansible@gcp.appengine:
+    docker.engine~software.application#source.archive::ansible@gcp.appengine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3191,7 +3835,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    docker.engine::ansible@virtual.machine:
+    docker.engine~docker.engine::ansible@virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3236,7 +3880,29 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    docker.engine#container.image::terraform@docker.engine->virtual.machine:
+    docker.engine~software.application#software.package::terraform@*->virtual.machine:
+        derived_from: docker.engine
+        metadata:
+            vintner_generated: 'true'
+        properties: {}
+    docker.engine~software.application#source.archive::terraform@*->virtual.machine:
+        derived_from: docker.engine
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+    docker.engine~software.application#container.image::terraform@docker.engine->virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3301,7 +3967,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::container_image::file" | eval }}'
-    docker.engine#container.image::terraform@kubernetes:
+    docker.engine~software.application#container.image::terraform@kubernetes:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3388,7 +4054,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    docker.engine#container.image::terraform@gcp.cloudrun:
+    docker.engine~software.application#container.image::terraform@gcp.cloudrun:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3460,7 +4126,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: '{{ SELF.application_name }}'
-    docker.engine#source.archive::terraform@gcp.appengine:
+    docker.engine~software.application#source.archive::terraform@gcp.appengine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3541,7 +4207,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
-    docker.engine::terraform@virtual.machine:
+    docker.engine~docker.engine::terraform@virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3589,7 +4255,7 @@ node_types:
                                                     - curl -sSL https://get.docker.com | sudo sh
                                                     - sudo groupadd -f docker
                                                     - sudo usermod -aG docker {{ SELF.os_ssh_user }}
-    docker.engine#container.image::kubernetes@kubernetes:
+    docker.engine~software.application#container.image::kubernetes@kubernetes:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3669,7 +4335,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    docker.engine#container.image::docker@docker.engine->virtual.machine:
+    docker.engine~software.application#container.image::docker@docker.engine->virtual.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -3729,7 +4395,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms::ansible@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms::ansible@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -3783,7 +4449,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms::ansible@kubernetes:
+    mysql.dbms~mysql.dbms::ansible@kubernetes:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -3884,7 +4550,7 @@ node_types:
                                                       app: '{{ SELF.dbms_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    mysql.dbms::ansible@gcp.cloudsql:
+    mysql.dbms~mysql.dbms::ansible@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -3974,7 +4640,7 @@ node_types:
                                       shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: Delete Instance
                                       shell: gcloud sql instances delete {{ SELF.dbms_name }} --quiet
-    mysql.dbms::ansible@virtual.machine:
+    mysql.dbms~mysql.dbms::ansible@virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4078,7 +4744,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms::terraform@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms::terraform@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4159,7 +4825,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ SELF.dbms_image }}'
-    mysql.dbms::terraform@kubernetes:
+    mysql.dbms~mysql.dbms::terraform@kubernetes:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4256,7 +4922,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.dbms_name }}'
                                             type: ClusterIP
-    mysql.dbms::terraform@gcp.cloudsql:
+    mysql.dbms~mysql.dbms::terraform@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4340,7 +5006,7 @@ node_types:
                                       instance: ${google_sql_database_instance.dbms.name}
                                       name: root
                                       password: ${google_sql_database_instance.dbms.root_password}
-    mysql.dbms::terraform@virtual.machine:
+    mysql.dbms~mysql.dbms::terraform@virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4444,7 +5110,7 @@ node_types:
                                           remote-exec:
                                               - inline:
                                                     - sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} 3000
-    mysql.dbms::kubernetes@kubernetes:
+    mysql.dbms~mysql.dbms::kubernetes@kubernetes:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4553,7 +5219,7 @@ node_types:
                                       ansible.builtin.pause:
                                           seconds: 10
                     delete: exit 0
-    mysql.dbms::docker@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms::docker@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -4632,7 +5298,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.database::ansible@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->virtual.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4690,7 +5356,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.database::ansible@mysql.dbms->kubernetes:
+    mysql.database~mysql.database::ansible@mysql.dbms->kubernetes:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4734,7 +5400,7 @@ node_types:
                                       ansible.builtin.shell: kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e "GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'";
                                       args:
                                           executable: /usr/bin/bash
-    mysql.database::ansible@mysql.dbms->gcp.cloudsql:
+    mysql.database~mysql.database::ansible@mysql.dbms->gcp.cloudsql:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4782,7 +5448,7 @@ node_types:
                                           login_password: '{{ HOST.dbms_password }}'
                                           login_port: 3306
                                           login_user: root
-    mysql.database::ansible@mysql.dbms->virtual.machine:
+    mysql.database~mysql.database::ansible@mysql.dbms->virtual.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4840,7 +5506,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.database::terraform@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::terraform@mysql.dbms->docker.engine->virtual.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4914,7 +5580,7 @@ node_types:
                                       privileges:
                                           - ALL
                                       user: ${mysql_user.user.user}
-    mysql.database::terraform@mysql.dbms->kubernetes:
+    mysql.database~mysql.database::terraform@mysql.dbms->kubernetes:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -4936,7 +5602,7 @@ node_types:
                 type: string
                 default:
                     get_input: k8s_client_key_file
-    mysql.database::terraform@mysql.dbms->gcp.cloudsql:
+    mysql.database~mysql.database::terraform@mysql.dbms->gcp.cloudsql:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -5002,7 +5668,7 @@ node_types:
                                       privileges:
                                           - ALL
                                       user: ${google_sql_user.user.name}
-    mysql.database::terraform@mysql.dbms->virtual.machine:
+    mysql.database~mysql.database::terraform@mysql.dbms->virtual.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -5076,7 +5742,7 @@ node_types:
                                       privileges:
                                           - ALL
                                       user: ${mysql_user.user.user}
-    mysql.database::kubernetes@mysql.dbms->kubernetes:
+    mysql.database~mysql.database::kubernetes@mysql.dbms->kubernetes:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -5176,7 +5842,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    mysql.database::docker@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::docker@mysql.dbms->docker.engine->virtual.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'

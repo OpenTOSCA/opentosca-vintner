@@ -1,7 +1,7 @@
 import * as check from '#check'
 import * as files from '#files'
 import std from '#std'
-import {constructType} from '#technologies/utils'
+import {constructRuleName} from '#technologies/utils'
 import path from 'path'
 import {ImplementationGenerator} from './types'
 
@@ -13,7 +13,7 @@ class Registry {
     }
 
     add(generator: ImplementationGenerator) {
-        const id = constructType(generator)
+        const id = constructRuleName(generator)
         std.log(`Adding generator "${id}"`)
 
         if (this.generators.has(id)) throw new Error(`Generator "${id}" already registered`)
