@@ -235,7 +235,8 @@ node_types:
     #
     ###################################################
 
-    kubernetes:
+    # TODO: cloud.service requires a hosting ...
+    kubernetes.cluster:
         derived_from: cloud.service
         metadata:
             vintner_abstract: 'true'

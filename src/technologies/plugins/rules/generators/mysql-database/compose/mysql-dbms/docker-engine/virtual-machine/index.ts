@@ -1,12 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils'
 
 // TODO: implement this
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
-    technology: 'terraform',
-    hosting: ['mysql.dbms', 'kubernetes.cluster'],
+    technology: 'compose',
+    hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
 
     generate: (name, type) => {
         return {
@@ -16,7 +16,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...KubernetesCredentials(),
+                ...OpenstackMachineCredentials(),
             },
         }
     },

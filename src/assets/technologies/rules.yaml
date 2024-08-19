@@ -22,7 +22,8 @@ ansible:
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
-    - component: software.application
+    # Service Application
+    - component: service.application
       hosting:
           - docker.engine
           - virtual.machine
@@ -30,25 +31,24 @@ ansible:
       weight: 0.5
       comment: Docker is more specialized.
 
-    - component: software.application
-      hosting: kubernetes
+    - component: service.application
+      hosting: kubernetes.cluster
       artifact: container.image
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    - component: software.application
+    - component: service.application
       hosting: gcp.cloudrun
       artifact: container.image
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
-    - component: software.application
+    - component: service.application
       hosting: gcp.appengine
       artifact: source.archive
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
 
-    # Service Application
     - component: service.application
       hosting:
           - '*'
@@ -75,7 +75,7 @@ ansible:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - kubernetes
+          - kubernetes.cluster
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
 
@@ -102,7 +102,7 @@ ansible:
       comment: Docker is more specialized.
 
     - component: mysql.dbms
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 0.5
       comment: Kubernetes is more specialized.
 
@@ -124,7 +124,7 @@ ansible:
       comment: Primary use case due to the specialization of Ansible.
 
     - component: ingress
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 0.5
       comment: Kubernetes is more specialized.
 
@@ -139,7 +139,7 @@ ansible:
       weight: 1
 
 terraform:
-    # Software
+    # Software Application
     - component: software.application
       hosting:
           - '*'
@@ -157,7 +157,8 @@ terraform:
       weight: 0
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
-    - component: software.application
+    # Service Application
+    - component: service.application
       hosting:
           - docker.engine
           - virtual.machine
@@ -165,25 +166,24 @@ terraform:
       weight: 0.5
       comment: Docker is more specialized.
 
-    - component: software.application
-      hosting: kubernetes
+    - component: service.application
+      hosting: kubernetes.cluster
       artifact: container.image
       weight: 0.5
       comment: Kubernetes is more specialized.
 
-    - component: software.application
+    - component: service.application
       hosting: gcp.cloudrun
       artifact: container.image
       weight: 1
       comment: Terraform provides a declarative module.
 
-    - component: software.application
+    - component: service.application
       hosting: gcp.appengine
       artifact: source.archive
       weight: 1
       comment: Terraform provides a declarative module.
 
-    # Service Application
     - component: service.application
       hosting:
           - '*'
@@ -210,7 +210,7 @@ terraform:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - kubernetes
+          - kubernetes.cluster
       weight: 1
       comment: Terraform provides a declarative module.
 
@@ -237,7 +237,7 @@ terraform:
       comment: Docker is more specialized.
 
     - component: mysql.dbms
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 0.5
       comment: Kubernetes is more specialized.
 
@@ -258,7 +258,7 @@ terraform:
       comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 
     - component: ingress
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 0.5
       comment: Kubernetes is more specialized.
 
@@ -276,7 +276,7 @@ terraform:
 kubernetes:
     # Software
     - component: software.application
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       artifact: container.image
       weight: 1
       comment: Kubernetes is the underlying technology.
@@ -285,23 +285,23 @@ kubernetes:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - kubernetes
+          - kubernetes.cluster
       weight: 0
       comment: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 
     # DBMS
     - component: mysql.dbms
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 1
       comment: Kubernetes is the underlying technology.
 
     # Ingress
     - component: ingress
-      hosting: kubernetes
+      hosting: kubernetes.cluster
       weight: 1
       comment: Kubernetes is the underlying technology.
 
-docker:
+compose:
     # Software
     - component: software.application
       hosting:
