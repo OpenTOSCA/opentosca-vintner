@@ -1,4 +1,4 @@
-expected: ../../../unfurl-technology---shop---variant-kubernetes/tests/tau/expected.yaml
+expected: ../../../unfurl-technology---shop---variant-kubernetes---only/tests/tau/expected.yaml
 replace:
     - - database_ansible
       - database

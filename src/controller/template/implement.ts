@@ -107,7 +107,7 @@ export default async function (options: TemplateImplementOptions) {
             // Ignore abstract types
             if (isAbstract(baseType)) continue
 
-            std.log(`processing node type "${baseType}"`)
+            std.log(`processing node type "${baseName}"`)
 
             for (const plugin of graph.plugins.technology) {
                 for (const [implementationName, implementationType] of Object.entries(

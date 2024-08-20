@@ -22,7 +22,7 @@ node_types:
     node.runtime:
         derived_from: software.runtime
         artifacts:
-            software_package:
+            system_package:
                 type: system.package
                 file: nodejs
                 properties:
@@ -59,7 +59,7 @@ node_types:
     python.runtime:
         derived_from: software.runtime
         artifacts:
-            software_package:
+            system_package:
                 type: system.package
                 file: python-is-python3
                 properties:
