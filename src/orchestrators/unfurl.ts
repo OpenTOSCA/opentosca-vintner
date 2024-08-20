@@ -1,5 +1,6 @@
 import * as check from '#check'
 import * as files from '#files'
+import {ASSETS_DIR} from '#files'
 import {Instance} from '#repositories/instances'
 import {Shell} from '#shell'
 import * as utils from '#utils'
@@ -152,6 +153,9 @@ spec:
         await this.shell.execute([this.binary, 'init', '--empty', this.shell.resolve(dataDirectory)])
         files.storeYAML(ensembleFile, ensembleFileContent)
         files.copy(instance.getTemplateDirectory(), ensembleDirectory)
+
+        // Vintner utils
+        files.copy(path.join(ASSETS_DIR, 'unfurl', 'vintner_utils.py'), path.join(dataDirectory, 'vintner_utils.py'))
 
         // This is messy: use options.inputs for validating and instance.hasVariabilityInputs for deployment
         const inputs = options.inputs ?? (instance.hasServiceInputs() ? instance.getServiceInputs() : undefined)

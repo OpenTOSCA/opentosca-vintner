@@ -1,0 +1,17 @@
+expected: ../../../unfurl-technology---shop---variant-static/tests/tau/expected.yaml
+replace:
+    - - database_ansible
+      - database
+
+    - - mysql_dbms_ansible
+      - mysql_dbms
+
+    - - shop_ansible
+      - shop
+merge:
+    topology_template:
+        node_templates:
+            shop:
+                properties:
+                    optional_feature: true
+                    premium_feature: true

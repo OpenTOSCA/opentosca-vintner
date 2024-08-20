@@ -1,0 +1,216 @@
+tosca_definitions_version: tosca_variability_1_0_rc_2
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        os_network:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_key_name:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_user:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_ssh_key_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_region_name:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_auth_type:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_auth_url:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_identity_api_version:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_interface:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_application_credential_id:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        os_application_credential_secret:
+            type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
+
+        gcp_region:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        gcp_service_account_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        gcp_project:
+            type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+
+        k8s_api_address:
+            type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        k8s_api_port:
+            type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        k8s_ca_cert_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        k8s_client_cert_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        k8s_client_key_file:
+            type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+    variability:
+        inputs:
+            env:
+                type: string
+            medium:
+                type: boolean
+            premium_feature:
+                type: boolean
+            optional_feature:
+                type: boolean
+
+    node_templates:
+        shop:
+            type: shop.component
+            persistent: true
+            technology:
+                - ansible:
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - terraform:
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+                - kubernetes:
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            properties:
+                - application_name: unfurl-technology
+                - DB_NAME: unfurl-technology
+                - DB_USERNAME: root
+                - DB_PASSWORD: {get_input: database_password}
+                - DB_DIALECT: mysql
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+                - premium_feature:
+                      value: true
+                      conditions: {equal: [{variability_input: premium_feature}, true]}
+                - premium_feature:
+                      value: false
+                      conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
+                - optional_feature:
+                      value: true
+                      conditions: {equal: [{variability_input: optional_feature}, true]}
+                - optional_feature:
+                      value: false
+                      conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
+            requirements:
+                - database: database
+                - host:
+                      node: os_compute
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - host:
+                      node: gcp_runtime
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+                - host:
+                      node: kubernetes
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        shop_expose:
+            type: shop.component.expose
+            technology: kubernetes
+            requirements:
+                - host: kubernetes
+
+        database:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {or: [{equal: [{variability_input: env}, STATIC]}, {equal: [{variability_input: env}, KUBERNETES]}]}
+                - terraform:
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+            properties:
+                - database_name: unfurl-technology
+            requirements:
+                - host:
+                      node: mysql_dbms
+                      conditions: {or: [{equal: [{variability_input: env}, STATIC]}, {equal: [{variability_input: env}, KUBERNETES]}]}
+                - host:
+                      node: gcp_dbms
+                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+                - depends:
+                      node: mysql_dbms_expose
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        mysql_dbms:
+            type: mysql.dbms
+            technology:
+                - ansible:
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - kubernetes:
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            properties:
+                - root_password: {get_input: database_password}
+            requirements:
+                - host:
+                      node: os_compute
+                      conditions: {equal: [{variability_input: env}, STATIC]}
+                - host:
+                      node: kubernetes
+                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+
+        mysql_dbms_expose:
+            type: mysql.dbms.expose
+            technology: kubernetes
+            requirements:
+                - host: kubernetes
+
+        os_compute:
+            type: os.compute
+            technology: terraform
+            properties:
+                - machine: unfurl-technology
+                - ports: [80, 3000]
+                - network: {get_input: os_network}
+                - flavor:
+                      value: m1.medium
+                      conditions: {variability_input: medium}
+                - flavor:
+                      value: m1.large
+                      conditions: {not: {variability_input: medium}}
+
+        gcp_dbms:
+            type: gcp.cloudsql
+            technology: terraform
+            properties:
+                - instance_name: unfurl-technology
+                - root_password: {get_input: database_password}
+
+        gcp_runtime:
+            type: gcp.appengine
+            technology: terraform
+
+        kubernetes:
+            type: kubernetes

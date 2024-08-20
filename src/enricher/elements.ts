@@ -1,4 +1,5 @@
 import Graph from '#graph/graph'
+import {TechnologyTemplateMap} from '#spec/technology-template'
 import * as utils from '#utils'
 
 export class ElementEnricher {
@@ -12,28 +13,40 @@ export class ElementEnricher {
         /**
          * Enrich technologies
          */
-        this.enrichTechnologies()
+        if (this.graph.options.enricher.technologies) this.enrichTechnologies()
     }
 
     private enrichTechnologies() {
         for (const node of this.graph.nodes) {
-            // Do not override manual modelled technologies
-            if (!utils.isEmpty(node.technologies)) continue
-
-            let hasCandidate = false
+            // Get all possible technology assignments
+            const candidates: TechnologyTemplateMap[] = []
             for (const plugin of this.graph.plugins.technology) {
-                for (const map of plugin.assign(node)) {
-                    hasCandidate = true
-                    // Note, this does not update node.technologies
-                    this.graph.addTechnology(node, map)
-                }
+                candidates.push(...plugin.assign(node))
             }
 
-            // Throw if technology is required but no candidate has been found
-            if (this.graph.options.checks.requiredTechnology) {
-                if (node.technologyRequired && !hasCandidate) {
-                    throw new Error(`${node.Display} has no technology candidates`)
+            if (utils.isEmpty(node.technologies)) {
+                // Throw if technology is required but no candidate has been found
+                if (this.graph.options.checks.requiredTechnology) {
+                    if (node.technologyRequired && utils.isEmpty(candidates)) {
+                        throw new Error(`${node.Display} has no technology candidates`)
+                    }
                 }
+
+                // Assign each possible technology assignment
+                candidates.forEach(it => this.graph.addTechnology(node, it))
+            } else {
+                // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
+                if (utils.isEmpty(this.graph.plugins.technology)) continue
+
+                // Do not override manual assigned technologies but enrich them with an implementation
+                const enriched: TechnologyTemplateMap[] = []
+                node.technologies.forEach(technology => {
+                    const filtered = candidates.filter(map => utils.firstKey(map) === technology.name)
+                    if (utils.isEmpty(filtered))
+                        throw new Error(`${node.Display} has no implementation for ${technology.display}`)
+                    enriched.push(...filtered)
+                })
+                this.graph.replaceTechnologies(node, enriched)
             }
         }
     }

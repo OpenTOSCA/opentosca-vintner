@@ -245,14 +245,14 @@ The following options are used to configure checks.
 
 The following options are used to configure the solver.
 
-| Keyname                          | Mandatory | Type                          | Default | Description                                               |
-|----------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
-| optimization_topology            | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering topology.              | 
-| optimization_topology_unique     | false     | Boolean                       | true    | Enable check for unique results considering topology.     |
-| optimization_topology_mode       | false     | count &#124; weight           | weight  | Configure optimization mode considering topology.         |
-| optimization_technologies        | false     | Boolean &#124; min &#124; max | false   | Enable optimization considering technologies.             | 
-| optimization_technologies_unique | false     | Boolean                       | false   | Enable check for unique results considering technologies. | 
-| optimization_technologies_mode   | false     | count &#124; weight           | count   | Configure optimization mode considering technologies.     | 
+| Keyname                          | Mandatory | Type                                    | Default | Description                                               |
+|----------------------------------|-----------|-----------------------------------------|---------|-----------------------------------------------------------|
+| optimization_topology            | false     | Boolean &#124; min &#124; max           | false   | Configure optimization considering topology.              | 
+| optimization_topology_unique     | false     | Boolean                                 | true    | Enable check for unique results considering topology.     |
+| optimization_topology_mode       | false     | count &#124; weight                     | weight  | Configure optimization mode considering topology.         |
+| optimization_technologies        | false     | Boolean &#124; min &#124; max           | false   | Enable optimization considering technologies.             | 
+| optimization_technologies_unique | false     | Boolean                                 | false   | Enable check for unique results considering technologies. | 
+| optimization_technologies_mode   | false     | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.     | 
 
 ### Normalization Options
 
@@ -263,13 +263,14 @@ The following options are used to configure the normalizer.
 | technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
 
 
-### Normalization Options
+### Enricher Options
 
 The following options are used to configure the enricher.
 
-| Keyname                   | Mandatory | Type                          | Default | Description                                                                                                           |
-|---------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
-| enrich_input_condition    | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+| Keyname                | Mandatory | Type                          | Default | Description                                                                                                           |
+|------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
+| enrich_input_condition | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+| enrich_technologies    | false     | Boolean                       | false   | Enable if technoloiges are enriched.                                                                                  |
 
 
 ### Constraints Options
@@ -318,13 +319,14 @@ node_default_condition_mode: incomingnaive-artifact-host
 optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
-optimization_technologies_mode: weight
+optimization_technologies_mode: weight-count
 technology_constraint: true
 hosting_stack_constraint: true
 relation_default_implied: true
 technology_required: false
 unconsumed_input_check: false
 unproduced_output_check: false
+enrich_technologies: true
 ```
 
 ### RC v3
@@ -350,6 +352,7 @@ required_artifact_constraint: true
 relation_default_implied: true
 technology_required: true
 checks: false
+enrich_technologies: true
 ```
 
 
@@ -546,7 +549,7 @@ A node template can also hold conditional types, artifact, and properties.
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 | weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
-| technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single}) &#124; Boolean           | An optional conditional assignment of deployment technologies.                                                                                                                           |
+| technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single})                          | An optional conditional assignment of deployment technologies.                                                                                                                           |
 
 For example, the following node template has a variability condition assigned.
 
@@ -1101,6 +1104,7 @@ export type TechnologyPluginBuilder = {
 ```typescript linenums="1"
 export type TechnologyPlugin = {
     assign: (node: Node) => {[technology: string]: TechnologyTemplate}[]
+    implement: (name: string, type: NodeType) => NodeTypeMap
 }
 ```
 

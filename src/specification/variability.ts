@@ -1,6 +1,6 @@
 import Element from '#/graph/element'
-import {TechnologyPluginBuilder} from '#graph/plugin'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyPluginBuilder} from '#technologies/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
 export type VariabilityDefinition = {
@@ -47,7 +47,7 @@ export type SolverOptions = {
     // Technologies
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
-    optimization_technologies_mode?: 'weight' | 'count'
+    optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 }
 
 export type NormalizationOptions = {
@@ -56,6 +56,7 @@ export type NormalizationOptions = {
 
 export type EnricherOptions = {
     enrich_input_condition?: boolean
+    enrich_technologies?: boolean
 }
 
 export type ConstraintsOptions = {

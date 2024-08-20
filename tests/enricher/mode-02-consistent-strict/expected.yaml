@@ -7,6 +7,7 @@ topology_template:
                   - application:
                         conditions:
                             - {node_presence: application, _generated: true}
+              technology: []
               conditions: []
               requirements:
                   - host:
@@ -19,6 +20,7 @@ topology_template:
                   - virtual_machine:
                         conditions:
                             - {node_presence: virtual_machine, _generated: true}
+              technology: []
               conditions:
                   - {logic_expression: is_static}
               requirements:
@@ -32,5 +34,6 @@ topology_template:
                   - private_cloud:
                         conditions:
                             - {node_presence: private_cloud, _generated: true}
+              technology: []
               conditions:
                   - {logic_expression: is_static}

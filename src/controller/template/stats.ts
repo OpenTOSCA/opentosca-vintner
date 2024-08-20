@@ -19,11 +19,12 @@ export type TemplateStats = {
     policies: number
     groups: number
     inputs: number
+    outputs: number
     artifacts: number
     imports: number
     technologies: number
     vdmm_elements: number
-    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies + Inputs
+    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies + Inputs + Outputs
     edmm_elements: number
     edmm_elements_without_technologies: number
     edmm_elements_conditions_manual: number
@@ -36,7 +37,7 @@ export default async function (options: TemplateStatsOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
 
-    return utils.sumObjects(
+    return utils.sumObjects<TemplateStats>(
         await Promise.all(
             options.template.map(async it => {
                 const template = await new Loader(it).load()
@@ -50,6 +51,7 @@ export default async function (options: TemplateStatsOptions) {
                     policies: graph.policies.length,
                     groups: graph.groups.length,
                     inputs: graph.inputs.length,
+                    outputs: graph.outputs.length,
                     artifacts: graph.artifacts.length,
                     imports: graph.imports.length,
                     technologies: graph.technologies.length,
@@ -60,13 +62,15 @@ export default async function (options: TemplateStatsOptions) {
                         graph.properties.length +
                         graph.artifacts.length +
                         graph.technologies.length +
-                        graph.inputs.length,
+                        graph.inputs.length +
+                        graph.outputs.length,
                     edmm_elements_without_technologies:
                         graph.nodes.length +
                         graph.relations.length +
                         graph.properties.length +
                         graph.artifacts.length +
-                        graph.inputs.length,
+                        graph.inputs.length +
+                        graph.outputs.length,
                     edmm_elements_conditions_manual: countManualAtEDMM(graph),
                     edmm_elements_conditions_generated: countGeneratedAtEDMM(graph),
                     loc: files.countLines(it),
@@ -87,6 +91,7 @@ function countManualAtEDMM(graph: Graph) {
     graph.artifacts.forEach(it => (count += countManual(it)))
     graph.technologies.forEach(it => (count += countManual(it)))
     graph.inputs.forEach(it => (count += countManual(it)))
+    graph.outputs.forEach(it => (count += countManual(it)))
 
     return count
 }
@@ -123,6 +128,7 @@ function countGeneratedAtEDMM(graph: Graph) {
     graph.artifacts.forEach(it => (count += countGenerated(it)))
     graph.technologies.forEach(it => (count += countGenerated(it)))
     graph.inputs.forEach(it => (count += countGenerated(it)))
+    graph.outputs.forEach(it => (count += countGenerated(it)))
 
     return count
 }

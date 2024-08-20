@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import {GroupTemplateMap} from '#spec/group-template'
+import {EntityTypesKeys} from '#spec/service-template'
 import {TopologyTemplate} from '#spec/topology-template'
 import {LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
@@ -24,6 +25,9 @@ export default class Transformer {
 
         // Clean variability definition from pruning options
         this.cleanVariabilityDefinition()
+
+        // Remove loaded types
+        this.cleanTypes()
     }
 
     private removeVariabilityGroups() {
@@ -195,6 +199,7 @@ export default class Transformer {
 
             // Delete enricher options
             delete this.topology.variability.options.enrich_input_condition
+            delete this.topology.variability.options.enrich_technologies
         }
 
         // Remove empty options
@@ -202,5 +207,18 @@ export default class Transformer {
 
         // Remove empty variability
         if (utils.isEmpty(this.topology.variability)) delete this.topology.variability
+    }
+
+    private cleanTypes() {
+        for (const key of EntityTypesKeys) {
+            const types = this.graph.serviceTemplate[key]
+            if (check.isUndefined(types)) return
+
+            for (const [name, type] of Object.entries(types)) {
+                if (type._loaded) delete types[name]
+            }
+
+            if (utils.isEmpty(this.graph.serviceTemplate[key])) delete this.graph.serviceTemplate[key]
+        }
     }
 }

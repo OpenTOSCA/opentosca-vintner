@@ -43,6 +43,7 @@ export function firstEntry<V>(map: {[key: string]: V}): [string, V] {
 export function isEmpty(obj: any) {
     if (check.isUndefined(obj)) return true
     if (check.isArray(obj)) return obj.length === 0
+    if (check.isString(obj)) return obj.length === 0
     if (check.isObject(obj)) return Object.keys(obj).length === 0
     throw new Error(`Cannot check if object ${pretty(obj)} is empty`)
 }
@@ -104,6 +105,10 @@ export function prettyNumber(number?: number) {
     return number.toLocaleString('en', {maximumFractionDigits: 3, minimumFractionDigits: 3})
 }
 
+export function roundNumber(number: number, digits = 2) {
+    return Number(number.toFixed(digits))
+}
+
 export function getMedianFromSorted(array: number[]) {
     const mid = Math.floor(array.length / 2)
     return array.length % 2 ? array[mid] : (array[mid] + array[mid - 1]) / 2
@@ -141,14 +146,14 @@ export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
-export function sumObjects(objects: {[key: string]: number}[]) {
+export function sumObjects<T>(objects: {[key: string]: number}[]): T {
     return objects.reduce((a, b) => {
         for (const key in b) {
             // eslint-disable-next-line no-prototype-builtins
             if (b.hasOwnProperty(key)) a[key] = (a[key] || 0) + b[key]
         }
         return a
-    }, {})
+    }, {}) as T
 }
 
 export function looseParse(value: any) {
@@ -197,4 +202,12 @@ export function replace(data: string, entries: [find: string, replace: string][]
         data = data.replaceAll(entry[0], entry[1])
     }
     return data
+}
+
+export function indent(str: string, spaces = 4) {
+    const padding = ' '.repeat(spaces)
+    return str
+        .split('\n')
+        .map(line => padding + line)
+        .join('\n')
 }

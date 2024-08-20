@@ -7,6 +7,7 @@ topology_template:
                   - application:
                         conditions:
                             - {node_presence: application, _generated: true}
+              technology: []
               conditions:
                   - {and: [], _generated: true}
               requirements:
@@ -20,6 +21,7 @@ topology_template:
                   - virtual_machine:
                         conditions:
                             - {node_presence: virtual_machine, _generated: true}
+              technology: []
               conditions:
                   - {has_incoming_relation: virtual_machine, _generated: true}
               properties:
@@ -49,5 +51,6 @@ topology_template:
                   - private_cloud:
                         conditions:
                             - {node_presence: private_cloud, _generated: true}
+              technology: []
               conditions:
                   - {has_incoming_relation: private_cloud, _generated: true}

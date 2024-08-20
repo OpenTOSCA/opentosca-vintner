@@ -4,7 +4,18 @@
  */
 
 export type InterfaceDefinition = {
-    operations: {[key: string]: OperationDefinition}
+    operations?: {[key: string]: OperationDefinition}
+    inputs?: {[key: string]: any}
 }
 
-export type OperationDefinition = {}
+export type OperationDefinition = {[key: string]: any} | string
+
+export const MANAGEMENT_INTERFACE = 'management'
+
+export enum MANAGEMENT_OPERATIONS {
+    CREATE = 'create',
+    CONFIGURE = 'configure',
+    START = 'start',
+    STOP = 'stop',
+    DELETE = 'delete',
+}

@@ -760,7 +760,7 @@ class SolverTechnologiesOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
-    readonly mode: 'weight' | 'count'
+    readonly mode: 'weight' | 'count' | 'weight-count'
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -812,9 +812,9 @@ class SolverTechnologiesOptions extends BaseOptions {
             this.unique = this.raw.optimization_technologies_unique ?? false
             assert.isBoolean(this.unique)
 
-            const mode = this.raw.optimization_technologies_mode ?? 'weight'
-            if (!['weight', 'count'].includes(mode)) {
-                throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+            const mode = this.raw.optimization_technologies_mode ?? 'weight-count'
+            if (!['weight', 'count', 'weight-count'].includes(mode)) {
+                throw new Error(`Option optimization_technology_mode must be "weight", "count", or "weight-count"`)
             }
             this.mode = mode
         }
@@ -944,12 +944,26 @@ export class NormalizationOptions extends BaseOptions {
 
 export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
+    readonly technologies: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         this.inputCondition = this.raw.enrich_input_condition ?? true
         assert.isBoolean(this.inputCondition)
+
+        if (this.v2 || this.v3) {
+            /**
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
+             */
+            this.technologies = this.raw.enrich_technologies ?? true
+        } else {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
+             */
+            this.technologies = this.raw.enrich_technologies ?? false
+        }
+        assert.isBoolean(this.technologies)
     }
 }
 

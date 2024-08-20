@@ -13,6 +13,7 @@ topology_template:
         options:
             expected_incoming_relation_check: false
             required_incoming_relation_constraint: false
+            enrich_technologies: false
 
     node_templates:
         application:

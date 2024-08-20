@@ -12,16 +12,16 @@ import TemplatesController from './templates'
 import UtilsController from './utils'
 
 export default {
+    assets: AssetsController,
     info: InfoController,
     install: InstallController,
     instances: InstancesController,
-    query: QueryController,
     orchestrators: OrchestratorsController,
+    query: QueryController,
+    sensors: SensorsController,
     server: ServerController,
     setup: SetupController,
     template: TemplateController,
     templates: TemplatesController,
-    sensors: SensorsController,
-    assets: AssetsController,
     utils: UtilsController,
 }

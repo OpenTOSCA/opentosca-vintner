@@ -14,8 +14,8 @@ export default async function (options: InstancesInfoOptions) {
      * Defaults
      */
     options.force = options.force ?? false
-    options.lock = options.force ? true : options.lock ?? true
-    options.machine = options.force ? true : options.machine ?? true
+    options.lock = options.force ? false : options.lock ?? true
+    options.machine = options.force ? false : options.machine ?? true
 
     /**
      * Instance

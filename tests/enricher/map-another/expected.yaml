@@ -6,6 +6,7 @@ topology_template:
               type:
                   - node_one:
                         conditions: []
+              technology: []
               conditions: []
               properties:
                   - key_one:

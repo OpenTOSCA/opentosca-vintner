@@ -1,8 +1,8 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import {Result} from '#resolver/result'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import MiniSat from 'logic-solver'
 
 export default class Optimizer {
@@ -42,8 +42,6 @@ export default class Optimizer {
          */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
-        // TODO: additionally minimize number of different technologies?
-
         return this.current
     }
 
@@ -52,49 +50,27 @@ export default class Optimizer {
      */
     private optimizeTopology() {
         const formulas = this.graph.nodes.map(it => it.id)
-        let weights: number | number[]
+        let weights: number | number[] | undefined
 
-        switch (this.graph.options.solver.topology.mode) {
-            /**
-             * Weight
-             */
-            case 'weight': {
-                weights = this.graph.nodes.map(it => it.weight * 100)
-                break
-            }
-
-            /**
-             * Count
-             */
-            case 'count': {
-                weights = 1
-                break
-            }
-
-            /**
-             * Abort
-             */
-            default:
-                throw new Error(`Topology optimization mode "${this.graph.options.solver.topology.mode}" not supported`)
+        /**
+         * Weight
+         */
+        if (this.graph.options.solver.topology.mode === 'weight') {
+            weights = this.graph.nodes.map(it => it.weight * 100)
         }
 
         /**
-         * Minimize
+         * Count
          */
-        if (this.graph.options.solver.topology.min) {
-            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
-            return
+        if (this.graph.options.solver.topology.mode === 'count') {
+            weights = 1
         }
 
         /**
-         * Maximize
+         * Optimize
          */
-        if (this.graph.options.solver.topology.max) {
-            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
-            return
-        }
-
-        throw new UnexpectedError()
+        assert.isDefined(weights)
+        this.optimize({min: this.graph.options.solver.topology.min, formulas, weights})
     }
 
     /**
@@ -121,55 +97,36 @@ export default class Optimizer {
      * Optimize technologies
      */
     private optimizeTechnologies() {
-        let formulas: MiniSat.Operands[]
-        let weights: number | number[]
+        /**
+         * Weight(-Count)
+         */
+        if (this.graph.options.solver.technologies.mode.includes('weight')) {
+            const formulas = this.graph.technologies.map(it => it.id)
+            const weights = this.graph.technologies.map(it => it.weight * 100)
 
-        switch (this.graph.options.solver.technologies.mode) {
-            /**
-             * Weight
-             */
-            case 'weight': {
-                formulas = this.graph.technologies.map(it => it.id)
-                weights = this.graph.technologies.map(it => it.weight * 100)
-                break
-            }
+            // We always maximize weight in weight-count
+            const min = this.graph.options.solver.technologies.mode.includes('count')
+                ? false
+                : this.graph.options.solver.technologies.min
 
-            /**
-             * Count
-             */
-            case 'count': {
-                const groups = utils.groupBy(this.graph.technologies, it => it.name)
-                formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
-                weights = 1
-                break
-            }
-
-            /**
-             * Abort
-             */
-            default:
-                throw new Error(
-                    `Technology optimization mode "${this.graph.options.solver.technologies.mode}" not supported`
-                )
+            this.optimize({min, formulas, weights})
         }
 
         /**
-         * Minimize
+         * (Weight-)Count
          */
-        if (this.graph.options.solver.technologies.min) {
-            this.current = this.minisat.minimizeWeightedSum(this.current, formulas, weights)
-            return
-        }
+        if (this.graph.options.solver.technologies.mode.includes('count')) {
+            const groups = utils.groupBy(this.graph.technologies, it => it.name)
+            const formulas = Object.entries(groups).map(([name, group]) => MiniSat.or(group.map(it => it.id)))
+            const weights = 1
 
-        /**
-         * Maximize
-         */
-        if (this.graph.options.solver.technologies.max) {
-            this.current = this.minisat.maximizeWeightedSum(this.current, formulas, weights)
-            return
-        }
+            // We always minimize count in weight-count
+            const min = this.graph.options.solver.technologies.mode.includes('weight')
+                ? true
+                : this.graph.options.solver.technologies.min
 
-        throw new UnexpectedError()
+            this.optimize({min, formulas: formulas, weights: weights})
+        }
     }
 
     /**
@@ -189,6 +146,19 @@ export default class Optimizer {
         if (check.isDefined(another)) {
             const mode = this.graph.options.solver.technologies.optimize ? 'besides' : 'without'
             throw new Error(`The result is ambiguous considering technologies (${mode} optimization)`)
+        }
+    }
+
+    /**
+     * Optimize
+     *
+     * This changes the state of the SAT solver but keeps it satisfiable
+     */
+    private optimize(options: {min: boolean; formulas: MiniSat.Operand[]; weights: number | number[]}) {
+        if (options.min) {
+            this.current = this.minisat.minimizeWeightedSum(this.current, options.formulas, options.weights)
+        } else {
+            this.current = this.minisat.maximizeWeightedSum(this.current, options.formulas, options.weights)
         }
     }
 }

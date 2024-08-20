@@ -512,6 +512,28 @@ template
         })
     )
 
+template
+    .command('implement')
+    .description('implement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .option('--orchestrator [string]', 'the orchestrator for which node type should be implemented', 'unfurl')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.implement(options)
+        })
+    )
+
+template
+    .command('unimplement')
+    .description('unimplement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unimplement(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 puml.command('topology')
@@ -768,8 +790,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
-    .option('--retry [boolean]', 'retry', true)
-    .option('--no-retry [boolean]')
+    .option('--retries [boolean]', 'number of retries', '3')
     .option('--verbose [boolean]', 'verbose')
     .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)

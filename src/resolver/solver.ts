@@ -133,7 +133,10 @@ export default class Solver {
         /**
          * Return
          */
-        if (options.all) return this.solveAll()
+        if (options.all) {
+            // This actually also contains the current result since we did not forbid it
+            return this.solveAll()
+        }
         return [result]
     }
 
