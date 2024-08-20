@@ -10,6 +10,9 @@ import {
 
 // TODO: we assume that dbms is exposed
 
+// Could use "docker exec" but then its imperative ...
+// Maybe one can ssh tunnel the dbms in container to local
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

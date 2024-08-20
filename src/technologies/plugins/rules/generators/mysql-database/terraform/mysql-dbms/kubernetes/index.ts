@@ -3,13 +3,19 @@ import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technol
 
 // TODO: next: implement this
 
+/**
+ * Official Kubernetes provider does not provide "kubectl exec", https://registry.terraform.io/providers/hashicorp/kubernetes
+ */
+
+// use jobs?
+// use https://registry.terraform.io/modules/magnolia-sre/kubectl-cmd/kubernetes/latest
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
-    weight: 1,
-    // TODO: does it?!
-    comment: 'Terraform provides a declarative module.',
+    weight: 0,
+    comment: 'Ansible is more specialized.',
 
     generate: (name, type) => {
         return {
