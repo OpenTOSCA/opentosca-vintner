@@ -60,7 +60,7 @@ node_types:
 
                                           apt-get update
                                           apt-get install -y dkms make linux-headers-$(uname -r) dialog
-                                          FALCO_FRONTEND=noninteractive  apt-get install -y falco
+                                          FALCO_FRONTEND=noninteractive apt-get install -y falco
                                       args:
                                           executable: /usr/bin/bash
 

@@ -40,13 +40,13 @@ topology_template:
                 - product: product_component
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         frontend_ingress:
             type: ingress::kubernetes::kubernetes
             requirements:
                 - application: frontend_component
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -63,7 +63,7 @@ topology_template:
                 - shipping: shipping_component
                 - cart: cart_component
                 - product: product_component
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -74,7 +74,7 @@ topology_template:
         email_component:
             type: email.component::kubernetes::kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -88,7 +88,7 @@ topology_template:
                 optional_payment_feature: false
                 premium_payment_feature: false
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -99,7 +99,7 @@ topology_template:
         currency_component:
             type: currency.component::kubernetes::kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -110,7 +110,7 @@ topology_template:
         shipping_component:
             type: shipping.component::kubernetes::kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -122,7 +122,7 @@ topology_template:
             type: cart.component::kubernetes::kubernetes
             requirements:
                 - database: cart_database
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         cart_database:
             type: mysql.database::terraform::mysql.dbms::kubernetes
@@ -139,7 +139,7 @@ topology_template:
                 dbms_name: cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -150,7 +150,7 @@ topology_template:
         product_component:
             type: product.component::kubernetes::kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -162,7 +162,7 @@ topology_template:
             type: recommendation.component::kubernetes::kubernetes
             requirements:
                 - product: product_component
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -173,7 +173,7 @@ topology_template:
         advertisement_component:
             type: advertisement.component::kubernetes::kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -189,7 +189,7 @@ topology_template:
             requirements:
                 - checkout: checkout_component
                 - recommendation: recommendation_component
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -197,7 +197,7 @@ topology_template:
         #
         ###################################################
 
-        kubernetes_runtime:
+        kubernetes:
             type: kubernetes
             properties:
                 k8s_host: {get_input: k8s_host}

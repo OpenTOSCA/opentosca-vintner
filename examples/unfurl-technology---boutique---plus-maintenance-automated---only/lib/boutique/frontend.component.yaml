@@ -98,7 +98,7 @@ node_types:
 
             ENV_PLATFORM:
                 type: string
-                default: {eval: '.::.requirements::[.name=host]::.target::env_platform'}
+                default: {eval: '.::.requirements::[.name=host]::.target::_hosting'}
 
             disable_profiler:
                 type: string

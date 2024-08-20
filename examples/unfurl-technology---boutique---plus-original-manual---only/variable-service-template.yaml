@@ -104,7 +104,7 @@ topology_template:
                 - product: product_component
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         frontend_ingress:
@@ -136,7 +136,7 @@ topology_template:
                 - shipping: shipping_component
                 - cart: cart_component
                 - product: product_component
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -153,7 +153,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -183,7 +183,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -200,7 +200,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -217,7 +217,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -235,7 +235,7 @@ topology_template:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - database: cart_database
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         cart_database:
@@ -259,7 +259,7 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudsql
 
         ###################################################
@@ -276,7 +276,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -294,7 +294,7 @@ topology_template:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - product: product_component
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -311,7 +311,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker_runtime
+                - host: docker
                 - host: gcp_cloudrun
 
         ###################################################
@@ -320,7 +320,7 @@ topology_template:
         #
         ###################################################
 
-        docker_runtime:
+        docker:
             type: docker.engine
             technology: ansible
             requirements:

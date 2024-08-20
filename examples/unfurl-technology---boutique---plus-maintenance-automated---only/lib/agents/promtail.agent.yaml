@@ -17,6 +17,19 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
 
+    # TODO: delete me
+    promtail.agent::delte_me:
+        derived_from: logging.agent
+
+        artifacts:
+            - apt_package:
+                  type: apt.package
+                  file: promtail
+                  properties:
+                      list: grafana
+                      key: https://apt.grafana.com/gpg.key
+                      source: https://apt.grafana.com stable main
+
     ###################################################
     #
     # Ansible Openstack

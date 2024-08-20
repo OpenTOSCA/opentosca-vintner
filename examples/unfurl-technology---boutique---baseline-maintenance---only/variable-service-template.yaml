@@ -121,7 +121,7 @@ topology_template:
                 - product: product_component_docker
                 - recommendation: recommendation_component_docker
                 - advertisement: advertisement_component_docker
-                - host: docker_runtime
+                - host: docker
 
         frontend_component_kubernetes:
             type: frontend.component
@@ -136,7 +136,7 @@ topology_template:
                 - product: product_component_kubernetes
                 - recommendation: recommendation_component_kubernetes
                 - advertisement: advertisement_component_kubernetes
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         frontend_component_terraform:
             type: frontend.component
@@ -165,7 +165,7 @@ topology_template:
             technology: kubernetes
             requirements:
                 - application: frontend_component_kubernetes
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         ###################################################
         #
@@ -183,7 +183,7 @@ topology_template:
                 - shipping: shipping_component_docker
                 - cart: cart_component_docker
                 - product: product_component_docker
-                - host: docker_runtime
+                - host: docker
 
         checkout_component_kubernetes:
             type: checkout.component
@@ -195,7 +195,7 @@ topology_template:
                 - shipping: shipping_component_kubernetes
                 - cart: cart_component_kubernetes
                 - product: product_component_kubernetes
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         checkout_component_terraform:
             type: checkout.component
@@ -219,13 +219,13 @@ topology_template:
             type: email.component
             technology: docker
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         email_component_kubernetes:
             type: email.component
             technology: kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         email_component_terraform:
             type: email.component
@@ -256,7 +256,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         payment_component_kubernetes:
             type: payment.component
@@ -275,7 +275,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         payment_component_terraform:
             type: payment.component
@@ -306,13 +306,13 @@ topology_template:
             type: currency.component
             technology: docker
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         currency_component_kubernetes:
             type: currency.component
             technology: kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         currency_component_terraform:
             type: currency.component
@@ -330,13 +330,13 @@ topology_template:
             type: shipping.component
             technology: docker
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         shipping_component_kubernetes:
             type: shipping.component
             technology: kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         shipping_component_terraform:
             type: shipping.component
@@ -355,14 +355,14 @@ topology_template:
             technology: docker
             requirements:
                 - database: cart_database
-                - host: docker_runtime
+                - host: docker
 
         cart_component_kubernetes:
             type: cart.component
             technology: kubernetes
             requirements:
                 - database: cart_database
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         cart_component_terraform:
             type: cart.component
@@ -396,7 +396,7 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         cart_dbms_kubernetes:
             type: mysql.dbms
@@ -405,7 +405,7 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         cart_dbms_terraform:
             type: mysql.dbms
@@ -426,13 +426,13 @@ topology_template:
             type: product.component
             technology: docker
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         product_component_kubernetes:
             type: product.component
             technology: kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         product_component_terraform:
             type: product.component
@@ -451,14 +451,14 @@ topology_template:
             technology: docker
             requirements:
                 - product: product_component_docker
-                - host: docker_runtime
+                - host: docker
 
         recommendation_component_kubernetes:
             type: recommendation.component
             technology: kubernetes
             requirements:
                 - product: product_component_kubernetes
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         recommendation_component_terraform:
             type: recommendation.component
@@ -477,13 +477,13 @@ topology_template:
             type: advertisement.component
             technology: docker
             requirements:
-                - host: docker_runtime
+                - host: docker
 
         advertisement_component_kubernetes:
             type: advertisement.component
             technology: kubernetes
             requirements:
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         advertisement_component_terraform:
             type: advertisement.component
@@ -516,7 +516,7 @@ topology_template:
             requirements:
                 - checkout: checkout_component_docker
                 - recommendation: recommendation_component_docker
-                - host: docker_runtime
+                - host: docker
 
         analytical_component_kubernetes:
             type: analytical.component
@@ -537,7 +537,7 @@ topology_template:
             requirements:
                 - checkout: checkout_component_kubernetes
                 - recommendation: recommendation_component_kubernetes
-                - host: kubernetes_runtime
+                - host: kubernetes
 
         analytical_component_terraform:
             type: analytical.component
@@ -566,7 +566,7 @@ topology_template:
         #
         ###################################################
 
-        docker_runtime:
+        docker:
             type: docker.engine
             technology: ansible
             requirements:
@@ -656,7 +656,7 @@ topology_template:
         #
         ###################################################
 
-        kubernetes_runtime:
+        kubernetes:
             type: kubernetes
             conditions: {logic_expression: is_kubernetes}
             properties:

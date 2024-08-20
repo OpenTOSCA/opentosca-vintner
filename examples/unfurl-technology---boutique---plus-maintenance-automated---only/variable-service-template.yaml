@@ -126,15 +126,15 @@ topology_template:
                 - product: product_component
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         frontend_ingress:
             type: ingress
             requirements:
                 - application: frontend_component
-                - host: kubernetes_runtime
+                - host: kubernetes
                 - host: virtual_machine
 
         ###################################################
@@ -152,8 +152,8 @@ topology_template:
                 - shipping: shipping_component
                 - cart: cart_component
                 - product: product_component
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -165,8 +165,8 @@ topology_template:
         email_component:
             type: email.component
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -191,8 +191,8 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -204,8 +204,8 @@ topology_template:
         currency_component:
             type: currency.component
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -217,8 +217,8 @@ topology_template:
         shipping_component:
             type: shipping.component
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -231,8 +231,8 @@ topology_template:
             type: cart.component
             requirements:
                 - database: cart_database
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         cart_database:
@@ -250,8 +250,8 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudsql
 
         ###################################################
@@ -263,8 +263,8 @@ topology_template:
         product_component:
             type: product.component
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -277,8 +277,8 @@ topology_template:
             type: recommendation.component
             requirements:
                 - product: product_component
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -290,8 +290,8 @@ topology_template:
         advertisement_component:
             type: advertisement.component
             requirements:
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -318,8 +318,8 @@ topology_template:
             requirements:
                 - checkout: checkout_component
                 - recommendation: recommendation_component
-                - host: docker_runtime
-                - host: kubernetes_runtime
+                - host: docker
+                - host: kubernetes
                 - host: gcp_cloudrun
 
         ###################################################
@@ -328,7 +328,7 @@ topology_template:
         #
         ###################################################
 
-        docker_runtime:
+        docker:
             type: docker.engine
             requirements:
                 - host: virtual_machine
@@ -410,7 +410,7 @@ topology_template:
         #
         ###################################################
 
-        kubernetes_runtime:
+        kubernetes:
             type: kubernetes
             conditions: {logic_expression: is_kubernetes}
             properties:

@@ -6,4 +6,3 @@ source configuration.sh
 
 # Pull dependencies
 $VINTNER template implement --dir ${TEMPLATE_DIR}
-

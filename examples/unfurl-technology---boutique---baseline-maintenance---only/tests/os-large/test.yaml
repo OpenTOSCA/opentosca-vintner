@@ -116,4 +116,4 @@ merge:
                 requirements:
                     - checkout: checkout_component
                     - recommendation: recommendation_component
-                    - host: docker_runtime
+                    - host: docker
