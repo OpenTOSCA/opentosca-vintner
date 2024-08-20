@@ -1,4 +1,4 @@
-env: ELASTIC
-tier: LARGE
+env: KUBERNETES
+medium: false
 optional_feature: true
 premium_feature: true

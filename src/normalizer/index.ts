@@ -281,7 +281,7 @@ export default class Normalizer {
                 assert.isString(rule.component)
 
                 /**
-                 * "host" is replaced in favor of "hosting"
+                 * "host" is deprecated
                  */
                 if (check.isDefined((rule as any).host))
                     throw new Error(`Technology rule must not define "host" but "hosting"`)

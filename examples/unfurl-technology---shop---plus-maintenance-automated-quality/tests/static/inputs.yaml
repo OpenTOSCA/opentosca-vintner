@@ -1,4 +1,4 @@
 env: STATIC
-tier: MEDIUM
+medium: true
 optional_feature: true
 premium_feature: true
