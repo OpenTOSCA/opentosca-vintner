@@ -24,9 +24,15 @@ import path from 'path'
 export type TemplateImplementOptions = {
     dir: string
     orchestrator: string
+    experimental: string
 }
 
 export default async function (options: TemplateImplementOptions) {
+    /**
+     * Experimental
+     */
+    assert.isTrue(options.experimental)
+
     /**
      * Orchestrator
      */
@@ -44,9 +50,13 @@ export default async function (options: TemplateImplementOptions) {
      * Init
      */
     files.createDirectory(lib)
-    files.copy(path.join(TECHNOLOGIES_DIR, 'types.yaml'), path.join(lib, 'types.yaml'), {overwrite: false})
     files.copy(path.join(TECHNOLOGIES_DIR, 'base.yaml'), path.join(lib, 'base.yaml'))
     files.copy(path.join(TECHNOLOGIES_DIR, 'extended.yaml'), path.join(lib, 'extended.yaml'))
+    files.storeYAML(
+        path.join(lib, 'types.yaml'),
+        {tosca_definitions_version: 'tosca_simple_yaml_1_3', imports: ['extended.yaml']},
+        {overwrite: false}
+    )
     files.storeYAML(path.join(lib, 'rules.yaml'), registry().rules, {notice: true})
 
     /**
