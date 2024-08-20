@@ -5,7 +5,6 @@ import Node from '#graph/node'
 import {bratify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
 import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
-import {constructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export const TECHNOLOGY_DEFAULT_WEIGHT = 1
@@ -29,13 +28,8 @@ export default class Technology extends Element {
         this.container = data.container
         this.index = data.index
 
-        // TODO: is this default value redundant due to implementation enrichment?
-        this.assign =
-            data.raw.assign ??
-            constructImplementationName({
-                type: this.container.getType().name,
-                rule: {component: this.name, technology: this.name},
-            })
+        assert.isDefined(data.raw.assign, `${this.Display} not normalized`)
+        this.assign = data.raw.assign
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false

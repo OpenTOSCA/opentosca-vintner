@@ -4,6 +4,7 @@ topology_template:
     variability:
         options:
             technology_required: false
+            enrich_technologies: false
 
     inputs:
         some_input:

@@ -61,6 +61,7 @@ export type NormalizationOptions = {
 
 export type EnricherOptions = {
     enrich_input_condition?: boolean
+    enrich_technologies?: boolean
 }
 
 export type ConstraintsOptions = {

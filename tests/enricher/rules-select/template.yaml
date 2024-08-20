@@ -10,6 +10,9 @@ topology_template:
             terraform:
                 - component: application
 
+        options:
+            enrich_technologies: true
+
     node_templates:
         application:
             type: application

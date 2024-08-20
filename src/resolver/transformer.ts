@@ -268,6 +268,7 @@ export default class Transformer {
         // Ignore if previously had no technologies
         if (utils.isEmpty(element.technologies)) return
 
+        // Present technology
         const technology = element.technologies.find(it => it.present)
         if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
 

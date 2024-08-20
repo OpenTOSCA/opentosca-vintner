@@ -3,6 +3,7 @@ import * as check from '#check'
 import Technology from '#graph/technology'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
+import {isAbstract} from '#technologies/utils'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -28,30 +29,6 @@ export default class Node extends Element {
     readonly properties: Property[] = []
     readonly propertiesMap: Map<String, Property[]> = new Map()
     readonly technologies: Technology[] = []
-
-    get technologyRequired() {
-        /**
-         * If an empty technology array has been modeled, then the node requires a technology
-         *
-         if (check.isDefined(data.raw.technology)) {
-         assert.isArray(data.raw.technology, `Technology of ${this.display} not normalized`)
-         this.technologyRequired = utils.isEmpty(data.raw.technology)
-         } else {
-         this.technologyRequired = false
-         }
-         */
-
-        /**
-         * If type is abstract, then no technology is required
-        const type = this.graph.inheritance.getNodeType(this.getType().name)
-        assert.isDefined(type, `Node type "${type} does not exist`)
-        return !isAbstract(type)
-         */
-
-        // TODO: implemet this
-
-        return false
-    }
 
     readonly weight: number = 1
 
@@ -86,6 +63,15 @@ export default class Node extends Element {
 
     get toscaId() {
         return this.name
+    }
+
+    /**
+     * Technology is required if type is not abstract
+     */
+    get technologyRequired() {
+        const type = this.graph.inheritance.getNodeType(this.getType().name)
+        assert.isDefined(type, `Node type "${this.getType().name}" does not exist`)
+        return !isAbstract(type)
     }
 
     get persistent() {

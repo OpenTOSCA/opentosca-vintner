@@ -7,6 +7,7 @@ topology_template:
                   - source:
                         conditions:
                             - {node_presence: source, _generated: true}
+              technology: []
               conditions:
                   - {and: [], _generated: true}
                   - {equal: [value, value]}
@@ -21,6 +22,7 @@ topology_template:
                   - target:
                         conditions:
                             - {node_presence: target, _generated: true}
+              technology: []
               conditions:
                   - {and: [{has_incoming_relation: target}, {has_artifact: target}], _generated: true}
               properties:

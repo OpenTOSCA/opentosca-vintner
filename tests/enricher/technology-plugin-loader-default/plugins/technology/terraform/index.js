@@ -6,7 +6,7 @@ module.exports = {
     build: (graph) => {
         return {
             assign: (node) => {
-                return [{ [technology.name()]: {} }];
+                return [{ [technology.name()]: { assign: "this-is-assigned" } }];
             }
         };
     }

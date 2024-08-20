@@ -13,7 +13,7 @@ export class ElementEnricher {
         /**
          * Enrich technologies
          */
-        this.enrichTechnologies()
+        if (this.graph.options.enricher.technologies) this.enrichTechnologies()
     }
 
     private enrichTechnologies() {

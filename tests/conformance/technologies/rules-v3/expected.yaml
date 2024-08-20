@@ -5,10 +5,16 @@ node_types:
         derived_from: tosca.nodes.Root
     ansible_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     terraform_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     ansible_terraform_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     database:
         derived_from: tosca.nodes.Root
     dbms:
@@ -17,7 +23,7 @@ node_types:
 topology_template:
     node_templates:
         application:
-            type: application::ansible::ansible_terraform_host
+            type: application~application::terraform@ansible_terraform_host
             requirements:
                 - host: ansible_terraform_host
                 - database: database
@@ -26,9 +32,9 @@ topology_template:
             type: ansible_terraform_host
 
         database:
-            type: database::terraform
+            type: database~database::terraform
             requirements:
                 - host: dbms
 
         dbms:
-            type: dbms::terraform
+            type: dbms~dbms::terraform

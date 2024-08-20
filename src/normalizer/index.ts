@@ -12,6 +12,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
+import {constructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export default class Normalizer {
@@ -236,24 +237,15 @@ export default class Normalizer {
      * Transform technologies to array of extended notation
      */
     private normalizeTechnologies(template: NodeTemplate) {
-        // No technology is required (implicitly modeled)
-        if (check.isUndefined(template.technology)) template.technology = this.options.technologyRequired
-
-        // No technology is required (manually modeled)
-        if (check.isFalse(template.technology)) {
-            delete template.technology
-            return
-        }
-
-        // Technology is required (will later throw if no technology candidates are found)
-        if (check.isTrue(template.technology)) template.technology = []
+        // Assign empty array if undefined
+        if (check.isUndefined(template.technology)) template.technology = []
 
         // Technology is directly assigned but in its short notation
         if (check.isString(template.technology)) {
             template.technology = [{[template.technology]: {}}]
         }
 
-        // No, one, or multiple technologies are assigned but already as array
+        // None, one, or multiple technologies are assigned but already as array
         if (check.isArray(template.technology)) {
             // Do nothing
         }
@@ -265,6 +257,21 @@ export default class Normalizer {
         template.technology = template.technology.map(it => {
             const entry = utils.firstEntry(it)
             return {[entry[0].toLowerCase()]: entry[1]}
+        })
+
+        // Default assign is "${node_type}~${node_type}::${technology}"
+        template.technology.forEach(map => {
+            const [technologyName, technologyTemplate] = utils.firstEntry(map)
+
+            assert.isArray(template.type)
+            const type = utils.firstKey(utils.first(template.type))
+
+            technologyTemplate.assign =
+                technologyTemplate.assign ??
+                constructImplementationName({
+                    type,
+                    rule: {component: type, technology: technologyName},
+                })
         })
     }
 

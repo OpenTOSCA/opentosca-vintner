@@ -5,10 +5,16 @@ node_types:
         derived_from: tosca.nodes.Root
     ansible_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     terraform_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     ansible_terraform_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     database:
         derived_from: tosca.nodes.Root
     dbms:
@@ -33,22 +39,22 @@ topology_template:
               conditions: []
               technology:
                   - terraform:
-                        assign: application::terraform::terraform_host
+                        assign: application~application::terraform@terraform_host
                         conditions:
                             - {node_presence: terraform_host, _generated: true}
 
                   - terraform:
-                        assign: application::terraform::ansible_terraform_host
+                        assign: application~application::terraform@ansible_terraform_host
                         conditions:
                             - {node_presence: ansible_terraform_host, _generated: true}
 
                   - ansible:
-                        assign: application::ansible::ansible_host
+                        assign: application~application::ansible@ansible_host
                         conditions:
                             - {node_presence: ansible_host, _generated: true}
 
                   - ansible:
-                        assign: application::ansible::ansible_terraform_host
+                        assign: application~application::ansible@ansible_terraform_host
                         conditions:
                             - {node_presence: ansible_terraform_host, _generated: true}
 
@@ -56,18 +62,21 @@ topology_template:
               type:
                   - ansible_host:
                         conditions: []
+              technology: []
               conditions: []
 
         - terraform_host:
               type:
                   - terraform_host:
                         conditions: []
+              technology: []
               conditions: []
 
         - ansible_terraform_host:
               type:
                   - ansible_terraform_host:
                         conditions: []
+              technology: []
               conditions: []
 
         - database:
@@ -76,7 +85,7 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
-                        assign: database::terraform
+                        assign: database~database::terraform
                         conditions: []
               requirements:
                   - host:
@@ -90,6 +99,6 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
-                        assign: dbms::terraform
+                        assign: dbms~dbms::terraform
                         conditions: []
               conditions: []

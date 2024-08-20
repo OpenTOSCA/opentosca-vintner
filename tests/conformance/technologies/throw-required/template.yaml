@@ -26,7 +26,7 @@ topology_template:
         technology_assignment_rules:
             terraform:
                 - component: another
-                  host: another_terraform_host
+                  hosting: another_terraform_host
 
     node_templates:
         application:

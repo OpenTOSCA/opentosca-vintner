@@ -119,8 +119,8 @@ export default class Inheritance {
         return this.graph.serviceTemplate[key] ?? ({} as {[key: string]: T})
     }
 
-    private getType(name: string, key: keyof EntityTypes) {
-        return Object.keys(this.getTypes(key)).includes(name)
+    private getType<T extends EntityType>(name: string, key: keyof EntityTypes) {
+        return this.getTypes<T>(key)[name]
     }
 
     private isType(is: string, question: string, key: keyof EntityTypes, fallback: string) {

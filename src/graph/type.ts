@@ -99,12 +99,24 @@ export default class Type extends Element {
     }
 
     isA(name: string) {
+        if (this.container.isArtifact()) {
+            return this.graph.inheritance.isArtifactType(this.name, name)
+        }
+
+        if (this.container.isGroup()) {
+            return this.graph.inheritance.isGroupType(this.name, name)
+        }
+
         if (this.container.isNode()) {
             return this.graph.inheritance.isNodeType(this.name, name)
         }
 
-        if (this.container.isArtifact()) {
-            return this.graph.inheritance.isArtifactType(this.name, name)
+        if (this.container.isPolicy()) {
+            return this.graph.inheritance.isPolicyType(this.name, name)
+        }
+
+        if (this.container.isRelation()) {
+            return this.graph.inheritance.isRelationshipType(this.name, name)
         }
 
         throw new Error(`${this.Display} does not support checking type inheritance`)

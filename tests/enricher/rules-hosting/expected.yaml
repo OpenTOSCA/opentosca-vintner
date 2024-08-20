@@ -3,20 +3,41 @@ tosca_definitions_version: tosca_variability_1_0
 node_types:
     application:
         derived_from: tosca.nodes.Root
+
     first_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     first_host_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     first_host_host_first_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     first_host_host_second_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     second_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     third_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
     fourth_host:
         derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
 
 topology_template:
     node_templates:
@@ -39,7 +60,7 @@ topology_template:
                         conditions: []
               technology:
                   - terraform:
-                        assign: application::terraform::first_host::first_host_host::first_host_host_second_host
+                        assign: application~application::terraform@first_host->first_host_host->first_host_host_second_host
                         conditions:
                             - and:
                                   - node_presence: first_host
@@ -47,7 +68,7 @@ topology_template:
                                   - node_presence: first_host_host_second_host
                               _generated: true
                   - terraform:
-                        assign: application::terraform::second_host
+                        assign: application~application::terraform@second_host
                         conditions:
                             - node_presence: second_host
                               _generated: true
@@ -56,6 +77,7 @@ topology_template:
               type:
                   - first_host:
                         conditions: []
+              technology: []
               requirements:
                   - host:
                         node: first_host_host
@@ -65,6 +87,7 @@ topology_template:
               type:
                   - first_host_host:
                         conditions: []
+              technology: []
               requirements:
                   - host:
                         node: first_host_host_first_host
@@ -77,24 +100,29 @@ topology_template:
               type:
                   - first_host_host_first_host:
                         conditions: []
+              technology: []
               conditions: []
         - first_host_host_second_host:
               type:
                   - first_host_host_second_host:
                         conditions: []
+              technology: []
               conditions: []
         - second_host:
               type:
                   - second_host:
                         conditions: []
+              technology: []
               conditions: []
         - third_host:
               type:
                   - third_host:
                         conditions: []
+              technology: []
               conditions: []
         - fourth_host:
               type:
                   - fourth_host:
                         conditions: []
+              technology: []
               conditions: []

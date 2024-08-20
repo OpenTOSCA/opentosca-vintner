@@ -18,7 +18,6 @@ export const GENERATION_NOTICE = `
 ################################################################
 `.trim()
 
-// TODO: introduce a real Rule object
 export type RuleData = {component: string; technology: string; artifact?: string; hosting?: string[]}
 
 export function constructImplementationName(data: {type: string; rule: RuleData}) {

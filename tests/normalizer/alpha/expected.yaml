@@ -27,6 +27,7 @@ topology_template:
         - application:
               type:
                   - docker.container.application: {}
+              technology: []
               requirements:
                   - host:
                         node: container
@@ -38,6 +39,7 @@ topology_template:
         - container:
               type:
                   - docker.container: {}
+              technology: []
               requirements:
                   - host:
                         node: engine
@@ -45,6 +47,7 @@ topology_template:
         - engine:
               type:
                   - docker.engine: {}
+              technology: []
               requirements:
                   - host:
                         node: vm
@@ -52,6 +55,7 @@ topology_template:
         - another_application:
               type:
                   - another.application: {}
+              technology: []
               requirements:
                   - host:
                         node: another_runtime
@@ -59,6 +63,7 @@ topology_template:
         - another_runtime:
               type:
                   - another.runtime: {}
+              technology: []
               requirements:
                   - host:
                         node: vm
@@ -66,10 +71,12 @@ topology_template:
         - vm:
               type:
                   - openstack.vm: {}
+              technology: []
 
         - magic:
               type:
                   - magic: {}
+              technology: []
               requirements:
                   - magic:
                         node: application

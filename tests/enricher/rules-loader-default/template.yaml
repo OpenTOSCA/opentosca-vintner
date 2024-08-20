@@ -5,6 +5,10 @@ node_types:
         derived_from: tosca.nodes.Root
 
 topology_template:
+    variability:
+        options:
+            enrich_technologies: true
+
     node_templates:
         application:
             type: application

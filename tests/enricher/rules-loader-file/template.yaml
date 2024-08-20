@@ -7,6 +7,10 @@ node_types:
 topology_template:
     variability:
         technology_assignment_rules: rules.yaml
+
+        options:
+            enrich_technologies: true
+
     node_templates:
         application:
             type: application
