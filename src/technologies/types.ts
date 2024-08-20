@@ -8,6 +8,7 @@ export type TechnologyPluginBuilder = {
 }
 
 export type TechnologyPlugin = {
+    // TODO: must assign technology.assign!
     assign: (node: Node) => TechnologyTemplateMap[]
     implement: (name: string, type: NodeType) => NodeTypeMap
 }

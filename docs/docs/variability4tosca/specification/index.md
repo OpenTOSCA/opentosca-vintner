@@ -245,14 +245,14 @@ The following options are used to configure checks.
 
 The following options are used to configure the solver.
 
-| Keyname                          | Mandatory | Type                          | Default | Description                                               |
-|----------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
-| optimization_topology            | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering topology.              | 
-| optimization_topology_unique     | false     | Boolean                       | true    | Enable check for unique results considering topology.     |
-| optimization_topology_mode       | false     | count &#124; weight           | weight  | Configure optimization mode considering topology.         |
-| optimization_technologies        | false     | Boolean &#124; min &#124; max | false   | Enable optimization considering technologies.             | 
-| optimization_technologies_unique | false     | Boolean                       | false   | Enable check for unique results considering technologies. | 
-| optimization_technologies_mode   | false     | count &#124; weight           | count   | Configure optimization mode considering technologies.     | 
+| Keyname                          | Mandatory | Type                                    | Default | Description                                               |
+|----------------------------------|-----------|-----------------------------------------|---------|-----------------------------------------------------------|
+| optimization_topology            | false     | Boolean &#124; min &#124; max           | false   | Configure optimization considering topology.              | 
+| optimization_topology_unique     | false     | Boolean                                 | true    | Enable check for unique results considering topology.     |
+| optimization_topology_mode       | false     | count &#124; weight                     | weight  | Configure optimization mode considering topology.         |
+| optimization_technologies        | false     | Boolean &#124; min &#124; max           | false   | Enable optimization considering technologies.             | 
+| optimization_technologies_unique | false     | Boolean                                 | false   | Enable check for unique results considering technologies. | 
+| optimization_technologies_mode   | false     | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.     | 
 
 ### Normalization Options
 

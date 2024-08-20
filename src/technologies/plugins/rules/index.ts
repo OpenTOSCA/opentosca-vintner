@@ -64,7 +64,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     },
                 })
 
-                // TODO: rename generators to rules?!
                 const generatorName = constructRuleName({
                     component: rule.component,
                     technology,
@@ -124,7 +123,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
                 if (!node.getType().isA(rule.component)) continue
 
-                // TODO: add this condition
                 let artifactCondition: LogicExpression | undefined
                 if (check.isDefined(rule.artifact)) {
                     // TODO: check if node template has artifact

@@ -4,7 +4,7 @@ import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
 import {METADATA, PROPERTIES} from './types'
 
-// TODO: consider inherited types
+// TODO: next: consider inherited types
 export function mapProperties(
     type: NodeType,
     options: {quote?: boolean; format?: 'map' | 'list' | 'ini'; ignore?: string[]} = {}
@@ -336,7 +336,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
     }
 }
 
-// TODO: support that operation is a path to a file, e.g., via artifact types ...
+// TODO: support that operation is a path to a file, e.g., via artifact types ... (or even inline Ansible or Terraform)
 export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'copy management operation',
@@ -352,7 +352,7 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
 export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'call management operation',
-        // TODO: does this work?
+        // TODO: next: does this work?
         'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
         args: {
             chdir: '{{ SELF.application_directory }}',

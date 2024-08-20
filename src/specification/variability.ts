@@ -14,10 +14,6 @@ export type VariabilityDefinition = {
     plugins?: PluginDefinitionMap
 }
 
-export type Inheritance = {
-    [key: string]: string
-}
-
 export type VariabilityInputDefinitionMap = {[key: string]: VariabilityInputDefinition}
 export type VariabilityInputDefinition = {
     type: string
@@ -51,7 +47,6 @@ export type SolverOptions = {
     // Technologies
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
-    // TODO: add "weight-count" to docs
     optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 }
 

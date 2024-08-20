@@ -11,7 +11,6 @@ const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
     hosting: ['gcp.cloudsql'],
-    // TODO: still state that eg Terraform is more specialized? google.cloud is way more limited in contrast to the terraform gcp module? also applies then to the other use cases where ansible is used in the context of gcp
     weight: 1,
     comment: 'Primary use case due to the specialization of Ansible.',
 

@@ -22,11 +22,7 @@ export type ImplementationGenerator = {
     artifact?: string
     hosting?: string[]
     generate: (name: string, type: NodeType) => NodeType
-
-    // TODO: this
     weight: number
-
-    // TODO: this
     comment: string
 }
 
@@ -44,6 +40,8 @@ export abstract class ImplementationGenerator2 {
     abstract component: string
     abstract artifact?: string
     abstract hosting?: string[]
+    abstract weight: number
+    abstract comment: string
 
     abstract generate(name: string, type: NodeType): NodeType
 }

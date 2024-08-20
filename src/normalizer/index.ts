@@ -307,6 +307,8 @@ export default class Normalizer {
         }
     }
 
+    // TODO: normalize more types
+
     private normalizeNodeTypes() {
         for (const [name, type] of Object.entries(this.serviceTemplate.node_types ?? {})) {
             if (check.isUndefined(type.derived_from)) type.derived_from = NODE_TYPE_ROOT

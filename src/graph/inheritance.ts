@@ -116,7 +116,7 @@ export default class Inheritance {
     }
 
     private getTypes<T extends EntityType>(key: keyof EntityTypes) {
-        return this.graph.serviceTemplate[key] ?? ({} as {[key: string]: T})
+        return (this.graph.serviceTemplate[key] ?? {}) as {[key: string]: T}
     }
 
     private getType<T extends EntityType>(name: string, key: keyof EntityTypes) {
