@@ -18,7 +18,6 @@ import {
     isImplementation,
 } from '#technologies/utils'
 import * as utils from '#utils'
-import _ from 'lodash'
 import path from 'path'
 
 export type TemplateImplementOptions = {
@@ -92,32 +91,34 @@ export default async function (options: TemplateImplementOptions) {
             std.log(`ignoring file "${file}" since it does not define Node Types`)
             continue
         }
+
         const implementations: {[key: string]: NodeType} = {}
 
-        Object.entries(templateData.node_types)
-            .filter(([name, type]) => {
-                // Ignore generated implementations
-                if (isGenerated(type)) return false
+        for (const [baseName, baseType] of Object.entries(templateData.node_types)) {
+            // Ignore generated implementations
+            if (isGenerated(baseType)) continue
 
-                // Ignore manual modeled implementations
-                if (isImplementation(name)) return false
+            // Ignore manual modeled implementations
+            if (isImplementation(baseName)) continue
 
-                // Ignore manual ignored types
-                if (!isGenerate(type)) return false
+            // Ignore manual ignored types
+            if (!isGenerate(baseType)) continue
 
-                // Ignore abstract types
-                if (isAbstract(type)) return false
+            // Ignore abstract types
+            if (isAbstract(baseType)) continue
 
-                // Otherwise include
-                return true
-            })
-            .forEach(([name, type]) => {
-                std.log(`processing node type "${name}"`)
-                for (const plugin of graph.plugins.technology) {
-                    // TODO: check that there are no collisions?
-                    _.merge(implementations, plugin.implement(name, type))
+            std.log(`processing node type "${baseType}"`)
+
+            for (const plugin of graph.plugins.technology) {
+                for (const [implementationName, implementationType] of Object.entries(
+                    plugin.implement(baseName, baseType)
+                )) {
+                    if (check.isDefined(implementations[implementationName]))
+                        throw new Error(`Implementation "${implementationName}" is already defined`)
+                    implementations[implementationName] = implementationType
                 }
-            })
+            }
+        }
 
         if (utils.isEmpty(implementations)) {
             std.log(`no implementations must be written`)

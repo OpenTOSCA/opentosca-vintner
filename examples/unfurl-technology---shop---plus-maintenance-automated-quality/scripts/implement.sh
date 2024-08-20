@@ -5,4 +5,4 @@ set -e
 source configuration.sh
 
 # Implement types
-$VINTNER template implement --dir ${TEMPLATE_DIR}
+$VINTNER template implement --dir ${TEMPLATE_DIR} --experimental

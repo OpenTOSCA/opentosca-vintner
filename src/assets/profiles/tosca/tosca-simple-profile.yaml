@@ -5,6 +5,7 @@ metadata:
 
 data_types:
     tosca.datatypes.Root:
+        derived_from: tosca.entity.Root
         description: The TOSCA root Data Type all other TOSCA base Data Types derive from
 
     tosca.datatypes.json:
@@ -104,6 +105,7 @@ data_types:
 
 artifact_types:
     tosca.artifacts.Root:
+        derived_from: tosca.entity.Root
         description: The TOSCA Artifact Type all other TOSCA Artifact Types derive from
 
     tosca.artifacts.File:
@@ -142,6 +144,7 @@ artifact_types:
 
 capability_types:
     tosca.capabilities.Root:
+        derived_from: tosca.entity.Root
         description: The TOSCA root Capability Type all other TOSCA Capability Types derive from
 
     tosca.capabilities.Node:
@@ -303,6 +306,7 @@ capability_types:
 
 relationship_types:
     tosca.relationships.Root:
+        derived_from: tosca.entity.Root
         description: The TOSCA root Relationship Type all other TOSCA base Relationship Types derive from
         attributes:
             tosca_id:
@@ -685,10 +689,12 @@ node_types:
 group_types:
     tosca.groups.Root:
         description: The TOSCA Group Type all other TOSCA Group Types derive from
+        derived_from: tosca.entity.Root
 
 policy_types:
     tosca.policies.Root:
         description: The TOSCA Policy Type all other TOSCA Policy Types derive from
+        derived_from: tosca.entity.Root
 
     tosca.policies.Placement:
         derived_from: tosca.policies.Root

@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import {GroupTemplateMap} from '#spec/group-template'
+import {EntityTypesKeys} from '#spec/service-template'
 import {TopologyTemplate} from '#spec/topology-template'
 import {LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
@@ -26,8 +27,7 @@ export default class Transformer {
         this.cleanVariabilityDefinition()
 
         // Remove loaded types
-        this.cleanNodeTypes()
-        this.cleanArtifactTypes()
+        this.cleanTypes()
     }
 
     private removeVariabilityGroups() {
@@ -208,19 +208,16 @@ export default class Transformer {
         if (utils.isEmpty(this.topology.variability)) delete this.topology.variability
     }
 
-    private cleanNodeTypes() {
-        if (check.isUndefined(this.graph.serviceTemplate.node_types)) return
-        for (const [name, type] of Object.entries(this.graph.serviceTemplate.node_types)) {
-            if (type._loaded) delete this.graph.serviceTemplate.node_types[name]
-        }
-        if (utils.isEmpty(this.graph.serviceTemplate.node_types)) delete this.graph.serviceTemplate.node_types
-    }
+    private cleanTypes() {
+        for (const key of EntityTypesKeys) {
+            const types = this.graph.serviceTemplate[key]
+            if (check.isUndefined(types)) return
 
-    private cleanArtifactTypes() {
-        if (check.isUndefined(this.graph.serviceTemplate.artifact_types)) return
-        for (const [name, type] of Object.entries(this.graph.serviceTemplate.artifact_types)) {
-            if (type._loaded) delete this.graph.serviceTemplate.artifact_types[name]
+            for (const [name, type] of Object.entries(types)) {
+                if (type._loaded) delete types[name]
+            }
+
+            if (utils.isEmpty(this.graph.serviceTemplate[key])) delete this.graph.serviceTemplate[key]
         }
-        if (utils.isEmpty(this.graph.serviceTemplate.artifact_types)) delete this.graph.serviceTemplate.artifact_types
     }
 }

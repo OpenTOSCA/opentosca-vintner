@@ -1,4 +1,5 @@
 import {ArtifactDefinition} from '#spec/artifact-definitions'
+import {EntityType} from '#spec/entity-type'
 import {InterfaceDefinition} from './interface-definition'
 
 /**
@@ -10,17 +11,13 @@ export const NODE_TYPE_ROOT = 'tosca.nodes.Root'
 
 export type NodeTypeMap = {[key: string]: NodeType}
 
-export type NodeType = {
-    derived_from?: string
-    metadata?: {[key: string]: string}
+export type NodeType = EntityType & {
     properties?: {[key: string]: PropertyDefinition}
     attributes?: {[key: string]: AttributeDefinition}
     capabilities?: {[key: string]: CapabilityDefinition}
     requirements?: {[key: string]: RequirementDefinition}
     interfaces?: {[key: string]: InterfaceDefinition}
     artifacts?: {[key: string]: ArtifactDefinition}
-    _loaded?: boolean
-    _file?: string
 }
 
 export type PropertyDefinition = {

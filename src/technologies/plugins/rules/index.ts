@@ -135,7 +135,10 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
 
                     // Check for artifact in type
-                    const hasArtifactInType = this.graph.inheritance.hasArtifact(node.getType().name, rule.artifact)
+                    const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
+                        node.getType().name,
+                        rule.artifact
+                    )
 
                     // Ignore if artifact not found
                     if (!hasArtifactInTemplate && !hasArtifactInType) continue

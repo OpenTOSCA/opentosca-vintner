@@ -7,6 +7,8 @@ tags:
 
 # EDMM Compliance Specification 1.0 Release Candidate
 
+{{ experimental_notice() }}
+
 This document specifies how to achieve EDMM compliance when modeling and gives additional insights.
 This document does not specify how to achieve EDMM compatibility on a technical level.
 The specification is under active development and is not backwards compatible with any previous versions.
@@ -28,20 +30,22 @@ The specification is under active development and is not backwards compatible wi
 
 ## Software Applications
 
-1. A `software.application` node template always requires a `source.archive`, `system.package`, or `container.image` deployment artifact.
-1. A `software.application` node template with an `source.archive` deployment artifact always requires the `start` operation and the `stop` operation. 
-
+1. A `software.application` node template always requires a `source.archive` or `system.package` deployment artifact.
+1. A `software.application` node template with an `source.archive` deployment artifact always requires the `start` operation and the `stop` operation.
 1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `virtual.machine` or `gcp.appengine` node template as host.
 1. A `software.application` node template with a `system.package` deployment artifact implicitly requires an `virtual.machine` node template as host.
-1. A `software.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
 
 
 ## Service Applications
 
-1. A `service.application` node template on a `virtual.machine` host is started as `systemd service`.
-1. A `service.appcliation` always requires a  `source.archive` deployment artifact. 
+1. A `service.application` node template on a `virtual.machine` host is started as `systemd` service.
+1. A `service.appcliation` always requires a  `source.archive` or `container.image` deployment artifact. 
 1. A `service.application` does not require a `stop` operation.
+1. A `service.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
 
+## Virtual Machine 
+
+1. A `virtual.machine` node template always requires a `virtual.machine.image` deployment artifact.
 
 ## Management Operations
 
@@ -78,6 +82,7 @@ The specification is under active development and is not backwards compatible wi
 1. A `source.archive` deployment artifact is extracted into the application directory.
 1. A node template can have conditional deployment artifacts.
 1. A node type cannot have conditional deployment artifacts.
+1. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
 
 
 ## Technology Rules

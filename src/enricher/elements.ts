@@ -35,7 +35,7 @@ export class ElementEnricher {
                 // Assign each possible technology assignment
                 candidates.forEach(it => this.graph.addTechnology(node, it))
             } else {
-                // Continue if, e.g., no rules at all exists (for backwards compatibility and testing purposed)
+                // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
                 if (utils.isEmpty(this.graph.plugins.technology)) continue
 
                 // Do not override manual assigned technologies but enrich them with an implementation

@@ -12,8 +12,6 @@ metadata:
 # See also https://github.com/UST-EDMM/edmm/blob/7f550a19155a702474f512e54ff2ddb148c003dd/docs/types.yml
 # and https://github.com/OpenTOSCA/opentosca-vintner/blob/838a5f3896aff309a0e89786fd2d7997503e1e17/docs/docs/sofdcar/tosca-simple-profile.yaml
 
-# https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_ARTIFACT_DEF
-
 artifact_types:
     ###################################################
     #
@@ -74,10 +72,9 @@ artifact_types:
     #
     ###################################################
 
-    # file contains repo/image:tag
+    # expects image reference in "file"
     container.image:
         derived_from: root
-        # TODO: add auth
 
     ###################################################
     #
@@ -85,6 +82,7 @@ artifact_types:
     #
     ###################################################
 
+    # expects image reference in "file"
     virtual.machine.image:
         derived_from: root
 

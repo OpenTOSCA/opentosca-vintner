@@ -2,10 +2,11 @@ import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
 import {PROFILES_DIR} from '#files'
-import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {EntityTypesKeys, ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
+import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import path from 'path'
 
@@ -166,53 +167,62 @@ export default class Loader {
     }
 
     private async loadTypes() {
+        /**
+         * Preconditions
+         */
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
-        if (check.isUndefined(this.serviceTemplate.node_types)) this.serviceTemplate.node_types = {}
-        if (check.isUndefined(this.serviceTemplate.artifact_types)) this.serviceTemplate.artifact_types = {}
 
+        /**
+         * Candidates
+         */
         const candidates = files.walkDirectory(PROFILES_DIR, {extensions: ['yaml', 'yml']})
 
+        /**
+         * Lib
+         */
         const lib = path.join(this.dir, 'lib')
         if (files.exists(lib)) candidates.push(...files.walkDirectory(lib, {extensions: ['yaml', 'yml']}))
 
-        for (const file of candidates) {
-            const template = files.loadYAML<ServiceTemplate>(file)
+        /**
+         * Load types of each file
+         */
+        for (const candidate of candidates) {
+            const template = files.loadYAML<ServiceTemplate>(candidate)
+
+            /**
+             * Ensure YAML file is a TOSCA service template
+             */
             if (check.isUndefined(template.tosca_definitions_version)) continue
 
+            /**
+             * Ensure version
+             */
             if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3)
                 throw new Error(`TOSCA definitions version "${template.tosca_definitions_version}" not supported`)
 
-            // TODO: load all types (and clean loaded ones)
+            /**
+             * Load types for each collection
+             */
+            for (const key of EntityTypesKeys) {
+                if (check.isUndefined(this.serviceTemplate[key])) this.serviceTemplate[key] = {}
+                const types = this.serviceTemplate[key]
+                if (check.isUndefined(types)) throw new UnexpectedError()
 
-            if (check.isDefined(template.node_types)) {
-                for (const [name, type] of Object.entries(template.node_types)) {
-                    if (Object.hasOwn(this.serviceTemplate.node_types, name))
-                        throw new Error(`Node type "${name}" duplicated in service template "${file}"`)
+                const loaded = template[key]
+                if (check.isUndefined(loaded)) continue
+
+                for (const [name, type] of Object.entries(loaded)) {
+                    if (check.isDefined(types[name])) {
+                        throw new Error(`${key} "${name}" duplicated in service template "${candidate}"`)
+                    }
+
+                    if (type.derived_from === name) throw new Error(`${key} "${name}" is derived from itself...`)
 
                     type._loaded = true
-                    type._file = file
-                    this.serviceTemplate.node_types[name] = type
+                    type._file = candidate
+                    types[name] = type
                 }
             }
-
-            if (check.isDefined(template.artifact_types)) {
-                for (const [name, type] of Object.entries(template.artifact_types)) {
-                    if (Object.hasOwn(this.serviceTemplate.artifact_types, name))
-                        throw new Error(`Artifact type "${name}" duplicated in service template "${file}"`)
-
-                    type._loaded = true
-                    type._file = file
-                    this.serviceTemplate.artifact_types[name] = type
-                }
-            }
-        }
-
-        for (const [name, type] of Object.entries(this.serviceTemplate.node_types)) {
-            if (type.derived_from === name) throw new Error(`Node type "${name}" is derived from itself...`)
-        }
-
-        for (const [name, type] of Object.entries(this.serviceTemplate.artifact_types)) {
-            if (type.derived_from === name) throw new Error(`Artifact type "${name}" is derived from itself...`)
         }
     }
 }
