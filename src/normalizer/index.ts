@@ -3,7 +3,11 @@ import * as check from '#check'
 import {NormalizationOptions} from '#graph/options'
 import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {
+    ARTIFACT_DEFINITION_DEFAULT_TYPE,
+    ArtifactDefinitionList,
+    ArtifactDefinitionMap,
+} from '#spec/artifact-definitions'
 import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
 import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
 import {DATA_TYPE_ROOT} from '#spec/data-type'
@@ -237,8 +241,13 @@ export default class Normalizer {
     private normalizeArtifact(map: ArtifactDefinitionMap) {
         const [name, template] = utils.firstEntry(map)
 
-        if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
-        if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
+        if (check.isObject(template) && check.isUndefined(template.type)) {
+            template.type = ARTIFACT_DEFINITION_DEFAULT_TYPE
+        }
+
+        if (check.isString(template)) {
+            map[name] = {file: template, type: ARTIFACT_DEFINITION_DEFAULT_TYPE}
+        }
 
         const updated = map[name]
         assert.isObject(updated)

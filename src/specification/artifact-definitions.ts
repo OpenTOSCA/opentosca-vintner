@@ -5,7 +5,7 @@
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {VariabilityAlternative} from '#spec/variability'
 
-export const ARTIFACT_DEFINITION_DEFAULT_TYPE = 'tosca.artifacts.Files'
+export const ARTIFACT_DEFINITION_DEFAULT_TYPE = 'tosca.artifacts.File'
 
 export type ArtifactDefinition = string | ExtendedArtifactDefinition
 
