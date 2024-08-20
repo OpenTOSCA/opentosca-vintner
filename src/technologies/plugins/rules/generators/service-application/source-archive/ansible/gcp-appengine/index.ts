@@ -1,14 +1,14 @@
+import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
+    SecureApplicationProtocolPropertyDefinition,
     SourceArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: application_address etc
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -26,6 +26,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
+                ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),
             },
             interfaces: {
@@ -96,8 +97,34 @@ const generator: ImplementationGenerator = {
                                             name: 'create app',
                                             shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet',
                                         },
+
+                                        // https://cloud.google.com/sdk/gcloud/reference/app/browse
+                                        {
+                                            name: 'browse app',
+                                            register: 'browse_app',
+                                            shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet ',
+                                        },
+                                        {
+                                            name: 'set attributes',
+                                            set_fact: {
+                                                application_address: '{{ browse_app.stdout[8:] | trim }}',
+                                                application_endpoint:
+                                                    '{{ SELF.application_protocol }}://{{ browse_app.stdout[8:] | trim }}:443',
+                                            },
+                                        },
                                     ],
                                 },
+                                resultTemplate: files.toYAML({
+                                    name: 'SELF',
+                                    attributes: {
+                                        application_address: '{{ outputs.application_address | trim }}',
+                                        application_endpoint: '{{ outputs.application_endpoint | trim }}',
+                                    },
+                                }),
+                            },
+                            outputs: {
+                                application_address: null,
+                                application_endpoint: null,
                             },
                         },
                         delete: {

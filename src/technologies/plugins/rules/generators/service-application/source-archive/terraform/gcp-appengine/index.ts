@@ -4,12 +4,13 @@ import {
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
+    SecureApplicationProtocolPropertyDefinition,
     SourceArchiveFile,
     TerraformStandardOperations,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: application_address etc
+// TODO: application port is now 443
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -27,6 +28,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
+                ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),
             },
             interfaces: {
@@ -56,6 +58,18 @@ const generator: ImplementationGenerator = {
                                         credentials: '{{ SELF.gcp_service_account_file }}',
                                         project: '{{ SELF.gcp_project }}',
                                         region: '{{ SELF.gcp_region }}',
+                                    },
+                                ],
+                            },
+                            output: {
+                                application_address: [
+                                    {
+                                        value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com',
+                                    },
+                                ],
+                                application_endpoint: [
+                                    {
+                                        value: '{{ SELF.application_protocol }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443',
                                     },
                                 ],
                             },
