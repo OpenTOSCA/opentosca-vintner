@@ -4,10 +4,17 @@ import {NormalizationOptions} from '#graph/options'
 import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
 import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
+import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
+import {DATA_TYPE_ROOT} from '#spec/data-type'
 import {GroupTemplateMap} from '#spec/group-template'
+import {GROUP_TYPE_ROOT} from '#spec/group-type'
+import {INTERFACE_TYPE_ROOT} from '#spec/interface-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {NODE_TYPE_ROOT} from '#spec/node-type'
+import {POLICY_TYPE_ROOT} from '#spec/policy-type'
 import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
+import {RELATIONSHIP_TYPE_ROOT} from '#spec/relationship-type'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
@@ -49,8 +56,15 @@ export default class Normalizer {
         // Technology rules
         this.normalizeTechnologyRules()
 
-        // Node Types
+        // Types
+        this.normalizeArtifactTypes()
+        this.normalizeCapabilityTypes()
+        this.normalizeDataTypes()
+        this.normalizeGroupTypes()
+        this.normalizeInterfaceTypes()
         this.normalizeNodeTypes()
+        this.normalizePolicyTypes()
+        this.normalizeRelationshipTypes()
 
         // Clean variability definition
         this.cleanVariabilityDefinition()
@@ -307,11 +321,51 @@ export default class Normalizer {
         }
     }
 
-    // TODO: normalize more types
+    private normalizeArtifactTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.artifact_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = ARTIFACT_TYPE_ROOT
+        }
+    }
+
+    private normalizeCapabilityTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.capability_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = CAPABILITY_TYPE_ROOT
+        }
+    }
+
+    private normalizeDataTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.data_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = DATA_TYPE_ROOT
+        }
+    }
+
+    private normalizeGroupTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.group_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = GROUP_TYPE_ROOT
+        }
+    }
+
+    private normalizeInterfaceTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.interface_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = INTERFACE_TYPE_ROOT
+        }
+    }
 
     private normalizeNodeTypes() {
         for (const [name, type] of Object.entries(this.serviceTemplate.node_types ?? {})) {
             if (check.isUndefined(type.derived_from)) type.derived_from = NODE_TYPE_ROOT
+        }
+    }
+
+    private normalizePolicyTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.policy_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = POLICY_TYPE_ROOT
+        }
+    }
+
+    private normalizeRelationshipTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.relationship_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = RELATIONSHIP_TYPE_ROOT
         }
     }
 
