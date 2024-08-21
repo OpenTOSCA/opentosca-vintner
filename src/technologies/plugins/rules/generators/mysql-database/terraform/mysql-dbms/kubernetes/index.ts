@@ -10,6 +10,8 @@ import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technol
 // use jobs?
 // use https://registry.terraform.io/modules/magnolia-sre/kubectl-cmd/kubernetes/latest
 
+// use https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
