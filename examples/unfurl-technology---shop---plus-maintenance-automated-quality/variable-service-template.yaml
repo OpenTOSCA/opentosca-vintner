@@ -115,13 +115,9 @@ topology_template:
                 - container_image:
                       type: docker.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
-                      conditions: {node_presence: kubernetes_cluster}
-
                 - source_archive:
                       type: source.archive
                       file: files/shop.source.zip
-                      # TODO: here would be default_alternative with scope by container and not just by name good! NOT WITH AUTOSELECTION on type! then we have both advantages!
-                      conditions: {or: [{node_presence: node_runtime}, {node_presence: gcp_appengine}]}
 
         shop_ingress:
             type: ingress
