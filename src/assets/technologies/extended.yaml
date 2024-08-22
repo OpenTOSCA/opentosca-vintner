@@ -21,6 +21,8 @@ node_types:
 
     node.runtime:
         derived_from: software.runtime
+        metadata:
+            vintner_normative: 'true'
         artifacts:
             system_package:
                 type: system.package
@@ -38,6 +40,7 @@ node_types:
     node.service.application:
         derived_from: service.application
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             application_language:
@@ -58,6 +61,8 @@ node_types:
 
     python.runtime:
         derived_from: software.runtime
+        metadata:
+            vintner_normative: 'true'
         artifacts:
             system_package:
                 type: system.package
@@ -77,6 +82,7 @@ node_types:
     python.service.application:
         derived_from: service.application
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             application_language:
@@ -98,6 +104,7 @@ node_types:
     binary.service.application:
         derived_from: service.application
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         interfaces:
             management:
@@ -114,6 +121,7 @@ node_types:
     gcp.provider:
         derived_from: cloud.provider
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             _hosting:
@@ -144,6 +152,7 @@ node_types:
     gcp.service:
         derived_from: cloud.service
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             _hosting:
@@ -157,6 +166,8 @@ node_types:
 
     gcp.cloudrun:
         derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
@@ -164,6 +175,8 @@ node_types:
 
     gcp.cloudsql:
         derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
@@ -171,6 +184,8 @@ node_types:
 
     gcp.appengine:
         derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
@@ -185,6 +200,8 @@ node_types:
 
     gcp.appenginereporting:
         derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
@@ -192,6 +209,8 @@ node_types:
 
     gcp.cloudbuild:
         derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
@@ -205,7 +224,8 @@ node_types:
 
     docker.engine:
         derived_from: container.runtime
-
+        metadata:
+            vintner_normative: 'true'
         properties:
             application_name:
                 type: string
@@ -238,6 +258,7 @@ node_types:
     kubernetes.cluster:
         derived_from: cloud.service
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
         properties:
@@ -276,6 +297,7 @@ node_types:
     openstack.provider:
         derived_from: cloud.provider
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
         properties:
@@ -318,6 +340,8 @@ node_types:
 
     mysql.dbms:
         derived_from: relational.dbms
+        metadata:
+            vintner_normative: 'true'
 
         properties:
             dbms_name:
@@ -364,6 +388,8 @@ node_types:
 
     mysql.database:
         derived_from: relational.database
+        metadata:
+            vintner_normative: 'true'
 
         properties:
             database_name:

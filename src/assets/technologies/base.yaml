@@ -21,6 +21,8 @@ artifact_types:
 
     root:
         derived_from: tosca.entity.Root
+        metadata:
+            vintner_normative: 'true'
 
     ###################################################
     #
@@ -31,6 +33,8 @@ artifact_types:
     source.archive:
         derived_from: root
         description: 'application packaged as zip archive'
+        metadata:
+            vintner_normative: 'true'
 
     ###################################################
     #
@@ -40,6 +44,8 @@ artifact_types:
 
     system.package:
         derived_from: root
+        metadata:
+            vintner_normative: 'true'
         properties:
             script:
                 type: string
@@ -75,6 +81,8 @@ artifact_types:
     # expects image reference in "file"
     container.image:
         derived_from: root
+        metadata:
+            vintner_normative: 'true'
 
     ###################################################
     #
@@ -85,13 +93,19 @@ artifact_types:
     # expects image reference in "file"
     virtual.machine.image:
         derived_from: root
+        metadata:
+            vintner_normative: 'true'
 
 interface_types:
     root:
         derived_from: tosca.entity.Root
+        metadata:
+            vintner_normative: 'true'
 
     management:
         derived_from: root
+        metadata:
+            vintner_normative: 'true'
         operations:
             create:
             configure:
@@ -110,6 +124,7 @@ node_types:
         derived_from: tosca.nodes.Root
         metadata:
             vintner_abstract: 'true'
+            vintner_normative: 'true'
 
     ###################################################
     #
@@ -120,8 +135,8 @@ node_types:
     cloud.provider:
         derived_from: root
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
-
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -135,8 +150,8 @@ node_types:
     cloud.service:
         derived_from: root
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
-
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -155,6 +170,7 @@ node_types:
     software.application:
         derived_from: root
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
         properties:
@@ -234,6 +250,7 @@ node_types:
     service.application:
         derived_from: software.application
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
         properties:
@@ -263,6 +280,7 @@ node_types:
     software.runtime:
         derived_from: software.application
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
         capabilities:
             - host:
@@ -278,6 +296,7 @@ node_types:
     container.runtime:
         derived_from: software.runtime
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
     ###################################################
@@ -288,6 +307,8 @@ node_types:
 
     virtual.machine:
         derived_from: root
+        metadata:
+            vintner_normative: 'true'
 
         properties:
             machine_name:
@@ -340,21 +361,25 @@ node_types:
     database:
         derived_from: root
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
     relational.database:
         derived_from: database
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
     dbms:
         derived_from: root
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
     relational.dbms:
         derived_from: dbms
         metadata:
+            vintner_normative: 'true'
             vintner_abstract: 'true'
 
     ###################################################
@@ -365,7 +390,8 @@ node_types:
 
     ingress:
         derived_from: root
-
+        metadata:
+            vintner_normative: 'true'
         properties:
             application_name:
                 type: string

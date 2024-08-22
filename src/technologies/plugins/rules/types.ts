@@ -9,6 +9,7 @@ export enum METADATA {
     VINTNER_GENERATED = 'vintner_generated',
     VINTNER_ORCHESTRATOR = 'vintner_orchestrator',
     VINTNER_ABSTRACT = 'vintner_abstract',
+    VINTNER_NORMATIVE = 'vintner_normative',
 }
 
 export enum PROPERTIES {
