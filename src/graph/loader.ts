@@ -1,11 +1,12 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
-import {PROFILES_DIR} from '#files'
+import {PROFILES_DIR, YAML_EXTENSIONS} from '#files'
 import {EntityTypesKeys, ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
+import {TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
 import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import path from 'path'
@@ -106,8 +107,8 @@ export default class Loader {
          * Load rules from default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, 'rules.yaml'))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'rules.yaml'))
+            if (files.exists(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))
             }
         }
 
@@ -115,8 +116,10 @@ export default class Loader {
          * Load rules from other default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, 'lib', 'rules.yaml'))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'lib', 'rules.yaml'))
+            if (files.exists(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(
+                    path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME)
+                )
             }
         }
 
@@ -175,13 +178,13 @@ export default class Loader {
         /**
          * Candidates
          */
-        const candidates = files.walkDirectory(PROFILES_DIR, {extensions: ['yaml', 'yml']})
+        const candidates = files.walkDirectory(PROFILES_DIR, {extensions: YAML_EXTENSIONS})
 
         /**
          * Lib
          */
         const lib = path.join(this.dir, 'lib')
-        if (files.exists(lib)) candidates.push(...files.walkDirectory(lib, {extensions: ['yaml', 'yml']}))
+        if (files.exists(lib)) candidates.push(...files.walkDirectory(lib, {extensions: YAML_EXTENSIONS}))
 
         /**
          * Load types of each file

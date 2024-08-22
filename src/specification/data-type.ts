@@ -7,3 +7,5 @@ import {EntityType} from '#spec/entity-type'
 export const DATA_TYPE_ROOT = 'tosca.datatypes.Root'
 
 export type DataType = EntityType
+
+export type DataTypeMap = {[key: string]: DataType}

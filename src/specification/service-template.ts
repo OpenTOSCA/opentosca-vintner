@@ -2,16 +2,16 @@
  * Service Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969451}
  */
-import {ArtifactType} from '#spec/artifact-type'
-import {CapabilityType} from '#spec/capability-type'
-import {DataType} from '#spec/data-type'
+import {ArtifactTypeMap} from '#spec/artifact-type'
+import {CapabilityTypeMap} from '#spec/capability-type'
+import {DataTypeMap} from '#spec/data-type'
 import {ImportDefinition} from '#spec/import-definition'
-import {InterfaceType} from '#spec/interface-type'
+import {InterfaceTypeMap} from '#spec/interface-type'
 import {Metadata} from '#spec/metadata'
-import {NodeType} from '#spec/node-type'
-import {PolicyType} from '#spec/policy-type'
-import {RelationshipType} from '#spec/relationship-type'
-import {GroupType} from './group-type'
+import {NodeTypeMap} from '#spec/node-type'
+import {PolicyTypeMap} from '#spec/policy-type'
+import {RelationshipTypeMap} from '#spec/relationship-type'
+import {GroupTypeMap} from './group-type'
 import {TopologyTemplate} from './topology-template'
 
 export enum TOSCA_DEFINITIONS_VERSION {
@@ -31,14 +31,14 @@ export type ServiceTemplate = {
 } & EntityTypes
 
 export type EntityTypes = {
-    artifact_types?: {[key: string]: ArtifactType}
-    data_types?: {[key: string]: DataType}
-    capability_types?: {[key: string]: CapabilityType}
-    interface_types?: {[key: string]: InterfaceType}
-    relationship_types?: {[key: string]: RelationshipType}
-    node_types?: {[key: string]: NodeType}
-    group_types?: {[key: string]: GroupType}
-    policy_types?: {[key: string]: PolicyType}
+    artifact_types?: ArtifactTypeMap
+    data_types?: DataTypeMap
+    capability_types?: CapabilityTypeMap
+    interface_types?: InterfaceTypeMap
+    relationship_types?: RelationshipTypeMap
+    node_types?: NodeTypeMap
+    group_types?: GroupTypeMap
+    policy_types?: PolicyTypeMap
 }
 
 export const EntityTypesKeys: (keyof EntityTypes)[] = [

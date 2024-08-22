@@ -22,11 +22,12 @@ import xml2js from 'xml2js'
 import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
-export const TECHNOLOGIES_DIR = path.resolve(ASSETS_DIR, 'technologies')
 export const PROFILES_DIR = path.resolve(ASSETS_DIR, 'profiles')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 export const SCRIPTS_DIR = path.resolve(ASSETS_DIR, 'scripts')
 export const TMP_PREFIX = 'opentosca-vintner--'
+
+export const YAML_EXTENSIONS = ['yaml', 'yml']
 
 export function exists(file: string) {
     return fss.existsSync(file)
@@ -115,7 +116,7 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
     return file
 }
 
-export function storeYAML(file: string, data: any | string, options: {notice?: boolean; overwrite?: boolean} = {}) {
+export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; overwrite?: boolean} = {}) {
     options.notice = options.notice ?? false
     options.overwrite = options.overwrite ?? true
 
@@ -130,7 +131,7 @@ export function storeYAML(file: string, data: any | string, options: {notice?: b
 
 `.trimStart()
 
-    let output = check.isString(data) ? data : toYAML(data)
+    let output = toYAML(data)
     if (options.notice) {
         output = notice + output
     }
@@ -156,8 +157,22 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
+export function formatYAML(obj: any) {
+    return prettier.format(obj, {
+        parser: 'yaml',
+        endOfLine: 'lf',
+        bracketSpacing: false,
+        singleQuote: true,
+        trailingComma: 'es5',
+        arrowParens: 'avoid',
+        tabWidth: 4,
+        printWidth: 69420,
+        semi: false,
+    })
+}
+
 export function toYAML(obj: any, options?: yaml.DumpOptions) {
-    return prettier.format(
+    return formatYAML(
         yaml.dump(
             obj,
             _.merge<yaml.DumpOptions, yaml.DumpOptions | undefined>(
@@ -170,18 +185,7 @@ export function toYAML(obj: any, options?: yaml.DumpOptions) {
                 },
                 options
             )
-        ),
-        {
-            parser: 'yaml',
-            endOfLine: 'lf',
-            bracketSpacing: false,
-            singleQuote: true,
-            trailingComma: 'es5',
-            arrowParens: 'avoid',
-            tabWidth: 4,
-            printWidth: 69420,
-            semi: false,
-        }
+        )
     )
 }
 

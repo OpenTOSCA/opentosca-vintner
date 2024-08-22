@@ -31,7 +31,7 @@ topology_template:
         ###################################################
 
         shop:
-            type: shop.component~service.application#container.image::kubernetes@kubernetes.cluster
+            type: shop.component~service.application#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: unfurl-technology-shop
                 DB_NAME: unfurl-technology-shop
@@ -45,7 +45,7 @@ topology_template:
                 - host: kubernetes_cluster
             artifacts:
                 container_image:
-                    type: container.image
+                    type: docker.image
                     file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
 
         shop_ingress:
