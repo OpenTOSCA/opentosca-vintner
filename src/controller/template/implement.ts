@@ -1,9 +1,10 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
+import {YAML_EXTENSIONS} from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
-import NormativeBaseTypes from '#normative/base'
+import {NORMATIVE_BASE_TYPES, NORMATIVE_BASE_TYPES_FILENAME} from '#normative/base'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
@@ -13,7 +14,7 @@ import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
     GENERATION_NOTICE,
-    TECHNOLOGY_RULES_FILE_NAME,
+    TECHNOLOGY_RULES_FILENAME,
     isAbstract,
     isGenerate,
     isGenerated,
@@ -21,7 +22,7 @@ import {
 } from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
-import NormativeSpecificTypes from 'src/normative/specific'
+import {NORMATIVE_SPECIFIC_TYPES, NORMATIVE_SPECIFIC_TYPES_FILENAME} from 'src/normative/specific'
 
 export type TemplateImplementOptions = {
     dir: string
@@ -52,14 +53,14 @@ export default async function (options: TemplateImplementOptions) {
     /**
      * Normative Base Types
      */
-    files.storeYAML<ServiceTemplate>(path.join(lib, NormativeBaseTypes.filename), NormativeBaseTypes.template, {
+    files.storeYAML<ServiceTemplate>(path.join(lib, NORMATIVE_BASE_TYPES_FILENAME), NORMATIVE_BASE_TYPES, {
         notice: true,
     })
 
     /**
      * Normative Specific Types
      */
-    files.storeYAML<ServiceTemplate>(path.join(lib, NormativeSpecificTypes.filename), NormativeSpecificTypes.template, {
+    files.storeYAML<ServiceTemplate>(path.join(lib, NORMATIVE_SPECIFIC_TYPES_FILENAME), NORMATIVE_SPECIFIC_TYPES, {
         notice: true,
     })
 
@@ -68,14 +69,17 @@ export default async function (options: TemplateImplementOptions) {
      */
     files.storeYAML<ServiceTemplate>(
         path.join(lib, 'types.yaml'),
-        {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3, imports: ['specific.yaml']},
+        {
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
+            imports: [NORMATIVE_SPECIFIC_TYPES_FILENAME],
+        },
         {overwrite: false}
     )
 
     /**
      * Technology Rules
      */
-    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILE_NAME), registry().rules, {
+    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILENAME), registry().rules, {
         notice: true,
     })
 
@@ -88,7 +92,7 @@ export default async function (options: TemplateImplementOptions) {
     /**
      * Implement
      */
-    for (const file of files.walkDirectory(lib, {extensions: ['yaml', 'yml']})) {
+    for (const file of files.walkDirectory(lib, {extensions: YAML_EXTENSIONS})) {
         std.log(`processing file "${file}"`)
 
         const templateString = files.loadFile(file)

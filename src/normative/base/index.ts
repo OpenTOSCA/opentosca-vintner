@@ -10,7 +10,9 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
  * and https://github.com/OpenTOSCA/opentosca-vintner/blob/838a5f3896aff309a0e89786fd2d7997503e1e17/docs/docs/sofdcar/tosca-simple-profile.yaml
  */
 
-const template: ServiceTemplate = {
+export const NORMATIVE_BASE_TYPES_FILENAME = 'base.yaml'
+
+export const NORMATIVE_BASE_TYPES: ServiceTemplate = {
     tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
     description: 'OpenTOSCA Vintner - Normative Base Types (Unfurl)',
     metadata: {
@@ -20,10 +22,3 @@ const template: ServiceTemplate = {
     interface_types: interfaces,
     node_types: nodes,
 }
-
-const NormativeBaseTypes = {
-    filename: 'base.yaml',
-    template,
-}
-
-export default NormativeBaseTypes
