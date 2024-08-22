@@ -5,6 +5,7 @@ import {YAML_EXTENSIONS} from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import {NORMATIVE_BASE_TYPES, NORMATIVE_BASE_TYPES_FILENAME} from '#normative/base'
+import {NORMATIVE_SPECIFIC_TYPES, NORMATIVE_SPECIFIC_TYPES_FILENAME} from '#normative/specific'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
@@ -22,7 +23,6 @@ import {
 } from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
-import {NORMATIVE_SPECIFIC_TYPES, NORMATIVE_SPECIFIC_TYPES_FILENAME} from 'src/normative/specific'
 
 export type TemplateImplementOptions = {
     dir: string
