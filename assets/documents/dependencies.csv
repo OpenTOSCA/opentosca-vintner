@@ -179,6 +179,7 @@
 "pend@1.2.0","MIT","https://github.com/andrewrk/node-pend"
 "picomatch@2.3.1","MIT","https://github.com/micromatch/picomatch"
 "pify@2.3.0","MIT","https://github.com/sindresorhus/pify"
+"prettier@2.8.7","MIT","https://github.com/prettier/prettier"
 "process-nextick-args@2.0.1","MIT","https://github.com/calvinmetcalf/process-nextick-args"
 "process@0.11.10","MIT","https://github.com/shtylman/node-process"
 "proxy-addr@2.0.7","MIT","https://github.com/jshttp/proxy-addr"
