@@ -1,5 +1,10 @@
-expected: ../../../unfurl-technology---shop---variant-static-large/tests/tau/expected.yaml
+expected: ../../../unfurl-technology---shop---variant-elastic/tests/tau/expected.yaml
+replace:
+    - - database_terraform
+      - database
 
+    - - shop_terraform
+      - shop
 merge:
     topology_template:
         node_templates:

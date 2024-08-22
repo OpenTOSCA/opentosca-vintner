@@ -1,7 +1,0 @@
-expected: ../../../unfurl-technology---shop---variant-static---only/tests/tau/expected.yaml
-replace:
-    - - database_ansible
-      - database
-
-    - - shop_ansible
-      - shop

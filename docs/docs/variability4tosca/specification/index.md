@@ -270,7 +270,8 @@ The following options are used to configure the enricher.
 | Keyname                | Mandatory | Type                          | Default | Description                                                                                                           |
 |------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
 | enrich_input_condition | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
-| enrich_technologies    | false     | Boolean                       | false   | Enable if technoloiges are enriched.                                                                                  |
+| enrich_technologies    | false     | Boolean                       | false   | Enable if technologies are enriched.                                                                                  |
+| enrich_implementations | false     | Boolean                       | false   | Enable if implementations are enriched.                                                                               |
 
 
 ### Constraints Options
@@ -327,6 +328,7 @@ technology_required: false
 unconsumed_input_check: false
 unproduced_output_check: false
 enrich_technologies: true
+enrich_implementations: true
 ```
 
 ### RC v3
@@ -353,6 +355,7 @@ relation_default_implied: true
 technology_required: true
 checks: false
 enrich_technologies: true
+enrich_implementations: true
 ```
 
 

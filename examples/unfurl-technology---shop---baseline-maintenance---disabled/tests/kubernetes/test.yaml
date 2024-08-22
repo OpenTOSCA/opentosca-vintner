@@ -1,5 +1,13 @@
 expected: ../../../unfurl-technology---shop---variant-kubernetes/tests/tau/expected.yaml
+replace:
+    - - database_ansible
+      - database
 
+    - - mysql_dbms_kubernetes
+      - mysql_dbms
+
+    - - shop_kubernetes
+      - shop
 merge:
     topology_template:
         node_templates:

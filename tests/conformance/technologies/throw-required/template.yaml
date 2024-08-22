@@ -25,8 +25,11 @@ topology_template:
 
         technology_assignment_rules:
             terraform:
-                - component: another
-                  hosting: another_terraform_host
+                - component: ansible_host
+                - component: terraform_host
+                - component: ansible_terraform_host
+                - component: database
+                - component: dbms
 
     node_templates:
         application:

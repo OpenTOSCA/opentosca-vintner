@@ -945,6 +945,7 @@ export class NormalizationOptions extends BaseOptions {
 export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
     readonly technologies: boolean
+    readonly implementations: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -964,6 +965,9 @@ export class EnricherOptions extends BaseOptions {
             this.technologies = this.raw.enrich_technologies ?? false
         }
         assert.isBoolean(this.technologies)
+
+        this.implementations = this.raw.enrich_implementations ?? true
+        assert.isBoolean(this.implementations)
     }
 }
 

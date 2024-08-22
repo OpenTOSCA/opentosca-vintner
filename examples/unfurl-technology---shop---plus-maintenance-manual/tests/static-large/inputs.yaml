@@ -1,4 +1,4 @@
 env: STATIC
-medium: false
+tier: LARGE
 optional_feature: true
 premium_feature: true
