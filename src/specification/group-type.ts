@@ -14,3 +14,5 @@ export const GROUP_TYPE_ROOT = 'tosca.groups.Root'
 export type GroupType = EntityType & {members?: GroupMember[]}
 
 export type GroupMember = string | [string, string] | [string, number]
+
+export type GroupTypeMap = {[key: string]: GroupType}

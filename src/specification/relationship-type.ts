@@ -7,3 +7,5 @@ import {EntityType} from '#spec/entity-type'
 export const RELATIONSHIP_TYPE_ROOT = 'tosca.relationship.Root'
 
 export type RelationshipType = EntityType
+
+export type RelationshipTypeMap = {[key: string]: RelationshipType}

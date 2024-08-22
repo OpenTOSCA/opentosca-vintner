@@ -7,3 +7,5 @@ import {EntityType} from '#spec/entity-type'
 export const ARTIFACT_TYPE_ROOT = 'tosca.artifacts.Root'
 
 export type ArtifactType = EntityType
+
+export type ArtifactTypeMap = {[key: string]: ArtifactType}

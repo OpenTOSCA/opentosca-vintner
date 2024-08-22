@@ -7,3 +7,5 @@ import {EntityType} from '#spec/entity-type'
 export const POLICY_TYPE_ROOT = 'tosca.policies.Root'
 
 export type PolicyType = EntityType
+
+export type PolicyTypeMap = {[key: string]: PolicyType}

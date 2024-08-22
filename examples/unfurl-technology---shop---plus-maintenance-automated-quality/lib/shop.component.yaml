@@ -57,7 +57,7 @@ node_types:
     #
     ################################################################
 
-    shop.component~service.application#container.image::ansible@gcp.cloudrun:
+    shop.component~service.application#docker.image::ansible@gcp.cloudrun:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -174,7 +174,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    shop.component~service.application#container.image::ansible@kubernetes.cluster:
+    shop.component~service.application#docker.image::ansible@kubernetes.cluster:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -371,7 +371,7 @@ node_types:
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
-    shop.component~service.application#container.image::ansible@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -476,7 +476,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -489,16 +489,16 @@ node_types:
                                       copy:
                                           dest: /etc/systemd/system/{{ SELF.application_name }}.service
                                           content: |
-
+    
                                               [Unit]
                                               After=network.target
-
+    
                                               [Service]
                                               Type=simple
                                               ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
                                               WorkingDirectory={{ SELF.application_directory }}
                                               EnvironmentFile={{ SELF.application_directory }}/.env
-
+    
                                               [Install]
                                               WantedBy=multi-user.target
                                     - name: enable service
@@ -540,7 +540,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -574,7 +574,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -605,7 +605,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -639,7 +639,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
@@ -729,7 +729,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -759,7 +759,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -793,7 +793,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -827,7 +827,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -857,7 +857,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
@@ -936,7 +936,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -966,7 +966,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -996,7 +996,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -1026,7 +1026,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -1056,7 +1056,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-
+    
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
@@ -1073,7 +1073,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~service.application#container.image::terraform@gcp.cloudrun:
+    shop.component~service.application#docker.image::terraform@gcp.cloudrun:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1157,7 +1157,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: '{{ SELF.application_name }}'
-    shop.component~service.application#container.image::terraform@kubernetes.cluster:
+    shop.component~service.application#docker.image::terraform@kubernetes.cluster:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1348,7 +1348,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}'
-    shop.component~service.application#container.image::terraform@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1446,7 +1446,7 @@ node_types:
         metadata:
             vintner_generated: 'true'
         properties: {}
-    shop.component~service.application#container.image::kubernetes@kubernetes.cluster:
+    shop.component~service.application#docker.image::kubernetes@kubernetes.cluster:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1538,7 +1538,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    shop.component~service.application#container.image::compose@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::compose@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'

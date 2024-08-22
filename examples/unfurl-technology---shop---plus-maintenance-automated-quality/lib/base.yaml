@@ -5,43 +5,19 @@
 ###################################################
 
 tosca_definitions_version: tosca_simple_yaml_1_3
-
+description: OpenTOSCA Vintner - Normative Base Types (Unfurl)
 metadata:
     vintner_orchestrator: unfurl
-
-# See also https://github.com/UST-EDMM/edmm/blob/7f550a19155a702474f512e54ff2ddb148c003dd/docs/types.yml
-# and https://github.com/OpenTOSCA/opentosca-vintner/blob/838a5f3896aff309a0e89786fd2d7997503e1e17/docs/docs/sofdcar/tosca-simple-profile.yaml
-
 artifact_types:
-    ###################################################
-    #
-    # Root
-    #
-    ###################################################
-
     root:
         derived_from: tosca.entity.Root
         metadata:
             vintner_normative: 'true'
-
-    ###################################################
-    #
-    # Source Archive
-    #
-    ###################################################
-
     source.archive:
         derived_from: root
-        description: 'application packaged as zip archive'
+        description: application packaged as zip archive
         metadata:
             vintner_normative: 'true'
-
-    ###################################################
-    #
-    # Software Package
-    #
-    ###################################################
-
     system.package:
         derived_from: root
         metadata:
@@ -50,58 +26,42 @@ artifact_types:
             script:
                 type: string
                 required: false
-                description: 'URL of an installation script'
+                description: URL of an installation script
             repository:
                 type: string
                 required: false
-                description: 'name of the repository (required if source is set)'
+                description: name of the repository (required if source is set)
             key:
                 type: string
                 required: false
-                description: 'URL of the apt key which signs the apt repository (required if source is set)'
+                description: URL of the apt key which signs the apt repository (required if source is set)
             source:
                 type: string
                 required: false
-                description: 'source of the repository'
+                description: source of the repository
             dependencies:
                 type: string
                 required: false
-                description: 'Comma separated list of apt packages that are additionally installed'
+                description: Comma separated list of apt packages that are additionally installed
             env:
                 type: string
                 default: ''
-                description: 'Space separated env variables'
-
-    ###################################################
-    #
-    # Container Image
-    #
-    ###################################################
-
-    # expects image reference in "file"
+                description: Space separated env variables
     container.image:
         derived_from: root
+        description: expects image reference in "file"
         metadata:
             vintner_normative: 'true'
-
-    ###################################################
-    #
-    # Virtual Machine Image
-    #
-    ###################################################
-
-    # expects image reference in "file"
     virtual.machine.image:
         derived_from: root
+        description: expects image reference in "file"
         metadata:
             vintner_normative: 'true'
-
 interface_types:
     root:
         derived_from: tosca.entity.Root
         metadata:
             vintner_normative: 'true'
-
     management:
         derived_from: root
         metadata:
@@ -112,26 +72,12 @@ interface_types:
             start:
             stop:
             delete:
-
 node_types:
-    ###################################################
-    #
-    # Root
-    #
-    ###################################################
-
     root:
         derived_from: tosca.nodes.Root
         metadata:
             vintner_abstract: 'true'
             vintner_normative: 'true'
-
-    ###################################################
-    #
-    # Cloud Provider
-    #
-    ###################################################
-
     cloud.provider:
         derived_from: root
         metadata:
@@ -140,13 +86,6 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-
-    ###################################################
-    #
-    # Cloud Service
-    #
-    ###################################################
-
     cloud.service:
         derived_from: root
         metadata:
@@ -155,28 +94,18 @@ node_types:
         capabilities:
             host:
                 type: tosca.capabilities.Compute
-
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
-
-    ###################################################
-    #
-    # Software Application
-    #
-    ###################################################
-
     software.application:
         derived_from: root
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
         properties:
             application_name:
                 type: string
-
             _management_create:
                 type: string
                 metadata:
@@ -187,7 +116,6 @@ node_types:
                         args:
                             - Management
                             - create
-
             _management_configure:
                 type: string
                 metadata:
@@ -198,7 +126,6 @@ node_types:
                         args:
                             - Management
                             - configure
-
             _management_start:
                 type: string
                 metadata:
@@ -209,7 +136,6 @@ node_types:
                         args:
                             - Management
                             - start
-
             _management_stop:
                 type: string
                 metadata:
@@ -220,7 +146,6 @@ node_types:
                         args:
                             - Management
                             - stop
-
             _management_delete:
                 type: string
                 metadata:
@@ -231,118 +156,79 @@ node_types:
                         args:
                             - Management
                             - delete
-
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
-
         interfaces:
             Management:
                 type: management
-
-    ###################################################
-    #
-    # Service Application
-    #
-    ###################################################
-
     service.application:
         derived_from: software.application
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
         properties:
             application_language:
                 type: string
-
             application_port:
                 type: string
-
             application_protocol:
                 type: string
-
         attributes:
             application_address:
                 type: string
-
             application_endpoint:
                 type: string
-                default: {concat: [{eval: '.::application_protocol'}, '://', {eval: '.::application_address'}, ':', {eval: '.::application_port'}]}
-
-    ###################################################
-    #
-    # Software Runtime
-    #
-    ###################################################
-
+                default:
+                    concat:
+                        - eval: .::application_protocol
+                        - '://'
+                        - eval: .::application_address
+                        - ':'
+                        - eval: .::application_port
     software.runtime:
         derived_from: software.application
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
         capabilities:
-            - host:
-                  capability: tosca.capabilities.Compute
-                  relationship: tosca.relationships.HostedOn
-
-    ###################################################
-    #
-    # Container Runtime
-    #
-    ###################################################
-
+            host:
+                type: tosca.capabilities.Compute
     container.runtime:
         derived_from: software.runtime
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
-    ###################################################
-    #
-    # Virtual Machine
-    #
-    ###################################################
-
     virtual.machine:
         derived_from: root
         metadata:
             vintner_normative: 'true'
-
         properties:
             machine_name:
                 type: string
-
             ports:
                 type: list
                 entry_schema:
                     type: integer
-
             flavor:
                 type: string
                 default: m1.medium
-
             network:
                 type: string
-
             ssh_user:
                 type: string
-
             ssh_key_name:
                 type: string
-
             ssh_key_file:
                 type: string
-
         attributes:
             management_address:
                 type: string
-
             application_address:
                 type: string
-                default: {eval: '.::management_address'}
-
+                default:
+                    eval: .::management_address
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -350,44 +236,28 @@ node_types:
                 type: unfurl.capabilities.Endpoint.Ansible
                 properties:
                     connection: ssh
-                    host: {eval: '.parent::management_address'}
-
-    ###################################################
-    #
-    # Database
-    #
-    ###################################################
-
+                    host:
+                        eval: .parent::management_address
     database:
         derived_from: root
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
     relational.database:
         derived_from: database
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
     dbms:
         derived_from: root
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
     relational.dbms:
         derived_from: dbms
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
-
-    ###################################################
-    #
-    # Ingress
-    #
-    ###################################################
-
     ingress:
         derived_from: root
         metadata:
@@ -395,25 +265,23 @@ node_types:
         properties:
             application_name:
                 type: string
-                default: {eval: '.::.requirements::[.name=application]::.target::application_name'}
-
+                default:
+                    eval: .::.requirements::[.name=application]::.target::application_name
             application_port:
                 type: string
-                default: {eval: '.::.requirements::[.name=application]::.target::application_port'}
-
+                default:
+                    eval: .::.requirements::[.name=application]::.target::application_port
             application_protocol:
                 type: string
-                default: {eval: '.::.requirements::[.name=application]::.target::application_protocol'}
-
+                default:
+                    eval: .::.requirements::[.name=application]::.target::application_protocol
         attributes:
             application_address:
                 type: string
-
         requirements:
             - application:
                   capability: tosca.capabilities.Endpoint
                   relationship: tosca.relationships.ConnectsTo
-
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
@@ -874,12 +742,12 @@ node_types:
                                                     curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
                                                     apt-get update
                                                     apt-get install caddy -y
-
+    
                                                     echo > /etc/caddy/Caddyfile
                                                     echo ":80 {" >> /etc/caddy/Caddyfile
                                                     echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
                                                     echo "}" >> /etc/caddy/Caddyfile
-
+    
                                                     systemctl reload caddy
                                                 destination: /tmp/install-ingress.sh
                                           remote-exec:

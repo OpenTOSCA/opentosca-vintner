@@ -7,3 +7,5 @@ import {EntityType} from '#spec/entity-type'
 export const CAPABILITY_TYPE_ROOT = 'tosca.capabilities.Root'
 
 export type CapabilityType = EntityType
+
+export type CapabilityTypeMap = {[key: string]: CapabilityType}

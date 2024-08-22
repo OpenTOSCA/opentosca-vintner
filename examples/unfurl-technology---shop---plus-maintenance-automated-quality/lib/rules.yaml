@@ -68,13 +68,13 @@ ansible:
       weight: 0.5
       comment: Docker is more specialized
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - gcp.cloudrun
       weight: 0
       comment: Custom module with imperative parts, while Terraform provides a declarative module.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
@@ -93,7 +93,7 @@ ansible:
       weight: 1
       comment: Primary use case due to the specialization of Ansible.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine
@@ -184,13 +184,13 @@ terraform:
       weight: 0.5
       comment: Docker is more specialized.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - gcp.cloudrun
       weight: 1
       comment: Terraform provides a declarative module.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
@@ -209,7 +209,7 @@ terraform:
       weight: 0.5
       comment: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine
@@ -254,7 +254,7 @@ kubernetes:
       weight: 0
       comment: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 1
@@ -274,7 +274,7 @@ compose:
       weight: 0
       comment: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
     - component: service.application
-      artifact: container.image
+      artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine

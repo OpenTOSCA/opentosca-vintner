@@ -6,6 +6,7 @@ import {EntityTypesKeys, ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
+import {TECHNOLOGY_RULES_FILE_NAME} from '#technologies/utils'
 import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import path from 'path'
@@ -106,8 +107,8 @@ export default class Loader {
          * Load rules from default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, 'rules.yaml'))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'rules.yaml'))
+            if (files.exists(path.join(this.dir, TECHNOLOGY_RULES_FILE_NAME))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, TECHNOLOGY_RULES_FILE_NAME))
             }
         }
 
@@ -115,8 +116,10 @@ export default class Loader {
          * Load rules from other default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, 'lib', 'rules.yaml'))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, 'lib', 'rules.yaml'))
+            if (files.exists(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILE_NAME))) {
+                rules = files.loadYAML<TechnologyAssignmentRulesMap>(
+                    path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILE_NAME)
+                )
             }
         }
 

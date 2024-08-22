@@ -22,7 +22,6 @@ import xml2js from 'xml2js'
 import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
-export const TECHNOLOGIES_DIR = path.resolve(ASSETS_DIR, 'technologies')
 export const PROFILES_DIR = path.resolve(ASSETS_DIR, 'profiles')
 export const TEMPLATES_DIR = path.resolve(ASSETS_DIR, 'templates')
 export const SCRIPTS_DIR = path.resolve(ASSETS_DIR, 'scripts')
@@ -115,7 +114,7 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
     return file
 }
 
-export function storeYAML(file: string, data: any | string, options: {notice?: boolean; overwrite?: boolean} = {}) {
+export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; overwrite?: boolean} = {}) {
     options.notice = options.notice ?? false
     options.overwrite = options.overwrite ?? true
 
@@ -130,7 +129,7 @@ export function storeYAML(file: string, data: any | string, options: {notice?: b
 
 `.trimStart()
 
-    let output = check.isString(data) ? data : toYAML(data)
+    let output = toYAML(data)
     if (options.notice) {
         output = notice + output
     }

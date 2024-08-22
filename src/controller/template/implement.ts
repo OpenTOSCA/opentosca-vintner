@@ -1,17 +1,19 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
-import {TECHNOLOGIES_DIR} from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import NormativeBaseTypes from '#normative/base'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import std from '#std'
 import registry from '#technologies/plugins/rules/registry'
 import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
     GENERATION_NOTICE,
+    TECHNOLOGY_RULES_FILE_NAME,
     isAbstract,
     isGenerate,
     isGenerated,
@@ -19,6 +21,7 @@ import {
 } from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
+import NormativeSpecificTypes from 'src/normative/specific'
 
 export type TemplateImplementOptions = {
     dir: string
@@ -44,19 +47,37 @@ export default async function (options: TemplateImplementOptions) {
      */
     assert.isDefined(options.dir, 'Directory not defined')
     const lib = path.join(options.dir, 'lib')
+    files.createDirectory(lib)
 
     /**
-     * Init
+     * Normative Base Types
      */
-    files.createDirectory(lib)
-    files.copy(path.join(TECHNOLOGIES_DIR, 'base.yaml'), path.join(lib, 'base.yaml'))
-    files.copy(path.join(TECHNOLOGIES_DIR, 'extended.yaml'), path.join(lib, 'extended.yaml'))
-    files.storeYAML(
+    files.storeYAML<ServiceTemplate>(path.join(lib, NormativeBaseTypes.filename), NormativeBaseTypes.template, {
+        notice: true,
+    })
+
+    /**
+     * Normative Specific Types
+     */
+    files.storeYAML<ServiceTemplate>(path.join(lib, NormativeSpecificTypes.filename), NormativeSpecificTypes.template, {
+        notice: true,
+    })
+
+    /**
+     * Types Import
+     */
+    files.storeYAML<ServiceTemplate>(
         path.join(lib, 'types.yaml'),
-        {tosca_definitions_version: 'tosca_simple_yaml_1_3', imports: ['extended.yaml']},
+        {tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3, imports: ['specific.yaml']},
         {overwrite: false}
     )
-    files.storeYAML(path.join(lib, 'rules.yaml'), registry().rules, {notice: true})
+
+    /**
+     * Technology Rules
+     */
+    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILE_NAME), registry().rules, {
+        notice: true,
+    })
 
     /**
      * Graph

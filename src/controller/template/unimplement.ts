@@ -1,7 +1,9 @@
 import * as assert from '#assert'
 import * as files from '#files'
+import NormativeBaseTypes from '#normative/base'
+import NormativeSpecificTypes from '#normative/specific'
 import std from '#std'
-import {GENERATION_MARK_REGEX} from '#technologies/utils'
+import {GENERATION_MARK_REGEX, TECHNOLOGY_RULES_FILE_NAME} from '#technologies/utils'
 import path from 'path'
 
 export type TemplateUnimplementOptions = {
@@ -15,9 +17,9 @@ export default async function (options: TemplateUnimplementOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
     const lib = path.join(options.dir, 'lib')
 
-    await files.removeFile(path.join(lib, 'base.yaml'))
-    await files.removeFile(path.join(lib, 'extended.yaml'))
-    await files.removeFile(path.join(lib, 'rules.yaml'))
+    await files.removeFile(path.join(lib, NormativeBaseTypes.filename))
+    await files.removeFile(path.join(lib, NormativeSpecificTypes.filename))
+    await files.removeFile(path.join(lib, TECHNOLOGY_RULES_FILE_NAME))
 
     for (const file of files.walkDirectory(lib, {extensions: ['yaml', 'yml']})) {
         const templateString = files.loadFile(file)

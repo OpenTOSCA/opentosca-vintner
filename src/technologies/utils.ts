@@ -3,6 +3,8 @@ import {NodeType} from '#spec/node-type'
 import {METADATA} from '#technologies/plugins/rules/types'
 import * as utils from '#utils'
 
+export const TECHNOLOGY_RULES_FILE_NAME = 'rules.yaml'
+
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 
 export const GENERATION_MARK_REGEX = new RegExp(
