@@ -8,6 +8,9 @@ topology_template:
         database_password:
             type: string
 
+        dbms_password:
+            type: string
+
         gcp_region:
             type: string
 
@@ -18,11 +21,17 @@ topology_template:
             type: string
 
     node_templates:
+        ###################################################
+        #
+        # Shop
+        #
+        ###################################################
+
         shop:
-            type: shop.component::terraform::gcp.appengine
+            type: shop.component~service.application#source.archive::terraform@gcp.appengine
             properties:
-                application_name: unfurl-technology
-                DB_NAME: unfurl-technology
+                application_name: unfurl-technology-shop
+                DB_NAME: unfurl-technology-shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
@@ -30,20 +39,64 @@ topology_template:
                 DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
-                - host: gcp_runtime
+                - host: gcp_appengine
+            artifacts:
+                source_archive:
+                    type: source.archive
+                    file: files/shop.source.zip
+
+        ###################################################
+        #
+        # Database
+        #
+        ###################################################
 
         database:
-            type: mysql.database::terraform::gcp.cloudsql
+            type: mysql.database~mysql.database::terraform@mysql.dbms->gcp.cloudsql
             properties:
-                database_name: unfurl-technology
+                database_name: unfurl-technology-shop-database
+                database_user: unfurl-technology-shop-user
+                database_password: {get_input: database_password}
             requirements:
-                - host: gcp_dbms
+                - host: mysql_dbms
 
-        gcp_dbms:
-            type: gcp.cloudsql::terraform
+        mysql_dbms:
+            type: mysql.dbms~mysql.dbms::terraform@gcp.cloudsql
             properties:
-                instance_name: unfurl-technology
-                root_password: {get_input: database_password}
+                dbms_name: unfurl-technology-shop-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: gcp_cloudsql
 
-        gcp_runtime:
-            type: gcp.appengine::terraform
+        ###################################################
+        #
+        # GCP
+        #
+        ###################################################
+
+        gcp_appengine:
+            type: gcp.appengine~gcp.service::terraform
+            requirements:
+                - host: gcp_provider
+                - build: gcp_cloudbuild
+                - reporting: gcp_appenginereporting
+
+        gcp_appenginereporting:
+            type: gcp.appenginereporting~gcp.service::terraform
+
+        gcp_cloudbuild:
+            type: gcp.cloudbuild~gcp.service::terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql~gcp.service::terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
+            type: gcp.provider
+            properties:
+                gcp_region: {get_input: gcp_region}
+                gcp_service_account_file: {get_input: gcp_service_account_file}
+                gcp_project: {get_input: gcp_project}

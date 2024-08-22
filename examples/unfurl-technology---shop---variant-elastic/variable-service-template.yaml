@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_variability_1_0_rc_3
 
 imports:
     - lib/types.yaml
@@ -6,6 +6,9 @@ imports:
 topology_template:
     inputs:
         database_password:
+            type: string
+
+        dbms_password:
             type: string
 
         gcp_region:
@@ -18,12 +21,19 @@ topology_template:
             type: string
 
     node_templates:
+        ###################################################
+        #
+        # Shop
+        #
+        ###################################################
+
         shop:
             type: shop.component
             technology: terraform
+            persistent: true
             properties:
-                application_name: unfurl-technology
-                DB_NAME: unfurl-technology
+                application_name: unfurl-technology-shop
+                DB_NAME: unfurl-technology-shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
@@ -31,23 +41,70 @@ topology_template:
                 DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
-                - host: gcp_runtime
+                - host: gcp_appengine
+            artifacts:
+                - source_archive:
+                      type: source.archive
+                      file: files/shop.source.zip
+
+        ###################################################
+        #
+        # Database
+        #
+        ###################################################
 
         database:
             type: mysql.database
             technology: terraform
             properties:
-                database_name: unfurl-technology
+                database_name: unfurl-technology-shop-database
+                database_user: unfurl-technology-shop-user
+                database_password: {get_input: database_password}
             requirements:
-                - host: gcp_dbms
+                - host: mysql_dbms
 
-        gcp_dbms:
-            type: gcp.cloudsql
+        mysql_dbms:
+            type: mysql.dbms
             technology: terraform
             properties:
-                instance_name: unfurl-technology
-                root_password: {get_input: database_password}
+                dbms_name: unfurl-technology-shop-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: gcp_cloudsql
 
-        gcp_runtime:
+        ###################################################
+        #
+        # GCP
+        #
+        ###################################################
+
+        gcp_appengine:
             type: gcp.appengine
             technology: terraform
+            requirements:
+                - host: gcp_provider
+                - build: gcp_cloudbuild
+                - reporting: gcp_appenginereporting
+
+        gcp_appenginereporting:
+            type: gcp.appenginereporting
+            technology: terraform
+
+        gcp_cloudbuild:
+            type: gcp.cloudbuild
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
+            type: gcp.provider
+            properties:
+                - gcp_region: {get_input: gcp_region}
+                - gcp_service_account_file: {get_input: gcp_service_account_file}
+                - gcp_project: {get_input: gcp_project}

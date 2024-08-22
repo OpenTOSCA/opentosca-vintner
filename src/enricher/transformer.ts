@@ -200,6 +200,7 @@ export default class Transformer {
             // Delete enricher options
             delete this.topology.variability.options.enrich_input_condition
             delete this.topology.variability.options.enrich_technologies
+            delete this.topology.variability.options.enrich_implementations
         }
 
         // Remove empty options

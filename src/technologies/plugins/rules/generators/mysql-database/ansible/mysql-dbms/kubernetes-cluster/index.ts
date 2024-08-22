@@ -6,6 +6,10 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: use https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_exec_module.html#ansible-collections-kubernetes-core-k8s-exec-module ?
+
+// TODO: use  https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

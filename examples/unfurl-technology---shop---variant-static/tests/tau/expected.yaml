@@ -8,6 +8,9 @@ topology_template:
         database_password:
             type: string
 
+        dbms_password:
+            type: string
+
         os_network:
             type: string
 
@@ -42,11 +45,17 @@ topology_template:
             type: string
 
     node_templates:
+        ###################################################
+        #
+        # Shop
+        #
+        ###################################################
+
         shop:
-            type: shop.component::ansible::os.compute
+            type: shop.component~service.application#source.archive::ansible@*->virtual.machine
             properties:
-                application_name: unfurl-technology
-                DB_NAME: unfurl-technology
+                application_name: unfurl-technology-shop
+                DB_NAME: unfurl-technology-shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
@@ -54,26 +63,77 @@ topology_template:
                 DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
-                - host: os_compute
+                - host: node_runtime
+            artifacts:
+                source_archive:
+                    type: source.archive
+                    file: files/shop.source.zip
+
+        shop_ingress:
+            type: ingress~ingress::ansible@virtual.machine
+            requirements:
+                - application: shop
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Database
+        #
+        ###################################################
 
         database:
-            type: mysql.database::ansible::mysql.dbms
+            type: mysql.database~mysql.database::ansible@mysql.dbms->virtual.machine
             properties:
-                database_name: unfurl-technology
+                database_name: unfurl-technology-shop-database
+                database_user: unfurl-technology-shop-user
+                database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms::ansible::os.compute
+            type: mysql.dbms~mysql.dbms::ansible@virtual.machine
             properties:
-                root_password: {get_input: database_password}
+                dbms_name: unfurl-technology-shop-dbms
+                dbms_password: {get_input: dbms_password}
             requirements:
-                - host: os_compute
+                - host: virtual_machine
 
-        os_compute:
-            type: os.compute::terraform
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        node_runtime:
+            type: node.runtime~software.application#system.package::ansible@*->virtual.machine
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: virtual.machine~virtual.machine::terraform@openstack.provider
             properties:
-                machine: unfurl-technology
-                ports: [80, 3000]
-                network: {get_input: os_network}
+                machine_name: unfurl-technology-shop-vm
+                image: Ubuntu 22.04
+                ports: [80]
                 flavor: m1.medium
+                network: {get_input: os_network}
+                ssh_user: {get_input: os_ssh_user}
+                ssh_key_name: {get_input: os_ssh_key_name}
+                ssh_key_file: {get_input: os_ssh_key_file}
+            requirements:
+                - host: openstack_provider
+            artifacts:
+                virtual_machine_image:
+                    type: virtual.machine.image
+                    file: Ubuntu 22.04
+
+        openstack_provider:
+            type: openstack.provider
+            properties:
+                os_region_name: {get_input: os_region_name}
+                os_auth_type: {get_input: os_auth_type}
+                os_auth_url: {get_input: os_auth_url}
+                os_identity_api_version: {get_input: os_identity_api_version}
+                os_interface: {get_input: os_interface}
+                os_application_credential_id: {get_input: os_application_credential_id}
+                os_application_credential_secret: {get_input: os_application_credential_secret}

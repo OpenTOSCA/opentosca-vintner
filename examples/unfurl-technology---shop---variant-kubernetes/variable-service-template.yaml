@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0
+tosca_definitions_version: tosca_variability_1_0_rc_3
 
 imports:
     - lib/types.yaml
@@ -8,10 +8,10 @@ topology_template:
         database_password:
             type: string
 
-        k8s_api_address:
+        dbms_password:
             type: string
 
-        k8s_api_port:
+        k8s_host:
             type: string
 
         k8s_ca_cert_file:
@@ -24,12 +24,19 @@ topology_template:
             type: string
 
     node_templates:
+        ###################################################
+        #
+        # Shop
+        #
+        ###################################################
+
         shop:
             type: shop.component
             technology: kubernetes
+            persistent: true
             properties:
-                application_name: unfurl-technology
-                DB_NAME: unfurl-technology
+                application_name: unfurl-technology-shop
+                DB_NAME: unfurl-technology-shop
                 DB_USERNAME: root
                 DB_PASSWORD: {get_input: database_password}
                 DB_DIALECT: mysql
@@ -37,36 +44,59 @@ topology_template:
                 DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
-                - host: kubernetes
+                - host: kubernetes_cluster
+            artifacts:
+                container_image:
+                    type: container.image
+                    file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
 
-        shop_expose:
-            type: shop.component.expose
+        shop_ingress:
+            type: ingress
             technology: kubernetes
             requirements:
-                - host: kubernetes
+                - application: shop
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Database
+        #
+        ###################################################
 
         database:
             type: mysql.database
-            technology: ansible
+            technology: terraform
             properties:
-                database_name: unfurl-technology
+                database_name: unfurl-technology-shop-database
+                database_user: unfurl-technology-shop-user
+                database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms
-                - depends: mysql_dbms_expose
 
         mysql_dbms:
             type: mysql.dbms
             technology: kubernetes
             properties:
-                root_password: {get_input: database_password}
+                dbms_name: unfurl-technology-shop-dbms
+                dbms_password: {get_input: dbms_password}
             requirements:
-                - host: kubernetes
+                - host: kubernetes_cluster
 
-        mysql_dbms_expose:
-            type: mysql.dbms.expose
-            technology: kubernetes
+        ###################################################
+        #
+        # Kubernetes
+        #
+        ###################################################
+
+        kubernetes_cluster:
+            type: kubernetes.cluster
+            properties:
+                k8s_host: {get_input: k8s_host}
+                k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
+                k8s_client_cert_file: {get_input: k8s_client_cert_file}
+                k8s_client_key_file: {get_input: k8s_client_key_file}
             requirements:
-                - host: kubernetes
+                - host: kubernetes_provider
 
-        kubernetes:
-            type: kubernetes
+        kubernetes_provider:
+            type: cloud.provider

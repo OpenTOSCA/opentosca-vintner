@@ -9,7 +9,7 @@ import {
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: this is wrong! it must connect via DOCKER_HOST ssh and not via Ansible?!
+// TODO: it must connect via DOCKER_HOST ssh and not via Ansible?!
 
 const generator: ImplementationGenerator = {
     component: 'service.application',

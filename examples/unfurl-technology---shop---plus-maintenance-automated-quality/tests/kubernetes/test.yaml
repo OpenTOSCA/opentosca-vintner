@@ -1,5 +1,10 @@
 expected: ../../../unfurl-technology---shop---variant-kubernetes/tests/tau/expected.yaml
 
+replace:
+    # Might be both
+    - - mysql.database~mysql.database::ansible
+      - mysql.database~mysql.database::terraform
+
 merge:
     topology_template:
         node_templates:

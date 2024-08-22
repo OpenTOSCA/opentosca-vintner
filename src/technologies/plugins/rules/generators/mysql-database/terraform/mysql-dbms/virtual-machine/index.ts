@@ -11,9 +11,9 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'virtual.machine'],
-    // TODO: why is this 0?
-    weight: 0,
-    comment: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
+    weight: 0.5,
+    comment:
+        'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
 
     generate: (name, type) => {
         return {

@@ -18,15 +18,13 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: does ExecStart work?
-
 const service = `
 [Unit]
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=. /.vintner/start.sh
+ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
 WorkingDirectory={{ SELF.application_directory }}
 EnvironmentFile={{ SELF.application_directory }}/.env
 

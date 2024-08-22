@@ -10,6 +10,11 @@ import {
 
 // TODO: we assume that dbms is exposed
 
+// TODO: could use https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward or https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
+
+// Could use "docker exec" but then its imperative ...
+// Maybe one can ssh tunnel the dbms in container to local
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

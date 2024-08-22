@@ -278,8 +278,8 @@ export default class Normalizer {
 
         // Lowercase technology names
         template.technology = template.technology.map(it => {
-            const entry = utils.firstEntry(it)
-            return {[entry[0].toLowerCase()]: entry[1]}
+            const [name, definition] = utils.firstEntry(it)
+            return {[name.toLowerCase()]: definition}
         })
 
         // Default assign is "${node_type}~${node_type}::${technology}"
