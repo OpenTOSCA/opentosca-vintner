@@ -43,21 +43,20 @@ export class ElementEnricher {
                 node.technologies.forEach(technology => {
                     // TODO: super inefficient but we need copies for each since the same technology might be defined multiple times
                     const candidates = this.getTechnologyCandidates(node)
-
                     const selected = candidates.filter(map => utils.firstKey(map) === technology.name)
 
                     for (const map of selected) {
-                        const [name, definition] = utils.firstEntry(map)
-
+                        const template = utils.firstValue(map)
                         if (!utils.isEmpty(technology.conditions)) {
                             // TODO: improve plugin typing!
-                            assert.isArray(definition.conditions)
-                            definition.conditions = [...technology.conditions, ...definition.conditions]
+                            assert.isArray(template.conditions)
+                            template.conditions = [...technology.conditions, ...template.conditions]
                         }
                     }
 
                     if (utils.isEmpty(selected))
                         throw new Error(`${node.Display} has no implementation for ${technology.display}`)
+
                     enriched.push(...selected)
                 })
                 this.graph.replaceTechnologies(node, enriched)
