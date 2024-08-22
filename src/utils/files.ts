@@ -157,8 +157,22 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
+export function formatYAML(obj: any) {
+    return prettier.format(obj, {
+        parser: 'yaml',
+        endOfLine: 'lf',
+        bracketSpacing: false,
+        singleQuote: true,
+        trailingComma: 'es5',
+        arrowParens: 'avoid',
+        tabWidth: 4,
+        printWidth: 69420,
+        semi: false,
+    })
+}
+
 export function toYAML(obj: any, options?: yaml.DumpOptions) {
-    return prettier.format(
+    return formatYAML(
         yaml.dump(
             obj,
             _.merge<yaml.DumpOptions, yaml.DumpOptions | undefined>(
@@ -171,18 +185,7 @@ export function toYAML(obj: any, options?: yaml.DumpOptions) {
                 },
                 options
             )
-        ),
-        {
-            parser: 'yaml',
-            endOfLine: 'lf',
-            bracketSpacing: false,
-            singleQuote: true,
-            trailingComma: 'es5',
-            arrowParens: 'avoid',
-            tabWidth: 4,
-            printWidth: 69420,
-            semi: false,
-        }
+        )
     )
 }
 

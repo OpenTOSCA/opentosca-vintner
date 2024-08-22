@@ -169,6 +169,6 @@ export default async function (options: TemplateImplementOptions) {
             continue
         }
 
-        files.storeFile(file, resultString)
+        files.storeFile(file, files.formatYAML(resultString))
     }
 }

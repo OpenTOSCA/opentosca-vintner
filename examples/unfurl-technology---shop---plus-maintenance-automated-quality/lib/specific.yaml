@@ -8,6 +8,8 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 description: OpenTOSCA Vintner - Normative Specific Types (Unfurl)
 metadata:
     vintner_orchestrator: unfurl
+imports:
+    - base.yaml
 artifact_types:
     docker.image:
         derived_from: root
