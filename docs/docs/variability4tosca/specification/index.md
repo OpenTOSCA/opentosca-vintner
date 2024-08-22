@@ -351,7 +351,7 @@ unique_property_constraint: true
 unique_artifact_constraint: true
 unique_input_constraint: true
 unique_output_constraint: true
-required_artifact_constraint: false
+required_artifact_constraint: true
 relation_default_implied: true
 technology_required: true
 checks: false

@@ -91,6 +91,7 @@ export type NodeDefaultConditionMode =
     | 'outgoing'
     | 'outgoingnaive'
     | 'incomingnaive-artifact-host'
+    | 'incomingnaive-artifactnaive-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
 export type ArtifactDefaultConditionMode = 'container' | 'technology' | 'container-technology'
