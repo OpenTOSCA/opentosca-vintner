@@ -58,8 +58,6 @@ export type EnricherOptions = {
     enrich_input_condition?: boolean
     enrich_technologies?: boolean
     enrich_implementations?: boolean
-    // TODO: remove this
-    enrich_artifacts?: boolean
 }
 
 export type ConstraintsOptions = {
@@ -128,7 +126,6 @@ export type DefaultOptions = {
     group_default_semantic_condition?: boolean
 
     artifact_default_condition?: boolean
-    // TODO: doc this
     artifact_default_condition_mode?: ArtifactDefaultConditionMode
     artifact_default_consistency_condition?: boolean
     artifact_default_semantic_condition?: boolean

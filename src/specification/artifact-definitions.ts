@@ -13,7 +13,6 @@ export type ExtendedArtifactDefinition = {
     type: string
     file: string
     properties?: PropertyAssignmentMap | PropertyAssignmentList
-    // TODO: doc this
     default_condition_mode?: ArtifactDefaultConditionMode
 } & VariabilityAlternative
 

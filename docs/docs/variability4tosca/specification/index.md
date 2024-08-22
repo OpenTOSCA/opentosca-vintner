@@ -160,6 +160,7 @@ The following options are used to configure the default conditions of elements.
 | group_default_consistency_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                                   |
 | group_default_semantic_condition         | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                                      |
 | artifact_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).                 |
+| artifact_default_condition_mode          | false     | List(container &#124; technology, -)                                                                  | container         | Configure the default condition for artifacts.                                     |
 | artifact_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                                |
 | artifact_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                                   |
 | property_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic).                |
@@ -356,6 +357,7 @@ technology_required: true
 checks: false
 enrich_technologies: true
 enrich_implementations: true
+artifact_default_condition_mode: container-technology
 ```
 
 
@@ -815,6 +817,7 @@ An artifact can also hold conditional properties.
 | default_alternative           | false     | Boolean                                                                              | Declare the artifact as default. This overwrites assigned conditions. There must be only one default artifact.                                                                           |                                                                                                       |
 | properties                    | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                    |
 | default_condition             | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                 |
+| default_condition_mode        | false     | List(container &#124; technology, -)                                                 | Configure the default condition for this element.                                                                                                                                        |
 | default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
 | default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
 | pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |

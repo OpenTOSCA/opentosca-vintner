@@ -83,8 +83,8 @@ export default class Artifact extends Element {
     }
 
     getElementGenericCondition() {
-        const consistency: LogicExpression[] = []
-        const semantic: LogicExpression[] = []
+        const consistencies: LogicExpression[] = []
+        const semantics: LogicExpression[] = []
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
@@ -92,7 +92,7 @@ export default class Artifact extends Element {
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
-                return consistency.push(this.container.presenceCondition)
+                return consistencies.push(this.container.presenceCondition)
             }
 
             /**
@@ -109,18 +109,18 @@ export default class Artifact extends Element {
                     if (!this.getType().isA(deconstructed.artifact)) continue
                     conditions.push(technology.presenceCondition)
                 }
-                return semantic.push(orify(conditions))
+                return semantics.push(orify(conditions))
             }
         })
 
         const wrappers: ConditionsWrapper[] = []
 
-        if (!utils.isEmpty(consistency)) {
-            wrappers.push({conditions: andify(consistency), consistency: true, semantic: false})
+        if (!utils.isEmpty(consistencies)) {
+            wrappers.push({conditions: andify(consistencies), consistency: true, semantic: false})
         }
 
-        if (!utils.isEmpty(semantic)) {
-            wrappers.push({conditions: andify(semantic), consistency: false, semantic: true})
+        if (!utils.isEmpty(semantics)) {
+            wrappers.push({conditions: andify(semantics), consistency: false, semantic: true})
         }
 
         return wrappers

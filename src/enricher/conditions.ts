@@ -59,26 +59,26 @@ export class ConditionEnricher {
 
     private enrichPruning(element: Element, conditions: LogicExpression[]) {
         const candidates = [element.getTypeSpecificCondition(), ...element.getElementGenericCondition()]
-        const selected = candidates.filter(wrapper => {
+        const selected = candidates.filter(candidate => {
             // Ignore undefined
-            if (check.isUndefined(wrapper)) return false
+            if (check.isUndefined(candidate)) return false
 
             // Add default condition if requested
             if (element.defaultEnabled && utils.isEmpty(conditions)) {
                 // If targets consistency and if allowed
-                if (wrapper.consistency && element.defaultConsistencyCondition) return true
+                if (candidate.consistency && element.defaultConsistencyCondition) return true
 
                 // If targets semantics and if allowed
-                if (wrapper.semantic && element.defaultSemanticCondition) return true
+                if (candidate.semantic && element.defaultSemanticCondition) return true
             }
 
             // Add pruning condition if requested
             if (element.pruningEnabled) {
                 // If targets consistency and if allowed
-                if (wrapper.consistency && element.consistencyPruning) return true
+                if (candidate.consistency && element.consistencyPruning) return true
 
                 // If targets semantics and if allowed
-                if (wrapper.semantic && element.semanticPruning) return true
+                if (candidate.semantic && element.semanticPruning) return true
             }
 
             // Otherwise

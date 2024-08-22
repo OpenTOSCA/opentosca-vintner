@@ -262,7 +262,7 @@ class DefaultOptions extends BaseOptions {
         if (this.v1 || this.v2) {
             this.artifactDefaultConditionMode =
                 this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container'
-            assert.isString(this.nodeDefaultConditionMode)
+            assert.isString(this.artifactDefaultConditionMode)
         } else {
             this.artifactDefaultConditionMode =
                 this.raw.artifact_default_condition_mode ??
@@ -960,7 +960,6 @@ export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
     readonly technologies: boolean
     readonly implementations: boolean
-    readonly artifacts: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -983,19 +982,6 @@ export class EnricherOptions extends BaseOptions {
 
         this.implementations = this.raw.enrich_implementations ?? true
         assert.isBoolean(this.implementations)
-
-        if (this.v2 || this.v3) {
-            /**
-             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
-             */
-            this.artifacts = this.raw.enrich_artifacts ?? true
-        } else {
-            /**
-             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
-             */
-            this.artifacts = this.raw.enrich_artifacts ?? false
-        }
-        assert.isBoolean(this.technologies)
     }
 }
 
