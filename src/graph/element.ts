@@ -117,8 +117,8 @@ export default abstract class Element {
         return utils.copy(tsc)
     }
 
-    getElementGenericCondition(): ConditionsWrapper | undefined {
-        return {conditions: true, consistency: true, semantic: true}
+    getElementGenericCondition(): ConditionsWrapper[] {
+        return [{conditions: true, consistency: true, semantic: true}]
     }
 
     defaultAlternative = false

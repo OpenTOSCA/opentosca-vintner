@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
-import {bratify} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
 import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
 import * as utils from '#utils'
@@ -98,11 +98,13 @@ export default class Technology extends Element {
             }
         })
 
-        return {
-            conditions: {and: conditions},
-            consistency: true,
-            semantic: false,
-        }
+        return [
+            {
+                conditions: andify(conditions),
+                consistency: true,
+                semantic: false,
+            },
+        ]
     }
 
     // Check if no other technology is present

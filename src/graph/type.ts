@@ -82,11 +82,13 @@ export default class Type extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: this.container.presenceCondition,
-            consistency: true,
-            semantic: false,
-        }
+        return [
+            {
+                conditions: this.container.presenceCondition,
+                consistency: true,
+                semantic: false,
+            },
+        ]
     }
 
     constructPresenceCondition() {

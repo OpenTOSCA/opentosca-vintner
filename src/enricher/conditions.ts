@@ -1,10 +1,9 @@
+import * as assert from '#assert'
 import * as check from '#check'
-import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {generatify, orify, simplify} from '#graph/utils'
+import {andify, generatify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
-import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export class ConditionEnricher {
@@ -21,34 +20,6 @@ export class ConditionEnricher {
         for (const element of this.graph.elements) {
             this.enrichConditions(element)
         }
-
-        /**
-         * Artifact pruning conditions
-         */
-        if (this.graph.options.enricher.artifacts) {
-            for (const artifact of this.graph.artifacts) {
-                // TODO: move this into artifact as semantic pruning only enabled in mode "container-technology"
-                this.enrichArtifact(artifact)
-            }
-        }
-    }
-
-    /**
-     * Artifact should be present if any respective technology is present
-     *
-     * Note, if no respective technology exists, then "or" is an empty list, which evaluates to "false".
-     * As a result, the artifact is always removed, as intended.
-     */
-    private enrichArtifact(artifact: Artifact) {
-        const conditions: LogicExpression[] = []
-        for (const technology of artifact.container.technologies) {
-            const deconstructed = destructImplementationName(technology.assign)
-            if (check.isUndefined(deconstructed.artifact)) continue
-            if (!artifact.getType().isA(deconstructed.artifact)) continue
-            conditions.push(technology.presenceCondition)
-        }
-
-        artifact.conditions.push(generatify(orify(conditions)))
     }
 
     private enrichConditions(element: Element) {
@@ -87,32 +58,46 @@ export class ConditionEnricher {
     }
 
     private enrichPruning(element: Element, conditions: LogicExpression[]) {
-        const candidates = [element.getTypeSpecificCondition(), element.getElementGenericCondition()]
-        const candidate = candidates.find(condition => {
+        const candidates = [element.getTypeSpecificCondition(), ...element.getElementGenericCondition()]
+        const selected = candidates.filter(wrapper => {
             // Ignore undefined
-            if (check.isUndefined(condition)) return false
+            if (check.isUndefined(wrapper)) return false
 
             // Add default condition if requested
             if (element.defaultEnabled && utils.isEmpty(conditions)) {
                 // If targets consistency and if allowed
-                if (condition?.consistency && element.defaultConsistencyCondition) return true
+                if (wrapper.consistency && element.defaultConsistencyCondition) return true
 
                 // If targets semantics and if allowed
-                if (condition?.semantic && element.defaultSemanticCondition) return true
+                if (wrapper.semantic && element.defaultSemanticCondition) return true
             }
 
             // Add pruning condition if requested
             if (element.pruningEnabled) {
                 // If targets consistency and if allowed
-                if (condition?.consistency && element.consistencyPruning) return true
+                if (wrapper.consistency && element.consistencyPruning) return true
 
                 // If targets semantics and if allowed
-                if (condition?.semantic && element.semanticPruning) return true
+                if (wrapper.semantic && element.semanticPruning) return true
             }
 
             // Otherwise
             return false
         })
-        if (check.isDefined(candidate)) conditions.unshift(generatify(simplify(candidate.conditions)))
+
+        if (!utils.isEmpty(selected)) {
+            conditions.unshift(
+                generatify(
+                    simplify(
+                        andify(
+                            selected.map(it => {
+                                assert.isDefined(it)
+                                return it.conditions
+                            })
+                        )
+                    )
+                )
+            )
+        }
     }
 }

@@ -3,9 +3,10 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
 import Type from '#graph/type'
-import {bratify} from '#graph/utils'
+import {andify, bratify, orify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
-import {LogicExpression} from '#spec/variability'
+import {ArtifactDefaultConditionMode, ConditionsWrapper, LogicExpression} from '#spec/variability'
+import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export default class Artifact extends Element {
@@ -34,6 +35,10 @@ export default class Artifact extends Element {
 
     get toscaId(): [string, string | number] {
         return [this.container.name, this.index]
+    }
+
+    get getDefaultMode(): ArtifactDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.artifactDefaultConditionMode
     }
 
     get defaultEnabled() {
@@ -78,7 +83,47 @@ export default class Artifact extends Element {
     }
 
     getElementGenericCondition() {
-        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
+        const consistency: LogicExpression[] = []
+        const semantic: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['container', 'technology'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'container') {
+                return consistency.push(this.container.presenceCondition)
+            }
+
+            /**
+             * Artifact should be present if any respective technology is present
+             *
+             * Note, if no respective technology exists, then "or" is an empty list, which evaluates to "false".
+             * As a result, the artifact is always removed, as intended.
+             */
+            if (it === 'technology') {
+                const conditions: LogicExpression[] = []
+                for (const technology of this.container.technologies) {
+                    const deconstructed = destructImplementationName(technology.assign)
+                    if (check.isUndefined(deconstructed.artifact)) continue
+                    if (!this.getType().isA(deconstructed.artifact)) continue
+                    conditions.push(technology.presenceCondition)
+                }
+                return semantic.push(orify(conditions))
+            }
+        })
+
+        const wrappers: ConditionsWrapper[] = []
+
+        if (!utils.isEmpty(consistency)) {
+            wrappers.push({conditions: andify(consistency), consistency: true, semantic: false})
+        }
+
+        if (!utils.isEmpty(semantic)) {
+            wrappers.push({conditions: andify(semantic), consistency: false, semantic: true})
+        }
+
+        return wrappers
     }
 
     constructPresenceCondition() {

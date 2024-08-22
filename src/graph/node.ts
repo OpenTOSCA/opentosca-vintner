@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Technology from '#graph/technology'
+import {andify} from '#graph/utils'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import {isAbstract} from '#technologies/utils'
@@ -186,7 +187,7 @@ export default class Node extends Element {
             }
         })
 
-        return {conditions: {and: conditions}, consistency: false, semantic: true}
+        return [{conditions: andify(conditions), consistency: false, semantic: true}]
     }
 
     get defaultConsistencyCondition() {
