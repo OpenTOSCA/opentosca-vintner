@@ -476,7 +476,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -489,16 +489,16 @@ node_types:
                                       copy:
                                           dest: /etc/systemd/system/{{ SELF.application_name }}.service
                                           content: |
-    
+
                                               [Unit]
                                               After=network.target
-    
+
                                               [Service]
                                               Type=simple
                                               ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
                                               WorkingDirectory={{ SELF.application_directory }}
                                               EnvironmentFile={{ SELF.application_directory }}/.env
-    
+
                                               [Install]
                                               WantedBy=multi-user.target
                                     - name: enable service
@@ -540,7 +540,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -574,7 +574,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -605,7 +605,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -639,7 +639,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
@@ -729,7 +729,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -759,7 +759,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -793,7 +793,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -827,7 +827,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -857,7 +857,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
@@ -936,7 +936,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_create }}
                                           mode: '0755'
                                       when: SELF._management_create != None
@@ -966,7 +966,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_configure }}
                                           mode: '0755'
                                       when: SELF._management_configure != None
@@ -996,7 +996,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_start }}
                                           mode: '0755'
                                       when: SELF._management_start != None
@@ -1026,7 +1026,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_stop }}
                                           mode: '0755'
                                       when: SELF._management_stop != None
@@ -1056,7 +1056,7 @@ node_types:
                                           content: |
                                               #! /usr/bin/bash
                                               set -e
-    
+
                                               {{ SELF._management_delete }}
                                           mode: '0755'
                                       when: SELF._management_delete != None
