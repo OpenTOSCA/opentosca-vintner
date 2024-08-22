@@ -294,7 +294,7 @@ node_types:
     #
     ################################################################
 
-    virtual.machine~virtual.machine::ansible@openstack.provider:
+    virtual.machine~virtual.machine#virtual.machine.image::ansible@openstack.provider:
         derived_from: virtual.machine
         metadata:
             vintner_generated: 'true'
@@ -412,7 +412,7 @@ node_types:
                                       openstack.cloud.security_group:
                                           state: absent
                                           name: '{{ SELF.machine_name }}'
-    virtual.machine~virtual.machine::terraform@openstack.provider:
+    virtual.machine~virtual.machine#virtual.machine.image::terraform@openstack.provider:
         derived_from: virtual.machine
         metadata:
             vintner_generated: 'true'

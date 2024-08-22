@@ -18,14 +18,17 @@ node_types:
 
 topology_template:
     variability:
-        options:
-            constraints: true
-            hosting_stack_constraint: true
-
         technology_assignment_rules:
             ansible:
                 - component: application
                   artifact: first.artifact.type
+                  hosting: [host]
+                  weight: 1
+
+            terraform:
+                - component: application
+                  artifact: second.artifact.type
+                  hosting: [host]
                   weight: 0
 
     node_templates:
@@ -40,3 +43,9 @@ topology_template:
                 - second_artifact_type:
                       type: second.artifact.type
                       file: second_artifact_file
+
+            requirements:
+                - host: host
+
+        host:
+            type: host

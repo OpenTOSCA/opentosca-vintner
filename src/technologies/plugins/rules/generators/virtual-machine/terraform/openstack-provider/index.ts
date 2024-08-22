@@ -10,6 +10,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'terraform',
+    artifact: 'virtual.machine.image',
     hosting: ['openstack.provider'],
     weight: 1,
     comment: 'Terraform provides a declarative module.',
