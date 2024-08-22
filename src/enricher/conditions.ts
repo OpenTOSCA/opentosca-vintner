@@ -25,14 +25,20 @@ export class ConditionEnricher {
         /**
          * Artifact pruning conditions
          */
-        // TODO: merge this somehow in the general pruning world by "pruning plugins"?
         if (this.graph.options.enricher.artifacts) {
             for (const artifact of this.graph.artifacts) {
+                // TODO: move this into artifact as semantic pruning only enabled in mode "container-technology"
                 this.enrichArtifact(artifact)
             }
         }
     }
 
+    /**
+     * Artifact should be present if any respective technology is present
+     *
+     * Note, if no respective technology exists, then "or" is an empty list, which evaluates to "false".
+     * As a result, the artifact is always removed, as intended.
+     */
     private enrichArtifact(artifact: Artifact) {
         const conditions: LogicExpression[] = []
         for (const technology of artifact.container.technologies) {
@@ -41,6 +47,7 @@ export class ConditionEnricher {
             if (!artifact.getType().isA(deconstructed.artifact)) continue
             conditions.push(technology.presenceCondition)
         }
+
         artifact.conditions.push(generatify(orify(conditions)))
     }
 
