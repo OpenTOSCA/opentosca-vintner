@@ -381,7 +381,7 @@ The following element-generic default conditions can be assigned to elements.
 | Relation                                | true        | false    | Check if the source and target of the relation is present.                         |
 | Policy                                  | false       | true     | Check if the policy has any targets which are present.                             |
 | Group                                   | false       | true     | Check if the group has any members which are present.                              |
-| Artifact                                | true        | false    | Check if the node template of the artifact is present.                             |
+| Artifact (Container)                    | true        | false    | Check if the node template of the artifact is present.                             |
 | Technology (container)                  | true        | false    | Check if the node template of the technology is present.                           |
 | Technology (other)                      | true        | false    | Check if no other technology of the node template is present.                      |
 | Root                                    | true        | true     | The default condition of element always holds.                                     |
@@ -402,6 +402,7 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Node with Artifact (artifactnaive)           | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
 | Relation (Source)                            | true        | false    | Check if the source of the relation is present.                                |
 | Relation (Target)                            | true        | false    | Check if the target of the relation is present.                                |
+| Artifact (Technology)                        | false       | true     | Check if the artifact is used by any technology.                               |
 
 
 ### Type-Specific Default Conditions
