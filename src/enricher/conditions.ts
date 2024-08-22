@@ -1,8 +1,10 @@
 import * as check from '#check'
+import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {generatify, simplify} from '#graph/utils'
+import {generatify, orify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
+import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export class ConditionEnricher {
@@ -19,6 +21,27 @@ export class ConditionEnricher {
         for (const element of this.graph.elements) {
             this.enrichConditions(element)
         }
+
+        /**
+         * Artifact pruning conditions
+         */
+        // TODO: merge this somehow in the general pruning world by "pruning plugins"?
+        if (this.graph.options.enricher.artifacts) {
+            for (const artifact of this.graph.artifacts) {
+                this.enrichArtifact(artifact)
+            }
+        }
+    }
+
+    private enrichArtifact(artifact: Artifact) {
+        const conditions: LogicExpression[] = []
+        for (const technology of artifact.container.technologies) {
+            const deconstructed = destructImplementationName(technology.assign)
+            if (check.isUndefined(deconstructed.artifact)) continue
+            if (!artifact.getType().isA(deconstructed.artifact)) continue
+            conditions.push(technology.presenceCondition)
+        }
+        artifact.conditions.push(generatify(orify(conditions)))
     }
 
     private enrichConditions(element: Element) {

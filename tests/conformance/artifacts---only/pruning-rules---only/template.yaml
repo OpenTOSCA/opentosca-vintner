@@ -1,0 +1,42 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+artifact_types:
+    first.artifact.type:
+        derived_from: tosca.artifacts.Root
+
+    second.artifact.type:
+        derived_from: tosca.artifacts.Root
+
+node_types:
+    application:
+        derived_from: tosca.nodes.Root
+
+topology_template:
+    variability:
+        options:
+            constraints: true
+            hosting_stack_constraint: true
+
+        technology_assignment_rules:
+            ansible:
+                - component: application
+                  artifact: first.artifact.type
+                  weight: 0
+
+            terraform:
+                - component: application
+                  artifact: second.artifact.type
+                  weight: 1
+
+    node_templates:
+        application:
+            type: application
+            persistent: true
+            artifacts:
+                - first_artifact_type:
+                      type: first.artifact.type
+                      file: first_artifact_file
+
+                - second_artifact_type:
+                      type: second.artifact.type
+                      file: second_artifact_file

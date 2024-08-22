@@ -58,6 +58,8 @@ export type EnricherOptions = {
     enrich_input_condition?: boolean
     enrich_technologies?: boolean
     enrich_implementations?: boolean
+    // TODO: remove this
+    enrich_artifacts?: boolean
 }
 
 export type ConstraintsOptions = {

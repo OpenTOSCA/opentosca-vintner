@@ -16,6 +16,10 @@ export function andify(conditions: LogicExpression[]) {
     return {and: conditions}
 }
 
+export function orify(conditions: LogicExpression[]) {
+    return {or: conditions}
+}
+
 export function simplify(conditions: LogicExpression) {
     if (!check.isObject(conditions)) return conditions
     if (check.isDefined(conditions.and)) {
