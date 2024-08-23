@@ -5,4 +5,8 @@ set -e
 source configuration.sh
 
 # Quality
-$VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml
+for dir in ../tests/*/;
+do
+  dir=$(basename $dir)
+  echo "${dir}: $($VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml --experimental --inputs ${TEMPLATE_DIR}/tests/${dir}/inputs.yaml)"
+done
