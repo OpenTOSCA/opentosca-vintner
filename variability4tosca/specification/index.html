@@ -880,6 +880,36 @@
       </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-managed-manual/">
+        artifacts-pruning-managed-manual
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-managed-rules-host/">
+        artifacts-pruning-managed-rules-host
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-managed-rules-multiple-different/">
+        artifacts-pruning-managed-rules-multiple-different
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-managed-rules-none/">
+        artifacts-pruning-managed-rules-none
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-managed-rules/">
+        artifacts-pruning-managed-rules
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tests/test-artifacts-pruning-manged-rules-multiple-same/">
+        artifacts-pruning-manged-rules-multiple-same
+      </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="../tests/test-artifacts-required-artifact-constraint-sat-pruning/">
         artifacts-required-artifact-constraint-sat-pruning
       </a>
@@ -3883,6 +3913,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable default condition for artifacts (consistency and semantic).</td>
 </tr>
 <tr>
+<td>artifact_default_condition_mode</td>
+<td>false</td>
+<td>List(container | technology, -)</td>
+<td>container</td>
+<td>Configure the default condition for artifacts.</td>
+</tr>
+<tr>
 <td>artifact_default_consistency_condition</td>
 <td>false</td>
 <td>Boolean</td>
@@ -4667,7 +4704,8 @@ Also, pruning modes also consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-16">16</a></span>
 <span class="normal"><a href="#__codelineno-4-17">17</a></span>
 <span class="normal"><a href="#__codelineno-4-18">18</a></span>
-<span class="normal"><a href="#__codelineno-4-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span>
+<span class="normal"><a href="#__codelineno-4-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -4686,6 +4724,7 @@ Also, pruning modes also consider input and output pruning.</p>
 <a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">¶</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -4752,7 +4791,7 @@ However, type-specific default conditions are defined per type, e.g., node type,
 <td>Check if the group has any members which are present.</td>
 </tr>
 <tr>
-<td>Artifact</td>
+<td>Artifact (container)</td>
 <td>true</td>
 <td>false</td>
 <td>Check if the node template of the artifact is present.</td>
@@ -4828,16 +4867,22 @@ The following default conditions can be chosen instead of the ones introduced ab
 <td>Check if any artifact is present using <code>has_artifact_naive</code>.</td>
 </tr>
 <tr>
-<td>Relation (Source)</td>
+<td>Relation (source)</td>
 <td>true</td>
 <td>false</td>
 <td>Check if the source of the relation is present.</td>
 </tr>
 <tr>
-<td>Relation (Target)</td>
+<td>Relation (target)</td>
 <td>true</td>
 <td>false</td>
 <td>Check if the target of the relation is present.</td>
+</tr>
+<tr>
+<td>Artifact (managed)</td>
+<td>false</td>
+<td>true</td>
+<td>Check if the artifact is managed by any technology.</td>
 </tr>
 </tbody>
 </table>
@@ -5859,6 +5904,12 @@ An artifact can also hold conditional properties.</p>
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template.</td>
 </tr>
 <tr>
+<td>default_condition_mode</td>
+<td>false</td>
+<td>List(container | technology, -)</td>
+<td>Configure the default condition for this element.</td>
+</tr>
+<tr>
 <td>default_consistency_condition</td>
 <td>false</td>
 <td>Boolean</td>
@@ -6334,6 +6385,12 @@ The definition is intended to be extended in other specifications, e.g., for bui
 <td>Tuple(Node: String | SELF | CONTAINER, Artifact: String | Number)</td>
 <td>Boolean</td>
 <td>Returns if artifact is present.</td>
+</tr>
+<tr>
+<td>is_managed</td>
+<td>SELF | Tuple(Node: String | SELF | CONTAINER, Artifact: String | Number)</td>
+<td>Boolean</td>
+<td>Returns if artifact is managed by a deployment technology.</td>
 </tr>
 <tr>
 <td>policy_presence</td>
@@ -7110,7 +7167,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
 <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 22, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 23, 2024</span>
 </small>
 </div>
 </article>
