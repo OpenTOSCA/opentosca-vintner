@@ -13,7 +13,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'source.archive',
+    artifact: 'zip.archive',
     hosting: ['gcp.appengine'],
     weight: 0,
     comment: 'Custom module with imperative parts, while Terraform provides a declarative module.',

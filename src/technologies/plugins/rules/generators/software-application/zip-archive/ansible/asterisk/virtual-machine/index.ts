@@ -21,7 +21,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'source.archive',
+    artifact: 'zip.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
     comment:

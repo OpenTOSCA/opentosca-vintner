@@ -11,17 +11,11 @@ metadata:
 artifact_types:
     root:
         derived_from: tosca.artifacts.Root
-        #metadata:
-        #    vintner_normative: 'true'
     source.archive:
         derived_from: root
-        description: application packaged as zip archive
-        #metadata:
-        #    vintner_normative: 'true'
+        description: application packaged as archive
     system.package:
         derived_from: root
-        #metadata:
-        #    vintner_normative: 'true'
         properties:
             script:
                 type: string
@@ -50,13 +44,9 @@ artifact_types:
     container.image:
         derived_from: root
         description: expects image reference in "file"
-        #metadata:
-        #   vintner_normative: 'true'
     virtual.machine.image:
         derived_from: root
         description: expects image reference in "file"
-        metadata:
-            vintner_normative: 'true'
 interface_types:
     root:
         derived_from: tosca.interfaces.Root

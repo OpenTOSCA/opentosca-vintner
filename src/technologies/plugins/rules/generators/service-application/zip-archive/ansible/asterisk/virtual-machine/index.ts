@@ -35,7 +35,7 @@ WantedBy=multi-user.target
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'source.archive',
+    artifact: 'zip.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 1,
     comment: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',

@@ -264,7 +264,7 @@ export function TerraformStandardOperations() {
 }
 
 export function SourceArchiveFile() {
-    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}`
+    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}`
 }
 
 export function ApplicationDirectory() {

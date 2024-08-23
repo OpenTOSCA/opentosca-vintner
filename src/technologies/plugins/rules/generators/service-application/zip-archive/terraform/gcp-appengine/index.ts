@@ -15,7 +15,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'terraform',
-    artifact: 'source.archive',
+    artifact: 'zip.archive',
     hosting: ['gcp.appengine'],
     weight: 1,
     comment: 'Terraform provides a declarative module.',

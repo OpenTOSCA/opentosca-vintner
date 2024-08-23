@@ -52,7 +52,7 @@ topology_template:
         ###################################################
 
         shop:
-            type: shop.component~service.application#source.archive::ansible@*->virtual.machine
+            type: shop.component~service.application#zip.archive::ansible@*->virtual.machine
             properties:
                 application_name: unfurl-technology-shop
                 DB_NAME: unfurl-technology-shop
@@ -65,8 +65,8 @@ topology_template:
                 - database: database
                 - host: node_runtime
             artifacts:
-                source_archive:
-                    type: source.archive
+                zip_archive:
+                    type: zip.archive
                     file: files/shop.source.zip
 
         shop_ingress:

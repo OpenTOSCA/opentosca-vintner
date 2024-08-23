@@ -36,7 +36,7 @@ import {MetadataGenerated, OpenstackMachineCredentials, OpenstackMachineHost} fr
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'terraform',
-    artifact: 'source.archive',
+    artifact: 'zip.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 0,
     comment: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',

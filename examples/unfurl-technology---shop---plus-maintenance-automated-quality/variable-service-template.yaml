@@ -117,8 +117,8 @@ topology_template:
                 - container_image:
                       type: docker.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
-                - source_archive:
-                      type: source.archive
+                - zip_archive:
+                      type: zip.archive
                       file: files/shop.source.zip
 
         shop_ingress:

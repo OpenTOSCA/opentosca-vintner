@@ -124,8 +124,8 @@ topology_template:
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
                       conditions: {node_presence: kubernetes_cluster}
 
-                - source_archive:
-                      type: source.archive
+                - zip_archive:
+                      type: zip.archive
                       file: files/shop.source.zip
                       conditions: {or: [{node_presence: node_runtime}, {node_presence: gcp_appengine}]}
 

@@ -12,6 +12,14 @@ const artifacts: ArtifactTypeMap = {
         },
         */
     },
+    'zip.archive': {
+        derived_from: 'source.archive',
+        /*
+        metadata: {
+            vintner_normative: 'true',
+        },
+        */
+    },
     'apt.package': {
         derived_from: 'system.package',
         /*

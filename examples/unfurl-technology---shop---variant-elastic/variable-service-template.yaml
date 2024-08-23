@@ -43,8 +43,8 @@ topology_template:
                 - database: database
                 - host: gcp_appengine
             artifacts:
-                - source_archive:
-                      type: source.archive
+                - zip_archive:
+                      type: zip.archive
                       file: files/shop.source.zip
 
         ###################################################

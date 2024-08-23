@@ -13,7 +13,7 @@ const artifacts: ArtifactTypeMap = {
     },
     'source.archive': {
         derived_from: 'root',
-        description: 'application packaged as zip archive',
+        description: 'application packaged as archive',
         /*
         metadata: {
             vintner_normative: 'true',
