@@ -13,7 +13,7 @@ import * as yaml from 'js-yaml'
 import lnk from 'lnk'
 import _ from 'lodash'
 import os from 'os'
-import * as path from 'path'
+import path from 'path'
 // TODO: fix import problem
 // @ts-ignore
 import * as prettier from 'prettier'
@@ -55,12 +55,12 @@ export function assertEmpty(dir: string) {
     if (!isEmpty(resolved)) throw new Error(`Directory "${resolved}" is not empty`)
 }
 
-export function isFile(path: string) {
-    return exists(path) && fss.lstatSync(path).isFile()
+export function isFile(file: string) {
+    return exists(file) && fss.lstatSync(file).isFile()
 }
 
-export function isDirectory(path: string) {
-    return exists(path) && fss.lstatSync(path).isDirectory()
+export function isDirectory(dir: string) {
+    return exists(dir) && fss.lstatSync(dir).isDirectory()
 }
 
 export function getSize(file: string) {
@@ -81,8 +81,8 @@ export function countNotBlankLines(file: string) {
         .filter(it => it).length
 }
 
-export function isLink(path: string) {
-    return path.startsWith('http://') || path.startsWith('https://')
+export function isLink(link: string) {
+    return link.startsWith('http://') || link.startsWith('https://')
 }
 
 export function loadFile(file: string) {
@@ -213,7 +213,7 @@ export async function sync(source: string, target: string) {
     })
 }
 
-export async function link(source: string, target: string) {
+export async function linkDirents(source: string, target: string) {
     try {
         await lnk(source, target, {force: true})
     } catch (e) {
@@ -267,7 +267,7 @@ export function createDirectory(directory: string) {
     }
 }
 
-export async function remove(it: string) {
+export async function removeDirent(it: string) {
     if (!exists(it)) return
 
     if (isDirectory(it)) {
@@ -351,10 +351,10 @@ export function temporary(name?: string) {
 
 export async function renderFile(source: string, data: ejs.Data, target?: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        ejs.renderFile(source, data, (error, data) => {
+        ejs.renderFile(source, data, (error, rendered) => {
             if (check.isDefined(error)) return reject(error)
-            if (check.isDefined(target)) storeFile(target, data)
-            return resolve(data)
+            if (check.isDefined(target)) storeFile(target, rendered)
+            return resolve(rendered)
         })
     })
 }

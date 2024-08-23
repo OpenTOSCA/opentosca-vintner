@@ -589,7 +589,7 @@ export default class Solver {
                     if (it.isNode()) return it.id
 
                     // Group
-                    return MiniSat.or(it.members.map(it => it.id))
+                    return MiniSat.or(it.members.map(iu => iu.id))
                 })
             )
         }

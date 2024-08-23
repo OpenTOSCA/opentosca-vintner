@@ -73,7 +73,7 @@ export class Dependency {
 
     async pull() {
         if (this.config.options.link) {
-            await files.link(this.source, this.target)
+            await files.linkDirents(this.source, this.target)
         } else {
             await files.sync(this.source, this.target)
         }
@@ -81,6 +81,6 @@ export class Dependency {
 
     async unpull() {
         // We assume that link is false. Otherwise, target is missing the base.
-        await files.remove(this.target)
+        await files.removeDirent(this.target)
     }
 }

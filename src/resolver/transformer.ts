@@ -74,7 +74,7 @@ export default class Transformer {
         if (check.isDefined(this.topology.node_templates)) {
             this.topology.node_templates = this.graph.nodes
                 .filter(node => node.present)
-                .reduce<NodeTemplateMap>((map, node) => {
+                .reduce<NodeTemplateMap>((nodeMap, node) => {
                     const template = node.raw
 
                     // Select present type
@@ -109,7 +109,7 @@ export default class Transformer {
                     // Delete all artifacts which are not present
                     template.artifacts = node.artifacts
                         .filter(it => it.present)
-                        .reduce<ArtifactDefinitionMap>((map, artifact) => {
+                        .reduce<ArtifactDefinitionMap>((artifactMap, artifact) => {
                             if (!check.isString(artifact.raw)) this.clean(artifact.raw)
 
                             // Select present type
@@ -118,14 +118,14 @@ export default class Transformer {
                             // Select present properties
                             this.transformProperties(artifact, artifact.raw)
 
-                            map[artifact.name] = artifact.raw
-                            return map
+                            artifactMap[artifact.name] = artifact.raw
+                            return artifactMap
                         }, {})
                     if (utils.isEmpty(template.artifacts)) delete template.artifacts
 
                     this.clean(template)
-                    map[node.name] = template
-                    return map
+                    nodeMap[node.name] = template
+                    return nodeMap
                 }, {})
 
             if (utils.isEmpty(this.topology.node_templates)) {

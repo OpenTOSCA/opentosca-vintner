@@ -12,36 +12,33 @@ const executables: {[key: string]: string} = {
 const executable = executables[platform.platform]
 if (!executable) throw new Error(`Platform not supported`)
 
-async function resolve(file: string) {
-    const resolved = path.resolve(file)
-    if (platform.wsl) {
-        return "'" + (await platform.wsl2win(resolved)) + "'"
+class Open {
+    async resolve(file: string) {
+        const resolved = path.resolve(file)
+        if (platform.wsl) {
+            return "'" + (await platform.wsl2win(resolved)) + "'"
+        }
+        return resolved
     }
-    return resolved
+
+    async file(file: string) {
+        const resolved = await this.resolve(file)
+        return new Promise<void>(resolve => {
+            exec(executable + ' ' + resolved, () => resolve())
+        })
+    }
+
+    async url(url: string) {
+        return new Promise<void>(resolve => {
+            exec(executable + ' ' + url, () => resolve())
+        })
+    }
+
+    async code(file: string) {
+        return new Promise<void>(resolve => {
+            exec('code' + ' ' + file, () => resolve())
+        })
+    }
 }
 
-async function file(file: string) {
-    const resolved = await resolve(file)
-    return new Promise<void>(resolve => {
-        exec(executable + ' ' + resolved, () => resolve())
-    })
-}
-
-async function url(url: string) {
-    return new Promise<void>(resolve => {
-        exec(executable + ' ' + url, () => resolve())
-    })
-}
-
-async function code(file: string) {
-    return new Promise<void>(resolve => {
-        exec('code' + ' ' + file, () => resolve())
-    })
-}
-
-export default {
-    resolve,
-    file,
-    url,
-    code,
-}
+export default new Open()
