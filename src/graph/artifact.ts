@@ -3,10 +3,9 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
 import Type from '#graph/type'
-import {andify, bratify, orify} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {ArtifactDefaultConditionMode, ConditionsWrapper, LogicExpression} from '#spec/variability'
-import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export default class Artifact extends Element {
@@ -102,14 +101,7 @@ export default class Artifact extends Element {
              * As a result, the artifact is always removed, as intended.
              */
             if (it === 'technology') {
-                const conditions: LogicExpression[] = []
-                for (const technology of this.container.technologies) {
-                    const deconstructed = destructImplementationName(technology.assign)
-                    if (check.isUndefined(deconstructed.artifact)) continue
-                    if (!this.getType().isA(deconstructed.artifact)) continue
-                    conditions.push(technology.presenceCondition)
-                }
-                return semantics.push(orify(conditions))
+                return semantics.push({is_managed: 'SELF', _cached_element: this})
             }
         })
 

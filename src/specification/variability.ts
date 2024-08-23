@@ -347,6 +347,7 @@ export type LogicExpression =
 
           // Artifact functions
           artifact_presence?: [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
+          is_managed?: 'SELF' | [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
 
           // Policy functions
           policy_presence?: string | number | 'SELF' | 'CONTAINER'
