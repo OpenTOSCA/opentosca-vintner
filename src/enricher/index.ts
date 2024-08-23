@@ -5,11 +5,17 @@ import Transformer from '#enricher/transformer'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
 
+export type Options = {
+    cleanTypes: boolean
+}
+
 export default class Enricher {
     private readonly serviceTemplate: ServiceTemplate
+    private readonly options: Options
 
-    constructor(serviceTemplate: ServiceTemplate) {
+    constructor(serviceTemplate: ServiceTemplate, options: Options = {cleanTypes: true}) {
         this.serviceTemplate = serviceTemplate
+        this.options = options
     }
 
     async run() {
@@ -41,6 +47,6 @@ export default class Enricher {
         /**
          * Transformer
          */
-        new Transformer(graph).run()
+        new Transformer(graph, {cleanTypes: this.options.cleanTypes}).run()
     }
 }

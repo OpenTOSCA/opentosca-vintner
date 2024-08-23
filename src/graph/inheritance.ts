@@ -138,6 +138,17 @@ export default class Inheritance {
             type: type as T,
         }))
 
+        /**
+         * Initially check that staring type has a definition
+         */
+        if (check.isUndefined(types.find(it => it.name === start))) {
+            console.log(
+                types,
+                types.find(it => it.name === start)
+            )
+            throw new Error(`starting ${key} "${start}" has no definition`)
+        }
+
         let current: {name: string; type: T} | undefined
 
         const has = () => {
