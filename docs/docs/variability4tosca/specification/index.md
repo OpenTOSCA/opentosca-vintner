@@ -335,7 +335,7 @@ enrich_implementations: true
 ### RC v3
 
 `tosca_variability_1_0_rc_3` has the following default values.
-Also, pruning modes also consider input and output pruning.
+Also, pruning modes consider input and output pruning.
 
 ```yaml linenums="1"
 mode: semantic-loose
@@ -343,7 +343,7 @@ node_default_condition_mode: incomingnaive-artifact-host
 optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
-optimization_technologies_mode: weight
+optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
 technology_constraint: true
 hosting_stack_constraint: true
