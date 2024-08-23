@@ -3,9 +3,9 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
 import Type from '#graph/type'
-import {bratify} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
-import {LogicExpression} from '#spec/variability'
+import {ArtifactDefaultConditionMode, ConditionsWrapper, LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Artifact extends Element {
@@ -34,6 +34,10 @@ export default class Artifact extends Element {
 
     get toscaId(): [string, string | number] {
         return [this.container.name, this.index]
+    }
+
+    get getDefaultMode(): ArtifactDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.artifactDefaultConditionMode
     }
 
     get defaultEnabled() {
@@ -78,7 +82,40 @@ export default class Artifact extends Element {
     }
 
     getElementGenericCondition() {
-        return {conditions: this.container.presenceCondition, consistency: true, semantic: false}
+        const consistencies: LogicExpression[] = []
+        const semantics: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['container', 'managed'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'container') {
+                return consistencies.push(this.container.presenceCondition)
+            }
+
+            /**
+             * Artifact should be present if any respective technology is present
+             *
+             * Note, if no respective technology exists, then "or" is an empty list, which evaluates to "false".
+             * As a result, the artifact is always removed, as intended.
+             */
+            if (it === 'managed') {
+                return semantics.push({is_managed: 'SELF', _cached_element: this})
+            }
+        })
+
+        const wrappers: ConditionsWrapper[] = []
+
+        if (!utils.isEmpty(consistencies)) {
+            wrappers.push({conditions: andify(consistencies), consistency: true, semantic: false})
+        }
+
+        if (!utils.isEmpty(semantics)) {
+            wrappers.push({conditions: andify(semantics), consistency: false, semantic: true})
+        }
+
+        return wrappers
     }
 
     constructPresenceCondition() {

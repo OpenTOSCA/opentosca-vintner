@@ -11,6 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'ansible',
+    artifact: 'virtual.machine.image',
     hosting: ['openstack.provider'],
     weight: 0.5,
     comment: 'Terraform is more specialized.',

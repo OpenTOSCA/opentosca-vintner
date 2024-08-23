@@ -1,7 +1,8 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
-import {generatify, simplify} from '#graph/utils'
+import {andify, generatify, simplify} from '#graph/utils'
 import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 
@@ -57,32 +58,46 @@ export class ConditionEnricher {
     }
 
     private enrichPruning(element: Element, conditions: LogicExpression[]) {
-        const candidates = [element.getTypeSpecificCondition(), element.getElementGenericCondition()]
-        const candidate = candidates.find(condition => {
+        const candidates = [element.getTypeSpecificCondition(), ...element.getElementGenericCondition()]
+        const selected = candidates.filter(candidate => {
             // Ignore undefined
-            if (check.isUndefined(condition)) return false
+            if (check.isUndefined(candidate)) return false
 
             // Add default condition if requested
             if (element.defaultEnabled && utils.isEmpty(conditions)) {
                 // If targets consistency and if allowed
-                if (condition?.consistency && element.defaultConsistencyCondition) return true
+                if (candidate.consistency && element.defaultConsistencyCondition) return true
 
                 // If targets semantics and if allowed
-                if (condition?.semantic && element.defaultSemanticCondition) return true
+                if (candidate.semantic && element.defaultSemanticCondition) return true
             }
 
             // Add pruning condition if requested
             if (element.pruningEnabled) {
                 // If targets consistency and if allowed
-                if (condition?.consistency && element.consistencyPruning) return true
+                if (candidate.consistency && element.consistencyPruning) return true
 
                 // If targets semantics and if allowed
-                if (condition?.semantic && element.semanticPruning) return true
+                if (candidate.semantic && element.semanticPruning) return true
             }
 
             // Otherwise
             return false
         })
-        if (check.isDefined(candidate)) conditions.unshift(generatify(simplify(candidate.conditions)))
+
+        if (!utils.isEmpty(selected)) {
+            conditions.unshift(
+                generatify(
+                    simplify(
+                        andify(
+                            selected.map(it => {
+                                assert.isDefined(it)
+                                return it.conditions
+                            })
+                        )
+                    )
+                )
+            )
+        }
     }
 }

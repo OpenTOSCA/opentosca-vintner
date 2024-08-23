@@ -91,8 +91,10 @@ export type NodeDefaultConditionMode =
     | 'outgoing'
     | 'outgoingnaive'
     | 'incomingnaive-artifact-host'
+    | 'incomingnaive-artifactnaive-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
+export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
 
 export type DefaultOptions = {
     default_condition?: boolean
@@ -125,6 +127,7 @@ export type DefaultOptions = {
     group_default_semantic_condition?: boolean
 
     artifact_default_condition?: boolean
+    artifact_default_condition_mode?: ArtifactDefaultConditionMode
     artifact_default_consistency_condition?: boolean
     artifact_default_semantic_condition?: boolean
 
@@ -344,6 +347,7 @@ export type LogicExpression =
 
           // Artifact functions
           artifact_presence?: [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
+          is_managed?: 'SELF' | [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
 
           // Policy functions
           policy_presence?: string | number | 'SELF' | 'CONTAINER'

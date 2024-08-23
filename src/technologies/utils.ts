@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {METADATA} from '#technologies/plugins/rules/types'
@@ -24,6 +25,37 @@ export type RuleData = {component: string; technology: string; artifact?: string
 
 export function constructImplementationName(data: {type: string; rule: RuleData}) {
     return `${data.type}~${constructRuleName(data.rule)}`
+}
+
+export function destructImplementationName(name: string) {
+    const result = name.match(
+        /(?<type>[^~]*)~(?<component>[^#]*)(#(?<artifact>[^::]*))?::(?<technology>[^@]*)(@(?<hosting>.*))?/
+    )
+    assert.isDefined(result)
+
+    const data = result.groups
+    assert.isDefined(data)
+
+    const type = data['type']
+    assert.isDefined(type)
+
+    const component = data['component']
+    assert.isDefined(component)
+
+    const artifact = data['artifact']
+
+    const technology = data['technology']
+    assert.isDefined(technology)
+
+    const hosting = data['hosting'] ? data['hosting'].split('->') : []
+
+    return {
+        type,
+        component,
+        artifact,
+        technology,
+        hosting,
+    }
 }
 
 export function constructRuleName(data: RuleData) {

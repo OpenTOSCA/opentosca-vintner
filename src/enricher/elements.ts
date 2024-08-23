@@ -1,4 +1,5 @@
 import * as assert from '#assert'
+import * as check from '#check'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import {TechnologyTemplateMap} from '#spec/technology-template'
@@ -49,8 +50,12 @@ export class ElementEnricher {
                         const template = utils.firstValue(map)
                         if (!utils.isEmpty(technology.conditions)) {
                             // TODO: improve plugin typing!
-                            assert.isArray(template.conditions)
-                            template.conditions = [...technology.conditions, ...template.conditions]
+                            // assert.isArray(template.conditions)
+                            assert.isDefined(template.conditions)
+                            template.conditions = [
+                                ...technology.conditions,
+                                ...(check.isArray(template.conditions) ? template.conditions : [template.conditions]),
+                            ]
                         }
                     }
 

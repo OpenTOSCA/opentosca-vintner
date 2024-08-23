@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
+    ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
@@ -85,6 +86,7 @@ class DefaultOptions extends BaseOptions {
     readonly groupDefaultSemanticCondition: boolean
 
     readonly artifactDefaultCondition: boolean
+    readonly artifactDefaultConditionMode: ArtifactDefaultConditionMode
     readonly artifactDefaultConsistencyCondition: boolean
     readonly artifactDefaultSemanticCondition: boolean
 
@@ -256,6 +258,16 @@ class DefaultOptions extends BaseOptions {
         this.artifactDefaultCondition =
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
         assert.isBoolean(this.artifactDefaultCondition)
+
+        if (this.v1 || this.v2) {
+            this.artifactDefaultConditionMode =
+                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container'
+            assert.isString(this.artifactDefaultConditionMode)
+        } else {
+            this.artifactDefaultConditionMode =
+                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container-managed'
+            assert.isString(this.artifactDefaultConditionMode)
+        }
 
         this.artifactDefaultConsistencyCondition =
             this.raw.artifact_default_consistency_condition ??
@@ -883,7 +895,11 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
             assert.isBoolean(this.uniqueOutput)
 
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            if (this.v3) {
+                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            } else {
+                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            }
             assert.isBoolean(this.requiredArtifact)
 
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints

@@ -67,11 +67,13 @@ export default class Policy extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: {has_present_target: this.toscaId, _cached_element: this},
-            consistency: false,
-            semantic: true,
-        }
+        return [
+            {
+                conditions: {has_present_target: this.toscaId, _cached_element: this},
+                consistency: false,
+                semantic: true,
+            },
+        ]
     }
 
     getTypeSpecificConditionWrapper() {
