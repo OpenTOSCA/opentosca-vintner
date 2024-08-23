@@ -2,7 +2,7 @@ import {InterfaceTypeMap} from '#spec/interface-type'
 
 const interfaces: InterfaceTypeMap = {
     root: {
-        derived_from: 'tosca.entity.Root',
+        derived_from: 'tosca.interfaces.Root',
         metadata: {
             vintner_normative: 'true',
         },

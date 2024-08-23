@@ -7,8 +7,8 @@ const nodes: NodeTypeMap = {
             vintner_normative: 'true',
         },
         artifacts: {
-            system_package: {
-                type: 'system.package',
+            apt_package: {
+                type: 'apt.package',
                 file: 'nodejs',
                 properties: {
                     setup: 'https://deb.nodesource.com/setup_18.x',
@@ -30,7 +30,7 @@ const nodes: NodeTypeMap = {
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: 'npm start',
                     configure: 'npm ci',
@@ -44,8 +44,8 @@ const nodes: NodeTypeMap = {
             vintner_normative: 'true',
         },
         artifacts: {
-            system_package: {
-                type: 'system.package',
+            apt_package: {
+                type: 'apt.package',
                 file: 'python-is-python3',
                 properties: {
                     dependencies: {
@@ -70,7 +70,7 @@ const nodes: NodeTypeMap = {
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: 'python main.py',
                     configure: 'pip install -r requirements.txt',
@@ -86,7 +86,7 @@ const nodes: NodeTypeMap = {
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: '{{ SELF.application_name }}',
                 },

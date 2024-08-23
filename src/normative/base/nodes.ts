@@ -58,7 +58,7 @@ const nodes: NodeTypeMap = {
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'create'],
+                        args: ['management', 'create'],
                     },
                 },
             },
@@ -70,7 +70,7 @@ const nodes: NodeTypeMap = {
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'configure'],
+                        args: ['management', 'configure'],
                     },
                 },
             },
@@ -82,7 +82,7 @@ const nodes: NodeTypeMap = {
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'start'],
+                        args: ['management', 'start'],
                     },
                 },
             },
@@ -94,7 +94,7 @@ const nodes: NodeTypeMap = {
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'stop'],
+                        args: ['management', 'stop'],
                     },
                 },
             },
@@ -106,7 +106,7 @@ const nodes: NodeTypeMap = {
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'delete'],
+                        args: ['management', 'delete'],
                     },
                 },
             },
@@ -120,7 +120,7 @@ const nodes: NodeTypeMap = {
             },
         ],
         interfaces: {
-            Management: {
+            management: {
                 type: 'management',
             },
         },

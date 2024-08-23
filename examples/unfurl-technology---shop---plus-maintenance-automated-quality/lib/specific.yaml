@@ -38,7 +38,7 @@ node_types:
                 default: node18
         interfaces:
             management:
-                type: Management
+                type: management
                 operations:
                     start: npm start
                     configure: npm ci
@@ -65,7 +65,7 @@ node_types:
                 default: python3
         interfaces:
             management:
-                type: Management
+                type: management
                 operations:
                     start: python main.py
                     configure: pip install -r requirements.txt
@@ -76,7 +76,7 @@ node_types:
             vintner_abstract: 'true'
         interfaces:
             management:
-                type: Management
+                type: management
                 operations:
                     start: '{{ SELF.application_name }}'
     gcp.provider:

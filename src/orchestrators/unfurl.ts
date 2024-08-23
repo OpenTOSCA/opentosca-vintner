@@ -141,17 +141,21 @@ export class Unfurl implements Orchestrator {
         const dataDirectory = options.dir ?? instance.getDataDirectory()
         const ensembleDirectory = path.join(dataDirectory, 'ensemble')
         const ensembleFile = path.join(ensembleDirectory, 'ensemble.yaml')
-        const ensembleFileContent = `apiVersion: unfurl/v1alpha1
-kind: Ensemble
-spec:
-  inputs:
-    +?include: service-inputs.yaml
-  service_template:
-    +include: ${instance.getServiceTemplateFile()}`
-        const ensembleInputsFile = path.join(ensembleDirectory, 'service-inputs.yaml')
+        const ensembleContent = {
+            apiVersion: 'unfurl/v1alpha1',
+            kind: 'Ensemble',
+            spec: {
+                inputs: {
+                    '+?include': 'service-inputs.yaml',
+                },
+                service_template: {
+                    '+include': instance.getServiceTemplateFile(),
+                },
+            },
+        }
 
         await this.shell.execute([this.binary, 'init', '--empty', this.shell.resolve(dataDirectory)])
-        files.storeYAML(ensembleFile, ensembleFileContent)
+        files.storeYAML(ensembleFile, ensembleContent)
         files.copy(instance.getTemplateDirectory(), ensembleDirectory)
 
         // Vintner utils
@@ -159,6 +163,6 @@ spec:
 
         // This is messy: use options.inputs for validating and instance.hasVariabilityInputs for deployment
         const inputs = options.inputs ?? (instance.hasServiceInputs() ? instance.getServiceInputs() : undefined)
-        if (check.isDefined(inputs)) files.copy(inputs, ensembleInputsFile)
+        if (check.isDefined(inputs)) files.copy(inputs, path.join(ensembleDirectory, 'service-inputs.yaml'))
     }
 }

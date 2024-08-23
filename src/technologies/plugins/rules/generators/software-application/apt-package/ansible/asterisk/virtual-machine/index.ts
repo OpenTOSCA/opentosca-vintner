@@ -14,7 +14,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'system.package',
+    artifact: 'apt.package',
     hosting: ['*', 'virtual.machine'],
     weight: 1,
     comment: 'Primary use case due to the specialization of Ansible.',

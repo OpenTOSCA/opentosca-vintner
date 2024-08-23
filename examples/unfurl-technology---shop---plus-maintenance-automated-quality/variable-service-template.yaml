@@ -88,6 +88,8 @@ topology_template:
             persistent: true
             properties:
                 - application_name: unfurl-technology-shop
+                - application_port: 3000
+                - application_protocol: http
                 - DB_NAME: unfurl-technology-shop
                 - DB_USERNAME: root
                 - DB_PASSWORD: {get_input: database_password}

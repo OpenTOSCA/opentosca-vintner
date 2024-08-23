@@ -1,24 +1,32 @@
 import {ArtifactTypeMap} from '#spec/artifact-type'
 
+// TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
+
 const artifacts: ArtifactTypeMap = {
     root: {
-        derived_from: 'tosca.entity.Root',
+        derived_from: 'tosca.artifacts.Root',
+        /*
         metadata: {
             vintner_normative: 'true',
         },
+        */
     },
     'source.archive': {
         derived_from: 'root',
         description: 'application packaged as zip archive',
+        /*
         metadata: {
             vintner_normative: 'true',
         },
+        */
     },
     'system.package': {
         derived_from: 'root',
+        /*
         metadata: {
             vintner_normative: 'true',
         },
+        */
         properties: {
             script: {
                 type: 'string',
@@ -55,16 +63,20 @@ const artifacts: ArtifactTypeMap = {
     'container.image': {
         derived_from: 'root',
         description: 'expects image reference in "file"',
+        /*
         metadata: {
             vintner_normative: 'true',
         },
+        */
     },
     'virtual.machine.image': {
         derived_from: 'root',
         description: 'expects image reference in "file"',
+        /*
         metadata: {
             vintner_normative: 'true',
         },
+            */
     },
 }
 

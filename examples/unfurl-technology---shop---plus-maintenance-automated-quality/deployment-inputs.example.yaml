@@ -1,4 +1,5 @@
 database_password: password
+dbms_password: password
 
 os_network: public-belwue
 os_ssh_key_name: default

@@ -1,5 +1,8 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+imports:
+    - specific.yaml
+
 node_types:
     ###################################################
     #
@@ -43,6 +46,10 @@ node_types:
                 type: boolean
                 metadata:
                     vintner_name: FEATURE_PREMIUM
+
+        capabilities:
+            endpoint:
+                type: tosca.capabilities.Endpoint
 
         requirements:
             - database:

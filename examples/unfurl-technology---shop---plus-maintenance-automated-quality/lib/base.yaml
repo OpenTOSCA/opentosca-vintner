@@ -10,18 +10,18 @@ metadata:
     vintner_orchestrator: unfurl
 artifact_types:
     root:
-        derived_from: tosca.entity.Root
-        metadata:
-            vintner_normative: 'true'
+        derived_from: tosca.artifacts.Root
+        #metadata:
+        #    vintner_normative: 'true'
     source.archive:
         derived_from: root
         description: application packaged as zip archive
-        metadata:
-            vintner_normative: 'true'
+        #metadata:
+        #    vintner_normative: 'true'
     system.package:
         derived_from: root
-        metadata:
-            vintner_normative: 'true'
+        #metadata:
+        #    vintner_normative: 'true'
         properties:
             script:
                 type: string
@@ -50,8 +50,8 @@ artifact_types:
     container.image:
         derived_from: root
         description: expects image reference in "file"
-        metadata:
-            vintner_normative: 'true'
+        #metadata:
+        #   vintner_normative: 'true'
     virtual.machine.image:
         derived_from: root
         description: expects image reference in "file"
@@ -59,7 +59,7 @@ artifact_types:
             vintner_normative: 'true'
 interface_types:
     root:
-        derived_from: tosca.entity.Root
+        derived_from: tosca.interfaces.Root
         metadata:
             vintner_normative: 'true'
     management:
@@ -114,7 +114,7 @@ node_types:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
                         args:
-                            - Management
+                            - management
                             - create
             _management_configure:
                 type: string
@@ -124,7 +124,7 @@ node_types:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
                         args:
-                            - Management
+                            - management
                             - configure
             _management_start:
                 type: string
@@ -134,7 +134,7 @@ node_types:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
                         args:
-                            - Management
+                            - management
                             - start
             _management_stop:
                 type: string
@@ -144,7 +144,7 @@ node_types:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
                         args:
-                            - Management
+                            - management
                             - stop
             _management_delete:
                 type: string
@@ -154,14 +154,14 @@ node_types:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
                         args:
-                            - Management
+                            - management
                             - delete
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
         interfaces:
-            Management:
+            management:
                 type: management
     service.application:
         derived_from: software.application
