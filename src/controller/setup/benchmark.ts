@@ -40,10 +40,10 @@ export default async function (options: BenchmarkOptions) {
                 // Service template is transformed in-place!
                 const serviceTemplate = generateBenchmarkServiceTemplate(seed)
 
-                const input = files.temporary(
+                const input = files.temporaryDirent(
                     `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_input_${crypto.generateNonce()}.yaml`
                 )
-                const output = files.temporary(
+                const output = files.temporaryDirent(
                     `vintner_benchmark_io_${io}_factor_${seed}_run_${run}_output_${crypto.generateNonce()}.yaml`
                 )
 

@@ -6,7 +6,7 @@ import * as path from 'path'
 describe('puml', () => {
     it('topology', async () => {
         const input = path.join(__dirname, 'topology', 'service-template.yaml')
-        const output = files.temporary('service-template.topology.puml')
+        const output = files.temporaryDirent('service-template.topology.puml')
 
         await Controller.template.puml.topology({path: input, output})
 
@@ -17,7 +17,7 @@ describe('puml', () => {
 
     it('types', async () => {
         const input = path.join(__dirname, 'types', 'service-template.yaml')
-        const output = files.temporary()
+        const output = files.temporaryDirent()
         files.createDirectory(output)
 
         await Controller.template.puml.types({path: input, output})

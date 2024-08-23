@@ -205,7 +205,7 @@ export function copy(source: string, target: string, options: {overwrite?: boole
     fse.copySync(path.resolve(source), path.resolve(target), {overwrite: options.overwrite})
 }
 
-export async function sync(source: string, target: string) {
+export async function syncDirent(source: string, target: string) {
     await syncDirectory.async(source, target, {
         onError(error): any {
             throw error
@@ -213,7 +213,7 @@ export async function sync(source: string, target: string) {
     })
 }
 
-export async function linkDirents(source: string, target: string) {
+export async function linkDirent(source: string, target: string) {
     try {
         await lnk(source, target, {force: true})
     } catch (e) {
@@ -323,7 +323,7 @@ export async function createArchive(source: string, target: string) {
     })
 }
 
-export async function download(source: string, target: string = temporary()): Promise<string> {
+export async function download(source: string, target: string = temporaryDirent()): Promise<string> {
     return new Promise((resolve, reject) => {
         axios
             .get(source, {
@@ -345,7 +345,7 @@ export async function download(source: string, target: string = temporary()): Pr
     })
 }
 
-export function temporary(name?: string) {
+export function temporaryDirent(name?: string) {
     return path.join(os.tmpdir(), TMP_PREFIX + (name || crypto.generateNonce()))
 }
 
@@ -359,6 +359,6 @@ export async function renderFile(source: string, data: ejs.Data, target?: string
     })
 }
 
-export function stat(file: string) {
+export function statDirent(file: string) {
     return fss.statSync(file)
 }

@@ -40,13 +40,13 @@ export class Shell {
 
         // If content, then store it as file
         if (check.isDefined(options.content)) {
-            options.file = files.temporary()
+            options.file = files.temporaryDirent()
             files.storeFile(options.file, options.content)
         }
 
         // If asset, then copy asset from within binary to filesystem
         if (check.isDefined(options.asset)) {
-            options.file = files.temporary(options.asset)
+            options.file = files.temporaryDirent(options.asset)
             files.copy(path.join(files.SCRIPTS_DIR, options.asset), options.file)
         }
 

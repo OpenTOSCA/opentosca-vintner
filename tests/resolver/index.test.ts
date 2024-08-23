@@ -6,7 +6,7 @@ describe('resolver', () => {
     it('load inputs', async () => {
         process.env.OPENTOSCA_VINTNER_VARIABILITY_INPUT_VARIABILITY_INPUT_ONE = 'variability_value_one'
 
-        const inputs = files.temporary()
+        const inputs = files.temporaryDirent()
         files.storeYAML(inputs, {
             variability_input_one: 1,
             variability_input_two: 'variability_value_two',
