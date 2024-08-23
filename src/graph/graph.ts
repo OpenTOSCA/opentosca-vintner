@@ -328,9 +328,9 @@ export default class Graph {
         assert.isStringOrNumber(element)
 
         if (check.isDefined(context.cached)) {
-            const element = context.cached
-            assert.isPolicy(element)
-            return element
+            const cached = context.cached
+            assert.isPolicy(cached)
+            return cached
         }
 
         if (element === 'SELF') {

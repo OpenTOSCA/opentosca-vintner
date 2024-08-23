@@ -186,15 +186,15 @@ export function sort(unordered: {[key: string]: boolean}) {
         }, {})
 }
 
-export function filter(unfiltered: {[key: string]: boolean}, filter: RegExp) {
+export function filter(unfiltered: {[key: string]: boolean}, regex: RegExp) {
     return Object.keys(unfiltered).reduce<{[key: string]: boolean}>((obj, key) => {
-        if (filter.test(key)) obj[key] = unfiltered[key]
+        if (regex.test(key)) obj[key] = unfiltered[key]
         return obj
     }, {})
 }
 
 export function sum(values: number[]) {
-    return values.reduce((sum, value) => sum + value, 0)
+    return values.reduce((acc, value) => acc + value, 0)
 }
 
 export function replace(data: string, entries: [find: string, replace: string][]) {

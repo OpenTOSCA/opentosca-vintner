@@ -24,9 +24,9 @@ export async function submit(options: SensorBaseOptions, inputs: InputAssignment
     })
 }
 
-export function prefix(data: InputAssignmentMap, prefix: string) {
+export function prefix(data: InputAssignmentMap, key: string) {
     return Object.entries(data).reduce<InputAssignmentMap>((acc, cur) => {
-        acc[`${prefix}_${cur[0]}`] = cur[1]
+        acc[`${key}_${cur[0]}`] = cur[1]
         return acc
     }, {})
 }

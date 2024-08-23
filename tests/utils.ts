@@ -66,7 +66,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
     return async function () {
         files.assertDirectory(dir)
         const config = loadConfig(dir)
-        const output = files.temporary()
+        const output = files.temporaryDirent()
 
         async function fn() {
             await Controller.template.resolve({
