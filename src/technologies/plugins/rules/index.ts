@@ -125,10 +125,11 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
                 let artifactCondition: LogicExpression | undefined
                 if (check.isDefined(rule.artifact)) {
-                    // TODO: check if node template has artifact
-
                     // Check for artifact in template
-                    const artifactsByTemplate = node.artifacts.filter(it => it.getType().isA(rule.artifact!))
+                    const artifactsByTemplate = node.artifacts.filter(it => {
+                        assert.isDefined(rule.artifact)
+                        return it.getType().isA(rule.artifact)
+                    })
                     // TODO: check naming convention?
                     const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
 

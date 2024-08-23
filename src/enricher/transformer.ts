@@ -7,13 +7,19 @@ import {TopologyTemplate} from '#spec/topology-template'
 import {LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
 
+export type Options = {
+    cleanTypes: boolean
+}
+
 export default class Transformer {
     private readonly graph: Graph
     private readonly topology: TopologyTemplate
+    private readonly options: Options
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: Options = {cleanTypes: true}) {
         this.graph = graph
         this.topology = graph.serviceTemplate.topology_template || {}
+        this.options = options
     }
 
     run() {
@@ -27,7 +33,7 @@ export default class Transformer {
         this.cleanVariabilityDefinition()
 
         // Remove loaded types
-        this.cleanTypes()
+        if (this.options.cleanTypes) this.cleanTypes()
     }
 
     private removeVariabilityGroups() {

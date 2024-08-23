@@ -50,7 +50,7 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
     /**
      * Enricher
      */
-    await new Enricher(options.template).run()
+    await new Enricher(options.template, {cleanTypes: false}).run()
 
     /**
      * Inputs

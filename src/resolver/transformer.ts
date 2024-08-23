@@ -10,7 +10,7 @@ import {GroupTemplateMap} from '#spec/group-template'
 import {GroupMember} from '#spec/group-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
-import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {EntityTypesKeys, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {ElementType} from '#spec/type-assignment'
 import * as utils from '#utils'
@@ -57,6 +57,9 @@ export default class Transformer {
         if (utils.isEmpty(this.topology)) {
             delete this.graph.serviceTemplate.topology_template
         }
+
+        // Clean types
+        this.cleanTypes()
     }
 
     private clean(raw: any) {
@@ -317,6 +320,19 @@ export default class Transformer {
             if (utils.isEmpty(this.graph.serviceTemplate.imports)) {
                 delete this.graph.serviceTemplate.imports
             }
+        }
+    }
+
+    private cleanTypes() {
+        for (const key of EntityTypesKeys) {
+            const types = this.graph.serviceTemplate[key]
+            if (check.isUndefined(types)) return
+
+            for (const [name, type] of Object.entries(types)) {
+                if (type._loaded) delete types[name]
+            }
+
+            if (utils.isEmpty(this.graph.serviceTemplate[key])) delete this.graph.serviceTemplate[key]
         }
     }
 }
