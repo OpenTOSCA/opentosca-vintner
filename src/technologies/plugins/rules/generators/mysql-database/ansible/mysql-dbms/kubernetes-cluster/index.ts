@@ -10,6 +10,8 @@ import {
 
 // TODO: use  https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
 
+// https://stackoverflow.com/questions/37288500/how-to-undo-a-kubectl-port-forward
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
