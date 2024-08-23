@@ -10,7 +10,7 @@ const key = {
 
 describe('crypto', () => {
     it('sign-verify', async () => {
-        const signature = files.temporary()
+        const signature = files.temporaryDirent()
 
         await Controller.template.sign({
             template,

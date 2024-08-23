@@ -21,7 +21,7 @@ async function main() {
         .loadFile(SOURCE)
         .split(/\r?\n/)
         .filter(it => it != '')
-        .map(it => it.split(',').map(it => it.slice(1, -1)))
+        .map(it => it.split(',').map(iu => iu.slice(1, -1)))
         .slice(1)
 
     /**

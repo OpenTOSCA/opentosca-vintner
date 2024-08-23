@@ -567,8 +567,8 @@ templates
     .description('lists all templates')
     .action(
         hae.exit(async () => {
-            const templates = await Controller.templates.list()
-            std.out(templates.map(template => template.getName()).join('\n'))
+            const list = await Controller.templates.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -623,8 +623,8 @@ templates
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            const template = await Controller.templates.inspect(options)
-            std.out(files.toYAML(template))
+            const inspect = await Controller.templates.inspect(options)
+            std.out(files.toYAML(inspect))
         })
     )
 
@@ -657,8 +657,8 @@ instances
     .description('lists all instances')
     .action(
         hae.exit(async () => {
-            const instances = await Controller.instances.list()
-            std.out(instances.map(it => it.getName()).join('\n'))
+            const list = await Controller.instances.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -691,8 +691,8 @@ instances
     .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
-            const info = await Controller.instances.info(options)
-            std.out(files.toYAML(info))
+            const output = await Controller.instances.info(options)
+            std.out(files.toYAML(output))
         })
     )
 
@@ -780,8 +780,8 @@ instances
     .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
-            const template = await Controller.instances.inspect(options)
-            std.out(files.toYAML(template))
+            const inspect = await Controller.instances.inspect(options)
+            std.out(files.toYAML(inspect))
         })
     )
 
@@ -1045,8 +1045,8 @@ assets
     .description('lists all assets')
     .action(
         hae.exit(async options => {
-            const assets = await Controller.assets.list()
-            std.out(assets.map(it => it.getName()).join('\n'))
+            const list = await Controller.assets.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 

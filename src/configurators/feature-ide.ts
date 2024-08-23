@@ -43,11 +43,11 @@ export default class FeatureIDE implements Configurator {
                     const originalAttributeName = utils.normalizeString(attribute.$.name)
 
                     const overrideAttributeName = feature.attribute?.find(
-                        attribute => attribute.$.name === `__name_${originalAttributeName}`
+                        it => it.$.name === `__name_${originalAttributeName}`
                     )?.$.value
 
                     const fullOverrideAttributeName = feature.attribute?.find(
-                        attribute => attribute.$.name === `__full_name_${originalAttributeName}`
+                        it => it.$.name === `__full_name_${originalAttributeName}`
                     )?.$.value
 
                     const effectiveAttributeName = utils.normalizeString(

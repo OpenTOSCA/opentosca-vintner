@@ -55,7 +55,7 @@ export class Unfurl implements Orchestrator {
      * https://docs.unfurl.run/cli.html#unfurl-validate
      */
     async validate(instance: Instance, options?: OrchestratorValidateOptions) {
-        const tmp = files.temporary()
+        const tmp = files.temporaryDirent()
         files.createDirectory(tmp)
         await this.createEnsemble(instance, {dir: tmp, inputs: options?.inputs})
 

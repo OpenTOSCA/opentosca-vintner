@@ -59,7 +59,7 @@ export class Template {
         key?: string
     }) {
         if (check.isDefined(options.gitRepository)) {
-            const repoDir = files.temporary()
+            const repoDir = files.temporaryDirent()
 
             await git.clone(options.gitRepository, repoDir)
             if (check.isDefined(options.gitCheckout)) {

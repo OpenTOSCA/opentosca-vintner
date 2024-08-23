@@ -87,9 +87,9 @@ export default class Checker {
             for (const list of [nodes, groups, policies, artifacts]) {
                 for (const element of list) {
                     const names = new Set()
-                    const types = element.types.filter(it => it.present)
-                    if (utils.isEmpty(types)) throw new Error(`${element.Display} has no type`)
-                    for (const type of types) {
+                    const elementTypes = element.types.filter(it => it.present)
+                    if (utils.isEmpty(elementTypes)) throw new Error(`${element.Display} has no type`)
+                    for (const type of elementTypes) {
                         if (names.has(type.name)) throw new Error(`${type.Display} is ambiguous`)
                         names.add(type.name)
                     }
@@ -100,19 +100,19 @@ export default class Checker {
         // Ensure that every component has at maximum one hosting relation
         if (this.graph.options.checks.ambiguousHosting) {
             for (const node of nodes) {
-                const relations = node.outgoing.filter(it => it.isHostedOn()).filter(it => it.present)
-                if (relations.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
+                const hostings = node.outgoing.filter(it => it.isHostedOn()).filter(it => it.present)
+                if (hostings.length > 1) throw new Error(`${node.Display} has more than one hosting relations`)
             }
         }
 
         // Ensure that every component that had a hosting relation previously still has one
         if (this.graph.options.checks.expectedHosting) {
             for (const node of nodes) {
-                const relations = node.outgoing.filter(
+                const hosting = node.outgoing.filter(
                     relation => relation.source.name === node.name && relation.isHostedOn()
                 )
 
-                if (relations.length !== 0 && !relations.some(it => it.present))
+                if (hosting.length !== 0 && !hosting.some(it => it.present))
                     throw new Error(`${node.Display} expected to have a hosting relation`)
             }
         }
@@ -151,8 +151,8 @@ export default class Checker {
         // Ensure that every component has at maximum technology
         if (this.graph.options.checks.ambiguousTechnology) {
             for (const node of nodes) {
-                const technologies = node.technologies.filter(it => it.present)
-                if (technologies.length > 1) throw new Error(`${node.Display} has more than one technology`)
+                if (node.technologies.filter(it => it.present).length > 1)
+                    throw new Error(`${node.Display} has more than one technology`)
             }
         }
 
