@@ -94,7 +94,7 @@ export type NodeDefaultConditionMode =
     | 'incomingnaive-artifactnaive-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
-export type ArtifactDefaultConditionMode = 'container' | 'technology' | 'container-technology'
+export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
 
 export type DefaultOptions = {
     default_condition?: boolean

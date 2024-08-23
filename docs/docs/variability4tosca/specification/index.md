@@ -357,7 +357,7 @@ technology_required: true
 checks: false
 enrich_technologies: true
 enrich_implementations: true
-artifact_default_condition_mode: container-technology
+artifact_default_condition_mode: container-managed
 ```
 
 
@@ -402,7 +402,7 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Node with Artifact (artifactnaive)           | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
 | Relation (source)                            | true        | false    | Check if the source of the relation is present.                                |
 | Relation (target)                            | true        | false    | Check if the target of the relation is present.                                |
-| Artifact (technology)                        | false       | true     | Check if the artifact is used by any technology.                               |
+| Artifact (managed)                           | false       | true     | Check if the artifact is managed by any technology.                            |
 
 
 ### Type-Specific Default Conditions

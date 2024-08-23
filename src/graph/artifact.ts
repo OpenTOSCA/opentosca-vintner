@@ -87,7 +87,7 @@ export default class Artifact extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'technology'].includes(it))
+            if (!['container', 'managed'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
@@ -100,7 +100,7 @@ export default class Artifact extends Element {
              * Note, if no respective technology exists, then "or" is an empty list, which evaluates to "false".
              * As a result, the artifact is always removed, as intended.
              */
-            if (it === 'technology') {
+            if (it === 'managed') {
                 return semantics.push({is_managed: 'SELF', _cached_element: this})
             }
         })
