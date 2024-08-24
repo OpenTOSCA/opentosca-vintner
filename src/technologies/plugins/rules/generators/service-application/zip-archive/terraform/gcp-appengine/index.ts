@@ -7,6 +7,7 @@ import {
     SecureApplicationProtocolPropertyDefinition,
     SourceArchiveFile,
     TerraformStandardOperations,
+    UnfurlSelfManagementOperation,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -91,7 +92,9 @@ const generator: ImplementationGenerator = {
                                             entrypoint: [
                                                 {
                                                     // TODO: "node index.js"? its currently "npm start"
-                                                    shell: `{{ SELF._management_${MANAGEMENT_OPERATIONS.START} }}`,
+                                                    shell: `{{ ${UnfurlSelfManagementOperation(
+                                                        MANAGEMENT_OPERATIONS.START
+                                                    )} }}`,
                                                 },
                                             ],
                                             env_variable: mapProperties(type, {format: 'map'}),

@@ -332,7 +332,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
         'ansible.builtin.fail': {
             dest: `Management operation "${operation}" missing`,
         },
-        when: `SELF._management_${operation} is None`,
+        when: AnsibleWhenOperationDefined(operation),
     }
 }
 
@@ -345,7 +345,7 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
             content: Operation(operation),
             mode: '0755',
         },
-        when: `SELF._management_${operation} != None`,
+        when: AnsibleWhenOperationDefined(operation),
     }
 }
 
@@ -357,7 +357,7 @@ export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
         args: {
             chdir: '{{ SELF.application_directory }}',
         },
-        when: `SELF._management_${operation} != None`,
+        when: AnsibleWhenOperationDefined(operation),
     }
 }
 
@@ -366,6 +366,16 @@ export function Operation(operation: MANAGEMENT_OPERATIONS) {
 #! /usr/bin/bash
 set -e
 
-{{ SELF._management_${operation} }}
+{{ ${UnfurlSelfManagementOperation(operation)} }}
 `.trimStart()
 }
+
+export function AnsibleWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
+    return `${UnfurlSelfManagementOperation(operation)} != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+}
+
+export function UnfurlSelfManagementOperation(operation: MANAGEMENT_OPERATIONS) {
+    return `SELF._management_${operation}`
+}
+
+export const VINTNER_MANAGEMENT_OPERATION_UNDEFINED = 'VINTNER_MANAGEMENT_OPERATION_UNDEFINED'

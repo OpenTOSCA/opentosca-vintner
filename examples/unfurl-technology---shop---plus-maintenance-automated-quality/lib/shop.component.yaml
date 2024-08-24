@@ -495,12 +495,12 @@ node_types:
 
                                               {{ SELF._management_create }}
                                           mode: '0755'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: create service
                                       copy:
                                           dest: /etc/systemd/system/{{ SELF.application_name }}.service
@@ -560,12 +560,12 @@ node_types:
 
                                               {{ SELF._management_configure }}
                                           mode: '0755'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -584,7 +584,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start is None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -594,7 +594,7 @@ node_types:
 
                                               {{ SELF._management_start }}
                                           mode: '0755'
-                                      when: SELF._management_start != None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
                                       ansible.builtin.systemd:
                                           name: '{{ SELF.application_name }}'
@@ -625,12 +625,12 @@ node_types:
 
                                               {{ SELF._management_stop }}
                                           mode: '0755'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: stop service
                                       ansible.builtin.systemd:
                                           name: '{{ SELF.application_name }}'
@@ -659,12 +659,12 @@ node_types:
 
                                               {{ SELF._management_delete }}
                                           mode: '0755'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete systemd service
                                       ansible.builtin.file:
                                           path: /etc/systemd/system/{{ SELF.application_name }}.service
@@ -745,12 +745,12 @@ node_types:
 
                                               {{ SELF._management_create }}
                                           mode: '0755'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -775,12 +775,12 @@ node_types:
 
                                               {{ SELF._management_configure }}
                                           mode: '0755'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -805,12 +805,12 @@ node_types:
 
                                               {{ SELF._management_start }}
                                           mode: '0755'
-                                      when: SELF._management_start != None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_start != None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -835,12 +835,12 @@ node_types:
 
                                               {{ SELF._management_stop }}
                                           mode: '0755'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -865,12 +865,12 @@ node_types:
 
                                               {{ SELF._management_delete }}
                                           mode: '0755'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: uninstall package
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::software_package::file | eval }}'
@@ -949,12 +949,12 @@ node_types:
 
                                               {{ SELF._management_create }}
                                           mode: '0755'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_create != None
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -979,12 +979,12 @@ node_types:
 
                                               {{ SELF._management_configure }}
                                           mode: '0755'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_configure != None
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -1003,7 +1003,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start is None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -1013,12 +1013,12 @@ node_types:
 
                                               {{ SELF._management_start }}
                                           mode: '0755'
-                                      when: SELF._management_start != None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_start != None
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -1037,7 +1037,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "stop" missing
-                                      when: SELF._management_stop is None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1047,12 +1047,12 @@ node_types:
 
                                               {{ SELF._management_stop }}
                                           mode: '0755'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_stop != None
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -1077,12 +1077,12 @@ node_types:
 
                                               {{ SELF._management_delete }}
                                           mode: '0755'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
-                                      when: SELF._management_delete != None
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete application directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
