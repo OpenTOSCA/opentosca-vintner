@@ -66,8 +66,8 @@ node_types:
     node:
         derived_from: tosca.nodes.Root
         metadata:
-            vintner_abstract: 'true'
             vintner_normative: 'true'
+            vintner_abstract: 'true'
     cloud.provider:
         derived_from: node
         metadata:
@@ -99,7 +99,7 @@ node_types:
             _management_create:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
                 default:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
@@ -109,7 +109,7 @@ node_types:
             _management_configure:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
                 default:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
@@ -119,7 +119,7 @@ node_types:
             _management_start:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
                 default:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
@@ -129,7 +129,7 @@ node_types:
             _management_stop:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
                 default:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'
@@ -139,7 +139,7 @@ node_types:
             _management_delete:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
                 default:
                     eval:
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation'

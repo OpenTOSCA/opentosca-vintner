@@ -2,6 +2,7 @@ import artifacts from '#/normative/base/artifacts'
 import interfaces from '#/normative/base/interfaces'
 import nodes from '#/normative/base/nodes'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {MetadataUnfurl} from '../utils'
 
 /**
  * Normative Base Types
@@ -16,7 +17,7 @@ export const NORMATIVE_BASE_TYPES: ServiceTemplate = {
     tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
     description: 'OpenTOSCA Vintner - Normative Base Types (Unfurl)',
     metadata: {
-        vintner_orchestrator: 'unfurl',
+        ...MetadataUnfurl(),
     },
     artifact_types: artifacts,
     interface_types: interfaces,

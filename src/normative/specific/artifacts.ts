@@ -8,7 +8,7 @@ const artifacts: ArtifactTypeMap = {
         description: 'expects image reference in "file"',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
     },
@@ -16,7 +16,7 @@ const artifacts: ArtifactTypeMap = {
         derived_from: 'source.archive',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
     },
@@ -24,7 +24,7 @@ const artifacts: ArtifactTypeMap = {
         derived_from: 'system.package',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
         properties: {

@@ -7,7 +7,7 @@ const artifacts: ArtifactTypeMap = {
         derived_from: 'tosca.artifacts.Root',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
     },
@@ -16,7 +16,7 @@ const artifacts: ArtifactTypeMap = {
         description: 'application packaged as archive',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
     },
@@ -24,7 +24,7 @@ const artifacts: ArtifactTypeMap = {
         derived_from: 'artifact',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
         properties: {
@@ -65,7 +65,7 @@ const artifacts: ArtifactTypeMap = {
         description: 'expects image reference in "file"',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         */
     },
@@ -74,9 +74,9 @@ const artifacts: ArtifactTypeMap = {
         description: 'expects image reference in "file"',
         /*
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
-            */
+        */
     },
 }
 

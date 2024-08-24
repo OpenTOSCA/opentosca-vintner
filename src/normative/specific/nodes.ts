@@ -1,10 +1,11 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {MetadataAbstract, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
     'node.runtime': {
         derived_from: 'software.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         artifacts: {
             apt_package: {
@@ -19,8 +20,8 @@ const nodes: NodeTypeMap = {
     'node.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_language: {
@@ -41,7 +42,7 @@ const nodes: NodeTypeMap = {
     'python.runtime': {
         derived_from: 'software.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         artifacts: {
             apt_package: {
@@ -59,8 +60,8 @@ const nodes: NodeTypeMap = {
     'python.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_language: {
@@ -81,8 +82,8 @@ const nodes: NodeTypeMap = {
     'binary.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         interfaces: {
             management: {
@@ -96,8 +97,8 @@ const nodes: NodeTypeMap = {
     'gcp.provider': {
         derived_from: 'cloud.provider',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -126,8 +127,8 @@ const nodes: NodeTypeMap = {
     'gcp.service': {
         derived_from: 'cloud.service',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -143,7 +144,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudrun': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -155,7 +156,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudsql': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -167,7 +168,7 @@ const nodes: NodeTypeMap = {
     'gcp.appengine': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -193,7 +194,7 @@ const nodes: NodeTypeMap = {
     'gcp.appenginereporting': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -205,7 +206,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudbuild': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -217,7 +218,7 @@ const nodes: NodeTypeMap = {
     'docker.engine': {
         derived_from: 'container.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             application_name: {
@@ -255,8 +256,8 @@ const nodes: NodeTypeMap = {
     'kubernetes.cluster': {
         derived_from: 'cloud.service',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -293,8 +294,8 @@ const nodes: NodeTypeMap = {
     'openstack.provider': {
         derived_from: 'cloud.provider',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -335,7 +336,7 @@ const nodes: NodeTypeMap = {
     'mysql.dbms': {
         derived_from: 'relational.dbms',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             dbms_name: {
@@ -386,7 +387,7 @@ const nodes: NodeTypeMap = {
     'mysql.database': {
         derived_from: 'relational.database',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             database_name: {
