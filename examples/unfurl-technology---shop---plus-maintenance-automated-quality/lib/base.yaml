@@ -9,13 +9,13 @@ description: OpenTOSCA Vintner - Normative Base Types (Unfurl)
 metadata:
     vintner_orchestrator: unfurl
 artifact_types:
-    root:
+    artifact:
         derived_from: tosca.artifacts.Root
     source.archive:
-        derived_from: root
+        derived_from: artifact
         description: application packaged as archive
     system.package:
-        derived_from: root
+        derived_from: artifact
         properties:
             script:
                 type: string
@@ -42,18 +42,18 @@ artifact_types:
                 default: ''
                 description: Space separated env variables
     container.image:
-        derived_from: root
+        derived_from: artifact
         description: expects image reference in "file"
     virtual.machine.image:
-        derived_from: root
+        derived_from: artifact
         description: expects image reference in "file"
 interface_types:
-    root:
+    interface:
         derived_from: tosca.interfaces.Root
         metadata:
             vintner_normative: 'true'
     management:
-        derived_from: root
+        derived_from: interface
         metadata:
             vintner_normative: 'true'
         operations:
@@ -63,13 +63,13 @@ interface_types:
             stop:
             delete:
 node_types:
-    root:
+    node:
         derived_from: tosca.nodes.Root
         metadata:
             vintner_abstract: 'true'
             vintner_normative: 'true'
     cloud.provider:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -77,7 +77,7 @@ node_types:
             host:
                 type: tosca.capabilities.Compute
     cloud.service:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -89,7 +89,7 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
     software.application:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -191,7 +191,7 @@ node_types:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     virtual.machine:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
         properties:
@@ -229,7 +229,7 @@ node_types:
                     host:
                         eval: .parent::management_address
     database:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -239,7 +239,7 @@ node_types:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     dbms:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -249,7 +249,7 @@ node_types:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     ingress:
-        derived_from: root
+        derived_from: node
         metadata:
             vintner_normative: 'true'
         properties:

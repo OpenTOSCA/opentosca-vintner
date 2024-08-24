@@ -3,7 +3,7 @@ import {ArtifactTypeMap} from '#spec/artifact-type'
 // TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
 
 const artifacts: ArtifactTypeMap = {
-    root: {
+    artifact: {
         derived_from: 'tosca.artifacts.Root',
         /*
         metadata: {
@@ -12,7 +12,7 @@ const artifacts: ArtifactTypeMap = {
         */
     },
     'source.archive': {
-        derived_from: 'root',
+        derived_from: 'artifact',
         description: 'application packaged as archive',
         /*
         metadata: {
@@ -21,7 +21,7 @@ const artifacts: ArtifactTypeMap = {
         */
     },
     'system.package': {
-        derived_from: 'root',
+        derived_from: 'artifact',
         /*
         metadata: {
             vintner_normative: 'true',
@@ -61,7 +61,7 @@ const artifacts: ArtifactTypeMap = {
         },
     },
     'container.image': {
-        derived_from: 'root',
+        derived_from: 'artifact',
         description: 'expects image reference in "file"',
         /*
         metadata: {
@@ -70,7 +70,7 @@ const artifacts: ArtifactTypeMap = {
         */
     },
     'virtual.machine.image': {
-        derived_from: 'root',
+        derived_from: 'artifact',
         description: 'expects image reference in "file"',
         /*
         metadata: {

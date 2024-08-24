@@ -4,7 +4,7 @@ import {ArtifactTypeMap} from '#spec/artifact-type'
 
 const artifacts: ArtifactTypeMap = {
     'docker.image': {
-        derived_from: 'root',
+        derived_from: 'container.image',
         description: 'expects image reference in "file"',
         /*
         metadata: {

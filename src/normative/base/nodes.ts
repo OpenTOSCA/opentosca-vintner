@@ -1,7 +1,7 @@
 import {NodeTypeMap} from '#spec/node-type'
 
 const nodes: NodeTypeMap = {
-    root: {
+    node: {
         derived_from: 'tosca.nodes.Root',
         metadata: {
             vintner_abstract: 'true',
@@ -9,7 +9,7 @@ const nodes: NodeTypeMap = {
         },
     },
     'cloud.provider': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
             vintner_abstract: 'true',
@@ -21,7 +21,7 @@ const nodes: NodeTypeMap = {
         },
     },
     'cloud.service': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
             vintner_abstract: 'true',
@@ -41,7 +41,7 @@ const nodes: NodeTypeMap = {
         ],
     },
     'software.application': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
             vintner_abstract: 'true',
@@ -186,7 +186,7 @@ const nodes: NodeTypeMap = {
         },
     },
     'virtual.machine': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
         },
@@ -244,7 +244,7 @@ const nodes: NodeTypeMap = {
         },
     },
     database: {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
             vintner_abstract: 'true',
@@ -258,7 +258,7 @@ const nodes: NodeTypeMap = {
         },
     },
     dbms: {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
             vintner_abstract: 'true',
@@ -272,7 +272,7 @@ const nodes: NodeTypeMap = {
         },
     },
     ingress: {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
             vintner_normative: 'true',
         },

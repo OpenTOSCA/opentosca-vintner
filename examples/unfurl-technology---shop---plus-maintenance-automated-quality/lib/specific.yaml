@@ -12,7 +12,7 @@ imports:
     - base.yaml
 artifact_types:
     docker.image:
-        derived_from: root
+        derived_from: container.image
         description: expects image reference in "file"
     zip.archive:
         derived_from: source.archive
