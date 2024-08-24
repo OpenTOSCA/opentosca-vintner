@@ -1,6 +1,6 @@
-import artifacts from '#/normative/base/artifacts'
-import interfaces from '#/normative/base/interfaces'
-import nodes from '#/normative/base/nodes'
+import artifacts from '#normative/base/artifacts'
+import interfaces from '#normative/base/interfaces'
+import nodes from '#normative/base/nodes'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {MetadataUnfurl} from '../utils'
 
