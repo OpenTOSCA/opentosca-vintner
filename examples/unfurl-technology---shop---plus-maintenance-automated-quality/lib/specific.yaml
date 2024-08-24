@@ -1217,6 +1217,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                                          project: '{{ SELF.gcp_project }}'
                     delete: exit 0
     gcp.cloudrun~gcp.service::terraform:
         derived_from: gcp.cloudrun
@@ -1299,6 +1300,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                                          project: '{{ SELF.gcp_project }}'
                     delete: exit 0
     gcp.cloudsql~gcp.service::terraform:
         derived_from: gcp.cloudsql
@@ -1381,6 +1383,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                                          project: '{{ SELF.gcp_project }}'
                     delete: exit 0
     gcp.appengine~gcp.service::terraform:
         derived_from: gcp.appengine
@@ -1463,6 +1466,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                                          project: '{{ SELF.gcp_project }}'
                     delete: exit 0
     gcp.appenginereporting~gcp.service::terraform:
         derived_from: gcp.appenginereporting
@@ -1545,6 +1549,7 @@ node_types:
                                     - name: enable service
                                       google.cloud.gcp_serviceusage_service:
                                           name: '{{ SELF.gcp_service }}'
+                                          project: '{{ SELF.gcp_project }}'
                     delete: exit 0
     gcp.cloudbuild~gcp.service::terraform:
         derived_from: gcp.cloudbuild
