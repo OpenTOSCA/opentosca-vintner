@@ -2,7 +2,7 @@ import {NodeTypeMap} from '#spec/node-type'
 import {MetadataAbstract, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
-    'node.runtime': {
+    'nodejs.runtime': {
         derived_from: 'software.runtime',
         metadata: {
             ...MetadataNormative(),
@@ -17,7 +17,7 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'node.service.application': {
+    'nodejs.service.application': {
         derived_from: 'service.application',
         metadata: {
             ...MetadataNormative(),
@@ -26,7 +26,7 @@ const nodes: NodeTypeMap = {
         properties: {
             application_language: {
                 type: 'string',
-                default: 'node18',
+                default: 'nodejs18',
             },
         },
         interfaces: {
@@ -341,6 +341,12 @@ const nodes: NodeTypeMap = {
         properties: {
             dbms_name: {
                 type: 'string',
+            },
+            application_name: {
+                type: 'string',
+                default: {
+                    eval: '.::dbms_name',
+                },
             },
             dbms_version: {
                 type: 'string',

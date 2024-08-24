@@ -11,7 +11,7 @@ node_types:
     ###################################################
 
     shop.component:
-        derived_from: node.service.application
+        derived_from: nodejs.service.application
 
         properties:
             application_name:
@@ -322,26 +322,22 @@ node_types:
                                     - name: activate service account
                                       shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: enable GCP AppEngine
-                                      shell: gcloud app create --region {{ SELF.gcp_region }}
+                                      shell: gcloud app create --region {{ SELF.gcp_region }} --quiet
                                       register: app_create_command
                                       failed_when:
                                           - "'Created' not in app_create_command.stderr"
                                           - "'already contains' not in app_create_command.stderr"
                                     - name: create working directory
                                       register: directory
-                                      tempfile:
+                                      ansible.builtin.tempfile:
                                           state: directory
                                     - name: extract deployment artifact in working directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ directory.path }}'
-                                    - name: touch specification
-                                      register: specification
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ directory.path }}/app.yaml'
-                                    - name: create manifest
+                                    - name: create specification
                                       ansible.builtin.copy:
-                                          dest: '{{ specification.path }}'
+                                          dest: '{{ directory.path }}/app.yaml'
                                           content: '{{ manifest | to_yaml }}'
                                       vars:
                                           manifest:
@@ -349,7 +345,6 @@ node_types:
                                               service: '{{ SELF.application_name }}'
                                               instance_class: F1
                                               env_variables:
-                                                  PORT: '"{{ SELF.application_port }}"'
                                                   DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                                   DB_NAME: '"{{ SELF.DB_NAME }}"'
                                                   DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
@@ -359,7 +354,7 @@ node_types:
                                                   FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
                                                   FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
                                     - name: create app
-                                      shell: gcloud app deploy {{ tempdir_info.path }} --quiet
+                                      shell: gcloud app deploy {{ directory.path }} --quiet
                                     - name: browse app
                                       register: browse_app
                                       shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet '
@@ -385,7 +380,7 @@ node_types:
                                     - name: activate service account
                                       ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
                                     - name: delete app
-                                      ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
+                                      ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
     shop.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -480,7 +475,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -921,7 +916,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -1333,8 +1328,7 @@ node_types:
                                                 - source_url: https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}
                                       entrypoint:
                                           - shell: '{{ SELF._management_start }}'
-                                      env_variable:
-                                          PORT: '"{{ SELF.application_port }}"'
+                                      env_variables:
                                           DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                           DB_NAME: '"{{ SELF.DB_NAME }}"'
                                           DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
@@ -1368,7 +1362,7 @@ node_types:
                                 object:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
-                                      source: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
     shop.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
         derived_from: shop.component
         metadata:

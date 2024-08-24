@@ -1,14 +1,16 @@
 import * as files from '#files'
-import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    SourceArchiveFile,
+    ZipArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
+
+// TODO: port is now 443
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -46,7 +48,7 @@ const generator: ImplementationGenerator = {
                                         // https://cloud.google.com/sdk/gcloud/reference/app/create
                                         {
                                             name: 'enable GCP AppEngine',
-                                            shell: 'gcloud app create --region {{ SELF.gcp_region }}',
+                                            shell: 'gcloud app create --region {{ SELF.gcp_region }} --quiet',
                                             register: 'app_create_command',
                                             failed_when: [
                                                 "'Created' not in app_create_command.stderr",
@@ -56,30 +58,22 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'create working directory',
                                             register: 'directory',
-                                            tempfile: {
+                                            'ansible.builtin.tempfile': {
                                                 state: 'directory',
                                             },
                                         },
                                         {
                                             name: 'extract deployment artifact in working directory',
                                             unarchive: {
-                                                src: SourceArchiveFile(),
+                                                src: ZipArchiveFile(),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },
-                                        {
-                                            name: 'touch specification',
-                                            register: 'specification',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ directory.path }}/app.yaml',
-                                            },
-                                        },
-
                                         // https://cloud.google.com/appengine/docs/standard/reference/app-yaml?tab=node.js
                                         {
-                                            name: 'create manifest',
+                                            name: 'create specification',
                                             'ansible.builtin.copy': {
-                                                dest: '{{ specification.path }}',
+                                                dest: '{{ directory.path }}/app.yaml',
                                                 content: '{{ manifest | to_yaml }}',
                                             },
                                             vars: {
@@ -87,7 +81,10 @@ const generator: ImplementationGenerator = {
                                                     runtime: '{{ SELF.application_language }}',
                                                     service: '{{ SELF.application_name }}',
                                                     instance_class: 'F1',
-                                                    env_variables: mapProperties(type, {format: 'map'}),
+                                                    env_variables: mapProperties(type, {
+                                                        format: 'map',
+                                                        ignore: [PROPERTIES.PORT],
+                                                    }),
                                                 },
                                             },
                                         },
@@ -95,7 +92,7 @@ const generator: ImplementationGenerator = {
                                         // https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                         {
                                             name: 'create app',
-                                            shell: 'gcloud app deploy {{ tempdir_info.path }} --quiet',
+                                            shell: 'gcloud app deploy {{ directory.path }} --quiet',
                                         },
 
                                         // https://cloud.google.com/sdk/gcloud/reference/app/browse
@@ -144,7 +141,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'delete app',
                                             'ansible.builtin.shell':
-                                                'gcloud app services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet',
+                                                'gcloud app services delete {{ SELF.application_name }} --quiet',
                                         },
                                     ],
                                 },

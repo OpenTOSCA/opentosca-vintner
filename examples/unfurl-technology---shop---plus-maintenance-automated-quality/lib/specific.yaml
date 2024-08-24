@@ -44,7 +44,7 @@ artifact_types:
                 default: ''
                 description: Space separated env variables
 node_types:
-    node.runtime:
+    nodejs.runtime:
         derived_from: software.runtime
         metadata:
             vintner_normative: 'true'
@@ -54,7 +54,7 @@ node_types:
                 file: nodejs
                 properties:
                     setup: https://deb.nodesource.com/setup_18.x
-    node.service.application:
+    nodejs.service.application:
         derived_from: service.application
         metadata:
             vintner_normative: 'true'
@@ -62,7 +62,7 @@ node_types:
         properties:
             application_language:
                 type: string
-                default: node18
+                default: nodejs18
         interfaces:
             management:
                 type: management
@@ -270,6 +270,10 @@ node_types:
         properties:
             dbms_name:
                 type: string
+            application_name:
+                type: string
+                default:
+                    eval: .::dbms_name
             dbms_version:
                 type: string
                 default: '5.7'
@@ -330,8 +334,8 @@ node_types:
     #
     ################################################################
 
-    node.runtime~software.application#apt.package::ansible@*->virtual.machine:
-        derived_from: node.runtime
+    nodejs.runtime~software.application#apt.package::ansible@*->virtual.machine:
+        derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
@@ -529,8 +533,8 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.runtime~software.application#zip.archive::ansible@*->virtual.machine:
-        derived_from: node.runtime
+    nodejs.runtime~software.application#zip.archive::ansible@*->virtual.machine:
+        derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
@@ -571,7 +575,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -732,13 +736,13 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.runtime~software.application#apt.package::terraform@*->virtual.machine:
-        derived_from: node.runtime
+    nodejs.runtime~software.application#apt.package::terraform@*->virtual.machine:
+        derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
         properties: {}
-    node.runtime~software.application#zip.archive::terraform@*->virtual.machine:
-        derived_from: node.runtime
+    nodejs.runtime~software.application#zip.archive::terraform@*->virtual.machine:
+        derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
         properties:
@@ -995,7 +999,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -1874,7 +1878,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -2698,7 +2702,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       unarchive:
-                                          src: '{{ ''project'' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                     - name: create vintner directory
                                       ansible.builtin.file:
@@ -2709,6 +2713,7 @@ node_types:
                                           dest: '{{ SELF.application_directory }}/.env'
                                           content:
                                               - DBMS_NAME="{{ SELF.dbms_name }}"
+                                              - APPLICATION_NAME="{{ SELF.application_name }}"
                                               - DBMS_VERSION="{{ SELF.dbms_version }}"
                                               - DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                               - DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"

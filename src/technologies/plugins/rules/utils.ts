@@ -263,8 +263,8 @@ export function TerraformStandardOperations() {
     }
 }
 
-export function SourceArchiveFile() {
-    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file | eval }}`
+export function ZipArchiveFile() {
+    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}`
 }
 
 export function ApplicationDirectory() {
@@ -300,7 +300,7 @@ export function AnsibleUnarchiveSourceArchiveTask() {
     return {
         name: 'extract deployment artifact in application directory',
         unarchive: {
-            src: SourceArchiveFile(),
+            src: ZipArchiveFile(),
             dest: '{{ SELF.application_directory }}',
         },
     }

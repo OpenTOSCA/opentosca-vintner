@@ -97,16 +97,16 @@ topology_template:
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
                 - premium_feature:
-                      value: true
+                      value: "true"
                       conditions: {equal: [{variability_input: premium_feature}, true]}
                 - premium_feature:
-                      value: false
+                      value: "false"
                       conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
                 - optional_feature:
-                      value: true
+                      value: "true"
                       conditions: {equal: [{variability_input: optional_feature}, true]}
                 - optional_feature:
-                      value: false
+                      value: "false"
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
@@ -214,6 +214,8 @@ topology_template:
 
         gcp_appenginereporting:
             type: gcp.appenginereporting
+            requirements:
+                - host: gcp_provider
 
         gcp_cloudbuild:
             type: gcp.cloudbuild

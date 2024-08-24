@@ -1,13 +1,13 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
-import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
     GCPProviderCredentials,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    SourceArchiveFile,
     TerraformStandardOperations,
     UnfurlSelfManagementOperation,
+    ZipArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
@@ -91,13 +91,15 @@ const generator: ImplementationGenerator = {
                                             ],
                                             entrypoint: [
                                                 {
-                                                    // TODO: "node index.js"? its currently "npm start"
                                                     shell: `{{ ${UnfurlSelfManagementOperation(
                                                         MANAGEMENT_OPERATIONS.START
                                                     )} }}`,
                                                 },
                                             ],
-                                            env_variable: mapProperties(type, {format: 'map'}),
+                                            env_variables: mapProperties(type, {
+                                                format: 'map',
+                                                ignore: [PROPERTIES.PORT],
+                                            }),
                                             runtime: '{{ SELF.application_language }}',
                                             service: '{{ SELF.application_name }}',
                                             service_account: '${google_service_account.custom_service_account.email}',
@@ -142,7 +144,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             bucket: '${google_storage_bucket.bucket.name}',
                                             name: 'object.zip',
-                                            source: SourceArchiveFile(),
+                                            source: ZipArchiveFile(),
                                         },
                                     ],
                                 },
