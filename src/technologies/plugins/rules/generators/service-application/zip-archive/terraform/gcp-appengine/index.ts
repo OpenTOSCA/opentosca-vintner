@@ -13,8 +13,6 @@ import {
 
 // TODO: application port is now 443
 
-// TODO: https
-
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'terraform',
@@ -31,6 +29,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
+                // TODO: this is not added
                 ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),
             },

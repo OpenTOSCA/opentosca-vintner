@@ -12,8 +12,6 @@ import {
 
 // TODO: port is now 443
 
-// TODO: https!
-
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
@@ -30,6 +28,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
+                // TODO: this is not added
                 ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),
             },

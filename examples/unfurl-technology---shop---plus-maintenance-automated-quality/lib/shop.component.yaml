@@ -17,12 +17,18 @@ node_types:
             application_name:
                 type: string
                 metadata:
-                    vintner_ignore: true
+                    vintner_ignore: 'true'
 
             application_port:
                 type: string
                 metadata:
                     vintner_name: PORT
+
+            application_protocol:
+                type: string
+                metadata:
+                    vintner_ignore: 'true'
+                default: http
 
             DB_DIALECT:
                 type: string
@@ -75,6 +81,9 @@ node_types:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
+            application_protocol:
+                type: string
+                default: https
             gcp_service_account_file:
                 type: string
                 default:
@@ -297,6 +306,9 @@ node_types:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
+            application_protocol:
+                type: string
+                default: https
             gcp_service_account_file:
                 type: string
                 default:
@@ -1092,6 +1104,9 @@ node_types:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
+            application_protocol:
+                type: string
+                default: https
             gcp_service_account_file:
                 type: string
                 default:
@@ -1277,6 +1292,9 @@ node_types:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
+            application_protocol:
+                type: string
+                default: https
             gcp_service_account_file:
                 type: string
                 default:
