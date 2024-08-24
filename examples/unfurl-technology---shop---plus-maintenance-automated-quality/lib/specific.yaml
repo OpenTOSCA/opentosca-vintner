@@ -2282,7 +2282,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_image }}
+                                                              - image: mysql:{{ SELF.dbms_version }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -2457,7 +2457,7 @@ node_types:
                                     - name: start container
                                       community.docker.docker_container:
                                           name: '{{ SELF.dbms_name }}'
-                                          image: mysql:{{ SELF.dbms_image }}
+                                          image: mysql:{{ SELF.dbms_version }}
                                           network_mode: host
                                           env:
                                               MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}'
@@ -3035,7 +3035,7 @@ node_types:
                                                   spec:
                                                       - container:
                                                             - name: '{{ SELF.dbms_name }}'
-                                                              image: mysql:{{ SELF.dbms_image }}
+                                                              image: mysql:{{ SELF.dbms_version }}
                                                               env:
                                                                   - name: MYSQL_ROOT_PASSWORD
                                                                     value: '{{ SELF.dbms_password }}'
@@ -3239,7 +3239,7 @@ node_types:
                                           - MYSQL_ROOT_PASSWORD={{ SELF.dbms_password }}
                             docker_image:
                                 image:
-                                    - name: mysql:{{ SELF.dbms_image }}
+                                    - name: mysql:{{ SELF.dbms_version }}
     mysql.dbms~software.application#apt.package::terraform@*->virtual.machine:
         derived_from: mysql.dbms
         metadata:
@@ -3338,7 +3338,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_image }}
+                                                              - image: mysql:{{ SELF.dbms_version }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -3434,7 +3434,7 @@ node_types:
                                               services:
                                                   application:
                                                       container_name: '{{ SELF.dbms_name }}'
-                                                      image: mysql:{{ SELF.dbms_image }}
+                                                      image: mysql:{{ SELF.dbms_version }}
                                                       network_mode: host
                                                       environment:
                                                           MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}'
@@ -3946,7 +3946,7 @@ node_types:
                                                           restartPolicy: Never
                                                           initContainers:
                                                               - name: create-database
-                                                                image: '{{ HOST.dbms_image }}'
+                                                                image: mysql:{{ HOST.dbms_version }}
                                                                 command:
                                                                     - mysql
                                                                     - '--host={{ HOST.management_address }}'
@@ -3956,7 +3956,7 @@ node_types:
                                                                     - '-e'
                                                                     - CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}
                                                               - name: create-user
-                                                                image: '{{ HOST.dbms_image }}'
+                                                                image: mysql:{{ HOST.dbms_version }}
                                                                 command:
                                                                     - mysql
                                                                     - '--host={{ HOST.management_address }}'
@@ -3966,7 +3966,7 @@ node_types:
                                                                     - '-e'
                                                                     - CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'
                                                               - name: grant-privileges
-                                                                image: '{{ HOST.dbms_image }}'
+                                                                image: mysql:{{ HOST.dbms_version }}
                                                                 command:
                                                                     - mysql
                                                                     - '--host={{ HOST.management_address }}'

@@ -160,7 +160,7 @@ topology_template:
         ###################################################
 
         node_runtime:
-            type: node.runtime
+            type: nodejs.runtime
             requirements:
                 - host: virtual_machine
 

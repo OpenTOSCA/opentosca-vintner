@@ -60,7 +60,7 @@ const generator: ImplementationGenerator = {
                                             name: 'start container',
                                             'community.docker.docker_container': {
                                                 name: '{{ SELF.dbms_name }}',
-                                                image: 'mysql:{{ SELF.dbms_image }}',
+                                                image: 'mysql:{{ SELF.dbms_version }}',
                                                 network_mode: 'host',
                                                 env: {
                                                     MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}',
