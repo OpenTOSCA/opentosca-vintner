@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 # Load configuration
 source configuration.sh
 
-$VINTNER instances delete --instance ${TEMPLATE_NAME}
+$VINTNER instances delete --instance ${TEMPLATE_NAME} --force
 
 $VINTNER templates delete --template ${TEMPLATE_NAME}
 

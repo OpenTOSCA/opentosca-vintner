@@ -790,7 +790,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
-    .option('--retries [boolean]', 'number of retries', '3')
+    .option('--retries [boolean]', 'number of retries', '1')
     .option('--verbose [boolean]', 'verbose')
     .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
