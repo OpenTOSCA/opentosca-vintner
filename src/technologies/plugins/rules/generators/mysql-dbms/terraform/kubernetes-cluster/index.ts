@@ -105,7 +105,7 @@ const generator: ImplementationGenerator = {
                                                                     container: [
                                                                         {
                                                                             name: '{{ SELF.dbms_name }}',
-                                                                            image: '{{ SELF.dbms_image }}',
+                                                                            image: 'mysql:{{ SELF.dbms_image }}',
                                                                             env: [
                                                                                 {
                                                                                     name: 'MYSQL_ROOT_PASSWORD',

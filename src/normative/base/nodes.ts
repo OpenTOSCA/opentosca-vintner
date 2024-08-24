@@ -201,7 +201,7 @@ const nodes: NodeTypeMap = {
             ports: {
                 type: 'list',
                 entry_schema: {
-                    type: 'integer',
+                    type: 'string',
                 },
             },
             flavor: {
@@ -262,7 +262,7 @@ const nodes: NodeTypeMap = {
         },
     },
     dbms: {
-        derived_from: 'node',
+        derived_from: 'software.application',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),

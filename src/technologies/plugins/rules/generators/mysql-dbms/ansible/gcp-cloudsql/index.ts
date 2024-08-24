@@ -68,7 +68,7 @@ const generator: ImplementationGenerator = {
                                             register: 'instance_info',
                                             'google.cloud.gcp_sql_instance': {
                                                 name: '{{  SELF.dbms_name }}',
-                                                database_version: 'MYSQL_5_7',
+                                                database_version: 'MYSQL_{{ SELF.dbms_version | replace(".", "_") }}',
                                                 settings: {
                                                     tier: 'db-f1-micro',
                                                     availability_type: 'REGIONAL',

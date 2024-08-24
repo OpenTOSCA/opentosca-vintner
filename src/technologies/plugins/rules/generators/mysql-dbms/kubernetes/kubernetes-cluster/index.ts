@@ -93,7 +93,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: '{{ SELF.dbms_image }}',
+                                                                        image: 'mysql:{{ SELF.dbms_image }}',
                                                                         name: '{{ SELF.dbms_name }}',
                                                                         env: [
                                                                             {

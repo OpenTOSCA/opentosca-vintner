@@ -342,11 +342,9 @@ const nodes: NodeTypeMap = {
             dbms_name: {
                 type: 'string',
             },
-            // TODO: this should be a deployment artifact
-            // TODO: also this is only used when deployed as docker container
-            dbms_image: {
+            dbms_version: {
                 type: 'string',
-                default: 'mysql:5.7',
+                default: '5.7',
             },
             dbms_password: {
                 type: 'string',
@@ -361,13 +359,13 @@ const nodes: NodeTypeMap = {
                 type: 'string',
             },
             application_port: {
-                type: 'integer',
+                type: 'string',
             },
             management_address: {
                 type: 'string',
             },
             management_port: {
-                type: 'integer',
+                type: 'string',
             },
         },
         capabilities: {
@@ -408,7 +406,7 @@ const nodes: NodeTypeMap = {
                 },
             },
             application_port: {
-                type: 'integer',
+                type: 'string',
                 default: {
                     eval: '.::.requirements::[.name=host]::.target::application_port',
                 },

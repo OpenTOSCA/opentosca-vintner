@@ -45,27 +45,27 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'run setup script',
                                             'ansible.builtin.shell':
-                                                'curl -fsSL {{ ".artifacts::software_package::script" | eval }} | sudo -E bash -',
-                                            when: '".artifacts::software_package::script" | eval != None',
+                                                'curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -',
+                                            when: '".artifacts::apt_package::script" | eval != None',
                                         },
                                         {
                                             name: 'add apt key',
                                             'ansible.builtin.apt_key': {
-                                                url: '{{ ".artifacts::software_package::key" | eval }}',
+                                                url: '{{ ".artifacts::apt_package::key" | eval }}',
                                                 keyring:
-                                                    '/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg',
+                                                    '/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::software_package::key" | eval != None',
+                                            when: '".artifacts::apt_package::key" | eval != None',
                                         },
                                         {
                                             name: 'add apt repository',
                                             'ansible.builtin.apt_repository': {
-                                                repo: 'deb [signed-by=/usr/share/keyrings/{{ ".artifacts::software_package::repository" | eval }}.gpg] {{ ".artifacts::software_package::source" | eval }}',
-                                                filename: '{{ ".artifacts::software_package::repository" | eval }}',
+                                                repo: 'deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}',
+                                                filename: '{{ ".artifacts::apt_package::repository" | eval }}',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::software_package::source" | eval != None',
+                                            when: '".artifacts::apt_package::source" | eval != None',
                                         },
                                         {
                                             name: 'update apt cache',
@@ -76,19 +76,19 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'install dependencies',
                                             'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::dependencies" | eval | split(",") | map("trim") }}',
+                                                name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::software_package::dependencies" | eval != None',
+                                            when: '".artifacts::apt_package::dependencies" | eval != None',
                                         },
                                         {
                                             name: 'install package',
                                             'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::file" | eval }}',
+                                                name: '{{ ".artifacts::apt_package::file" | eval }}',
                                                 state: 'present',
                                             },
                                             environment:
-                                                '{{ ".artifacts::software_package::file" | eval | split | map("split", "=") | community.general.dict }}',
+                                                '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}',
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
@@ -183,7 +183,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'uninstall package',
                                             'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::software_package::file | eval }}',
+                                                name: '{{ ".artifacts::apt_package::file | eval }}',
                                                 state: 'absent',
                                             },
                                         },

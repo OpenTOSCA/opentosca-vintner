@@ -48,6 +48,8 @@ systemctl enable mysql
 systemctl restart mysql
 `
 
+// TODO: ensure dbms_version is installed
+
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
@@ -65,16 +67,16 @@ const generator: ImplementationGenerator = {
             properties: {
                 ...OpenstackMachineCredentials(),
                 ...OpenstackMachineHost(),
-            },
-            attributes: {
+                application_port: {
+                    type: 'string',
+                    default: 3001,
+                },
                 application_address: {
                     type: 'string',
                     default: '127.0.0.1',
                 },
-                application_port: {
-                    type: 'integer',
-                    default: 3000,
-                },
+            },
+            attributes: {
                 management_address: {
                     type: 'string',
                     default: {
@@ -83,7 +85,7 @@ const generator: ImplementationGenerator = {
                 },
                 management_port: {
                     type: 'integer',
-                    default: 3000,
+                    default: {eval: '.::application_port'},
                 },
             },
             capabilities: {
@@ -116,7 +118,7 @@ const generator: ImplementationGenerator = {
                                                 'remote-exec': [
                                                     {
                                                         inline: [
-                                                            'sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} 3000',
+                                                            'sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} {{ SELF.application_port }}',
                                                         ],
                                                     },
                                                 ],

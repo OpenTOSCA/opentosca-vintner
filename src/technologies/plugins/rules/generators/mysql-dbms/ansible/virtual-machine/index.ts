@@ -9,8 +9,7 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: ensure 5.7 is installed
-// lsb-release gnupg
+// TODO: ensure dbms_version is installed
 
 /**
  * apt-get install sudo wget lsb-release gnupg -y
@@ -33,16 +32,18 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {...OpenstackMachineCredentials()},
-            attributes: {
+            properties: {
+                ...OpenstackMachineCredentials(),
+                application_port: {
+                    type: 'string',
+                    default: 3001,
+                },
                 application_address: {
                     type: 'string',
                     default: '127.0.0.1',
                 },
-                application_port: {
-                    type: 'string',
-                    default: 3000,
-                },
+            },
+            attributes: {
                 management_address: {
                     type: 'string',
                     default: {
@@ -51,7 +52,7 @@ const generator: ImplementationGenerator = {
                 },
                 management_port: {
                     type: 'integer',
-                    default: 3000,
+                    default: {eval: '.::application_port'},
                 },
             },
             capabilities: {
@@ -131,7 +132,7 @@ const generator: ImplementationGenerator = {
                                             lineinfile: {
                                                 path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
                                                 regexp: '^# port',
-                                                line: 'port = 3000',
+                                                line: 'port = {{ SEFL.application_port }}',
                                                 backup: 'yes',
                                             },
                                         },

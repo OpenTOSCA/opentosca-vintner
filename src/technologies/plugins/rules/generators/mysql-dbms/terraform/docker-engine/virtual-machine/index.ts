@@ -99,7 +99,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ SELF.dbms_image }}',
+                                            name: 'mysql:{{ SELF.dbms_image }}',
                                         },
                                     ],
                                 },
