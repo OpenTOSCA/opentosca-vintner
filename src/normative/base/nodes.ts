@@ -1,4 +1,5 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {METADATA} from '#technologies/plugins/rules/types'
 
 const nodes: NodeTypeMap = {
     node: {
@@ -137,6 +138,9 @@ const nodes: NodeTypeMap = {
             },
             application_port: {
                 type: 'string',
+                metadata: {
+                    [METADATA.VINTNER_NAME]: 'PORT',
+                },
             },
             application_protocol: {
                 type: 'string',

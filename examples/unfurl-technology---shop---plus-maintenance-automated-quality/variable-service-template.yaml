@@ -90,8 +90,8 @@ topology_template:
                 - application_name: unfurl-technology-shop
                 - application_port: 3000
                 - application_protocol: http
-                - DB_NAME: unfurl-technology-shop
-                - DB_USERNAME: root
+                - DB_NAME: shop
+                - DB_USERNAME: shop
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
@@ -137,8 +137,8 @@ topology_template:
         database:
             type: mysql.database
             properties:
-                - database_name: unfurl-technology-shop-database
-                - database_user: unfurl-technology-shop-user
+                - database_name: shop
+                - database_user: shop
                 - database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms

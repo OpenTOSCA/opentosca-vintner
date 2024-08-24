@@ -9,6 +9,16 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: ensure 5.7 is installed
+// lsb-release gnupg
+
+/**
+ * apt-get install sudo wget lsb-release gnupg -y
+ *
+ * wget https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb
+ * sudo dpkg -i mysql-apt-config_0.8.17-1_all.deb
+ */
+
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',

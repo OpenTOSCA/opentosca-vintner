@@ -19,6 +19,11 @@ node_types:
                 metadata:
                     vintner_ignore: true
 
+            application_port:
+                type: string
+                metadata:
+                    vintner_name: PORT
+
             DB_DIALECT:
                 type: string
 
@@ -249,6 +254,8 @@ node_types:
                                                               - image: '{{ ".artifacts::container_image::file" | eval }}'
                                                                 name: '{{ SELF.application_name }}'
                                                                 env:
+                                                                    - name: PORT
+                                                                      value: '"{{ SELF.application_port }}"'
                                                                     - name: DB_DIALECT
                                                                       value: '"{{ SELF.DB_DIALECT }}"'
                                                                     - name: DB_NAME
@@ -342,6 +349,7 @@ node_types:
                                               service: '{{ SELF.application_name }}'
                                               instance_class: F1
                                               env_variables:
+                                                  PORT: '"{{ SELF.application_port }}"'
                                                   DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                                   DB_NAME: '"{{ SELF.DB_NAME }}"'
                                                   DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
@@ -416,6 +424,7 @@ node_types:
                                           image: '{{ ".artifacts::container_image::file" | eval }}'
                                           network_mode: host
                                           env:
+                                              PORT: '"{{ SELF.application_port }}"'
                                               DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                               DB_NAME: '"{{ SELF.DB_NAME }}"'
                                               DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
@@ -533,6 +542,7 @@ node_types:
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
                                           content:
+                                              - PORT="{{ SELF.application_port }}"
                                               - DB_DIALECT="{{ SELF.DB_DIALECT }}"
                                               - DB_NAME="{{ SELF.DB_NAME }}"
                                               - DB_USERNAME="{{ SELF.DB_USERNAME }}"
@@ -921,6 +931,7 @@ node_types:
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
                                           content:
+                                              - PORT="{{ SELF.application_port }}"
                                               - DB_DIALECT="{{ SELF.DB_DIALECT }}"
                                               - DB_NAME="{{ SELF.DB_NAME }}"
                                               - DB_USERNAME="{{ SELF.DB_USERNAME }}"
@@ -1231,6 +1242,8 @@ node_types:
                                                   spec:
                                                       - container:
                                                             - env:
+                                                                  - name: PORT
+                                                                    value: '"{{ SELF.application_port }}"'
                                                                   - name: DB_DIALECT
                                                                     value: '"{{ SELF.DB_DIALECT }}"'
                                                                   - name: DB_NAME
@@ -1321,6 +1334,7 @@ node_types:
                                       entrypoint:
                                           - shell: '{{ SELF._management_start }}'
                                       env_variable:
+                                          PORT: '"{{ SELF.application_port }}"'
                                           DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                           DB_NAME: '"{{ SELF.DB_NAME }}"'
                                           DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
@@ -1412,6 +1426,7 @@ node_types:
                             docker_container:
                                 application:
                                     - env:
+                                          - PORT={{ SELF.application_port }}
                                           - DB_DIALECT={{ SELF.DB_DIALECT }}
                                           - DB_NAME={{ SELF.DB_NAME }}
                                           - DB_USERNAME={{ SELF.DB_USERNAME }}
@@ -1504,6 +1519,8 @@ node_types:
                                                               - image: '{{ ".artifacts::container_image::file" | eval }}'
                                                                 name: '{{ SELF.application_name }}'
                                                                 env:
+                                                                    - name: PORT
+                                                                      value: '"{{ SELF.application_port }}"'
                                                                     - name: DB_DIALECT
                                                                       value: '"{{ SELF.DB_DIALECT }}"'
                                                                     - name: DB_NAME
@@ -1594,6 +1611,7 @@ node_types:
                                                       image: '{{ ".artifacts::container_image::file" | eval }}'
                                                       network_mode: host
                                                       environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
                                                           DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
                                                           DB_NAME: '"{{ SELF.DB_NAME }}"'
                                                           DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'

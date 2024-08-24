@@ -163,6 +163,8 @@ node_types:
                 type: string
             application_port:
                 type: string
+                metadata:
+                    vintner_name: PORT
             application_protocol:
                 type: string
         attributes:
