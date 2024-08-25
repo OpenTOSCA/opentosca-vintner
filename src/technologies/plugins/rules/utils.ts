@@ -317,11 +317,14 @@ export function AnsibleCreateVintnerDirectory() {
 }
 
 export function AnsibleCreateApplicationEnvironment(type: NodeType) {
+    const env = mapProperties(type, {format: 'ini'})
+    assert.isArray(env)
+
     return {
         name: 'create .env file',
         copy: {
             dest: '{{ SELF.application_directory }}/.env',
-            content: mapProperties(type, {format: 'ini'}),
+            content: env.join(`\n`) + '\n',
         },
     }
 }
@@ -332,7 +335,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
         'ansible.builtin.fail': {
             dest: `Management operation "${operation}" missing`,
         },
-        when: AnsibleWhenOperationDefined(operation),
+        when: AnsibleWhenOperationUndefined(operation),
     }
 }
 
@@ -356,6 +359,7 @@ export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
         'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
         args: {
             chdir: '{{ SELF.application_directory }}',
+            executable: '/bin/bash',
         },
         when: AnsibleWhenOperationDefined(operation),
     }
@@ -372,6 +376,10 @@ set -e
 
 export function AnsibleWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
     return `${UnfurlSelfManagementOperation(operation)} != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+}
+
+export function AnsibleWhenOperationUndefined(operation: MANAGEMENT_OPERATIONS) {
+    return `${UnfurlSelfManagementOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
 }
 
 export function UnfurlSelfManagementOperation(operation: MANAGEMENT_OPERATIONS) {

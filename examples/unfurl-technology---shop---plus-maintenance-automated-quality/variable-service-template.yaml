@@ -97,20 +97,20 @@ topology_template:
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
                 - premium_feature:
-                      value: "true"
+                      value: 'true'
                       conditions: {equal: [{variability_input: premium_feature}, true]}
                 - premium_feature:
-                      value: "false"
+                      value: 'false'
                       conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
                 - optional_feature:
-                      value: "true"
+                      value: 'true'
                       conditions: {equal: [{variability_input: optional_feature}, true]}
                 - optional_feature:
-                      value: "false"
+                      value: 'false'
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
-                - host: node_runtime
+                - host: nodejs_runtime
                 - host: gcp_appengine
                 - host: kubernetes_cluster
             artifacts:
@@ -159,7 +159,7 @@ topology_template:
         #
         ###################################################
 
-        node_runtime:
+        nodejs_runtime:
             type: nodejs.runtime
             requirements:
                 - host: virtual_machine
@@ -169,7 +169,7 @@ topology_template:
             properties:
                 - machine_name: unfurl-technology-shop-vm
                 - image: Ubuntu 22.04
-                - ports: [80]
+                - ports: ['80']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}

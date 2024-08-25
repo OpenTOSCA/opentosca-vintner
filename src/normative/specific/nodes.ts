@@ -7,12 +7,40 @@ const nodes: NodeTypeMap = {
         metadata: {
             ...MetadataNormative(),
         },
+        properties: {
+            application_name: {
+                type: 'string',
+                default: 'nodejs',
+            },
+        },
         artifacts: {
             apt_package: {
                 type: 'apt.package',
                 file: 'nodejs',
                 properties: {
-                    setup: 'https://deb.nodesource.com/setup_18.x',
+                    script: 'https://deb.nodesource.com/setup_18.x',
+                },
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
+                    },
                 },
             },
         },
@@ -52,6 +80,28 @@ const nodes: NodeTypeMap = {
                     dependencies: {
                         type: 'string',
                         default: 'python3 python3-pip python3-venv',
+                    },
+                },
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
                     },
                 },
             },

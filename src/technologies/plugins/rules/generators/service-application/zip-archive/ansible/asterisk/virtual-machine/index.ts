@@ -65,6 +65,13 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
+                                            name: 'install operational dependencies',
+                                            'ansible.builtin.apt': {
+                                                name: 'unzip',
+                                                update_cache: 'yes',
+                                            },
+                                        },
+                                        {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
@@ -72,6 +79,9 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),
+                                        },
+                                        {
+                                            ...AnsibleCreateApplicationEnvironment(type),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
@@ -109,9 +119,6 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             ...AnsibleWaitForSSHTask(),
-                                        },
-                                        {
-                                            ...AnsibleCreateApplicationEnvironment(type),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),

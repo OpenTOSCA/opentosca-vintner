@@ -48,12 +48,30 @@ node_types:
         derived_from: software.runtime
         metadata:
             vintner_normative: 'true'
+        properties:
+            application_name:
+                type: string
+                default: nodejs
         artifacts:
             apt_package:
                 type: apt.package
                 file: nodejs
                 properties:
-                    setup: https://deb.nodesource.com/setup_18.x
+                    script: https://deb.nodesource.com/setup_18.x
+        attributes:
+            management_address:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection: ssh
+                    host:
+                        eval: .parent::management_address
     nodejs.service.application:
         derived_from: service.application
         metadata:
@@ -81,6 +99,20 @@ node_types:
                     dependencies:
                         type: string
                         default: python3 python3-pip python3-venv
+        attributes:
+            management_address:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+            endpoint:
+                type: unfurl.capabilities.Endpoint.Ansible
+                properties:
+                    connection: ssh
+                    host:
+                        eval: .parent::management_address
     python.service.application:
         derived_from: service.application
         metadata:
@@ -348,6 +380,14 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
         interfaces:
             Standard:
                 operations:
@@ -364,6 +404,8 @@ node_types:
                                       wait_for_connection:
                                     - name: run setup script
                                       ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
                                       when: '".artifacts::apt_package::script" | eval != None'
                                     - name: add apt key
                                       ansible.builtin.apt_key:
@@ -389,7 +431,11 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: present
-                                      environment: '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -404,6 +450,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -434,6 +481,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -464,6 +512,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -494,6 +543,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -524,10 +574,15 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: uninstall package
                                       ansible.builtin.apt:
-                                          name: '{{ ".artifacts::apt_package::file | eval }}'
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
                             playbookArgs:
                                 - '--become'
@@ -584,7 +639,8 @@ node_types:
                                     - name: create .env file
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: []
+                                          content: |
+                                              APPLICATION_NAME="{{ SELF.application_name }}"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -599,6 +655,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -629,6 +686,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -648,7 +706,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -663,6 +721,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -682,7 +741,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "stop" missing
-                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -697,6 +756,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -727,6 +787,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete application directory
                                       ansible.builtin.file:
@@ -772,6 +833,14 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
         interfaces:
             Standard:
                 operations:
@@ -788,6 +857,8 @@ node_types:
                                       wait_for_connection:
                                     - name: run setup script
                                       ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
                                       when: '".artifacts::apt_package::script" | eval != None'
                                     - name: add apt key
                                       ansible.builtin.apt_key:
@@ -813,7 +884,11 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: present
-                                      environment: '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -828,6 +903,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -858,6 +934,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -888,6 +965,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -918,6 +996,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -948,10 +1027,15 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: uninstall package
                                       ansible.builtin.apt:
-                                          name: '{{ ".artifacts::apt_package::file | eval }}'
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
                             playbookArgs:
                                 - '--become'
@@ -1008,7 +1092,8 @@ node_types:
                                     - name: create .env file
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: []
+                                          content: |+
+
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -1023,6 +1108,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1053,6 +1139,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1072,7 +1159,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -1087,6 +1174,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1106,7 +1194,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "stop" missing
-                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1121,6 +1209,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1151,6 +1240,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete application directory
                                       ansible.builtin.file:
@@ -1656,6 +1746,14 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
         interfaces:
             Standard:
                 operations:
@@ -1672,6 +1770,8 @@ node_types:
                                       wait_for_connection:
                                     - name: run setup script
                                       ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
                                       when: '".artifacts::apt_package::script" | eval != None'
                                     - name: add apt key
                                       ansible.builtin.apt_key:
@@ -1697,7 +1797,11 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: present
-                                      environment: '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -1712,6 +1816,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1742,6 +1847,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1772,6 +1878,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1802,6 +1909,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1832,10 +1940,15 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: uninstall package
                                       ansible.builtin.apt:
-                                          name: '{{ ".artifacts::apt_package::file | eval }}'
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
                             playbookArgs:
                                 - '--become'
@@ -1892,9 +2005,9 @@ node_types:
                                     - name: create .env file
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content:
-                                              - APPLICATION_NAME="{{ SELF.application_name }}"
-                                              - _HOSTING="{{ SELF._hosting }}"
+                                          content: |
+                                              APPLICATION_NAME="{{ SELF.application_name }}"
+                                              _HOSTING="{{ SELF._hosting }}"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -1909,6 +2022,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1939,6 +2053,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1958,7 +2073,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -1973,6 +2088,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -1992,7 +2108,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "stop" missing
-                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -2007,6 +2123,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2037,6 +2154,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete application directory
                                       ansible.builtin.file:
@@ -2372,41 +2490,56 @@ node_types:
                                           name: mysql
                                           state: started
                                           enabled: 'yes'
-                                    - name: Create mysql user
-                                      community.mysql.mysql_user:
-                                          name: root
-                                          password: '{{ SELF.root_password }}'
-                                          priv: '*.*:ALL'
-                                          host: '%'
-                                          state: present
-                                    - name: Delete localhost root
-                                      community.mysql.mysql_user:
-                                          name: root
-                                          host: localhost
-                                          state: absent
-                                    - name: Enable passwordless login
+                                    - name: Enable passwordless login (root)
                                       copy:
                                           dest: /root/.my.cnf
                                           content: |
                                               [client]
                                               user=root
-                                              password={{ SELF.root_password }}
+                                              password={{ SELF.dbms_password }}
+                                    - name: Enable passwordless login (current)
+                                      copy:
+                                          dest: /home/{{ SELF.os_ssh_user }}/.my.cnf
+                                          content: |
+                                              [client]
+                                              user=root
+                                              password={{ SELF.dbms_password }}
+                                    - name: Configure port (e.g., since 3306 is blocked by the provider)
+                                      lineinfile:
+                                          path: /etc/mysql/mysql.conf.d/mysqld.cnf
+                                          regexp: ^# port
+                                          line: port = {{ SELF.application_port }}
+                                          backup: 'yes'
                                     - name: Enable remote login
                                       lineinfile:
                                           path: /etc/mysql/mysql.conf.d/mysqld.cnf
                                           regexp: ^bind-address
                                           line: bind-address = 0.0.0.0
                                           backup: 'yes'
-                                    - name: Configure port (e.g., since 3306 is blocked by the provider)
-                                      lineinfile:
-                                          path: /etc/mysql/mysql.conf.d/mysqld.cnf
-                                          regexp: ^# port
-                                          line: port = {{ SEFL.application_port }}
-                                          backup: 'yes'
                                     - name: Restart mysql
                                       service:
                                           name: mysql
                                           state: restarted
+                                    - name: Create all root
+                                      community.mysql.mysql_user:
+                                          name: root
+                                          password: '{{ SELF.dbms_password }}'
+                                          priv: '*.*:ALL'
+                                          host: '%'
+                                          state: present
+                                          login_host: localhost
+                                          login_password: '{{ SELF.dbms_password }}'
+                                          login_port: '{{ SELF.application_port }}'
+                                          login_user: root
+                                    - name: Delete localhost root
+                                      community.mysql.mysql_user:
+                                          name: root
+                                          host: localhost
+                                          state: absent
+                                          login_host: localhost
+                                          login_password: '{{ SELF.dbms_password }}'
+                                          login_port: '{{ SELF.application_port }}'
+                                          login_user: root
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -2480,6 +2613,14 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
         interfaces:
             Standard:
                 operations:
@@ -2496,6 +2637,8 @@ node_types:
                                       wait_for_connection:
                                     - name: run setup script
                                       ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
                                       when: '".artifacts::apt_package::script" | eval != None'
                                     - name: add apt key
                                       ansible.builtin.apt_key:
@@ -2521,7 +2664,11 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: present
-                                      environment: '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}'
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -2536,6 +2683,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2566,6 +2714,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2596,6 +2745,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2626,6 +2776,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2656,10 +2807,15 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: uninstall package
                                       ansible.builtin.apt:
-                                          name: '{{ ".artifacts::apt_package::file | eval }}'
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
                             playbookArgs:
                                 - '--become'
@@ -2716,12 +2872,12 @@ node_types:
                                     - name: create .env file
                                       copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content:
-                                              - DBMS_NAME="{{ SELF.dbms_name }}"
-                                              - APPLICATION_NAME="{{ SELF.application_name }}"
-                                              - DBMS_VERSION="{{ SELF.dbms_version }}"
-                                              - DBMS_PASSWORD="{{ SELF.dbms_password }}"
-                                              - DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
+                                          content: |
+                                              DBMS_NAME="{{ SELF.dbms_name }}"
+                                              APPLICATION_NAME="{{ SELF.application_name }}"
+                                              DBMS_VERSION="{{ SELF.dbms_version }}"
+                                              DBMS_PASSWORD="{{ SELF.dbms_password }}"
+                                              DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -2736,6 +2892,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/create.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2766,6 +2923,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/configure.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2785,7 +2943,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "start" missing
-                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -2800,6 +2958,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/start.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2819,7 +2978,7 @@ node_types:
                                     - name: assert management operation
                                       ansible.builtin.fail:
                                           dest: Management operation "stop" missing
-                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -2834,6 +2993,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/stop.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                             playbookArgs:
                                 - '--become'
@@ -2864,6 +3024,7 @@ node_types:
                                       ansible.builtin.shell: . .env && . .vintner/delete.sh
                                       args:
                                           chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: delete application directory
                                       ansible.builtin.file:

@@ -94,28 +94,26 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Create mysql user',
-                                            'community.mysql.mysql_user': {
-                                                name: 'root',
-                                                password: '{{ SELF.root_password }}',
-                                                priv: '*.*:ALL',
-                                                host: '%',
-                                                state: 'present',
-                                            },
-                                        },
-                                        {
-                                            name: 'Delete localhost root',
-                                            'community.mysql.mysql_user': {
-                                                name: 'root',
-                                                host: 'localhost',
-                                                state: 'absent',
-                                            },
-                                        },
-                                        {
-                                            name: 'Enable passwordless login',
+                                            name: 'Enable passwordless login (root)',
                                             copy: {
                                                 dest: '/root/.my.cnf',
-                                                content: '[client]\nuser=root\npassword={{ SELF.root_password }}\n',
+                                                content: '[client]\nuser=root\npassword={{ SELF.dbms_password }}\n',
+                                            },
+                                        },
+                                        {
+                                            name: 'Enable passwordless login (current)',
+                                            copy: {
+                                                dest: `/home/{{ SELF.os_ssh_user }}/.my.cnf`,
+                                                content: '[client]\nuser=root\npassword={{ SELF.dbms_password }}\n',
+                                            },
+                                        },
+                                        {
+                                            name: 'Configure port (e.g., since 3306 is blocked by the provider)',
+                                            lineinfile: {
+                                                path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
+                                                regexp: '^# port',
+                                                line: 'port = {{ SELF.application_port }}',
+                                                backup: 'yes',
                                             },
                                         },
                                         {
@@ -128,19 +126,36 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Configure port (e.g., since 3306 is blocked by the provider)',
-                                            lineinfile: {
-                                                path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
-                                                regexp: '^# port',
-                                                line: 'port = {{ SEFL.application_port }}',
-                                                backup: 'yes',
-                                            },
-                                        },
-                                        {
                                             name: 'Restart mysql',
                                             service: {
                                                 name: 'mysql',
                                                 state: 'restarted',
+                                            },
+                                        },
+                                        {
+                                            name: 'Create all root',
+                                            'community.mysql.mysql_user': {
+                                                name: 'root',
+                                                password: '{{ SELF.dbms_password }}',
+                                                priv: '*.*:ALL',
+                                                host: '%',
+                                                state: 'present',
+                                                login_host: 'localhost',
+                                                login_password: '{{ SELF.dbms_password }}',
+                                                login_port: '{{ SELF.application_port }}',
+                                                login_user: 'root',
+                                            },
+                                        },
+                                        {
+                                            name: 'Delete localhost root',
+                                            'community.mysql.mysql_user': {
+                                                name: 'root',
+                                                host: 'localhost',
+                                                state: 'absent',
+                                                login_host: 'localhost',
+                                                login_password: '{{ SELF.dbms_password }}',
+                                                login_port: '{{ SELF.application_port }}',
+                                                login_user: 'root',
                                             },
                                         },
                                     ],

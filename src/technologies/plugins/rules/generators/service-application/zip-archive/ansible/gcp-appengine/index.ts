@@ -136,6 +136,9 @@ const generator: ImplementationGenerator = {
                                             name: 'activate service account',
                                             'ansible.builtin.shell':
                                                 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
 
                                         // https://cloud.google.com/sdk/gcloud/reference/app/deploy
@@ -143,6 +146,9 @@ const generator: ImplementationGenerator = {
                                             name: 'delete app',
                                             'ansible.builtin.shell':
                                                 'gcloud app services delete {{ SELF.application_name }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                     ],
                                 },

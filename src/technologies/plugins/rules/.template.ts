@@ -2,6 +2,8 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {MetadataGenerated} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
+    comment: '',
+    weight: 0,
     component: 'service.application',
     technology: 'ansible',
     artifact: 'zip.archive',

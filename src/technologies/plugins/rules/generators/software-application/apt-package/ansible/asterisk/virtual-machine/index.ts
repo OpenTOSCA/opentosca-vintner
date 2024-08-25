@@ -3,9 +3,12 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleCallOperationTask,
     AnsibleCopyOperationTask,
+    AnsibleCreateApplicationDirectoryTask,
+    AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
+    ApplicationDirectory,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -28,6 +31,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...OpenstackMachineCredentials(),
+                ...ApplicationDirectory(),
             },
             interfaces: {
                 Standard: {
@@ -46,6 +50,9 @@ const generator: ImplementationGenerator = {
                                             name: 'run setup script',
                                             'ansible.builtin.shell':
                                                 'curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                             when: '".artifacts::apt_package::script" | eval != None',
                                         },
                                         {
@@ -88,7 +95,10 @@ const generator: ImplementationGenerator = {
                                                 state: 'present',
                                             },
                                             environment:
-                                                '{{ ".artifacts::apt_package::file" | eval | split | map("split", "=") | community.general.dict }}',
+                                                '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}',
+                                        },
+                                        {
+                                            ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
@@ -181,9 +191,12 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
+                                            ...AnsibleDeleteApplicationDirectoryTask(),
+                                        },
+                                        {
                                             name: 'uninstall package',
                                             'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::apt_package::file | eval }}',
+                                                name: '{{ ".artifacts::apt_package::file" | eval }}',
                                                 state: 'absent',
                                             },
                                         },
