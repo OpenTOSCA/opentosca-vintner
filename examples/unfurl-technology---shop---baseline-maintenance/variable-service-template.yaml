@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0_rc_3
+tosca_definitions_version: tosca_variability_1_0_rc_2
 
 imports:
     - lib/types.yaml
@@ -13,68 +13,88 @@ topology_template:
 
         os_network:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_name:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_user:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_file:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_region_name:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_type:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_url:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_identity_api_version:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_interface:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_id:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_secret:
             type: string
+            conditions: {equal: [{variability_input: env}, STATIC]}
 
         gcp_region:
             type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_service_account_file:
             type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_project:
             type: string
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         k8s_host:
             type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_ca_cert_file:
             type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_cert_file:
             type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_key_file:
             type: string
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
     variability:
         inputs:
             env:
                 type: string
             tier:
-                type: string
+                type: boolean
             premium_feature:
                 type: boolean
             optional_feature:
                 type: boolean
+        options:
+            checks: false
 
     node_templates:
         ###################################################
@@ -83,20 +103,15 @@ topology_template:
         #
         ###################################################
 
-        shop:
+        shop_ansible:
             type: shop.component
+            conditions: {equal: [{variability_input: env}, STATIC]}
             persistent: true
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            technology: ansible
             properties:
                 - application_name: unfurl-technology-shop
-                - application_protocol: http
                 - application_port: 3000
+                - application_protocol: http
                 - DB_NAME: shop
                 - DB_USERNAME: shop
                 - DB_PASSWORD: {get_input: database_password}
@@ -116,32 +131,96 @@ topology_template:
                       value: 'false'
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
-                - database: database
+                - database: database_ansible
                 - host: nodejs_runtime
+            artifacts:
+                - zip_archive:
+                      type: zip.archive
+                      file: files/shop.source.zip
+
+        shop_terraform:
+            type: shop.component
+            persistent: true
+            conditions: {equal: [{variability_input: env}, ELASTIC]}
+            technology: terraform
+            properties:
+                - application_name: unfurl-technology-shop
+                - application_port: 3000
+                - application_protocol: http
+                - DB_NAME: shop
+                - DB_USERNAME: shop
+                - DB_PASSWORD: {get_input: database_password}
+                - DB_DIALECT: mysql
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+                - premium_feature:
+                      value: 'true'
+                      conditions: {equal: [{variability_input: premium_feature}, true]}
+                - premium_feature:
+                      value: 'false'
+                      conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
+                - optional_feature:
+                      value: 'true'
+                      conditions: {equal: [{variability_input: optional_feature}, true]}
+                - optional_feature:
+                      value: 'false'
+                      conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
+            requirements:
+                - database: database_terraform
                 - host: gcp_appengine
+            artifacts:
+                - zip_archive:
+                      type: zip.archive
+                      file: files/shop.source.zip
+
+        shop_kubernetes:
+            type: shop.component
+            persistent: true
+            conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            technology: kubernetes
+            properties:
+                - application_name: unfurl-technology-shop
+                - application_port: 3000
+                - application_protocol: http
+                - DB_NAME: shop
+                - DB_USERNAME: shop
+                - DB_PASSWORD: {get_input: database_password}
+                - DB_DIALECT: mysql
+                - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
+                - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
+                - premium_feature:
+                      value: 'true'
+                      conditions: {equal: [{variability_input: premium_feature}, true]}
+                - premium_feature:
+                      value: 'false'
+                      conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
+                - optional_feature:
+                      value: 'true'
+                      conditions: {equal: [{variability_input: optional_feature}, true]}
+                - optional_feature:
+                      value: 'false'
+                      conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
+            requirements:
+                - database: database_ansible
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
-                      conditions: {node_presence: kubernetes_cluster}
 
-                - zip_archive:
-                      type: zip.archive
-                      file: files/shop.source.zip
-                      conditions: {or: [{node_presence: nodejs_runtime}, {node_presence: gcp_appengine}]}
-
-        shop_ingress:
+        shop_ingress_ansible:
             type: ingress
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            technology: ansible
             requirements:
-                - application: shop
-                - host: kubernetes_cluster
+                - application: shop_ansible
                 - host: virtual_machine
+
+        shop_ingress_kubernetes:
+            type: ingress
+            technology: kubernetes
+            requirements:
+                - application: shop_kubernetes
+                - host: kubernetes_cluster
 
         ###################################################
         #
@@ -149,38 +228,53 @@ topology_template:
         #
         ###################################################
 
-        database:
+        database_ansible:
             type: mysql.database
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            technology: ansible
             properties:
                 - database_name: shop
                 - database_user: shop
                 - database_password: {get_input: database_password}
             requirements:
-                - host: mysql_dbms
+                - host: mysql_dbms_ansible
+                - host: mysql_dbms_kubernetes
 
-        mysql_dbms:
+        database_terraform:
+            type: mysql.database
+            technology: terraform
+            properties:
+                - database_name: shop
+                - database_user: shop
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: mysql_dbms_terraform
+
+        mysql_dbms_ansible:
             type: mysql.dbms
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
+            technology: ansible
             properties:
                 - dbms_name: unfurl-technology-shop-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
-                - host: kubernetes_cluster
+
+        mysql_dbms_terraform:
+            type: mysql.dbms
+            technology: terraform
+            properties:
+                - dbms_name: unfurl-technology-shop-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
                 - host: gcp_cloudsql
+
+        mysql_dbms_kubernetes:
+            type: mysql.dbms
+            technology: kubernetes
+            properties:
+                - dbms_name: unfurl-technology-shop-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: kubernetes_cluster
 
         ###################################################
         #

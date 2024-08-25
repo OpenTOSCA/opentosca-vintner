@@ -1,5 +1,3 @@
-expected: ../../../unfurl-technology---shop---plus-maintenance-automated/tests/elastic/expected.yaml
-
 merge:
     topology_template:
         node_templates:

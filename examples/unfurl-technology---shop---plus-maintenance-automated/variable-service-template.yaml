@@ -86,17 +86,10 @@ topology_template:
         shop:
             type: shop.component
             persistent: true
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - application_name: unfurl-technology-shop
-                - application_protocol: http
                 - application_port: 3000
+                - application_protocol: http
                 - DB_NAME: shop
                 - DB_USERNAME: shop
                 - DB_PASSWORD: {get_input: database_password}
@@ -124,20 +117,12 @@ topology_template:
                 - docker_image:
                       type: docker.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
-                      conditions: {node_presence: kubernetes_cluster}
-
                 - zip_archive:
                       type: zip.archive
                       file: files/shop.source.zip
-                      conditions: {or: [{node_presence: nodejs_runtime}, {node_presence: gcp_appengine}]}
 
         shop_ingress:
             type: ingress
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             requirements:
                 - application: shop
                 - host: kubernetes_cluster
@@ -151,13 +136,6 @@ topology_template:
 
         database:
             type: mysql.database
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - database_name: shop
                 - database_user: shop
@@ -167,13 +145,6 @@ topology_template:
 
         mysql_dbms:
             type: mysql.dbms
-            technology:
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - terraform:
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - kubernetes:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - dbms_name: unfurl-technology-shop-dbms
                 - dbms_password: {get_input: dbms_password}
@@ -190,13 +161,11 @@ topology_template:
 
         nodejs_runtime:
             type: nodejs.runtime
-            technology: ansible
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
             type: virtual.machine
-            technology: terraform
             properties:
                 - machine_name: unfurl-technology-shop-vm
                 - image: Ubuntu 22.04
@@ -238,7 +207,6 @@ topology_template:
 
         gcp_appengine:
             type: gcp.appengine
-            technology: terraform
             requirements:
                 - host: gcp_provider
                 - build: gcp_cloudbuild
@@ -246,19 +214,16 @@ topology_template:
 
         gcp_appenginereporting:
             type: gcp.appenginereporting
-            technology: terraform
             requirements:
                 - host: gcp_provider
 
         gcp_cloudbuild:
             type: gcp.cloudbuild
-            technology: terraform
             requirements:
                 - host: gcp_provider
 
         gcp_cloudsql:
             type: gcp.cloudsql
-            technology: terraform
             requirements:
                 - host: gcp_provider
 

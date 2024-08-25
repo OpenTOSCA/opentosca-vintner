@@ -1,5 +1,13 @@
 expected: ../../../unfurl-technology---shop---plus-maintenance-automated/tests/elastic/expected.yaml
+replace:
+    - - _ansible
+      - ''
 
+    - - _terraform
+      - ''
+
+    - - _kubernetes
+      - ''
 merge:
     topology_template:
         node_templates:
