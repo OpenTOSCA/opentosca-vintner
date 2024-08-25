@@ -370,19 +370,19 @@ export function Operation(operation: MANAGEMENT_OPERATIONS) {
 #! /usr/bin/bash
 set -e
 
-{{ ${UnfurlSelfManagementOperation(operation)} }}
+{{ ${SelfOperation(operation)} }}
 `.trimStart()
 }
 
 export function AnsibleWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
-    return `${UnfurlSelfManagementOperation(operation)} != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+    return `${SelfOperation(operation)} != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
 }
 
 export function AnsibleWhenOperationUndefined(operation: MANAGEMENT_OPERATIONS) {
-    return `${UnfurlSelfManagementOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+    return `${SelfOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
 }
 
-export function UnfurlSelfManagementOperation(operation: MANAGEMENT_OPERATIONS) {
+export function SelfOperation(operation: MANAGEMENT_OPERATIONS) {
     return `SELF._management_${operation}`
 }
 

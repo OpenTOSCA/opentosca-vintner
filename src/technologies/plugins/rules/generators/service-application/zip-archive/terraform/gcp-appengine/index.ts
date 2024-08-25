@@ -5,8 +5,8 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
+    SelfOperation,
     TerraformStandardOperations,
-    UnfurlSelfManagementOperation,
     ZipArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
@@ -92,9 +92,7 @@ const generator: ImplementationGenerator = {
                                             ],
                                             entrypoint: [
                                                 {
-                                                    shell: `{{ ${UnfurlSelfManagementOperation(
-                                                        MANAGEMENT_OPERATIONS.START
-                                                    )} }}`,
+                                                    shell: `{{ ${SelfOperation(MANAGEMENT_OPERATIONS.START)} }}`,
                                                 },
                                             ],
                                             env_variables: mapProperties(type, {
