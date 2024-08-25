@@ -78,7 +78,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: '{{ ".artifacts::container_image::file" | eval }}',
+                                                                        image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                                         ports: [
                                                                             {
                                                                                 name: 'http1',

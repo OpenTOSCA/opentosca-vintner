@@ -65,7 +65,7 @@ const generator: ImplementationGenerator = {
                                                     services: {
                                                         application: {
                                                             container_name: '{{ SELF.application_name }}',
-                                                            image: '{{ ".artifacts::container_image::file" | eval }}',
+                                                            image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                             network_mode: 'host',
                                                             environment: mapProperties(type, {format: 'map'}),
                                                         },
