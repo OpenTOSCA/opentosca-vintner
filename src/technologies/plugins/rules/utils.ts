@@ -355,7 +355,6 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
 export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'call management operation',
-        // TODO: next: does this work?
         'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
         args: {
             chdir: '{{ SELF.application_directory }}',
