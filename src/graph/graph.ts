@@ -1,9 +1,9 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Import from '#graph/import'
+import Inheritance from '#graph/inheritance'
 import {Options} from '#graph/options'
 import Output from '#graph/output'
-import {TechnologyPlugin} from '#graph/plugin'
 import {Populator} from '#graph/populator'
 import Technology from '#graph/technology'
 import {andify, generatify, simplify} from '#graph/utils'
@@ -24,6 +24,7 @@ import {
     RelationTypePresenceArguments,
     TechnologyPresenceArguments,
 } from '#spec/variability'
+import {TechnologyPlugin} from '#technologies/types'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -62,6 +63,7 @@ export default class Graph {
     elements: Element[] = []
 
     types: Type[] = []
+    inheritance: Inheritance
 
     nodes: Node[] = []
     nodesMap = new Map<string, Node>()
@@ -109,6 +111,11 @@ export default class Graph {
             ].includes(this.serviceTemplate.tosca_definitions_version)
         )
             throw new Error('Unsupported TOSCA definitions version')
+
+        /**
+         * Inheritance
+         */
+        this.inheritance = new Inheritance(this)
 
         /**
          * Normalizer
@@ -321,9 +328,9 @@ export default class Graph {
         assert.isStringOrNumber(element)
 
         if (check.isDefined(context.cached)) {
-            const element = context.cached
-            assert.isPolicy(element)
-            return element
+            const cached = context.cached
+            assert.isPolicy(cached)
+            return cached
         }
 
         if (element === 'SELF') {
@@ -636,6 +643,10 @@ export default class Graph {
         node.raw.technology.push({
             [technology]: {conditions: template.conditions, weight: template.weight, assign: template.assign},
         })
+    }
+
+    replaceTechnologies(node: Node, maps: TechnologyTemplateMap[]) {
+        node.raw.technology = maps
     }
 
     regenerate() {

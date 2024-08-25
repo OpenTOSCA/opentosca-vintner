@@ -13,6 +13,6 @@ export type PolicyTemplate = {
     properties?: PropertyAssignmentMap | PropertyAssignmentList
 } & VariabilityAlternative
 
-export type PolicyAssignmentMap = {[name: string]: PolicyTemplate}
+export type PolicyTemplateMap = {[name: string]: PolicyTemplate}
 
-export type PolicyTemplateList = PolicyAssignmentMap[]
+export type PolicyTemplateList = PolicyTemplateMap[]

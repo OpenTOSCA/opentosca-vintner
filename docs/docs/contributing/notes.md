@@ -214,24 +214,25 @@ Run the following command, to count the lines of code in the `src` folder.
 cloc src
 ```
 
-The following output has been generated for the commit `7007d26f97d68fbe8a0a76e73eafabd51918a860` on June 2, 2024.
+The following output has been generated for the commit `bfb7b26af7114888ff030bce094063db7f017a6c` on August 20, 2024.
 
 ```text linenums="1"
-     229 text files.
-     226 unique files.                                          
+     300 text files.
+     297 unique files.                                          
        3 files ignored.
 
-github.com/AlDanial/cloc v 1.98  T=0.19 s (1217.7 files/s, 90032.4 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.27 s (1082.1 files/s, 93577.3 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     193           2611           1544          12060
-Bourne Shell                    19             64             57            208
-YAML                             8             12              0            111
+TypeScript                     259           3112           1902          18597
+YAML                            11            223            152           1248
+Bourne Shell                    20             75             78            242
 EJS                              5              7              0             34
+Python                           1              4              0             10
 CSV                              1              0              0              1
 -------------------------------------------------------------------------------
-SUM:                           226           2694           1601          12414
+SUM:                           297           3421           2132          20132
 -------------------------------------------------------------------------------
 ```
 
@@ -255,6 +256,13 @@ The following links are used in publications.
 - https://vintner.opentosca.org/variability4tosca/guides/artifacts
 - https://vintner.opentosca.org/variability4tosca/guides/pruning
 - https://vintner.opentosca.org/variability4tosca/guides/modes
+
+
+## Typical Reasons for UNSAT 
+
+1. Technology constraint; can be disabled by `technology_constraint: false`
+1. Artifact constraint; can be disabled by `required_artifact_constraint: false`
+1. Required incoming relation constraint; can be disabled by `required_incoming_relation_constraint: false`
 
 
 ## Limitations

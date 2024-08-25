@@ -2,10 +2,12 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
-import {bratify} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
 import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
 import * as utils from '#utils'
+
+export const TECHNOLOGY_DEFAULT_WEIGHT = 1
 
 export default class Technology extends Element {
     readonly name: string
@@ -14,7 +16,7 @@ export default class Technology extends Element {
     readonly index: number
     readonly container: Node
     readonly weight: number
-    readonly assign?: string
+    readonly assign: string
 
     readonly defaultAlternative: boolean
 
@@ -25,12 +27,14 @@ export default class Technology extends Element {
         this.raw = data.raw
         this.container = data.container
         this.index = data.index
+
+        assert.isDefined(data.raw.assign, `${this.Display} not normalized`)
         this.assign = data.raw.assign
 
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false
 
-        this.weight = data.raw.weight ?? 1
+        this.weight = data.raw.weight ?? TECHNOLOGY_DEFAULT_WEIGHT
         assert.isNumber(this.weight)
         if (this.weight < 0) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
         if (this.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
@@ -94,11 +98,13 @@ export default class Technology extends Element {
             }
         })
 
-        return {
-            conditions: {and: conditions},
-            consistency: true,
-            semantic: false,
-        }
+        return [
+            {
+                conditions: andify(conditions),
+                consistency: true,
+                semantic: false,
+            },
+        ]
     }
 
     // Check if no other technology is present

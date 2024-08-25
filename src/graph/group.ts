@@ -85,11 +85,13 @@ export default class Group extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: {has_present_member: this.toscaId, _cached_element: this},
-            consistency: false,
-            semantic: true,
-        }
+        return [
+            {
+                conditions: {has_present_member: this.toscaId, _cached_element: this},
+                consistency: false,
+                semantic: true,
+            },
+        ]
     }
 
     constructPresenceCondition() {

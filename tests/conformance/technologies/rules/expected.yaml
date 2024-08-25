@@ -1,9 +1,29 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+node_types:
+    application:
+        derived_from: tosca.nodes.Root
+    ansible_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    terraform_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    ansible_terraform_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    database:
+        derived_from: tosca.nodes.Root
+    dbms:
+        derived_from: tosca.nodes.Root
+
 topology_template:
     node_templates:
         application:
-            type: application.terraform.ansible_terraform_host
+            type: application~application::terraform@ansible_terraform_host
             requirements:
                 - host: ansible_terraform_host
                 - database: database
@@ -12,9 +32,9 @@ topology_template:
             type: ansible_terraform_host
 
         database:
-            type: database.terraform.dbms
+            type: database~database::terraform
             requirements:
                 - host: dbms
 
         dbms:
-            type: dbms.terraform.dbms
+            type: dbms~dbms::terraform

@@ -2,17 +2,24 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Graph from '#graph/graph'
 import {GroupTemplateMap} from '#spec/group-template'
+import {EntityTypesKeys} from '#spec/service-template'
 import {TopologyTemplate} from '#spec/topology-template'
 import {LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
 
+export type Options = {
+    cleanTypes: boolean
+}
+
 export default class Transformer {
     private readonly graph: Graph
     private readonly topology: TopologyTemplate
+    private readonly options: Options
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: Options = {cleanTypes: true}) {
         this.graph = graph
         this.topology = graph.serviceTemplate.topology_template || {}
+        this.options = options
     }
 
     run() {
@@ -24,6 +31,9 @@ export default class Transformer {
 
         // Clean variability definition from pruning options
         this.cleanVariabilityDefinition()
+
+        // Remove loaded types
+        if (this.options.cleanTypes) this.cleanTypes()
     }
 
     private removeVariabilityGroups() {
@@ -195,6 +205,8 @@ export default class Transformer {
 
             // Delete enricher options
             delete this.topology.variability.options.enrich_input_condition
+            delete this.topology.variability.options.enrich_technologies
+            delete this.topology.variability.options.enrich_implementations
         }
 
         // Remove empty options
@@ -202,5 +214,18 @@ export default class Transformer {
 
         // Remove empty variability
         if (utils.isEmpty(this.topology.variability)) delete this.topology.variability
+    }
+
+    private cleanTypes() {
+        for (const key of EntityTypesKeys) {
+            const types = this.graph.serviceTemplate[key]
+            if (check.isUndefined(types)) return
+
+            for (const [name, type] of Object.entries(types)) {
+                if (type._loaded) delete types[name]
+            }
+
+            if (utils.isEmpty(this.graph.serviceTemplate[key])) delete this.graph.serviceTemplate[key]
+        }
     }
 }

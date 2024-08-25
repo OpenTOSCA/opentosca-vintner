@@ -10,6 +10,9 @@ topology_template:
             is_l: {equal: [{variability_input: l}, true]}
             is_r: {equal: [{variability_input: l}, false]}
 
+        options:
+            enrich_technologies: false
+
     node_templates:
         application:
             type: Application

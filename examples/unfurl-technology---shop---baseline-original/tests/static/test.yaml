@@ -1,0 +1,10 @@
+expected: ../../../unfurl-technology---shop---plus-maintenance-automated/tests/static/expected.yaml
+replace:
+    - - _ansible
+      - ''
+
+    - - _terraform
+      - ''
+
+    - - _kubernetes
+      - ''

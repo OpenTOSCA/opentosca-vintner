@@ -12,6 +12,7 @@ topology_template:
                   - node:
                         conditions:
                             - {node_presence: node, _generated: true}
+              technology: []
               conditions:
                   - {and: [], _generated: true}
                   - {variability_input: node.node}

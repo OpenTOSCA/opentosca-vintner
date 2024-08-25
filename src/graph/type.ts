@@ -82,11 +82,13 @@ export default class Type extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: this.container.presenceCondition,
-            consistency: true,
-            semantic: false,
-        }
+        return [
+            {
+                conditions: this.container.presenceCondition,
+                consistency: true,
+                semantic: false,
+            },
+        ]
     }
 
     constructPresenceCondition() {
@@ -96,6 +98,30 @@ export default class Type extends Element {
     // Check if no other type is present
     constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.types.filter(it => it !== this))
+    }
+
+    isA(name: string) {
+        if (this.container.isArtifact()) {
+            return this.graph.inheritance.isArtifactType(this.name, name)
+        }
+
+        if (this.container.isGroup()) {
+            return this.graph.inheritance.isGroupType(this.name, name)
+        }
+
+        if (this.container.isNode()) {
+            return this.graph.inheritance.isNodeType(this.name, name)
+        }
+
+        if (this.container.isPolicy()) {
+            return this.graph.inheritance.isPolicyType(this.name, name)
+        }
+
+        if (this.container.isRelation()) {
+            return this.graph.inheritance.isRelationshipType(this.name, name)
+        }
+
+        throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
     isType() {

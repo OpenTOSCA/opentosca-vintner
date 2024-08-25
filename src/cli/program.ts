@@ -512,6 +512,28 @@ template
         })
     )
 
+template
+    .command('implement')
+    .description('implement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .option('--orchestrator [string]', 'the orchestrator for which node type should be implemented', 'unfurl')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.implement(options)
+        })
+    )
+
+template
+    .command('unimplement')
+    .description('unimplement node types')
+    .requiredOption('--dir <string>', 'path to service template directory')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.unimplement(options)
+        })
+    )
+
 const puml = template.command('puml').description('generate puml')
 
 puml.command('topology')
@@ -545,8 +567,8 @@ templates
     .description('lists all templates')
     .action(
         hae.exit(async () => {
-            const templates = await Controller.templates.list()
-            std.out(templates.map(template => template.getName()).join('\n'))
+            const list = await Controller.templates.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -601,8 +623,8 @@ templates
     .requiredOption('--template <string>', 'template name')
     .action(
         hae.exit(async options => {
-            const template = await Controller.templates.inspect(options)
-            std.out(files.toYAML(template))
+            const inspect = await Controller.templates.inspect(options)
+            std.out(files.toYAML(inspect))
         })
     )
 
@@ -635,8 +657,8 @@ instances
     .description('lists all instances')
     .action(
         hae.exit(async () => {
-            const instances = await Controller.instances.list()
-            std.out(instances.map(it => it.getName()).join('\n'))
+            const list = await Controller.instances.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 
@@ -669,8 +691,8 @@ instances
     .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
-            const info = await Controller.instances.info(options)
-            std.out(files.toYAML(info))
+            const output = await Controller.instances.info(options)
+            std.out(files.toYAML(output))
         })
     )
 
@@ -758,8 +780,8 @@ instances
     .option('--no-machine [boolean]')
     .action(
         hae.exit(async options => {
-            const template = await Controller.instances.inspect(options)
-            std.out(files.toYAML(template))
+            const inspect = await Controller.instances.inspect(options)
+            std.out(files.toYAML(inspect))
         })
     )
 
@@ -768,8 +790,7 @@ instances
     .description('deploys instance')
     .requiredOption('--instance <string>', 'instance name')
     .option('--inputs [string]', 'path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY})')
-    .option('--retry [boolean]', 'retry', true)
-    .option('--no-retry [boolean]')
+    .option('--retries [boolean]', 'number of retries', '1')
     .option('--verbose [boolean]', 'verbose')
     .option('--no-verbose [boolean]')
     .option('--force [boolean]', 'force', false)
@@ -1024,8 +1045,8 @@ assets
     .description('lists all assets')
     .action(
         hae.exit(async options => {
-            const assets = await Controller.assets.list()
-            std.out(assets.map(it => it.getName()).join('\n'))
+            const list = await Controller.assets.list()
+            std.out(list.map(it => it.getName()).join('\n'))
         })
     )
 

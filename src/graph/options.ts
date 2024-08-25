@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {
+    ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
@@ -85,6 +86,7 @@ class DefaultOptions extends BaseOptions {
     readonly groupDefaultSemanticCondition: boolean
 
     readonly artifactDefaultCondition: boolean
+    readonly artifactDefaultConditionMode: ArtifactDefaultConditionMode
     readonly artifactDefaultConsistencyCondition: boolean
     readonly artifactDefaultSemanticCondition: boolean
 
@@ -256,6 +258,16 @@ class DefaultOptions extends BaseOptions {
         this.artifactDefaultCondition =
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
         assert.isBoolean(this.artifactDefaultCondition)
+
+        if (this.v1 || this.v2) {
+            this.artifactDefaultConditionMode =
+                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container'
+            assert.isString(this.artifactDefaultConditionMode)
+        } else {
+            this.artifactDefaultConditionMode =
+                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container-managed'
+            assert.isString(this.artifactDefaultConditionMode)
+        }
 
         this.artifactDefaultConsistencyCondition =
             this.raw.artifact_default_consistency_condition ??
@@ -760,7 +772,7 @@ class SolverTechnologiesOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
-    readonly mode: 'weight' | 'count'
+    readonly mode: 'weight' | 'count' | 'weight-count'
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -812,9 +824,9 @@ class SolverTechnologiesOptions extends BaseOptions {
             this.unique = this.raw.optimization_technologies_unique ?? false
             assert.isBoolean(this.unique)
 
-            const mode = this.raw.optimization_technologies_mode ?? 'weight'
-            if (!['weight', 'count'].includes(mode)) {
-                throw new Error(`Option optimization_technology_mode must be "weight" or "count"`)
+            const mode = this.raw.optimization_technologies_mode ?? 'weight-count'
+            if (!['weight', 'count', 'weight-count'].includes(mode)) {
+                throw new Error(`Option optimization_technology_mode must be "weight", "count", or "weight-count"`)
             }
             this.mode = mode
         }
@@ -883,7 +895,11 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
             assert.isBoolean(this.uniqueOutput)
 
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            if (this.v3) {
+                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            } else {
+                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+            }
             assert.isBoolean(this.requiredArtifact)
 
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
@@ -944,12 +960,30 @@ export class NormalizationOptions extends BaseOptions {
 
 export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
+    readonly technologies: boolean
+    readonly implementations: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         this.inputCondition = this.raw.enrich_input_condition ?? true
         assert.isBoolean(this.inputCondition)
+
+        if (this.v2 || this.v3) {
+            /**
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
+             */
+            this.technologies = this.raw.enrich_technologies ?? true
+        } else {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
+             */
+            this.technologies = this.raw.enrich_technologies ?? false
+        }
+        assert.isBoolean(this.technologies)
+
+        this.implementations = this.raw.enrich_implementations ?? true
+        assert.isBoolean(this.implementations)
     }
 }
 

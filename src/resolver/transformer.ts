@@ -10,7 +10,7 @@ import {GroupTemplateMap} from '#spec/group-template'
 import {GroupMember} from '#spec/group-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
-import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
+import {EntityTypesKeys, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {ElementType} from '#spec/type-assignment'
 import * as utils from '#utils'
@@ -57,6 +57,9 @@ export default class Transformer {
         if (utils.isEmpty(this.topology)) {
             delete this.graph.serviceTemplate.topology_template
         }
+
+        // Clean types
+        this.cleanTypes()
     }
 
     private clean(raw: any) {
@@ -71,7 +74,7 @@ export default class Transformer {
         if (check.isDefined(this.topology.node_templates)) {
             this.topology.node_templates = this.graph.nodes
                 .filter(node => node.present)
-                .reduce<NodeTemplateMap>((map, node) => {
+                .reduce<NodeTemplateMap>((nodeMap, node) => {
                     const template = node.raw
 
                     // Select present type
@@ -106,7 +109,7 @@ export default class Transformer {
                     // Delete all artifacts which are not present
                     template.artifacts = node.artifacts
                         .filter(it => it.present)
-                        .reduce<ArtifactDefinitionMap>((map, artifact) => {
+                        .reduce<ArtifactDefinitionMap>((artifactMap, artifact) => {
                             if (!check.isString(artifact.raw)) this.clean(artifact.raw)
 
                             // Select present type
@@ -115,14 +118,14 @@ export default class Transformer {
                             // Select present properties
                             this.transformProperties(artifact, artifact.raw)
 
-                            map[artifact.name] = artifact.raw
-                            return map
+                            artifactMap[artifact.name] = artifact.raw
+                            return artifactMap
                         }, {})
                     if (utils.isEmpty(template.artifacts)) delete template.artifacts
 
                     this.clean(template)
-                    map[node.name] = template
-                    return map
+                    nodeMap[node.name] = template
+                    return nodeMap
                 }, {})
 
             if (utils.isEmpty(this.topology.node_templates)) {
@@ -256,7 +259,7 @@ export default class Transformer {
         }
     }
 
-    private transformType(element: {types: Type[]; Display: string}, template: {type: ElementType}) {
+    private transformType(element: {types: Type[]; Display: string}, template: {type?: ElementType}) {
         const type = element.types.find(it => it.present)
         if (check.isUndefined(type)) throw new Error(`${element.Display} has no present type`)
         template.type = type.name
@@ -268,24 +271,11 @@ export default class Transformer {
         // Ignore if previously had no technologies
         if (utils.isEmpty(element.technologies)) return
 
+        // Present technology
         const technology = element.technologies.find(it => it.present)
         if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
 
-        if (check.isDefined(technology.assign)) {
-            template.type = technology.assign
-        } else {
-            let type = template.type
-            type += '.' + technology.name
-
-            const host = element.hosts.find(it => it.present)
-            if (check.isDefined(host)) {
-                type += '.' + host.getType().name.split('.')[0]
-            } else {
-                type += '.' + template.type.split('.')[0]
-            }
-
-            template.type = type
-        }
+        template.type = technology.assign
     }
 
     private transformProperties(
@@ -330,6 +320,19 @@ export default class Transformer {
             if (utils.isEmpty(this.graph.serviceTemplate.imports)) {
                 delete this.graph.serviceTemplate.imports
             }
+        }
+    }
+
+    private cleanTypes() {
+        for (const key of EntityTypesKeys) {
+            const types = this.graph.serviceTemplate[key]
+            if (check.isUndefined(types)) return
+
+            for (const [name, type] of Object.entries(types)) {
+                if (type._loaded) delete types[name]
+            }
+
+            if (utils.isEmpty(this.graph.serviceTemplate[key])) delete this.graph.serviceTemplate[key]
         }
     }
 }

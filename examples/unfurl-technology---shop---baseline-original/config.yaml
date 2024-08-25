@@ -1,0 +1,3 @@
+dependencies:
+    - source: ../unfurl-technology---shop---plus-maintenance-automated/lib
+    - source: ../unfurl-technology---shop---plus-maintenance-automated/files

@@ -59,11 +59,13 @@ export default class Output extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: {is_produced: this.toscaId, _cached_element: this},
-            consistency: false,
-            semantic: true,
-        }
+        return [
+            {
+                conditions: {is_produced: this.toscaId, _cached_element: this},
+                consistency: false,
+                semantic: true,
+            },
+        ]
     }
 
     constructPresenceCondition() {

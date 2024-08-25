@@ -1,5 +1,25 @@
 tosca_definitions_version: tosca_variability_1_0
 
+node_types:
+    application:
+        derived_from: tosca.nodes.Root
+    ansible_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    terraform_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    ansible_terraform_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    database:
+        derived_from: tosca.nodes.Root
+    dbms:
+        derived_from: tosca.nodes.Root
+
 topology_template:
     variability:
         options:
@@ -8,28 +28,32 @@ topology_template:
             optimization_technologies_unique: true
             technology_pruning: true
             technology_constraint: true
+            enrich_technologies: true
 
         technology_assignment_rules:
             terraform:
                 - component: application
-                  host: terraform_host
+                  hosting: terraform_host
 
                 - component: application
-                  host: ansible_terraform_host
+                  hosting: ansible_terraform_host
 
                 - component: another
-                  host: another_terraform_host
+                  hosting: another_terraform_host
+
+                - component: database
+                - component: dbms
 
             ansible:
                 - component: application
-                  host: ansible_host
+                  hosting: ansible_host
 
                 - component: application
-                  host: ansible_terraform_host
+                  hosting: ansible_terraform_host
 
             helm:
                 - component: application
-                  host: helm_host
+                  hosting: helm_host
 
     node_templates:
         application:

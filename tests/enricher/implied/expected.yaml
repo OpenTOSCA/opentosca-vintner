@@ -58,6 +58,7 @@ topology_template:
                         conditions:
                             - node_presence: worker
                               _generated: true
+              technology: []
               requirements:
                   - left:
                         node: left
@@ -91,6 +92,7 @@ topology_template:
                         conditions:
                             - node_presence: left
                               _generated: true
+              technology: []
               requirements:
                   - host:
                         node: left_host
@@ -113,6 +115,7 @@ topology_template:
                         conditions:
                             - node_presence: left_host
                               _generated: true
+              technology: []
               requirements:
                   - host:
                         node: left_host_host
@@ -135,6 +138,7 @@ topology_template:
                         conditions:
                             - node_presence: left_host_host
                               _generated: true
+              technology: []
               conditions:
                   - has_incoming_relation: left_host_host
                     _generated: true
@@ -145,6 +149,7 @@ topology_template:
                         conditions:
                             - node_presence: right
                               _generated: true
+              technology: []
               requirements:
                   - host:
                         node: right_host
@@ -167,6 +172,7 @@ topology_template:
                         conditions:
                             - node_presence: right_host
                               _generated: true
+              technology: []
               conditions:
                   - has_incoming_relation: right_host
                     _generated: true

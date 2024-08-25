@@ -99,7 +99,7 @@ export class QueryTest {
             const title = this.test.title
 
             async function fn() {
-                const output = files.temporary()
+                const output = files.temporaryDirent()
                 await resolveQueries({
                     output,
                     template: test.config.template,

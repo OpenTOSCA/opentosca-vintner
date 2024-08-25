@@ -31,7 +31,9 @@
             "#std": ["src/utils/std"],
             "#check": ["src/utils/check"],
             "#assert": ["src/utils/assert"],
-            "#machines/*": ["src/machines/*"]
+            "#machines/*": ["src/machines/*"],
+            "#technologies/*": ["src/technologies/*"],
+            "#normative/*": ["src/normative/*"]
         },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,

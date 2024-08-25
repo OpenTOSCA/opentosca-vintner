@@ -60,11 +60,13 @@ export default class Input extends Element {
     }
 
     getElementGenericCondition() {
-        return {
-            conditions: {is_consumed: this.toscaId, _cached_element: this},
-            consistency: false,
-            semantic: true,
-        }
+        return [
+            {
+                conditions: {is_consumed: this.toscaId, _cached_element: this},
+                consistency: false,
+                semantic: true,
+            },
+        ]
     }
 
     constructPresenceCondition() {

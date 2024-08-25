@@ -16,11 +16,15 @@ export function andify(conditions: LogicExpression[]) {
     return {and: conditions}
 }
 
-export function simplify(conditions: LogicExpression) {
+export function orify(conditions: LogicExpression[]) {
+    return {or: conditions}
+}
+
+export function simplify(conditions: LogicExpression): LogicExpression {
     if (!check.isObject(conditions)) return conditions
     if (check.isDefined(conditions.and)) {
         // Recursive
-        conditions.and.forEach(it => simplify(it))
+        conditions.and = conditions.and.map(it => simplify(it))
 
         /**
          // Remove duplicates
@@ -41,7 +45,7 @@ export function simplify(conditions: LogicExpression) {
 
     if (check.isDefined(conditions.or)) {
         // Recursive
-        conditions.or.forEach(it => simplify(it))
+        conditions.or = conditions.or.map(it => simplify(it))
 
         /**
          // Remove duplicates

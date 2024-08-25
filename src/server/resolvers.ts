@@ -373,6 +373,22 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/template/implement',
+    hae.express(async (req, res, next) => {
+        await Controller.template.implement(req.body)
+        res.json({})
+    })
+)
+
+resolvers.post(
+    '/template/unimplement',
+    hae.express(async (req, res, next) => {
+        await Controller.template.unimplement(req.body)
+        res.json({})
+    })
+)
+
 /**
  * Templates
  */

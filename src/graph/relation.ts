@@ -1,5 +1,5 @@
 import * as check from '#check'
-import {bratify} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {ExtendedRequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
@@ -127,7 +127,7 @@ export default class Relation extends Element {
             }
         })
 
-        return {conditions: {and: conditions}, consistency: true, semantic: false}
+        return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
 
     constructPresenceCondition() {

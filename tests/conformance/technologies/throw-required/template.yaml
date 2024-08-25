@@ -1,5 +1,19 @@
 tosca_definitions_version: tosca_variability_1_0_rc_3
 
+node_types:
+    application:
+        derived_from: tosca.nodes.Root
+    ansible_host:
+        derived_from: tosca.nodes.Root
+    terraform_host:
+        derived_from: tosca.nodes.Root
+    ansible_terraform_host:
+        derived_from: tosca.nodes.Root
+    database:
+        derived_from: tosca.nodes.Root
+    dbms:
+        derived_from: tosca.nodes.Root
+
 topology_template:
     variability:
         options:
@@ -11,8 +25,11 @@ topology_template:
 
         technology_assignment_rules:
             terraform:
-                - component: another
-                  host: another_terraform_host
+                - component: ansible_host
+                - component: terraform_host
+                - component: ansible_terraform_host
+                - component: database
+                - component: dbms
 
     node_templates:
         application:

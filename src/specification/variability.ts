@@ -1,6 +1,6 @@
 import Element from '#/graph/element'
-import {TechnologyPluginBuilder} from '#graph/plugin'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyPluginBuilder} from '#technologies/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
 export type VariabilityDefinition = {
@@ -47,7 +47,7 @@ export type SolverOptions = {
     // Technologies
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
-    optimization_technologies_mode?: 'weight' | 'count'
+    optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 }
 
 export type NormalizationOptions = {
@@ -56,6 +56,8 @@ export type NormalizationOptions = {
 
 export type EnricherOptions = {
     enrich_input_condition?: boolean
+    enrich_technologies?: boolean
+    enrich_implementations?: boolean
 }
 
 export type ConstraintsOptions = {
@@ -89,8 +91,10 @@ export type NodeDefaultConditionMode =
     | 'outgoing'
     | 'outgoingnaive'
     | 'incomingnaive-artifact-host'
+    | 'incomingnaive-artifactnaive-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
+export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
 
 export type DefaultOptions = {
     default_condition?: boolean
@@ -123,6 +127,7 @@ export type DefaultOptions = {
     group_default_semantic_condition?: boolean
 
     artifact_default_condition?: boolean
+    artifact_default_condition_mode?: ArtifactDefaultConditionMode
     artifact_default_consistency_condition?: boolean
     artifact_default_semantic_condition?: boolean
 
@@ -342,6 +347,7 @@ export type LogicExpression =
 
           // Artifact functions
           artifact_presence?: [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
+          is_managed?: 'SELF' | [node: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', artifact: string | number]
 
           // Policy functions
           policy_presence?: string | number | 'SELF' | 'CONTAINER'

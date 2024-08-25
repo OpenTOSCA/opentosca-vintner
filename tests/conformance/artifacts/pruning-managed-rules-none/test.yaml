@@ -1,0 +1,1 @@
+description: No rule support artifact "second_artifact_type". Hence it is removed since empty "or" is assigned which evaluates to false

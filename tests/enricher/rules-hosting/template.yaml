@@ -1,5 +1,44 @@
 tosca_definitions_version: tosca_variability_1_0
 
+node_types:
+    application:
+        derived_from: tosca.nodes.Root
+
+    first_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    first_host_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    first_host_host_first_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    first_host_host_second_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    second_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    third_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
+    fourth_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+
 topology_template:
     variability:
         technology_assignment_rules:
@@ -13,6 +52,9 @@ topology_template:
                 - component: application
                   hosting:
                       - second_host
+
+        options:
+            enrich_technologies: true
 
     node_templates:
         application:
@@ -58,4 +100,4 @@ topology_template:
             type: third_host
 
         fourth_host:
-            type: forth_host
+            type: fourth_host

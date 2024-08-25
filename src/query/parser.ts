@@ -1,7 +1,7 @@
 import * as files from '#files'
 import {parseInt} from 'lodash'
 import ohm from 'ohm-js'
-import path from 'path'
+import nodepath from 'path'
 import {
     ConditionExpression,
     Expression,
@@ -27,7 +27,7 @@ export function parse(query: string, startRule?: string) {
     throw new Error(`Unable to parse query: \n ${match.message}`)
 }
 
-const grammar = ohm.grammar(files.loadFile(path.join(files.ASSETS_DIR, 'grammar.ohm')))
+const grammar = ohm.grammar(files.loadFile(nodepath.join(files.ASSETS_DIR, 'grammar.ohm')))
 const semantics = grammar.createSemantics()
 semantics.addOperation('buildAST', {
     Main(a, _) {

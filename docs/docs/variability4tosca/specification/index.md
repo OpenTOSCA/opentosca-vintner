@@ -160,6 +160,7 @@ The following options are used to configure the default conditions of elements.
 | group_default_consistency_condition      | false     | Boolean                                                                                               | false             | Enable default consistency condition for groups.                                   |
 | group_default_semantic_condition         | false     | Boolean                                                                                               | false             | Enable default semantic condition for groups.                                      |
 | artifact_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for artifacts (consistency and semantic).                 |
+| artifact_default_condition_mode          | false     | List(container &#124; technology, -)                                                                  | container         | Configure the default condition for artifacts.                                     |
 | artifact_default_consistency_condition   | false     | Boolean                                                                                               | false             | Enable default consistency condition for artifacts.                                |
 | artifact_default_semantic_condition      | false     | Boolean                                                                                               | false             | Enable default semantic condition for artifacts.                                   |
 | property_default_condition               | false     | Boolean                                                                                               | false             | Enable default condition for properties (consistency and semantic).                |
@@ -245,14 +246,14 @@ The following options are used to configure checks.
 
 The following options are used to configure the solver.
 
-| Keyname                          | Mandatory | Type                          | Default | Description                                               |
-|----------------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
-| optimization_topology            | false     | Boolean &#124; min &#124; max | false   | Configure optimization considering topology.              | 
-| optimization_topology_unique     | false     | Boolean                       | true    | Enable check for unique results considering topology.     |
-| optimization_topology_mode       | false     | count &#124; weight           | weight  | Configure optimization mode considering topology.         |
-| optimization_technologies        | false     | Boolean &#124; min &#124; max | false   | Enable optimization considering technologies.             | 
-| optimization_technologies_unique | false     | Boolean                       | false   | Enable check for unique results considering technologies. | 
-| optimization_technologies_mode   | false     | count &#124; weight           | count   | Configure optimization mode considering technologies.     | 
+| Keyname                          | Mandatory | Type                                    | Default | Description                                               |
+|----------------------------------|-----------|-----------------------------------------|---------|-----------------------------------------------------------|
+| optimization_topology            | false     | Boolean &#124; min &#124; max           | false   | Configure optimization considering topology.              | 
+| optimization_topology_unique     | false     | Boolean                                 | true    | Enable check for unique results considering topology.     |
+| optimization_topology_mode       | false     | count &#124; weight                     | weight  | Configure optimization mode considering topology.         |
+| optimization_technologies        | false     | Boolean &#124; min &#124; max           | false   | Enable optimization considering technologies.             | 
+| optimization_technologies_unique | false     | Boolean                                 | false   | Enable check for unique results considering technologies. | 
+| optimization_technologies_mode   | false     | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.     | 
 
 ### Normalization Options
 
@@ -263,13 +264,15 @@ The following options are used to configure the normalizer.
 | technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
 
 
-### Normalization Options
+### Enricher Options
 
 The following options are used to configure the enricher.
 
-| Keyname                   | Mandatory | Type                          | Default | Description                                                                                                           |
-|---------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
-| enrich_input_condition    | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+| Keyname                | Mandatory | Type                          | Default | Description                                                                                                           |
+|------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
+| enrich_input_condition | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+| enrich_technologies    | false     | Boolean                       | false   | Enable if technologies are enriched.                                                                                  |
+| enrich_implementations | false     | Boolean                       | false   | Enable if implementations are enriched.                                                                               |
 
 
 ### Constraints Options
@@ -318,19 +321,21 @@ node_default_condition_mode: incomingnaive-artifact-host
 optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
-optimization_technologies_mode: weight
+optimization_technologies_mode: weight-count
 technology_constraint: true
 hosting_stack_constraint: true
 relation_default_implied: true
 technology_required: false
 unconsumed_input_check: false
 unproduced_output_check: false
+enrich_technologies: true
+enrich_implementations: true
 ```
 
 ### RC v3
 
 `tosca_variability_1_0_rc_3` has the following default values.
-Also, pruning modes also consider input and output pruning.
+Also, pruning modes consider input and output pruning.
 
 ```yaml linenums="1"
 mode: semantic-loose
@@ -338,7 +343,7 @@ node_default_condition_mode: incomingnaive-artifact-host
 optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
-optimization_technologies_mode: weight
+optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
 technology_constraint: true
 hosting_stack_constraint: true
@@ -350,6 +355,9 @@ required_artifact_constraint: true
 relation_default_implied: true
 technology_required: true
 checks: false
+enrich_technologies: true
+enrich_implementations: true
+artifact_default_condition_mode: container-managed
 ```
 
 
@@ -373,7 +381,7 @@ The following element-generic default conditions can be assigned to elements.
 | Relation                                | true        | false    | Check if the source and target of the relation is present.                         |
 | Policy                                  | false       | true     | Check if the policy has any targets which are present.                             |
 | Group                                   | false       | true     | Check if the group has any members which are present.                              |
-| Artifact                                | true        | false    | Check if the node template of the artifact is present.                             |
+| Artifact (container)                    | true        | false    | Check if the node template of the artifact is present.                             |
 | Technology (container)                  | true        | false    | Check if the node template of the technology is present.                           |
 | Technology (other)                      | true        | false    | Check if no other technology of the node template is present.                      |
 | Root                                    | true        | true     | The default condition of element always holds.                                     |
@@ -392,8 +400,9 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Node with Outgoing Relations (outgoingnaive) | false       | true     | Check if any outgoing relation is present using `has_outgoing_relation_naive`. |
 | Node with Host (host)                        | false       | true     | Check if any host is present.                                                  |
 | Node with Artifact (artifactnaive)           | false       | true     | Check if any artifact is present using `has_artifact_naive`.                   |
-| Relation (Source)                            | true        | false    | Check if the source of the relation is present.                                |
-| Relation (Target)                            | true        | false    | Check if the target of the relation is present.                                |
+| Relation (source)                            | true        | false    | Check if the source of the relation is present.                                |
+| Relation (target)                            | true        | false    | Check if the target of the relation is present.                                |
+| Artifact (managed)                           | false       | true     | Check if the artifact is managed by any technology.                            |
 
 
 ### Type-Specific Default Conditions
@@ -546,7 +555,7 @@ A node template can also hold conditional types, artifact, and properties.
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
 | weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
-| technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single}) &#124; Boolean           | An optional conditional assignment of deployment technologies.                                                                                                                           |
+| technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single})                          | An optional conditional assignment of deployment technologies.                                                                                                                           |
 
 For example, the following node template has a variability condition assigned.
 
@@ -809,6 +818,7 @@ An artifact can also hold conditional properties.
 | default_alternative           | false     | Boolean                                                                              | Declare the artifact as default. This overwrites assigned conditions. There must be only one default artifact.                                                                           |                                                                                                       |
 | properties                    | false     | Map(String, PropertyAssignment) &#124; List(Map(String, PropertyAssignment){single}) | An optional map of property assignments or a list of property assignments maps. If a list is given, then each property assignment map must contain only one property.                    |
 | default_condition             | false     | Boolean                                                                              | Enable the default condition for this element. This overrides the variability options of the variable topology template.                                                                 |
+| default_condition_mode        | false     | List(container &#124; technology, -)                                                 | Configure the default condition for this element.                                                                                                                                        |
 | default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
 | default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
 | pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
@@ -993,6 +1003,7 @@ The following presence operators can be used inside a logic expression.
 | has_artifact_naive          | Node: String &#124; SELF &#124; CONTAINER &#124; SOURCE &#124; TARGET                                                                        | Boolean | Returns if any artifact of the node template is present in a naive way that will result in a circle considering the default condition of artifacts.                              |
 | relation_presence           | Tuple(Node: String &#124; SELF &#124; CONTAINER, Relation: String &#124; Number)                                                             | Boolean | Returns if relation is present.                                                                                                                                                  |
 | artifact_presence           | Tuple(Node: String &#124; SELF &#124; CONTAINER, Artifact: String &#124; Number)                                                             | Boolean | Returns if artifact is present.                                                                                                                                                  |
+| is_managed                  | SELF &#124; Tuple(Node: String &#124; SELF &#124; CONTAINER, Artifact: String &#124; Number)                                                 | Boolean | Returns if artifact is managed by a deployment technology.                                                                                                                       |
 | policy_presence             | Policy: String &#124; Number                                                                                                                 | Boolean | Returns if policy is present.                                                                                                                                                    |
 | group_presence              | Group: String                                                                                                                                | Boolean | Returns if group is present.                                                                                                                                                     |
 | input_presence              | Input: String &#124; Number                                                                                                                  | Boolean | Returns if input is present.                                                                                                                                                     |
@@ -1101,6 +1112,7 @@ export type TechnologyPluginBuilder = {
 ```typescript linenums="1"
 export type TechnologyPlugin = {
     assign: (node: Node) => {[technology: string]: TechnologyTemplate}[]
+    implement: (name: string, type: NodeType) => NodeTypeMap
 }
 ```
 

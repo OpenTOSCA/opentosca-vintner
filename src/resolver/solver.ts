@@ -8,6 +8,7 @@ import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
+import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 import day from '#utils/day'
 import {UnexpectedError} from '#utils/error'
@@ -133,7 +134,10 @@ export default class Solver {
         /**
          * Return
          */
-        if (options.all) return this.solveAll()
+        if (options.all) {
+            // This actually also contains the current result since we did not forbid it
+            return this.solveAll()
+        }
         return [result]
     }
 
@@ -585,7 +589,7 @@ export default class Solver {
                     if (it.isNode()) return it.id
 
                     // Group
-                    return MiniSat.or(it.members.map(it => it.id))
+                    return MiniSat.or(it.members.map(iu => iu.id))
                 })
             )
         }
@@ -612,6 +616,19 @@ export default class Solver {
         if (check.isDefined(expression.artifact_presence)) {
             const artifact = this.graph.getArtifact(expression.artifact_presence, {element, cached})
             return artifact.id
+        }
+
+        /**
+         * is_managed
+         */
+        if (check.isDefined(expression.is_managed)) {
+            const artifact = this.graph.getArtifact(expression.is_managed, {element, cached})
+            const technologies = artifact.container.technologies.filter(it => {
+                const deconstructed = destructImplementationName(it.assign)
+                if (check.isUndefined(deconstructed.artifact)) return false
+                return artifact.getType().isA(deconstructed.artifact)
+            })
+            return MiniSat.or(technologies.map(it => it.id))
         }
 
         /**

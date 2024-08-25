@@ -3,14 +3,27 @@ import * as check from '#check'
 import {NormalizationOptions} from '#graph/options'
 import {PropertyContainerTemplate} from '#graph/property'
 import {TypeContainerTemplate} from '#graph/type'
-import {ArtifactDefinitionList, ArtifactDefinitionMap} from '#spec/artifact-definitions'
+import {
+    ARTIFACT_DEFINITION_DEFAULT_TYPE,
+    ArtifactDefinitionList,
+    ArtifactDefinitionMap,
+} from '#spec/artifact-definitions'
+import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
+import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
+import {DATA_TYPE_ROOT} from '#spec/data-type'
 import {GroupTemplateMap} from '#spec/group-template'
+import {GROUP_TYPE_ROOT} from '#spec/group-type'
+import {INTERFACE_TYPE_ROOT} from '#spec/interface-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {NODE_TYPE_ROOT} from '#spec/node-type'
+import {POLICY_TYPE_ROOT} from '#spec/policy-type'
 import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
+import {RELATIONSHIP_TYPE_ROOT} from '#spec/relationship-type'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
+import {constructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export default class Normalizer {
@@ -46,6 +59,16 @@ export default class Normalizer {
 
         // Technology rules
         this.normalizeTechnologyRules()
+
+        // Types
+        this.normalizeArtifactTypes()
+        this.normalizeCapabilityTypes()
+        this.normalizeDataTypes()
+        this.normalizeGroupTypes()
+        this.normalizeInterfaceTypes()
+        this.normalizeNodeTypes()
+        this.normalizePolicyTypes()
+        this.normalizeRelationshipTypes()
 
         // Clean variability definition
         this.cleanVariabilityDefinition()
@@ -147,7 +170,7 @@ export default class Normalizer {
     }
 
     private normalizeTypes(template: TypeContainerTemplate) {
-        assert.isDefined(template.type, `${utils.stringify(template)} has no type`)
+        assert.isDefined(template.type)
 
         if (check.isArray(template.type)) return
 
@@ -218,8 +241,13 @@ export default class Normalizer {
     private normalizeArtifact(map: ArtifactDefinitionMap) {
         const [name, template] = utils.firstEntry(map)
 
-        if (check.isObject(template) && check.isUndefined(template.type)) template.type = 'tosca.artifacts.File'
-        if (check.isString(template)) map[name] = {file: template, type: 'tosca.artifacts.File'}
+        if (check.isObject(template) && check.isUndefined(template.type)) {
+            template.type = ARTIFACT_DEFINITION_DEFAULT_TYPE
+        }
+
+        if (check.isString(template)) {
+            map[name] = {file: template, type: ARTIFACT_DEFINITION_DEFAULT_TYPE}
+        }
 
         const updated = map[name]
         assert.isObject(updated)
@@ -232,24 +260,15 @@ export default class Normalizer {
      * Transform technologies to array of extended notation
      */
     private normalizeTechnologies(template: NodeTemplate) {
-        // No technology is required (implicitly modeled)
-        if (check.isUndefined(template.technology)) template.technology = this.options.technologyRequired
-
-        // No technology is required (manually modeled)
-        if (check.isFalse(template.technology)) {
-            delete template.technology
-            return
-        }
-
-        // Technology is required (will later throw if no technology candidates are found)
-        if (check.isTrue(template.technology)) template.technology = []
+        // Assign empty array if undefined
+        if (check.isUndefined(template.technology)) template.technology = []
 
         // Technology is directly assigned but in its short notation
         if (check.isString(template.technology)) {
             template.technology = [{[template.technology]: {}}]
         }
 
-        // No, one, or multiple technologies are assigned but already as array
+        // None, one, or multiple technologies are assigned but already as array
         if (check.isArray(template.technology)) {
             // Do nothing
         }
@@ -259,8 +278,23 @@ export default class Normalizer {
 
         // Lowercase technology names
         template.technology = template.technology.map(it => {
-            const entry = utils.firstEntry(it)
-            return {[entry[0].toLowerCase()]: entry[1]}
+            const [name, definition] = utils.firstEntry(it)
+            return {[name.toLowerCase()]: definition}
+        })
+
+        // Default assign is "${node_type}~${node_type}::${technology}"
+        template.technology.forEach(map => {
+            const [technologyName, technologyTemplate] = utils.firstEntry(map)
+
+            assert.isArray(template.type)
+            const type = utils.firstKey(utils.first(template.type))
+
+            technologyTemplate.assign =
+                technologyTemplate.assign ??
+                constructImplementationName({
+                    type,
+                    rule: {component: type, technology: technologyName},
+                })
         })
     }
 
@@ -277,28 +311,70 @@ export default class Normalizer {
                 assert.isString(rule.component)
 
                 /**
-                 * "host" is replaced in favor of "hosting"
+                 * "host" is deprecated
                  */
-                if (check.isDefined(rule.host)) {
-                    if (check.isDefined(rule.hosting))
-                        throw new Error(`Technology rule must not define both "host" and "hosting"`)
+                if (check.isDefined((rule as any).host))
+                    throw new Error(`Technology rule must not define "host" but "hosting"`)
 
-                    assert.isString(rule.host)
-                    rule.hosting = [rule.host]
-                    delete rule.host
-                }
-
-                if (check.isDefined(rule.hosting)) {
-                    if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
-
-                    assert.isArray(rule.hosting)
-                    rule.hosting.forEach(it => assert.isString(it))
-                }
+                /**
+                 * Ensure that hosting is always an array
+                 */
+                if (check.isUndefined(rule.hosting)) rule.hosting = []
+                if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
+                rule.hosting.forEach(it => assert.isString(it))
 
                 if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
                 if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
                 if (check.isDefined(rule.assign)) assert.isString(rule.assign)
             }
+        }
+    }
+
+    private normalizeArtifactTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.artifact_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = ARTIFACT_TYPE_ROOT
+        }
+    }
+
+    private normalizeCapabilityTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.capability_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = CAPABILITY_TYPE_ROOT
+        }
+    }
+
+    private normalizeDataTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.data_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = DATA_TYPE_ROOT
+        }
+    }
+
+    private normalizeGroupTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.group_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = GROUP_TYPE_ROOT
+        }
+    }
+
+    private normalizeInterfaceTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.interface_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = INTERFACE_TYPE_ROOT
+        }
+    }
+
+    private normalizeNodeTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.node_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = NODE_TYPE_ROOT
+        }
+    }
+
+    private normalizePolicyTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.policy_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = POLICY_TYPE_ROOT
+        }
+    }
+
+    private normalizeRelationshipTypes() {
+        for (const [name, type] of Object.entries(this.serviceTemplate.relationship_types ?? {})) {
+            if (check.isUndefined(type.derived_from)) type.derived_from = RELATIONSHIP_TYPE_ROOT
         }
     }
 

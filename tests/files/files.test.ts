@@ -4,15 +4,15 @@ import {expect} from 'chai'
 
 describe('files', () => {
     it('store only if changed: changed', async () => {
-        const file = files.temporary()
+        const file = files.temporaryDirent()
 
         files.storeFile(file, 'value')
-        const first = files.stat(file).mtime
+        const first = files.statDirent(file).mtime
 
         await utils.sleep(1111)
 
         files.storeFile(file, 'another_value', {onlyIfChanged: true})
-        const second = files.stat(file).mtime
+        const second = files.statDirent(file).mtime
 
         expect(files.loadFile(file)).to.equal('another_value')
 
@@ -20,15 +20,15 @@ describe('files', () => {
     })
 
     it('store only if changed: not changed', async () => {
-        const file = files.temporary()
+        const file = files.temporaryDirent()
 
         files.storeFile(file, 'value')
-        const first = files.stat(file).mtime
+        const first = files.statDirent(file).mtime
 
         await utils.sleep(1111)
 
         files.storeFile(file, 'value', {onlyIfChanged: true})
-        const second = files.stat(file).mtime
+        const second = files.statDirent(file).mtime
 
         expect(files.loadFile(file)).to.equal('value')
         expect(first).to.equalTime(second)
