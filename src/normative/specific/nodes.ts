@@ -1,36 +1,65 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {MetadataAbstract, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
-    'node.runtime': {
+    'nodejs.runtime': {
         derived_from: 'software.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
+        },
+        properties: {
+            application_name: {
+                type: 'string',
+                default: 'nodejs',
+            },
         },
         artifacts: {
-            system_package: {
-                type: 'system.package',
+            apt_package: {
+                type: 'apt.package',
                 file: 'nodejs',
                 properties: {
-                    setup: 'https://deb.nodesource.com/setup_18.x',
+                    script: 'https://deb.nodesource.com/setup_18.x',
+                },
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
+                    },
                 },
             },
         },
     },
-    'node.service.application': {
+    'nodejs.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_language: {
                 type: 'string',
-                default: 'node18',
+                default: 'nodejs18',
             },
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: 'npm start',
                     configure: 'npm ci',
@@ -41,11 +70,11 @@ const nodes: NodeTypeMap = {
     'python.runtime': {
         derived_from: 'software.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         artifacts: {
-            system_package: {
-                type: 'system.package',
+            apt_package: {
+                type: 'apt.package',
                 file: 'python-is-python3',
                 properties: {
                     dependencies: {
@@ -55,12 +84,34 @@ const nodes: NodeTypeMap = {
                 },
             },
         },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
+                    },
+                },
+            },
+        },
     },
     'python.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_language: {
@@ -70,7 +121,7 @@ const nodes: NodeTypeMap = {
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: 'python main.py',
                     configure: 'pip install -r requirements.txt',
@@ -81,12 +132,12 @@ const nodes: NodeTypeMap = {
     'binary.service.application': {
         derived_from: 'service.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         interfaces: {
             management: {
-                type: 'Management',
+                type: 'management',
                 operations: {
                     start: '{{ SELF.application_name }}',
                 },
@@ -96,8 +147,8 @@ const nodes: NodeTypeMap = {
     'gcp.provider': {
         derived_from: 'cloud.provider',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -126,8 +177,8 @@ const nodes: NodeTypeMap = {
     'gcp.service': {
         derived_from: 'cloud.service',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -143,7 +194,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudrun': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -155,7 +206,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudsql': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -167,7 +218,7 @@ const nodes: NodeTypeMap = {
     'gcp.appengine': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -193,7 +244,7 @@ const nodes: NodeTypeMap = {
     'gcp.appenginereporting': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -205,7 +256,7 @@ const nodes: NodeTypeMap = {
     'gcp.cloudbuild': {
         derived_from: 'gcp.service',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             gcp_service: {
@@ -217,7 +268,7 @@ const nodes: NodeTypeMap = {
     'docker.engine': {
         derived_from: 'container.runtime',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             application_name: {
@@ -255,8 +306,8 @@ const nodes: NodeTypeMap = {
     'kubernetes.cluster': {
         derived_from: 'cloud.service',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -293,8 +344,8 @@ const nodes: NodeTypeMap = {
     'openstack.provider': {
         derived_from: 'cloud.provider',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             _hosting: {
@@ -335,15 +386,21 @@ const nodes: NodeTypeMap = {
     'mysql.dbms': {
         derived_from: 'relational.dbms',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             dbms_name: {
                 type: 'string',
             },
-            dbms_image: {
+            application_name: {
                 type: 'string',
-                default: 'mysql:5.6',
+                default: {
+                    eval: '.::dbms_name',
+                },
+            },
+            dbms_version: {
+                type: 'string',
+                default: '5.7',
             },
             dbms_password: {
                 type: 'string',
@@ -358,13 +415,13 @@ const nodes: NodeTypeMap = {
                 type: 'string',
             },
             application_port: {
-                type: 'integer',
+                type: 'string',
             },
             management_address: {
                 type: 'string',
             },
             management_port: {
-                type: 'integer',
+                type: 'string',
             },
         },
         capabilities: {
@@ -384,7 +441,7 @@ const nodes: NodeTypeMap = {
     'mysql.database': {
         derived_from: 'relational.database',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             database_name: {
@@ -405,7 +462,7 @@ const nodes: NodeTypeMap = {
                 },
             },
             application_port: {
-                type: 'integer',
+                type: 'string',
                 default: {
                     eval: '.::.requirements::[.name=host]::.target::application_port',
                 },

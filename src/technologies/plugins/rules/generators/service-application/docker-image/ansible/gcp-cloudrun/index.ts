@@ -42,6 +42,9 @@ const generator: ImplementationGenerator = {
                                             name: 'activate service account',
                                             'ansible.builtin.shell':
                                                 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         {
                                             name: 'touch service',
@@ -75,7 +78,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: '{{ ".artifacts::container_image::file" | eval }}',
+                                                                        image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                                         ports: [
                                                                             {
                                                                                 name: 'http1',
@@ -99,6 +102,9 @@ const generator: ImplementationGenerator = {
                                             name: 'apply service',
                                             'ansible.builtin.shell':
                                                 'gcloud run services replace {{ service.path }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         {
                                             name: 'touch policy',
@@ -129,6 +135,9 @@ const generator: ImplementationGenerator = {
                                             name: 'apply policy',
                                             'ansible.builtin.shell':
                                                 'gcloud run services set-iam-policy {{ SELF.application_name }} {{ policy.path }} --region {{ SELF.gcp_region }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         // https://cloud.google.com/sdk/gcloud/reference/run/services/describe
                                         {
@@ -136,6 +145,9 @@ const generator: ImplementationGenerator = {
                                             register: 'service_description',
                                             'ansible.builtin.shell':
                                                 'gcloud run services describe {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet --format=json',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         {
                                             name: 'set attributes',
@@ -172,12 +184,18 @@ const generator: ImplementationGenerator = {
                                             name: 'activate service account',
                                             'ansible.builtin.shell':
                                                 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         // https://cloud.google.com/sdk/gcloud/reference/run/services/delete
                                         {
                                             name: 'delete app',
                                             'ansible.builtin.shell':
                                                 'gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                     ],
                                 },

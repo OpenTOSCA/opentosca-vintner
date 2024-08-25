@@ -1,16 +1,17 @@
+import {MetadataNormative} from '#normative/utils'
 import {InterfaceTypeMap} from '#spec/interface-type'
 
 const interfaces: InterfaceTypeMap = {
-    root: {
-        derived_from: 'tosca.entity.Root',
+    interface: {
+        derived_from: 'tosca.interfaces.Root',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
     },
     management: {
-        derived_from: 'root',
+        derived_from: 'interface',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         operations: {
             create: null,

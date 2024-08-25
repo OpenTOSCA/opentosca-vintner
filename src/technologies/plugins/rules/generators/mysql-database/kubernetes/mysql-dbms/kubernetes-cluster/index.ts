@@ -64,7 +64,7 @@ const generator: ImplementationGenerator = {
                                                                 initContainers: [
                                                                     {
                                                                         name: 'create-database',
-                                                                        image: '{{ HOST.dbms_image }}',
+                                                                        image: 'mysql:{{ HOST.dbms_version }}',
                                                                         command: [
                                                                             'mysql',
                                                                             '--host={{ HOST.management_address }}',
@@ -77,7 +77,7 @@ const generator: ImplementationGenerator = {
                                                                     },
                                                                     {
                                                                         name: 'create-user',
-                                                                        image: '{{ HOST.dbms_image }}',
+                                                                        image: 'mysql:{{ HOST.dbms_version }}',
                                                                         command: [
                                                                             'mysql',
                                                                             '--host={{ HOST.management_address }}',
@@ -90,7 +90,7 @@ const generator: ImplementationGenerator = {
                                                                     },
                                                                     {
                                                                         name: 'grant-privileges',
-                                                                        image: '{{ HOST.dbms_image }}',
+                                                                        image: 'mysql:{{ HOST.dbms_version }}',
                                                                         command: [
                                                                             'mysql',
                                                                             '--host={{ HOST.management_address }}',

@@ -91,7 +91,7 @@ const generator: ImplementationGenerator = {
                                                                     container: [
                                                                         {
                                                                             env: mapProperties(type),
-                                                                            image: '{{ ".artifacts::container_image::file" | eval }}',
+                                                                            image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                                             name: '{{ SELF.application_name }}',
                                                                             port: [
                                                                                 {

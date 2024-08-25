@@ -263,8 +263,8 @@ export function TerraformStandardOperations() {
     }
 }
 
-export function SourceArchiveFile() {
-    return `{{ 'project' | get_dir }}/ensemble/{{  ".artifacts::source_archive::file | eval }}`
+export function ZipArchiveFile() {
+    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}`
 }
 
 export function ApplicationDirectory() {
@@ -300,7 +300,7 @@ export function AnsibleUnarchiveSourceArchiveTask() {
     return {
         name: 'extract deployment artifact in application directory',
         unarchive: {
-            src: SourceArchiveFile(),
+            src: ZipArchiveFile(),
             dest: '{{ SELF.application_directory }}',
         },
     }
@@ -317,11 +317,14 @@ export function AnsibleCreateVintnerDirectory() {
 }
 
 export function AnsibleCreateApplicationEnvironment(type: NodeType) {
+    const env = mapProperties(type, {format: 'ini'})
+    assert.isArray(env)
+
     return {
         name: 'create .env file',
         copy: {
             dest: '{{ SELF.application_directory }}/.env',
-            content: mapProperties(type, {format: 'ini'}),
+            content: env.join(`\n`) + '\n',
         },
     }
 }
@@ -332,7 +335,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
         'ansible.builtin.fail': {
             dest: `Management operation "${operation}" missing`,
         },
-        when: `SELF._management_${operation} is None`,
+        when: AnsibleWhenOperationUndefined(operation),
     }
 }
 
@@ -345,7 +348,7 @@ export function AnsibleCopyOperationTask(operation: MANAGEMENT_OPERATIONS) {
             content: Operation(operation),
             mode: '0755',
         },
-        when: `SELF._management_${operation} != None`,
+        when: AnsibleWhenOperationDefined(operation),
     }
 }
 
@@ -356,8 +359,9 @@ export function AnsibleCallOperationTask(operation: MANAGEMENT_OPERATIONS) {
         'ansible.builtin.shell': `. .env && . .vintner/${operation}.sh`,
         args: {
             chdir: '{{ SELF.application_directory }}',
+            executable: '/bin/bash',
         },
-        when: `SELF._management_${operation} != None`,
+        when: AnsibleWhenOperationDefined(operation),
     }
 }
 
@@ -366,6 +370,20 @@ export function Operation(operation: MANAGEMENT_OPERATIONS) {
 #! /usr/bin/bash
 set -e
 
-{{ SELF._management_${operation} }}
+{{ ${SelfOperation(operation)} }}
 `.trimStart()
 }
+
+export function AnsibleWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
+    return `${SelfOperation(operation)} != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+}
+
+export function AnsibleWhenOperationUndefined(operation: MANAGEMENT_OPERATIONS) {
+    return `${SelfOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+}
+
+export function SelfOperation(operation: MANAGEMENT_OPERATIONS) {
+    return `SELF._management_${operation}`
+}
+
+export const VINTNER_MANAGEMENT_OPERATION_UNDEFINED = 'VINTNER_MANAGEMENT_OPERATION_UNDEFINED'

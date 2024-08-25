@@ -48,7 +48,12 @@ export default async function (options: InstancesDeployOptions) {
         while (remaining > 0) {
             try {
                 std.log(`run ${total - remaining + 1} of ${total}`)
-                await orchestrator.deploy(instance, {verbose: options.verbose})
+
+                if (total === remaining) {
+                    await orchestrator.deploy(instance, {verbose: options.verbose})
+                } else {
+                    await orchestrator.continue(instance, {verbose: options.verbose})
+                }
             } catch (e) {
                 // Throw in final run
                 if (remaining === 1) throw e
@@ -56,7 +61,6 @@ export default async function (options: InstancesDeployOptions) {
                 // Log and retry
                 std.log(e)
                 await utils.sleep(10 * 1000)
-                await orchestrator.continue(instance, {verbose: options.verbose})
             } finally {
                 remaining--
             }

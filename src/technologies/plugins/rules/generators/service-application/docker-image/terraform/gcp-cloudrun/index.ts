@@ -82,7 +82,7 @@ const generator: ImplementationGenerator = {
                                                 {
                                                     containers: [
                                                         {
-                                                            image: '{{ ".artifacts::container_image::file" | eval }}',
+                                                            image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                             ports: [
                                                                 {
                                                                     name: 'http1',

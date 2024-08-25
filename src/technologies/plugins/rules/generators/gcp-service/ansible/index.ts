@@ -42,6 +42,7 @@ const generator: ImplementationGenerator = {
                                             name: 'enable service',
                                             'google.cloud.gcp_serviceusage_service': {
                                                 name: '{{ SELF.gcp_service }}',
+                                                project: '{{ SELF.gcp_project }}',
                                             },
                                         },
                                     ],

@@ -10,6 +10,8 @@ import {
 
 // TODO: use  https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
 
+// https://stackoverflow.com/questions/37288500/how-to-undo-a-kubectl-port-forward
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
@@ -40,7 +42,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'create database',
                                             'ansible.builtin.shell':
-                                                'kubectl exec deploy/{{ HOST.dbms_name }} -- mysql --password={{ HOST.dbms_password }} -e "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}";',
+                                                'kubectl exec deploy/{{ HOST.dbms_name }} -- mysql --password={{ HOST.dbms_password }} -e "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}"',
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
@@ -48,7 +50,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'create user',
                                             'ansible.builtin.shell':
-                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'\";",
+                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'\"",
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
@@ -56,7 +58,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'grant privileges',
                                             'ansible.builtin.shell':
-                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'\";",
+                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'\"",
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

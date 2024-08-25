@@ -95,39 +95,41 @@ topology_template:
                       conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - application_name: unfurl-technology-shop
-                - DB_NAME: unfurl-technology-shop
-                - DB_USERNAME: root
+                - application_protocol: http
+                - application_port: 3000
+                - DB_NAME: shop
+                - DB_USERNAME: shop
                 - DB_PASSWORD: {get_input: database_password}
                 - DB_DIALECT: mysql
                 - DB_ADDRESS: {eval: '.::.requirements[.name=database]::.target::application_address'}
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
                 - premium_feature:
-                      value: true
+                      value: 'true'
                       conditions: {equal: [{variability_input: premium_feature}, true]}
                 - premium_feature:
-                      value: false
+                      value: 'false'
                       conditions: {not: {equal: [{variability_input: premium_feature}, true]}}
                 - optional_feature:
-                      value: true
+                      value: 'true'
                       conditions: {equal: [{variability_input: optional_feature}, true]}
                 - optional_feature:
-                      value: false
+                      value: 'false'
                       conditions: {not: {equal: [{variability_input: optional_feature}, true]}}
             requirements:
                 - database: database
-                - host: node_runtime
+                - host: nodejs_runtime
                 - host: gcp_appengine
                 - host: kubernetes_cluster
             artifacts:
-                - container_image:
+                - docker_image:
                       type: docker.image
                       file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
                       conditions: {node_presence: kubernetes_cluster}
 
-                - source_archive:
-                      type: source.archive
+                - zip_archive:
+                      type: zip.archive
                       file: files/shop.source.zip
-                      conditions: {or: [{node_presence: node_runtime}, {node_presence: gcp_appengine}]}
+                      conditions: {or: [{node_presence: nodejs_runtime}, {node_presence: gcp_appengine}]}
 
         shop_ingress:
             type: ingress
@@ -154,11 +156,11 @@ topology_template:
                       conditions: {equal: [{variability_input: env}, STATIC]}
                 - terraform:
                       conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - terraform:
+                - ansible:
                       conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
-                - database_name: unfurl-technology-shop-database
-                - database_user: unfurl-technology-shop-user
+                - database_name: shop
+                - database_user: shop
                 - database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms
@@ -186,8 +188,8 @@ topology_template:
         #
         ###################################################
 
-        node_runtime:
-            type: node.runtime
+        nodejs_runtime:
+            type: nodejs.runtime
             technology: ansible
             requirements:
                 - host: virtual_machine
@@ -198,7 +200,7 @@ topology_template:
             properties:
                 - machine_name: unfurl-technology-shop-vm
                 - image: Ubuntu 22.04
-                - ports: [80]
+                - ports: ['80']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
@@ -245,6 +247,8 @@ topology_template:
         gcp_appenginereporting:
             type: gcp.appenginereporting
             technology: terraform
+            requirements:
+                - host: gcp_provider
 
         gcp_cloudbuild:
             type: gcp.cloudbuild

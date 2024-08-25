@@ -1,18 +1,19 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {MetadataAbstract, MetadataIgnore, MetadataName, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
-    root: {
+    node: {
         derived_from: 'tosca.nodes.Root',
         metadata: {
-            vintner_abstract: 'true',
-            vintner_normative: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     'cloud.provider': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         capabilities: {
             host: {
@@ -21,10 +22,10 @@ const nodes: NodeTypeMap = {
         },
     },
     'cloud.service': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         capabilities: {
             host: {
@@ -41,10 +42,10 @@ const nodes: NodeTypeMap = {
         ],
     },
     'software.application': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_name: {
@@ -53,60 +54,60 @@ const nodes: NodeTypeMap = {
             _management_create: {
                 type: 'string',
                 metadata: {
-                    vintner_ignore: true,
+                    ...MetadataIgnore(),
                 },
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'create'],
+                        args: ['management', 'create'],
                     },
                 },
             },
             _management_configure: {
                 type: 'string',
                 metadata: {
-                    vintner_ignore: true,
+                    ...MetadataIgnore(),
                 },
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'configure'],
+                        args: ['management', 'configure'],
                     },
                 },
             },
             _management_start: {
                 type: 'string',
                 metadata: {
-                    vintner_ignore: true,
+                    ...MetadataIgnore(),
                 },
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'start'],
+                        args: ['management', 'start'],
                     },
                 },
             },
             _management_stop: {
                 type: 'string',
                 metadata: {
-                    vintner_ignore: true,
+                    ...MetadataIgnore(),
                 },
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'stop'],
+                        args: ['management', 'stop'],
                     },
                 },
             },
             _management_delete: {
                 type: 'string',
                 metadata: {
-                    vintner_ignore: true,
+                    ...MetadataIgnore(),
                 },
                 default: {
                     eval: {
                         python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['Management', 'delete'],
+                        args: ['management', 'delete'],
                     },
                 },
             },
@@ -120,7 +121,7 @@ const nodes: NodeTypeMap = {
             },
         ],
         interfaces: {
-            Management: {
+            management: {
                 type: 'management',
             },
         },
@@ -128,8 +129,8 @@ const nodes: NodeTypeMap = {
     'service.application': {
         derived_from: 'software.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         properties: {
             application_language: {
@@ -137,6 +138,9 @@ const nodes: NodeTypeMap = {
             },
             application_port: {
                 type: 'string',
+                metadata: {
+                    ...MetadataName('PORT'),
+                },
             },
             application_protocol: {
                 type: 'string',
@@ -169,8 +173,8 @@ const nodes: NodeTypeMap = {
     'software.runtime': {
         derived_from: 'software.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         capabilities: {
             host: {
@@ -181,14 +185,14 @@ const nodes: NodeTypeMap = {
     'container.runtime': {
         derived_from: 'software.runtime',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     'virtual.machine': {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             machine_name: {
@@ -197,7 +201,7 @@ const nodes: NodeTypeMap = {
             ports: {
                 type: 'list',
                 entry_schema: {
-                    type: 'integer',
+                    type: 'string',
                 },
             },
             flavor: {
@@ -244,37 +248,37 @@ const nodes: NodeTypeMap = {
         },
     },
     database: {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     'relational.database': {
         derived_from: 'database',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     dbms: {
-        derived_from: 'root',
+        derived_from: 'software.application',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     'relational.dbms': {
         derived_from: 'dbms',
         metadata: {
-            vintner_normative: 'true',
-            vintner_abstract: 'true',
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
     },
     ingress: {
-        derived_from: 'root',
+        derived_from: 'node',
         metadata: {
-            vintner_normative: 'true',
+            ...MetadataNormative(),
         },
         properties: {
             application_name: {

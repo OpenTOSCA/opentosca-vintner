@@ -69,7 +69,7 @@ const generator: ImplementationGenerator = {
                                     machine: [
                                         {
                                             flavor_name: '{{ SELF.flavor }}',
-                                            image_name: '{{  ".artifacts::virtual_machine_image::file | eval }}',
+                                            image_name: '{{  ".artifacts::virtual_machine_image::file" | eval }}',
                                             key_pair: 'default',
                                             name: '{{ SELF.machine_name }}',
                                             network: [

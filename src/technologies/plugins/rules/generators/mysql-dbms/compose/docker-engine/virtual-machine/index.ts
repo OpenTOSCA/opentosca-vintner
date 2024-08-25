@@ -79,7 +79,7 @@ const generator: ImplementationGenerator = {
                                                     services: {
                                                         application: {
                                                             container_name: '{{ SELF.dbms_name }}',
-                                                            image: '{{ SELF.dbms_image }}',
+                                                            image: 'mysql:{{ SELF.dbms_version }}',
                                                             network_mode: 'host',
                                                             environment: {
                                                                 MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',

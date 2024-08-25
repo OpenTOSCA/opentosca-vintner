@@ -85,7 +85,7 @@ const generator: ImplementationGenerator = {
                                 google_sql_database_instance: {
                                     dbms: [
                                         {
-                                            database_version: 'MYSQL_5_7',
+                                            database_version: 'MYSQL_{{ SELF.dbms_version | replace(".", "_") }}',
                                             deletion_protection: false,
                                             name: '{{ SELF.dbms_name }}',
                                             root_password: '{{ SELF.dbms_password }}',

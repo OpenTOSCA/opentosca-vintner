@@ -83,7 +83,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ ".artifacts::container_image::file" | eval }}',
+                                            name: '{{ ".artifacts::docker_image::file" | eval }}',
                                         },
                                     ],
                                 },
