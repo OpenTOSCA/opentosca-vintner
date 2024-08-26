@@ -25,7 +25,7 @@ node_types:
     ###################################################
 
     checkout.component:
-        derived_from: service.application
+        derived_from: go.service.application
 
         properties:
             application_name:

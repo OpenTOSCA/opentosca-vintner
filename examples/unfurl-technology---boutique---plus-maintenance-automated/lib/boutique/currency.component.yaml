@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     currency.component:
-        derived_from: service.application
+        derived_from: nodejs.service.application
 
         properties:
             application_name:
