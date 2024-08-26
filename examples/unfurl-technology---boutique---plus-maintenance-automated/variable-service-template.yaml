@@ -101,10 +101,6 @@ topology_template:
                 type: boolean
                 default: false
 
-        options:
-            # TODO: can be removed?
-            optimization_technologies_mode: weight-count
-
     node_templates:
         ###################################################
         #

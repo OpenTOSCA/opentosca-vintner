@@ -61,6 +61,7 @@ topology_template:
                 type: string
         options:
             checks: false
+            enrich_technologies: false
 
     node_templates:
         ###################################################

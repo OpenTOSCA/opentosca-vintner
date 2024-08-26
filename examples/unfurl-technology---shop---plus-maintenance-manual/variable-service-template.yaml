@@ -75,6 +75,8 @@ topology_template:
                 type: boolean
             optional_feature:
                 type: boolean
+        options:
+            enrich_technologies: false
 
     node_templates:
         ###################################################

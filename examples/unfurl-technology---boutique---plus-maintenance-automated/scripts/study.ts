@@ -285,7 +285,7 @@ async function main() {
         'VDMM+ Maintenance Manual',
         path.join(
             examplesDir,
-            'unfurl-technology---boutique---plus-maintenance-manual---disabled',
+            'unfurl-technology---boutique---plus-maintenance-manual',
             'variable-service-template.yaml'
         )
     )
