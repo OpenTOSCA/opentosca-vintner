@@ -529,7 +529,7 @@ topology_template:
                       conditions: {logic_expression: is_gcp}
             properties:
                 - application_name: analytical
-                - application_port: 7006
+                - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
                 - RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
@@ -581,6 +581,9 @@ topology_template:
                 - tar_archive:
                       type: tar.archive
                       file: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
+                      properties:
+                          extra_opts:
+                              - '--strip-components=1'
 
         promtail_agent:
             type: promtail.agent

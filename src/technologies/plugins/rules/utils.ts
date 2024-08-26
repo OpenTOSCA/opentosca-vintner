@@ -315,7 +315,7 @@ export function AnsibleUnarchiveZipArchiveFileTask() {
             src: ZipArchiveFile(),
             dest: '{{ SELF.application_directory }}',
             remote_src: '{{  (".artifacts::zip_archive::file" | eval).startswith("http") }}',
-            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval  }}',
+            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}',
         },
         when: 'not (".artifacts::zip_archive::file" | eval).startswith("http")',
     }
@@ -328,7 +328,7 @@ export function AnsibleUnarchiveZipArchiveUrlTask() {
             src: ZipArchiveUrl(),
             dest: '{{ SELF.application_directory }}',
             remote_src: 'yes',
-            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval  }}',
+            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}',
         },
         when: '(".artifacts::zip_archive::file" | eval).startswith("http")',
     }
@@ -340,7 +340,7 @@ export function AnsibleUnarchiveTarArchiveFileTask() {
         'ansible.builtin.unarchive': {
             src: TarArchiveFile(),
             dest: '{{ SELF.application_directory }}',
-            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval  }}',
+            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}',
         },
         when: 'not (".artifacts::tar_archive::file" | eval).startswith("http")',
     }
@@ -353,7 +353,7 @@ export function AnsibleUnarchiveTarArchiveUrlTask() {
             src: TarArchiveUrl(),
             dest: '{{ SELF.application_directory }}',
             remote_src: 'yes',
-            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval  }}',
+            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}',
         },
         when: '(".artifacts::tar_archive::file" | eval).startswith("http")',
     }
