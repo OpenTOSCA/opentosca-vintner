@@ -301,7 +301,7 @@ topology_template:
                 - os_ssh_key_file: {get_input: os_ssh_key_file}
                 - os_region_name: {get_input: os_region_name}
             requirements:
-                - host: openstack
+                - host: openstack_provider
 
         openstack_provider:
             type: openstack.provider

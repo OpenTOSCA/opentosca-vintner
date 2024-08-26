@@ -1,20 +1,21 @@
-replace:
-    # The selection of Terraform and Ansible is random since they have the same quality assigned for mysql.database ...
-    - - mysql.database::terraform::mysql
-      - mysql.database::ansible::mysql
-
-    - - mysql.database::ansible::mysql
-      - mysql.database::terraform::mysql
-
 merge:
     topology_template:
         node_templates:
             analytical_component:
-                type: analytical.component::terraform::gcp.cloudrun
+                type: analytical.component~service.application#docker.image::terraform@gcp.cloudrun
                 properties:
-                    optional_analytical_feature: false
-                    premium_analytical_feature: false
+                    application_name: analytical
+                    application_port: 7006
+                    application_protocol: grpc
+                    CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                    RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                    optional_analytical_feature: 'false'
+                    premium_analytical_feature: 'false'
                 requirements:
                     - checkout: checkout_component
                     - recommendation: recommendation_component
                     - host: gcp_cloudrun
+                artifacts:
+                    docker_image:
+                        type: docker.image
+                        file: milesstoetzner/boutique-analytical:v8

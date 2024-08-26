@@ -1,7 +1,0 @@
-replace:
-    # The selection of Terraform and Ansible is random since they have the same quality assigned for mysql.database ...
-    - - mysql.database::terraform::mysql
-      - mysql.database::ansible::mysql
-
-    - - mysql.database::ansible::mysql
-      - mysql.database::terraform::mysql

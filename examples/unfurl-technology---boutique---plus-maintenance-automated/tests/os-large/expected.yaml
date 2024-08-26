@@ -52,7 +52,22 @@ topology_template:
         ###################################################
 
         frontend_component:
-            type: frontend.component::docker::docker.engine
+            type: frontend.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: frontend
+                application_port: 8080
+                application_protocol: http
+                disable_profiler: '1'
+                CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                AD_SERVICE_ADDR: {eval: '.::.requirements::[.name=advertisement]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+                SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
             requirements:
                 - checkout: checkout_component
                 - currency: currency_component
@@ -62,9 +77,13 @@ topology_template:
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-frontend:v8
 
         frontend_ingress:
-            type: ingress::ansible::virtual.machine
+            type: ingress~ingress::ansible@virtual.machine
             requirements:
                 - application: frontend_component
                 - host: virtual_machine
@@ -76,7 +95,20 @@ topology_template:
         ###################################################
 
         checkout_component:
-            type: checkout.component::docker::docker.engine
+            type: checkout.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: checkout
+                application_port: 7003
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                PAYMENT_SERVICE_ADDR: {eval: '.::.requirements::[.name=payment]::.target::application_endpoint'}
+                EMAIL_SERVICE_ADDR: {eval: '.::.requirements::[.name=email]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
             requirements:
                 - email: email_component
                 - payment: payment_component
@@ -85,6 +117,10 @@ topology_template:
                 - cart: cart_component
                 - product: product_component
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-checkout:v8
 
         ###################################################
         #
@@ -93,9 +129,18 @@ topology_template:
         ###################################################
 
         email_component:
-            type: email.component::docker::docker.engine
+            type: email.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: email
+                application_port: 7005
+                application_protocol: grpc
+                disable_profiler: '1'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-email:v8
 
         ###################################################
         #
@@ -104,12 +149,20 @@ topology_template:
         ###################################################
 
         payment_component:
-            type: payment.component::docker::docker.engine
+            type: payment.component~service.application#docker.image::compose@docker.engine->virtual.machine
             properties:
-                optional_payment_feature: false
-                premium_payment_feature: false
+                application_name: payment
+                application_port: 7006
+                application_protocol: grpc
+                disable_profiler: '1'
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-payment:v8
 
         ###################################################
         #
@@ -118,9 +171,18 @@ topology_template:
         ###################################################
 
         currency_component:
-            type: currency.component::docker::docker.engine
+            type: currency.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: currency
+                application_port: 7004
+                application_protocol: grpc
+                disable_profiler: '1'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-currency:v8
 
         ###################################################
         #
@@ -129,9 +191,18 @@ topology_template:
         ###################################################
 
         shipping_component:
-            type: shipping.component::docker::docker.engine
+            type: shipping.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: shipping
+                application_port: 7009
+                application_protocol: grpc
+                disable_profiler: '1'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-shipping:v8
 
         ###################################################
         #
@@ -140,24 +211,40 @@ topology_template:
         ###################################################
 
         cart_component:
-            type: cart.component::docker::docker.engine
+            type: cart.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: cart
+                application_port: 7070
+                application_protocol: grpc
+                disable_profiler: '1'
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'cart'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: cart_database
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-cart:v8
 
         cart_database:
-            type: mysql.database::terraform::mysql.dbms::docker.engine
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->virtual.machine
             properties:
-                database_name: cart-database
-                database_user: cart-user
+                database_name: cart
+                database_user: cart
                 database_password: {get_input: database_password}
             requirements:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms::docker::docker.engine
+            type: mysql.dbms~mysql.dbms::compose@docker.engine->virtual.machine
             properties:
-                dbms_name: cart-dbms
+                dbms_name: unfurl-technology-boutique-cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_engine
@@ -169,9 +256,18 @@ topology_template:
         ###################################################
 
         product_component:
-            type: product.component::docker::docker.engine
+            type: product.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: product
+                application_port: 7007
+                application_protocol: grpc
+                disable_profiler: '1'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-product:v8
 
         ###################################################
         #
@@ -180,10 +276,20 @@ topology_template:
         ###################################################
 
         recommendation_component:
-            type: recommendation.component::docker::docker.engine
+            type: recommendation.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: recommendation
+                application_port: 7008
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
             requirements:
                 - product: product_component
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-recommendation:v8
 
         ###################################################
         #
@@ -192,9 +298,18 @@ topology_template:
         ###################################################
 
         advertisement_component:
-            type: advertisement.component::docker::docker.engine
+            type: advertisement.component~service.application#docker.image::compose@docker.engine->virtual.machine
+            properties:
+                application_name: advertisement
+                application_port: 7000
+                application_protocol: grpc
+                disable_profiler: '1'
             requirements:
                 - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-advertisement:v8
 
         ###################################################
         #
@@ -203,38 +318,70 @@ topology_template:
         ###################################################
 
         docker_engine:
-            type: docker.engine::ansible::virtual.machine
+            type: docker.engine~docker.engine::ansible@virtual.machine
             requirements:
                 - host: virtual_machine
 
         node_agent:
-            type: node.agent::ansible::virtual.machine
+            type: node.agent~service.application#tar.archive::ansible@*->virtual.machine
+            properties:
+                application_name: node_exporter
+                application_port: 9100
+                application_protocol: http
             requirements:
                 - host: virtual_machine
+            interfaces:
+                management:
+                    operations:
+                        start: node_exporter
+            artifacts:
+                tar_archive:
+                    type: tar.archive
+                    file: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
 
         promtail_agent:
-            type: promtail.agent::ansible::virtual.machine
+            type: promtail.agent~software.application#apt.package::ansible@*->virtual.machine
             requirements:
                 - host: virtual_machine
+            artifacts:
+                apt_package:
+                    type: apt.package
+                    file: promtail
+                    properties:
+                        repository: grafana
+                        key: https://apt.grafana.com/gpg.key
+                        source: https://apt.grafana.com stable main
 
         falco_agent:
-            type: falco.agent::ansible::virtual.machine
+            type: falco.agent~software.application#apt.package::ansible@*->virtual.machine
             requirements:
                 - host: virtual_machine
+            artifacts:
+                apt_package:
+                    type: apt.package
+                    file: falco
+                    properties:
+                        namespace: falco
+                        key: https://falco.org/repo/falcosecurity-packages.asc
+                        source: https://download.falco.org/packages/deb stable main
+                        env: FALCO_FRONTEND=noninteractive
 
         virtual_machine:
-            type: virtual.machine::terraform
+            type: virtual.machine~virtual.machine#virtual.machine.image::terraform@openstack.provider
             properties:
                 machine: unfurl-technology-boutique
                 ports: ['80', '9100']
                 flavor: m1.large
-                os_network: {get_input: os_network}
-                os_ssh_key_name: {get_input: os_ssh_key_name}
-                os_ssh_user: {get_input: os_ssh_user}
-                os_ssh_key_file: {get_input: os_ssh_key_file}
-                os_region_name: {get_input: os_region_name}
+                network: {get_input: os_network}
+                ssh_key_name: {get_input: os_ssh_key_name}
+                ssh_user: {get_input: os_ssh_user}
+                ssh_key_file: {get_input: os_ssh_key_file}
             requirements:
-                - host: openstack
+                - host: openstack_provider
+            artifacts:
+                virtual_machine_image:
+                    type: virtual.machine.image
+                    file: Ubuntu 22.04
 
         openstack_provider:
             type: openstack.provider
