@@ -1,0 +1,90 @@
+expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/expected.yaml
+inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/inputs.yaml
+
+replace:
+    - - frontend_component_terraform
+      - frontend_component
+
+    - - checkout_component_terraform
+      - checkout_component
+
+    - - email_component_terraform
+      - email_component
+
+    - - payment_component_terraform
+      - payment_component
+
+    - - currency_component_terraform
+      - currency_component
+
+    - - shipping_component_terraform
+      - shipping_component
+
+    - - cart_component_terraform
+      - cart_component
+
+    - - cart_database_terraform
+      - cart_database
+
+    - - cart_dbms_terraform
+      - cart_dbms
+
+    - - product_component_terraform
+      - product_component
+
+    - - recommendation_component_terraform
+      - recommendation_component
+
+    - - advertisement_component_terraform
+      - advertisement_component
+
+merge:
+    topology_template:
+        inputs:
+            database_password:
+                type: string
+
+            dbms_password:
+                type: string
+
+            os_network:
+                type: string
+
+            os_ssh_key_name:
+                type: string
+
+            os_ssh_user:
+                type: string
+
+            os_ssh_key_file:
+                type: string
+
+            os_region_name:
+                type: string
+
+            os_auth_type:
+                type: string
+
+            os_auth_url:
+                type: string
+
+            os_identity_api_version:
+                type: string
+
+            os_interface:
+                type: string
+
+            os_application_credential_id:
+                type: string
+
+            os_application_credential_secret:
+                type: string
+
+            gcp_region:
+                type: string
+
+            gcp_service_account_file:
+                type: string
+
+            gcp_project:
+                type: string
