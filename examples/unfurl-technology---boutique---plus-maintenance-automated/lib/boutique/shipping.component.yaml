@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     shipping.component:
-        derived_from: service.application
+        derived_from: go.service.application
 
         properties:
             application_name:

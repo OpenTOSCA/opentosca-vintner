@@ -20,7 +20,7 @@ node_types:
     ###################################################
 
     recommendation.component:
-        derived_from: service.application
+        derived_from: python.service.application
 
         properties:
             application_name:
