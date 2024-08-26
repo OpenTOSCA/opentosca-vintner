@@ -61,10 +61,10 @@ topology_template:
                 - product: product_component
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
-                - host: docker
+                - host: docker_engine
 
         frontend_ingress:
-            type: ingress::ansible::openstack.machine
+            type: ingress::ansible::virtual.machine
             requirements:
                 - application: frontend_component
                 - host: virtual_machine
@@ -84,7 +84,7 @@ topology_template:
                 - shipping: shipping_component
                 - cart: cart_component
                 - product: product_component
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -95,7 +95,7 @@ topology_template:
         email_component:
             type: email.component::docker::docker.engine
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -109,7 +109,7 @@ topology_template:
                 optional_payment_feature: false
                 premium_payment_feature: false
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -120,7 +120,7 @@ topology_template:
         currency_component:
             type: currency.component::docker::docker.engine
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -131,7 +131,7 @@ topology_template:
         shipping_component:
             type: shipping.component::docker::docker.engine
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -143,7 +143,7 @@ topology_template:
             type: cart.component::docker::docker.engine
             requirements:
                 - database: cart_database
-                - host: docker
+                - host: docker_engine
 
         cart_database:
             type: mysql.database::terraform::mysql.dbms::docker.engine
@@ -160,7 +160,7 @@ topology_template:
                 dbms_name: cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -171,7 +171,7 @@ topology_template:
         product_component:
             type: product.component::docker::docker.engine
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -183,7 +183,7 @@ topology_template:
             type: recommendation.component::docker::docker.engine
             requirements:
                 - product: product_component
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -194,7 +194,7 @@ topology_template:
         advertisement_component:
             type: advertisement.component::docker::docker.engine
             requirements:
-                - host: docker
+                - host: docker_engine
 
         ###################################################
         #
@@ -202,31 +202,31 @@ topology_template:
         #
         ###################################################
 
-        docker:
-            type: docker.engine::ansible::openstack.machine
+        docker_engine:
+            type: docker.engine::ansible::virtual.machine
             requirements:
                 - host: virtual_machine
 
-        monitoring_agent:
-            type: node.agent::ansible::openstack.machine
+        node_agent:
+            type: node.agent::ansible::virtual.machine
             requirements:
                 - host: virtual_machine
 
-        logging_agent:
-            type: promtail.agent::ansible::openstack.machine
+        promtail_agent:
+            type: promtail.agent::ansible::virtual.machine
             requirements:
                 - host: virtual_machine
 
-        security_agent:
-            type: falco.agent::ansible::openstack.machine
+        falco_agent:
+            type: falco.agent::ansible::virtual.machine
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: openstack.machine::terraform
+            type: virtual.machine::terraform
             properties:
                 machine: unfurl-technology-boutique
-                ports: [80, 9100]
+                ports: ['80', '9100']
                 flavor: m1.medium
                 os_network: {get_input: os_network}
                 os_ssh_key_name: {get_input: os_ssh_key_name}
@@ -236,7 +236,7 @@ topology_template:
             requirements:
                 - host: openstack
 
-        openstack:
+        openstack_provider:
             type: openstack.provider
             properties:
                 os_region_name: {get_input: os_region_name}

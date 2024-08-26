@@ -97,7 +97,7 @@ topology_template:
                 - product: product_component_docker
                 - recommendation: recommendation_component_docker
                 - advertisement: advertisement_component_docker
-                - host: docker
+                - host: docker_engine
 
         frontend_component_terraform:
             type: frontend.component
@@ -137,7 +137,7 @@ topology_template:
                 - shipping: shipping_component_docker
                 - cart: cart_component_docker
                 - product: product_component_docker
-                - host: docker
+                - host: docker_engine
 
         checkout_component_terraform:
             type: checkout.component
@@ -161,7 +161,7 @@ topology_template:
             type: email.component
             technology: docker
             requirements:
-                - host: docker
+                - host: docker_engine
 
         email_component_terraform:
             type: email.component
@@ -192,7 +192,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: docker
+                - host: docker_engine
 
         payment_component_terraform:
             type: payment.component
@@ -223,7 +223,7 @@ topology_template:
             type: currency.component
             technology: docker
             requirements:
-                - host: docker
+                - host: docker_engine
 
         currency_component_terraform:
             type: currency.component
@@ -241,7 +241,7 @@ topology_template:
             type: shipping.component
             technology: docker
             requirements:
-                - host: docker
+                - host: docker_engine
 
         shipping_component_terraform:
             type: shipping.component
@@ -260,7 +260,7 @@ topology_template:
             technology: docker
             requirements:
                 - database: cart_database
-                - host: docker
+                - host: docker_engine
 
         cart_component_terraform:
             type: cart.component
@@ -291,7 +291,7 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker
+                - host: docker_engine
 
         cart_dbms_terraform:
             type: mysql.dbms
@@ -312,7 +312,7 @@ topology_template:
             type: product.component
             technology: docker
             requirements:
-                - host: docker
+                - host: docker_engine
 
         product_component_terraform:
             type: product.component
@@ -331,7 +331,7 @@ topology_template:
             technology: docker
             requirements:
                 - product: product_component_docker
-                - host: docker
+                - host: docker_engine
 
         recommendation_component_terraform:
             type: recommendation.component
@@ -350,7 +350,7 @@ topology_template:
             type: advertisement.component
             technology: docker
             requirements:
-                - host: docker
+                - host: docker_engine
 
         advertisement_component_terraform:
             type: advertisement.component
@@ -364,36 +364,36 @@ topology_template:
         #
         ###################################################
 
-        docker:
+        docker_engine:
             type: docker.engine
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        monitoring_agent:
+        node_agent:
             type: node.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        logging_agent:
+        promtail_agent:
             type: promtail.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        security_agent:
+        falco_agent:
             type: falco.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: openstack.machine
+            type: virtual.machine
             technology: terraform
             properties:
                 - machine: unfurl-technology-boutique
-                - ports: [80, 9100]
+                - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
@@ -401,16 +401,15 @@ topology_template:
                       value: m1.large
                       conditions: {equal: [{variability_input: tier}, LARGE]}
 
-                - os_network: {get_input: os_network}
-                - os_ssh_key_name: {get_input: os_ssh_key_name}
-                - os_ssh_user: {get_input: os_ssh_user}
-                - os_ssh_key_file: {get_input: os_ssh_key_file}
-                - os_region_name: {get_input: os_region_name}
+                - network: {get_input: os_network}
+                - ssh_user: {get_input: os_ssh_user}
+                - ssh_key_name: {get_input: os_ssh_key_name}
+                - ssh_key_file: {get_input: os_ssh_key_file}
 
             requirements:
-                - host: openstack
+                - host: openstack_provider
 
-        openstack:
+        openstack_provider:
             type: openstack.provider
             conditions: {logic_expression: is_openstack}
             properties:

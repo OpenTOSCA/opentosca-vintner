@@ -1,4 +1,6 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - extended.yaml
+    - agents/types.yaml
+    - boutique/types.yaml
+    - specific.yaml

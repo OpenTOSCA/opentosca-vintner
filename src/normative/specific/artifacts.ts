@@ -20,6 +20,14 @@ const artifacts: ArtifactTypeMap = {
         },
         */
     },
+    'tar.archive': {
+        derived_from: 'source.archive',
+        /*
+        metadata: {
+            ...MetadataNormative(),
+        },
+        */
+    },
     'apt.package': {
         derived_from: 'system.package',
         /*

@@ -21,7 +21,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'zip.archive',
+    artifact: 'tar.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
     comment:
@@ -50,13 +50,6 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             ...AnsibleWaitForSSHTask(),
-                                        },
-                                        {
-                                            name: 'install operational dependencies',
-                                            'ansible.builtin.apt': {
-                                                name: 'unzip',
-                                                update_cache: 'yes',
-                                            },
                                         },
                                         {
                                             ...AnsibleCreateApplicationDirectoryTask(),

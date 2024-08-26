@@ -142,10 +142,6 @@ export default class Inheritance {
          * Initially check that staring type has a definition
          */
         if (check.isUndefined(types.find(it => it.name === start))) {
-            console.log(
-                types,
-                types.find(it => it.name === start)
-            )
             throw new Error(`starting ${key} "${start}" has no definition`)
         }
 

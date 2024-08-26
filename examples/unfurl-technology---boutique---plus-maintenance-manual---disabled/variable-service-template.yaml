@@ -129,8 +129,8 @@ topology_template:
                 - product: product_component
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         frontend_ingress:
@@ -142,7 +142,7 @@ topology_template:
                       conditions: {logic_expression: is_kubernetes}
             requirements:
                 - application: frontend_component
-                - host: kubernetes
+                - host: kubernetes_cluster
                 - host: virtual_machine
 
         ###################################################
@@ -167,8 +167,8 @@ topology_template:
                 - shipping: shipping_component
                 - cart: cart_component
                 - product: product_component
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -187,8 +187,8 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -220,8 +220,8 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -240,8 +240,8 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -260,8 +260,8 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -281,8 +281,8 @@ topology_template:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - database: cart_database
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         cart_database:
@@ -308,8 +308,8 @@ topology_template:
                 - dbms_name: cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudsql
 
         ###################################################
@@ -328,8 +328,8 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -349,8 +349,8 @@ topology_template:
                       conditions: {logic_expression: is_gcp}
             requirements:
                 - product: product_component
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -369,8 +369,8 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             requirements:
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -404,8 +404,8 @@ topology_template:
             requirements:
                 - checkout: checkout_component
                 - recommendation: recommendation_component
-                - host: docker
-                - host: kubernetes
+                - host: docker_engine
+                - host: kubernetes_cluster
                 - host: gcp_cloudrun
 
         ###################################################
@@ -414,36 +414,36 @@ topology_template:
         #
         ###################################################
 
-        docker:
+        docker_engine:
             type: docker.engine
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        monitoring_agent:
+        node_agent:
             type: node.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        logging_agent:
+        promtail_agent:
             type: promtail.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
-        security_agent:
+        falco_agent:
             type: falco.agent
             technology: ansible
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: openstack.machine
+            type: virtual.machine
             technology: terraform
             properties:
                 - machine: unfurl-technology-boutique
-                - ports: [80, 9100]
+                - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
@@ -451,16 +451,15 @@ topology_template:
                       value: m1.large
                       conditions: {equal: [{variability_input: tier}, LARGE]}
 
-                - os_network: {get_input: os_network}
-                - os_ssh_key_name: {get_input: os_ssh_key_name}
-                - os_ssh_user: {get_input: os_ssh_user}
-                - os_ssh_key_file: {get_input: os_ssh_key_file}
-                - os_region_name: {get_input: os_region_name}
+                - network: {get_input: os_network}
+                - ssh_user: {get_input: os_ssh_user}
+                - ssh_key_name: {get_input: os_ssh_key_name}
+                - ssh_key_file: {get_input: os_ssh_key_file}
 
             requirements:
-                - host: openstack
+                - host: openstack_provider
 
-        openstack:
+        openstack_provider:
             type: openstack.provider
             conditions: {logic_expression: is_openstack}
             properties:

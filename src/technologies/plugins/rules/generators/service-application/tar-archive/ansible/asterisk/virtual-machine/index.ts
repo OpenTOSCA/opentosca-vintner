@@ -18,14 +18,27 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+const service = `
+[Unit]
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+WorkingDirectory={{ SELF.application_directory }}
+EnvironmentFile={{ SELF.application_directory }}/.env
+
+[Install]
+WantedBy=multi-user.target
+`
+
 const generator: ImplementationGenerator = {
-    component: 'software.application',
+    component: 'service.application',
     technology: 'ansible',
-    artifact: 'zip.archive',
+    artifact: 'tar.archive',
     hosting: ['*', 'virtual.machine'],
-    weight: 0.5,
-    comment:
-        'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.',
+    weight: 1,
+    comment: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
 
     generate: (name, type) => {
         return {
@@ -52,13 +65,6 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'install operational dependencies',
-                                            'ansible.builtin.apt': {
-                                                name: 'unzip',
-                                                update_cache: 'yes',
-                                            },
-                                        },
-                                        {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
@@ -75,6 +81,22 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                        },
+                                        {
+                                            name: 'create service',
+                                            copy: {
+                                                dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
+                                                content: service,
+                                            },
+                                        },
+                                        {
+                                            name: 'enable service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'stopped',
+                                                enabled: 'yes',
+                                                daemon_reload: 'yes',
+                                            },
                                         },
                                     ],
                                 },
@@ -119,7 +141,13 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.START),
+                                            name: 'start service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'started',
+                                                enabled: 'yes',
+                                                daemon_reload: 'yes',
+                                            },
                                         },
                                     ],
                                 },
@@ -137,13 +165,17 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.STOP),
-                                        },
-                                        {
                                             ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                        },
+                                        {
+                                            name: 'stop service',
+                                            'ansible.builtin.systemd': {
+                                                name: '{{ SELF.application_name }}',
+                                                state: 'stopped',
+                                            },
                                         },
                                     ],
                                 },
@@ -165,6 +197,19 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                        },
+                                        {
+                                            name: 'delete systemd service',
+                                            'ansible.builtin.file': {
+                                                path: '/etc/systemd/system/{{ SELF.application_name }}.service',
+                                                state: 'absent',
+                                            },
+                                        },
+                                        {
+                                            name: 'reload daemon',
+                                            'ansible.builtin.systemd': {
+                                                daemon_reload: true,
+                                            },
                                         },
                                         {
                                             ...AnsibleDeleteApplicationDirectoryTask(),

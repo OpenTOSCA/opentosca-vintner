@@ -299,9 +299,10 @@ export function AnsibleDeleteApplicationDirectoryTask() {
 export function AnsibleUnarchiveSourceArchiveTask() {
     return {
         name: 'extract deployment artifact in application directory',
-        unarchive: {
+        'ansible.builtin.unarchive': {
             src: ZipArchiveFile(),
             dest: '{{ SELF.application_directory }}',
+            remote_src: '{{  ".artifacts::zip_archive::file" | eval is url }}',
         },
     }
 }
