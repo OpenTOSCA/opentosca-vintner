@@ -90,11 +90,7 @@ async function main() {
      */
     const vdmm_baseline_original = await stats(
         'VDMM Baseline Original',
-        path.join(
-            examplesDir,
-            'unfurl-technology---boutique---baseline-original---disabled',
-            'variable-service-template.yaml'
-        )
+        path.join(examplesDir, 'unfurl-technology---boutique---baseline-original', 'variable-service-template.yaml')
     )
 
     /**
@@ -267,11 +263,7 @@ async function main() {
      */
     const vdmm_baseline_maintenance = await stats(
         'VDMM Baseline Maintenance',
-        path.join(
-            examplesDir,
-            'unfurl-technology---boutique---baseline-maintenance---disabled',
-            'variable-service-template.yaml'
-        )
+        path.join(examplesDir, 'unfurl-technology---boutique---baseline-maintenance', 'variable-service-template.yaml')
     )
 
     /**

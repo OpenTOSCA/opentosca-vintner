@@ -1,45 +1,15 @@
-expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/expected.yaml
-inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/inputs.yaml
+expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-medium/expected.yaml
+inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-medium/inputs.yaml
 
 replace:
-    - - frontend_component_terraform
-      - frontend_component
+    - - _ansible
+      - ''
 
-    - - checkout_component_terraform
-      - checkout_component
+    - - _terraform
+      - ''
 
-    - - email_component_terraform
-      - email_component
-
-    - - payment_component_terraform
-      - payment_component
-
-    - - currency_component_terraform
-      - currency_component
-
-    - - shipping_component_terraform
-      - shipping_component
-
-    - - cart_component_terraform
-      - cart_component
-
-    - - cart_database_terraform
-      - cart_database
-
-    - - cart_dbms_terraform
-      - cart_dbms
-
-    - - product_component_terraform
-      - product_component
-
-    - - recommendation_component_terraform
-      - recommendation_component
-
-    - - advertisement_component_terraform
-      - advertisement_component
-
-    - - analytical_component_terraform
-      - analytical_component
+    - - _compose
+      - ''
 
 merge:
     topology_template:
@@ -106,11 +76,20 @@ merge:
 
         node_templates:
             analytical_component:
-                type: analytical.component::terraform::gcp.cloudrun
+                type: analytical.component~service.application#docker.image::compose@docker.engine->virtual.machine
                 properties:
-                    optional_analytical_feature: false
-                    premium_analytical_feature: false
+                    application_name: analytical
+                    application_port: 7006
+                    application_protocol: grpc
+                    CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                    RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                    optional_analytical_feature: 'false'
+                    premium_analytical_feature: 'false'
                 requirements:
                     - checkout: checkout_component
                     - recommendation: recommendation_component
-                    - host: gcp_cloudrun
+                    - host: docker_engine
+                artifacts:
+                    docker_image:
+                        type: docker.image
+                        file: milesstoetzner/boutique-analytical:v8

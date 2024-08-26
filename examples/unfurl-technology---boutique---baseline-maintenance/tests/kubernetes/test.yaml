@@ -2,47 +2,17 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tes
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/kubernetes/inputs.yaml
 
 replace:
-    - - frontend_component_kubernetes
-      - frontend_component
+    - - _ansible
+      - ''
 
-    - - frontend_ingress_kubernetes
-      - frontend_ingress
+    - - _terraform
+      - ''
 
-    - - checkout_component_kubernetes
-      - checkout_component
+    - - _compose
+      - ''
 
-    - - email_component_kubernetes
-      - email_component
-
-    - - payment_component_kubernetes
-      - payment_component
-
-    - - currency_component_kubernetes
-      - currency_component
-
-    - - shipping_component_kubernetes
-      - shipping_component
-
-    - - cart_component_kubernetes
-      - cart_component
-
-    - - cart_database_ansible
-      - cart_database
-
-    - - cart_dbms_kubernetes
-      - cart_dbms
-
-    - - product_component_kubernetes
-      - product_component
-
-    - - recommendation_component_kubernetes
-      - recommendation_component
-
-    - - advertisement_component_kubernetes
-      - advertisement_component
-
-    - - analytical_component_kubernetes
-      - analytical_component
+    - - _kubernetes
+      - ''
 
 merge:
     topology_template:

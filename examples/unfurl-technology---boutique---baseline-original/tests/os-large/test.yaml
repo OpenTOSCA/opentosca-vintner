@@ -2,44 +2,14 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tes
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-large/inputs.yaml
 
 replace:
-    - - frontend_component_docker
-      - frontend_component
+    - - _ansible
+      - ''
 
-    - - frontend_ingress_docker
-      - frontend_ingress
+    - - _terraform
+      - ''
 
-    - - checkout_component_docker
-      - checkout_component
-
-    - - email_component_docker
-      - email_component
-
-    - - payment_component_docker
-      - payment_component
-
-    - - currency_component_docker
-      - currency_component
-
-    - - shipping_component_docker
-      - shipping_component
-
-    - - cart_component_docker
-      - cart_component
-
-    - - cart_database_docker
-      - cart_database
-
-    - - cart_dbms_docker
-      - cart_dbms
-
-    - - product_component_docker
-      - product_component
-
-    - - recommendation_component_docker
-      - recommendation_component
-
-    - - advertisement_component_docker
-      - advertisement_component
+    - - _compose
+      - ''
 
 merge:
     topology_template:

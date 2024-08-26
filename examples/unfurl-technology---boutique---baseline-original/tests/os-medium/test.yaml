@@ -1,42 +1,15 @@
-expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/expected.yaml
-inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/gcp/inputs.yaml
+expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-medium/expected.yaml
+inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-medium/inputs.yaml
 
 replace:
-    - - frontend_component_terraform
-      - frontend_component
+    - - _ansible
+      - ''
 
-    - - checkout_component_terraform
-      - checkout_component
+    - - _terraform
+      - ''
 
-    - - email_component_terraform
-      - email_component
-
-    - - payment_component_terraform
-      - payment_component
-
-    - - currency_component_terraform
-      - currency_component
-
-    - - shipping_component_terraform
-      - shipping_component
-
-    - - cart_component_terraform
-      - cart_component
-
-    - - cart_database_terraform
-      - cart_database
-
-    - - cart_dbms_terraform
-      - cart_dbms
-
-    - - product_component_terraform
-      - product_component
-
-    - - recommendation_component_terraform
-      - recommendation_component
-
-    - - advertisement_component_terraform
-      - advertisement_component
+    - - _compose
+      - ''
 
 merge:
     topology_template:

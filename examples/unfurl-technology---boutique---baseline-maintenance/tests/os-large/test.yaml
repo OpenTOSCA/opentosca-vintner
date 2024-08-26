@@ -2,47 +2,14 @@ expected: ../../../unfurl-technology---boutique---plus-maintenance-automated/tes
 inputs: ../../../unfurl-technology---boutique---plus-maintenance-automated/tests/os-large/inputs.yaml
 
 replace:
-    - - frontend_component_docker
-      - frontend_component
+    - - _ansible
+      - ''
 
-    - - frontend_ingress_ansible
-      - frontend_ingress
+    - - _terraform
+      - ''
 
-    - - checkout_component_docker
-      - checkout_component
-
-    - - email_component_docker
-      - email_component
-
-    - - payment_component_docker
-      - payment_component
-
-    - - currency_component_docker
-      - currency_component
-
-    - - shipping_component_docker
-      - shipping_component
-
-    - - cart_component_docker
-      - cart_component
-
-    - - cart_database_docker
-      - cart_database
-
-    - - cart_dbms_docker
-      - cart_dbms
-
-    - - product_component_docker
-      - product_component
-
-    - - recommendation_component_docker
-      - recommendation_component
-
-    - - advertisement_component_docker
-      - advertisement_component
-
-    - - analytical_component_docker
-      - analytical_component
+    - - _compose
+      - ''
 
 merge:
     topology_template:
@@ -109,11 +76,20 @@ merge:
 
         node_templates:
             analytical_component:
-                type: analytical.component::docker::docker.engine
+                type: analytical.component~service.application#docker.image::compose@docker.engine->virtual.machine
                 properties:
-                    optional_analytical_feature: false
-                    premium_analytical_feature: false
+                    application_name: analytical
+                    application_port: 7006
+                    application_protocol: grpc
+                    CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                    RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                    optional_analytical_feature: 'false'
+                    premium_analytical_feature: 'false'
                 requirements:
                     - checkout: checkout_component
                     - recommendation: recommendation_component
                     - host: docker_engine
+                artifacts:
+                    docker_image:
+                        type: docker.image
+                        file: milesstoetzner/boutique-analytical:v8

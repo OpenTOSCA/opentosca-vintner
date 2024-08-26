@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0_rc_3
+tosca_definitions_version: tosca_variability_1_0_rc_2
 
 imports:
     - lib/types.yaml
@@ -53,27 +53,12 @@ topology_template:
         gcp_project:
             type: string
 
-        k8s_host:
-            type: string
-
-        k8s_ca_cert_file:
-            type: string
-
-        k8s_client_cert_file:
-            type: string
-
-        k8s_client_key_file:
-            type: string
-
     variability:
         expressions:
             is_gcp: {equal: [{variability_input: env}, GCP]}
-            is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
             has_optional_payment_feature: {equal: [{variability_input: optional_payment_feature}, true]}
             has_premium_payment_feature: {equal: [{variability_input: premium_payment_feature}, true]}
-            has_optional_analytical_feature: {equal: [{variability_input: optional_analytical_feature}, true]}
-            has_premium_analytical_feature: {equal: [{variability_input: premium_analytical_feature}, true]}
         inputs:
             env:
                 type: string
@@ -90,15 +75,6 @@ topology_template:
             premium_payment_feature:
                 type: boolean
                 default: false
-
-            optional_analytical_feature:
-                type: boolean
-                default: false
-
-            premium_analytical_feature:
-                type: boolean
-                default: false
-
     node_templates:
         ###################################################
         #
@@ -106,9 +82,11 @@ topology_template:
         #
         ###################################################
 
-        frontend_component:
+        frontend_component_compose:
             type: frontend.component
             persistent: true
+            conditions: {logic_expression: is_openstack}
+            technology: compose
             properties:
                 - application_name: frontend
                 - application_port: 8080
@@ -135,15 +113,57 @@ topology_template:
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
                 - SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
             requirements:
-                - checkout: checkout_component
-                - currency: currency_component
-                - shipping: shipping_component
-                - cart: cart_component
-                - product: product_component
-                - recommendation: recommendation_component
-                - advertisement: advertisement_component
+                - checkout: checkout_component_compose
+                - currency: currency_component_compose
+                - shipping: shipping_component_compose
+                - cart: cart_component_compose
+                - product: product_component_compose
+                - recommendation: recommendation_component_compose
+                - advertisement: advertisement_component_compose
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-frontend:v8
+
+        frontend_component_terraform:
+            type: frontend.component
+            conditions: {logic_expression: is_gcp}
+            persistent: true
+            technology: terraform
+            properties:
+                - application_name: frontend
+                - application_port: 8080
+                - application_protocol: http
+                - disable_profiler: '1'
+                - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                - CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                - SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                - CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                - PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                - RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                - AD_SERVICE_ADDR: {eval: '.::.requirements::[.name=advertisement]::.target::application_endpoint'}
+                - optional_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_optional_payment_feature}
+                - optional_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_optional_payment_feature}}
+                - premium_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_premium_payment_feature}
+                - premium_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_premium_payment_feature}}
+                - SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
+            requirements:
+                - checkout: checkout_component_terraform
+                - currency: currency_component_terraform
+                - shipping: shipping_component_terraform
+                - cart: cart_component_terraform
+                - product: product_component_terraform
+                - recommendation: recommendation_component_terraform
+                - advertisement: advertisement_component_terraform
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -152,9 +172,9 @@ topology_template:
 
         frontend_ingress:
             type: ingress
+            technology: ansible
             requirements:
-                - application: frontend_component
-                - host: kubernetes_cluster
+                - application: frontend_component_compose
                 - host: virtual_machine
 
         ###################################################
@@ -163,8 +183,9 @@ topology_template:
         #
         ###################################################
 
-        checkout_component:
+        checkout_component_compose:
             type: checkout.component
+            technology: compose
             properties:
                 - application_name: checkout
                 - application_port: 7003
@@ -189,14 +210,51 @@ topology_template:
                       value: 'false'
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
-                - email: email_component
-                - payment: payment_component
-                - currency: currency_component
-                - shipping: shipping_component
-                - cart: cart_component
-                - product: product_component
+                - email: email_component_compose
+                - payment: payment_component_compose
+                - currency: currency_component_compose
+                - shipping: shipping_component_compose
+                - cart: cart_component_compose
+                - product: product_component_compose
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-checkout:v8
+
+        checkout_component_terraform:
+            type: checkout.component
+            technology: terraform
+            properties:
+                - application_name: checkout
+                - application_port: 7003
+                - application_protocol: grpc
+                - disable_profiler: '1'
+                - PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                - SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                - PAYMENT_SERVICE_ADDR: {eval: '.::.requirements::[.name=payment]::.target::application_endpoint'}
+                - EMAIL_SERVICE_ADDR: {eval: '.::.requirements::[.name=email]::.target::application_endpoint'}
+                - CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                - CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                - optional_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_optional_payment_feature}
+                - optional_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_optional_payment_feature}}
+                - premium_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_premium_payment_feature}
+                - premium_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_premium_payment_feature}}
+            requirements:
+                - email: email_component_terraform
+                - payment: payment_component_terraform
+                - currency: currency_component_terraform
+                - shipping: shipping_component_terraform
+                - cart: cart_component_terraform
+                - product: product_component_terraform
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -209,8 +267,9 @@ topology_template:
         #
         ###################################################
 
-        email_component:
+        email_component_compose:
             type: email.component
+            technology: compose
             properties:
                 - application_name: email
                 - application_port: 7005
@@ -218,7 +277,20 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-email:v8
+
+        email_component_terraform:
+            type: email.component
+            technology: terraform
+            properties:
+                - application_name: email
+                - application_port: 7005
+                - application_protocol: grpc
+                - disable_profiler: '1'
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -231,8 +303,9 @@ topology_template:
         #
         ###################################################
 
-        payment_component:
+        payment_component_compose:
             type: payment.component
+            technology: compose
             properties:
                 - application_name: payment
                 - application_port: 7006
@@ -252,7 +325,32 @@ topology_template:
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-payment:v8
+
+        payment_component_terraform:
+            type: payment.component
+            technology: terraform
+            properties:
+                - application_name: payment
+                - application_port: 7006
+                - application_protocol: grpc
+                - disable_profiler: '1'
+                - optional_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_optional_payment_feature}
+                - optional_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_optional_payment_feature}}
+                - premium_payment_feature:
+                      value: 'true'
+                      conditions: {logic_expression: has_premium_payment_feature}
+                - premium_payment_feature:
+                      value: 'false'
+                      conditions: {not: {logic_expression: has_premium_payment_feature}}
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -265,8 +363,9 @@ topology_template:
         #
         ###################################################
 
-        currency_component:
+        currency_component_compose:
             type: currency.component
+            technology: compose
             properties:
                 - application_name: currency
                 - application_port: 7004
@@ -274,7 +373,20 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-currency:v8
+
+        currency_component_terraform:
+            type: currency.component
+            technology: terraform
+            properties:
+                - application_name: currency
+                - application_port: 7004
+                - application_protocol: grpc
+                - disable_profiler: '1'
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -287,8 +399,9 @@ topology_template:
         #
         ###################################################
 
-        shipping_component:
+        shipping_component_compose:
             type: shipping.component
+            technology: compose
             properties:
                 - application_name: shipping
                 - application_port: 7009
@@ -296,7 +409,20 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-shipping:v8
+
+        shipping_component_terraform:
+            type: shipping.component
+            technology: terraform
+            properties:
+                - application_name: shipping
+                - application_port: 7009
+                - application_protocol: grpc
+                - disable_profiler: '1'
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -309,8 +435,33 @@ topology_template:
         #
         ###################################################
 
-        cart_component:
+        cart_component_compose:
             type: cart.component
+            technology: compose
+            properties:
+                - application_name: cart
+                - application_port: 7070
+                - application_protocol: grpc
+                - disable_profiler: '1'
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'cart'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+            requirements:
+                - database: cart_database_ansible
+                - host: docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-cart:v8
+
+        cart_component_terraform:
+            type: cart.component
+            technology: terraform
             properties:
                 - application_name: cart
                 - application_port: 7070
@@ -324,32 +475,49 @@ topology_template:
                 - mysql_table: 'cart'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
-                - database: cart_database
-                - host: docker_engine
-                - host: kubernetes_cluster
+                - database: cart_database_terraform
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: milesstoetzner/boutique-cart:v8
 
-        cart_database:
+        cart_database_ansible:
             type: mysql.database
+            technology: ansible
             properties:
                 - database_name: cart
                 - database_user: cart
                 - database_password: {get_input: database_password}
             requirements:
-                - host: cart_dbms
+                - host: cart_dbms_compose
 
-        cart_dbms:
+        cart_database_terraform:
+            type: mysql.database
+            technology: terraform
+            properties:
+                - database_name: cart
+                - database_user: cart
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: cart_dbms_terraform
+
+        cart_dbms_compose:
             type: mysql.dbms
+            technology: compose
             properties:
                 - dbms_name: unfurl-technology-boutique-cart-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+
+        cart_dbms_terraform:
+            type: mysql.dbms
+            technology: terraform
+            properties:
+                - dbms_name: unfurl-technology-boutique-cart-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
                 - host: gcp_cloudsql
 
         ###################################################
@@ -358,8 +526,9 @@ topology_template:
         #
         ###################################################
 
-        product_component:
+        product_component_compose:
             type: product.component
+            technology: compose
             properties:
                 - application_name: product
                 - application_port: 7007
@@ -367,7 +536,20 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-product:v8
+
+        product_component_terraform:
+            type: product.component
+            technology: terraform
+            properties:
+                - application_name: product
+                - application_port: 7007
+                - application_protocol: grpc
+                - disable_profiler: '1'
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -380,18 +562,36 @@ topology_template:
         #
         ###################################################
 
-        recommendation_component:
+        recommendation_component_compose:
             type: recommendation.component
+            technology: compose
             properties:
                 - application_name: recommendation
                 - application_port: 7008
                 - application_protocol: grpc
                 - disable_profiler: '1'
                 - PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+
             requirements:
-                - product: product_component
+                - product: product_component_compose
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-recommendation:v8
+
+        recommendation_component_terraform:
+            type: recommendation.component
+            technology: terraform
+            properties:
+                - application_name: recommendation
+                - application_port: 7008
+                - application_protocol: grpc
+                - disable_profiler: '1'
+                - PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+
+            requirements:
+                - product: product_component_terraform
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -404,8 +604,9 @@ topology_template:
         #
         ###################################################
 
-        advertisement_component:
+        advertisement_component_compose:
             type: advertisement.component
+            technology: compose
             properties:
                 - application_name: advertisement
                 - application_port: 7000
@@ -413,7 +614,20 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: milesstoetzner/boutique-advertisement:v8
+
+        advertisement_component_terraform:
+            type: advertisement.component
+            technology: terraform
+            properties:
+                - application_name: advertisement
+                - application_port: 7000
+                - application_protocol: grpc
+                - disable_profiler: '1'
+            requirements:
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -428,11 +642,13 @@ topology_template:
 
         docker_engine:
             type: docker.engine
+            technology: ansible
             requirements:
                 - host: virtual_machine
 
         node_agent:
             type: node.agent
+            technology: ansible
             properties:
                 - application_name: node_exporter
                 - application_port: 9100
@@ -450,6 +666,7 @@ topology_template:
 
         promtail_agent:
             type: promtail.agent
+            technology: ansible
             requirements:
                 - host: virtual_machine
             artifacts:
@@ -463,6 +680,7 @@ topology_template:
 
         falco_agent:
             type: falco.agent
+            technology: ansible
             requirements:
                 - host: virtual_machine
             artifacts:
@@ -477,6 +695,7 @@ topology_template:
 
         virtual_machine:
             type: virtual.machine
+            technology: terraform
             properties:
                 - machine: unfurl-technology-boutique
                 - ports: ['80', '9100']
@@ -486,6 +705,7 @@ topology_template:
                 - flavor:
                       value: m1.large
                       conditions: {equal: [{variability_input: tier}, LARGE]}
+
                 - network: {get_input: os_network}
                 - ssh_user: {get_input: os_ssh_user}
                 - ssh_key_name: {get_input: os_ssh_key_name}
@@ -517,11 +737,13 @@ topology_template:
 
         gcp_cloudrun:
             type: gcp.cloudrun
+            technology: terraform
             requirements:
                 - host: gcp_provider
 
         gcp_cloudsql:
             type: gcp.cloudsql
+            technology: terraform
             requirements:
                 - host: gcp_provider
 
@@ -532,23 +754,3 @@ topology_template:
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
                 - gcp_project: {get_input: gcp_project}
-
-        ###################################################
-        #
-        # Kubernetes
-        #
-        ###################################################
-
-        kubernetes_cluster:
-            type: kubernetes.cluster
-            conditions: {logic_expression: is_kubernetes}
-            properties:
-                - k8s_host: {get_input: k8s_host}
-                - k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
-                - k8s_client_cert_file: {get_input: k8s_client_cert_file}
-                - k8s_client_key_file: {get_input: k8s_client_key_file}
-            requirements:
-                - host: kubernetes_provider
-
-        kubernetes_provider:
-            type: cloud.provider
