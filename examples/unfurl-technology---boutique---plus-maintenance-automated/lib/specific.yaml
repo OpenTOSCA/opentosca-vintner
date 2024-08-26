@@ -214,6 +214,10 @@ node_types:
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
+        properties:
+            application_language:
+                type: string
+                default: binary
         interfaces:
             management:
                 type: management
