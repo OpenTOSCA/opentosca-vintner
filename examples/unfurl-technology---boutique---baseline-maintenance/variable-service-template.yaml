@@ -1039,6 +1039,8 @@ topology_template:
         promtail_agent:
             type: promtail.agent
             technology: ansible
+            properties:
+                - application_name: promtail
             requirements:
                 - host: virtual_machine
             artifacts:
@@ -1053,6 +1055,8 @@ topology_template:
         falco_agent:
             type: falco.agent
             technology: ansible
+            properties:
+                - application_name: falco
             requirements:
                 - host: virtual_machine
             artifacts:
@@ -1060,7 +1064,7 @@ topology_template:
                       type: apt.package
                       file: falco
                       properties:
-                          namespace: falco
+                          repository: falco
                           key: https://falco.org/repo/falcosecurity-packages.asc
                           source: https://download.falco.org/packages/deb stable main
                           env: FALCO_FRONTEND=noninteractive
@@ -1069,7 +1073,7 @@ topology_template:
             type: virtual.machine
             technology: terraform
             properties:
-                - machine: unfurl-technology-boutique
+                - machine_name: unfurl-technology-boutique
                 - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
