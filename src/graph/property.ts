@@ -106,4 +106,8 @@ export default class Property extends Element {
     isProperty() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }

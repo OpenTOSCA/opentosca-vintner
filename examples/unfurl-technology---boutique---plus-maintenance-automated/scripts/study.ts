@@ -13,6 +13,8 @@ const templateDir = path.join('..')
 const templateFile = path.join(templateDir, 'variable-service-template.yaml')
 const testsDir = path.join(templateDir, 'tests')
 
+// TODO: guess technologies
+
 async function main() {
     /**
      * Graph
@@ -249,6 +251,7 @@ async function main() {
     /**
      * Kubernetes (12 technologies are encoded in types)
      */
+    // TODO: but this contains analytical and the others done?! in general test.yaml#merge breaks the script ...
     const edmm_kubernetes = await stats('EDMM Kubernetes', path.join(testsDir, 'kubernetes', 'expected.yaml'))
     edmm_kubernetes.technology_assignments = 13
     edmm_kubernetes.lines_of_code += 13

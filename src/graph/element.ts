@@ -203,4 +203,8 @@ export default abstract class Element {
     isTechnology(): this is Technology {
         return false
     }
+
+    isEDMM() {
+        return false
+    }
 }
