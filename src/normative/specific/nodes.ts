@@ -268,7 +268,7 @@ const nodes: NodeTypeMap = {
             management: {
                 type: 'management',
                 operations: {
-                    start: '{{ SELF.application_name }}',
+                    start: './{{ SELF.application_name }}',
                 },
             },
         },

@@ -10,7 +10,8 @@ import {
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveSourceArchiveTask,
+    AnsibleUnarchiveTarArchiveFileTask,
+    AnsibleUnarchiveTarArchiveUrlTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -55,7 +56,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveSourceArchiveTask(),
+                                            ...AnsibleUnarchiveTarArchiveFileTask(),
+                                        },
+                                        {
+                                            ...AnsibleUnarchiveTarArchiveUrlTask(),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),

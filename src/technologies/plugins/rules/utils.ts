@@ -267,6 +267,18 @@ export function ZipArchiveFile() {
     return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}`
 }
 
+export function ZipArchiveUrl() {
+    return `{{  ".artifacts::zip_archive::file" | eval }}`
+}
+
+export function TarArchiveFile() {
+    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}`
+}
+
+export function TarArchiveUrl() {
+    return `{{  ".artifacts::tar_archive::file" | eval }}`
+}
+
 export function ApplicationDirectory() {
     return {
         application_directory: {
@@ -296,14 +308,54 @@ export function AnsibleDeleteApplicationDirectoryTask() {
     }
 }
 
-export function AnsibleUnarchiveSourceArchiveTask() {
+export function AnsibleUnarchiveZipArchiveFileTask() {
     return {
         name: 'extract deployment artifact in application directory',
         'ansible.builtin.unarchive': {
             src: ZipArchiveFile(),
             dest: '{{ SELF.application_directory }}',
-            remote_src: '{{  ".artifacts::zip_archive::file" | eval is url }}',
+            remote_src: '{{  (".artifacts::zip_archive::file" | eval).startswith("http") }}',
+            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval  }}',
         },
+        when: 'not (".artifacts::zip_archive::file" | eval).startswith("http")',
+    }
+}
+
+export function AnsibleUnarchiveZipArchiveUrlTask() {
+    return {
+        name: 'extract deployment artifact in application directory',
+        'ansible.builtin.unarchive': {
+            src: ZipArchiveUrl(),
+            dest: '{{ SELF.application_directory }}',
+            remote_src: 'yes',
+            extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval  }}',
+        },
+        when: '(".artifacts::zip_archive::file" | eval).startswith("http")',
+    }
+}
+
+export function AnsibleUnarchiveTarArchiveFileTask() {
+    return {
+        name: 'extract deployment artifact from file in application directory',
+        'ansible.builtin.unarchive': {
+            src: TarArchiveFile(),
+            dest: '{{ SELF.application_directory }}',
+            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval  }}',
+        },
+        when: 'not (".artifacts::tar_archive::file" | eval).startswith("http")',
+    }
+}
+
+export function AnsibleUnarchiveTarArchiveUrlTask() {
+    return {
+        name: 'extract deployment artifact from URL in application directory',
+        'ansible.builtin.unarchive': {
+            src: TarArchiveUrl(),
+            dest: '{{ SELF.application_directory }}',
+            remote_src: 'yes',
+            extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval  }}',
+        },
+        when: '(".artifacts::tar_archive::file" | eval).startswith("http")',
     }
 }
 

@@ -330,10 +330,6 @@ topology_template:
                 application_protocol: http
             requirements:
                 - host: virtual_machine
-            interfaces:
-                management:
-                    operations:
-                        start: node_exporter
             artifacts:
                 tar_archive:
                     type: tar.archive

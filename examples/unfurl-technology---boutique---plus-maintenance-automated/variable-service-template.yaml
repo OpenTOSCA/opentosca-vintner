@@ -430,7 +430,7 @@ topology_template:
             type: analytical.component
             properties:
                 - application_name: analytical
-                - application_port: 7006
+                - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
                 - RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
@@ -455,7 +455,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: milesstoetzner/boutique-analytical:v8
+                      file: milesstoetzner/boutique-analytics:v8
 
         ###################################################
         #
@@ -476,14 +476,13 @@ topology_template:
                 - application_protocol: http
             requirements:
                 - host: virtual_machine
-            interfaces:
-                management:
-                    operations:
-                        start: node_exporter
             artifacts:
                 - tar_archive:
                       type: tar.archive
                       file: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
+                      properties:
+                          extra_opts:
+                              - '--strip-components=1'
 
         promtail_agent:
             type: promtail.agent
