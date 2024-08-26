@@ -2,12 +2,12 @@ tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
     - ../specific.yaml
-    - email.service.yaml
-    - payment.service.yaml
-    - currency.service.yaml
-    - shipping.service.yaml
-    - cart.service.yaml
-    - product.service.yaml
+    - email.component.yaml
+    - payment.component.yaml
+    - currency.component.yaml
+    - shipping.component.yaml
+    - cart.component.yaml
+    - product.component.yaml
 
 capability_types:
     boutique.capabilities.Endpoint.Checkout:
