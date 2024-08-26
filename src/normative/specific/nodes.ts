@@ -258,6 +258,12 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
             ...MetadataAbstract(),
         },
+        properties: {
+            application_language: {
+                type: 'string',
+                default: 'binary',
+            },
+        },
         interfaces: {
             management: {
                 type: 'management',

@@ -11,7 +11,7 @@ node_types:
     ###################################################
 
     node.agent:
-        derived_from: service.application
+        derived_from: binary.service.application
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
