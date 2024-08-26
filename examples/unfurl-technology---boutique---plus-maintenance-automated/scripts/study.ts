@@ -102,11 +102,7 @@ async function main() {
      */
     const vdmm_plus_original_manual = await stats(
         'VDMM+ Original Manual',
-        path.join(
-            examplesDir,
-            'unfurl-technology---boutique---plus-original-manual---disabled',
-            'variable-service-template.yaml'
-        )
+        path.join(examplesDir, 'unfurl-technology---boutique---plus-original-manual', 'variable-service-template.yaml')
     )
 
     /**
@@ -116,7 +112,7 @@ async function main() {
         'VDMM+ Original Automated Quality',
         path.join(
             examplesDir,
-            'unfurl-technology---boutique---plus-original-automated---disabled',
+            'unfurl-technology---boutique---plus-original-automated',
             'variable-service-template.yaml'
         )
     )
