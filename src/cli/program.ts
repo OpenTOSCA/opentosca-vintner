@@ -1134,3 +1134,18 @@ program
             if (options.format === 'json') std.out(files.toJSON(result))
         })
     )
+
+/**
+ * Case Study
+ */
+const study = program.command('study').description('conduct case studies')
+
+study
+    .command('technology')
+    .description('conduct technology case study')
+    .requiredOption('--application <string>', 'application name, e.g., boutique or shop')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.technology(options)
+        })
+    )

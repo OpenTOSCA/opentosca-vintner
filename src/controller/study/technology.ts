@@ -1,5 +1,6 @@
+import * as assert from '#assert'
 import * as check from '#check'
-import controller from '#controller'
+import Controller from '#controller'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
@@ -7,20 +8,24 @@ import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import path from 'path'
 
-const examplesDir = path.join('..', '..')
-
-const templateDir = path.join('..')
-const templateFile = path.join(templateDir, 'variable-service-template.yaml')
-const testsDir = path.join(templateDir, 'tests')
+export type StudyTechnologyOptions = {
+    application: string
+}
 
 // TODO: guess technologies
 
-async function main() {
-    /**
-     * Graph
-     */
-    const template = await new Loader(templateFile).load()
-    const graph = new Graph(template)
+export default async function (options: StudyTechnologyOptions) {
+    assert.isDefined(options.application)
+
+    // TODO: adapt
+    const examplesDir = path.join('examples')
+
+    const templateDir = path.join(
+        examplesDir,
+        `unfurl-technology---${options.application}---plus-maintenance-automated`
+    )
+    const templateFile = path.join(templateDir, 'variable-service-template.yaml')
+    const testsDir = path.join(templateDir, 'tests')
 
     /*******************************************************************************************************************
      *
@@ -30,6 +35,8 @@ async function main() {
     /**
      * Rules
      */
+    const template = await new Loader(templateFile).load()
+    const graph = new Graph(template)
     const map = graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules ?? {}
     if (check.isString(map)) throw new UnexpectedError()
 
@@ -92,7 +99,11 @@ async function main() {
      */
     const vdmm_baseline_original = await stats(
         'VDMM Baseline Original',
-        path.join(examplesDir, 'unfurl-technology---boutique---baseline-original', 'variable-service-template.yaml')
+        path.join(
+            examplesDir,
+            `unfurl-technology---${options.application}---baseline-original`,
+            'variable-service-template.yaml'
+        )
     )
 
     /**
@@ -100,7 +111,11 @@ async function main() {
      */
     const vdmm_plus_original_manual = await stats(
         'VDMM+ Original Manual',
-        path.join(examplesDir, 'unfurl-technology---boutique---plus-original-manual', 'variable-service-template.yaml')
+        path.join(
+            examplesDir,
+            `unfurl-technology---${options.application}---plus-original-manual`,
+            'variable-service-template.yaml'
+        )
     )
 
     /**
@@ -110,7 +125,7 @@ async function main() {
         'VDMM+ Original Automated Quality',
         path.join(
             examplesDir,
-            'unfurl-technology---boutique---plus-original-automated',
+            `unfurl-technology---${options.application}---plus-original-automated`,
             'variable-service-template.yaml'
         )
     )
@@ -217,7 +232,7 @@ async function main() {
     for (const variant of files.listDirectories(testsDir)) {
         const inputs = path.join(testsDir, variant, 'inputs.yaml')
 
-        const quality = await controller.template.quality({
+        const quality = await Controller.template.quality({
             template: templateFile,
             experimental: true,
             inputs,
@@ -266,7 +281,11 @@ async function main() {
      */
     const vdmm_baseline_maintenance = await stats(
         'VDMM Baseline Maintenance',
-        path.join(examplesDir, 'unfurl-technology---boutique---baseline-maintenance', 'variable-service-template.yaml')
+        path.join(
+            examplesDir,
+            `unfurl-technology---${options.application}---baseline-maintenance`,
+            'variable-service-template.yaml'
+        )
     )
 
     /**
@@ -276,7 +295,7 @@ async function main() {
         'VDMM+ Maintenance Manual',
         path.join(
             examplesDir,
-            'unfurl-technology---boutique---plus-maintenance-manual',
+            `unfurl-technology---${options.application}---plus-maintenance-manual`,
             'variable-service-template.yaml'
         )
     )
@@ -506,14 +525,14 @@ function sumMetrics(scenario: string, variants: MetricsData[]): MetricsData {
 }
 
 async function stats(scenario: string, file: string): Promise<MetricsData> {
-    const stats = await controller.template.stats({template: [file], experimental: true})
+    const data = await Controller.template.stats({template: [file], experimental: true})
     return {
         scenario,
         models: 1,
-        elements: stats.edmm_elements_without_technologies,
-        conditions: stats.edmm_elements_conditions_manual,
-        technology_assignments: stats.technologies,
-        lines_of_code: stats.loc,
+        elements: data.edmm_elements_without_technologies,
+        conditions: data.edmm_elements_conditions_manual,
+        technology_assignments: data.technologies,
+        lines_of_code: data.loc,
     }
 }
 
@@ -522,5 +541,3 @@ function printTable<T>(caption: string, data: T[]) {
     console.log(caption)
     console.table(data)
 }
-
-main()
