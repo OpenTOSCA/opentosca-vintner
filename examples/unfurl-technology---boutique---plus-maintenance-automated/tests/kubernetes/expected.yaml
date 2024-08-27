@@ -297,10 +297,10 @@ topology_template:
         #
         ###################################################
 
-        analytical_component:
-            type: analytical.component~service.application#docker.image::kubernetes@kubernetes.cluster
+        analytics_component:
+            type: analytics.component~service.application#docker.image::kubernetes@kubernetes.cluster
             properties:
-                application_name: analytical
+                application_name: analytics
                 application_port: 7001
                 application_protocol: grpc
                 CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}

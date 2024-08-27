@@ -516,8 +516,8 @@ topology_template:
         #
         ###################################################
 
-        analytical_component:
-            type: analytical.component
+        analytics_component:
+            type: analytics.component
             technology:
                 - compose:
                       conditions: {logic_expression: is_openstack}
@@ -526,7 +526,7 @@ topology_template:
                 - terraform:
                       conditions: {logic_expression: is_gcp}
             properties:
-                - application_name: analytical
+                - application_name: analytics
                 - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}

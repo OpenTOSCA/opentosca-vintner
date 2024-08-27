@@ -426,10 +426,10 @@ topology_template:
         #
         ###################################################
 
-        analytical_component:
-            type: analytical.component
+        analytics_component:
+            type: analytics.component
             properties:
-                - application_name: analytical
+                - application_name: analytics
                 - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
