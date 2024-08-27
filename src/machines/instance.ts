@@ -199,11 +199,13 @@ export class InstanceStateMachine {
                         machine.do(ACTIONS.SUCCESS)
                         if (options.write && machine.state !== STATES.DELETED) this.instance.setState(machine.state)
                     } catch (e) {
-                        // TODO: remove this
-                        // TODO: error is supressed if eg machine.do throws ...
-                        console.log(e)
-                        machine.do(ACTIONS.ERROR)
-                        if (options.write) this.instance.setState(machine.state)
+                        try {
+                            machine.do(ACTIONS.ERROR)
+                            if (options.write) this.instance.setState(machine.state)
+                        } catch (f) {
+                            f.cause = e
+                            throw f
+                        }
                         throw e
                     }
                 } else {
