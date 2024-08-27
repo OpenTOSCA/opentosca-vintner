@@ -167,7 +167,7 @@ node_types:
                                     - name: set attributes
                                       set_fact:
                                           application_address: '{{ (service_description.stdout | from_json ).status.url[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
+                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
                             resultTemplate: |
                                 name: SELF
                                 attributes:
@@ -354,7 +354,7 @@ node_types:
                                     - name: set attributes
                                       set_fact:
                                           application_address: '{{ browse_app.stdout[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol }}://{{ browse_app.stdout[8:] | trim }}:443'
+                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ browse_app.stdout[8:] | trim }}:443'
                             resultTemplate: |
                                 name: SELF
                                 attributes:
@@ -1649,7 +1649,7 @@ node_types:
                             application_address:
                                 - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
                             application_endpoint:
-                                - value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
+                                - value: '{{ SELF.application_protocol  | regex_replace("^(.*[^s])$", "\\1s") }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
                         resource:
                             google_cloud_run_v2_service:
                                 application:
@@ -1817,7 +1817,7 @@ node_types:
                             application_address:
                                 - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
                             application_endpoint:
-                                - value: '{{ SELF.application_protocol }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
+                                - value: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
                         resource:
                             google_app_engine_standard_app_version:
                                 app:
