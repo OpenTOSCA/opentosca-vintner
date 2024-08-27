@@ -913,11 +913,11 @@ topology_template:
         #
         ###################################################
 
-        analytical_component_compose:
-            type: analytical.component
+        analytics_component_compose:
+            type: analytics.component
             technology: compose
             properties:
-                - application_name: analytical
+                - application_name: analytics
                 - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
@@ -944,11 +944,11 @@ topology_template:
                       type: docker.image
                       file: milesstoetzner/boutique-analytics:v8
 
-        analytical_component_kubernetes:
-            type: analytical.component
+        analytics_component_kubernetes:
+            type: analytics.component
             technology: kubernetes
             properties:
-                - application_name: analytical
+                - application_name: analytics
                 - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
@@ -975,11 +975,11 @@ topology_template:
                       type: docker.image
                       file: milesstoetzner/boutique-analytics:v8
 
-        analytical_component_terraform:
-            type: analytical.component
+        analytics_component_terraform:
+            type: analytics.component
             technology: terraform
             properties:
-                - application_name: analytical
+                - application_name: analytics
                 - application_port: 7001
                 - application_protocol: grpc
                 - CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}

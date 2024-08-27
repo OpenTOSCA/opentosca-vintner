@@ -75,10 +75,10 @@ merge:
                 type: string
 
         node_templates:
-            analytical_component:
-                type: analytical.component~service.application#docker.image::terraform@gcp.cloudrun
+            analytics_component:
+                type: analytics.component~service.application#docker.image::terraform@gcp.cloudrun
                 properties:
-                    application_name: analytical
+                    application_name: analytics
                     application_port: 7001
                     application_protocol: grpc
                     CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
