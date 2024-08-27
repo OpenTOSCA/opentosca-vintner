@@ -36,7 +36,7 @@ export type StudyTechnologyOptions = {
  */
 
 /**
- * File structure of an application
+ * File structure of required models of an application
  *
  * examples/
  * - unfurl-technology---${options.application}---baseline-maintenance/
@@ -46,6 +46,12 @@ export type StudyTechnologyOptions = {
  *      - variable-service-template.yaml
  *
  * - unfurl-technology---${options.application}---plus-maintenance-automated/
+ *     - tests/
+ *          - ${edmm_original_variant_i}/
+ *                  - expected.yaml
+ *                  - inputs.yaml
+ *                  - test.yaml
+ *     - study.yaml
  *     - variable-service-template.yaml
  *
  * - unfurl-technology---${options.application}---plus-maintenance-manual/
@@ -67,8 +73,6 @@ export type StudyTechnologyOptions = {
  * This is fine, since we do not read stats of EDMM variants after maintenance.
  */
 
-// TODO: read variant dynamically since they differ?!
-
 export default async function (options: StudyTechnologyOptions) {
     assert.isDefined(options.application)
     assert.isTrue(options.experimental)
@@ -83,6 +87,11 @@ export default async function (options: StudyTechnologyOptions) {
     )
     const templateFile = path.join(templateDir, 'variable-service-template.yaml')
     const testsDir = path.join(templateDir, 'tests')
+
+    const config = files.loadYAML<StudyConfig>(path.join(templateDir, 'study.yaml'))
+    assert.isDefined(config.study)
+    assert.isDefined(config.originals)
+    if (config.study !== 'technology') throw new Error(`Study "${config.study}" must be "technology"`)
 
     /*******************************************************************************************************************
      *
@@ -120,26 +129,13 @@ export default async function (options: StudyTechnologyOptions) {
      * Initial Metrics
      *
      ******************************************************************************************************************/
-
-    /**
-     * EDMM GCP
-     */
-    const edmm_gcp = await stats('EDMM GCP Variant', path.join(testsDir, 'gcp', 'expected.yaml'))
-
-    /**
-     * EDMM OS Medium
-     */
-    const edmm_os_medium = await stats('EDMM OS Medium Variant', path.join(testsDir, 'os-medium', 'expected.yaml'))
-
-    /**
-     * EDMM OS Large
-     */
-    const edmm_os_large = await stats('EDMM OS Large Variant', path.join(testsDir, 'os-large', 'expected.yaml'))
-
     /**
      * EDMM Total Original
      */
-    const edmm_variants_original = [edmm_gcp, edmm_os_medium, edmm_os_large]
+    const edmm_variants_original: MetricsData[] = []
+    for (const original of config.originals) {
+        edmm_variants_original.push(await stats(`EDMM "${original}"`, path.join(testsDir, original, 'expected.yaml')))
+    }
     const edmm_total_original = sumMetrics('EDMM Total', edmm_variants_original)
 
     /**
@@ -179,9 +175,7 @@ export default async function (options: StudyTechnologyOptions) {
     )
 
     printTable<MetricsData>('Metrics relevant when modeling the different scenarios', [
-        edmm_gcp,
-        edmm_os_large,
-        edmm_os_medium,
+        ...edmm_variants_original,
         edmm_total_original,
         vdmm_baseline_original,
         vdmm_plus_original_manual,
@@ -241,8 +235,8 @@ export default async function (options: StudyTechnologyOptions) {
      ******************************************************************************************************************/
 
     const qualityData: QualityData[] = []
-    for (const variant of files.listDirectories(testsDir)) {
-        const inputs = path.join(testsDir, variant, 'inputs.yaml')
+    for (const original of config.originals) {
+        const inputs = path.join(testsDir, original, 'inputs.yaml')
 
         const quality = await Controller.template.quality({
             template: templateFile,
@@ -251,7 +245,7 @@ export default async function (options: StudyTechnologyOptions) {
         })
 
         qualityData.push({
-            scenario: variant,
+            scenario: original,
             expert: quality.max_weight,
             non_expert: [quality.min_weight, quality.max_weight],
             random: [quality.min_weight, quality.max_weight],
@@ -353,6 +347,11 @@ export default async function (options: StudyTechnologyOptions) {
          */
         relativeMaintenanceDiff(vdmm_plus_automated_diff, vdmm_baseline_diff),
     ])
+}
+
+type StudyConfig = {
+    study: string
+    originals: string[]
 }
 
 type RuleData = {
