@@ -5,4 +5,4 @@ set -e
 source configuration.sh
 
 # Study
-$VINTNER study technology --application boutique
+$VINTNER study technology --application boutique --experimental

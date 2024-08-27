@@ -4,6 +4,7 @@ import * as files from '#files'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {IMPLEMENTATION_NAME_REGEX, isImplementation} from '#technologies/utils'
 import * as utils from '#utils'
 
 export type TemplateStatsOptions = {
@@ -41,8 +42,8 @@ export default async function (options: TemplateStatsOptions) {
 
     return utils.sumObjects<TemplateStats>(
         await Promise.all(
-            options.template.map(async it => {
-                const template = await new Loader(it).load()
+            options.template.map(async file => {
+                const template = await new Loader(file).load()
                 const graph = new Graph(template)
 
                 const stats: TemplateStats = {
@@ -59,41 +60,47 @@ export default async function (options: TemplateStatsOptions) {
                     technologies: graph.technologies.length,
                     vdmm_elements: graph.elements.length,
 
-                    edmm_elements: graph.elements.filter(e => e.isEDMM()).length,
+                    edmm_elements: graph.elements.filter(element => element.isEDMM()).length,
 
                     edmm_elements_without_technologies: graph.elements
-                        .filter(e => e.isEDMM())
-                        .filter(e => !e.isTechnology()).length,
+                        .filter(element => element.isEDMM())
+                        .filter(element => !element.isTechnology()).length,
 
                     edmm_elements_conditions_manual: graph.elements
-                        .filter(e => e.isEDMM())
-                        .reduce((acc, e) => acc + countManualConditions(e), 0),
+                        .filter(element => element.isEDMM())
+                        .reduce((sum, element) => sum + countManualConditions(element), 0),
 
                     edmm_elements_conditions_generated: graph.elements
-                        .filter(e => e.isEDMM())
-                        .reduce((acc, e) => acc + countGeneratedConditions(e), 0),
+                        .filter(element => element.isEDMM())
+                        .reduce((sum, element) => sum + countGeneratedConditions(element), 0),
 
-                    loc: files.countLines(it),
-                    locp: files.countNotBlankLines(it),
+                    loc: files.countLines(file),
+                    locp: files.countNotBlankLines(file),
                 }
+
+                /**
+                 * Guess technology elements based on node type names following our implementation name pattern, see {@link IMPLEMENTATION_NAME_REGEX}.
+                 * Add technologies to the corresponding stats.
+                 * However, we ignore edmm_elements_conditions_manual and edmm_elements_conditions_generated since we guess technologies only for EDMM and not for VDMM
+                 */
+                if (options.guessTechnologies) {
+                    const guessed = graph.nodes.filter(node => isImplementation(node.getType().name)).length
+
+                    stats.technologies += guessed
+                    stats.vdmm_elements += guessed
+                    stats.edmm_elements += guessed
+                    stats.loc += guessed
+                    stats.locp += guessed
+                }
+
                 return stats
             })
         )
     )
 }
 
-function guessTechnologies(): number {
-    // TODO: detect technology in type name
-    // TODO: add to edmm_elements
-    // TODO: breaks edmm_elements_conditions_manual/generated? no, since we guess only in EDMM and not in VDMM
-    // TODO: add to loc
-    // TODO: add to locp
-
-    return 0
-}
-
-// TODO: does this work for VariabilityGroups?
-// TODO: this likely does not work in a general case
+// TODO: does not work for VariabilityGroups
+// TODO: does not work for arbitrary nested conditions
 function countManualConditions(element: Element) {
     let count = 0
 
@@ -115,8 +122,8 @@ function countManualConditions(element: Element) {
     return count
 }
 
-// TODO: does this work for VariabilityGroups?
-// TODO: this likely does not work in a general case
+// TODO: does not work for VariabilityGroups
+// TODO: does not work for arbitrary nested conditions
 function countGeneratedConditions(element: Element) {
     let count = 0
 
