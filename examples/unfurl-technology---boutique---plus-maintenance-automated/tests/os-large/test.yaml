@@ -1,0 +1,21 @@
+merge:
+    topology_template:
+        node_templates:
+            analytical_component:
+                type: analytical.component~service.application#docker.image::compose@docker.engine->virtual.machine
+                properties:
+                    application_name: analytical
+                    application_port: 7001
+                    application_protocol: grpc
+                    CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                    RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                    optional_analytical_feature: 'false'
+                    premium_analytical_feature: 'false'
+                requirements:
+                    - checkout: checkout_component
+                    - recommendation: recommendation_component
+                    - host: docker_engine
+                artifacts:
+                    docker_image:
+                        type: docker.image
+                        file: milesstoetzner/boutique-analytics:v8

@@ -61,8 +61,8 @@ const nodes: NodeTypeMap = {
             management: {
                 type: 'management',
                 operations: {
-                    start: 'npm start',
                     configure: 'npm ci',
+                    start: 'npm start',
                 },
             },
         },
@@ -123,9 +123,132 @@ const nodes: NodeTypeMap = {
             management: {
                 type: 'management',
                 operations: {
-                    start: 'python main.py',
                     configure: 'pip install -r requirements.txt',
+                    start: 'python main.py',
                 },
+            },
+        },
+    },
+    // TODO: go runtime?
+    // TODO: management operations
+    'go.service.application': {
+        derived_from: 'service.application',
+        metadata: {
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
+        },
+        properties: {
+            application_language: {
+                type: 'string',
+                default: 'go122',
+            },
+        },
+    },
+    'java.runtime': {
+        derived_from: 'software.runtime',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            application_name: {
+                type: 'string',
+                default: 'java',
+            },
+        },
+        artifacts: {
+            apt_package: {
+                type: 'apt.package',
+                file: 'openjdk-18-jre-headless',
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
+                    },
+                },
+            },
+        },
+    },
+    // TODO: management operations
+    'java.service.application': {
+        derived_from: 'service.application',
+        metadata: {
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
+        },
+        properties: {
+            application_language: {
+                type: 'string',
+                default: 'java21',
+            },
+        },
+    },
+    'dotnet.runtime': {
+        derived_from: 'software.runtime',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            application_name: {
+                type: 'string',
+                default: 'java',
+            },
+        },
+        artifacts: {
+            apt_package: {
+                type: 'apt.package',
+                file: 'dotnet-sdk-8.0',
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+                default: {
+                    eval: '.::.requirements::[.name=host]::.target::management_address',
+                },
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+            endpoint: {
+                type: 'unfurl.capabilities.Endpoint.Ansible',
+                properties: {
+                    connection: 'ssh',
+                    host: {
+                        eval: '.parent::management_address',
+                    },
+                },
+            },
+        },
+    },
+    // TODO: management operations
+    'csharp.service.application': {
+        derived_from: 'service.application',
+        metadata: {
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
+        },
+        properties: {
+            application_language: {
+                type: 'string',
+                default: 'dotnet8',
             },
         },
     },
@@ -135,11 +258,17 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
             ...MetadataAbstract(),
         },
+        properties: {
+            application_language: {
+                type: 'string',
+                default: 'binary',
+            },
+        },
         interfaces: {
             management: {
                 type: 'management',
                 operations: {
-                    start: '{{ SELF.application_name }}',
+                    start: './{{ SELF.application_name }}',
                 },
             },
         },

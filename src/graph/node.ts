@@ -229,4 +229,8 @@ export default class Node extends Element {
     isNode() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }

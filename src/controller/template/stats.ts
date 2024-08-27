@@ -8,7 +8,8 @@ import * as utils from '#utils'
 
 export type TemplateStatsOptions = {
     template: string[]
-    experimental: boolean
+    experimental?: boolean
+    guessTechnologies?: boolean
 }
 
 export type TemplateStats = {
@@ -24,7 +25,6 @@ export type TemplateStats = {
     imports: number
     technologies: number
     vdmm_elements: number
-    // Nodes + Relations + Properties + Artifacts + (Manual) Technologies + Inputs + Outputs
     edmm_elements: number
     edmm_elements_without_technologies: number
     edmm_elements_conditions_manual: number
@@ -36,6 +36,8 @@ export type TemplateStats = {
 export default async function (options: TemplateStatsOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
+
+    options.guessTechnologies = options.guessTechnologies ?? true
 
     return utils.sumObjects<TemplateStats>(
         await Promise.all(
@@ -56,23 +58,21 @@ export default async function (options: TemplateStatsOptions) {
                     imports: graph.imports.length,
                     technologies: graph.technologies.length,
                     vdmm_elements: graph.elements.length,
-                    edmm_elements:
-                        graph.nodes.length +
-                        graph.relations.length +
-                        graph.properties.length +
-                        graph.artifacts.length +
-                        graph.technologies.length +
-                        graph.inputs.length +
-                        graph.outputs.length,
-                    edmm_elements_without_technologies:
-                        graph.nodes.length +
-                        graph.relations.length +
-                        graph.properties.length +
-                        graph.artifacts.length +
-                        graph.inputs.length +
-                        graph.outputs.length,
-                    edmm_elements_conditions_manual: countManualAtEDMM(graph),
-                    edmm_elements_conditions_generated: countGeneratedAtEDMM(graph),
+
+                    edmm_elements: graph.elements.filter(e => e.isEDMM()).length,
+
+                    edmm_elements_without_technologies: graph.elements
+                        .filter(e => e.isEDMM())
+                        .filter(e => !e.isTechnology()).length,
+
+                    edmm_elements_conditions_manual: graph.elements
+                        .filter(e => e.isEDMM())
+                        .reduce((acc, e) => acc + countManualConditions(e), 0),
+
+                    edmm_elements_conditions_generated: graph.elements
+                        .filter(e => e.isEDMM())
+                        .reduce((acc, e) => acc + countGeneratedConditions(e), 0),
+
                     loc: files.countLines(it),
                     locp: files.countNotBlankLines(it),
                 }
@@ -82,23 +82,19 @@ export default async function (options: TemplateStatsOptions) {
     )
 }
 
-function countManualAtEDMM(graph: Graph) {
-    let count = 0
+function guessTechnologies(): number {
+    // TODO: detect technology in type name
+    // TODO: add to edmm_elements
+    // TODO: breaks edmm_elements_conditions_manual/generated? no, since we guess only in EDMM and not in VDMM
+    // TODO: add to loc
+    // TODO: add to locp
 
-    graph.nodes.forEach(it => (count += countManual(it)))
-    graph.relations.forEach(it => (count += countManual(it)))
-    graph.properties.forEach(it => (count += countManual(it)))
-    graph.artifacts.forEach(it => (count += countManual(it)))
-    graph.technologies.forEach(it => (count += countManual(it)))
-    graph.inputs.forEach(it => (count += countManual(it)))
-    graph.outputs.forEach(it => (count += countManual(it)))
-
-    return count
+    return 0
 }
 
 // TODO: does this work for VariabilityGroups?
 // TODO: this likely does not work in a general case
-function countManual(element: Element) {
+function countManualConditions(element: Element) {
     let count = 0
 
     element.conditions.forEach(it => {
@@ -119,23 +115,9 @@ function countManual(element: Element) {
     return count
 }
 
-function countGeneratedAtEDMM(graph: Graph) {
-    let count = 0
-
-    graph.nodes.forEach(it => (count += countGenerated(it)))
-    graph.relations.forEach(it => (count += countGenerated(it)))
-    graph.properties.forEach(it => (count += countGenerated(it)))
-    graph.artifacts.forEach(it => (count += countGenerated(it)))
-    graph.technologies.forEach(it => (count += countGenerated(it)))
-    graph.inputs.forEach(it => (count += countGenerated(it)))
-    graph.outputs.forEach(it => (count += countGenerated(it)))
-
-    return count
-}
-
 // TODO: does this work for VariabilityGroups?
 // TODO: this likely does not work in a general case
-function countGenerated(element: Element) {
+function countGeneratedConditions(element: Element) {
     let count = 0
 
     element.conditions.forEach(it => {

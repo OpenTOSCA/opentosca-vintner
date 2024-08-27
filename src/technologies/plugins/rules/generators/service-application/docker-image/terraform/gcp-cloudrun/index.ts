@@ -1,6 +1,7 @@
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
     GCPProviderCredentials,
+    HOTFIX_SECURE_PROTOCOL_FILTER,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
@@ -67,7 +68,7 @@ const generator: ImplementationGenerator = {
                                 ],
                                 application_endpoint: [
                                     {
-                                        value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443',
+                                        value: `{{ SELF.application_protocol  | ${HOTFIX_SECURE_PROTOCOL_FILTER} }}://$\{substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443`,
                                     },
                                 ],
                             },

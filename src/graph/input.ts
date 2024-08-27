@@ -81,4 +81,8 @@ export default class Input extends Element {
     isInput() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }

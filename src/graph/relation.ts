@@ -162,6 +162,10 @@ export default class Relation extends Element {
         return true
     }
 
+    isEDMM() {
+        return true
+    }
+
     get implied() {
         // Implied if manually defined
         if (check.isDefined(this.raw.implied)) return this.raw.implied

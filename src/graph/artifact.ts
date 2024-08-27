@@ -141,4 +141,8 @@ export default class Artifact extends Element {
     isArtifact() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }

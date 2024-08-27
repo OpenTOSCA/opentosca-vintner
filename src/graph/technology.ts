@@ -119,4 +119,8 @@ export default class Technology extends Element {
     isTechnology() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }

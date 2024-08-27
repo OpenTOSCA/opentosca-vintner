@@ -2,6 +2,7 @@ import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
 import {
     GCPProviderCredentials,
+    HOTFIX_SECURE_PROTOCOL_FILTER,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
@@ -71,7 +72,7 @@ const generator: ImplementationGenerator = {
                                 ],
                                 application_endpoint: [
                                     {
-                                        value: '{{ SELF.application_protocol }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443',
+                                        value: `{{ SELF.application_protocol | ${HOTFIX_SECURE_PROTOCOL_FILTER} }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443`,
                                     },
                                 ],
                             },

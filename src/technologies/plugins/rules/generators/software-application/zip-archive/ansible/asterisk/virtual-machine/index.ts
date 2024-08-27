@@ -10,7 +10,8 @@ import {
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveSourceArchiveTask,
+    AnsibleUnarchiveZipArchiveFileTask,
+    AnsibleUnarchiveZipArchiveUrlTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -52,10 +53,20 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
+                                            name: 'install operational dependencies',
+                                            'ansible.builtin.apt': {
+                                                name: 'unzip',
+                                                update_cache: 'yes',
+                                            },
+                                        },
+                                        {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveSourceArchiveTask(),
+                                            ...AnsibleUnarchiveZipArchiveFileTask(),
+                                        },
+                                        {
+                                            ...AnsibleUnarchiveZipArchiveUrlTask(),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),

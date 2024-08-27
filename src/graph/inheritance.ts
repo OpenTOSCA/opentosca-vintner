@@ -142,25 +142,29 @@ export default class Inheritance {
          * Initially check that staring type has a definition
          */
         if (check.isUndefined(types.find(it => it.name === start))) {
-            console.log(
-                types,
-                types.find(it => it.name === start)
-            )
             throw new Error(`starting ${key} "${start}" has no definition`)
         }
 
         let current: {name: string; type: T} | undefined
 
         const has = () => {
-            if (check.isDefined(current) && current.type.derived_from === ENTITY_TYPE_ROOT) return false
-            const next = peek()
-            return check.isDefined(next)
+            if (check.isUndefined(current)) return true
+            return current.type.derived_from !== ENTITY_TYPE_ROOT
         }
 
         const peek = () => {
-            if (check.isUndefined(current)) return types.find(it => it.name === start)
-            if (check.isUndefined(current.type.derived_from)) return types.find(it => it.name === fallback)
-            return types.find(it => it.name === current!.type.derived_from)
+            if (check.isUndefined(current)) {
+                return types.find(it => it.name === start)
+            }
+
+            if (check.isUndefined(current.type.derived_from)) {
+                return types.find(it => it.name === fallback)
+            }
+
+            return types.find(it => {
+                assert.isDefined(current)
+                return it.name === current.type.derived_from
+            })
         }
 
         const walk = () => {

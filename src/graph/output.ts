@@ -80,4 +80,8 @@ export default class Output extends Element {
     isOutput() {
         return true
     }
+
+    isEDMM() {
+        return true
+    }
 }
