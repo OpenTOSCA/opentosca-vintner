@@ -69,6 +69,9 @@ export function SecureApplicationProtocolPropertyDefinition(type: NodeType): {[k
     }
 }
 
+// TODO: fix this hotfix
+export const HOTFIX_SECURE_PROTOCOL_FILTER = 'regex_replace("^(.*[^s])$", "\\\\1s")'
+
 export function MetadataGenerated() {
     return {[METADATA.VINTNER_GENERATED]: 'true'}
 }
