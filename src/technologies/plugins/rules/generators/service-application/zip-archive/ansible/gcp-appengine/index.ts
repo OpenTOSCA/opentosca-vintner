@@ -29,7 +29,6 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                // TODO: this is not added
                 ...SecureApplicationProtocolPropertyDefinition(type),
                 ...GCPProviderCredentials(),
             },

@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {MetadataGenerated, OpenstackMachineCredentials, OpenstackMachineHost} from '#technologies/plugins/rules/utils'
 
-// TODO: next: implement this
+// TODO: implement this
 
 /**
  * create application directory

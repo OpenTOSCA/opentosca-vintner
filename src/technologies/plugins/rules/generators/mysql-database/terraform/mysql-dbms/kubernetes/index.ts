@@ -1,7 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
 
-// TODO: next: implement this
+// TODO: implement this
 
 /**
  * Official Kubernetes provider does not provide "kubectl exec", https://registry.terraform.io/providers/hashicorp/kubernetes

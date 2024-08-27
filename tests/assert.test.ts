@@ -1,8 +1,6 @@
 import * as assert from '#assert'
 import {expect} from 'chai'
 
-// TODO: add more tests
-
 describe('assert', () => {
     it('isStringOrNumber: is string', () => {
         expect(() => assert.isStringOrNumber('string')).not.to.throw()
