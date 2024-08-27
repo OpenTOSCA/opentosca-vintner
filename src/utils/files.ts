@@ -37,8 +37,9 @@ export function assertFile(file: string) {
     if (!isFile(file)) throw new Error(`File "${file}" does not exist`)
 }
 
-export function assertDirectory(dir: string, file = false) {
-    if (file) {
+export function assertDirectory(dir: string, options: {file?: boolean} = {}) {
+    options.file = options.file ?? false
+    if (options.file) {
         assertDirectory(path.dirname(dir))
     } else {
         if (!isDirectory(dir)) throw new Error(`Directory "${dir}" does not exist`)
@@ -308,7 +309,7 @@ export async function extractArchive(source: string, target: string) {
 
 export async function createArchive(source: string, target: string) {
     assertDirectory(source)
-    assertDirectory(target, true)
+    assertDirectory(target, {file: true})
     return new Promise<void>((resolve, reject) => {
         const archive = archiver('zip', {zlib: {level: 9}})
         const stream = fss.createWriteStream(target)

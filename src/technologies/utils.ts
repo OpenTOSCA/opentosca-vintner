@@ -27,10 +27,13 @@ export function constructImplementationName(data: {type: string; rule: RuleData}
     return `${data.type}~${constructRuleName(data.rule)}`
 }
 
+// TODO: also parse hosting stack by detecting reoccurring "->"
+export const IMPLEMENTATION_NAME_REGEX = new RegExp(
+    /(?<type>[^~]*)~(?<component>[^#]*)(#(?<artifact>[^::]*))?::(?<technology>[^@]*)(@(?<hosting>.*))?/
+)
+
 export function destructImplementationName(name: string) {
-    const result = name.match(
-        /(?<type>[^~]*)~(?<component>[^#]*)(#(?<artifact>[^::]*))?::(?<technology>[^@]*)(@(?<hosting>.*))?/
-    )
+    const result = name.match(IMPLEMENTATION_NAME_REGEX)
     assert.isDefined(result)
 
     const data = result.groups
@@ -75,8 +78,7 @@ export function constructRuleName(data: RuleData) {
 }
 
 export function isImplementation(type: string) {
-    // TODO: replace this with proper regex match
-    return type.includes('::')
+    return IMPLEMENTATION_NAME_REGEX.test(type)
 }
 
 export function isGenerated(type: NodeType) {

@@ -155,11 +155,9 @@ topology_template:
             type: mysql.database
             technology:
                 - ansible:
-                      conditions: {equal: [{variability_input: env}, STATIC]}
+                      conditions: {or: [{equal: [{variability_input: env}, STATIC]}, {equal: [{variability_input: env}, KUBERNETES]}]}
                 - terraform:
                       conditions: {equal: [{variability_input: env}, ELASTIC]}
-                - ansible:
-                      conditions: {equal: [{variability_input: env}, KUBERNETES]}
             properties:
                 - database_name: shop
                 - database_user: shop

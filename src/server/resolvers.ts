@@ -679,4 +679,15 @@ resolvers.post(
  * Cannot be controlled via API
  */
 
+/**
+ * Study
+ */
+resolvers.post(
+    '/study/technology',
+    hae.express(async (req, res, next) => {
+        const study = await Controller.study.technology(req.body)
+        res.json({study})
+    })
+)
+
 export default resolvers
