@@ -20,7 +20,7 @@ const generator: ImplementationGenerator = {
     artifact: 'zip.archive',
     hosting: ['gcp.appengine'],
     weight: 1,
-    comment: 'Terraform provides a declarative module.',
+    reasoning: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

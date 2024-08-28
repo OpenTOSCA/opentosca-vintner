@@ -13,7 +13,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    implementation: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
+    reasoning: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {
@@ -45,16 +46,16 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'add docker group',
-                                            'ansible.builtin.shell': 'groupadd -f docker',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            'ansible.builtin.group': {
+                                                name: 'docker',
                                             },
                                         },
                                         {
                                             name: 'add user to docker group',
-                                            'ansible.builtin.shell': 'usermod -aG docker {{ SELF.os_ssh_user }}',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            'ansible.builtin.user': {
+                                                name: '{{ SELF.os_ssh_user }}',
+                                                groups: 'docker',
+                                                append: 'yes',
                                             },
                                         },
                                     ],

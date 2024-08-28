@@ -20,7 +20,7 @@ const generator: ImplementationGenerator = {
     artifact: 'apt.package',
     hosting: ['*', 'virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reasoning: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

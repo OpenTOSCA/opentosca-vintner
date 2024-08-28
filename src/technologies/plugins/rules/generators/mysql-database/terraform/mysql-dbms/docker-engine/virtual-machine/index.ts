@@ -14,7 +14,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
     weight: 0.5,
-    comment:
+    reasoning:
         'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
 
     generate: (name, type) => {

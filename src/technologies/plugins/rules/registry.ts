@@ -36,7 +36,7 @@ class Registry {
                     artifact: generator.artifact,
                     hosting: generator.hosting,
                     weight: generator.weight,
-                    comment: generator.comment,
+                    comment: generator.reasoning,
                 })
             )
         }

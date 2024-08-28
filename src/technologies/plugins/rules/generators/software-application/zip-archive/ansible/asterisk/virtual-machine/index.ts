@@ -25,7 +25,7 @@ const generator: ImplementationGenerator = {
     artifact: 'zip.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
-    comment:
+    reasoning:
         'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.',
 
     generate: (name, type) => {

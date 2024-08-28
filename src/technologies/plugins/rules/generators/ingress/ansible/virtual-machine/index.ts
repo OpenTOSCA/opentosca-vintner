@@ -13,7 +13,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reasoning: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {
@@ -45,6 +45,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
+                                        // TODO: improve this
                                         {
                                             name: 'install caddy',
                                             'ansible.builtin.shell':
@@ -63,9 +64,9 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'restart caddy',
-                                            'ansible.builtin.shell': 'systemctl reload caddy',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            'ansible.builtin.systemd': {
+                                                name: 'caddy',
+                                                state: 'reloaded',
                                             },
                                         },
                                     ],

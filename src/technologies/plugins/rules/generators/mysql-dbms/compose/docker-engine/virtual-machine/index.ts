@@ -14,7 +14,7 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 1,
-    comment: 'Docker is the underlying technology.',
+    reasoning: 'Docker is the underlying technology.',
 
     generate: (name, type) => {
         return {
