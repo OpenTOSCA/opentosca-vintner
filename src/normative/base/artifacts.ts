@@ -19,6 +19,15 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
         */
+        properties: {
+            extra_opts: {
+                type: 'list',
+                entry_schema: {
+                    type: 'string',
+                },
+                default: [],
+            },
+        },
     },
     'system.package': {
         derived_from: 'artifact',

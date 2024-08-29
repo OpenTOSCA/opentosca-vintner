@@ -19,10 +19,11 @@ apt-get update
 apt-get install caddy -y
 
 # Configure caddy
-echo > /etc/caddy/Caddyfile
-echo ":80 {" >> /etc/caddy/Caddyfile
-echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
-echo "}" >> /etc/caddy/Caddyfile
+cat <<EOF > /etc/caddy/Caddyfile
+:80 {
+        reverse_proxy localhost:{{ SELF.application_port }}
+}
+EOF
 
 # Restart caddy
 systemctl reload caddy

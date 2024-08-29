@@ -1,37 +1,25 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
+import {NodeType} from '#spec/node-type'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated, OpenstackMachineCredentials, OpenstackMachineHost} from '#technologies/plugins/rules/utils'
-
-// TODO: implement this
-
-/**
- * create application directory
- * copy deployment artifact
- * extract deployment artifact
- * create vintner directory
- *
- * create env
- *
- * copy create
- * call create with env
- *
- * copy configure
- * call configure with env
- *
- * assert start
- * copy start
- * call start with env
- */
-
-/**
- * assert stop
- * copy stop
- * call stop with env
- *
- * copy delete
- * call delete with env
- *
- * delete application directory
- */
+import {
+    ApplicationDirectory,
+    BASH_HEADER,
+    BashAssertOperation,
+    BashCallOperation,
+    BashCopyOperation,
+    BashCreateApplicationDirectory,
+    BashCreateApplicationEnvironment,
+    BashCreateVintnerDirectory,
+    BashDeleteApplicationDirectory,
+    BashDownloadTarArchive,
+    BashUnarchiveTarArchiveFile,
+    JinjaWhenSourceArchiveFile,
+    MetadataGenerated,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+    TarArchiveFile,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
 const generator: ImplementationGenerator = {
     component: 'software.application',
@@ -48,9 +36,166 @@ const generator: ImplementationGenerator = {
             properties: {
                 ...OpenstackMachineCredentials(),
                 ...OpenstackMachineHost(),
+                ...ApplicationDirectory(),
+            },
+            interfaces: {
+                ...TerraformStandardOperations(),
+                defaults: {
+                    inputs: {
+                        main: {
+                            resource: {
+                                terraform_data: {
+                                    vm: [
+                                        {
+                                            connection: [
+                                                {
+                                                    host: '{{ SELF.os_ssh_host }}',
+                                                    private_key: '${file("{{ SELF.os_ssh_key_file }}")}',
+                                                    type: 'ssh',
+                                                    user: '{{ SELF.os_ssh_user }}',
+                                                },
+                                            ],
+                                            provisioner: {
+                                                file: [
+                                                    {
+                                                        source: TarArchiveFile(),
+                                                        destination: `/tmp/artifact-${name}`,
+                                                        count: `{{ (${JinjaWhenSourceArchiveFile(
+                                                            'tar.archive'
+                                                        )}) | ternary(1, 0) }}`,
+                                                    },
+                                                    {
+                                                        content: create(name, type),
+                                                        destination: `/tmp/create-${name}.sh`,
+                                                    },
+                                                    {
+                                                        content: configure(),
+                                                        destination: `/tmp/configure-${name}.sh`,
+                                                    },
+                                                    {
+                                                        content: start(),
+                                                        destination: `/tmp/start-${name}.sh`,
+                                                    },
+                                                    {
+                                                        content: stop(),
+                                                        destination: `/tmp/stop-${name}.sh`,
+                                                    },
+                                                    {
+                                                        content: del(),
+                                                        destination: `/tmp/delete-${name}.sh`,
+                                                    },
+                                                ],
+                                                'remote-exec': [
+                                                    {
+                                                        inline: [
+                                                            `sudo bash /tmp/create-${name}.sh`,
+                                                            `sudo bash /tmp/configure-${name}.sh`,
+                                                            `sudo bash /tmp/start-${name}.sh`,
+                                                        ],
+                                                    },
+                                                    {
+                                                        inline: [
+                                                            `sudo bash /tmp/stop-${name}.sh`,
+                                                            `sudo bash /tmp/delete-${name}.sh`,
+                                                        ],
+                                                        when: 'destroy',
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
             },
         }
     },
+}
+
+function create(name: string, type: NodeType) {
+    return `
+${BASH_HEADER}
+
+# Create application directory
+${BashCreateApplicationDirectory()}
+
+# Create application environment
+${BashCreateApplicationEnvironment(type)}
+
+# Download deployment artifact if required
+${BashDownloadTarArchive(name)}
+
+# Extract deployment artifact
+${BashUnarchiveTarArchiveFile(name)}
+
+# Create vintner directory
+${BashCreateVintnerDirectory()}
+
+# Copy operation
+${BashCopyOperation(MANAGEMENT_OPERATIONS.CREATE)}
+
+# Execute operation
+${BashCallOperation(MANAGEMENT_OPERATIONS.CREATE)}
+`
+}
+
+function configure() {
+    return `
+${BASH_HEADER}
+
+# Copy operation
+${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+
+# Execute operation
+${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+`
+}
+
+function start() {
+    return `
+${BASH_HEADER}
+
+# Assert operation
+${BashAssertOperation(MANAGEMENT_OPERATIONS.START)}
+
+# Copy operation
+${BashCopyOperation(MANAGEMENT_OPERATIONS.START)}
+
+# Execute operation
+${BashCallOperation(MANAGEMENT_OPERATIONS.START)}
+`
+}
+
+function stop() {
+    return `
+${BASH_HEADER}
+
+# Assert operation
+${BashAssertOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Copy operation
+${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Execute operation
+${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
+`
+}
+
+function del() {
+    return `
+${BASH_HEADER}
+
+# Copy operation
+${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Execute operation
+${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Delete application directory
+${BashDeleteApplicationDirectory()}
+`
 }
 
 export default generator
