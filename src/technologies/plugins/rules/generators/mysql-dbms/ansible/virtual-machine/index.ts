@@ -1,3 +1,4 @@
+import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostEndpointCapability,
@@ -23,7 +24,9 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
+    details:
+        '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks',
 
     generate: (name, type) => {
         return {
@@ -73,8 +76,8 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'Installing mysql',
-                                            package: {
-                                                name: '{{item}}',
+                                            'ansible.builtin.apt': {
+                                                name: '{{ item }}',
                                                 state: 'present',
                                                 update_cache: 'yes',
                                             },
@@ -87,29 +90,28 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'Start and enable mysql service',
-                                            service: {
+                                            'ansible.builtin.systemd': {
                                                 name: 'mysql',
                                                 state: 'started',
                                                 enabled: 'yes',
                                             },
                                         },
                                         {
-                                            name: 'Enable passwordless login (root)',
-                                            copy: {
-                                                dest: '/root/.my.cnf',
-                                                content: '[client]\nuser=root\npassword={{ SELF.dbms_password }}\n',
+                                            name: 'Enable passwordless login',
+                                            'ansible.builtin.copy': {
+                                                dest: '{{ item }}',
+                                                content: files.toINI({
+                                                    client: {
+                                                        user: 'root',
+                                                        password: '{{ SELF.dbms_password }}',
+                                                    },
+                                                }),
                                             },
-                                        },
-                                        {
-                                            name: 'Enable passwordless login (current)',
-                                            copy: {
-                                                dest: `/home/{{ SELF.os_ssh_user }}/.my.cnf`,
-                                                content: '[client]\nuser=root\npassword={{ SELF.dbms_password }}\n',
-                                            },
+                                            loop: ['/root/.my.cnf', '/home/{{ SELF.os_ssh_user }}/.my.cnf'],
                                         },
                                         {
                                             name: 'Configure port (e.g., since 3306 is blocked by the provider)',
-                                            lineinfile: {
+                                            'ansible.builtin.lineinfile': {
                                                 path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
                                                 regexp: '^# port',
                                                 line: 'port = {{ SELF.application_port }}',
@@ -118,7 +120,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'Enable remote login',
-                                            lineinfile: {
+                                            'ansible.builtin.lineinfile': {
                                                 path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
                                                 regexp: '^bind-address',
                                                 line: 'bind-address = 0.0.0.0',
@@ -127,7 +129,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'Restart mysql',
-                                            service: {
+                                            'ansible.builtin.systemd': {
                                                 name: 'mysql',
                                                 state: 'restarted',
                                             },

@@ -13,7 +13,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 0.5,
-    comment: 'Docker is more specialized.',
+    reason: 'Docker is more specialized.',
+    details: '"docker_container" and "docker_image" resources',
 
     generate: (name, type) => {
         return {

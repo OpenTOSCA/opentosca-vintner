@@ -13,7 +13,9 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
+    details:
+        '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks',
 
     generate: (name, type) => {
         return {
@@ -24,7 +26,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...OpenstackMachineCredentials()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: {
@@ -46,11 +48,27 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'install caddy',
-                                            'ansible.builtin.shell':
-                                                "apt install -y debian-keyring debian-archive-keyring apt-transport-https curl\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg\ncurl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list\napt-get update\napt-get install caddy -y\n",
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            name: 'add apt key',
+                                            'ansible.builtin.apt_key': {
+                                                url: 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key',
+                                                keyring: '/usr/share/keyrings/caddy-stable-archive-keyring.gpg',
+                                                state: 'present',
+                                            },
+                                        },
+                                        {
+                                            name: 'add apt repository',
+                                            'ansible.builtin.apt_repository': {
+                                                repo: 'deb [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main',
+                                                filename: 'caddy-stable',
+                                                state: 'present',
+                                            },
+                                        },
+                                        {
+                                            name: 'install package',
+                                            'ansible.builtin.apt': {
+                                                name: 'caddy',
+                                                state: 'present',
+                                                update_cache: 'yes',
                                             },
                                         },
                                         {
@@ -63,9 +81,9 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'restart caddy',
-                                            'ansible.builtin.shell': 'systemctl reload caddy',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            'ansible.builtin.systemd': {
+                                                name: 'caddy',
+                                                state: 'reloaded',
                                             },
                                         },
                                     ],

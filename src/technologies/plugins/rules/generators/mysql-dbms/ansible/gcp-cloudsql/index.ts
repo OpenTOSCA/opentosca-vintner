@@ -12,7 +12,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['gcp.cloudsql'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
+    details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks',
 
     generate: (name, type) => {
         return {
@@ -128,11 +129,19 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             name: 'Activate service account',
-                                            shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            'ansible.builtin.shell':
+                                                'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         {
                                             name: 'Delete Instance',
-                                            shell: 'gcloud sql instances delete {{ SELF.dbms_name }} --quiet',
+                                            'ansible.builtin.shell':
+                                                'gcloud sql instances delete {{ SELF.dbms_name }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                     ],
                                 },

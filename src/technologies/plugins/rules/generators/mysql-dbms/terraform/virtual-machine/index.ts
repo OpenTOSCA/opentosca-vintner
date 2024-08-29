@@ -1,6 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostEndpointCapability,
+    BASH_HEADER,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -9,8 +10,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const script = `
-#!/usr/bin/env bash
-set -e
+${BASH_HEADER}
 export DEBIAN_FRONTEND="noninteractive"
 
 DBMS_PASSWORD=$1
@@ -55,7 +55,9 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['virtual.machine'],
     weight: 0,
-    comment: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
+    reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
+    details:
+        '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner',
 
     generate: (name, type) => {
         return {

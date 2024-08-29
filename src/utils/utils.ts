@@ -28,6 +28,15 @@ export function toList<T>(data: T | T[] | undefined): T[] {
     return filterNotNull([data])
 }
 
+export function toMap(list: {name: string; value: string}[]) {
+    return list.reduce<{
+        [key: string]: string
+    }>((env, it) => {
+        env[it.name] = it.value
+        return env
+    }, {})
+}
+
 export function firstValue<V>(map: {[key: string]: V}): V {
     return Object.values(map).values().next().value
 }

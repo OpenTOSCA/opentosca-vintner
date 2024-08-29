@@ -14,7 +14,8 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 0.5,
-    comment: 'Docker is more specialized.',
+    reason: 'Docker is more specialized.',
+    details: '"docker_container" and "docker_image" resources',
 
     generate: (name, type) => {
         return {
@@ -73,7 +74,7 @@ const generator: ImplementationGenerator = {
                                 docker_container: {
                                     application: [
                                         {
-                                            env: mapProperties(type, {format: 'ini', quote: false}),
+                                            env: mapProperties(type, {format: 'env', quote: false}),
                                             image: '${docker_image.image.image_id}',
                                             name: '{{ SELF.application_name }}',
                                             network_mode: 'host',

@@ -7,19 +7,23 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    ZipArchiveFile,
+    SourceArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 // TODO: port is now 443
 
+const artifact = 'zip.archive'
+
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'zip.archive',
+    artifact,
     hosting: ['gcp.appengine'],
     weight: 0,
-    comment: 'Custom module with imperative parts, while Terraform provides a declarative module.',
+    reason: 'Custom module with imperative parts, while Terraform provides a declarative module.',
+    details:
+        '"ansible.builtin.shell", "ansible.builtin.tempfile", "ansible.builtin.unarchive", and "ansible.builtin.copy" tasks',
 
     generate: (name, type) => {
         return {
@@ -44,12 +48,20 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         {
                                             name: 'activate service account',
-                                            shell: 'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            'ansible.builtin.shell':
+                                                'gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         // https://cloud.google.com/sdk/gcloud/reference/app/create
                                         {
                                             name: 'enable GCP AppEngine',
-                                            shell: 'gcloud app create --region {{ SELF.gcp_region }} --quiet',
+                                            'ansible.builtin.shell':
+                                                'gcloud app create --region {{ SELF.gcp_region }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                             register: 'app_create_command',
                                             failed_when: [
                                                 "'Created' not in app_create_command.stderr",
@@ -65,8 +77,8 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'extract deployment artifact in working directory',
-                                            unarchive: {
-                                                src: ZipArchiveFile(),
+                                            'ansible.builtin.unarchive': {
+                                                src: SourceArchiveFile(artifact),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },
@@ -93,14 +105,21 @@ const generator: ImplementationGenerator = {
                                         // https://cloud.google.com/sdk/gcloud/reference/app/deploy
                                         {
                                             name: 'create app',
-                                            shell: 'gcloud app deploy {{ directory.path }} --quiet',
+                                            'ansible.builtin.shell': 'gcloud app deploy {{ directory.path }} --quiet',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
 
                                         // https://cloud.google.com/sdk/gcloud/reference/app/browse
                                         {
                                             name: 'browse app',
                                             register: 'browse_app',
-                                            shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet ',
+                                            'ansible.builtin.shell':
+                                                'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet ',
+                                            args: {
+                                                executable: '/bin/bash',
+                                            },
                                         },
                                         {
                                             name: 'set attributes',

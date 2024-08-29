@@ -6,12 +6,13 @@ import {
     AnsibleCopyOperationTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleCreateApplicationEnvironment,
+    AnsibleCreateApplicationSystemdUnit,
     AnsibleCreateVintnerDirectory,
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveTarArchiveFileTask,
-    AnsibleUnarchiveTarArchiveUrlTask,
+    AnsibleUnarchiveSourceArchiveFileTask,
+    AnsibleUnarchiveSourceArchiveUrlTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -19,27 +20,17 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-const service = `
-[Unit]
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
-WorkingDirectory={{ SELF.application_directory }}
-EnvironmentFile={{ SELF.application_directory }}/.env
-
-[Install]
-WantedBy=multi-user.target
-`
+const artifact = 'tar.archive'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'tar.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
+    reason: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
+    details:
+        '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements',
 
     generate: (name, type) => {
         return {
@@ -69,10 +60,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveFileTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveUrlTask(),
+                                            ...AnsibleUnarchiveSourceArchiveUrlTask(artifact),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),
@@ -87,11 +78,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
-                                            name: 'create service',
-                                            copy: {
-                                                dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
-                                                content: service,
-                                            },
+                                            ...AnsibleCreateApplicationSystemdUnit(),
                                         },
                                         {
                                             name: 'enable service',

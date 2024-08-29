@@ -17,7 +17,8 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['gcp.cloudrun'],
     weight: 1,
-    comment: 'Terraform provides a declarative module.',
+    reason: 'Terraform provides a declarative module.',
+    details: '"google_cloud_run_v2_service" and "google_cloud_run_service_iam_binding" resources',
 
     generate: (name, type) => {
         return {

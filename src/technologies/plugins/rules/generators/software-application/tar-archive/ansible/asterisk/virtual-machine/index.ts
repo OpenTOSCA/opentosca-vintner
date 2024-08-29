@@ -10,8 +10,8 @@ import {
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveTarArchiveFileTask,
-    AnsibleUnarchiveTarArchiveUrlTask,
+    AnsibleUnarchiveSourceArchiveFileTask,
+    AnsibleUnarchiveSourceArchiveUrlTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -19,14 +19,17 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+const artifact = 'tar.archive'
+
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'tar.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
-    comment:
-        'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.',
+    reason: 'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., "service.application".',
+    details:
+        '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements',
 
     generate: (name, type) => {
         return {
@@ -56,10 +59,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveFileTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveUrlTask(),
+                                            ...AnsibleUnarchiveSourceArchiveUrlTask(artifact),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),

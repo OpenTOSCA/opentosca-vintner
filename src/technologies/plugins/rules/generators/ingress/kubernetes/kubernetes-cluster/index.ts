@@ -13,7 +13,8 @@ const generator: ImplementationGenerator = {
     technology: 'kubernetes',
     hosting: ['kubernetes.cluster'],
     weight: 1,
-    comment: 'Kubernetes is the underlying technology.',
+    reason: 'Kubernetes is the underlying technology.',
+    details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
         return {
@@ -24,7 +25,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...KubernetesCredentials()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: 'not implemented',

@@ -17,7 +17,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
     weight: 1,
-    comment: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

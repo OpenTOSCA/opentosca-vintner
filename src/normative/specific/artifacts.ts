@@ -19,15 +19,6 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
         */
-        properties: {
-            extra_opts: {
-                type: 'list',
-                entry_schema: {
-                    type: 'string',
-                },
-                default: [],
-            },
-        },
     },
     'tar.archive': {
         derived_from: 'source.archive',
@@ -36,15 +27,6 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
         */
-        properties: {
-            extra_opts: {
-                type: 'list',
-                entry_schema: {
-                    type: 'string',
-                },
-                default: [],
-            },
-        },
     },
     'apt.package': {
         derived_from: 'system.package',

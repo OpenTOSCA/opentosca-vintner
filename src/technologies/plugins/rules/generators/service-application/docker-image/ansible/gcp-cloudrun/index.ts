@@ -16,7 +16,8 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['gcp.cloudrun'],
     weight: 0,
-    comment: 'Custom module with imperative parts, while Terraform provides a declarative module.',
+    reason: 'Custom module with imperative parts, while Terraform provides a declarative module.',
+    details: '"ansible.builtin.shell", "ansible.builtin.tempfile", and "ansible.builtin.copy" tasks ',
 
     generate: (name, type) => {
         return {

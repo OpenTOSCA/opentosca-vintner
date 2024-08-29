@@ -11,7 +11,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    comment: 'Kubernetes is more specialized.',
+    reason: 'Kubernetes is more specialized.',
+    details: '"kubernetes_service_v1" resource',
 
     generate: (name, type) => {
         return {
@@ -22,7 +23,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...KubernetesCredentials()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: 'not implemented',

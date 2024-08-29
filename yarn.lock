@@ -783,6 +783,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ini@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@types/ini@npm:4.1.1"
+  checksum: 5d17a4af098bcf0263c767515a3856ebdd61a84ba78bd132e1cf7d05ed29a928af4ea80657a1226b39a4c9b3d5e1349a2bbaaa0c5c7ec068034ba7ae768f63cf
+  languageName: node
+  linkType: hard
+
 "@types/js-yaml@npm:^4.0.5":
   version: 4.0.5
   resolution: "@types/js-yaml@npm:4.0.5"
@@ -3833,6 +3840,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ini@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "ini@npm:4.1.3"
+  checksum: 004b2be42388877c58add606149f1a0c7985c90a0ba5dbf45a4738fdc70b0798d922caecaa54617029626505898ac451ff0537a08b949836b49d3267f66542c9
+  languageName: node
+  linkType: hard
+
 "ini@npm:~1.3.0":
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
@@ -5492,6 +5506,7 @@ __metadata:
     "@types/fs-extra": ^11.0.1
     "@types/glob": ^8.1.0
     "@types/http-errors": ^2.0.1
+    "@types/ini": ^4.1.1
     "@types/js-yaml": ^4.0.5
     "@types/json-diff": ^0.9.1
     "@types/license-checker": ^25.0.3
@@ -5530,6 +5545,7 @@ __metadata:
     fs-extra: ^11.2.0
     glob: ^10.4.1
     http-errors: ^2.0.0
+    ini: ^4.1.3
     is-wsl: ^2.2.0
     js-yaml: ^4.1.0
     json-diff: ^1.0.6

@@ -14,7 +14,8 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
-    comment: 'Kubernetes is the underlying technology.',
+    reason: 'Kubernetes is the underlying technology.',
+    details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
         return {
