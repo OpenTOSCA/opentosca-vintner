@@ -13,8 +13,7 @@ const generator: ImplementationGenerator = {
     technology: 'kubernetes',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
     weight: 0,
-    reasoning:
-        'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
+    reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
         return {

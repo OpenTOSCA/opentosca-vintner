@@ -12,7 +12,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['gcp.cloudsql'],
     weight: 1,
-    reasoning: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
+    details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks',
 
     generate: (name, type) => {
         return {

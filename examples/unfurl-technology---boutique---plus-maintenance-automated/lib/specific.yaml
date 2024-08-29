@@ -3719,13 +3719,13 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                     - name: add docker group
-                                      ansible.builtin.shell: groupadd -f docker
-                                      args:
-                                          executable: /usr/bin/bash
+                                      ansible.builtin.group:
+                                          name: docker
                                     - name: add user to docker group
-                                      ansible.builtin.shell: usermod -aG docker {{ SELF.os_ssh_user }}
-                                      args:
-                                          executable: /usr/bin/bash
+                                      ansible.builtin.user:
+                                          name: '{{ SELF.os_ssh_user }}'
+                                          groups: docker
+                                          append: 'yes'
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'

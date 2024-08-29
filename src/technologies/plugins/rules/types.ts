@@ -23,6 +23,6 @@ export type ImplementationGenerator = {
     generate: (name: string, type: NodeType) => NodeType
     weight: number
     // TODO: make this mandatory
-    implementation?: string
-    reasoning: string
+    details?: string
+    reason: string
 }

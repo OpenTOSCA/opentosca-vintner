@@ -11,7 +11,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['gcp.cloudsql'],
     weight: 1,
-    reasoning: 'Terraform provides a declarative module.',
+    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

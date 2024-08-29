@@ -1,3 +1,4 @@
+import * as files from '#files'
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
@@ -19,27 +20,13 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-const service = `
-[Unit]
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
-WorkingDirectory={{ SELF.application_directory }}
-EnvironmentFile={{ SELF.application_directory }}/.env
-
-[Install]
-WantedBy=multi-user.target
-`
-
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
     artifact: 'tar.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 1,
-    reasoning: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
+    reason: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
 
     generate: (name, type) => {
         return {
@@ -86,11 +73,25 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
+                                        // TODO: mv this into utils
                                         {
                                             name: 'create service',
                                             copy: {
                                                 dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
-                                                content: service,
+                                                content: files.toINI({
+                                                    Unit: {
+                                                        After: 'network.target',
+                                                    },
+                                                    Service: {
+                                                        Type: 'simple',
+                                                        ExecStart: '/usr/bin/bash -c ". ./.vintner/start.sh"',
+                                                        WorkingDirectory: '{{ SELF.application_directory }}',
+                                                        EnvironmentFile: '{{ SELF.application_directory }}/.env',
+                                                    },
+                                                    Install: {
+                                                        WantedBy: 'multi-user.target',
+                                                    },
+                                                }),
                                             },
                                         },
                                         {

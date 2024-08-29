@@ -11,7 +11,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    reasoning: 'Kubernetes is more specialized.',
+    reason: 'Kubernetes is more specialized.',
+    details: '"kubernetes_service_v1" resource',
 
     generate: (name, type) => {
         return {

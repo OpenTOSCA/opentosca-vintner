@@ -17,7 +17,8 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 1,
-    reasoning: 'Docker is the underlying technology.',
+    reason: 'Docker is the underlying technology.',
+    details: 'docker compose manifest generated and applied',
 
     generate: (name, type) => {
         return {

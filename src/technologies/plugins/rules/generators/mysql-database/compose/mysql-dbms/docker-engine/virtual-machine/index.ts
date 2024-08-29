@@ -8,8 +8,7 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
     weight: 0,
-    reasoning:
-        'One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.',
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
         return {

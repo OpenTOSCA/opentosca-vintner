@@ -7,7 +7,7 @@ import {METADATA, PROPERTIES} from './types'
 // TODO: next: consider inherited types
 export function mapProperties(
     type: NodeType,
-    options: {quote?: boolean; format?: 'map' | 'list' | 'ini'; ignore?: string[]} = {}
+    options: {quote?: boolean; format?: 'map' | 'list' | 'env'; ignore?: string[]} = {}
 ) {
     options.quote = options.quote ?? true
     options.format = options.format ?? 'list'
@@ -44,7 +44,8 @@ export function mapProperties(
             return env
         }, {})
 
-    if (options.format === 'ini') return list.map(it => `${it.name}=${it.value}`)
+    // TODO: use files.toENV
+    if (options.format === 'env') return list.map(it => `${it.name}=${it.value}`)
 
     throw new UnexpectedError()
 }
@@ -373,7 +374,7 @@ export function AnsibleCreateVintnerDirectory() {
 }
 
 export function AnsibleCreateApplicationEnvironment(type: NodeType) {
-    const env = mapProperties(type, {format: 'ini'})
+    const env = mapProperties(type, {format: 'env'})
     assert.isArray(env)
 
     return {

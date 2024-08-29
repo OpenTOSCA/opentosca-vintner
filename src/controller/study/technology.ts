@@ -106,6 +106,8 @@ export default async function (options: StudyTechnologyOptions) {
     const map = graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules ?? {}
     if (check.isString(map)) throw new UnexpectedError()
 
+    console.log(map)
+
     /**
      * Table
      */
@@ -117,7 +119,8 @@ export default async function (options: StudyTechnologyOptions) {
                 Component: rule.component,
                 Hosting: rule.hosting,
                 Quality: rule.weight,
-                Comment: rule.comment,
+                Reason: rule.reason,
+                // Details: rule.details,
             })
         })
     })
@@ -359,7 +362,8 @@ type RuleData = {
     Component: string
     Hosting?: string | string[]
     Quality?: number
-    Comment?: string
+    Reason?: string
+    Details?: string
 }
 
 type QualityData = {

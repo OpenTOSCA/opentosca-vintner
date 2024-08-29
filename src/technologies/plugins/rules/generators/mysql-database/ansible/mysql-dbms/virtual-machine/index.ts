@@ -13,7 +13,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'virtual.machine'],
     weight: 1,
-    reasoning: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

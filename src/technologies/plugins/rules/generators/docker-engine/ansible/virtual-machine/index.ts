@@ -13,8 +13,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['virtual.machine'],
     weight: 1,
-    implementation: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
-    reasoning: 'Primary use case due to the specialization of Ansible.',
+    reason: 'Primary use case due to the specialization of Ansible.',
+    details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
 
     generate: (name, type) => {
         return {

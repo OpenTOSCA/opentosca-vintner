@@ -10,8 +10,8 @@ const generator: ImplementationGenerator = {
     component: 'gcp.service',
     technology: 'terraform',
     weight: 1,
-    implementation: '"google_project_service" resource',
-    reasoning: 'Terraform provides a declarative module.',
+    reason: 'Terraform provides a declarative module.',
+    details: '"google_project_service" resource',
 
     generate: (name, type) => {
         return {

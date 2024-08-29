@@ -9,6 +9,7 @@ import * as ejs from 'ejs'
 import extract from 'extract-zip'
 import * as fss from 'fs'
 import * as fse from 'fs-extra'
+import * as ini from 'ini'
 import * as yaml from 'js-yaml'
 import lnk from 'lnk'
 import _ from 'lodash'
@@ -198,6 +199,10 @@ export function toENV(obj: {[key: string]: string | number | boolean}) {
     return Object.entries(obj)
         .map(([key, value]) => `${key}="${value}"`)
         .join(`\n`)
+}
+
+export function toINI(obj: any) {
+    return ini.stringify(obj)
 }
 
 export function copy(source: string, target: string, options: {overwrite?: boolean} = {}) {

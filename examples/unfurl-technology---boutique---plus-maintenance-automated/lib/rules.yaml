@@ -7,306 +7,314 @@
 ansible:
     - component: gcp.service
       weight: 1
-      comment: Ansible provides a declarative module
+      reason: Ansible provides a declarative module
+      details: '"google.cloud.gcp_serviceusage_service" task'
     - component: docker.engine
       hosting:
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
+      details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks'
     - component: ingress
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
+      details: '"kubernetes.core.k8s" task'
     - component: ingress
       hosting:
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
+      details: '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks'
     - component: mysql.dbms
       hosting:
           - gcp.cloudsql
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: mysql.dbms
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
     - component: mysql.dbms
       hosting:
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: virtual.machine
       artifact: virtual.machine.image
       hosting:
           - openstack.provider
       weight: 0.5
-      comment: Terraform is more specialized.
+      reason: Terraform is more specialized.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - gcp.cloudsql
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - kubernetes.cluster
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: mysql.dbms
       hosting:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      comment: Docker is more specialized
+      reason: Docker is more specialized
     - component: service.application
       artifact: docker.image
       hosting:
           - gcp.cloudrun
       weight: 0
-      comment: Custom module with imperative parts, while Terraform provides a declarative module.
+      reason: Custom module with imperative parts, while Terraform provides a declarative module.
     - component: service.application
       artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
     - component: service.application
       artifact: zip.archive
       hosting:
           - gcp.appengine
       weight: 0
-      comment: Custom module with imperative parts, while Terraform provides a declarative module.
+      reason: Custom module with imperative parts, while Terraform provides a declarative module.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - docker.engine
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: service.application
       artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      comment: Docker is more specialized.
+      reason: Docker is more specialized.
     - component: service.application
       artifact: tar.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible. Special integration for systemd.
+      reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
     - component: service.application
       artifact: zip.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible. Special integration for systemd.
+      reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
     - component: software.application
       artifact: apt.package
       hosting:
           - '*'
           - virtual.machine
       weight: 1
-      comment: Primary use case due to the specialization of Ansible.
+      reason: Primary use case due to the specialization of Ansible.
     - component: software.application
       artifact: tar.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0.5
-      comment: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+      reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
     - component: software.application
       artifact: zip.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0.5
-      comment: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+      reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 terraform:
     - component: gcp.service
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
+      details: '"google_project_service" resource'
     - component: docker.engine
       hosting:
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      details: '"remote-exec" provider'
     - component: ingress
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
+      details: '"kubernetes_service_v1" resource'
     - component: ingress
       hosting:
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
     - component: mysql.dbms
       hosting:
           - gcp.cloudsql
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
     - component: mysql.dbms
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
     - component: mysql.dbms
       hosting:
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
     - component: virtual.machine
       artifact: virtual.machine.image
       hosting:
           - openstack.provider
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - gcp.cloudsql
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - kubernetes.cluster
       weight: 0
-      comment: Ansible is more specialized.
+      reason: Ansible is more specialized.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - virtual.machine
       weight: 0.5
-      comment: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+      reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: mysql.dbms
       hosting:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      comment: Docker is more specialized.
+      reason: Docker is more specialized.
     - component: service.application
       artifact: docker.image
       hosting:
           - gcp.cloudrun
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
     - component: service.application
       artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
-      comment: Kubernetes is more specialized.
+      reason: Kubernetes is more specialized.
     - component: service.application
       artifact: zip.archive
       hosting:
           - gcp.appengine
       weight: 1
-      comment: Terraform provides a declarative module.
+      reason: Terraform provides a declarative module.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - docker.engine
           - virtual.machine
       weight: 0.5
-      comment: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+      reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: service.application
       artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      comment: Docker is more specialized.
+      reason: Docker is more specialized.
     - component: service.application
       artifact: tar.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
     - component: service.application
       artifact: zip.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
     - component: software.application
       artifact: apt.package
       hosting:
           - '*'
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
     - component: software.application
       artifact: tar.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
     - component: software.application
       artifact: zip.archive
       hosting:
           - '*'
           - virtual.machine
       weight: 0
-      comment: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
+      reason: Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".
 kubernetes:
     - component: ingress
       hosting:
           - kubernetes.cluster
       weight: 1
-      comment: Kubernetes is the underlying technology.
+      reason: Kubernetes is the underlying technology.
     - component: mysql.dbms
       hosting:
           - kubernetes.cluster
       weight: 1
-      comment: Kubernetes is the underlying technology.
+      reason: Kubernetes is the underlying technology.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - kubernetes.cluster
       weight: 0
-      comment: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
+      reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
     - component: service.application
       artifact: docker.image
       hosting:
           - kubernetes.cluster
       weight: 1
-      comment: Kubernetes is the underlying technology.
+      reason: Kubernetes is the underlying technology.
 compose:
     - component: mysql.dbms
       hosting:
           - docker.engine
           - virtual.machine
       weight: 1
-      comment: Docker is the underlying technology.
+      reason: Docker is the underlying technology.
     - component: mysql.database
       hosting:
           - mysql.dbms
           - docker.engine
           - virtual.machine
       weight: 0
-      comment: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
     - component: service.application
       artifact: docker.image
       hosting:
           - docker.engine
           - virtual.machine
       weight: 1
-      comment: Docker is the underlying technology.
+      reason: Docker is the underlying technology.

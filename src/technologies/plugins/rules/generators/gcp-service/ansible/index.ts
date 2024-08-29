@@ -10,8 +10,8 @@ const generator: ImplementationGenerator = {
     component: 'gcp.service',
     technology: 'ansible',
     weight: 1,
-    implementation: '"google.cloud.gcp_serviceusage_service" task',
-    reasoning: 'Ansible provides a declarative module',
+    reason: 'Ansible provides a declarative module',
+    details: '"google.cloud.gcp_serviceusage_service" task',
 
     generate: (name, type) => {
         return {

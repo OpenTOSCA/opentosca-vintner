@@ -11,8 +11,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    implementation: '"kubernetes.core.k8s" task',
-    reasoning: 'Kubernetes is more specialized.',
+    reason: 'Kubernetes is more specialized.',
+    details: '"kubernetes.core.k8s" task',
 
     generate: (name, type) => {
         return {

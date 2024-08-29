@@ -12,8 +12,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['virtual.machine'],
     weight: 0,
-    implementation: '"remote-exec" provider',
-    reasoning: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
+    reason: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
+    details: '"remote-exec" provider',
 
     generate: (name, type) => {
         return {
