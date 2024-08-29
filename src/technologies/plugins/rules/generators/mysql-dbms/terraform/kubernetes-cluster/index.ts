@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
     reason: 'Kubernetes is more specialized.',
+    details: '"kubernetes_deployment_v1" and "kubernetes_service_v1" resources',
 
     generate: (name, type) => {
         return {

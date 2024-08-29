@@ -14,6 +14,7 @@ const generator: ImplementationGenerator = {
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 0.5,
     reason: 'Docker is more specialized.',
+    details: '"docker_container" and "docker_image" resources',
 
     generate: (name, type) => {
         return {

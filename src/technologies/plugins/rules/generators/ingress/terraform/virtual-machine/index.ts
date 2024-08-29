@@ -8,18 +8,23 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const script = `
-apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
+#!/usr/bin/env bash
+set -e
 
+# Install caddy
+apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
 curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | tee /etc/apt/sources.list.d/caddy-stable.list
 apt-get update
 apt-get install caddy -y
 
+# Configure caddy
 echo > /etc/caddy/Caddyfile
 echo ":80 {" >> /etc/caddy/Caddyfile
 echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
 echo "}" >> /etc/caddy/Caddyfile
 
+# Restart caddy
 systemctl reload caddy
 `
 
