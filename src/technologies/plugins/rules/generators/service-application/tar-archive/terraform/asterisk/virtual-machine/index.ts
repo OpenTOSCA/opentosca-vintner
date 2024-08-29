@@ -194,10 +194,10 @@ systemctl stop {{ SELF.application_name }}
 ${BASH_HEADER}
 
 # Copy operation
-${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
+${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Execute operation
-${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
+${BashCallOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Delete application directory
 ${BashDeleteApplicationDirectory()}

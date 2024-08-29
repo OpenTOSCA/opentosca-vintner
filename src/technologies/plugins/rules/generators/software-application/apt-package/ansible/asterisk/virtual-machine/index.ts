@@ -55,7 +55,7 @@ const generator: ImplementationGenerator = {
                                             args: {
                                                 executable: '/bin/bash',
                                             },
-                                            when: '".artifacts::apt_package::script" | eval != None',
+                                            when: '".artifacts::apt_package::script" | eval != ""',
                                         },
                                         {
                                             name: 'add apt key',
@@ -65,7 +65,7 @@ const generator: ImplementationGenerator = {
                                                     '/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::apt_package::key" | eval != None',
+                                            when: '".artifacts::apt_package::key" | eval != ""',
                                         },
                                         {
                                             name: 'add apt repository',
@@ -74,7 +74,7 @@ const generator: ImplementationGenerator = {
                                                 filename: '{{ ".artifacts::apt_package::repository" | eval }}',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::apt_package::source" | eval != None',
+                                            when: '".artifacts::apt_package::source" | eval != ""',
                                         },
                                         {
                                             name: 'update apt cache',
@@ -88,7 +88,7 @@ const generator: ImplementationGenerator = {
                                                 name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}',
                                                 state: 'present',
                                             },
-                                            when: '".artifacts::apt_package::dependencies" | eval != None',
+                                            when: '".artifacts::apt_package::dependencies" | eval != ""',
                                         },
                                         {
                                             name: 'install package',
