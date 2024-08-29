@@ -27,6 +27,8 @@ const generator: ImplementationGenerator = {
     hosting: ['*', 'virtual.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
+    details:
+        '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements',
 
     generate: (name, type) => {
         return {
@@ -73,10 +75,9 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
-                                        // TODO: mv this into utils
                                         {
                                             name: 'create service',
-                                            copy: {
+                                            'ansible.builtin.copy': {
                                                 dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
                                                 content: files.toINI({
                                                     Unit: {

@@ -379,7 +379,7 @@ export function AnsibleCreateApplicationEnvironment(type: NodeType) {
 
     return {
         name: 'create .env file',
-        copy: {
+        'ansible.builtin.copy': {
             dest: '{{ SELF.application_directory }}/.env',
             content: env.join(`\n`) + '\n',
         },

@@ -25,7 +25,9 @@ const generator: ImplementationGenerator = {
     artifact: 'tar.archive',
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
-    reason: 'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.',
+    reason: 'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., "service.application".',
+    details:
+        '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements',
 
     generate: (name, type) => {
         return {
