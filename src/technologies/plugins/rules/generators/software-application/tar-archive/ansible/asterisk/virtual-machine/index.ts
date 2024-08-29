@@ -19,10 +19,12 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+const artifact = 'tar.archive'
+
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'ansible',
-    artifact: 'tar.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 0.5,
     reason: 'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., "service.application".',
@@ -57,10 +59,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveSourceArchiveFileTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
-                                            ...AnsibleUnarchiveSourceArchiveUrlTask(),
+                                            ...AnsibleUnarchiveSourceArchiveUrlTask(artifact),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),

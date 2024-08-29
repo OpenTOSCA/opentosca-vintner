@@ -14,6 +14,12 @@ artifact_types:
     source.archive:
         derived_from: artifact
         description: application packaged as archive
+        properties:
+            extra_opts:
+                type: list
+                entry_schema:
+                    type: string
+                default: []
     system.package:
         derived_from: artifact
         properties:
@@ -736,18 +742,24 @@ node_types:
                                           file:
                                               - content: |
 
-                                                    apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
+                                                    #!/usr/bin/env bash
+                                                    set -e
 
+                                                    # Install caddy
+                                                    apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
                                                     curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
                                                     curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | tee /etc/apt/sources.list.d/caddy-stable.list
                                                     apt-get update
                                                     apt-get install caddy -y
 
-                                                    echo > /etc/caddy/Caddyfile
-                                                    echo ":80 {" >> /etc/caddy/Caddyfile
-                                                    echo "        reverse_proxy localhost:{{ SELF.application_port }}" >> /etc/caddy/Caddyfile
-                                                    echo "}" >> /etc/caddy/Caddyfile
+                                                    # Configure caddy
+                                                    cat <<EOF > /etc/caddy/Caddyfile
+                                                    :80 {
+                                                            reverse_proxy localhost:{{ SELF.application_port }}
+                                                    }
+                                                    EOF
 
+                                                    # Restart caddy
                                                     systemctl reload caddy
                                                 destination: /tmp/install-ingress.sh
                                           remote-exec:

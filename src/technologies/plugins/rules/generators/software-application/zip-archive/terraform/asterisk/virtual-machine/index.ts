@@ -1,37 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {MetadataGenerated, OpenstackMachineCredentials, OpenstackMachineHost} from '#technologies/plugins/rules/utils'
 
-// TODO: implement this
-
-/**
- * create application directory
- * copy deployment artifact
- * extract deployment artifact
- * create vintner directory
- *
- * create env
- *
- * copy create
- * call create with env
- *
- * copy configure
- * call configure with env
- *
- * assert start
- * copy start
- * call start with env
- */
-
-/**
- * assert stop
- * copy stop
- * call stop with env
- *
- * copy delete
- * call delete with env
- *
- * delete application directory
- */
+// TODO: next: implement this
 
 const generator: ImplementationGenerator = {
     component: 'software.application',
