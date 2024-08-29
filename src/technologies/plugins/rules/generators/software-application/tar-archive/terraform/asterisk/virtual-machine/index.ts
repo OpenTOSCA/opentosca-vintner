@@ -115,8 +115,7 @@ class Generator extends GeneratorAbstract {
     }
 
     private create(name: string, type: NodeType) {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Create application directory
 ${BashCreateApplicationDirectory()}
@@ -142,8 +141,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CREATE)}
     }
 
     private configure() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
@@ -154,8 +152,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
     }
 
     private start() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Assert operation
 ${BashAssertOperation(MANAGEMENT_OPERATIONS.START)}
@@ -169,8 +166,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.START)}
     }
 
     private stop() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Assert operation
 ${BashAssertOperation(MANAGEMENT_OPERATIONS.STOP)}
@@ -184,8 +180,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
     }
 
     private delete() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}

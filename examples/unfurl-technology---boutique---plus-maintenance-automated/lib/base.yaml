@@ -27,26 +27,32 @@ artifact_types:
                 type: string
                 required: false
                 description: URL of an installation script
+                default: ''
             repository:
                 type: string
                 required: false
                 description: name of the repository (required if source is set)
+                default: ''
             key:
                 type: string
                 required: false
                 description: URL of the apt key which signs the apt repository (required if source is set)
+                default: ''
             source:
                 type: string
                 required: false
                 description: source of the repository
+                default: ''
             dependencies:
                 type: string
                 required: false
                 description: Comma separated list of apt packages that are additionally installed
+                default: ''
             env:
                 type: string
-                default: ''
+                required: false
                 description: Space separated env variables
+                default: ''
     container.image:
         derived_from: artifact
         description: expects image reference in "file"

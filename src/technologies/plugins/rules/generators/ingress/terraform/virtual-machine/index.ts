@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    BASH_HEADER,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -8,8 +9,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const script = `
-#!/usr/bin/env bash
-set -e
+${BASH_HEADER}
 
 # Install caddy
 apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl

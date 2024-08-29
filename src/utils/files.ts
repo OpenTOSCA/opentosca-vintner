@@ -151,7 +151,7 @@ export function storeJSON(file: string, data: any | string) {
 }
 
 export function storeENV(file: string, data: any | string) {
-    storeFile(path.resolve(file), check.isString(data) ? data : toENV(data))
+    storeFile(path.resolve(file), check.isString(data) ? data : toENV(data).join('\n'))
     return file
 }
 
@@ -195,12 +195,14 @@ export function toJSON(obj: any) {
     return utils.pretty(obj)
 }
 
-export function toENV(obj: {[key: string]: string | number | boolean} | {[key: string]: string | number | boolean}[]) {
-    return toINI(obj)
+export function toENV(obj: {[key: string]: string | number | boolean}, options: {quote?: boolean} = {}) {
+    options.quote = options.quote ?? true
+    const quote = options.quote ? '"' : ''
+    return Object.entries(obj).map(([key, value]) => `${key}=${quote}${value}${quote}`)
 }
 
 export function toINI(obj: any) {
-    return ini.stringify(obj)
+    return ini.stringify(obj, {platform: 'linux'})
 }
 
 export function copy(source: string, target: string, options: {overwrite?: boolean} = {}) {

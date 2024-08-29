@@ -1,6 +1,7 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostEndpointCapability,
+    BASH_HEADER,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
@@ -9,8 +10,7 @@ import {
 } from '#technologies/plugins/rules/utils'
 
 const script = `
-#!/usr/bin/env bash
-set -e
+${BASH_HEADER}
 export DEBIAN_FRONTEND="noninteractive"
 
 DBMS_PASSWORD=$1

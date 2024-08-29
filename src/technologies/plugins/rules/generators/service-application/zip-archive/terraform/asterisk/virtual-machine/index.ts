@@ -121,8 +121,7 @@ class Generator extends GeneratorAbstract {
     }
 
     private create(name: string, type: NodeType) {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Create application directory
 ${BashCreateApplicationDirectory()}
@@ -148,8 +147,7 @@ systemctl enable {{ SELF.application_name }}
     }
 
     private configure() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
@@ -160,8 +158,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
     }
 
     private start() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Assert operation
 ${BashAssertOperation(MANAGEMENT_OPERATIONS.START)}
@@ -172,8 +169,7 @@ systemctl start {{ SELF.application_name }}
     }
 
     private stop() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Assert operation
 ${BashAssertOperation(MANAGEMENT_OPERATIONS.STOP)}
@@ -190,8 +186,7 @@ systemctl stop {{ SELF.application_name }}
     }
 
     private delete() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}
@@ -210,3 +205,5 @@ systemctl daemon-reload
 `
     }
 }
+
+export default new Generator()

@@ -18,7 +18,7 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-export class Generator extends GeneratorAbstract {
+class Generator extends GeneratorAbstract {
     component = 'software.application'
     technology = 'terraform'
     artifact = 'apt.archive'
@@ -105,8 +105,7 @@ export class Generator extends GeneratorAbstract {
     }
 
     private create(name: string, type: NodeType) {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Run setup script 
 if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
@@ -159,8 +158,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CREATE)}
     }
 
     private configure() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
@@ -171,8 +169,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
     }
 
     private start() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.START)}
@@ -183,8 +180,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.START)}
     }
 
     private stop() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
@@ -195,8 +191,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
     }
 
     private delete() {
-        return `
-${BASH_HEADER}
+        return `${BASH_HEADER}
 
 # Copy operation
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}

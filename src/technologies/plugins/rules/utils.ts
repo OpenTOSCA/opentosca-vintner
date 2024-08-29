@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as files from '#files'
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
+import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import {METADATA, PROPERTIES} from './types'
 
@@ -37,15 +38,9 @@ export function mapProperties(
 
     if (options.format === 'list') return list
 
-    if (options.format === 'map')
-        return list.reduce<{
-            [key: string]: string
-        }>((env, it) => {
-            env[it.name] = it.value
-            return env
-        }, {})
+    if (options.format === 'map') return utils.toMap(list)
 
-    if (options.format === 'env') return files.toENV(list)
+    if (options.format === 'env') return files.toENV(utils.toMap(list), {quote: false})
 
     throw new UnexpectedError()
 }
@@ -330,7 +325,7 @@ export function SourceArchiveExtraOpts(type: string) {
 
 export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
     if (type === 'zip.archive') {
-        // TODO: this
+        // TODO: next: this
         return 'not implemented'
     }
 
@@ -395,7 +390,7 @@ export function BashCreateVintnerDirectory() {
 export function ApplicationEnvironment(type: NodeType) {
     const env = mapProperties(type, {format: 'env'})
     assert.isArray(env)
-    return env.join(`\n`) + '\n'
+    return env.join(`\n`)
 }
 
 export function ApplicationSystemdUnit() {
@@ -505,12 +500,10 @@ cd {{ SELF.application_directory }}
 }
 
 export function Operation(operation: MANAGEMENT_OPERATIONS) {
-    return `
-#! /usr/bin/bash
-set -e
+    return `${BASH_HEADER}
 
 {{ (${SelfOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}" ) | ternary("echo 0", foo) }}
-`.trimStart()
+`.trim()
 }
 
 export function JinjaWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
@@ -522,11 +515,11 @@ export function JinjaWhenOperationUndefined(operation: MANAGEMENT_OPERATIONS) {
 }
 
 export function BashWhenOperationDefined(operation: MANAGEMENT_OPERATIONS) {
-    return `"{{ ${SelfOperation(operation)} | split('\n') | first }}" != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+    return `"{{ ${SelfOperation(operation)} | split('\\n') | first }}" != "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
 }
 
 export function BashWhenOperationUndefined(operation: MANAGEMENT_OPERATIONS) {
-    return `"{{ ${SelfOperation(operation)} | split('\n') | first }}" == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
+    return `"{{ ${SelfOperation(operation)} | split('\\n') | first }}" == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}"`
 }
 
 export function SelfOperation(operation: MANAGEMENT_OPERATIONS) {
