@@ -1,4 +1,6 @@
+import * as check from '#check'
 import {NodeType} from '#spec/node-type'
+import {constructRuleName} from '#technologies/utils'
 
 export enum METADATA {
     VINTNER_GENERATE = 'vintner_generate',
@@ -25,4 +27,25 @@ export type ImplementationGenerator = {
     // TODO: make this mandatory
     details?: string
     reason: string
+}
+
+// TODO: migrate to this
+export abstract class GeneratorAbstract implements ImplementationGenerator {
+    private _id?: string
+    get id() {
+        if (check.isUndefined(this._id)) {
+            this._id = constructRuleName(this)
+        }
+        return this._id
+    }
+
+    abstract technology: string
+    abstract component: string
+    abstract artifact?: string
+    abstract hosting?: string[]
+    abstract weight: number
+    abstract reason: string
+    abstract details: string
+
+    abstract generate(name: string, type: NodeType): NodeType
 }

@@ -1,4 +1,5 @@
 import * as assert from '#assert'
+import * as files from '#files'
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType, PropertyDefinition} from '#spec/node-type'
 import {UnexpectedError} from '#utils/error'
@@ -396,6 +397,33 @@ export function ApplicationEnvironment(type: NodeType) {
     const env = mapProperties(type, {format: 'env'})
     assert.isArray(env)
     return env.join(`\n`) + '\n'
+}
+
+export function ApplicationSystemdUnit() {
+    return files.toINI({
+        Unit: {
+            After: 'network.target',
+        },
+        Service: {
+            Type: 'simple',
+            ExecStart: '/usr/bin/bash -c ". ./.vintner/start.sh"',
+            WorkingDirectory: '{{ SELF.application_directory }}',
+            EnvironmentFile: '{{ SELF.application_directory }}/.env',
+        },
+        Install: {
+            WantedBy: 'multi-user.target',
+        },
+    })
+}
+
+export function AnsibleCreateApplicationSystemdUnit() {
+    return {
+        name: 'create service',
+        'ansible.builtin.copy': {
+            dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
+            content: ApplicationSystemdUnit(),
+        },
+    }
 }
 
 export function AnsibleCreateApplicationEnvironment(type: NodeType) {

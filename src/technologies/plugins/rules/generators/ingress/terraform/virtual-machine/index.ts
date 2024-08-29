@@ -34,7 +34,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['virtual.machine'],
     weight: 0,
-    reason: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
+    reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
     details:
         '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner',
 

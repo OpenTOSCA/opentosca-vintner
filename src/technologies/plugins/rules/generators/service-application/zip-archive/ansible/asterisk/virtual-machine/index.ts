@@ -1,4 +1,3 @@
-import * as files from '#files'
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
@@ -7,6 +6,7 @@ import {
     AnsibleCopyOperationTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleCreateApplicationEnvironment,
+    AnsibleCreateApplicationSystemdUnit,
     AnsibleCreateVintnerDirectory,
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
@@ -84,24 +84,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
-                                            name: 'create service',
-                                            copy: {
-                                                dest: '/etc/systemd/system/{{ SELF.application_name }}.service',
-                                                content: files.toINI({
-                                                    Unit: {
-                                                        After: 'network.target',
-                                                    },
-                                                    Service: {
-                                                        Type: 'simple',
-                                                        ExecStart: '/usr/bin/bash -c ". ./.vintner/start.sh"',
-                                                        WorkingDirectory: '{{ SELF.application_directory }}',
-                                                        EnvironmentFile: '{{ SELF.application_directory }}/.env',
-                                                    },
-                                                    Install: {
-                                                        WantedBy: 'multi-user.target',
-                                                    },
-                                                }),
-                                            },
+                                            ...AnsibleCreateApplicationSystemdUnit(),
                                         },
                                         {
                                             name: 'enable service',

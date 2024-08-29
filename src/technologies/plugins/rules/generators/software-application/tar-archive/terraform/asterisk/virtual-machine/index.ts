@@ -1,6 +1,6 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
-import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {
     ApplicationDirectory,
     BASH_HEADER,
@@ -21,17 +21,16 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-const artifact = 'tar.archive'
+class Generator extends GeneratorAbstract {
+    component = 'software.application'
+    technology = 'terraform'
+    artifact = 'tar.archive'
+    hosting = ['*', 'virtual.machine']
+    weight = 0
+    reason = 'Ansible is more specialized. Also using provisioners is a "last resort".'
+    details = '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
 
-const generator: ImplementationGenerator = {
-    component: 'software.application',
-    technology: 'terraform',
-    artifact,
-    hosting: ['*', 'virtual.machine'],
-    weight: 0,
-    reason: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
-
-    generate: (name, type) => {
+    generate(name: string, type: NodeType) {
         return {
             derived_from: name,
             metadata: {...MetadataGenerated()},
@@ -60,30 +59,30 @@ const generator: ImplementationGenerator = {
                                             provisioner: {
                                                 file: [
                                                     {
-                                                        source: SourceArchiveFile(artifact),
+                                                        source: SourceArchiveFile(this.artifact),
                                                         destination: `/tmp/artifact-${name}`,
                                                         count: `{{ (${JinjaWhenSourceArchiveFile(
-                                                            artifact
+                                                            this.artifact
                                                         )}) | ternary(1, 0) }}`,
                                                     },
                                                     {
-                                                        content: create(name, type),
+                                                        content: this.create(name, type),
                                                         destination: `/tmp/create-${name}.sh`,
                                                     },
                                                     {
-                                                        content: configure(),
+                                                        content: this.configure(),
                                                         destination: `/tmp/configure-${name}.sh`,
                                                     },
                                                     {
-                                                        content: start(),
+                                                        content: this.start(),
                                                         destination: `/tmp/start-${name}.sh`,
                                                     },
                                                     {
-                                                        content: stop(),
+                                                        content: this.stop(),
                                                         destination: `/tmp/stop-${name}.sh`,
                                                     },
                                                     {
-                                                        content: del(),
+                                                        content: this.delete(),
                                                         destination: `/tmp/delete-${name}.sh`,
                                                     },
                                                 ],
@@ -113,11 +112,10 @@ const generator: ImplementationGenerator = {
                 },
             },
         }
-    },
-}
+    }
 
-function create(name: string, type: NodeType) {
-    return `
+    private create(name: string, type: NodeType) {
+        return `
 ${BASH_HEADER}
 
 # Create application directory
@@ -127,10 +125,10 @@ ${BashCreateApplicationDirectory()}
 ${BashCreateApplicationEnvironment(type)}
 
 # Download deployment artifact if required
-${BashDownloadSourceArchive(name, artifact)}
+${BashDownloadSourceArchive(name, this.artifact)}
 
 # Extract deployment artifact
-${BashUnarchiveSourceArchiveFile(name, artifact)}
+${BashUnarchiveSourceArchiveFile(name, this.artifact)}
 
 # Create vintner directory
 ${BashCreateVintnerDirectory()}
@@ -141,10 +139,10 @@ ${BashCopyOperation(MANAGEMENT_OPERATIONS.CREATE)}
 # Execute operation
 ${BashCallOperation(MANAGEMENT_OPERATIONS.CREATE)}
 `
-}
+    }
 
-function configure() {
-    return `
+    private configure() {
+        return `
 ${BASH_HEADER}
 
 # Copy operation
@@ -153,10 +151,10 @@ ${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
 # Execute operation
 ${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
 `
-}
+    }
 
-function start() {
-    return `
+    private start() {
+        return `
 ${BASH_HEADER}
 
 # Assert operation
@@ -168,10 +166,10 @@ ${BashCopyOperation(MANAGEMENT_OPERATIONS.START)}
 # Execute operation
 ${BashCallOperation(MANAGEMENT_OPERATIONS.START)}
 `
-}
+    }
 
-function stop() {
-    return `
+    private stop() {
+        return `
 ${BASH_HEADER}
 
 # Assert operation
@@ -183,10 +181,10 @@ ${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
 # Execute operation
 ${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
 `
-}
+    }
 
-function del() {
-    return `
+    private delete() {
+        return `
 ${BASH_HEADER}
 
 # Copy operation
@@ -198,6 +196,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
 # Delete application directory
 ${BashDeleteApplicationDirectory()}
 `
+    }
 }
 
-export default generator
+export default new Generator()
