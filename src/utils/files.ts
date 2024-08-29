@@ -195,10 +195,8 @@ export function toJSON(obj: any) {
     return utils.pretty(obj)
 }
 
-export function toENV(obj: {[key: string]: string | number | boolean}) {
-    return Object.entries(obj)
-        .map(([key, value]) => `${key}="${value}"`)
-        .join(`\n`)
+export function toENV(obj: {[key: string]: string | number | boolean} | {[key: string]: string | number | boolean}[]) {
+    return toINI(obj)
 }
 
 export function toINI(obj: any) {

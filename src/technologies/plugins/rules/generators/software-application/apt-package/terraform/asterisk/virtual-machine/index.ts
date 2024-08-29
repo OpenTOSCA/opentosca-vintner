@@ -18,8 +18,6 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: implement this
-
 export class Generator extends GeneratorAbstract {
     component = 'software.application'
     technology = 'terraform'

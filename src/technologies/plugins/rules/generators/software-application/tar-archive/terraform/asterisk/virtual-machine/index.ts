@@ -191,7 +191,7 @@ ${BASH_HEADER}
 ${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Execute operation
-${BashCallOperation(MANAGEMENT_OPERATIONS.DELETE}
+${BashCallOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Delete application directory
 ${BashDeleteApplicationDirectory()}

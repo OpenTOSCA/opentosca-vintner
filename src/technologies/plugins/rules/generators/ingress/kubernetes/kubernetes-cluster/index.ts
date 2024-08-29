@@ -25,7 +25,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...KubernetesCredentials()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: 'not implemented',

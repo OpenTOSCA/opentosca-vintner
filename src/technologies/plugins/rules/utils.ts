@@ -45,8 +45,7 @@ export function mapProperties(
             return env
         }, {})
 
-    // TODO: use files.toENV
-    if (options.format === 'env') return list.map(it => `${it.name}=${it.value}`)
+    if (options.format === 'env') return files.toENV(list)
 
     throw new UnexpectedError()
 }

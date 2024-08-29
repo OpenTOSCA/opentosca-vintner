@@ -26,7 +26,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...OpenstackMachineCredentials()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: {

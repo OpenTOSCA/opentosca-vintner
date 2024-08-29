@@ -47,7 +47,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {...OpenstackMachineCredentials(), ...OpenstackMachineHost()},
             attributes: {
-                // TODO: implement this
+                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: {eval: '.::.requirements::[.name=host]::.target::application_address'},
