@@ -11,8 +11,7 @@ import {
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveZipArchiveFileTask,
-    AnsibleUnarchiveZipArchiveUrlTask,
+    AnsibleUnarchiveSourceArchiveFileTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -20,10 +19,12 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+const artifact = 'zip.archive'
+
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'zip.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
@@ -65,10 +66,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveZipArchiveFileTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
-                                            ...AnsibleUnarchiveZipArchiveUrlTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),

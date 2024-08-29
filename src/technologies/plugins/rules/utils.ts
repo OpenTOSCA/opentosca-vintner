@@ -267,22 +267,6 @@ export function TerraformStandardOperations() {
     }
 }
 
-export function ZipArchiveFile() {
-    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}`
-}
-
-export function ZipArchiveUrl() {
-    return `{{  ".artifacts::zip_archive::file" | eval }}`
-}
-
-export function TarArchiveFile() {
-    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}`
-}
-
-export function TarArchiveUrl() {
-    return `{{ ".artifacts::tar_archive::file" | eval }}`
-}
-
 export function ApplicationDirectory() {
     return {
         application_directory: {
@@ -320,68 +304,48 @@ export function BashDeleteApplicationDirectory() {
     return `rm -rf "{{ SELF.application_directory }}"`
 }
 
-export function AnsibleUnarchiveZipArchiveFileTask() {
-    const type = 'zip.archive'
+export function SourceArchiveFile(type: string) {
+    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::${SourceArchiveName(type)}::file" | eval }}`
+}
+
+export function SourceArchiveUrl(type: string) {
+    return `{{ ".artifacts::${SourceArchiveName(type)}::file" | eval }}`
+}
+
+export function AnsibleUnarchiveSourceArchiveFileTask(type: string) {
     return {
         name: 'extract deployment artifact in application directory',
         'ansible.builtin.unarchive': {
-            src: ZipArchiveFile(),
+            src: SourceArchiveFile(type),
             dest: '{{ SELF.application_directory }}',
             extra_opts: SourceArchiveExtraOpts(type),
         },
         when: JinjaWhenSourceArchiveFile(type),
     }
-}
-
-// TODO: this
-export function BashUnarchiveZipArchiveFile(name: string) {
-    return `
-echo "Not implemented"
-exit 1
-`.trim()
 }
 
 export function SourceArchiveExtraOpts(type: string) {
     return `{{ ".artifacts::${SourceArchiveName(type)}::extra_opts" | eval | map_value }}`
 }
 
-export function AnsibleUnarchiveZipArchiveUrlTask() {
-    const type = 'zip.archive'
-    return {
-        name: 'extract deployment artifact in application directory',
-        'ansible.builtin.unarchive': {
-            src: ZipArchiveUrl(),
-            dest: '{{ SELF.application_directory }}',
-            remote_src: 'yes',
-            extra_opts: SourceArchiveExtraOpts(type),
-        },
-        when: JinjaWhenSourceArchiveUrl(type),
+export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
+    if (type === 'zip.archive') {
+        // TODO: this
+        return 'not implemented'
+    }
+
+    if (type == 'tar.archive') {
+        return `tar -xzf /tmp/artifact-${name} -C {{ SELF.application_directory }} ${SourceArchiveExtraOpts(
+            'tar.archive'
+        )}`
     }
 }
 
-export function AnsibleUnarchiveTarArchiveFileTask() {
-    const type = 'tar.archive'
-    return {
-        name: 'extract deployment artifact from file in application directory',
-        'ansible.builtin.unarchive': {
-            src: TarArchiveFile(),
-            dest: '{{ SELF.application_directory }}',
-            extra_opts: SourceArchiveExtraOpts(type),
-        },
-        when: JinjaWhenSourceArchiveFile(type),
-    }
-}
-
-export function BashUnarchiveTarArchiveFile(name: string) {
-    return `tar -xzf /tmp/artifact-${name} -C {{ SELF.application_directory }} ${SourceArchiveExtraOpts('tar.archive')}`
-}
-
-export function AnsibleUnarchiveTarArchiveUrlTask() {
-    const type = 'tar.archive'
+export function AnsibleUnarchiveSourceArchiveUrlTask(type: string) {
     return {
         name: 'extract deployment artifact from URL in application directory',
         'ansible.builtin.unarchive': {
-            src: TarArchiveUrl(),
+            src: SourceArchiveUrl(type),
             dest: '{{ SELF.application_directory }}',
             remote_src: 'yes',
             extra_opts: SourceArchiveExtraOpts(type),
@@ -402,10 +366,10 @@ export function BashWhenSourceArchiveUrl(type: string) {
     return `"{{ ".artifacts::${SourceArchiveName(type)}::file" | eval }}" == http*`
 }
 
-export function BashDownloadTarArchive(name: string) {
+export function BashDownloadSourceArchive(name: string, type: string) {
     return `
-if [[ ${BashWhenSourceArchiveUrl('tar.archive')} ]]; then 
-    wget -O /tmp/artifact-${name} ${TarArchiveUrl()} 
+if [[ ${BashWhenSourceArchiveUrl(type)} ]]; then 
+    wget -O /tmp/artifact-${name} ${SourceArchiveUrl(type)} 
 fi
 `.trim()
 }

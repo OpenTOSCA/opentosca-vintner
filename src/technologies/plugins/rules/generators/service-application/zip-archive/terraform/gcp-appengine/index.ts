@@ -7,17 +7,19 @@ import {
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
     SelfOperation,
+    SourceArchiveFile,
     TerraformStandardOperations,
-    ZipArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 // TODO: application port is now 443
 
+const artifact = 'zip.archive'
+
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'terraform',
-    artifact: 'zip.archive',
+    artifact,
     hosting: ['gcp.appengine'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
@@ -145,7 +147,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             bucket: '${google_storage_bucket.bucket.name}',
                                             name: 'object.zip',
-                                            source: ZipArchiveFile(),
+                                            source: SourceArchiveFile(artifact),
                                         },
                                     ],
                                 },

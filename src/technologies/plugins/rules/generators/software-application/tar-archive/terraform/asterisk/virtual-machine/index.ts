@@ -11,20 +11,22 @@ import {
     BashCreateApplicationEnvironment,
     BashCreateVintnerDirectory,
     BashDeleteApplicationDirectory,
-    BashDownloadTarArchive,
-    BashUnarchiveTarArchiveFile,
+    BashDownloadSourceArchive,
+    BashUnarchiveSourceArchiveFile,
     JinjaWhenSourceArchiveFile,
     MetadataGenerated,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    TarArchiveFile,
+    SourceArchiveFile,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
+
+const artifact = 'tar.archive'
 
 const generator: ImplementationGenerator = {
     component: 'software.application',
     technology: 'terraform',
-    artifact: 'tar.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 0,
     reason: 'Ansible is more specialized. Also using Remote-Exec Executor is a "last resort".',
@@ -58,10 +60,10 @@ const generator: ImplementationGenerator = {
                                             provisioner: {
                                                 file: [
                                                     {
-                                                        source: TarArchiveFile(),
+                                                        source: SourceArchiveFile(artifact),
                                                         destination: `/tmp/artifact-${name}`,
                                                         count: `{{ (${JinjaWhenSourceArchiveFile(
-                                                            'tar.archive'
+                                                            artifact
                                                         )}) | ternary(1, 0) }}`,
                                                     },
                                                     {
@@ -125,10 +127,10 @@ ${BashCreateApplicationDirectory()}
 ${BashCreateApplicationEnvironment(type)}
 
 # Download deployment artifact if required
-${BashDownloadTarArchive(name)}
+${BashDownloadSourceArchive(name, artifact)}
 
 # Extract deployment artifact
-${BashUnarchiveTarArchiveFile(name)}
+${BashUnarchiveSourceArchiveFile(name, artifact)}
 
 # Create vintner directory
 ${BashCreateVintnerDirectory()}

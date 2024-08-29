@@ -7,16 +7,18 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    ZipArchiveFile,
+    SourceArchiveFile,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
 // TODO: port is now 443
 
+const artifact = 'zip.archive'
+
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'zip.archive',
+    artifact,
     hosting: ['gcp.appengine'],
     weight: 0,
     reason: 'Custom module with imperative parts, while Terraform provides a declarative module.',
@@ -76,7 +78,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'extract deployment artifact in working directory',
                                             'ansible.builtin.unarchive': {
-                                                src: ZipArchiveFile(),
+                                                src: SourceArchiveFile(artifact),
                                                 dest: '{{ directory.path }}',
                                             },
                                         },

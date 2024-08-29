@@ -11,8 +11,8 @@ import {
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
-    AnsibleUnarchiveTarArchiveFileTask,
-    AnsibleUnarchiveTarArchiveUrlTask,
+    AnsibleUnarchiveSourceArchiveFileTask,
+    AnsibleUnarchiveSourceArchiveUrlTask,
     AnsibleWaitForSSHTask,
     ApplicationDirectory,
     MetadataGenerated,
@@ -20,10 +20,12 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+const artifact = 'tar.archive'
+
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
-    artifact: 'tar.archive',
+    artifact,
     hosting: ['*', 'virtual.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible. Special integration for systemd.',
@@ -58,10 +60,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveFileTask(),
+                                            ...AnsibleUnarchiveSourceArchiveFileTask(artifact),
                                         },
                                         {
-                                            ...AnsibleUnarchiveTarArchiveUrlTask(),
+                                            ...AnsibleUnarchiveSourceArchiveUrlTask(artifact),
                                         },
                                         {
                                             ...AnsibleCreateVintnerDirectory(),
