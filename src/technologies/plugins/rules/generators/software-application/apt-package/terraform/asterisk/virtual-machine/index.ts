@@ -133,7 +133,6 @@ fi
 # Install package
 {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
 
-
 # Create application directory
 ${BashCreateApplicationDirectory()}
 

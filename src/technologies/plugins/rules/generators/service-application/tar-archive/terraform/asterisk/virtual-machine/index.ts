@@ -68,7 +68,7 @@ class Generator extends GeneratorAbstract {
                                                     },
                                                     {
                                                         content: ApplicationSystemdUnit(),
-                                                        default:
+                                                        destination:
                                                             '/etc/systemd/system/{{ SELF.application_name }}.service',
                                                     },
                                                     {

@@ -325,8 +325,9 @@ export function SourceArchiveExtraOpts(type: string) {
 
 export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
     if (type === 'zip.archive') {
-        // TODO: next: this
-        return 'not implemented'
+        return `unzip /tmp/artifact-${name} -d {{ SELF.application_directory }} ${SourceArchiveExtraOpts(
+            'tar.archive'
+        )}`
     }
 
     if (type == 'tar.archive') {
@@ -369,6 +370,7 @@ fi
 `.trim()
 }
 
+// TODO: replace this with filter for type once https://github.com/onecommons/unfurl/issues/338 is resolved
 export function SourceArchiveName(type: string) {
     return type.replaceAll('.', '_')
 }
@@ -400,7 +402,7 @@ export function ApplicationSystemdUnit() {
         },
         Service: {
             Type: 'simple',
-            ExecStart: '/usr/bin/bash -c ". ./.vintner/start.sh"',
+            ExecStart: `/usr/bin/bash -c ". ./.vintner/${MANAGEMENT_OPERATIONS.START}.sh"`,
             WorkingDirectory: '{{ SELF.application_directory }}',
             EnvironmentFile: '{{ SELF.application_directory }}/.env',
         },
