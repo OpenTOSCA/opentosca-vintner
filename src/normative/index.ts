@@ -19,8 +19,6 @@ export function NormativeTypes(orchestrator?: string) {
     const specific = utils.copy(normativeSpecific)
 
     if (check.isDefined(orchestrator)) {
-        const dialect = getDialect(orchestrator)
-
         switch (orchestrator) {
             case 'unfurl':
                 _.merge(base, unfurlBase)
