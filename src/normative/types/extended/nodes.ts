@@ -219,9 +219,8 @@ const nodes: NodeTypeMap = {
         interfaces: {
             management: {
                 type: 'management',
-                // TODO: migrate this to normative
                 operations: {
-                    start: './{{ SELF.application_name }}',
+                    start: {get_property: ['SELF', 'application_name']},
                 },
             },
         },

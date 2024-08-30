@@ -1,10 +1,10 @@
 import * as check from '#check'
-import unfurlBase from '#normative/dialects/unfurl/base'
-import unfurlSpecific from '#normative/dialects/unfurl/specific'
-import normativeBase from '#normative/types/base'
-import normativeSpecific from '#normative/types/specific'
 import * as utils from '#utils'
 import * as _ from 'lodash'
+import unfurlCore from 'src/normative/dialects/unfurl/core'
+import unfurlExtended from 'src/normative/dialects/unfurl/extended'
+import normativeCore from 'src/normative/types/core'
+import normativeExtended from 'src/normative/types/extended'
 
 /**
  * Normative Types
@@ -15,18 +15,18 @@ import * as _ from 'lodash'
  */
 
 export function NormativeTypes(orchestrator?: string) {
-    const base = utils.copy(normativeBase)
-    const specific = utils.copy(normativeSpecific)
+    const core = utils.copy(normativeCore)
+    const extended = utils.copy(normativeExtended)
 
     if (check.isDefined(orchestrator)) {
         switch (orchestrator) {
             case 'unfurl':
-                _.merge(base, unfurlBase)
-                _.merge(specific, unfurlSpecific)
+                _.merge(core, utils.copy(unfurlCore))
+                _.merge(extended, utils.copy(unfurlExtended))
 
                 // TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
-                Object.values(base.artifact_types ?? {}).forEach(it => delete it.metadata)
-                Object.values(specific.artifact_types ?? {}).forEach(it => delete it.metadata)
+                Object.values(core.artifact_types ?? {}).forEach(it => delete it.metadata)
+                Object.values(extended.artifact_types ?? {}).forEach(it => delete it.metadata)
                 break
 
             default:
@@ -35,13 +35,19 @@ export function NormativeTypes(orchestrator?: string) {
     }
 
     return {
-        base: {
-            filename: 'base.yaml',
-            template: base,
+        core: {
+            id: 'tosca-vintner-profile-core',
+            yaml: 'tosca-vintner-profile-core.yaml',
+            short: 'Core',
+            name: 'TOSCA Vintner Core',
+            template: core,
         },
-        specific: {
-            filename: 'specific.yaml',
-            template: specific,
+        extended: {
+            id: 'tosca-vintner-profile-extended',
+            yaml: 'tosca-vintner-profile-extended.yaml',
+            short: 'Extended',
+            name: 'TOSCA Vintner Extended',
+            template: extended,
         },
     }
 }

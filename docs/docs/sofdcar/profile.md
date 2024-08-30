@@ -2,6 +2,8 @@
 title: Profile
 tags:
 - SofDCar
+- Normative
+- Profile
 - Specification
 ---
 

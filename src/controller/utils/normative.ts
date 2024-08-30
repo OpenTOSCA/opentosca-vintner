@@ -21,8 +21,8 @@ export default async function (options: NormativeOptions) {
      * Filter
      */
     const types = []
-    if (options.base) types.push(normative.base.template)
-    if (options.specific) types.push(normative.specific.template)
+    if (options.base) types.push(normative.core.template)
+    if (options.specific) types.push(normative.extended.template)
 
     /**
      * Simplify

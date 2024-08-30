@@ -5,11 +5,11 @@ import nodes from './nodes'
 
 const template: ServiceTemplate = {
     tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
-    description: 'OpenTOSCA Vintner - Normative Specific Types',
+    description: 'OpenTOSCA Vintner - Normative Extended Types',
     metadata: {
         ...MetadataNormative(),
     },
-    imports: ['base.yaml'],
+    imports: ['tosca-vintner-profile-core.yaml'],
     artifact_types: artifacts,
     node_types: nodes,
 }

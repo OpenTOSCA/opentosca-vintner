@@ -1,37 +1,25 @@
-import * as files from '#files'
+import Controller from '#controller'
 import Loader from '#graph/loader'
-import * as utils from '#utils'
 import * as path from 'path'
-
-async function run(name: string, id: string, variant: string) {
-    const dir = path.join('docs', 'docs', 'sofdcar')
-    const template = new Loader(path.join(dir, name + '.yaml')).raw()
-    await files.renderFile(
-        path.join(__dirname, 'profile.template.ejs'),
-        {
-            template,
-            utils: {
-                toYAML: files.toYAML,
-                toTitle: (value: string) =>
-                    value
-                        .split('_')
-                        .map(it => utils.toFirstUpperCase(it))
-                        .join(' '),
-                toText: (value: string) => value.split('_').join(' '),
-                toFigure: (value: string) => name + '.' + value.replace('_', '-') + '.svg',
-            },
-            profile: {
-                id,
-                variant,
-            },
-        },
-        path.join(dir, name + '.md')
-    )
-}
+import {renderProfile} from '../.utils/profile/utils'
 
 async function main() {
-    await run('tosca-sofdcar-profile-core', 'c', 'Core')
-    await run('tosca-sofdcar-profile-extended', 'e', 'Extended')
+    const dir = path.join('docs', 'docs', 'sofdcar')
+
+    const coreName = 'tosca-sofdcar-profile-core'
+    const coreFile = path.join(dir, coreName + '.yaml')
+    const core = new Loader(coreFile).raw()
+    await Controller.template.puml.types({path: coreFile})
+    await renderProfile({name: coreName, id: 'c', profile: 'TOSCA SofDCar Core', dir, template: core})
+
+    const extendedName = 'tosca-sofdcar-profile-extended'
+    const extendedFile = path.join(dir, extendedName + '.yaml')
+    const extended = new Loader(extendedFile).raw()
+    await Controller.template.puml.types({path: extendedFile})
+    await renderProfile({name: extendedName, id: 'e', profile: 'TOSCA SofDCar Extended', dir, template: extended})
+
+    await Controller.template.puml.topology({path: path.join(dir, 'guides', 'location', 'service-template.yaml')})
+    await Controller.template.puml.topology({path: path.join(dir, 'guides', 'zone', 'service-template.yaml')})
 }
 
 main()

@@ -15,7 +15,7 @@ The artifact all other artifacts are derived from.
 
 ```yaml linenums="1"
 sofdcar.artifacts.Root:
-  derived_from: tosca.artifacts.Root
+    derived_from: tosca.artifacts.Root
 ```
 
 #### sofdcar.artifacts.Deployment
@@ -24,7 +24,7 @@ The artifact all other deployment artifacts are derived from.
 
 ```yaml linenums="1"
 sofdcar.artifacts.Deployment:
-  derived_from: tosca.artifacts.Deployment
+    derived_from: tosca.artifacts.Deployment
 ```
 
 #### sofdcar.artifacts.Implementation
@@ -33,7 +33,7 @@ The artifact all other implementation artifacts are derived from.
 
 ```yaml linenums="1"
 sofdcar.artifacts.Implementation:
-  derived_from: tosca.artifacts.Implementation
+    derived_from: tosca.artifacts.Implementation
 ```
 
 ### Capability Types
@@ -52,7 +52,7 @@ The capability all other capabilities are derived from.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Root:
-  derived_from: tosca.capabilities.Root
+    derived_from: tosca.capabilities.Root
 ```
 
 #### sofdcar.capabilities.Host.ECU.Software
@@ -61,7 +61,7 @@ The capability to host an ECU software.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Host.ECU.Software:
-  derived_from: tosca.capabilities.Container
+    derived_from: tosca.capabilities.Container
 ```
 
 #### sofdcar.capabilities.OperatingSystem.RealTime
@@ -70,18 +70,18 @@ The capability to provide a real-time operating system.
 
 ```yaml linenums="1"
 sofdcar.capabilities.OperatingSystem.RealTime:
-  derived_from: tosca.capabilities.OperatingSystem
-  properties:
-    time_guarantee:
-      type: integer
-      required: false
-    guarantee_type:
-      type: string
-      constraints:
-        - valid_values:
-            - hard
-            - firm
-            - soft
+    derived_from: tosca.capabilities.OperatingSystem
+    properties:
+        time_guarantee:
+            type: integer
+            required: false
+        guarantee_type:
+            type: string
+            constraints:
+                - valid_values:
+                      - hard
+                      - firm
+                      - soft
 ```
 
 #### sofdcar.capabilities.Endpoint
@@ -90,7 +90,7 @@ The capability to provide an endpoint to which a client can connect to.
 
 ```yaml linenums="1"
 sofdcar.capabilities.Endpoint:
-  derived_from: sofdcar.capabilities.Root
+    derived_from: sofdcar.capabilities.Root
 ```
 
 ### Data Types
@@ -109,7 +109,7 @@ The data all other data are derived from.
 
 ```yaml linenums="1"
 sofdcar.data.Root:
-  derived_from: tosca.datatypes.Root
+    derived_from: tosca.datatypes.Root
 ```
 
 ### Group Types
@@ -128,7 +128,7 @@ The group all other groups are derived from.
 
 ```yaml linenums="1"
 sofdcar.groups.Root:
-  derived_from: tosca.groups.Root
+    derived_from: tosca.groups.Root
 ```
 
 #### sofdcar.groups.Location
@@ -137,7 +137,7 @@ The geographical location of nodes.
 
 ```yaml linenums="1"
 sofdcar.groups.Location:
-  derived_from: sofdcar.groups.Root
+    derived_from: sofdcar.groups.Root
 ```
 
 #### sofdcar.groups.Domain
@@ -146,7 +146,7 @@ The domain in a domain-oriented architecture.
 
 ```yaml linenums="1"
 sofdcar.groups.Domain:
-  derived_from: sofdcar.groups.Root
+    derived_from: sofdcar.groups.Root
 ```
 
 #### sofdcar.groups.Zone
@@ -155,7 +155,7 @@ The zone in a zone-oriented architecture.
 
 ```yaml linenums="1"
 sofdcar.groups.Zone:
-  derived_from: sofdcar.groups.Root
+    derived_from: sofdcar.groups.Root
 ```
 
 ### Interface Types
@@ -174,7 +174,7 @@ The interface all other interfaces are derived from.
 
 ```yaml linenums="1"
 sofdcar.interfaces.Root:
-  derived_from: tosca.interfaces.Root
+    derived_from: tosca.interfaces.Root
 ```
 
 #### sofdcar.interfaces.Nodes
@@ -183,10 +183,10 @@ The standard management interface of nodes.
 
 ```yaml linenums="1"
 sofdcar.interfaces.Nodes:
-  derived_from: tosca.interfaces.node.lifecycle.Standard
-  operations:
-    build:
-      description: Builds deployment artifacts.
+    derived_from: tosca.interfaces.node.lifecycle.Standard
+    operations:
+        build:
+            description: Builds deployment artifacts.
 ```
 
 #### sofdcar.interfaces.Relationship
@@ -195,7 +195,7 @@ The standard management interface for relationships.
 
 ```yaml linenums="1"
 sofdcar.interfaces.Relationship:
-  derived_from: tosca.interfaces.relationship.Configure
+    derived_from: tosca.interfaces.relationship.Configure
 ```
 
 ### Node Types
@@ -214,7 +214,7 @@ The node all other nodes are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Root:
-  derived_from: tosca.nodes.Root
+    derived_from: tosca.nodes.Root
 ```
 
 #### sofdcar.nodes.Vehicle
@@ -223,7 +223,7 @@ The node all other vehicles are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Vehicle:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.Cloud
@@ -232,7 +232,7 @@ The node all other clouds are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Cloud:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.ECU.Hardware
@@ -241,12 +241,12 @@ The hardware of an ECU.
 
 ```yaml linenums="1"
 sofdcar.nodes.ECU.Hardware:
-  derived_from: sofdcar.nodes.Root
-  capabilities:
-    host:
-      type: sofdcar.capabilities.Host.ECU.Software
-      valid_source_types:
-        - sofdcar.nodes.ECU.Software
+    derived_from: sofdcar.nodes.Root
+    capabilities:
+        host:
+            type: sofdcar.capabilities.Host.ECU.Software
+            valid_source_types:
+                - sofdcar.nodes.ECU.Software
 ```
 
 #### sofdcar.nodes.ECU.Software
@@ -255,11 +255,11 @@ The software running on an ECU.
 
 ```yaml linenums="1"
 sofdcar.nodes.ECU.Software:
-  derived_from: sofdcar.nodes.Root
-  requirements:
-    - host:
-        capability: sofdcar.capabilities.Host.ECU.Software
-        relationship: tosca.relationships.HostedOn
+    derived_from: sofdcar.nodes.Root
+    requirements:
+        - host:
+              capability: sofdcar.capabilities.Host.ECU.Software
+              relationship: tosca.relationships.HostedOn
 ```
 
 #### sofdcar.nodes.ECU.Runtime
@@ -268,16 +268,16 @@ The runtime for an ECU software.
 
 ```yaml linenums="1"
 sofdcar.nodes.ECU.Runtime:
-  derived_from: sofdcar.nodes.ECU.Software
-  capabilities:
-    host:
-      type: sofdcar.capabilities.Host.ECU.Software
-      valid_source_types:
-        - sofdcar.nodes.ECU.Software
-  requirements:
-    - host:
-        capability: sofdcar.capabilities.Host.ECU.Software
-        relationship: tosca.relationships.HostedOn
+    derived_from: sofdcar.nodes.ECU.Software
+    capabilities:
+        host:
+            type: sofdcar.capabilities.Host.ECU.Software
+            valid_source_types:
+                - sofdcar.nodes.ECU.Software
+    requirements:
+        - host:
+              capability: sofdcar.capabilities.Host.ECU.Software
+              relationship: tosca.relationships.HostedOn
 ```
 
 #### sofdcar.nodes.HPC.Software
@@ -286,7 +286,7 @@ The software running on an HPC.
 
 ```yaml linenums="1"
 sofdcar.nodes.HPC.Software:
-  derived_from: tosca.nodes.SoftwareComponent
+    derived_from: tosca.nodes.SoftwareComponent
 ```
 
 #### sofdcar.nodes.HPC.Hardware
@@ -295,12 +295,12 @@ The hardware of an HPC.
 
 ```yaml linenums="1"
 sofdcar.nodes.HPC.Hardware:
-  derived_from: sofdcar.nodes.Root
-  capabilities:
-    host:
-      type: tosca.capabilities.Compute
-      valid_source_types:
-        - tosca.nodes.SoftwareComponent
+    derived_from: sofdcar.nodes.Root
+    capabilities:
+        host:
+            type: tosca.capabilities.Compute
+            valid_source_types:
+                - tosca.nodes.SoftwareComponent
 ```
 
 #### sofdcar.nodes.Actuator
@@ -309,7 +309,7 @@ The node all other actuators are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Actuator:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.Accelerator
@@ -318,7 +318,7 @@ The node all other accelerators are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Accelerator:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Brake
@@ -327,7 +327,7 @@ The node all other brakes are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Brake:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Steering
@@ -336,7 +336,7 @@ The node all other steerings are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Steering:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Light
@@ -345,7 +345,7 @@ The node all other lights are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Light:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Cooling
@@ -354,7 +354,7 @@ The node all other coolings are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Cooling:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Airbag
@@ -363,7 +363,7 @@ The node all other airbags are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Airbag:
-  derived_from: sofdcar.nodes.Actuator
+    derived_from: sofdcar.nodes.Actuator
 ```
 
 #### sofdcar.nodes.Sensor
@@ -372,7 +372,7 @@ The node all other sensors are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Sensor:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.RADAR
@@ -381,7 +381,7 @@ The node all other RADAR are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.RADAR:
-  derived_from: sofdcar.nodes.Sensor
+    derived_from: sofdcar.nodes.Sensor
 ```
 
 #### sofdcar.nodes.Camera
@@ -390,7 +390,7 @@ The node all other cameras are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Camera:
-  derived_from: sofdcar.nodes.Sensor
+    derived_from: sofdcar.nodes.Sensor
 ```
 
 #### sofdcar.nodes.LIDAR
@@ -399,7 +399,7 @@ The node all other LIDAR are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.LIDAR:
-  derived_from: sofdcar.nodes.Sensor
+    derived_from: sofdcar.nodes.Sensor
 ```
 
 #### sofdcar.nodes.Ultrasonic
@@ -408,7 +408,7 @@ The node all other ultrasonics are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Ultrasonic:
-  derived_from: sofdcar.nodes.Sensor
+    derived_from: sofdcar.nodes.Sensor
 ```
 
 #### sofdcar.nodes.Microphone
@@ -417,7 +417,7 @@ The node all other microphones are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Microphone:
-  derived_from: sofdcar.nodes.Sensor
+    derived_from: sofdcar.nodes.Sensor
 ```
 
 #### sofdcar.nodes.Channel
@@ -426,13 +426,13 @@ The node all other communication channels are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Channel:
-  derived_from: sofdcar.nodes.Root
-  capabilities:
-    endpoint:
-      type: sofdcar.capabilities.Endpoint
-      occurrences:
-        - 0
-        - UNBOUNDED
+    derived_from: sofdcar.nodes.Root
+    capabilities:
+        endpoint:
+            type: sofdcar.capabilities.Endpoint
+            occurrences:
+                - 0
+                - UNBOUNDED
 ```
 
 #### sofdcar.nodes.Battery
@@ -441,7 +441,7 @@ The node all other batteries are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Battery:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 #### sofdcar.nodes.Feature
@@ -450,7 +450,7 @@ The node all other features are derived from.
 
 ```yaml linenums="1"
 sofdcar.nodes.Feature:
-  derived_from: sofdcar.nodes.Root
+    derived_from: sofdcar.nodes.Root
 ```
 
 ### Policy Types
@@ -469,7 +469,7 @@ The policy all other policies are derived from.
 
 ```yaml linenums="1"
 sofdcar.policies.Root:
-  derived_from: tosca.policies.Root
+    derived_from: tosca.policies.Root
 ```
 
 #### sofdcar.policies.Security
@@ -478,7 +478,7 @@ The policy all other security-related policies are derived from.
 
 ```yaml linenums="1"
 sofdcar.policies.Security:
-  derived_from: sofdcar.policies.Root
+    derived_from: sofdcar.policies.Root
 ```
 
 #### sofdcar.policies.Safety
@@ -487,7 +487,7 @@ The policy all other safety-related policies are derived from.
 
 ```yaml linenums="1"
 sofdcar.policies.Safety:
-  derived_from: sofdcar.policies.Root
+    derived_from: sofdcar.policies.Root
 ```
 
 ### Relationship Types
@@ -506,7 +506,7 @@ The relationship all other relationships are derived from.
 
 ```yaml linenums="1"
 sofdcar.relationships.Root:
-  derived_from: tosca.relationships.Root
+    derived_from: tosca.relationships.Root
 ```
 
 

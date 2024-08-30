@@ -1,0 +1,58 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "node"
+
+rectangle "cloud.provider"
+
+rectangle "cloud.service"
+
+rectangle "software.application"
+
+rectangle "service.application"
+
+rectangle "software.runtime"
+
+rectangle "container.runtime"
+
+rectangle "virtual.machine"
+
+rectangle "database"
+
+rectangle "relational.database"
+
+rectangle "dbms"
+
+rectangle "relational.dbms"
+
+rectangle "ingress"
+
+
+"tosca.nodes.Root" <|-- "node"
+
+"node" <|-- "cloud.provider"
+
+"node" <|-- "cloud.service"
+
+"node" <|-- "software.application"
+
+"software.application" <|-- "service.application"
+
+"software.application" <|-- "software.runtime"
+
+"software.runtime" <|-- "container.runtime"
+
+"node" <|-- "virtual.machine"
+
+"node" <|-- "database"
+
+"database" <|-- "relational.database"
+
+"software.application" <|-- "dbms"
+
+"dbms" <|-- "relational.dbms"
+
+"node" <|-- "ingress"
+
+@enduml

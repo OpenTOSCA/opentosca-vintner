@@ -1,0 +1,218 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+description: OpenTOSCA Vintner - Normative Core Types
+metadata:
+    vintner_normative: 'true'
+artifact_types:
+    artifact:
+        derived_from: tosca.artifacts.Root
+        metadata:
+            vintner_normative: 'true'
+    source.archive:
+        derived_from: artifact
+        description: application packaged as archive
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            extra_opts:
+                type: list
+                entry_schema:
+                    type: string
+                required: false
+    system.package:
+        derived_from: artifact
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            script:
+                type: string
+                required: false
+                description: URL of an installation script
+            repository:
+                type: string
+                required: false
+                description: name of the repository (required if source is set)
+            key:
+                type: string
+                required: false
+                description: URL of the apt key which signs the apt repository (required if source is set)
+            source:
+                type: string
+                required: false
+                description: source of the repository
+            dependencies:
+                type: string
+                required: false
+                description: Comma separated list of apt packages that are additionally installed
+            env:
+                type: string
+                required: false
+                description: Space separated env variables
+    container.image:
+        derived_from: artifact
+        description: expects image reference in "file"
+        metadata:
+            vintner_normative: 'true'
+    virtual.machine.image:
+        derived_from: artifact
+        description: expects image reference in "file"
+        metadata:
+            vintner_normative: 'true'
+interface_types:
+    interface:
+        derived_from: tosca.interfaces.Root
+        metadata:
+            vintner_normative: 'true'
+    management:
+        derived_from: interface
+        metadata:
+            vintner_normative: 'true'
+        operations:
+            create:
+            configure:
+            start:
+            stop:
+            delete:
+node_types:
+    node:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    cloud.provider:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+    cloud.service:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+    software.application:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        properties:
+            application_name:
+                type: string
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
+        interfaces:
+            management:
+                type: management
+    service.application:
+        derived_from: software.application
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        properties:
+            application_language:
+                type: string
+            application_port:
+                type: string
+                metadata:
+                    vintner_name: PORT
+            application_protocol:
+                type: string
+        attributes:
+            application_address:
+                type: string
+            application_endpoint:
+                type: string
+    software.runtime:
+        derived_from: software.application
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+    container.runtime:
+        derived_from: software.runtime
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    virtual.machine:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            machine_name:
+                type: string
+            ports:
+                type: list
+                entry_schema:
+                    type: string
+            flavor:
+                type: string
+                default: m1.medium
+            network:
+                type: string
+            ssh_user:
+                type: string
+            ssh_key_name:
+                type: string
+            ssh_key_file:
+                type: string
+        attributes:
+            management_address:
+                type: string
+            application_address:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+    database:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    relational.database:
+        derived_from: database
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    dbms:
+        derived_from: software.application
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    relational.dbms:
+        derived_from: dbms
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+    ingress:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            application_name:
+                type: string
+            application_port:
+                type: string
+            application_protocol:
+                type: string
+        attributes:
+            application_address:
+                type: string
+        requirements:
+            - application:
+                  capability: tosca.capabilities.Endpoint
+                  relationship: tosca.relationships.ConnectsTo
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn

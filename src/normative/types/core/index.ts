@@ -6,7 +6,7 @@ import nodes from './nodes'
 
 const template: ServiceTemplate = {
     tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
-    description: 'OpenTOSCA Vintner - Normative Base Types',
+    description: 'OpenTOSCA Vintner - Normative Core Types',
     metadata: {
         ...MetadataNormative(),
     },
