@@ -25,23 +25,11 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -87,23 +75,11 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -164,23 +140,11 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -218,23 +182,11 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -267,6 +219,7 @@ const nodes: NodeTypeMap = {
         interfaces: {
             management: {
                 type: 'management',
+                // TODO: migrate this to normative
                 operations: {
                     start: './{{ SELF.application_name }}',
                 },
@@ -316,7 +269,6 @@ const nodes: NodeTypeMap = {
             },
             gcp_service: {
                 type: 'string',
-                default: 'must-be-overridden',
             },
         },
     },
@@ -412,23 +364,11 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -523,9 +463,6 @@ const nodes: NodeTypeMap = {
             },
             application_name: {
                 type: 'string',
-                default: {
-                    eval: '.::dbms_name',
-                },
             },
             dbms_version: {
                 type: 'string',
@@ -586,15 +523,9 @@ const nodes: NodeTypeMap = {
         attributes: {
             application_address: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::application_address',
-                },
             },
             application_port: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=host]::.target::application_port',
-                },
             },
         },
         capabilities: {

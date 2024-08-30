@@ -1,40 +1,31 @@
+import {MetadataNormative} from '#normative/types/utils'
 import {ArtifactTypeMap} from '#spec/artifact-type'
-
-// TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
 
 const artifacts: ArtifactTypeMap = {
     'docker.image': {
         derived_from: 'container.image',
         description: 'expects image reference in "file"',
-        /*
         metadata: {
             ...MetadataNormative(),
         },
-        */
     },
     'zip.archive': {
         derived_from: 'source.archive',
-        /*
         metadata: {
             ...MetadataNormative(),
         },
-        */
     },
     'tar.archive': {
         derived_from: 'source.archive',
-        /*
         metadata: {
             ...MetadataNormative(),
         },
-        */
     },
     'apt.package': {
         derived_from: 'system.package',
-        /*
         metadata: {
             ...MetadataNormative(),
         },
-        */
         properties: {
             script: {
                 type: 'string',
@@ -63,7 +54,7 @@ const artifacts: ArtifactTypeMap = {
             },
             env: {
                 type: 'string',
-                default: '',
+                required: false,
                 description: 'Space separated env variables',
             },
         },

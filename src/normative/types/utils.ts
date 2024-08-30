@@ -1,4 +1,4 @@
-import {METADATA} from '#/technologies/plugins/rules/types'
+import {METADATA} from '#technologies/plugins/rules/types'
 
 export function MetadataNormative() {
     return {[METADATA.VINTNER_NORMATIVE]: 'true'}
@@ -14,8 +14,4 @@ export function MetadataIgnore() {
 
 export function MetadataName(name: string) {
     return {[METADATA.VINTNER_NAME]: name}
-}
-
-export function MetadataUnfurl() {
-    return {[METADATA.VINTNER_ORCHESTRATOR]: 'unfurl'}
 }

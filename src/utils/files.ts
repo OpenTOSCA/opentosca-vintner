@@ -118,8 +118,8 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
     return file
 }
 
-export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; overwrite?: boolean} = {}) {
-    options.notice = options.notice ?? false
+export function storeYAML<T>(file: string, data: T, options: {generated?: boolean; overwrite?: boolean} = {}) {
+    options.generated = options.generated ?? false
     options.overwrite = options.overwrite ?? true
 
     const resolved = path.resolve(file)
@@ -134,7 +134,7 @@ export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; 
 `.trimStart()
 
     let output = toYAML(data)
-    if (options.notice) {
+    if (options.generated) {
         output = notice + output
     }
 

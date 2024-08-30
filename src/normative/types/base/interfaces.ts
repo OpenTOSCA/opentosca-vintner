@@ -1,4 +1,4 @@
-import {MetadataNormative} from '#normative/utils'
+import {MetadataNormative} from '#normative/types/utils'
 import {InterfaceTypeMap} from '#spec/interface-type'
 
 const interfaces: InterfaceTypeMap = {

@@ -1,11 +1,10 @@
+import {NormativeTypes} from '#/normative'
 import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
 import {YAML_EXTENSIONS} from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
-import {NORMATIVE_BASE_TYPES, NORMATIVE_BASE_TYPES_FILENAME} from '#normative/base'
-import {NORMATIVE_SPECIFIC_TYPES, NORMATIVE_SPECIFIC_TYPES_FILENAME} from '#normative/specific'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
@@ -51,17 +50,14 @@ export default async function (options: TemplateImplementOptions) {
     files.createDirectory(lib)
 
     /**
-     * Normative Base Types
+     * Normative Types
      */
-    files.storeYAML<ServiceTemplate>(path.join(lib, NORMATIVE_BASE_TYPES_FILENAME), NORMATIVE_BASE_TYPES, {
-        notice: true,
+    const normative = NormativeTypes(options.orchestrator)
+    files.storeYAML<ServiceTemplate>(path.join(lib, normative.base.filename), normative.base.template, {
+        generated: true,
     })
-
-    /**
-     * Normative Specific Types
-     */
-    files.storeYAML<ServiceTemplate>(path.join(lib, NORMATIVE_SPECIFIC_TYPES_FILENAME), NORMATIVE_SPECIFIC_TYPES, {
-        notice: true,
+    files.storeYAML<ServiceTemplate>(path.join(lib, normative.specific.filename), normative.specific.template, {
+        generated: true,
     })
 
     /**
@@ -71,7 +67,7 @@ export default async function (options: TemplateImplementOptions) {
         path.join(lib, 'types.yaml'),
         {
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
-            imports: [NORMATIVE_SPECIFIC_TYPES_FILENAME],
+            imports: [normative.specific.filename],
         },
         {overwrite: false}
     )
@@ -80,7 +76,7 @@ export default async function (options: TemplateImplementOptions) {
      * Technology Rules
      */
     files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILENAME), registry().rules, {
-        notice: true,
+        generated: true,
     })
 
     /**

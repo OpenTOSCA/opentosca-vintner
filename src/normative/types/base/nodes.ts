@@ -1,5 +1,5 @@
 import {NodeTypeMap} from '#spec/node-type'
-import {MetadataAbstract, MetadataIgnore, MetadataName, MetadataNormative} from '../utils'
+import {MetadataAbstract, MetadataName, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
     node: {
@@ -51,66 +51,6 @@ const nodes: NodeTypeMap = {
             application_name: {
                 type: 'string',
             },
-            _management_create: {
-                type: 'string',
-                metadata: {
-                    ...MetadataIgnore(),
-                },
-                default: {
-                    eval: {
-                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['management', 'create'],
-                    },
-                },
-            },
-            _management_configure: {
-                type: 'string',
-                metadata: {
-                    ...MetadataIgnore(),
-                },
-                default: {
-                    eval: {
-                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['management', 'configure'],
-                    },
-                },
-            },
-            _management_start: {
-                type: 'string',
-                metadata: {
-                    ...MetadataIgnore(),
-                },
-                default: {
-                    eval: {
-                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['management', 'start'],
-                    },
-                },
-            },
-            _management_stop: {
-                type: 'string',
-                metadata: {
-                    ...MetadataIgnore(),
-                },
-                default: {
-                    eval: {
-                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['management', 'stop'],
-                    },
-                },
-            },
-            _management_delete: {
-                type: 'string',
-                metadata: {
-                    ...MetadataIgnore(),
-                },
-                default: {
-                    eval: {
-                        python: '{{ "project" | get_dir }}/vintner_utils.py#get_operation',
-                        args: ['management', 'delete'],
-                    },
-                },
-            },
         },
         requirements: [
             {
@@ -152,21 +92,6 @@ const nodes: NodeTypeMap = {
             },
             application_endpoint: {
                 type: 'string',
-                default: {
-                    concat: [
-                        {
-                            eval: '.::application_protocol',
-                        },
-                        '://',
-                        {
-                            eval: '.::application_address',
-                        },
-                        ':',
-                        {
-                            eval: '.::application_port',
-                        },
-                    ],
-                },
             },
         },
     },
@@ -227,23 +152,11 @@ const nodes: NodeTypeMap = {
             },
             application_address: {
                 type: 'string',
-                default: {
-                    eval: '.::management_address',
-                },
             },
         },
         capabilities: {
             host: {
                 type: 'tosca.capabilities.Compute',
-            },
-            endpoint: {
-                type: 'unfurl.capabilities.Endpoint.Ansible',
-                properties: {
-                    connection: 'ssh',
-                    host: {
-                        eval: '.parent::management_address',
-                    },
-                },
             },
         },
     },
@@ -283,21 +196,12 @@ const nodes: NodeTypeMap = {
         properties: {
             application_name: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=application]::.target::application_name',
-                },
             },
             application_port: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=application]::.target::application_port',
-                },
             },
             application_protocol: {
                 type: 'string',
-                default: {
-                    eval: '.::.requirements::[.name=application]::.target::application_protocol',
-                },
             },
         },
         attributes: {
