@@ -31,6 +31,7 @@ This repository holds the following specifications and profiles.
 
 - [Variability4TOSCA](https://vintner.opentosca.org/variability4tosca/motivation)
 - [Queries4TOSCA](https://vintner.opentosca.org/queries4tosca/getting-started)
+- [TOSCA Vintner Profile](https://vintner.opentosca.org/normative)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
 
