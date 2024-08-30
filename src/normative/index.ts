@@ -47,5 +47,3 @@ export function NormativeTypes(orchestrator?: string) {
         },
     }
 }
-
-function getDialect(orchestrator: string) {}
