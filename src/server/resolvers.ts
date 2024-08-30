@@ -288,7 +288,7 @@ resolvers.post(
 resolvers.post(
     '/template/query',
     hae.express(async (req, res, next) => {
-        await Controller.template.query(req.body)
+        Controller.template.query(req.body)
         res.json({})
     })
 )
@@ -661,6 +661,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/utils/normative',
+    hae.express(async (req, res, next) => {
+        const normative = await Controller.utils.normative(req.body)
+        res.json({normative})
+    })
+)
+
 /**
  * Query
  */
@@ -668,8 +676,8 @@ resolvers.post(
 resolvers.post(
     '/query/run',
     hae.express(async (req, res, next) => {
-        const result = await Controller.query.run(req.body)
-        res.json(result)
+        const query = await Controller.query.run(req.body)
+        res.json({query})
     })
 )
 

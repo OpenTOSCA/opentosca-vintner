@@ -25,8 +25,8 @@ export function NormativeTypes(orchestrator?: string) {
                 _.merge(specific, unfurlSpecific)
 
                 // TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
-                Object.values(base.artifact_types || {}).forEach(it => delete it.metadata)
-                Object.values(specific.artifact_types || {}).forEach(it => delete it.metadata)
+                Object.values(base.artifact_types ?? {}).forEach(it => delete it.metadata)
+                Object.values(specific.artifact_types ?? {}).forEach(it => delete it.metadata)
                 break
 
             default:
