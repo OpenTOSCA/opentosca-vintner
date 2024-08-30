@@ -598,7 +598,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -650,7 +650,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -685,7 +685,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -716,7 +716,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -751,7 +751,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -856,7 +856,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -908,7 +908,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -943,7 +943,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -974,7 +974,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1009,7 +1009,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1110,7 +1110,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1141,7 +1141,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1172,7 +1172,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1203,7 +1203,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1234,7 +1234,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1333,7 +1333,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1364,7 +1364,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1399,7 +1399,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1434,7 +1434,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1465,7 +1465,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1563,7 +1563,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1594,7 +1594,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1629,7 +1629,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1664,7 +1664,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -1695,7 +1695,7 @@ node_types:
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
                                           content: |-
-                                              #! /usr/bin/bash
+                                              #!/usr/bin/bash
                                               set -e
 
                                               {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2138,9 +2138,9 @@ node_types:
 
                                                     [Install]
                                                     WantedBy=multi-user.target
-                                                default: /etc/systemd/system/{{ SELF.application_name }}.service
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Create application directory
@@ -2178,12 +2178,12 @@ node_types:
                                                     systemctl enable {{ SELF.application_name }}
                                                 destination: /tmp/create-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2196,7 +2196,7 @@ node_types:
                                                     . .vintner/configure.sh
                                                 destination: /tmp/configure-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2209,7 +2209,7 @@ node_types:
                                                     systemctl start {{ SELF.application_name }}
                                                 destination: /tmp/start-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2220,7 +2220,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2236,12 +2236,12 @@ node_types:
                                                     systemctl stop {{ SELF.application_name }}
                                                 destination: /tmp/stop-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2333,9 +2333,9 @@ node_types:
 
                                                     [Install]
                                                     WantedBy=multi-user.target
-                                                default: /etc/systemd/system/{{ SELF.application_name }}.service
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Create application directory
@@ -2361,7 +2361,7 @@ node_types:
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    not implemented
+                                                    unzip /tmp/artifact-checkout.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2373,12 +2373,12 @@ node_types:
                                                     systemctl enable {{ SELF.application_name }}
                                                 destination: /tmp/create-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2391,7 +2391,7 @@ node_types:
                                                     . .vintner/configure.sh
                                                 destination: /tmp/configure-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2404,7 +2404,7 @@ node_types:
                                                     systemctl start {{ SELF.application_name }}
                                                 destination: /tmp/start-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2415,7 +2415,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2431,12 +2431,12 @@ node_types:
                                                     systemctl stop {{ SELF.application_name }}
                                                 destination: /tmp/stop-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2514,7 +2514,7 @@ node_types:
                                       provisioner:
                                           file:
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Run setup script 
@@ -2542,7 +2542,6 @@ node_types:
 
                                                     # Install package
                                                     {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
-
 
                                                     # Create application directory
                                                     mkdir -p {{ SELF.application_directory }}
@@ -2574,7 +2573,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2587,12 +2586,12 @@ node_types:
                                                     . .vintner/create.sh
                                                 destination: /tmp/create-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2605,12 +2604,12 @@ node_types:
                                                     . .vintner/configure.sh
                                                 destination: /tmp/configure-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2623,12 +2622,12 @@ node_types:
                                                     . .vintner/start.sh
                                                 destination: /tmp/start-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2641,12 +2640,12 @@ node_types:
                                                     . .vintner/stop.sh
                                                 destination: /tmp/stop-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2724,7 +2723,7 @@ node_types:
                                                 destination: /tmp/artifact-checkout.component
                                                 count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Create application directory
@@ -2757,7 +2756,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2770,12 +2769,12 @@ node_types:
                                                     . .vintner/create.sh
                                                 destination: /tmp/create-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2788,7 +2787,7 @@ node_types:
                                                     . .vintner/configure.sh
                                                 destination: /tmp/configure-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2799,7 +2798,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2812,7 +2811,7 @@ node_types:
                                                     . .vintner/start.sh
                                                 destination: /tmp/start-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2823,7 +2822,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2836,12 +2835,12 @@ node_types:
                                                     . .vintner/stop.sh
                                                 destination: /tmp/stop-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2916,7 +2915,7 @@ node_types:
                                                 destination: /tmp/artifact-checkout.component
                                                 count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Create application directory
@@ -2942,14 +2941,14 @@ node_types:
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    not implemented
+                                                    unzip /tmp/artifact-checkout.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2962,12 +2961,12 @@ node_types:
                                                     . .vintner/create.sh
                                                 destination: /tmp/create-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -2980,7 +2979,7 @@ node_types:
                                                     . .vintner/configure.sh
                                                 destination: /tmp/configure-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -2991,7 +2990,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -3004,7 +3003,7 @@ node_types:
                                                     . .vintner/start.sh
                                                 destination: /tmp/start-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Assert operation
@@ -3015,7 +3014,7 @@ node_types:
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
@@ -3028,12 +3027,12 @@ node_types:
                                                     . .vintner/stop.sh
                                                 destination: /tmp/stop-checkout.component.sh
                                               - content: |
-                                                    #!/usr/bin/env bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     # Copy operation
                                                     cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #! /usr/bin/bash
+                                                    #!/usr/bin/bash
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}

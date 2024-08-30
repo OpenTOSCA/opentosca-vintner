@@ -529,7 +529,7 @@ export function SelfOperation(operation: MANAGEMENT_OPERATIONS) {
 }
 
 export const BASH_HEADER = `
-#!/usr/bin/env bash
+#!/usr/bin/bash
 set -e
 `.trim()
 

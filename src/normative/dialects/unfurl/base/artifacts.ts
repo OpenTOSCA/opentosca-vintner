@@ -1,17 +1,15 @@
 import {ArtifactTypeMap} from '#spec/artifact-type'
 import {RecursivePartial} from '#utils/types'
 
-// TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
-
 const artifacts: RecursivePartial<ArtifactTypeMap> = {
-    artifact: {
-        metadata: undefined,
-    },
     'source.archive': {
-        metadata: undefined,
+        properties: {
+            extra_opts: {
+                default: [],
+            },
+        },
     },
     'system.package': {
-        metadata: undefined,
         properties: {
             script: {
                 default: '',
@@ -32,12 +30,6 @@ const artifacts: RecursivePartial<ArtifactTypeMap> = {
                 default: '',
             },
         },
-    },
-    'container.image': {
-        metadata: undefined,
-    },
-    'virtual.machine.image': {
-        metadata: undefined,
     },
 }
 

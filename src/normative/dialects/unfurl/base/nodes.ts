@@ -67,6 +67,8 @@ const nodes: RecursivePartial<NodeTypeMap> = {
                 },
             },
         },
+    },
+    'service.application': {
         attributes: {
             application_endpoint: {
                 default: {
