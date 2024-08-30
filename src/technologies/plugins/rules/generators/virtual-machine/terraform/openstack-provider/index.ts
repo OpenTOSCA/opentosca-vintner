@@ -10,7 +10,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'terraform',
-    artifact: 'virtual.machine.image',
+    artifact: 'machine.image',
     hosting: ['openstack.provider'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
@@ -71,7 +71,7 @@ const generator: ImplementationGenerator = {
                                     machine: [
                                         {
                                             flavor_name: '{{ SELF.flavor }}',
-                                            image_name: '{{  ".artifacts::virtual_machine_image::file" | eval }}',
+                                            image_name: '{{  ".artifacts::machine_image::file" | eval }}',
                                             key_pair: 'default',
                                             name: '{{ SELF.machine_name }}',
                                             network: [

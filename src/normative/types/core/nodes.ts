@@ -160,6 +160,52 @@ const nodes: NodeTypeMap = {
             },
         },
     },
+    'physical.machine': {
+        derived_from: 'node',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            machine_name: {
+                type: 'string',
+            },
+            ports: {
+                type: 'list',
+                entry_schema: {
+                    type: 'string',
+                },
+            },
+            flavor: {
+                type: 'string',
+                default: 'm1.medium',
+            },
+            network: {
+                type: 'string',
+            },
+            ssh_user: {
+                type: 'string',
+            },
+            ssh_key_name: {
+                type: 'string',
+            },
+            ssh_key_file: {
+                type: 'string',
+            },
+        },
+        attributes: {
+            management_address: {
+                type: 'string',
+            },
+            application_address: {
+                type: 'string',
+            },
+        },
+        capabilities: {
+            host: {
+                type: 'tosca.capabilities.Compute',
+            },
+        },
+    },
     database: {
         derived_from: 'node',
         metadata: {

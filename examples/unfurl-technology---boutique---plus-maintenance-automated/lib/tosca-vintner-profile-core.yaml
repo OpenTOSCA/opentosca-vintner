@@ -5,7 +5,7 @@
 ###################################################
 
 tosca_definitions_version: tosca_simple_yaml_1_3
-description: OpenTOSCA Vintner - Normative Base Types
+description: OpenTOSCA Vintner - Normative Core Types
 metadata:
     vintner_normative: 'true'
     vintner_orchestrator: unfurl
@@ -58,7 +58,7 @@ artifact_types:
     container.image:
         derived_from: artifact
         description: expects image reference in "file"
-    virtual.machine.image:
+    machine.image:
         derived_from: artifact
         description: expects image reference in "file"
 interface_types:
@@ -300,7 +300,7 @@ node_types:
     #
     ################################################################
 
-    virtual.machine~virtual.machine#virtual.machine.image::ansible@openstack.provider:
+    virtual.machine~virtual.machine#machine.image::ansible@openstack.provider:
         derived_from: virtual.machine
         metadata:
             vintner_generated: 'true'
@@ -384,7 +384,7 @@ node_types:
                                       openstack.cloud.server:
                                           state: present
                                           name: '{{ SELF.machine_name }}'
-                                          image: '{{  ".artifacts::virtual_machine_image::file" | eval }}'
+                                          image: '{{  ".artifacts::machine_image::file" | eval }}'
                                           key_name: default
                                           flavor: '{{ SELF.flavor }}'
                                           network: '{{ SELF.network }}'
@@ -418,7 +418,7 @@ node_types:
                                       openstack.cloud.security_group:
                                           state: absent
                                           name: '{{ SELF.machine_name }}'
-    virtual.machine~virtual.machine#virtual.machine.image::terraform@openstack.provider:
+    virtual.machine~virtual.machine#machine.image::terraform@openstack.provider:
         derived_from: virtual.machine
         metadata:
             vintner_generated: 'true'
@@ -493,7 +493,7 @@ node_types:
                             openstack_compute_instance_v2:
                                 machine:
                                     - flavor_name: '{{ SELF.flavor }}'
-                                      image_name: '{{  ".artifacts::virtual_machine_image::file" | eval }}'
+                                      image_name: '{{  ".artifacts::machine_image::file" | eval }}'
                                       key_pair: default
                                       name: '{{ SELF.machine_name }}'
                                       network:

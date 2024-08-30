@@ -214,8 +214,8 @@ topology_template:
             requirements:
                 - host: openstack_provider
             artifacts:
-                - virtual_machine_image:
-                      type: virtual.machine.image
+                - machine_image:
+                      type: machine.image
                       file: Ubuntu 22.04
 
         openstack_provider:

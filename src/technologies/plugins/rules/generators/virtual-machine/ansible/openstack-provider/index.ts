@@ -11,7 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',
     technology: 'ansible',
-    artifact: 'virtual.machine.image',
+    artifact: 'machine.image',
     hosting: ['openstack.provider'],
     weight: 0.5,
     reason: 'Terraform is more specialized.',
@@ -86,7 +86,7 @@ const generator: ImplementationGenerator = {
                                             'openstack.cloud.server': {
                                                 state: 'present',
                                                 name: '{{ SELF.machine_name }}',
-                                                image: '{{  ".artifacts::virtual_machine_image::file" | eval }}',
+                                                image: '{{  ".artifacts::machine_image::file" | eval }}',
                                                 key_name: 'default',
                                                 flavor: '{{ SELF.flavor }}',
                                                 network: '{{ SELF.network }}',

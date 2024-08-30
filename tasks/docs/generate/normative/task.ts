@@ -10,6 +10,9 @@ async function main() {
 
     const normative = NormativeTypes()
 
+    const profileFile = path.join(dir, normative.profile.yaml)
+    files.storeYAML<ServiceTemplate>(profileFile, normative.profile.template)
+
     const coreFile = path.join(dir, normative.core.yaml)
     files.storeYAML<ServiceTemplate>(coreFile, normative.core.template)
     await Controller.template.puml.types({path: coreFile})

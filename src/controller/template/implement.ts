@@ -53,10 +53,13 @@ export default async function (options: TemplateImplementOptions) {
      * Normative Types
      */
     const normative = NormativeTypes(options.orchestrator)
-    files.storeYAML<ServiceTemplate>(path.join(lib, normative.core.id + '.yaml'), normative.core.template, {
+    files.storeYAML<ServiceTemplate>(path.join(lib, normative.profile.yaml), normative.profile.template, {
         generated: true,
     })
-    files.storeYAML<ServiceTemplate>(path.join(lib, normative.extended.id + '.yaml'), normative.extended.template, {
+    files.storeYAML<ServiceTemplate>(path.join(lib, normative.core.yaml), normative.core.template, {
+        generated: true,
+    })
+    files.storeYAML<ServiceTemplate>(path.join(lib, normative.extended.yaml), normative.extended.template, {
         generated: true,
     })
 
@@ -67,7 +70,7 @@ export default async function (options: TemplateImplementOptions) {
         path.join(lib, 'types.yaml'),
         {
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
-            imports: [normative.extended.id + '.yaml'],
+            imports: [normative.profile.yaml],
         },
         {overwrite: false}
     )

@@ -1,4 +1,5 @@
 import * as check from '#check'
+import { TOSCA_DEFINITIONS_VERSION } from '#spec/service-template'
 import * as utils from '#utils'
 import * as _ from 'lodash'
 import unfurlCore from 'src/normative/dialects/unfurl/core'
@@ -15,18 +16,18 @@ import normativeExtended from 'src/normative/types/extended'
  */
 
 export function NormativeTypes(orchestrator?: string) {
-    const core = utils.copy(normativeCore)
-    const extended = utils.copy(normativeExtended)
+    const coreTemplate = utils.copy(normativeCore)
+    const extendedTemplate = utils.copy(normativeExtended)
 
     if (check.isDefined(orchestrator)) {
         switch (orchestrator) {
             case 'unfurl':
-                _.merge(core, utils.copy(unfurlCore))
-                _.merge(extended, utils.copy(unfurlExtended))
+                _.merge(coreTemplate, utils.copy(unfurlCore))
+                _.merge(extendedTemplate, utils.copy(unfurlExtended))
 
                 // TODO: unfurl does not support metadata at artifact types, https://github.com/onecommons/unfurl/issues/340
-                Object.values(core.artifact_types ?? {}).forEach(it => delete it.metadata)
-                Object.values(extended.artifact_types ?? {}).forEach(it => delete it.metadata)
+                Object.values(coreTemplate.artifact_types ?? {}).forEach(it => delete it.metadata)
+                Object.values(extendedTemplate.artifact_types ?? {}).forEach(it => delete it.metadata)
                 break
 
             default:
@@ -34,20 +35,43 @@ export function NormativeTypes(orchestrator?: string) {
         }
     }
 
-    return {
-        core: {
-            id: 'tosca-vintner-profile-core',
-            yaml: 'tosca-vintner-profile-core.yaml',
-            short: 'Core',
-            name: 'TOSCA Vintner Core',
-            template: core,
-        },
-        extended: {
-            id: 'tosca-vintner-profile-extended',
-            yaml: 'tosca-vintner-profile-extended.yaml',
-            short: 'Extended',
-            name: 'TOSCA Vintner Extended',
-            template: extended,
+    const core = {
+        id: 'tosca-vintner-profile-core',
+        yaml: 'tosca-vintner-profile-core.yaml',
+        name: 'TOSCA Vintner Core',
+        short: 'Core',
+        template: coreTemplate,
+    }
+
+    const extended = {
+        id: 'tosca-vintner-profile-extended',
+        yaml: 'tosca-vintner-profile-extended.yaml',
+        name: 'TOSCA Vintner Extended',
+        short: 'Extended',
+        template: extendedTemplate,
+    }
+
+    const profile = {
+        id: 'tosca-vintner-profile',
+        yaml: 'tosca-vintner-profile.yaml',
+        name: 'TOSCA Vintner Profile',
+        short: 'Profile',
+        template: {
+            tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
+            description: 'TOSCA Profile for Vintner.',
+            metadata: {
+                template_name: 'TOSCA Vintner Profile',
+                template_author: 'Miles Stötzner',
+                template_contact: 'miles.stoetzner@iste.uni-stuttgart.de',
+                template_version: '1.0.0-draft',
+                template_id: 'tosca-vintner-profile',
+                template_license: 'https://www.apache.org/licenses/LICENSE-2.0',
+                acknowledgments:
+                    'Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).',
+            },
+            imports: [`./${core.yaml}`, `./${extended.yaml}`],
         },
     }
+
+    return {core, extended, profile}
 }

@@ -46,7 +46,7 @@ ansible:
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks'
     - component: virtual.machine
-      artifact: virtual.machine.image
+      artifact: machine.image
       hosting:
           - openstack.provider
       weight: 0.5
@@ -195,7 +195,7 @@ terraform:
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
     - component: virtual.machine
-      artifact: virtual.machine.image
+      artifact: machine.image
       hosting:
           - openstack.provider
       weight: 1

@@ -10,7 +10,7 @@ rectangle "system.package"
 
 rectangle "container.image"
 
-rectangle "virtual.machine.image"
+rectangle "machine.image"
 
 
 "tosca.artifacts.Root" <|-- "artifact"
@@ -21,6 +21,6 @@ rectangle "virtual.machine.image"
 
 "artifact" <|-- "container.image"
 
-"artifact" <|-- "virtual.machine.image"
+"artifact" <|-- "machine.image"
 
 @enduml

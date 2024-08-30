@@ -69,7 +69,7 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
     },
-    'virtual.machine.image': {
+    'machine.image': {
         derived_from: 'artifact',
         description: 'expects image reference in "file"',
         metadata: {

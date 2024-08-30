@@ -45,7 +45,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## Virtual Machine 
 
-1. A `virtual.machine` node template always requires a `virtual.machine.image` deployment artifact.
+1. A `virtual.machine` node template always requires a `machine.image` deployment artifact.
 
 ## Management Operations
 

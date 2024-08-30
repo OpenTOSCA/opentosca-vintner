@@ -19,6 +19,7 @@ export default async function (options: TemplateUnimplementOptions) {
 
     const normative = NormativeTypes()
 
+    await files.removeFile(path.join(lib, normative.profile.yaml))
     await files.removeFile(path.join(lib, normative.core.yaml))
     await files.removeFile(path.join(lib, normative.extended.yaml))
     await files.removeFile(path.join(lib, TECHNOLOGY_RULES_FILENAME))

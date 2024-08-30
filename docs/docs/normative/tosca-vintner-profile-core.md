@@ -84,12 +84,12 @@ container.image:
         vintner_normative: 'true'
 ```
 
-#### virtual.machine.image
+#### machine.image
 
 expects image reference in &#34;file&#34;
 
 ```yaml linenums="1"
-virtual.machine.image:
+machine.image:
     derived_from: artifact
     metadata:
         vintner_normative: 'true'
