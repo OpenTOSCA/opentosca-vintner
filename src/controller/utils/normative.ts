@@ -2,7 +2,13 @@ import {NormativeTypes} from '#/normative'
 import * as files from '#files'
 import * as utils from '#utils'
 
-export type NormativeOptions = {orchestrator?: string; format?: string; base?: boolean; specific?: boolean}
+export type NormativeOptions = {
+    orchestrator?: string
+    format?: string
+    profile?: boolean
+    base?: boolean
+    specific?: boolean
+}
 
 export default async function (options: NormativeOptions) {
     /**
@@ -21,6 +27,7 @@ export default async function (options: NormativeOptions) {
      * Filter
      */
     const types = []
+    if (options.profile) types.push(normative.profile.template)
     if (options.base) types.push(normative.core.template)
     if (options.specific) types.push(normative.extended.template)
 

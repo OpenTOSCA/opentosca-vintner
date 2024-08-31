@@ -1121,6 +1121,8 @@ utils
     .command('normative')
     .description('returns normative types')
     .option('--orchestrator [string]', 'orchestrator dialect')
+    .option('--profile [boolean]', 'include profile entry', true)
+    .option('--no-profile [boolean]')
     .option('--base [boolean]', 'include base types', true)
     .option('--no-base [boolean]')
     .option('--specific [boolean]', 'include specific types', true)
