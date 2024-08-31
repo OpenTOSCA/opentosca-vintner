@@ -11,15 +11,15 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    inputs:
-      first:
-        type: boolean
-        default: true
-        implies: second
-      second:
-        type: boolean
-        default: false
+    variability:
+        inputs:
+            first:
+                type: boolean
+                default: true
+                implies: second
+            second:
+                type: boolean
+                default: false
 {% endraw %}
 ```
 

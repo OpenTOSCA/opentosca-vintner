@@ -11,29 +11,29 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      input_default_condition: true
-      input_default_consistency_condition: true
-      input_default_semantic_condition: true
-      property_default_condition: true
-  inputs:
-    some_input:
-      type: string
-  node_templates:
-    container:
-      type: container
-      conditions: true
-      properties:
-        some_property:
-          get_input: some_input
-    another_container:
-      type: container
-      conditions: false
-      properties:
-        some_property:
-          get_input: some_input
+    variability:
+        options:
+            type_default_condition: true
+            input_default_condition: true
+            input_default_consistency_condition: true
+            input_default_semantic_condition: true
+            property_default_condition: true
+    inputs:
+        some_input:
+            type: string
+    node_templates:
+        container:
+            type: container
+            conditions: true
+            properties:
+                some_property:
+                    get_input: some_input
+        another_container:
+            type: container
+            conditions: false
+            properties:
+                some_property:
+                    get_input: some_input
 {% endraw %}
 ```
 
@@ -48,15 +48,15 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  inputs:
-    some_input:
-      type: string
-  node_templates:
-    container:
-      type: container
-      properties:
-        some_property:
-          get_input: some_input
+    inputs:
+        some_input:
+            type: string
+    node_templates:
+        container:
+            type: container
+            properties:
+                some_property:
+                    get_input: some_input
 {% endraw %}
 ```
 

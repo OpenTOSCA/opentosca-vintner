@@ -11,30 +11,30 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incoming
-      node_pruning: true
-      relation_default_condition: true
-      relation_default_condition_mode: source-target
-      relation_pruning: true
-      type_default_condition: true
-  node_templates:
-    node_one:
-      type: node_one
-      pruning: true
-      conditions: true
-    node_two:
-      type: node_two
-      conditions: false
-      requirements:
-        - relation_two: node_one
-    node_three:
-      type: node_three
-      conditions: false
-      requirements:
-        - relation_three: node_one
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incoming
+            node_pruning: true
+            relation_default_condition: true
+            relation_default_condition_mode: source-target
+            relation_pruning: true
+            type_default_condition: true
+    node_templates:
+        node_one:
+            type: node_one
+            pruning: true
+            conditions: true
+        node_two:
+            type: node_two
+            conditions: false
+            requirements:
+                - relation_two: node_one
+        node_three:
+            type: node_three
+            conditions: false
+            requirements:
+                - relation_three: node_one
 {% endraw %}
 ```
 

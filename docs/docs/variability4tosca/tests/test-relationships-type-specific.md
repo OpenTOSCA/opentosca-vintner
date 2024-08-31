@@ -11,32 +11,32 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      relation_default_condition: true
-    type_specific_conditions:
-      relationship_types:
+    variability:
+        options:
+            type_default_condition: true
+            relation_default_condition: true
+        type_specific_conditions:
+            relationship_types:
+                rone:
+                    conditions:
+                        or: []
+    node_templates:
+        source:
+            type: source
+            requirements:
+                - one:
+                      node: target
+                      relationship: rone
+                - two:
+                      node: target
+                      relationship: rtwo
+        target:
+            type: target
+    relationship_templates:
         rone:
-          conditions:
-            or: []
-  node_templates:
-    source:
-      type: source
-      requirements:
-        - one:
-            node: target
-            relationship: rone
-        - two:
-            node: target
-            relationship: rtwo
-    target:
-      type: target
-  relationship_templates:
-    rone:
-      type: rone
-    rtwo:
-      type: rtwo
+            type: rone
+        rtwo:
+            type: rtwo
 {% endraw %}
 ```
 
@@ -51,18 +51,18 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    source:
-      type: source
-      requirements:
-        - two:
-            node: target
-            relationship: rtwo
-    target:
-      type: target
-  relationship_templates:
-    rtwo:
-      type: rtwo
+    node_templates:
+        source:
+            type: source
+            requirements:
+                - two:
+                      node: target
+                      relationship: rtwo
+        target:
+            type: target
+    relationship_templates:
+        rtwo:
+            type: rtwo
 {% endraw %}
 ```
 

@@ -19,24 +19,24 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      optimization_topology: true
-  node_templates:
-    agent:
-      type: agent
-      conditions:
-        host_presence: SELF
-      requirements:
-        - host: vm
-    worker:
-      type: worker
-      conditions: true
-      requirements:
-        - host: vm
-    vm:
-      type: vm
+    variability:
+        options:
+            mode: semantic-loose
+            optimization_topology: true
+    node_templates:
+        agent:
+            type: agent
+            conditions:
+                host_presence: SELF
+            requirements:
+                - host: vm
+        worker:
+            type: worker
+            conditions: true
+            requirements:
+                - host: vm
+        vm:
+            type: vm
 {% endraw %}
 ```
 
@@ -51,17 +51,17 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    agent:
-      type: agent
-      requirements:
-        - host: vm
-    worker:
-      type: worker
-      requirements:
-        - host: vm
-    vm:
-      type: vm
+    node_templates:
+        agent:
+            type: agent
+            requirements:
+                - host: vm
+        worker:
+            type: worker
+            requirements:
+                - host: vm
+        vm:
+            type: vm
 {% endraw %}
 ```
 

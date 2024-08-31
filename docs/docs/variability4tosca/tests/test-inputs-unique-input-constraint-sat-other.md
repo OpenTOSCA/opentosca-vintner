@@ -11,18 +11,18 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      unique_input_constraint: true
-  inputs:
-    - one:
-        type: string_a
-        conditions: false
-    - one:
-        type: string_b
-    - three:
-        type: string
+    variability:
+        options:
+            type_default_condition: true
+            unique_input_constraint: true
+    inputs:
+        - one:
+              type: string_a
+              conditions: false
+        - one:
+              type: string_b
+        - three:
+              type: string
 {% endraw %}
 ```
 
@@ -37,11 +37,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  inputs:
-    one:
-      type: string_b
-    three:
-      type: string
+    inputs:
+        one:
+            type: string_b
+        three:
+            type: string
 {% endraw %}
 ```
 

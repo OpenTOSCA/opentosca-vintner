@@ -11,88 +11,88 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    inputs:
-      static:
-        type: boolean
-        default: true
-    presets:
-      static:
+    variability:
         inputs:
-          static: true
-      elastic:
-        inputs:
-          static: false
-    expressions:
-      is_static:
-        equal:
-          - variability_input: static
-          - true
-      is_elastic:
-        equal:
-          - variability_input: static
-          - false
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incoming-host
-      hosting_stack_constraint: true
-      optimization_topology: true
-  node_templates:
-    shop:
-      type: shop.component
-      persistent: true
-      requirements:
-        - host:
-            node: os_kubernetes
-            conditions:
-              logic_expression: is_static
-        - host:
-            node: gcp_runtime
-            conditions:
-              logic_expression: is_elastic
-        - database:
-            node: database
-            conditions: true
-            implied: true
-    database:
-      type: shop.database
-      requirements:
-        - host:
-            node: os_dbms
-        - host:
-            node: gcp_dbms
-    os_dbms:
-      type: os.dbms
-      requirements:
-        - host: os_kubernetes
-    os_monitor:
-      type: os.monitor
-      requirements:
-        - host: os_kubernetes
-    os_logger:
-      type: os.logger
-      requirements:
-        - host: os_kubernetes
-    os_kubernetes:
-      type: os.kubernetes
-      requirements:
-        - host: os_compute
-    os_compute:
-      type: os.compute
-      requirements:
-        - host: os_cloud
-    os_cloud:
-      type: os_cloud
-    gcp_dbms:
-      type: gcp.dbms
-      requirements:
-        - host: gcp_cloud
-    gcp_runtime:
-      type: gcp.runtime
-      requirements:
-        - host: gcp_cloud
-    gcp_cloud:
-      type: gcp.cloud
+            static:
+                type: boolean
+                default: true
+        presets:
+            static:
+                inputs:
+                    static: true
+            elastic:
+                inputs:
+                    static: false
+        expressions:
+            is_static:
+                equal:
+                    - variability_input: static
+                    - true
+            is_elastic:
+                equal:
+                    - variability_input: static
+                    - false
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+            optimization_topology: true
+    node_templates:
+        shop:
+            type: shop.component
+            persistent: true
+            requirements:
+                - host:
+                      node: os_kubernetes
+                      conditions:
+                          logic_expression: is_static
+                - host:
+                      node: gcp_runtime
+                      conditions:
+                          logic_expression: is_elastic
+                - database:
+                      node: database
+                      conditions: true
+                      implied: true
+        database:
+            type: shop.database
+            requirements:
+                - host:
+                      node: os_dbms
+                - host:
+                      node: gcp_dbms
+        os_dbms:
+            type: os.dbms
+            requirements:
+                - host: os_kubernetes
+        os_monitor:
+            type: os.monitor
+            requirements:
+                - host: os_kubernetes
+        os_logger:
+            type: os.logger
+            requirements:
+                - host: os_kubernetes
+        os_kubernetes:
+            type: os.kubernetes
+            requirements:
+                - host: os_compute
+        os_compute:
+            type: os.compute
+            requirements:
+                - host: os_cloud
+        os_cloud:
+            type: os_cloud
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host: gcp_cloud
+        gcp_runtime:
+            type: gcp.runtime
+            requirements:
+                - host: gcp_cloud
+        gcp_cloud:
+            type: gcp.cloud
 {% endraw %}
 ```
 
@@ -107,26 +107,26 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    shop:
-      type: shop.component
-      requirements:
-        - host: gcp_runtime
-        - database: database
-    database:
-      type: shop.database
-      requirements:
-        - host: gcp_dbms
-    gcp_dbms:
-      type: gcp.dbms
-      requirements:
-        - host: gcp_cloud
-    gcp_runtime:
-      type: gcp.runtime
-      requirements:
-        - host: gcp_cloud
-    gcp_cloud:
-      type: gcp.cloud
+    node_templates:
+        shop:
+            type: shop.component
+            requirements:
+                - host: gcp_runtime
+                - database: database
+        database:
+            type: shop.database
+            requirements:
+                - host: gcp_dbms
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host: gcp_cloud
+        gcp_runtime:
+            type: gcp.runtime
+            requirements:
+                - host: gcp_cloud
+        gcp_cloud:
+            type: gcp.cloud
 {% endraw %}
 ```
 

@@ -370,7 +370,7 @@ topology_template:
                         env: FALCO_FRONTEND=noninteractive
 
         virtual_machine:
-            type: virtual.machine~virtual.machine#virtual.machine.image::terraform@openstack.provider
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
             properties:
                 machine_name: unfurl-technology-boutique
                 ports: ['80', '9100']
@@ -382,8 +382,8 @@ topology_template:
             requirements:
                 - host: openstack_provider
             artifacts:
-                virtual_machine_image:
-                    type: virtual.machine.image
+                machine_image:
+                    type: machine.image
                     file: Ubuntu 22.04
 
         openstack_provider:

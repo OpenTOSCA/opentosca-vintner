@@ -11,30 +11,30 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incoming-host
-      relation_default_condition: true
-      relation_default_condition_mode: source-target
-      type_default_condition: true
-      persistent_check: false
-      optimization_topology: true
-      hosting_stack_constraint: true
-  node_templates:
-    worker:
-      type: worker
-      persistent: false
-      requirements:
-        - host:
-            node: vm
-    vm:
-      type: vm
-      requirements:
-        - host:
-            node: hypervisor
-    hypervisor:
-      type: hypervisor
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incoming-host
+            relation_default_condition: true
+            relation_default_condition_mode: source-target
+            type_default_condition: true
+            persistent_check: false
+            optimization_topology: true
+            hosting_stack_constraint: true
+    node_templates:
+        worker:
+            type: worker
+            persistent: false
+            requirements:
+                - host:
+                      node: vm
+        vm:
+            type: vm
+            requirements:
+                - host:
+                      node: hypervisor
+        hypervisor:
+            type: hypervisor
 {% endraw %}
 ```
 

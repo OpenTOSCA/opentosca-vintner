@@ -16,30 +16,29 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incoming-host
-      hosting_stack_constraint: true
-      optimization: false
-      optimization_topology_unique: true
-  node_templates:
-    agent:
-      type: agent
-      requirements:
-        - host: vm
-    worker:
-      type: worker
-      persistent: true
-      requirements:
-        - host:
-            node: vm
-    vm:
-      type: vm
-      requirements:
-        - host: hypervisor
-    hypervisor:
-      type: hypervisor
+    variability:
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+            optimization_topology_unique: true
+    node_templates:
+        agent:
+            type: agent
+            requirements:
+                - host: vm
+        worker:
+            type: worker
+            persistent: true
+            requirements:
+                - host:
+                      node: vm
+        vm:
+            type: vm
+            requirements:
+                - host: hypervisor
+        hypervisor:
+            type: hypervisor
 {% endraw %}
 ```
 
@@ -54,21 +53,21 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    agent:
-      type: agent
-      requirements:
-        - host: vm
-    worker:
-      type: worker
-      requirements:
-        - host: vm
-    vm:
-      type: vm
-      requirements:
-        - host: hypervisor
-    hypervisor:
-      type: hypervisor
+    node_templates:
+        agent:
+            type: agent
+            requirements:
+                - host: vm
+        worker:
+            type: worker
+            requirements:
+                - host: vm
+        vm:
+            type: vm
+            requirements:
+                - host: hypervisor
+        hypervisor:
+            type: hypervisor
 {% endraw %}
 ```
 

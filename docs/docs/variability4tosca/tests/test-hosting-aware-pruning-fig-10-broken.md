@@ -11,29 +11,29 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incoming-artifact-host
-      optimization_topology: min
-      optimization_topology_unique: false
-      hosting_stack_constraint: true
-  node_templates:
-    app:
-      type: app
-      persistent: true
-      requirements:
-        - host: elastic
-        - host: static
-        - database:
-            node: database
-            implied: true
-    database:
-      type: database
-    static:
-      type: static
-    elastic:
-      type: elastic
+    variability:
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming-artifact-host
+            optimization_topology: min
+            optimization_topology_unique: false
+            hosting_stack_constraint: true
+    node_templates:
+        app:
+            type: app
+            persistent: true
+            requirements:
+                - host: elastic
+                - host: static
+                - database:
+                      node: database
+                      implied: true
+        database:
+            type: database
+        static:
+            type: static
+        elastic:
+            type: elastic
 {% endraw %}
 ```
 

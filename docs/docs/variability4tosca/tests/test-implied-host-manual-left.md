@@ -11,38 +11,40 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_2
 topology_template:
-  variability:
-    inputs:
-      l:
-        type: boolean
-    expressions:
-      is_l:
-        equal:
-          - variability_input: l
-          - true
-      is_r:
-        equal:
-          - variability_input: l
-          - false
-  node_templates:
-    application:
-      type: Application
-      persistent: true
-      requirements:
-        - host:
-            node: left
-            implied: false
-        - host:
-            node: right
-            implied: false
-    right:
-      type: Right
-      conditions:
-        logic_expression: is_r
-    left:
-      type: Left
-      conditions:
-        logic_expression: is_l
+    variability:
+        inputs:
+            l:
+                type: boolean
+        expressions:
+            is_l:
+                equal:
+                    - variability_input: l
+                    - true
+            is_r:
+                equal:
+                    - variability_input: l
+                    - false
+        options:
+            enrich_technologies: false
+    node_templates:
+        application:
+            type: Application
+            persistent: true
+            requirements:
+                - host:
+                      node: left
+                      implied: false
+                - host:
+                      node: right
+                      implied: false
+        right:
+            type: Right
+            conditions:
+                logic_expression: is_r
+        left:
+            type: Left
+            conditions:
+                logic_expression: is_l
 {% endraw %}
 ```
 
@@ -64,13 +66,13 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    application:
-      type: Application
-      requirements:
-        - host: left
-    left:
-      type: Left
+    node_templates:
+        application:
+            type: Application
+            requirements:
+                - host: left
+        left:
+            type: Left
 {% endraw %}
 ```
 

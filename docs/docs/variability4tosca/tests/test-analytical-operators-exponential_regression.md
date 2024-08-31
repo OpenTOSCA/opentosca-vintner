@@ -11,22 +11,22 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        - value:
-            expression:
-              exponential_regression:
-                - - - 0
-                    - 1
-                  - - 1
-                    - 2.72
-                  - - 2
-                    - 7.39
-                  - - 3
-                    - 20.09
-                - 4
+    node_templates:
+        container:
+            type: container
+            properties:
+                - value:
+                      expression:
+                          exponential_regression:
+                              - - - 0
+                                  - 1
+                                - - 1
+                                  - 2.72
+                                - - 2
+                                  - 7.39
+                                - - 3
+                                  - 20.09
+                              - 4
 {% endraw %}
 ```
 
@@ -41,11 +41,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    container:
-      type: container
-      properties:
-        value: 54.6
+    node_templates:
+        container:
+            type: container
+            properties:
+                value: 54.6
 {% endraw %}
 ```
 

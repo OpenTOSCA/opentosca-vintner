@@ -14,14 +14,14 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-  node_templates:
-    container:
-      type: container
-      conditions:
-        not: false
+    variability:
+        options:
+            type_default_condition: true
+    node_templates:
+        container:
+            type: container
+            conditions:
+                not: false
 {% endraw %}
 ```
 
@@ -36,9 +36,9 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    container:
-      type: container
+    node_templates:
+        container:
+            type: container
 {% endraw %}
 ```
 

@@ -11,20 +11,21 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_3
 topology_template:
-  variability:
-    options:
-      technology_required: false
-  inputs:
-    some_input:
-      type: string
-  node_templates:
-    container:
-      type: container
-      conditions: false
-      persistent: true
-      properties:
-        some_property:
-          get_input: some_input
+    variability:
+        options:
+            technology_required: false
+            enrich_technologies: false
+    inputs:
+        some_input:
+            type: string
+    node_templates:
+        container:
+            type: container
+            conditions: false
+            persistent: true
+            properties:
+                some_property:
+                    get_input: some_input
 {% endraw %}
 ```
 

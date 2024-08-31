@@ -11,17 +11,17 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 imports:
-  - file: some_file
-    conditions: true
+    - file: some_file
+      conditions: true
 topology_template:
-  variability:
-    options:
-      type_pruning: true
-  node_templates:
-    container:
-      type: container
-      conditions:
-        import_presence: 0
+    variability:
+        options:
+            type_pruning: true
+    node_templates:
+        container:
+            type: container
+            conditions:
+                import_presence: 0
 {% endraw %}
 ```
 
@@ -36,11 +36,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
-  - some_file
+    - some_file
 topology_template:
-  node_templates:
-    container:
-      type: container
+    node_templates:
+        container:
+            type: container
 {% endraw %}
 ```
 

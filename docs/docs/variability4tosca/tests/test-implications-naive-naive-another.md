@@ -11,37 +11,37 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incomingnaive-host
-      relation_default_condition: true
-      relation_default_condition_mode: source-target
-      type_default_condition: true
-      hosting_stack_constraint: true
-      optimization_topology: true
-      optimization_topology_unique: true
-  node_templates:
-    app:
-      type: app
-      persistent: true
-      requirements:
-        - database:
-            node: database
-            implied: true
-        - host:
-            node: static
-        - host:
-            node: elastic
-    database:
-      type: database
-      requirements:
-        - host:
-            node: static
-    static:
-      type: static
-    elastic:
-      type: elastic
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incomingnaive-host
+            relation_default_condition: true
+            relation_default_condition_mode: source-target
+            type_default_condition: true
+            hosting_stack_constraint: true
+            optimization_topology: true
+            optimization_topology_unique: true
+    node_templates:
+        app:
+            type: app
+            persistent: true
+            requirements:
+                - database:
+                      node: database
+                      implied: true
+                - host:
+                      node: static
+                - host:
+                      node: elastic
+        database:
+            type: database
+            requirements:
+                - host:
+                      node: static
+        static:
+            type: static
+        elastic:
+            type: elastic
 {% endraw %}
 ```
 
@@ -56,18 +56,18 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    app:
-      type: app
-      requirements:
-        - database: database
-        - host: static
-    database:
-      type: database
-      requirements:
-        - host: static
-    static:
-      type: static
+    node_templates:
+        app:
+            type: app
+            requirements:
+                - database: database
+                - host: static
+        database:
+            type: database
+            requirements:
+                - host: static
+        static:
+            type: static
 {% endraw %}
 ```
 

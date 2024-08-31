@@ -11,27 +11,28 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      optimization_technologies: true
-      optimization_technologies_mode: weight
-      optimization_technologies_unique: true
-      technology_pruning: true
-      technology_constraint: true
-  node_templates:
-    container:
-      type: container
-      technology:
-        - terraform:
-            conditions: true
-        - ansible:
-            conditions: true
-            weight: 100
-    another:
-      type: another
-      technology:
-        - ansible:
-            conditions: true
+    variability:
+        options:
+            optimization_technologies: true
+            optimization_technologies_mode: weight
+            optimization_technologies_unique: true
+            technology_pruning: true
+            technology_constraint: true
+    node_templates:
+        container:
+            type: container
+            technology:
+                - terraform:
+                      conditions: true
+                      weight: 0.5
+                - ansible:
+                      conditions: true
+                      weight: 1
+        another:
+            type: another
+            technology:
+                - ansible:
+                      conditions: true
 {% endraw %}
 ```
 
@@ -46,11 +47,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    container:
-      type: container.terraform.container
-    another:
-      type: another.ansible.another
+    node_templates:
+        container:
+            type: container~container::terraform
+        another:
+            type: another~another::ansible
 {% endraw %}
 ```
 

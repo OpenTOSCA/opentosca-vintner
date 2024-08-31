@@ -11,65 +11,65 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    inputs:
-      mode:
-        type: string
-        default: left
-    presets:
-      left:
+    variability:
         inputs:
-          mode: left
-      right:
-        inputs:
-          mode: right
-    expressions:
-      is_left:
-        equal:
-          - variability_input: mode
-          - left
-      is_right:
-        equal:
-          - variability_input: mode
-          - right
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incoming-host
-      hosting_stack_constraint: true
-      optimization_topology: true
-      optimization_topology_unique: true
-  node_templates:
-    worker:
-      type: worker
-      persistent: true
-      implies:
-        - - relation_presence:
-              - SELF
-              - left
-          - logic_expression: is_left
-        - - relation_presence:
-              - SELF
-              - right
-          - logic_expression: is_right
-      requirements:
-        - left: left
-        - right: right
-    left:
-      type: left
-      requirements:
-        - host: left_host
-    left_host:
-      type: left.host
-      requirements:
-        - host: left_host_host
-    left_host_host:
-      type: left.host.host
-    right:
-      type: right
-      requirements:
-        - host: right_host
-    right_host:
-      type: right.host
+            mode:
+                type: string
+                default: left
+        presets:
+            left:
+                inputs:
+                    mode: left
+            right:
+                inputs:
+                    mode: right
+        expressions:
+            is_left:
+                equal:
+                    - variability_input: mode
+                    - left
+            is_right:
+                equal:
+                    - variability_input: mode
+                    - right
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+            optimization_topology: true
+            optimization_topology_unique: true
+    node_templates:
+        worker:
+            type: worker
+            persistent: true
+            implies:
+                - - relation_presence:
+                        - SELF
+                        - left
+                  - logic_expression: is_left
+                - - relation_presence:
+                        - SELF
+                        - right
+                  - logic_expression: is_right
+            requirements:
+                - left: left
+                - right: right
+        left:
+            type: left
+            requirements:
+                - host: left_host
+        left_host:
+            type: left.host
+            requirements:
+                - host: left_host_host
+        left_host_host:
+            type: left.host.host
+        right:
+            type: right
+            requirements:
+                - host: right_host
+        right_host:
+            type: right.host
 {% endraw %}
 ```
 
@@ -84,17 +84,17 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    worker:
-      type: worker
-      requirements:
-        - right: right
-    right:
-      type: right
-      requirements:
-        - host: right_host
-    right_host:
-      type: right.host
+    node_templates:
+        worker:
+            type: worker
+            requirements:
+                - right: right
+        right:
+            type: right
+            requirements:
+                - host: right_host
+        right_host:
+            type: right.host
 {% endraw %}
 ```
 

@@ -11,39 +11,39 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incomingnaive-host
-      hosting_stack_constraint: true
-      optimization: true
-      optimization_technologies: true
-      technology_pruning: true
-  node_templates:
-    container:
-      type: container
-      persistent: true
-      technology:
-        - ansible:
-            conditions: true
-        - terraform:
-            conditions: true
-      requirements:
-        - relation:
-            node: container_host
-            conditions: false
-    container_host:
-      type: container_host
-    container_host_agent:
-      type: container_host_agent
-      requirements:
-        - host:
-            node: container_host
-    another:
-      type: another
-      technology:
-        - ansible:
-            conditions: true
+    variability:
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incomingnaive-host
+            hosting_stack_constraint: true
+            optimization_topology: true
+            optimization_technologies: true
+            technology_pruning: true
+    node_templates:
+        container:
+            type: container
+            persistent: true
+            technology:
+                - ansible:
+                      conditions: true
+                - terraform:
+                      conditions: true
+            requirements:
+                - relation:
+                      node: container_host
+                      conditions: false
+        container_host:
+            type: container_host
+        container_host_agent:
+            type: container_host_agent
+            requirements:
+                - host:
+                      node: container_host
+        another:
+            type: another
+            technology:
+                - ansible:
+                      conditions: true
 {% endraw %}
 ```
 
@@ -58,11 +58,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    container:
-      type: container.ansible.container
-    another:
-      type: another.ansible.another
+    node_templates:
+        container:
+            type: container~container::ansible
+        another:
+            type: another~another::ansible
 {% endraw %}
 ```
 

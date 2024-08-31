@@ -11,18 +11,18 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      unique_property_constraint: true
-  node_templates:
-    node_one:
-      type: node_one
-      properties:
-        - key_one:
-            conditions: false
-            value: value_one_a
-        - key_one: value_one_b
-        - key_two: value_two
+    variability:
+        options:
+            unique_property_constraint: true
+    node_templates:
+        node_one:
+            type: node_one
+            properties:
+                - key_one:
+                      conditions: false
+                      value: value_one_a
+                - key_one: value_one_b
+                - key_two: value_two
 {% endraw %}
 ```
 
@@ -37,12 +37,12 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    node_one:
-      type: node_one
-      properties:
-        key_one: value_one_b
-        key_two: value_two
+    node_templates:
+        node_one:
+            type: node_one
+            properties:
+                key_one: value_one_b
+                key_two: value_two
 {% endraw %}
 ```
 

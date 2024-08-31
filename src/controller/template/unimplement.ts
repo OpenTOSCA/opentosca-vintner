@@ -1,8 +1,7 @@
+import {NormativeTypes} from '#/normative'
 import * as assert from '#assert'
 import * as files from '#files'
 import {YAML_EXTENSIONS} from '#files'
-import {NORMATIVE_BASE_TYPES_FILENAME} from '#normative/base'
-import {NORMATIVE_SPECIFIC_TYPES_FILENAME} from '#normative/specific'
 import std from '#std'
 import {GENERATION_MARK_REGEX, TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
 import path from 'path'
@@ -18,8 +17,11 @@ export default async function (options: TemplateUnimplementOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
     const lib = path.join(options.dir, 'lib')
 
-    await files.removeFile(path.join(lib, NORMATIVE_BASE_TYPES_FILENAME))
-    await files.removeFile(path.join(lib, NORMATIVE_SPECIFIC_TYPES_FILENAME))
+    const normative = NormativeTypes()
+
+    await files.removeFile(path.join(lib, normative.profile.yaml))
+    await files.removeFile(path.join(lib, normative.core.yaml))
+    await files.removeFile(path.join(lib, normative.extended.yaml))
     await files.removeFile(path.join(lib, TECHNOLOGY_RULES_FILENAME))
 
     for (const file of files.walkDirectory(lib, {extensions: YAML_EXTENSIONS})) {

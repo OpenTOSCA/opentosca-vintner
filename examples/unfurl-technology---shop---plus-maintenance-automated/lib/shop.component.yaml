@@ -183,7 +183,7 @@ node_types:
                                     - name: set attributes
                                       set_fact:
                                           application_address: '{{ (service_description.stdout | from_json ).status.url[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
+                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
                             resultTemplate: |
                                 name: SELF
                                 attributes:
@@ -344,9 +344,13 @@ node_types:
                             playbook:
                                 q:
                                     - name: activate service account
-                                      shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
+                                      ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
+                                      args:
+                                          executable: /bin/bash
                                     - name: enable GCP AppEngine
-                                      shell: gcloud app create --region {{ SELF.gcp_region }} --quiet
+                                      ansible.builtin.shell: gcloud app create --region {{ SELF.gcp_region }} --quiet
+                                      args:
+                                          executable: /bin/bash
                                       register: app_create_command
                                       failed_when:
                                           - "'Created' not in app_create_command.stderr"
@@ -356,7 +360,7 @@ node_types:
                                       ansible.builtin.tempfile:
                                           state: directory
                                     - name: extract deployment artifact in working directory
-                                      unarchive:
+                                      ansible.builtin.unarchive:
                                           src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ directory.path }}'
                                     - name: create specification
@@ -378,14 +382,18 @@ node_types:
                                                   FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
                                                   FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
                                     - name: create app
-                                      shell: gcloud app deploy {{ directory.path }} --quiet
+                                      ansible.builtin.shell: gcloud app deploy {{ directory.path }} --quiet
+                                      args:
+                                          executable: /bin/bash
                                     - name: browse app
                                       register: browse_app
-                                      shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet '
+                                      ansible.builtin.shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet '
+                                      args:
+                                          executable: /bin/bash
                                     - name: set attributes
                                       set_fact:
                                           application_address: '{{ browse_app.stdout[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol }}://{{ browse_app.stdout[8:] | trim }}:443'
+                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ browse_app.stdout[8:] | trim }}:443'
                             resultTemplate: |
                                 name: SELF
                                 attributes:
@@ -461,6 +469,260 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
+    shop.component~service.application#tar.archive::ansible@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                              DB_NAME="{{ SELF.DB_NAME }}"
+                                              DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                              DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                              DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                              DB_PORT="{{ SELF.DB_PORT }}"
+                                              FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                              FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: create service
+                                      ansible.builtin.copy:
+                                          dest: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          content: |
+                                              [Unit]
+                                              After=network.target
+
+                                              [Service]
+                                              Type=simple
+                                              ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                              WorkingDirectory={{ SELF.application_directory }}
+                                              EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                              [Install]
+                                              WantedBy=multi-user.target
+                                    - name: enable service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: start service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: started
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: stop service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete systemd service
+                                      ansible.builtin.file:
+                                          path: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          state: absent
+                                    - name: reload daemon
+                                      ansible.builtin.systemd:
+                                          daemon_reload: true
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
     shop.component~service.application#zip.archive::ansible@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -506,17 +768,25 @@ node_types:
                                           path: '{{ SELF.application_directory }}'
                                           state: directory
                                     - name: extract deployment artifact in application directory
-                                      unarchive:
+                                      ansible.builtin.unarchive:
                                           src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
                                           state: directory
                                     - name: create .env file
-                                      copy:
+                                      ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: |
+                                          content: |-
                                               PORT="{{ SELF.application_port }}"
                                               DB_DIALECT="{{ SELF.DB_DIALECT }}"
                                               DB_NAME="{{ SELF.DB_NAME }}"
@@ -529,11 +799,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_create }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -543,10 +813,9 @@ node_types:
                                           executable: /bin/bash
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: create service
-                                      copy:
+                                      ansible.builtin.copy:
                                           dest: /etc/systemd/system/{{ SELF.application_name }}.service
                                           content: |
-
                                               [Unit]
                                               After=network.target
 
@@ -582,11 +851,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_configure }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -617,11 +886,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_start }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
@@ -648,11 +917,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_stop }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -683,11 +952,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_delete }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -751,19 +1020,19 @@ node_types:
                                       ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
                                       args:
                                           executable: /bin/bash
-                                      when: '".artifacts::apt_package::script" | eval != None'
+                                      when: '".artifacts::apt_package::script" | eval != ""'
                                     - name: add apt key
                                       ansible.builtin.apt_key:
                                           url: '{{ ".artifacts::apt_package::key" | eval }}'
                                           keyring: /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
                                           state: present
-                                      when: '".artifacts::apt_package::key" | eval != None'
+                                      when: '".artifacts::apt_package::key" | eval != ""'
                                     - name: add apt repository
                                       ansible.builtin.apt_repository:
                                           repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}
                                           filename: '{{ ".artifacts::apt_package::repository" | eval }}'
                                           state: present
-                                      when: '".artifacts::apt_package::source" | eval != None'
+                                      when: '".artifacts::apt_package::source" | eval != ""'
                                     - name: update apt cache
                                       ansible.builtin.apt:
                                           update_cache: 'yes'
@@ -771,7 +1040,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}'
                                           state: present
-                                      when: '".artifacts::apt_package::dependencies" | eval != None'
+                                      when: '".artifacts::apt_package::dependencies" | eval != ""'
                                     - name: install package
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
@@ -784,11 +1053,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_create }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -815,11 +1084,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_configure }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -846,11 +1115,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_start }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -877,11 +1146,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_stop }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -908,11 +1177,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_delete }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -928,6 +1197,232 @@ node_types:
                                     - name: uninstall package
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    shop.component~software.application#tar.archive::ansible@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                              DB_NAME="{{ SELF.DB_NAME }}"
+                                              DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                              DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                              DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                              DB_PORT="{{ SELF.DB_PORT }}"
+                                              FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                              FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
                                           state: absent
                             playbookArgs:
                                 - '--become'
@@ -969,22 +1464,34 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
                                     - name: create application directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: directory
                                     - name: extract deployment artifact in application directory
-                                      unarchive:
+                                      ansible.builtin.unarchive:
                                           src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
                                           state: directory
                                     - name: create .env file
-                                      copy:
+                                      ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: |
+                                          content: |-
                                               PORT="{{ SELF.application_port }}"
                                               DB_DIALECT="{{ SELF.DB_DIALECT }}"
                                               DB_NAME="{{ SELF.DB_NAME }}"
@@ -997,11 +1504,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_create }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1028,11 +1535,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_configure }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1063,11 +1570,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_start }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1098,11 +1605,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_stop }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1129,11 +1636,11 @@ node_types:
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
-                                          content: |
-                                              #! /usr/bin/bash
+                                          content: |-
+                                              #!/usr/bin/bash
                                               set -e
 
-                                              {{ SELF._management_delete }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1200,7 +1707,7 @@ node_types:
                             application_address:
                                 - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
                             application_endpoint:
-                                - value: '{{ SELF.application_protocol }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
+                                - value: '{{ SELF.application_protocol  | regex_replace("^(.*[^s])$", "\\1s") }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
                         resource:
                             google_cloud_run_v2_service:
                                 application:
@@ -1388,7 +1895,7 @@ node_types:
                             application_address:
                                 - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
                             application_endpoint:
-                                - value: '{{ SELF.application_protocol }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
+                                - value: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
                         resource:
                             google_app_engine_standard_app_version:
                                 app:
@@ -1505,16 +2012,790 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
+    shop.component~service.application#tar.archive::terraform@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                                destination: /tmp/artifact-shop.component
+                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    [Unit]
+                                                    After=network.target
+
+                                                    [Service]
+                                                    Type=simple
+                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                                    WorkingDirectory={{ SELF.application_directory }}
+                                                    EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                                    [Install]
+                                                    WantedBy=multi-user.target
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                                    DB_NAME="{{ SELF.DB_NAME }}"
+                                                    DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                                    DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                                    DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                                    DB_PORT="{{ SELF.DB_PORT }}"
+                                                    FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                                    FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-shop.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    tar -xzf /tmp/artifact-shop.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Reload systemd daemon
+                                                    systemctl daemon-reload
+
+                                                    # Enable service 
+                                                    systemctl enable {{ SELF.application_name }}
+                                                destination: /tmp/create-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Start service 
+                                                    systemctl start {{ SELF.application_name }}
+                                                destination: /tmp/start-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+
+                                                    # Stop service 
+                                                    systemctl stop {{ SELF.application_name }}
+                                                destination: /tmp/stop-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Delete systemd service 
+                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                                    # Reload system daemon
+                                                    systemctl daemon-reload
+                                                destination: /tmp/delete-shop.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-shop.component.sh
+                                                    - sudo bash /tmp/configure-shop.component.sh
+                                                    - sudo bash /tmp/start-shop.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-shop.component.sh
+                                                    - sudo bash /tmp/delete-shop.component.sh
+                                                when: destroy
     shop.component~service.application#zip.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
-        properties: {}
-    shop.component~software.application#apt.package::terraform@*->virtual.machine:
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                                destination: /tmp/artifact-shop.component
+                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    [Unit]
+                                                    After=network.target
+
+                                                    [Service]
+                                                    Type=simple
+                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                                    WorkingDirectory={{ SELF.application_directory }}
+                                                    EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                                    [Install]
+                                                    WantedBy=multi-user.target
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                                    DB_NAME="{{ SELF.DB_NAME }}"
+                                                    DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                                    DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                                    DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                                    DB_PORT="{{ SELF.DB_PORT }}"
+                                                    FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                                    FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-shop.component {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    unzip /tmp/artifact-shop.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Reload systemd daemon
+                                                    systemctl daemon-reload
+
+                                                    # Enable service 
+                                                    systemctl enable {{ SELF.application_name }}
+                                                destination: /tmp/create-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Start service 
+                                                    systemctl start {{ SELF.application_name }}
+                                                destination: /tmp/start-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+
+                                                    # Stop service 
+                                                    systemctl stop {{ SELF.application_name }}
+                                                destination: /tmp/stop-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Delete systemd service 
+                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                                    # Reload system daemon
+                                                    systemctl daemon-reload
+                                                destination: /tmp/delete-shop.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-shop.component.sh
+                                                    - sudo bash /tmp/configure-shop.component.sh
+                                                    - sudo bash /tmp/start-shop.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-shop.component.sh
+                                                    - sudo bash /tmp/delete-shop.component.sh
+                                                when: destroy
+    shop.component~software.application#apt.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
-        properties: {}
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Run setup script 
+                                                    if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
+                                                        curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                                    fi
+
+                                                    # Add apt key
+                                                    if [[ "{{ ".artifacts::apt_package::key" | eval }}" != "" ]]; then 
+                                                        curl -1sLf {{ ".artifacts::apt_package::key" | eval }} | gpg --dearmor --yes -o /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                                    fi
+
+                                                    # Add apt repository
+                                                    if [[ "{{ ".artifacts::apt_package::source" | eval }}" != "" ]]; then 
+                                                        echo "deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}" | tee {{ ".artifacts::apt_package::repository" | eval }}
+                                                    fi
+
+                                                    # Update apt cache
+                                                    apt-get update -y
+
+                                                    # Install dependencies
+                                                    if [[ "{{ ".artifacts::apt_package::dependencies" | eval }}" != "" ]]; then 
+                                                        apt-get install {{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }} -y
+                                                    fi
+
+                                                    # Install package
+                                                    {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                                    DB_NAME="{{ SELF.DB_NAME }}"
+                                                    DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                                    DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                                    DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                                    DB_PORT="{{ SELF.DB_PORT }}"
+                                                    FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                                    FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::apt_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-shop.component {{ ".artifacts::apt_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    undefined
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/create.sh
+                                                destination: /tmp/create-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/start.sh
+                                                destination: /tmp/start-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+                                                destination: /tmp/stop-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Uninstall package
+                                                    apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
+                                                destination: /tmp/delete-shop.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-shop.component.sh
+                                                    - sudo bash /tmp/configure-shop.component.sh
+                                                    - sudo bash /tmp/start-shop.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-shop.component.sh
+                                                    - sudo bash /tmp/delete-shop.component.sh
+                                                when: destroy
+    shop.component~software.application#tar.archive::terraform@*->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                                destination: /tmp/artifact-shop.component
+                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                                    DB_NAME="{{ SELF.DB_NAME }}"
+                                                    DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                                    DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                                    DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                                    DB_PORT="{{ SELF.DB_PORT }}"
+                                                    FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                                    FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-shop.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    tar -xzf /tmp/artifact-shop.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/create.sh
+                                                destination: /tmp/create-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/start.sh
+                                                destination: /tmp/start-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+                                                destination: /tmp/stop-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+                                                destination: /tmp/delete-shop.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-shop.component.sh
+                                                    - sudo bash /tmp/configure-shop.component.sh
+                                                    - sudo bash /tmp/start-shop.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-shop.component.sh
+                                                    - sudo bash /tmp/delete-shop.component.sh
+                                                when: destroy
     shop.component~software.application#zip.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -1532,6 +2813,180 @@ node_types:
                 type: string
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                                destination: /tmp/artifact-shop.component
+                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DB_DIALECT="{{ SELF.DB_DIALECT }}"
+                                                    DB_NAME="{{ SELF.DB_NAME }}"
+                                                    DB_USERNAME="{{ SELF.DB_USERNAME }}"
+                                                    DB_PASSWORD="{{ SELF.DB_PASSWORD }}"
+                                                    DB_ADDRESS="{{ SELF.DB_ADDRESS }}"
+                                                    DB_PORT="{{ SELF.DB_PORT }}"
+                                                    FEATURE_OPTIONAL="{{ SELF.optional_feature }}"
+                                                    FEATURE_PREMIUM="{{ SELF.premium_feature }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-shop.component {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    unzip /tmp/artifact-shop.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/create.sh
+                                                destination: /tmp/create-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/start.sh
+                                                destination: /tmp/start-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+                                                destination: /tmp/stop-shop.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+                                                destination: /tmp/delete-shop.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-shop.component.sh
+                                                    - sudo bash /tmp/configure-shop.component.sh
+                                                    - sudo bash /tmp/start-shop.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-shop.component.sh
+                                                    - sudo bash /tmp/delete-shop.component.sh
+                                                when: destroy
     shop.component~service.application#docker.image::kubernetes@kubernetes.cluster:
         derived_from: shop.component
         metadata:

@@ -1,0 +1,14 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "interface"
+
+rectangle "management"
+
+
+"tosca.interfaces.Root" <|-- "interface"
+
+"interface" <|-- "management"
+
+@enduml

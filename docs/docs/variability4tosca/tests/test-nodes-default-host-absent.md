@@ -11,22 +11,22 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-  node_templates:
-    node_one:
-      type: node_one
-      pruning: true
-      default_condition_mode: host
-      requirements:
-        - host:
-            node: node_two
-            conditions:
-              target_presence: SELF
-    node_two:
-      type: node_two
-      conditions: false
+    variability:
+        options:
+            type_default_condition: true
+    node_templates:
+        node_one:
+            type: node_one
+            pruning: true
+            default_condition_mode: host
+            requirements:
+                - host:
+                      node: node_two
+                      conditions:
+                          target_presence: SELF
+        node_two:
+            type: node_two
+            conditions: false
 {% endraw %}
 ```
 

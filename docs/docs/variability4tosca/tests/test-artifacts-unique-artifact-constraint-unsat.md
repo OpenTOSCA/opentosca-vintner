@@ -14,17 +14,17 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      unique_artifact_constraint: true
-  node_templates:
-    node_one:
-      type: node
-      artifacts:
-        - artifact_one:
-            type: artifact_a
-        - artifact_one:
-            type: artifact_b
+    variability:
+        options:
+            unique_artifact_constraint: true
+    node_templates:
+        node_one:
+            type: node
+            artifacts:
+                - artifact_one:
+                      type: artifact_a
+                - artifact_one:
+                      type: artifact_b
 {% endraw %}
 ```
 

@@ -118,8 +118,8 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
     return file
 }
 
-export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; overwrite?: boolean} = {}) {
-    options.notice = options.notice ?? false
+export function storeYAML<T>(file: string, data: T, options: {generated?: boolean; overwrite?: boolean} = {}) {
+    options.generated = options.generated ?? false
     options.overwrite = options.overwrite ?? true
 
     const resolved = path.resolve(file)
@@ -134,7 +134,7 @@ export function storeYAML<T>(file: string, data: T, options: {notice?: boolean; 
 `.trimStart()
 
     let output = toYAML(data)
-    if (options.notice) {
+    if (options.generated) {
         output = notice + output
     }
 
@@ -155,8 +155,22 @@ export function storeENV(file: string, data: any | string) {
     return file
 }
 
+export function toXML(obj: any) {
+    return new xml2js.Builder().buildObject(obj)
+}
+
 export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
+}
+
+export function toFormat(obj: any, format: string) {
+    if (format === 'yaml') return toYAML(obj)
+    if (format === 'json') return toJSON(obj)
+    if (format === 'ini') return toINI(obj)
+    if (format === 'env') return toENV(obj)
+    if (format === 'xml') return toXML(obj)
+
+    throw new Error(`Format "${format}" not supported`)
 }
 
 export function formatYAML(obj: any) {

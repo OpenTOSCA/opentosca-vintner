@@ -11,40 +11,40 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incoming
-      node_pruning: true
-      relation_default_condition: true
-      relation_default_condition_mode: source-target
-      relation_pruning: true
-      type_default_condition: true
-  node_templates:
-    node_one:
-      type: node_one
-      conditions: false
-      requirements:
-        - relation_one_one:
-            node: node_three
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incoming
+            node_pruning: true
+            relation_default_condition: true
+            relation_default_condition_mode: source-target
+            relation_pruning: true
+            type_default_condition: true
+    node_templates:
+        node_one:
+            type: node_one
             conditions: false
-    node_two:
-      type: node_two
-      conditions: false
-      requirements:
-        - relation_two_one: node_three
-        - relation_two_two: node_five
-    node_three:
-      type: node_three
-      conditions: true
-    node_four:
-      type: node_four
-    node_five:
-      type: node_five
-    node_six:
-      type: node_six
-      requirements:
-        - relation_six_one: node_five
+            requirements:
+                - relation_one_one:
+                      node: node_three
+                      conditions: false
+        node_two:
+            type: node_two
+            conditions: false
+            requirements:
+                - relation_two_one: node_three
+                - relation_two_two: node_five
+        node_three:
+            type: node_three
+            conditions: true
+        node_four:
+            type: node_four
+        node_five:
+            type: node_five
+        node_six:
+            type: node_six
+            requirements:
+                - relation_six_one: node_five
 {% endraw %}
 ```
 
@@ -59,15 +59,15 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    node_four:
-      type: node_four
-    node_five:
-      type: node_five
-    node_six:
-      type: node_six
-      requirements:
-        - relation_six_one: node_five
+    node_templates:
+        node_four:
+            type: node_four
+        node_five:
+            type: node_five
+        node_six:
+            type: node_six
+            requirements:
+                - relation_six_one: node_five
 {% endraw %}
 ```
 
