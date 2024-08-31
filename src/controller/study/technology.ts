@@ -115,6 +115,7 @@ export default async function (options: StudyTechnologyOptions) {
             ruleData.push({
                 Technology: name,
                 Component: rule.component,
+                Artifact: rule.artifact,
                 Hosting: rule.hosting,
                 Quality: rule.weight,
                 Reason: rule.reason,
@@ -358,6 +359,7 @@ type StudyConfig = {
 type RuleData = {
     Technology: string
     Component: string
+    Artifact?: string
     Hosting?: string | string[]
     Quality?: number
     Reason?: string

@@ -131,6 +131,7 @@ nav:
                 - Conformance Tests: queries4tosca/tests
           - scsar
           - edmm
+          - rules
           - normative/index.md
           - TOSCA SofDCar Profile:
                 - sofdcar/profile.md

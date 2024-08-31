@@ -9,6 +9,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'gcp.service',
     technology: 'ansible',
+    hosting: [],
     weight: 1,
     reason: 'Ansible provides a declarative module',
     details: '"google.cloud.gcp_serviceusage_service" task',

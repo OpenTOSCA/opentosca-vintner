@@ -21,7 +21,7 @@ export type ImplementationGenerator = {
     technology: string
     component: string
     artifact?: string
-    hosting?: string[]
+    hosting: string[]
     generate: (name: string, type: NodeType) => NodeType
     weight: number
     // TODO: make this mandatory
@@ -42,7 +42,7 @@ export abstract class GeneratorAbstract implements ImplementationGenerator {
     abstract technology: string
     abstract component: string
     abstract artifact?: string
-    abstract hosting?: string[]
+    abstract hosting: string[]
     abstract weight: number
     abstract reason: string
     abstract details: string
