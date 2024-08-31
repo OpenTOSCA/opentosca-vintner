@@ -1,11 +1,11 @@
 import * as check from '#check'
-import { TOSCA_DEFINITIONS_VERSION } from '#spec/service-template'
+import unfurlCore from '#normative/dialects/unfurl/core'
+import unfurlExtended from '#normative/dialects/unfurl/extended'
+import normativeCore from '#normative/types/core'
+import normativeExtended from '#normative/types/extended'
+import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
 import * as _ from 'lodash'
-import unfurlCore from 'src/normative/dialects/unfurl/core'
-import unfurlExtended from 'src/normative/dialects/unfurl/extended'
-import normativeCore from 'src/normative/types/core'
-import normativeExtended from 'src/normative/types/extended'
 
 /**
  * Normative Types
