@@ -195,6 +195,9 @@ jobs:
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
               run: ./task docs:generate:sofdcar
 
+            - name: (DOCS) Generate TOSCA Vintner Profile Page
+              run: ./task docs:generate:vintner
+
             - name: (DOCS) Generate PlantUML of Service Templates
               run: ./task docs:generate:puml
 
@@ -204,8 +207,8 @@ jobs:
             - name: (RELEASE) Archive docs
               run: tar -czvf docs.tar.gz -C docs/site/ .
 
-            - name: (RELEASE) Upload docs to release
-              run: gh release upload latest docs.tar.gz
+            - name: (RELEASE) Upload docs and profiles to release
+              run: gh release upload latest docs.tar.gz docs/docs/sofdcar/tosca-sofdcar-*.yaml docs/docs/normative/tosca-vintner-*.yaml
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
