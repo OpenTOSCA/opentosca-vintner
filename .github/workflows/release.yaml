@@ -196,7 +196,7 @@ jobs:
               run: ./task docs:generate:sofdcar
 
             - name: (DOCS) Generate TOSCA Vintner Profile Page
-              run: ./task docs:generate:vintner
+              run: ./task docs:generate:normative
 
             - name: (DOCS) Generate PlantUML of Service Templates
               run: ./task docs:generate:puml
