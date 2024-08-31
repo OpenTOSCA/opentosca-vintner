@@ -1,0 +1,26 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "artifact"
+
+rectangle "source.archive"
+
+rectangle "system.package"
+
+rectangle "container.image"
+
+rectangle "machine.image"
+
+
+"tosca.artifacts.Root" <|-- "artifact"
+
+"artifact" <|-- "source.archive"
+
+"artifact" <|-- "system.package"
+
+"artifact" <|-- "container.image"
+
+"artifact" <|-- "machine.image"
+
+@enduml

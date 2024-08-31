@@ -1,0 +1,22 @@
+@startuml
+skinparam componentStyle rectangle
+
+
+rectangle "docker.image"
+
+rectangle "zip.archive"
+
+rectangle "tar.archive"
+
+rectangle "apt.package"
+
+
+"container.image" <|-- "docker.image"
+
+"source.archive" <|-- "zip.archive"
+
+"source.archive" <|-- "tar.archive"
+
+"system.package" <|-- "apt.package"
+
+@enduml
