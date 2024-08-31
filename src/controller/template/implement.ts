@@ -9,7 +9,7 @@ import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
 import std from '#std'
-import registry from '#technologies/plugins/rules/registry'
+import Registry from '#technologies/plugins/rules/registry'
 import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
@@ -78,7 +78,7 @@ export default async function (options: TemplateImplementOptions) {
     /**
      * Technology Rules
      */
-    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILENAME), registry().rules, {
+    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILENAME), Registry.rules, {
         generated: true,
     })
 
