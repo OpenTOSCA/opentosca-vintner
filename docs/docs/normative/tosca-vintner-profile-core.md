@@ -127,10 +127,15 @@ management:
         vintner_normative: 'true'
     operations:
         create:
+            description: management lifecycle create operation.
         configure:
+            description: management lifecycle configure operation.
         start:
+            description: management lifecycle start operation.
         stop:
+            description: management lifecycle stop operation.
         delete:
+            description: management lifecycle delete operation.
 ```
 
 ### Node Types

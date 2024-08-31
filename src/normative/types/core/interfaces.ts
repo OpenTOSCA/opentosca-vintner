@@ -14,11 +14,21 @@ const interfaces: InterfaceTypeMap = {
             ...MetadataNormative(),
         },
         operations: {
-            create: null,
-            configure: null,
-            start: null,
-            stop: null,
-            delete: null,
+            create: {
+                description: 'management lifecycle create operation.',
+            },
+            configure: {
+                description: 'management lifecycle configure operation.',
+            },
+            start: {
+                description: 'management lifecycle start operation.',
+            },
+            stop: {
+                description: 'management lifecycle stop operation.',
+            },
+            delete: {
+                description: 'management lifecycle delete operation.',
+            },
         },
     },
 }

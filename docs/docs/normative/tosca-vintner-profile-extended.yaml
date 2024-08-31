@@ -188,14 +188,6 @@ node_types:
             application_language:
                 type: string
                 default: binary
-        interfaces:
-            management:
-                type: management
-                operations:
-                    start:
-                        get_property:
-                            - SELF
-                            - application_name
     gcp.provider:
         derived_from: cloud.provider
         metadata:

@@ -216,14 +216,6 @@ const nodes: NodeTypeMap = {
                 default: 'binary',
             },
         },
-        interfaces: {
-            management: {
-                type: 'management',
-                operations: {
-                    start: {get_property: ['SELF', 'application_name']},
-                },
-            },
-        },
     },
     'gcp.provider': {
         derived_from: 'cloud.provider',

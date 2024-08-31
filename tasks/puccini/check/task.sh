@@ -1,5 +1,6 @@
 # Validate each service template
-for TEMPLATE in docs/docs/sofdcar/tosca-sofdcar-profile.yaml docs/docs/sofdcar/tosca-sofdcar-profile-core.yaml docs/docs/sofdcar/tosca-sofdcar-profile-extended.yaml docs/docs/sofdcar/guides/location/service-template.yaml docs/docs/sofdcar/guides/zone/service-template.yaml; do
+CONFIG=$(cat ${TASK_TASK_DIR}/config)
+for TEMPLATE in $CONFIG; do
   echo
   ./task puccini:check:single $TEMPLATE
 done

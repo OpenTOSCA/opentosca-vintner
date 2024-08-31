@@ -296,14 +296,6 @@ binary.service.application:
         application_language:
             type: string
             default: binary
-    interfaces:
-        management:
-            type: management
-            operations:
-                start:
-                    get_property:
-                        - SELF
-                        - application_name
 ```
 
 #### gcp.provider

@@ -54,6 +54,7 @@ const nodes: RecursivePartial<NodeTypeMap> = {
     'binary.service.application': {
         interfaces: {
             management: {
+                type: 'management',
                 operations: {
                     start: './{{ SELF.application_name }}',
                 },
