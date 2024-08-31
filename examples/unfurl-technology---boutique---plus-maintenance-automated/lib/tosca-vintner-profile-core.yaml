@@ -72,10 +72,15 @@ interface_types:
             vintner_normative: 'true'
         operations:
             create:
+                description: management lifecycle create operation.
             configure:
+                description: management lifecycle configure operation.
             start:
+                description: management lifecycle start operation.
             stop:
+                description: management lifecycle stop operation.
             delete:
+                description: management lifecycle delete operation.
 node_types:
     node:
         derived_from: tosca.nodes.Root
@@ -244,6 +249,36 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
+    physical.machine:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            machine_name:
+                type: string
+            ports:
+                type: list
+                entry_schema:
+                    type: string
+            flavor:
+                type: string
+                default: m1.medium
+            network:
+                type: string
+            ssh_user:
+                type: string
+            ssh_key_name:
+                type: string
+            ssh_key_file:
+                type: string
+        attributes:
+            management_address:
+                type: string
+            application_address:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
     database:
         derived_from: node
         metadata:

@@ -6,7 +6,7 @@ import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
 import std from '#std'
-import loadRegistry from '#technologies/plugins/rules/registry'
+import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {constructImplementationName, constructRuleName, isGenerated} from '#technologies/utils'
@@ -70,7 +70,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     artifact: rule.artifact,
                     hosting: rule.hosting,
                 })
-                const generator = loadRegistry().get(generatorName)
+                const generator = Registry.get(generatorName)
 
                 // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
                 if (check.isUndefined(generator)) {
