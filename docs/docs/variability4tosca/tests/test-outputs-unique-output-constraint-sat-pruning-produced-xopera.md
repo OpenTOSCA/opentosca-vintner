@@ -11,35 +11,35 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      output_default_condition: true
-      output_default_consistency_condition: true
-      output_default_semantic_condition: true
-      property_default_condition: true
-      unique_output_constraint: true
-  outputs:
-    - input:
-        type: string_a
-        value:
-          get_property:
-            - container
-            - some_property
-    - input:
-        type: string_b
-        value:
-          get_property:
-            - container
-            - another_property
-  node_templates:
-    container:
-      type: container
-      properties:
-        - some_property: some_value
-        - another_property:
-            conditions: false
-            value: another_value
+    variability:
+        options:
+            type_default_condition: true
+            output_default_condition: true
+            output_default_consistency_condition: true
+            output_default_semantic_condition: true
+            property_default_condition: true
+            unique_output_constraint: true
+    outputs:
+        - input:
+              type: string_a
+              value:
+                  get_property:
+                      - container
+                      - some_property
+        - input:
+              type: string_b
+              value:
+                  get_property:
+                      - container
+                      - another_property
+    node_templates:
+        container:
+            type: container
+            properties:
+                - some_property: some_value
+                - another_property:
+                      conditions: false
+                      value: another_value
 {% endraw %}
 ```
 
@@ -54,18 +54,18 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  outputs:
-    input:
-      type: string_a
-      value:
-        get_property:
-          - container
-          - some_property
-  node_templates:
-    container:
-      type: container
-      properties:
-        some_property: some_value
+    outputs:
+        input:
+            type: string_a
+            value:
+                get_property:
+                    - container
+                    - some_property
+    node_templates:
+        container:
+            type: container
+            properties:
+                some_property: some_value
 {% endraw %}
 ```
 

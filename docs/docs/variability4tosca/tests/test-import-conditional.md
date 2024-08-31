@@ -11,10 +11,10 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 imports:
-  - file: some_file
-    conditions: true
-  - file: another_file
-    conditions: false
+    - file: some_file
+      conditions: true
+    - file: another_file
+      conditions: false
 {% endraw %}
 ```
 
@@ -29,7 +29,7 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 imports:
-  - some_file
+    - some_file
 {% endraw %}
 ```
 

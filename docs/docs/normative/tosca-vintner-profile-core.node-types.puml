@@ -18,6 +18,8 @@ rectangle "container.runtime"
 
 rectangle "virtual.machine"
 
+rectangle "physical.machine"
+
 rectangle "database"
 
 rectangle "relational.database"
@@ -44,6 +46,8 @@ rectangle "ingress"
 "software.runtime" <|-- "container.runtime"
 
 "node" <|-- "virtual.machine"
+
+"node" <|-- "physical.machine"
 
 "node" <|-- "database"
 

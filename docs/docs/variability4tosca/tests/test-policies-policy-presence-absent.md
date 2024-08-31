@@ -11,19 +11,19 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-  node_templates:
-    container:
-      type: container
-      conditions:
-        policy_presence: policy_one
-  policies:
-    - policy_one:
-        type: policy_one
-        conditions: false
-        targets: []
+    variability:
+        options:
+            type_default_condition: true
+    node_templates:
+        container:
+            type: container
+            conditions:
+                policy_presence: policy_one
+    policies:
+        - policy_one:
+              type: policy_one
+              conditions: false
+              targets: []
 {% endraw %}
 ```
 

@@ -11,23 +11,23 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      constraints: false
-      optimization_topology: false
-  node_templates:
-    one:
-      type: one
-      requirements:
-        - host:
-            node: two
-        - host:
-            node: three
-    two:
-      type: two
-    three:
-      type: three
+    variability:
+        options:
+            mode: semantic-loose
+            constraints: false
+            optimization_topology: false
+    node_templates:
+        one:
+            type: one
+            requirements:
+                - host:
+                      node: two
+                - host:
+                      node: three
+        two:
+            type: two
+        three:
+            type: three
 {% endraw %}
 ```
 

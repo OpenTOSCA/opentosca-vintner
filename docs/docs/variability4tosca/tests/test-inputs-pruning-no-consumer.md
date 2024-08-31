@@ -11,16 +11,16 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      input_default_condition: true
-      input_default_consistency_condition: true
-      input_default_semantic_condition: true
-      property_default_condition: true
-  inputs:
-    some_input:
-      type: string
+    variability:
+        options:
+            type_default_condition: true
+            input_default_condition: true
+            input_default_consistency_condition: true
+            input_default_semantic_condition: true
+            property_default_condition: true
+    inputs:
+        some_input:
+            type: string
 {% endraw %}
 ```
 

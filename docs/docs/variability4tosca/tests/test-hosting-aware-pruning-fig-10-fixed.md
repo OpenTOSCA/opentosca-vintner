@@ -11,29 +11,29 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incomingnaive-artifact-host
-      optimization_topology: min
-      optimization_topology_unique: false
-      hosting_stack_constraint: true
-  node_templates:
-    app:
-      type: app
-      persistent: true
-      requirements:
-        - host: elastic
-        - host: static
-        - database:
-            node: database
-            implied: true
-    database:
-      type: database
-    static:
-      type: static
-    elastic:
-      type: elastic
+    variability:
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incomingnaive-artifact-host
+            optimization_topology: min
+            optimization_topology_unique: false
+            hosting_stack_constraint: true
+    node_templates:
+        app:
+            type: app
+            persistent: true
+            requirements:
+                - host: elastic
+                - host: static
+                - database:
+                      node: database
+                      implied: true
+        database:
+            type: database
+        static:
+            type: static
+        elastic:
+            type: elastic
 {% endraw %}
 ```
 
@@ -48,16 +48,16 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    app:
-      type: app
-      requirements:
-        - host: elastic
-        - database: database
-    database:
-      type: database
-    elastic:
-      type: elastic
+    node_templates:
+        app:
+            type: app
+            requirements:
+                - host: elastic
+                - database: database
+        database:
+            type: database
+        elastic:
+            type: elastic
 {% endraw %}
 ```
 

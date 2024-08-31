@@ -10,60 +10,82 @@ The variability of the following variable service template shall be resolved.
 ```yaml linenums="1"
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
-topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      optimization_technologies: true
-      optimization_technologies_unique: true
-      technology_pruning: true
-      technology_constraint: true
-    technology_assignment_rules:
-      terraform:
-        - component: application
-          host: terraform_host
-        - component: application
-          host: ansible_terraform_host
-        - component: another
-          host: another_terraform_host
-      ansible:
-        - component: application
-          host: ansible_host
-        - component: application
-          host: ansible_terraform_host
-      helm:
-        - component: application
-          host: helm_host
-  node_templates:
+node_types:
     application:
-      type: application
-      persistent: true
-      requirements:
-        - host:
-            node: ansible_host
-            conditions: false
-        - host:
-            node: terraform_host
-            conditions: false
-        - host:
-            node: ansible_terraform_host
-        - database:
-            node: database
+        derived_from: tosca.nodes.Root
     ansible_host:
-      type: ansible_host
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     terraform_host:
-      type: terraform_host
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     ansible_terraform_host:
-      type: ansible_terraform_host
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     database:
-      type: database
-      technology: terraform
-      requirements:
-        - host:
-            node: dbms
+        derived_from: tosca.nodes.Root
     dbms:
-      type: dbms
-      technology: terraform
+        derived_from: tosca.nodes.Root
+topology_template:
+    variability:
+        options:
+            mode: semantic-loose
+            optimization_technologies: true
+            optimization_technologies_unique: true
+            technology_pruning: true
+            technology_constraint: true
+            enrich_technologies: true
+        technology_assignment_rules:
+            terraform:
+                - component: application
+                  hosting: terraform_host
+                - component: application
+                  hosting: ansible_terraform_host
+                - component: another
+                  hosting: another_terraform_host
+                - component: database
+                - component: dbms
+            ansible:
+                - component: application
+                  hosting: ansible_host
+                - component: application
+                  hosting: ansible_terraform_host
+            helm:
+                - component: application
+                  hosting: helm_host
+    node_templates:
+        application:
+            type: application
+            persistent: true
+            requirements:
+                - host:
+                      node: ansible_host
+                      conditions: false
+                - host:
+                      node: terraform_host
+                      conditions: false
+                - host:
+                      node: ansible_terraform_host
+                - database:
+                      node: database
+        ansible_host:
+            type: ansible_host
+        terraform_host:
+            type: terraform_host
+        ansible_terraform_host:
+            type: ansible_terraform_host
+        database:
+            type: database
+            technology: terraform
+            requirements:
+                - host:
+                      node: dbms
+        dbms:
+            type: dbms
+            technology: terraform
 {% endraw %}
 ```
 
@@ -77,21 +99,40 @@ The following variability-resolved service template is expected.
 ```yaml linenums="1"
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
-topology_template:
-  node_templates:
+node_types:
     application:
-      type: application.terraform.ansible_terraform_host
-      requirements:
-        - host: ansible_terraform_host
-        - database: database
+        derived_from: tosca.nodes.Root
+    ansible_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
+    terraform_host:
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     ansible_terraform_host:
-      type: ansible_terraform_host
+        derived_from: tosca.nodes.Root
+        metadata:
+            vintner_abstract: 'true'
     database:
-      type: database.terraform.dbms
-      requirements:
-        - host: dbms
+        derived_from: tosca.nodes.Root
     dbms:
-      type: dbms.terraform.dbms
+        derived_from: tosca.nodes.Root
+topology_template:
+    node_templates:
+        application:
+            type: application~application::terraform@ansible_terraform_host
+            requirements:
+                - host: ansible_terraform_host
+                - database: database
+        ansible_terraform_host:
+            type: ansible_terraform_host
+        database:
+            type: database~database::terraform
+            requirements:
+                - host: dbms
+        dbms:
+            type: dbms~dbms::terraform
 {% endraw %}
 ```
 

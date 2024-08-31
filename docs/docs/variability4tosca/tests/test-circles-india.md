@@ -20,28 +20,28 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_pruning: true
-      relation_default_condition: true
-      type_default_condition: true
-      optimization_topology: true
-  node_templates:
-    node_one:
-      type: node_one
-    node_two:
-      type: node_two
-      conditions:
-        node_presence: node_one
-      requirements:
-        - relation_two_one: node_one
-    node_three:
-      type: node_three
-      requirements:
-        - relation_three_one:
-            node: node_one
+    variability:
+        options:
+            node_pruning: true
+            relation_default_condition: true
+            type_default_condition: true
+            optimization_topology: true
+    node_templates:
+        node_one:
+            type: node_one
+        node_two:
+            type: node_two
             conditions:
-              source_presence: SELF
+                node_presence: node_one
+            requirements:
+                - relation_two_one: node_one
+        node_three:
+            type: node_three
+            requirements:
+                - relation_three_one:
+                      node: node_one
+                      conditions:
+                          source_presence: SELF
 {% endraw %}
 ```
 
@@ -56,17 +56,17 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    node_one:
-      type: node_one
-    node_two:
-      type: node_two
-      requirements:
-        - relation_two_one: node_one
-    node_three:
-      type: node_three
-      requirements:
-        - relation_three_one: node_one
+    node_templates:
+        node_one:
+            type: node_one
+        node_two:
+            type: node_two
+            requirements:
+                - relation_two_one: node_one
+        node_three:
+            type: node_three
+            requirements:
+                - relation_three_one: node_one
 {% endraw %}
 ```
 

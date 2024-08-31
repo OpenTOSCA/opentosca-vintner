@@ -11,23 +11,23 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: artifactnaive
-      artifact_default_condition: true
-      type_default_condition: true
-      optimization_topology: true
-  node_templates:
-    container:
-      type: container_type
-      artifacts:
-        - artifact_one:
-            type: artifact_one_type
-            file: artifact_one_file
-        - artifact_two:
-            type: artifact_two_type
-            file: artifact_two_file
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: artifactnaive
+            artifact_default_condition: true
+            type_default_condition: true
+            optimization_topology: true
+    node_templates:
+        container:
+            type: container_type
+            artifacts:
+                - artifact_one:
+                      type: artifact_one_type
+                      file: artifact_one_file
+                - artifact_two:
+                      type: artifact_two_type
+                      file: artifact_two_file
 {% endraw %}
 ```
 

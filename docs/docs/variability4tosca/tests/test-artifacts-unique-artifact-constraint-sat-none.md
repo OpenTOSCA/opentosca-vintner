@@ -14,21 +14,21 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_pruning: true
-      unique_artifact_constraint: true
-      checks: false
-  node_templates:
-    node_one:
-      type: node
-      artifacts:
-        - artifact_one:
-            type: artifact_a
-            conditions: false
-        - artifact_one:
-            type: artifact_b
-            conditions: false
+    variability:
+        options:
+            type_pruning: true
+            unique_artifact_constraint: true
+            checks: false
+    node_templates:
+        node_one:
+            type: node
+            artifacts:
+                - artifact_one:
+                      type: artifact_a
+                      conditions: false
+                - artifact_one:
+                      type: artifact_b
+                      conditions: false
 {% endraw %}
 ```
 
@@ -43,9 +43,9 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    node_one:
-      type: node
+    node_templates:
+        node_one:
+            type: node
 {% endraw %}
 ```
 

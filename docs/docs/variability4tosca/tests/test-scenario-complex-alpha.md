@@ -14,66 +14,66 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-      node_default_condition: false
-      node_pruning: false
-      expected_incoming_relation_check: false
-  node_templates:
-    node_one:
-      type: node_one
-    node_two:
-      type: node_two
-      conditions: false
-      properties:
-        - property_one: value_one
-      requirements:
-        - relation_one:
-            node: node_one
-            conditions: true
-            relationship: relationship_one
-        - relation_two:
-            node: node_three
+    variability:
+        options:
+            mode: semantic-loose
+            node_default_condition: false
+            node_pruning: false
+            expected_incoming_relation_check: false
+    node_templates:
+        node_one:
+            type: node_one
+        node_two:
+            type: node_two
             conditions: false
-        - relation_three:
-            node: node_four
-            default_alternative: true
-      artifacts:
-        - artifact_one: file_one
-        - artifact_one:
-            file: file_one
-            default_alternative: true
-    node_three:
-      type: node_three
-    node_four:
-      type: node_four
-  relationship_templates:
-    relationship_one:
-      type: relationship_one
-      properties:
-        - property_two: value_two
-  groups:
-    group_one:
-      type: group_one
-      members:
-        - node_one
-    group_two:
-      type: group_two
-      members:
-        - node_two
-        - - node_two
-          - relation_one
-  policies:
-    - policy_one:
-        type: policy_one
-        targets:
-          - node_one
-    - policy_two:
-        type: policy_two
-        targets:
-          - node_two
-        conditions: true
+            properties:
+                - property_one: value_one
+            requirements:
+                - relation_one:
+                      node: node_one
+                      conditions: true
+                      relationship: relationship_one
+                - relation_two:
+                      node: node_three
+                      conditions: false
+                - relation_three:
+                      node: node_four
+                      default_alternative: true
+            artifacts:
+                - artifact_one: file_one
+                - artifact_one:
+                      file: file_one
+                      default_alternative: true
+        node_three:
+            type: node_three
+        node_four:
+            type: node_four
+    relationship_templates:
+        relationship_one:
+            type: relationship_one
+            properties:
+                - property_two: value_two
+    groups:
+        group_one:
+            type: group_one
+            members:
+                - node_one
+        group_two:
+            type: group_two
+            members:
+                - node_two
+                - - node_two
+                  - relation_one
+    policies:
+        - policy_one:
+              type: policy_one
+              targets:
+                  - node_one
+        - policy_two:
+              type: policy_two
+              targets:
+                  - node_two
+              conditions: true
 {% endraw %}
 ```
 
@@ -88,23 +88,23 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    node_one:
-      type: node_one
-    node_three:
-      type: node_three
-    node_four:
-      type: node_four
-  groups:
-    group_one:
-      type: group_one
-      members:
-        - node_one
-  policies:
-    - policy_one:
-        type: policy_one
-        targets:
-          - node_one
+    node_templates:
+        node_one:
+            type: node_one
+        node_three:
+            type: node_three
+        node_four:
+            type: node_four
+    groups:
+        group_one:
+            type: group_one
+            members:
+                - node_one
+    policies:
+        - policy_one:
+              type: policy_one
+              targets:
+                  - node_one
 {% endraw %}
 ```
 

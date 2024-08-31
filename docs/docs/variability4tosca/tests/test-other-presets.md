@@ -11,41 +11,41 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    inputs:
-      mode:
-        type: string
-    presets:
-      one:
+    variability:
         inputs:
-          mode: one
-      two:
-        inputs:
-          mode: two
-    expressions:
-      is_one:
-        equal:
-          - variability_input: mode
-          - one
-      is_two:
-        equal:
-          - variability_input: mode
-          - two
-    options:
-      type_default_condition: true
-  node_templates:
-    one:
-      type: one
-      conditions:
-        logic_expression: is_one
-    two:
-      type: two
-      conditions:
-        logic_expression: is_two
-      requirements:
-        - three: three
-    three:
-      type: three
+            mode:
+                type: string
+        presets:
+            one:
+                inputs:
+                    mode: one
+            two:
+                inputs:
+                    mode: two
+        expressions:
+            is_one:
+                equal:
+                    - variability_input: mode
+                    - one
+            is_two:
+                equal:
+                    - variability_input: mode
+                    - two
+        options:
+            type_default_condition: true
+    node_templates:
+        one:
+            type: one
+            conditions:
+                logic_expression: is_one
+        two:
+            type: two
+            conditions:
+                logic_expression: is_two
+            requirements:
+                - three: three
+        three:
+            type: three
 {% endraw %}
 ```
 
@@ -60,13 +60,13 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    two:
-      type: two
-      requirements:
-        - three: three
-    three:
-      type: three
+    node_templates:
+        two:
+            type: two
+            requirements:
+                - three: three
+        three:
+            type: three
 {% endraw %}
 ```
 

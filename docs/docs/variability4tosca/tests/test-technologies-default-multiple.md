@@ -11,17 +11,17 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_pruning: true
-  node_templates:
-    container:
-      type: container
-      technology:
-        - ansible:
-            default_alternative: true
-        - terraform:
-            default_alternative: true
+    variability:
+        options:
+            type_pruning: true
+    node_templates:
+        container:
+            type: container
+            technology:
+                - ansible:
+                      default_alternative: true
+                - terraform:
+                      default_alternative: true
 {% endraw %}
 ```
 

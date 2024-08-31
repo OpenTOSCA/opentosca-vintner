@@ -6,7 +6,7 @@ An overview is given in Figure e1.
 
 <figure markdown>
 ![Capability Types](tosca-sofdcar-profile-extended.capability-types.svg)
-<figcaption>Figure e1: TOSCA SofDCar Extended Capability Types</figcaption>
+<figcaption>Figure e1:  Capability Types</figcaption>
 </figure>
 
 #### sofdcar.capabilities.Endpoint.CAN
@@ -97,7 +97,7 @@ An overview is given in Figure e2.
 
 <figure markdown>
 ![Data Types](tosca-sofdcar-profile-extended.data-types.svg)
-<figcaption>Figure e2: TOSCA SofDCar Extended Data Types</figcaption>
+<figcaption>Figure e2:  Data Types</figcaption>
 </figure>
 
 #### sofdcar.data.GPIO.Pin
@@ -126,7 +126,7 @@ An overview is given in Figure e3.
 
 <figure markdown>
 ![Node Types](tosca-sofdcar-profile-extended.node-types.svg)
-<figcaption>Figure e3: TOSCA SofDCar Extended Node Types</figcaption>
+<figcaption>Figure e3:  Node Types</figcaption>
 </figure>
 
 #### sofdcar.nodes.CAN
@@ -342,7 +342,7 @@ An overview is given in Figure e4.
 
 <figure markdown>
 ![Policy Types](tosca-sofdcar-profile-extended.policy-types.svg)
-<figcaption>Figure e4: TOSCA SofDCar Extended Policy Types</figcaption>
+<figcaption>Figure e4:  Policy Types</figcaption>
 </figure>
 
 #### sofdcar.policies.ASIL
@@ -397,7 +397,7 @@ An overview is given in Figure e5.
 
 <figure markdown>
 ![Relationship Types](tosca-sofdcar-profile-extended.relationship-types.svg)
-<figcaption>Figure e5: TOSCA SofDCar Extended Relationship Types</figcaption>
+<figcaption>Figure e5:  Relationship Types</figcaption>
 </figure>
 
 #### sofdcar.relationships.CAN

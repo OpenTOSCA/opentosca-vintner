@@ -11,28 +11,28 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      mode: semantic-loose
-  node_templates:
-    one:
-      type: one
-      conditions:
-        not:
-          node_presence: two
-      requirements:
-        - host: one_host
-    one_host:
-      type: one_host
-    two:
-      type: two
-      conditions:
-        not:
-          node_presence: one
-      requirements:
-        - host: two_host
-    two_host:
-      type: two_host
+    variability:
+        options:
+            mode: semantic-loose
+    node_templates:
+        one:
+            type: one
+            conditions:
+                not:
+                    node_presence: two
+            requirements:
+                - host: one_host
+        one_host:
+            type: one_host
+        two:
+            type: two
+            conditions:
+                not:
+                    node_presence: one
+            requirements:
+                - host: two_host
+        two_host:
+            type: two_host
 {% endraw %}
 ```
 

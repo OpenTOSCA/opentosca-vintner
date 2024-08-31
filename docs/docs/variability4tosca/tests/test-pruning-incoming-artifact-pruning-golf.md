@@ -11,39 +11,39 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incoming-artifact
-      node_pruning: true
-      artifact_default_condition: true
-      artifact_pruning: true
-      relation_default_condition: true
-      relation_pruning: true
-      type_default_condition: true
-      type_pruning: true
-  node_templates:
-    source:
-      type: source
-      requirements:
-        - relation:
-            node: container
-    tource:
-      type: tource
-      requirements:
-        - relation:
-            node: container
-    container:
-      type: container_type
-      artifacts:
-        - artifact_one:
-            type: artifact_one_type
-            file: artifact_one_file
-            conditions: false
-        - artifact_two:
-            type: artifact_two_type
-            file: artifact_two_file
-            conditions: false
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incoming-artifact
+            node_pruning: true
+            artifact_default_condition: true
+            artifact_pruning: true
+            relation_default_condition: true
+            relation_pruning: true
+            type_default_condition: true
+            type_pruning: true
+    node_templates:
+        source:
+            type: source
+            requirements:
+                - relation:
+                      node: container
+        tource:
+            type: tource
+            requirements:
+                - relation:
+                      node: container
+        container:
+            type: container_type
+            artifacts:
+                - artifact_one:
+                      type: artifact_one_type
+                      file: artifact_one_file
+                      conditions: false
+                - artifact_two:
+                      type: artifact_two_type
+                      file: artifact_two_file
+                      conditions: false
 {% endraw %}
 ```
 
@@ -58,11 +58,11 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    source:
-      type: source
-    tource:
-      type: tource
+    node_templates:
+        source:
+            type: source
+        tource:
+            type: tource
 {% endraw %}
 ```
 

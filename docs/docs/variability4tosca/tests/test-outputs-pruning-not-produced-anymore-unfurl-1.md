@@ -11,23 +11,23 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      type_default_condition: true
-      output_default_condition: true
-      output_default_consistency_condition: true
-      output_default_semantic_condition: true
-      property_default_condition: true
-  outputs:
-    input:
-      type: string
-      value: '{{ ''::container::some_property'' | eval }}'
-  node_templates:
-    container:
-      type: container
-      conditions: false
-      properties:
-        some_property: some_value
+    variability:
+        options:
+            type_default_condition: true
+            output_default_condition: true
+            output_default_consistency_condition: true
+            output_default_semantic_condition: true
+            property_default_condition: true
+    outputs:
+        input:
+            type: string
+            value: "{{ '::container::some_property' | eval }}"
+    node_templates:
+        container:
+            type: container
+            conditions: false
+            properties:
+                some_property: some_value
 {% endraw %}
 ```
 

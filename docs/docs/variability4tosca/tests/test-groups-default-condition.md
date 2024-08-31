@@ -11,59 +11,59 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      group_default_condition: true
-      type_default_condition: true
-      expected_incoming_relation_check: false
-  groups:
-    group_one:
-      type: variability.groups.ConditionalMembers
-      members:
-        - magic
-        - - magic
-          - 0
-        - - application
-          - magic
-      conditions: false
-    group_two:
-      type: tosca.groups.Root
-      members:
-        - container
-        - magic
-    group_three:
-      type: tosca.groups.Root
-      members:
-        - magic
-  node_templates:
-    application:
-      type: docker.container.application
-      requirements:
-        - host: container
-        - magic: magic
-        - more: another_application
-    container:
-      type: docker.container
-      requirements:
-        - host: engine
-    engine:
-      type: docker.engine
-      requirements:
-        - host: vm
-    another_application:
-      type: another.application
-      requirements:
-        - host: another_runtime
-    another_runtime:
-      type: another.runtime
-      requirements:
-        - host: vm
-    vm:
-      type: openstack.vm
-    magic:
-      type: magic
-      requirements:
-        - magic: application
+    variability:
+        options:
+            group_default_condition: true
+            type_default_condition: true
+            expected_incoming_relation_check: false
+    groups:
+        group_one:
+            type: variability.groups.ConditionalMembers
+            members:
+                - magic
+                - - magic
+                  - 0
+                - - application
+                  - magic
+            conditions: false
+        group_two:
+            type: tosca.groups.Root
+            members:
+                - container
+                - magic
+        group_three:
+            type: tosca.groups.Root
+            members:
+                - magic
+    node_templates:
+        application:
+            type: docker.container.application
+            requirements:
+                - host: container
+                - magic: magic
+                - more: another_application
+        container:
+            type: docker.container
+            requirements:
+                - host: engine
+        engine:
+            type: docker.engine
+            requirements:
+                - host: vm
+        another_application:
+            type: another.application
+            requirements:
+                - host: another_runtime
+        another_runtime:
+            type: another.runtime
+            requirements:
+                - host: vm
+        vm:
+            type: openstack.vm
+        magic:
+            type: magic
+            requirements:
+                - magic: application
 {% endraw %}
 ```
 
@@ -78,35 +78,35 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  groups:
-    group_two:
-      type: tosca.groups.Root
-      members:
-        - container
-  node_templates:
-    application:
-      type: docker.container.application
-      requirements:
-        - host: container
-        - more: another_application
-    container:
-      type: docker.container
-      requirements:
-        - host: engine
-    engine:
-      type: docker.engine
-      requirements:
-        - host: vm
-    another_application:
-      type: another.application
-      requirements:
-        - host: another_runtime
-    another_runtime:
-      type: another.runtime
-      requirements:
-        - host: vm
-    vm:
-      type: openstack.vm
+    groups:
+        group_two:
+            type: tosca.groups.Root
+            members:
+                - container
+    node_templates:
+        application:
+            type: docker.container.application
+            requirements:
+                - host: container
+                - more: another_application
+        container:
+            type: docker.container
+            requirements:
+                - host: engine
+        engine:
+            type: docker.engine
+            requirements:
+                - host: vm
+        another_application:
+            type: another.application
+            requirements:
+                - host: another_runtime
+        another_runtime:
+            type: another.runtime
+            requirements:
+                - host: vm
+        vm:
+            type: openstack.vm
 {% endraw %}
 ```
 

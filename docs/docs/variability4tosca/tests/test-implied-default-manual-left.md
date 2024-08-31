@@ -11,42 +11,43 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0_rc_2
 topology_template:
-  variability:
-    inputs:
-      l:
-        type: boolean
-    expressions:
-      is_l:
-        equal:
-          - variability_input: l
-          - true
-      is_r:
-        equal:
-          - variability_input: l
-          - false
-    options:
-      expected_incoming_relation_check: false
-      required_incoming_relation_constraint: false
-  node_templates:
-    application:
-      type: Application
-      persistent: true
-      requirements:
-        - connection:
-            node: left
-            conditions:
-              logic_expression: is_l
-            implied: false
-        - connection:
-            node: right
-            implied: false
-            default_alternative: true
-    right:
-      type: Right
-      persistent: true
-    left:
-      type: Left
-      persistent: true
+    variability:
+        inputs:
+            l:
+                type: boolean
+        expressions:
+            is_l:
+                equal:
+                    - variability_input: l
+                    - true
+            is_r:
+                equal:
+                    - variability_input: l
+                    - false
+        options:
+            expected_incoming_relation_check: false
+            required_incoming_relation_constraint: false
+            enrich_technologies: false
+    node_templates:
+        application:
+            type: Application
+            persistent: true
+            requirements:
+                - connection:
+                      node: left
+                      conditions:
+                          logic_expression: is_l
+                      implied: false
+                - connection:
+                      node: right
+                      implied: false
+                      default_alternative: true
+        right:
+            type: Right
+            persistent: true
+        left:
+            type: Left
+            persistent: true
 {% endraw %}
 ```
 
@@ -68,15 +69,15 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    application:
-      type: Application
-      requirements:
-        - connection: left
-    right:
-      type: Right
-    left:
-      type: Left
+    node_templates:
+        application:
+            type: Application
+            requirements:
+                - connection: left
+        right:
+            type: Right
+        left:
+            type: Left
 {% endraw %}
 ```
 

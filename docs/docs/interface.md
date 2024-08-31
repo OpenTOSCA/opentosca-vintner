@@ -927,9 +927,13 @@ continue instance (deployment)
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances debug
 
@@ -981,7 +985,11 @@ debug utility that passes a command into the orchestrator in scope of the instan
 | instance |  true  | string | instance name |
 | command |  true  | string | command |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
+| machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances delete
 
@@ -1029,8 +1037,11 @@ deletes instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances deploy
 
@@ -1078,11 +1089,15 @@ deploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
-| retry |  false  | boolean | retry (default: true) |
+| retries |  false  | boolean | number of retries (default: "1") |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances info
 
@@ -1130,8 +1145,11 @@ display instance info
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances init
 
@@ -1183,8 +1201,11 @@ initializes a new instance
 | instance |  true  | string | instance name (must match /^[a-z\-]+$/) |
 | template |  true  | string | template name |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances inspect
 
@@ -1232,8 +1253,11 @@ inspects variability-resolved service template
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances list
 
@@ -1331,9 +1355,13 @@ returns instance outputs
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances path
 
@@ -1429,8 +1457,11 @@ resolves variability
 | presets |  false  | string... | names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}) |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances state
 
@@ -1482,8 +1513,9 @@ set the state of the instance
 | instance |  true  | string | instance name |
 | state |  true  | string | state |
 | force |  false  | boolean | force (default: false) |
-| lock |  false  | boolean | enable locking (default: true) |
-| machine |  false  | boolean | enable state machine (default: true) |
+| no-force |  false  | boolean |  |
+| lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 
 ## vintner instances swap
 
@@ -1535,8 +1567,11 @@ swap instance template
 | instance |  true  | string | instance name |
 | template |  true  | string | template name |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances unadapt
 
@@ -1625,9 +1660,13 @@ undeploys instance
 | --- | --- | --- | --- |
 | instance |  true  | string | instance name |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances update
 
@@ -1676,9 +1715,13 @@ update instance
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs (env: OPENTOSCA_VINTNER_DEPLOYMENT_INPUT_${KEY}) |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner instances validate
 
@@ -1727,10 +1770,15 @@ validates variability-resolved service template
 | instance |  true  | string | instance name |
 | inputs |  false  | string | path to the deployment inputs |
 | verbose |  false  | boolean | verbose |
+| no-verbose |  false  | boolean |  |
 | dry |  false  | boolean | dry run |
+| no-dry |  false  | boolean |  |
 | force |  false  | boolean | force (default: false) |
+| no-force |  false  | boolean |  |
 | lock |  false  | boolean | enable instance locking (default: true) |
+| no-lock |  false  | boolean |  |
 | machine |  false  | boolean | enable state machine (default: true) |
+| no-machine |  false  | boolean |  |
 
 ## vintner orchestrators attest
 
@@ -2054,7 +2102,8 @@ starts a sensor for compute utilization, such as cpu and memory
 | template |  true  | string | node template name |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
-| disable-submission |  false  | boolean | disable submission of data (default: false) |
+| submission |  false  | boolean | send data (default: true) |
+| no-submission |  false  | boolean |  |
 
 ## vintner sensors file
 
@@ -2073,8 +2122,10 @@ starts a sensor for data stored in a file
 | file |  true  | string | path to file |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every 10 seconds") |
-| disable-watch |  false  | boolean | do not watch file but send data once (default: false) |
-| disable-submission |  false  | boolean | disable submission of data (default: false) |
+| watch |  false  | boolean | watch file and send changes (default: true) |
+| no-watch |  false  | boolean |  |
+| submission |  false  | boolean | send data (default: true) |
+| no-submission |  false  | boolean |  |
 
 ## vintner sensors location
 
@@ -2093,7 +2144,8 @@ starts a sensor for the current location
 | template |  true  | string | node template name |
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every minute") |
-| disable-submission |  false  | boolean | disable submission of data (default: false) |
+| submission |  false  | boolean | send data (default: true) |
+| no-submission |  false  | boolean |  |
 
 ## vintner sensors weekday
 
@@ -2112,7 +2164,8 @@ starts a sensor for the weekday
 | vintner |  false  | string | vintner address to submit sensors data (default: "http://127.0.0.1:3000") |
 | time-interval |  false  | string | interval to submit data (default: "every day") |
 | start |  false  | string | set day to start from |
-| disable-submission |  false  | boolean | disable submission of data (default: false) |
+| submission |  false  | boolean | send data (default: true) |
+| no-submission |  false  | boolean |  |
 
 ## vintner server start
 
@@ -2212,6 +2265,7 @@ cleans up the filesystem
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | force |  false  | boolean | force clean up |
+| no-force |  false  | boolean |  |
 
 ## vintner setup code
 
@@ -2343,6 +2397,57 @@ resets the filesystem
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | force |  false  | boolean | force clean up |
+| no-force |  false  | boolean |  |
+
+## vintner study technology
+
+conduct technology case study
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner study technology --application ${APPLICATION} --experimental ${EXPERIMENTAL}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"application": "${APPLICATION}", "experimental": "${EXPERIMENTAL}"}' \
+            ${SERVER_ADDRESS}/study/technology
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/study/technology", {
+		application: APPLICATION,
+		experimental: EXPERIMENTAL
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/study/technology", json={
+		"application": APPLICATION,
+		"experimental": EXPERIMENTAL
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/study/technology", json=mapOf(
+		"application" to APPLICATION,
+		"experimental" to EXPERIMENTAL
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| application |  true  | string | application name, e.g., boutique or shop |
+| experimental |  true  |  | enable experimental feature |
 
 ## vintner template enrich
 
@@ -2393,6 +2498,57 @@ enrich conditions
 | --- | --- | --- | --- |
 | template |  true  | string | path to variable service template |
 | output |  true  | string | path of the output |
+
+## vintner template implement
+
+implement node types
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template implement --dir ${DIR} --experimental ${EXPERIMENTAL}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"dir": "${DIR}", "experimental": "${EXPERIMENTAL}"}' \
+            ${SERVER_ADDRESS}/template/implement
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/implement", {
+		dir: DIR,
+		experimental: EXPERIMENTAL
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/implement", json={
+		"dir": DIR,
+		"experimental": EXPERIMENTAL
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/implement", json=mapOf(
+		"dir" to DIR,
+		"experimental" to EXPERIMENTAL
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| dir |  true  | string | path to service template directory |
+| experimental |  true  |  | enable experimental feature |
+| orchestrator |  false  | string | the orchestrator for which node type should be implemented (default: "unfurl") |
 
 ## vintner template init
 
@@ -2448,6 +2604,7 @@ initializes a CSAR
 | template |  true  | string | template name (default: directory name of --path) |
 | vintner |  true  | string | vintner binary to execute (default: "task cli --") |
 | force |  false  | boolean | force initialization, e.g., on non-empty directories |
+| no-force |  false  | boolean |  |
 
 ## vintner template inputs
 
@@ -2645,6 +2802,7 @@ pull template dependencies
 | --- | --- | --- | --- |
 | dir |  true  | string | path to service template directory |
 | link |  false  | boolean | create symbolic links instead of copying files (default: false) |
+| no-link |  false  | boolean |  |
 
 ## vintner template puml topology
 
@@ -2740,6 +2898,58 @@ plot types as PlantUML (each entity types is plotted separately)
 | path |  true  | string | path to service template |
 | output |  false  | string | path of the output directory (default: the directory of the service template) |
 | types |  false  | string... | entity types to consider, e.g., "node_types" (default: Every defined entity type) |
+
+## vintner template quality
+
+get quality of template (experimental)
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template quality --experimental ${EXPERIMENTAL} --template ${TEMPLATE}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"experimental": "${EXPERIMENTAL}", "template": "${TEMPLATE}"}' \
+            ${SERVER_ADDRESS}/template/quality
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/quality", {
+		experimental: EXPERIMENTAL,
+		template: TEMPLATE
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/quality", json={
+		"experimental": EXPERIMENTAL,
+		"template": TEMPLATE
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/quality", json=mapOf(
+		"experimental" to EXPERIMENTAL,
+		"template" to TEMPLATE
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| experimental |  true  |  | enable experimental feature |
+| template |  true  | string | path to service template |
+| presets |  false  | string... | names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
+| inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}) |
 
 ## vintner template query
 
@@ -2992,6 +3202,52 @@ runs tests defined in the CSAR
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | path |  true  | string | path or link to the extracted CSAR |
+
+## vintner template unimplement
+
+unimplement node types
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner template unimplement --dir ${DIR}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"dir": "${DIR}"}' \
+            ${SERVER_ADDRESS}/template/unimplement
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/template/unimplement", {
+		dir: DIR
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/template/unimplement", json={
+		"dir": DIR
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/template/unimplement", json=mapOf(
+		"dir" to DIR
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| dir |  true  | string | path to service template directory |
 
 ## vintner template unpackage
 
@@ -3515,3 +3771,49 @@ generates a nonce
     import khttp.post
     post(SERVER_ADDRESS + "/utils/nonce")
     ```
+
+## vintner utils normative
+
+returns normative types
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils normative 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/utils/normative
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/normative")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/normative")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/normative")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| orchestrator |  false  | string | orchestrator dialect |
+| profile |  false  | boolean | include profile entry (default: true) |
+| no-profile |  false  | boolean |  |
+| base |  false  | boolean | include base types (default: true) |
+| no-base |  false  | boolean |  |
+| specific |  false  | boolean | include specific types (default: true) |
+| no-specific |  false  | boolean |  |
+| format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |

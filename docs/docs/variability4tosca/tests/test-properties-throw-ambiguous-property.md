@@ -11,13 +11,13 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  node_templates:
-    node_one:
-      type: node_one
-      properties:
-        - key_one: value_one
-        - key_one: value_one
-        - key_two: value_two
+    node_templates:
+        node_one:
+            type: node_one
+            properties:
+                - key_one: value_one
+                - key_one: value_one
+                - key_two: value_two
 {% endraw %}
 ```
 

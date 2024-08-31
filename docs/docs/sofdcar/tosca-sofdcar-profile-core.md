@@ -6,7 +6,7 @@ An overview is given in Figure c1.
 
 <figure markdown>
 ![Artifact Types](tosca-sofdcar-profile-core.artifact-types.svg)
-<figcaption>Figure c1: TOSCA SofDCar Core Artifact Types</figcaption>
+<figcaption>Figure c1:  Artifact Types</figcaption>
 </figure>
 
 #### sofdcar.artifacts.Root
@@ -43,7 +43,7 @@ An overview is given in Figure c2.
 
 <figure markdown>
 ![Capability Types](tosca-sofdcar-profile-core.capability-types.svg)
-<figcaption>Figure c2: TOSCA SofDCar Core Capability Types</figcaption>
+<figcaption>Figure c2:  Capability Types</figcaption>
 </figure>
 
 #### sofdcar.capabilities.Root
@@ -100,7 +100,7 @@ An overview is given in Figure c3.
 
 <figure markdown>
 ![Data Types](tosca-sofdcar-profile-core.data-types.svg)
-<figcaption>Figure c3: TOSCA SofDCar Core Data Types</figcaption>
+<figcaption>Figure c3:  Data Types</figcaption>
 </figure>
 
 #### sofdcar.data.Root
@@ -119,7 +119,7 @@ An overview is given in Figure c4.
 
 <figure markdown>
 ![Group Types](tosca-sofdcar-profile-core.group-types.svg)
-<figcaption>Figure c4: TOSCA SofDCar Core Group Types</figcaption>
+<figcaption>Figure c4:  Group Types</figcaption>
 </figure>
 
 #### sofdcar.groups.Root
@@ -165,7 +165,7 @@ An overview is given in Figure c5.
 
 <figure markdown>
 ![Interface Types](tosca-sofdcar-profile-core.interface-types.svg)
-<figcaption>Figure c5: TOSCA SofDCar Core Interface Types</figcaption>
+<figcaption>Figure c5:  Interface Types</figcaption>
 </figure>
 
 #### sofdcar.interfaces.Root
@@ -205,7 +205,7 @@ An overview is given in Figure c6.
 
 <figure markdown>
 ![Node Types](tosca-sofdcar-profile-core.node-types.svg)
-<figcaption>Figure c6: TOSCA SofDCar Core Node Types</figcaption>
+<figcaption>Figure c6:  Node Types</figcaption>
 </figure>
 
 #### sofdcar.nodes.Root
@@ -460,7 +460,7 @@ An overview is given in Figure c7.
 
 <figure markdown>
 ![Policy Types](tosca-sofdcar-profile-core.policy-types.svg)
-<figcaption>Figure c7: TOSCA SofDCar Core Policy Types</figcaption>
+<figcaption>Figure c7:  Policy Types</figcaption>
 </figure>
 
 #### sofdcar.policies.Root
@@ -497,7 +497,7 @@ An overview is given in Figure c8.
 
 <figure markdown>
 ![Relationship Types](tosca-sofdcar-profile-core.relationship-types.svg)
-<figcaption>Figure c8: TOSCA SofDCar Core Relationship Types</figcaption>
+<figcaption>Figure c8:  Relationship Types</figcaption>
 </figure>
 
 #### sofdcar.relationships.Root

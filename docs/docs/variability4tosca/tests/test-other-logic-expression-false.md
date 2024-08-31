@@ -11,20 +11,20 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    expressions:
-      name:
-        node_presence: node_one
-    options:
-      type_default_condition: true
-  node_templates:
-    container:
-      type: container
-      conditions:
-        logic_expression: name
-    node_one:
-      type: node_one
-      conditions: false
+    variability:
+        expressions:
+            name:
+                node_presence: node_one
+        options:
+            type_default_condition: true
+    node_templates:
+        container:
+            type: container
+            conditions:
+                logic_expression: name
+        node_one:
+            type: node_one
+            conditions: false
 {% endraw %}
 ```
 

@@ -11,77 +11,77 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    inputs:
-      static:
-        type: boolean
-        default: true
-    presets:
-      static:
+    variability:
         inputs:
-          static: true
-      elastic:
-        inputs:
-          static: false
-    expressions:
-      is_static:
-        equal:
-          - variability_input: static
-          - true
-      is_elastic:
-        equal:
-          - variability_input: static
-          - false
-    options:
-      mode: semantic-loose
-      node_default_condition_mode: incoming-host
-      hosting_stack_constraint: true
-      optimization_topology: false
-  node_templates:
-    shop:
-      type: shop.component
-      persistent: true
-      requirements:
-        - host:
-            node: os_compute
-        - host:
-            node: gcp_runtime
-        - database:
-            node: os_database
-        - database:
-            node: gcp_database
-    os_database:
-      type: os.database
-      requirements:
-        - host: os_compute
-    os_monitor:
-      type: os.monitor
-      requirements:
-        - host: os_compute
-    os_compute:
-      type: os.compute
-      requirements:
-        - host: os_cloud
-    os_cloud:
-      type: os.provider
-      conditions:
-        logic_expression: is_static
-    gcp_runtime:
-      type: gcp.runtime
-      requirements:
-        - host: gcp_cloud
-    gcp_database:
-      type: gcp.database
-      requirements:
-        - host: gcp_dbms
-    gcp_dbms:
-      type: gcp.dbms
-      requirements:
-        - host: gcp_cloud
-    gcp_cloud:
-      type: gcp.provider
-      conditions:
-        logic_expression: is_elastic
+            static:
+                type: boolean
+                default: true
+        presets:
+            static:
+                inputs:
+                    static: true
+            elastic:
+                inputs:
+                    static: false
+        expressions:
+            is_static:
+                equal:
+                    - variability_input: static
+                    - true
+            is_elastic:
+                equal:
+                    - variability_input: static
+                    - false
+        options:
+            mode: semantic-loose
+            node_default_condition_mode: incoming-host
+            hosting_stack_constraint: true
+            optimization_topology: false
+    node_templates:
+        shop:
+            type: shop.component
+            persistent: true
+            requirements:
+                - host:
+                      node: os_compute
+                - host:
+                      node: gcp_runtime
+                - database:
+                      node: os_database
+                - database:
+                      node: gcp_database
+        os_database:
+            type: os.database
+            requirements:
+                - host: os_compute
+        os_monitor:
+            type: os.monitor
+            requirements:
+                - host: os_compute
+        os_compute:
+            type: os.compute
+            requirements:
+                - host: os_cloud
+        os_cloud:
+            type: os.provider
+            conditions:
+                logic_expression: is_static
+        gcp_runtime:
+            type: gcp.runtime
+            requirements:
+                - host: gcp_cloud
+        gcp_database:
+            type: gcp.database
+            requirements:
+                - host: gcp_dbms
+        gcp_dbms:
+            type: gcp.dbms
+            requirements:
+                - host: gcp_cloud
+        gcp_cloud:
+            type: gcp.provider
+            conditions:
+                logic_expression: is_elastic
 {% endraw %}
 ```
 

@@ -11,82 +11,82 @@ The variability of the following variable service template shall be resolved.
 {% raw %}
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-  variability:
-    options:
-      node_default_condition: true
-      node_default_condition_mode: incoming-host
-      relation_default_condition: true
-      relation_default_condition_mode: source-target
-      type_default_condition: true
-      hosting_stack_constraint: true
-      optimization_topology: false
-      optimization_topology_unique: true
-    inputs:
-      static:
-        type: boolean
-        default: true
-    presets:
-      static:
+    variability:
+        options:
+            node_default_condition: true
+            node_default_condition_mode: incoming-host
+            relation_default_condition: true
+            relation_default_condition_mode: source-target
+            type_default_condition: true
+            hosting_stack_constraint: true
+            optimization_topology: false
+            optimization_topology_unique: true
         inputs:
-          static: true
-      elastic:
-        inputs:
-          static: false
-    expressions:
-      is_static:
-        equal:
-          - variability_input: static
-          - true
-      is_elastic:
-        equal:
-          - variability_input: static
-          - false
-    constraints:
-      - implies:
-          - logic_expression: is_static
-          - relation_presence:
-              - worker
-              - dev_host
-      - implies:
-          - logic_expression: is_elastic
-          - relation_presence:
-              - worker
-              - prod_host
-  node_templates:
-    worker:
-      type: worker
-      persistent: true
-      requirements:
-        - dev_database:
-            node: dev_database
-        - dev_host:
-            node: dev_host
-        - prod_database:
-            node: prod_database
-        - prod_host:
-            node: prod_host
-    dev_database:
-      type: dev_database
-      requirements:
-        - host: dev_host
-    dev_host:
-      type: dev_host
-      requirements:
-        - host:
-            node: dev_cloud
-    dev_cloud:
-      type: dev_cloud
-    prod_database:
-      type: prod_database
-      requirements:
-        - host: prod_host
-    prod_host:
-      type: prod_host
-      requirements:
-        - host:
-            node: prod_cloud
-    prod_cloud:
-      type: prod_cloud
+            static:
+                type: boolean
+                default: true
+        presets:
+            static:
+                inputs:
+                    static: true
+            elastic:
+                inputs:
+                    static: false
+        expressions:
+            is_static:
+                equal:
+                    - variability_input: static
+                    - true
+            is_elastic:
+                equal:
+                    - variability_input: static
+                    - false
+        constraints:
+            - implies:
+                  - logic_expression: is_static
+                  - relation_presence:
+                        - worker
+                        - dev_host
+            - implies:
+                  - logic_expression: is_elastic
+                  - relation_presence:
+                        - worker
+                        - prod_host
+    node_templates:
+        worker:
+            type: worker
+            persistent: true
+            requirements:
+                - dev_database:
+                      node: dev_database
+                - dev_host:
+                      node: dev_host
+                - prod_database:
+                      node: prod_database
+                - prod_host:
+                      node: prod_host
+        dev_database:
+            type: dev_database
+            requirements:
+                - host: dev_host
+        dev_host:
+            type: dev_host
+            requirements:
+                - host:
+                      node: dev_cloud
+        dev_cloud:
+            type: dev_cloud
+        prod_database:
+            type: prod_database
+            requirements:
+                - host: prod_host
+        prod_host:
+            type: prod_host
+            requirements:
+                - host:
+                      node: prod_cloud
+        prod_cloud:
+            type: prod_cloud
 {% endraw %}
 ```
 
@@ -101,22 +101,22 @@ The following variability-resolved service template is expected.
 {% raw %}
 tosca_definitions_version: tosca_simple_yaml_1_3
 topology_template:
-  node_templates:
-    worker:
-      type: worker
-      requirements:
-        - prod_database: prod_database
-        - prod_host: prod_host
-    prod_database:
-      type: prod_database
-      requirements:
-        - host: prod_host
-    prod_host:
-      type: prod_host
-      requirements:
-        - host: prod_cloud
-    prod_cloud:
-      type: prod_cloud
+    node_templates:
+        worker:
+            type: worker
+            requirements:
+                - prod_database: prod_database
+                - prod_host: prod_host
+        prod_database:
+            type: prod_database
+            requirements:
+                - host: prod_host
+        prod_host:
+            type: prod_host
+            requirements:
+                - host: prod_cloud
+        prod_cloud:
+            type: prod_cloud
 {% endraw %}
 ```
 
