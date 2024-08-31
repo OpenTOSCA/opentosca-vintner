@@ -6,28 +6,28 @@ import * as utils from '#utils'
 import {ImplementationGenerator} from './types'
 
 class Registry {
-    readonly generators = new Map<string, ImplementationGenerator>()
+    readonly map = new Map<string, ImplementationGenerator>()
 
     constructor() {
         this.init()
     }
 
     get(id: string) {
-        return this.generators.get(id)
+        return this.map.get(id)
     }
 
     private init() {
         for (const generator of generators.flat(Infinity) as ImplementationGenerator[]) {
             const id = constructRuleName(generator)
-            if (this.generators.has(id)) throw new Error(`Generator "${id}" already registered`)
-            this.generators.set(id, generator)
+            if (this.map.has(id)) throw new Error(`Generator "${id}" already registered`)
+            this.map.set(id, generator)
         }
     }
 
     get rules(): TechnologyAssignmentRulesMap {
         const map: TechnologyAssignmentRulesMap = {}
 
-        for (const generator of this.generators.values()) {
+        for (const generator of this.map.values()) {
             if (check.isUndefined(map[generator.technology])) {
                 map[generator.technology] = []
             }
