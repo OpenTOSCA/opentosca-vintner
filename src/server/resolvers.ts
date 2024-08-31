@@ -669,6 +669,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/utils/rules',
+    hae.express(async (req, res, next) => {
+        const rules = await Controller.utils.rules(req.body)
+        res.json({rules})
+    })
+)
+
 /**
  * Query
  */
