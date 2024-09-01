@@ -2,21 +2,21 @@
 skinparam componentStyle rectangle
 
 rectangle "worker" {
-[application] <<[[https://vintner.opentosca.org example.nodes.Application]]>>
-file source_archive <<[[https://vintner.opentosca.org tar.archive]]>> as application_0
-application_0 - application
+["application"] <<[[https://vintner.opentosca.org example.nodes.Application]]>> as application
+file tar_archive <<[[https://vintner.opentosca.org tar.archive]]>> as application_artifact_0
+application_artifact_0 - application
 
-[runtime] <<example.nodes.Runtime>>
+["runtime"] <<example.nodes.Runtime>> as runtime
 
 }
 rectangle "data" {
-[database] <<example.nodes.Database>>
+["database"] <<example.nodes.Database>> as database
 
-[dbms] <<example.nodes.DBMS>>
+["dbms"] <<example.nodes.DBMS>> as dbms
 
 }
 
-[compute] <<example.nodes.Compute>>
+["compute"] <<example.nodes.Compute>> as compute
 
 
 application -(0- runtime : host
