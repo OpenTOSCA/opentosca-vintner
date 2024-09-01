@@ -2,8 +2,8 @@ import * as assert from '#assert'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import * as puml from '#puml'
 import std from '#std'
-import * as puml from '#utils/puml'
 import path from 'path'
 
 export type TemplatePUMLTopologyOptions = {

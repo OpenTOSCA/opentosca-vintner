@@ -3,9 +3,9 @@ import * as check from '#check'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import * as puml from '#puml'
 import {EntityTypes, EntityTypesKeys} from '#spec/service-template'
 import std from '#std'
-import * as puml from '#utils/puml'
 import path from 'path'
 
 export type TemplatePUMLTypesOptions = {
