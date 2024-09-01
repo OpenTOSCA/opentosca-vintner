@@ -1,0 +1,10 @@
+<%
+const enlink = (element) => {
+    const type = element.types[0]
+    const definition = type.getDefinition()
+    const link = definition?.metadata?.['vintner_link']
+    if (link) return `[[${link} ${type.name}]]`
+    return type.name
+}
+-%>
+<%= enlink(element) %>

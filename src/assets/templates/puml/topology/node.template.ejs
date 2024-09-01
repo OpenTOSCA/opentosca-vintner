@@ -1,4 +1,4 @@
-[<%= node.name %>] <<<%= enlink(node) %>>>
+[<%= node.name %>] <<<%- include('type.link.ejs', {element: node}) -%>>>
 <% node.artifacts.forEach(artifact => { -%>
 <%- include('artifact.template.ejs', {artifact}) %>
 <% }) -%>

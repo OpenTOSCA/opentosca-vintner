@@ -19,92 +19,2371 @@ The specification is under active development and is not backwards compatible wi
 ## Deployment Technology "Ansible"
 
 Ansible is an open-source automation tool primarily used for configuration management, application deployment, and task automation. It allows IT administrators and DevOps teams to manage software on servers using SSH, without the need for agents on target nodes. Ansible uses simple, human-readable YAML files called playbooks to define tasks and configurations, enabling consistent management of IT environments across multiple servers. Its main purpose is to simplify the management of software configurations, reduce manual effort, and ensure consistency and reliability in IT operations, making it an ideal tool for automating repetitive tasks and orchestrating complex workflows across diverse environments.
-Find our [more](https://ansible.com){target=_blank}.
+Find out [more](https://ansible.com){target=_blank}.
 
+### Overview
 
 | Component | Artifact | Hosting | Quality | Reason |
 | --- | --- | --- | --- | --- |
-| [docker.engine](../../normative/index.md#dockerengine){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [gcp.service](../../normative/index.md#gcpservice){target=_blank} |  |  | 1 | Ansible provides a declarative module |
-| [ingress](../../normative/index.md#ingress){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [ingress](../../normative/index.md#ingress){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [gcp.cloudsql](../../normative/index.md#gcpcloudsql){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Docker is more specialized |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [gcp.cloudsql](../../normative/index.md#gcpcloudsql){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [gcp.cloudrun](../../normative/index.md#gcpcloudrun){target=_blank} | 0 | Custom module with imperative parts, while Terraform provides a declarative module. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [tar.archive](../../normative/index.md#tararchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. Special integration for systemd. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. Special integration for systemd. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | [gcp.appengine](../../normative/index.md#gcpappengine){target=_blank} | 0 | Custom module with imperative parts, while Terraform provides a declarative module. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [apt.package](../../normative/index.md#aptpackage){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [tar.archive](../../normative/index.md#tararchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., &#34;service.application&#34;. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application. |
-| [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | [machine.image](../../normative/index.md#machineimage){target=_blank} | [openstack.provider](../../normative/index.md#openstackprovider){target=_blank} | 0.5 | Terraform is more specialized. |
+| [docker.engine](/normative#dockerengine){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [gcp.service](/normative#gcpservice){target=_blank} |  |  | 1 | Ansible provides a declarative module |
+| [ingress](/normative#ingress){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [ingress](/normative#ingress){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [gcp.cloudsql](/normative#gcpcloudsql){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Docker is more specialized |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [gcp.cloudsql](/normative#gcpcloudsql){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [gcp.cloudrun](/normative#gcpcloudrun){target=_blank} | 0 | Custom module with imperative parts, while Terraform provides a declarative module. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [service.application](/normative#serviceapplication){target=_blank} | [tar.archive](/normative#tararchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. Special integration for systemd. |
+| [service.application](/normative#serviceapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. Special integration for systemd. |
+| [service.application](/normative#serviceapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | [gcp.appengine](/normative#gcpappengine){target=_blank} | 0 | Custom module with imperative parts, while Terraform provides a declarative module. |
+| [software.application](/normative#softwareapplication){target=_blank} | [apt.package](/normative#aptpackage){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Primary use case due to the specialization of Ansible. |
+| [software.application](/normative#softwareapplication){target=_blank} | [tar.archive](/normative#tararchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., &#34;service.application&#34;. |
+| [software.application](/normative#softwareapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application. |
+| [virtual.machine](/normative#virtualmachine){target=_blank} | [machine.image](/normative#machineimage){target=_blank} | [openstack.provider](/normative#openstackprovider){target=_blank} | 0.5 | Terraform is more specialized. |
+
+
+### Rule #1
+
+docker.engine
+
+
+
+virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+&#34;ansible.builtin.shell&#34;, &#34;ansible.builtin.group&#34;, and &#34;ansible.builtin.user&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1cp4digjkk3dn" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1cp4digjkk3dn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="8" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18" y="30.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="27" y="30.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="127" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1cp4digjkk3dn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#dockerengine docker.engine]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #2
+
+gcp.service
+
+
+
+
+
+
+
+Ansible provides a declarative module
+
+&#34;google.cloud.gcp_serviceusage_service&#34; task
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="71px" preserveAspectRatio="none" style="width:134px;height:71px;" version="1.1" viewBox="0 0 134 71" width="134px" zoomAndPan="magnify"><defs><filter height="300%" id="f19fug2ho64162" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f19fug2ho64162)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="117" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#gcpservice" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpservice" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="79" x="25" y="30.9951">gcp.service</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="104" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="24.5" y="47.292">component</text><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#gcpservice gcp.service]]>>
+
+
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #3
+
+ingress
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes.core.k8s&#34; task
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rgxrnq4ixwt1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="39.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="56" y="30.9951">«</text><a href="/normative#ingress" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ingress" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="49" x="65" y="30.9951">ingress</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="114" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#ingress ingress]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #4
+
+ingress
+
+
+
+virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+&#34;ansible.builtin.apt_key&#34;, &#34;ansible.builtin.apt_repository&#34;, &#34;ansible.builtin.apt&#34;, &#34;ansible.builtin.copy&#34;, and &#34;ansible.builtin.systemd&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="fq803xhofa2nn" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fq803xhofa2nn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="27" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="22" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="22" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="43.5" y="30.9951">«</text><a href="/normative#ingress" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ingress" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="49" x="52.5" y="30.9951">ingress</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="101.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fq803xhofa2nn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#ingress ingress]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #5
+
+mysql.database
+
+
+
+mysql.dbms,docker.engine,virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="461px" preserveAspectRatio="none" style="width:162px;height:461px;" version="1.1" viewBox="0 0 162 461" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rskzspl2joec" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="9.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="19.5" y="290.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="28.5" y="290.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="128.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--entity host2--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="7.5" y="398"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="403"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="440.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="17.5" y="420.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="26.5" y="420.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="420.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="437.292">host2</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host1 to host2--><path d="M78.5,321.1 C78.5,343.42 78.5,375.64 78.5,397.95 " fill="none" id="host1-host2" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="364.0669">host</text><path d="M85.5711,352.4577 A10,10 0 0 0 71.4289 352.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="359.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#dockerengine docker.engine]]>>
+
+[host2] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+host1 -(0- host2 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #6
+
+mysql.database
+
+
+
+mysql.dbms,gcp.cloudsql
+
+
+
+Primary use case due to the specialization of Ansible.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:162px;height:331px;" version="1.1" viewBox="0 0 162 331" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1qv3f5ya69sfx" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="16" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="11" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="11" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="26" y="290.9951">«</text><a href="/normative#gcpcloudsql" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudsql" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="87" x="35" y="290.9951">gcp.cloudsql</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="122" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#gcpcloudsql gcp.cloudsql]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #7
+
+mysql.database
+
+
+
+mysql.dbms,kubernetes.cluster
+
+
+
+Primary use case due to the specialization of Ansible.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:184px;height:331px;" version="1.1" viewBox="0 0 184 331" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fdkktm4ksmcqd" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="36" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="143" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="290.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="307.292">host1</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M89.5,191.1 C89.5,213.42 89.5,245.64 89.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="234.0669">host</text><path d="M96.5711,222.4577 A10,10 0 0 0 82.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #8
+
+mysql.database
+
+
+
+mysql.dbms,virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:162px;height:331px;" version="1.1" viewBox="0 0 162 331" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1r4tbhx0s9tgp" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="7.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="17.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="26.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #9
+
+mysql.dbms
+
+
+
+docker.engine,virtual.machine
+
+
+
+Docker is more specialized
+
+&#34;community.docker.docker_container&#34; task
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:159px;height:331px;" version="1.1" viewBox="0 0 159 331" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1vpy0537dnacv" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="36" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="118" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="8" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="27" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="127" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="307.292">host1</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M77,191.1 C77,213.42 77,245.64 77,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="234.0669">host</text><path d="M84.0711,222.4577 A10,10 0 0 0 69.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #10
+
+mysql.dbms
+
+
+
+gcp.cloudsql
+
+
+
+Primary use case due to the specialization of Ansible.
+
+&#34;google.cloud.gcp_sql_instance&#34; and &#34;google.cloud.gcp_sql_user&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:142px;height:201px;" version="1.1" viewBox="0 0 142 201" width="142px" zoomAndPan="magnify"><defs><filter height="300%" id="fh83joab5afgz" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fh83joab5afgz)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="8.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18.5" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="27.5" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="109.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="28.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fh83joab5afgz)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#gcpcloudsql" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudsql" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="87" x="25" y="160.9951">gcp.cloudsql</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="112" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="48.5" y="177.292">host0</text><!--link component to host0--><path d="M68.5,61.1 C68.5,83.42 68.5,115.64 68.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="69.5" y="104.0669">host</text><path d="M75.5711,92.4577 A10,10 0 0 0 61.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="68.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#gcpcloudsql gcp.cloudsql]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #11
+
+mysql.dbms
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes.core.k8s&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fzcw6iktypg8l" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #12
+
+mysql.dbms
+
+
+
+virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+&#34;ansible.builtin.apt&#34;, &#34;ansible.builtin.systemd&#34;, &#34;ansible.builtin.copy&#34;, &#34;ansible.builtin.lineinfile&#34;, and &#34;community.mysql.mysql_user&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1nqvl5em3tlv1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1nqvl5em3tlv1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="36" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="118" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1nqvl5em3tlv1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #13
+
+service.application
+
+docker.image
+
+docker.engine,virtual.machine
+
+
+
+Docker is more specialized.
+
+&#34;community.docker.docker_container&#34; task
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:349px;height:331px;" version="1.1" viewBox="0 0 349 331" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="ft0ar4ftztrb6" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="187" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="197" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="206" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="306" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="185" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="195" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="204" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="308" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="307.292">host1</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M256,191.1 C256,213.42 256,245.64 256,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="234.0669">host</text><path d="M263.0711,222.4577 A10,10 0 0 0 248.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #14
+
+service.application
+
+docker.image
+
+gcp.cloudrun
+
+
+
+Custom module with imperative parts, while Terraform provides a declarative module.
+
+&#34;ansible.builtin.shell&#34;, &#34;ansible.builtin.tempfile&#34;, and &#34;ansible.builtin.copy&#34; tasks 
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:349px;height:201px;" version="1.1" viewBox="0 0 349 201" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="fd62i3ecb7jhc" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="129" x="191.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="186.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="186.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="201.5" y="160.9951">«</text><a href="/normative#gcpcloudrun" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudrun" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="91" x="210.5" y="160.9951">gcp.cloudrun</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="301.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#gcpcloudrun gcp.cloudrun]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #15
+
+service.application
+
+docker.image
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes.core.k8s&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:350px;height:201px;" version="1.1" viewBox="0 0 350 201" width="350px" zoomAndPan="magnify"><defs><filter height="300%" id="f1kq3zm7gdox1k" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="172.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="182.5" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="191.5" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="320.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #16
+
+service.application
+
+tar.archive
+
+*,virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible. Special integration for systemd.
+
+&#34;ansible.builtin.file&#34;, &#34;ansible.builtin.unarchive&#34;, &#34;ansible.builtin.copy&#34;, &#34;ansible.builtin.fail&#34;, &#34;ansible.builtin.shell&#34;, and &#34;ansible.builtin.systemd&#34; tasks with &#34;when&#34; statements
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:327px;height:331px;" version="1.1" viewBox="0 0 327 331" width="327px" zoomAndPan="magnify"><defs><filter height="300%" id="f76h4q2nk9ac7" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="151.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="161.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="170.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="297.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" points="6,8,6,60.5938,116,60.5938,116,18,106,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M106,8 L106,18 L116,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#tararchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#tararchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="72" x="25" y="30.9951">tar.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="97" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="204" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="221.5" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214" y="307.292">host1</text><!--link component_0 to component--><path d="M116.08,34.5 C127.75,34.5 139.42,34.5 151.08,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234,61.1 C234,83.42 234,115.64 234,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235" y="104.0669">host</text><path d="M241.0711,92.4577 A10,10 0 0 0 226.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M234,191.1 C234,213.42 234,245.64 234,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235" y="234.0669">host</text><path d="M241.0711,222.4577 A10,10 0 0 0 226.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#tararchive tar.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #17
+
+service.application
+
+zip.archive
+
+*,virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible. Special integration for systemd.
+
+&#34;ansible.builtin.file&#34;, &#34;ansible.builtin.unarchive&#34;, &#34;ansible.builtin.copy&#34;, &#34;ansible.builtin.fail&#34;, &#34;ansible.builtin.shell&#34;, and &#34;ansible.builtin.systemd&#34; tasks with &#34;when&#34; statements
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:328px;height:331px;" version="1.1" viewBox="0 0 328 331" width="328px" zoomAndPan="magnify"><defs><filter height="300%" id="f1t5cj0mcljxuf" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="152" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="171" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="298" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="204.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="222" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="307.292">host1</text><!--link component_0 to component--><path d="M117.25,34.5 C128.7,34.5 140.15,34.5 151.6,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234.5,61.1 C234.5,83.42 234.5,115.64 234.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="104.0669">host</text><path d="M241.5711,92.4577 A10,10 0 0 0 227.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M234.5,191.1 C234.5,213.42 234.5,245.64 234.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="234.0669">host</text><path d="M241.5711,222.4577 A10,10 0 0 0 227.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #18
+
+service.application
+
+zip.archive
+
+gcp.appengine
+
+
+
+Custom module with imperative parts, while Terraform provides a declarative module.
+
+&#34;ansible.builtin.shell&#34;, &#34;ansible.builtin.tempfile&#34;, &#34;ansible.builtin.unarchive&#34;, and &#34;ansible.builtin.copy&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:328px;height:201px;" version="1.1" viewBox="0 0 328 201" width="328px" zoomAndPan="magnify"><defs><filter height="300%" id="f1j9igqdeoh8eq" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="152" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="171" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="298" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173.5" y="160.9951">«</text><a href="/normative#gcpappengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpappengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182.5" y="160.9951">gcp.appengine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="177.292">host0</text><!--link component_0 to component--><path d="M117.25,34.5 C128.7,34.5 140.15,34.5 151.6,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234.5,61.1 C234.5,83.42 234.5,115.64 234.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="104.0669">host</text><path d="M241.5711,92.4577 A10,10 0 0 0 227.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#gcpappengine gcp.appengine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #19
+
+software.application
+
+apt.package
+
+*,virtual.machine
+
+
+
+Primary use case due to the specialization of Ansible.
+
+&#34;ansible.builtin.shell&#34;, &#34;ansible.builtin.apt_key&#34;, &#34;ansible.builtin.apt_repository&#34;, &#34;ansible.builtin.apt&#34;, and &#34;ansible.builtin.copy&#34;, tasks with &#34;when&#34; statements
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:349px;height:331px;" version="1.1" viewBox="0 0 349 331" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="fxcq5y9he8xw1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fxcq5y9he8xw1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="164.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="159.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="159.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="174.5" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="183.5" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="211.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#fxcq5y9he8xw1)" points="6,8,6,60.5938,129,60.5938,129,18,119,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M119,8 L119,18 L129,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#aptpackage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#aptpackage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="85" x="25" y="30.9951">apt.package</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="110" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="44.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fxcq5y9he8xw1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="221.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="216.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="216.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="239" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="231.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#fxcq5y9he8xw1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="180.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="175.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="175.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="190.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="199.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="303.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="231.5" y="307.292">host1</text><!--link component_0 to component--><path d="M129.31,34.5 C140.93,34.5 152.54,34.5 164.16,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M251.5,61.1 C251.5,83.42 251.5,115.64 251.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="252.5" y="104.0669">host</text><path d="M258.5711,92.4577 A10,10 0 0 0 244.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="251.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M251.5,191.1 C251.5,213.42 251.5,245.64 251.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="252.5" y="234.0669">host</text><path d="M258.5711,222.4577 A10,10 0 0 0 244.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="251.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#aptpackage apt.package]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #20
+
+software.application
+
+tar.archive
+
+*,virtual.machine
+
+
+
+While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., &#34;service.application&#34;.
+
+&#34;ansible.builtin.file&#34;, &#34;ansible.builtin.unarchive&#34;, &#34;ansible.builtin.copy&#34;, &#34;ansible.builtin.fail&#34;, and &#34;ansible.builtin.shell&#34; tasks with &#34;when&#34; statements
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:336px;height:331px;" version="1.1" viewBox="0 0 336 331" width="336px" zoomAndPan="magnify"><defs><filter height="300%" id="f4g2setwlcj1z" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="151" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="161" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="170" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="306" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="198" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f4g2setwlcj1z)" points="6,8,6,60.5938,116,60.5938,116,18,106,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M106,8 L106,18 L116,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#tararchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#tararchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="72" x="25" y="30.9951">tar.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="97" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="208" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="203" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="203" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="225.5" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="218" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="167" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="162" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="162" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="177" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="186" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="290" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="218" y="307.292">host1</text><!--link component_0 to component--><path d="M116.31,34.5 C127.72,34.5 139.13,34.5 150.54,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M238,61.1 C238,83.42 238,115.64 238,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="239" y="104.0669">host</text><path d="M245.0711,92.4577 A10,10 0 0 0 230.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="238" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M238,191.1 C238,213.42 238,245.64 238,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="239" y="234.0669">host</text><path d="M245.0711,222.4577 A10,10 0 0 0 230.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="238" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#tararchive tar.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #21
+
+software.application
+
+zip.archive
+
+*,virtual.machine
+
+
+
+While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+
+&#34;ansible.builtin.apt&#34;, &#34;ansible.builtin.file&#34;, &#34;ansible.builtin.unarchive&#34;, &#34;ansible.builtin.copy&#34;, &#34;ansible.builtin.fail&#34;, and &#34;ansible.builtin.shell&#34; tasks with &#34;when&#34; statements
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:337px;height:331px;" version="1.1" viewBox="0 0 337 331" width="337px" zoomAndPan="magnify"><defs><filter height="300%" id="f1hislvpsfy4g9" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="152.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162.5" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="171.5" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="307.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="199.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="209.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="204.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="204.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="227" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="219.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="168.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="163.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="163.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="178.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="187.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="291.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="219.5" y="307.292">host1</text><!--link component_0 to component--><path d="M117.12,34.5 C128.92,34.5 140.71,34.5 152.5,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M239.5,61.1 C239.5,83.42 239.5,115.64 239.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="240.5" y="104.0669">host</text><path d="M246.5711,92.4577 A10,10 0 0 0 232.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="239.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M239.5,191.1 C239.5,213.42 239.5,245.64 239.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="240.5" y="234.0669">host</text><path d="M246.5711,222.4577 A10,10 0 0 0 232.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="239.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #22
+
+virtual.machine
+
+machine.image
+
+openstack.provider
+
+
+
+Terraform is more specialized.
+
+&#34;openstack.cloud.security_group&#34;, &#34;openstack.cloud.security_group_rule&#34; and &#34;openstack.cloud.server&#34; tasks
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:352px;height:201px;" version="1.1" viewBox="0 0 352 201" width="352px" zoomAndPan="magnify"><defs><filter height="300%" id="finaenn99p6ho" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#finaenn99p6ho)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="184.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="179.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="179.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="194.5" y="30.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="203.5" y="30.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="307.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="215.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#finaenn99p6ho)" points="6,8,6,60.5938,149,60.5938,149,18,139,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M139,8 L139,18 L149,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#machineimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#machineimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="105" x="25" y="30.9951">machine.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="54.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#finaenn99p6ho)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="171" x="170" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="165" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="165" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="180" y="160.9951">«</text><a href="/normative#openstackprovider" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#openstackprovider" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="133" x="189" y="160.9951">openstack.provider</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="322" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="235.5" y="177.292">host0</text><!--link component_0 to component--><path d="M149.12,34.5 C160.89,34.5 172.67,34.5 184.44,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M255.5,61.1 C255.5,83.42 255.5,115.64 255.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="256.5" y="104.0669">host</text><path d="M262.5711,92.4577 A10,10 0 0 0 248.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="255.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#virtualmachine virtual.machine]]>>
+file artifact <<[[/normative#machineimage machine.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#openstackprovider openstack.provider]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
 
 
 ## Deployment Technology "Terraform"
 
 Terraform is an open-source infrastructure as code (IaC) tool developed by HashiCorp that allows users to define, provision, and manage cloud infrastructure in a consistent, automated, and reproducible way. Using a declarative configuration language called HashiCorp Configuration Language (HCL) or JSON, Terraform enables users to define infrastructure components such as virtual machines, networks, and storage in human-readable configuration files. It supports a wide range of cloud providers, including AWS, Azure, Google Cloud, and many others, allowing for seamless multi-cloud management. By applying these configurations, Terraform creates and manages the defined resources through APIs, making it a powerful tool for automating infrastructure deployment, scaling, and version control. However, Terraform is specifically designed for managing infrastructure and is not intended for managing software on remote targets, which is outside its primary scope.
-Find our [more](https://terraform.io){target=_blank}.
+Find out [more](https://terraform.io){target=_blank}.
 
+### Overview
 
 | Component | Artifact | Hosting | Quality | Reason |
 | --- | --- | --- | --- | --- |
-| [docker.engine](../../normative/index.md#dockerengine){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [gcp.service](../../normative/index.md#gcpservice){target=_blank} |  |  | 1 | Terraform provides a declarative module. |
-| [ingress](../../normative/index.md#ingress){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [ingress](../../normative/index.md#ingress){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [gcp.cloudsql](../../normative/index.md#gcpcloudsql){target=_blank} | 1 | Terraform provides a declarative module. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0 | Ansible is more specialized. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [gcp.cloudsql](../../normative/index.md#gcpcloudsql){target=_blank} | 1 | Terraform provides a declarative module. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [gcp.cloudrun](../../normative/index.md#gcpcloudrun){target=_blank} | 1 | Terraform provides a declarative module. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [tar.archive](../../normative/index.md#tararchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | [gcp.appengine](../../normative/index.md#gcpappengine){target=_blank} | 1 | Terraform provides a declarative module. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [apt.archive](../../normative/index.md#aptarchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [tar.archive](../../normative/index.md#tararchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [software.application](../../normative/index.md#softwareapplication){target=_blank} | [zip.archive](../../normative/index.md#ziparchive){target=_blank} | * -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
-| [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | [machine.image](../../normative/index.md#machineimage){target=_blank} | [openstack.provider](../../normative/index.md#openstackprovider){target=_blank} | 1 | Terraform provides a declarative module. |
+| [docker.engine](/normative#dockerengine){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [gcp.service](/normative#gcpservice){target=_blank} |  |  | 1 | Terraform provides a declarative module. |
+| [ingress](/normative#ingress){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [ingress](/normative#ingress){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [gcp.cloudsql](/normative#gcpcloudsql){target=_blank} | 1 | Terraform provides a declarative module. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0 | Ansible is more specialized. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [gcp.cloudsql](/normative#gcpcloudsql){target=_blank} | 1 | Terraform provides a declarative module. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0.5 | Docker is more specialized. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [gcp.cloudrun](/normative#gcpcloudrun){target=_blank} | 1 | Terraform provides a declarative module. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0.5 | Kubernetes is more specialized. |
+| [service.application](/normative#serviceapplication){target=_blank} | [tar.archive](/normative#tararchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [service.application](/normative#serviceapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [service.application](/normative#serviceapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | [gcp.appengine](/normative#gcpappengine){target=_blank} | 1 | Terraform provides a declarative module. |
+| [software.application](/normative#softwareapplication){target=_blank} | [apt.archive](/normative#aptarchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [software.application](/normative#softwareapplication){target=_blank} | [tar.archive](/normative#tararchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [software.application](/normative#softwareapplication){target=_blank} | [zip.archive](/normative#ziparchive){target=_blank} | * -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;. |
+| [virtual.machine](/normative#virtualmachine){target=_blank} | [machine.image](/normative#machineimage){target=_blank} | [openstack.provider](/normative#openstackprovider){target=_blank} | 1 | Terraform provides a declarative module. |
+
+
+### Rule #1
+
+docker.engine
+
+
+
+virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;remote-exec&#34; provider
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1cp4digjkk3dn" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1cp4digjkk3dn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="8" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18" y="30.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="27" y="30.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="127" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1cp4digjkk3dn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#dockerengine docker.engine]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #2
+
+gcp.service
+
+
+
+
+
+
+
+Terraform provides a declarative module.
+
+&#34;google_project_service&#34; resource
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="71px" preserveAspectRatio="none" style="width:134px;height:71px;" version="1.1" viewBox="0 0 134 71" width="134px" zoomAndPan="magnify"><defs><filter height="300%" id="f19fug2ho64162" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f19fug2ho64162)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="117" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#gcpservice" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpservice" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="79" x="25" y="30.9951">gcp.service</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="104" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="24.5" y="47.292">component</text><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#gcpservice gcp.service]]>>
+
+
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #3
+
+ingress
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes_service_v1&#34; resource
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rgxrnq4ixwt1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="39.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="56" y="30.9951">«</text><a href="/normative#ingress" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ingress" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="49" x="65" y="30.9951">ingress</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="114" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#ingress ingress]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #4
+
+ingress
+
+
+
+virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;terraform_data&#34; resource with an &#34;ssh&#34; connection to the virtual machine to copy the install script using the &#34;file&#34; provisioner on the virtual machine and to execute the script using the &#34;remote-exec&#34; provisioner
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="fq803xhofa2nn" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fq803xhofa2nn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="27" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="22" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="22" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="43.5" y="30.9951">«</text><a href="/normative#ingress" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ingress" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="49" x="52.5" y="30.9951">ingress</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="101.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fq803xhofa2nn)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#ingress ingress]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #5
+
+mysql.database
+
+
+
+mysql.dbms,docker.engine,virtual.machine
+
+
+
+Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="461px" preserveAspectRatio="none" style="width:162px;height:461px;" version="1.1" viewBox="0 0 162 461" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rskzspl2joec" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="9.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="19.5" y="290.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="28.5" y="290.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="128.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--entity host2--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="7.5" y="398"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="403"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="440.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="17.5" y="420.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="26.5" y="420.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="420.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="437.292">host2</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host1 to host2--><path d="M78.5,321.1 C78.5,343.42 78.5,375.64 78.5,397.95 " fill="none" id="host1-host2" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="364.0669">host</text><path d="M85.5711,352.4577 A10,10 0 0 0 71.4289 352.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="359.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#dockerengine docker.engine]]>>
+
+[host2] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+host1 -(0- host2 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #6
+
+mysql.database
+
+
+
+mysql.dbms,gcp.cloudsql
+
+
+
+Terraform provides a declarative module.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:162px;height:331px;" version="1.1" viewBox="0 0 162 331" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1qv3f5ya69sfx" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1qv3f5ya69sfx)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="16" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="11" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="11" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="26" y="290.9951">«</text><a href="/normative#gcpcloudsql" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudsql" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="87" x="35" y="290.9951">gcp.cloudsql</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="122" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#gcpcloudsql gcp.cloudsql]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #7
+
+mysql.database
+
+
+
+mysql.dbms,kubernetes.cluster
+
+
+
+Ansible is more specialized.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:184px;height:331px;" version="1.1" viewBox="0 0 184 331" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fdkktm4ksmcqd" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="36" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="143" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="290.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="307.292">host1</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M89.5,191.1 C89.5,213.42 89.5,245.64 89.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="234.0669">host</text><path d="M96.5711,222.4577 A10,10 0 0 0 82.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #8
+
+mysql.database
+
+
+
+mysql.dbms,virtual.machine
+
+
+
+Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:162px;height:331px;" version="1.1" viewBox="0 0 162 331" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1r4tbhx0s9tgp" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1r4tbhx0s9tgp)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="7.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="17.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="26.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #9
+
+mysql.dbms
+
+
+
+docker.engine,virtual.machine
+
+
+
+Docker is more specialized.
+
+&#34;docker_container&#34; and &#34;docker_image&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:159px;height:331px;" version="1.1" viewBox="0 0 159 331" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1vpy0537dnacv" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="36" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="118" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="8" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="27" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="127" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="307.292">host1</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M77,191.1 C77,213.42 77,245.64 77,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="234.0669">host</text><path d="M84.0711,222.4577 A10,10 0 0 0 69.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #10
+
+mysql.dbms
+
+
+
+gcp.cloudsql
+
+
+
+Terraform provides a declarative module.
+
+&#34;google_sql_database_instance&#34; and &#34;google_sql_user&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:142px;height:201px;" version="1.1" viewBox="0 0 142 201" width="142px" zoomAndPan="magnify"><defs><filter height="300%" id="fh83joab5afgz" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fh83joab5afgz)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="8.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18.5" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="27.5" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="109.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="28.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fh83joab5afgz)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="125" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#gcpcloudsql" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudsql" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="87" x="25" y="160.9951">gcp.cloudsql</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="112" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="48.5" y="177.292">host0</text><!--link component to host0--><path d="M68.5,61.1 C68.5,83.42 68.5,115.64 68.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="69.5" y="104.0669">host</text><path d="M75.5711,92.4577 A10,10 0 0 0 61.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="68.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#gcpcloudsql gcp.cloudsql]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #11
+
+mysql.dbms
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes_deployment_v1&#34; and &#34;kubernetes_service_v1&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fzcw6iktypg8l" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #12
+
+mysql.dbms
+
+
+
+virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;terraform_data&#34; resource with an &#34;ssh&#34; connection to the virtual machine to copy the install script using the &#34;file&#34; provisioner on the virtual machine and to execute the script using the &#34;remote-exec&#34; provisioner
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:159px;height:201px;" version="1.1" viewBox="0 0 159 201" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1nqvl5em3tlv1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1nqvl5em3tlv1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="36" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="118" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1nqvl5em3tlv1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="160.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #13
+
+service.application
+
+docker.image
+
+docker.engine,virtual.machine
+
+
+
+Docker is more specialized.
+
+&#34;docker_container&#34; and &#34;docker_image&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:349px;height:331px;" version="1.1" viewBox="0 0 349 331" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="ft0ar4ftztrb6" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="187" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="197" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="206" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="306" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="185" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="195" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="204" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="308" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="307.292">host1</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M256,191.1 C256,213.42 256,245.64 256,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="234.0669">host</text><path d="M263.0711,222.4577 A10,10 0 0 0 248.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #14
+
+service.application
+
+docker.image
+
+gcp.cloudrun
+
+
+
+Terraform provides a declarative module.
+
+&#34;google_cloud_run_v2_service&#34; and &#34;google_cloud_run_service_iam_binding&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:349px;height:201px;" version="1.1" viewBox="0 0 349 201" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="fd62i3ecb7jhc" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fd62i3ecb7jhc)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="129" x="191.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="186.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="186.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="201.5" y="160.9951">«</text><a href="/normative#gcpcloudrun" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpcloudrun" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="91" x="210.5" y="160.9951">gcp.cloudrun</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="301.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#gcpcloudrun gcp.cloudrun]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #15
+
+service.application
+
+docker.image
+
+kubernetes.cluster
+
+
+
+Kubernetes is more specialized.
+
+&#34;kubernetes_deployment_v1&#34; and &#34;kubernetes_service_v1&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:350px;height:201px;" version="1.1" viewBox="0 0 350 201" width="350px" zoomAndPan="magnify"><defs><filter height="300%" id="f1kq3zm7gdox1k" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="172.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="182.5" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="191.5" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="320.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #16
+
+service.application
+
+tar.archive
+
+*,virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;file&#34; provisioner to upload artifacts and scripts and &#34;remote-exec&#34; to execute scripts
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:327px;height:331px;" version="1.1" viewBox="0 0 327 331" width="327px" zoomAndPan="magnify"><defs><filter height="300%" id="f76h4q2nk9ac7" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="151.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="161.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="170.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="297.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" points="6,8,6,60.5938,116,60.5938,116,18,106,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M106,8 L106,18 L116,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#tararchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#tararchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="72" x="25" y="30.9951">tar.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="97" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="204" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="221.5" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f76h4q2nk9ac7)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214" y="307.292">host1</text><!--link component_0 to component--><path d="M116.08,34.5 C127.75,34.5 139.42,34.5 151.08,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234,61.1 C234,83.42 234,115.64 234,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235" y="104.0669">host</text><path d="M241.0711,92.4577 A10,10 0 0 0 226.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M234,191.1 C234,213.42 234,245.64 234,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235" y="234.0669">host</text><path d="M241.0711,222.4577 A10,10 0 0 0 226.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#tararchive tar.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #17
+
+service.application
+
+zip.archive
+
+*,virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;file&#34; provisioner to upload artifacts and scripts and &#34;remote-exec&#34; to execute scripts
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:328px;height:331px;" version="1.1" viewBox="0 0 328 331" width="328px" zoomAndPan="magnify"><defs><filter height="300%" id="f1t5cj0mcljxuf" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="152" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="171" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="298" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="204.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="199.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="222" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1t5cj0mcljxuf)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="307.292">host1</text><!--link component_0 to component--><path d="M117.25,34.5 C128.7,34.5 140.15,34.5 151.6,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234.5,61.1 C234.5,83.42 234.5,115.64 234.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="104.0669">host</text><path d="M241.5711,92.4577 A10,10 0 0 0 227.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M234.5,191.1 C234.5,213.42 234.5,245.64 234.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="234.0669">host</text><path d="M241.5711,222.4577 A10,10 0 0 0 227.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #18
+
+service.application
+
+zip.archive
+
+gcp.appengine
+
+
+
+Terraform provides a declarative module.
+
+&#34;google_app_engine_standard_app_version&#34;, &#34;google_project_iam_member&#34;, &#34;google_service_account&#34;, &#34;google_storage_bucket&#34;, and &#34;google_storage_bucket_object&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:328px;height:201px;" version="1.1" viewBox="0 0 328 201" width="328px" zoomAndPan="magnify"><defs><filter height="300%" id="f1j9igqdeoh8eq" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="152" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="171" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="298" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="194.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1j9igqdeoh8eq)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="163.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="158.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="173.5" y="160.9951">«</text><a href="/normative#gcpappengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#gcpappengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="182.5" y="160.9951">gcp.appengine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="286.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="214.5" y="177.292">host0</text><!--link component_0 to component--><path d="M117.25,34.5 C128.7,34.5 140.15,34.5 151.6,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M234.5,61.1 C234.5,83.42 234.5,115.64 234.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="235.5" y="104.0669">host</text><path d="M241.5711,92.4577 A10,10 0 0 0 227.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="234.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#gcpappengine gcp.appengine]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #19
+
+software.application
+
+apt.archive
+
+*,virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;file&#34; provisioner to upload scripts and &#34;remote-exec&#34; to execute scripts
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:340px;height:331px;" version="1.1" viewBox="0 0 340 331" width="340px" zoomAndPan="magnify"><defs><filter height="300%" id="f123ebmm8j0rrd" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f123ebmm8j0rrd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="155" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="150" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="150" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="165" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="174" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="310" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="202" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f123ebmm8j0rrd)" points="6,8,6,60.5938,120,60.5938,120,18,110,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M110,8 L110,18 L120,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#aptarchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#aptarchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="76" x="25" y="30.9951">apt.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="101" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="40" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f123ebmm8j0rrd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="212" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="207" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="207" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="229.5" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="222" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f123ebmm8j0rrd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="171" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="166" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="166" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="181" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="190" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="294" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="222" y="307.292">host1</text><!--link component_0 to component--><path d="M120.34,34.5 C131.74,34.5 143.15,34.5 154.55,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M242,61.1 C242,83.42 242,115.64 242,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="243" y="104.0669">host</text><path d="M249.0711,92.4577 A10,10 0 0 0 234.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="242" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M242,191.1 C242,213.42 242,245.64 242,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="243" y="234.0669">host</text><path d="M249.0711,222.4577 A10,10 0 0 0 234.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="242" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#aptarchive apt.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #20
+
+software.application
+
+tar.archive
+
+*,virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;file&#34; provisioner to upload artifacts and scripts and &#34;remote-exec&#34; to execute scripts
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:336px;height:331px;" version="1.1" viewBox="0 0 336 331" width="336px" zoomAndPan="magnify"><defs><filter height="300%" id="f4g2setwlcj1z" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="151" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="146" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="161" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="170" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="306" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="198" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f4g2setwlcj1z)" points="6,8,6,60.5938,116,60.5938,116,18,106,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M106,8 L106,18 L116,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#tararchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#tararchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="72" x="25" y="30.9951">tar.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="97" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="208" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="203" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="203" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="225.5" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="218" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f4g2setwlcj1z)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="167" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="162" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="162" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="177" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="186" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="290" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="218" y="307.292">host1</text><!--link component_0 to component--><path d="M116.31,34.5 C127.72,34.5 139.13,34.5 150.54,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M238,61.1 C238,83.42 238,115.64 238,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="239" y="104.0669">host</text><path d="M245.0711,92.4577 A10,10 0 0 0 230.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="238" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M238,191.1 C238,213.42 238,245.64 238,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="239" y="234.0669">host</text><path d="M245.0711,222.4577 A10,10 0 0 0 230.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="238" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#tararchive tar.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #21
+
+software.application
+
+zip.archive
+
+*,virtual.machine
+
+
+
+Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+&#34;file&#34; provisioner to upload artifacts and scripts and &#34;remote-exec&#34; to execute scripts
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:337px;height:331px;" version="1.1" viewBox="0 0 337 331" width="337px" zoomAndPan="magnify"><defs><filter height="300%" id="f1hislvpsfy4g9" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="174" x="152.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="147.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="162.5" y="30.9951">«</text><a href="/normative#softwareapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="136" x="171.5" y="30.9951">software.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="307.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="199.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" points="6,8,6,60.5938,117,60.5938,117,18,107,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M107,8 L107,18 L117,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#ziparchive" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ziparchive" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="73" x="25" y="30.9951">zip.archive</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="98" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="38.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="60" x="209.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="204.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="204.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="25" x="227" y="160.9951">«*»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="219.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1hislvpsfy4g9)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="168.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="163.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="163.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="178.5" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="187.5" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="291.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="219.5" y="307.292">host1</text><!--link component_0 to component--><path d="M117.12,34.5 C128.92,34.5 140.71,34.5 152.5,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M239.5,61.1 C239.5,83.42 239.5,115.64 239.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="240.5" y="104.0669">host</text><path d="M246.5711,92.4577 A10,10 0 0 0 232.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="239.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M239.5,191.1 C239.5,213.42 239.5,245.64 239.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="240.5" y="234.0669">host</text><path d="M246.5711,222.4577 A10,10 0 0 0 232.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="239.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#softwareapplication software.application]]>>
+file artifact <<[[/normative#ziparchive zip.archive]]>> as component_0
+component_0 - component
+
+[host0] <<*>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #22
+
+virtual.machine
+
+machine.image
+
+openstack.provider
+
+
+
+Terraform provides a declarative module.
+
+&#34;openstack_compute_instance_v2&#34;, &#34;openstack_networking_secgroup_rule_v2&#34; and &#34;openstack_networking_secgroup_v2&#34; resources
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:352px;height:201px;" version="1.1" viewBox="0 0 352 201" width="352px" zoomAndPan="magnify"><defs><filter height="300%" id="finaenn99p6ho" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#finaenn99p6ho)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="184.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="179.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="179.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="194.5" y="30.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="203.5" y="30.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="307.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="215.5" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#finaenn99p6ho)" points="6,8,6,60.5938,149,60.5938,149,18,139,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M139,8 L139,18 L149,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#machineimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#machineimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="105" x="25" y="30.9951">machine.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="54.5" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#finaenn99p6ho)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="171" x="170" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="165" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="165" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="180" y="160.9951">«</text><a href="/normative#openstackprovider" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#openstackprovider" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="133" x="189" y="160.9951">openstack.provider</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="322" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="235.5" y="177.292">host0</text><!--link component_0 to component--><path d="M149.12,34.5 C160.89,34.5 172.67,34.5 184.44,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M255.5,61.1 C255.5,83.42 255.5,115.64 255.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="256.5" y="104.0669">host</text><path d="M262.5711,92.4577 A10,10 0 0 0 248.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="255.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#virtualmachine virtual.machine]]>>
+file artifact <<[[/normative#machineimage machine.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#openstackprovider openstack.provider]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
 
 
 ## Deployment Technology "Kubernetes"
 
 Kubernetes, also known as K8s, is an open-source system for automating the deployment, scaling, and management of containerized applications, offering production-grade container orchestration. It provides a robust platform for running and managing applications in clusters of servers, ensuring high availability, scalability, and efficient resource utilization. Kubernetes allows users to define the desired state of their applications using declarative manifests, which specify the configuration, deployment, and management of containerized workloads. By continuously monitoring and adjusting the cluster to match these desired states, Kubernetes simplifies the application deployment process, supports automated rollouts and rollbacks, and ensures the self-healing of applications, making it a critical tool for modern software delivery and operational efficiency.
-Find our [more](https://kubernetes.io){target=_blank}.
+Find out [more](https://kubernetes.io){target=_blank}.
 
+### Overview
 
 | Component | Artifact | Hosting | Quality | Reason |
 | --- | --- | --- | --- | --- |
-| [ingress](../../normative/index.md#ingress){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 0 | Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [kubernetes.cluster](../../normative/index.md#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
+| [ingress](/normative#ingress){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 0 | Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [kubernetes.cluster](/normative#kubernetescluster){target=_blank} | 1 | Kubernetes is the underlying technology. |
+
+
+### Rule #1
+
+ingress
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is the underlying technology.
+
+Kubernetes manifest generated and applied
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rgxrnq4ixwt1" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="100" x="39.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="34.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="56" y="30.9951">«</text><a href="/normative#ingress" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#ingress" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="49" x="65" y="30.9951">ingress</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="114" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rgxrnq4ixwt1)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#ingress ingress]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #2
+
+mysql.database
+
+
+
+mysql.dbms,kubernetes.cluster
+
+
+
+Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:184px;height:331px;" version="1.1" viewBox="0 0 184 331" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fdkktm4ksmcqd" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="36" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="143" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#fdkktm4ksmcqd)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="290.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="307.292">host1</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M89.5,191.1 C89.5,213.42 89.5,245.64 89.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="234.0669">host</text><path d="M96.5711,222.4577 A10,10 0 0 0 82.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #3
+
+mysql.dbms
+
+
+
+kubernetes.cluster
+
+
+
+Kubernetes is the underlying technology.
+
+Kubernetes manifest generated and applied
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:184px;height:201px;" version="1.1" viewBox="0 0 184 201" width="184px" zoomAndPan="magnify"><defs><filter height="300%" id="fzcw6iktypg8l" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="29.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="24.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="39.5" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="48.5" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="49.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#fzcw6iktypg8l)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="6" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="25" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="154" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="69.5" y="177.292">host0</text><!--link component to host0--><path d="M89.5,61.1 C89.5,83.42 89.5,115.64 89.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="90.5" y="104.0669">host</text><path d="M96.5711,92.4577 A10,10 0 0 0 82.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="89.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #4
+
+service.application
+
+docker.image
+
+kubernetes.cluster
+
+
+
+Kubernetes is the underlying technology.
+
+Kubernetes manifest generated and applied
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="201px" preserveAspectRatio="none" style="width:350px;height:201px;" version="1.1" viewBox="0 0 350 201" width="350px" zoomAndPan="magnify"><defs><filter height="300%" id="f1kq3zm7gdox1k" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1kq3zm7gdox1k)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="167" x="172.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="167.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="182.5" y="160.9951">«</text><a href="/normative#kubernetescluster" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#kubernetescluster" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="129" x="191.5" y="160.9951">kubernetes.cluster</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="320.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#kubernetescluster kubernetes.cluster]]>>
+
+
+component -(0- host0 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
 
 
 ## Deployment Technology "Docker Compose"
 
 Docker Compose is a tool that enables the definition and running of multi-container applications on a Docker Engine, using a single YAML configuration file. It streamlines the management of complex applications by simplifying the control of services, networks, and volumes, allowing developers to manage the entire stack effortlessly. Compose is particularly suited for development, testing, and single-host deployments, providing a consistent environment across various stages of the application lifecycle. However, it is limited to working within the Docker ecosystem, as it only deploys on Docker Engine, making it an ideal choice for those heavily invested in Docker-based workflows.
-Find our [more](https://docs.docker.com/compose){target=_blank}.
+Find out [more](https://docs.docker.com/compose){target=_blank}.
 
+### Overview
 
 | Component | Artifact | Hosting | Quality | Reason |
 | --- | --- | --- | --- | --- |
-| [mysql.database](../../normative/index.md#mysqldatabase){target=_blank} |  | [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} -&gt; [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 0 | One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while declarative other technologies provide declarative modules. |
-| [mysql.dbms](../../normative/index.md#mysqldbms){target=_blank} |  | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Docker is the underlying technology. |
-| [service.application](../../normative/index.md#serviceapplication){target=_blank} | [docker.image](../../normative/index.md#dockerimage){target=_blank} | [docker.engine](../../normative/index.md#dockerengine){target=_blank} -&gt; [virtual.machine](../../normative/index.md#virtualmachine){target=_blank} | 1 | Docker is the underlying technology. |
+| [mysql.database](/normative#mysqldatabase){target=_blank} |  | [mysql.dbms](/normative#mysqldbms){target=_blank} -&gt; [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 0 | One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while declarative other technologies provide declarative modules. |
+| [mysql.dbms](/normative#mysqldbms){target=_blank} |  | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Docker is the underlying technology. |
+| [service.application](/normative#serviceapplication){target=_blank} | [docker.image](/normative#dockerimage){target=_blank} | [docker.engine](/normative#dockerengine){target=_blank} -&gt; [virtual.machine](/normative#virtualmachine){target=_blank} | 1 | Docker is the underlying technology. |
+
+
+### Rule #1
+
+mysql.database
+
+
+
+mysql.dbms,docker.engine,virtual.machine
+
+
+
+One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while declarative other technologies provide declarative modules.
+
+
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="461px" preserveAspectRatio="none" style="width:162px;height:461px;" version="1.1" viewBox="0 0 162 461" width="162px" zoomAndPan="magnify"><defs><filter height="300%" id="f1rskzspl2joec" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="145" x="6" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#mysqldatabase" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="107" x="25" y="30.9951">mysql.database</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="132" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="38.5" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="18.5" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="13.5" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="28.5" y="160.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="37.5" y="160.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119.5" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="9.5" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="4.5" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="19.5" y="290.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="28.5" y="290.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="128.5" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="307.292">host1</text><!--entity host2--><rect fill="#FEFECE" filter="url(#f1rskzspl2joec)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="7.5" y="398"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="403"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="2.5" y="440.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="17.5" y="420.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="26.5" y="420.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="130.5" y="420.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="58.5" y="437.292">host2</text><!--link component to host0--><path d="M78.5,61.1 C78.5,83.42 78.5,115.64 78.5,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="104.0669">host</text><path d="M85.5711,92.4577 A10,10 0 0 0 71.4289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M78.5,191.1 C78.5,213.42 78.5,245.64 78.5,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="234.0669">host</text><path d="M85.5711,222.4577 A10,10 0 0 0 71.4289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host1 to host2--><path d="M78.5,321.1 C78.5,343.42 78.5,375.64 78.5,397.95 " fill="none" id="host1-host2" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="79.5" y="364.0669">host</text><path d="M85.5711,352.4577 A10,10 0 0 0 71.4289 352.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="78.5" cy="359.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldatabase mysql.database]]>>
+
+[host0] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host1] <<[[/normative#dockerengine docker.engine]]>>
+
+[host2] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+host1 -(0- host2 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #2
+
+mysql.dbms
+
+
+
+docker.engine,virtual.machine
+
+
+
+Docker is the underlying technology.
+
+docker-compose manifest generated and applied
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:159px;height:331px;" version="1.1" viewBox="0 0 159 331" width="159px" zoomAndPan="magnify"><defs><filter height="300%" id="f1vpy0537dnacv" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="17" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="12" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="27" y="30.9951">«</text><a href="/normative#mysqldbms" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="82" x="36" y="30.9951">mysql.dbms</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="118" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="37" y="47.292">component</text><!--entity host0--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="8" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="3" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="18" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="27" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="127" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#f1vpy0537dnacv)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="6" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="1" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="25" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="129" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="57" y="307.292">host1</text><!--link component to host0--><path d="M77,61.1 C77,83.42 77,115.64 77,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="104.0669">host</text><path d="M84.0711,92.4577 A10,10 0 0 0 69.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M77,191.1 C77,213.42 77,245.64 77,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="78" y="234.0669">host</text><path d="M84.0711,222.4577 A10,10 0 0 0 69.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="77" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#mysqldbms mysql.dbms]]>>
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
+### Rule #3
+
+service.application
+
+docker.image
+
+docker.engine,virtual.machine
+
+
+
+Docker is the underlying technology.
+
+docker compose manifest generated and applied
+
+<figure markdown>
+  <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="331px" preserveAspectRatio="none" style="width:349px;height:331px;" version="1.1" viewBox="0 0 349 331" width="349px" zoomAndPan="magnify"><defs><filter height="300%" id="ft0ar4ftztrb6" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--entity component--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="165" x="173.5" y="8"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="13"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="168.5" y="50.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="183.5" y="30.9951">«</text><a href="/normative#serviceapplication" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#serviceapplication" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="127" x="192.5" y="30.9951">service.application</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="319.5" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="80" x="216" y="47.292">component</text><!--entity component_0--><polygon fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" points="6,8,6,60.5938,138,60.5938,138,18,128,8,6,8" style="stroke: #000000; stroke-width: 1.5;"/><path d="M128,8 L128,18 L138,18 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="16" y="30.9951">«</text><a href="/normative#dockerimage" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerimage" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="94" x="25" y="30.9951">docker.image</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="119" y="30.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="46" x="49" y="47.292">artifact</text><!--entity host0--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="138" x="187" y="138"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="143"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="182" y="180.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="197" y="160.9951">«</text><a href="/normative#dockerengine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#dockerengine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="100" x="206" y="160.9951">docker.engine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="306" y="160.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="177.292">host0</text><!--entity host1--><rect fill="#FEFECE" filter="url(#ft0ar4ftztrb6)" height="52.5938" style="stroke: #A80036; stroke-width: 1.5;" width="142" x="185" y="268"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="273"/><rect fill="#FEFECE" height="5" style="stroke: #A80036; stroke-width: 1.5;" width="10" x="180" y="310.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="195" y="290.9951">«</text><a href="/normative#virtualmachine" target="_top" xlink:actuate="onRequest" xlink:show="new" xlink:title="/normative#virtualmachine" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="104" x="204" y="290.9951">virtual.machine</text></a><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="9" x="308" y="290.9951">»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="40" x="236" y="307.292">host1</text><!--link component_0 to component--><path d="M138.12,34.5 C149.79,34.5 161.45,34.5 173.12,34.5 " fill="none" id="component_0-component" style="stroke: #A80036; stroke-width: 1.0;"/><!--link component to host0--><path d="M256,61.1 C256,83.42 256,115.64 256,137.95 " fill="none" id="component-host0" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="104.0669">host</text><path d="M263.0711,92.4577 A10,10 0 0 0 248.9289 92.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="99.5288" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--link host0 to host1--><path d="M256,191.1 C256,213.42 256,245.64 256,267.95 " fill="none" id="host0-host1" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="28" x="257" y="234.0669">host</text><path d="M263.0711,222.4577 A10,10 0 0 0 248.9289 222.4577" fill="#FFFFFF" style="stroke: #A80036; stroke-width: 1.5;"/><ellipse cx="256" cy="229.5287" fill="#FFFFFF" rx="6" ry="6" style="stroke: #A80036; stroke-width: 1.5;"/><!--
+@startuml
+skinparam componentStyle rectangle
+
+
+[component] <<[[/normative#serviceapplication service.application]]>>
+file artifact <<[[/normative#dockerimage docker.image]]>> as component_0
+component_0 - component
+
+[host0] <<[[/normative#dockerengine docker.engine]]>>
+
+[host1] <<[[/normative#virtualmachine virtual.machine]]>>
+
+
+component -(0- host0 : host
+host0 -(0- host1 : host
+
+@enduml
+
+PlantUML version 1.2019.06(Fri May 24 19:10:25 CEST 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 11.0.24+8-post-Ubuntu-1ubuntu322.04
+Operating System: Linux
+OS Version: 5.15.153.1-microsoft-standard-WSL2
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
+</figure>
+
 
 
 

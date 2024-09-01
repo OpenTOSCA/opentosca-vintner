@@ -15,19 +15,43 @@ This document specifies the deployment technology rules.
 The specification is under active development and is not backwards compatible with any previous versions.
 
 
-<% Object.entries(data).forEach(([technology, rules]) => {-%>
-<% const description = descriptions.find(it => it.id === technology) -%>
+<%
+Object.entries(data).forEach(([technology, rules]) => {
+  const description = descriptions.find(it => it.id === technology)
+-%>
 
 ## Deployment Technology "<%- description.name %>"
 
 <%- description.description %>
 Find out [more](<%- description.link %>){target=_blank}.
 
+### Overview
 
 | Component | Artifact | Hosting | Quality | Reason |
 | --- | --- | --- | --- | --- |
 <% rules.forEach(rule => {-%>
 | <%= link(rule.component) -%> | <%= rule.artifact ? link(rule.artifact) : '' -%> | <%= rule.hosting.map(link).join(" -> ") -%> | <%= rule.weight -%> | <%= rule.reason -%> |
+<% }) %>
+
+<% rules.forEach((rule, index) => {-%>
+### <%= description.name %> Rule #<%= index + 1 %>
+
+<%= rule.component %>
+
+<%= rule.artifact %>
+
+<%= rule.hosting %>
+
+<%= rule.quality %>
+
+<%= rule.reason %>
+
+<%= rule.details %>
+
+<figure markdown>
+  <%- svgs["rule." + technology + "." + (index + 1)] %>
+</figure>
+
 <% }) %>
 <% }) %>
 

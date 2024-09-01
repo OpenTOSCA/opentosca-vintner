@@ -1,15 +1,17 @@
 import * as assert from '#assert'
+import * as check from '#check'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {EntityTypes, EntityTypesKeys} from '#spec/service-template'
 import std from '#std'
-import * as utils from '#utils'
+import * as puml from '#utils/puml'
 import path from 'path'
 
 export type TemplatePUMLTypesOptions = {
     path: string
     output?: string
-    types?: string[]
+    types?: (keyof EntityTypes)[]
 }
 
 export default async function (options: TemplatePUMLTypesOptions) {
@@ -21,21 +23,18 @@ export default async function (options: TemplatePUMLTypesOptions) {
 
     const graph = new Graph(new Loader(options.path).raw())
 
-    const types = options.types ?? Object.keys(graph.serviceTemplate).filter(it => it.endsWith('_types'))
+    const keys = options.types ?? EntityTypesKeys
 
     const result: {[key: string]: string} = {}
-    for (const type of types) {
-        result[type] = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'types', 'types.template.ejs'), {
-            graph,
-            utils,
-            type,
-        })
+    for (const key of keys) {
+        if (check.isUndefined(graph.serviceTemplate[key])) continue
+        result[key] = await puml.renderTypes(graph, key)
     }
 
-    for (const [type, plot] of Object.entries(result)) {
+    for (const [key, plot] of Object.entries(result)) {
         const output = path.join(
             outputDir,
-            files.getBase(options.path).replace(/(\.yaml|\.yml)/, '.' + type.replace('_', '-') + '.puml')
+            files.getBase(options.path).replace(/(\.yaml|\.yml)/, '.' + key.replace('_', '-') + '.puml')
         )
         if (!output.endsWith('.puml')) throw new Error(`Output path "${output}" does not end with '.puml'`)
 

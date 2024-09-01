@@ -78,7 +78,7 @@ plugins:
     - macros:
           on_error_fail: true
           module_name: macros
-    - glightbox
+    #- glightbox
     - include_dir_to_nav
     - git-revision-date-localized:
           enabled: !ENV [MKDOCS_REVISION_ENABLED, true]

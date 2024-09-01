@@ -1,2 +1,2 @@
-file <%= artifact.name %> <<<%= enlink(artifact) %>>> as <%= artifact.container.name %>_<%= artifact.index %>
+file <%= artifact.name %> <<<%- include('type.link.ejs', {element: artifact}) -%>>> as <%= artifact.container.name %>_<%= artifact.index %>
 <%= artifact.container.name %>_<%= artifact.index %> - <%= artifact.container.name %>
