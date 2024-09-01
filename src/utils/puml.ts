@@ -47,7 +47,7 @@ async function renderPUML(plot: string, options: RenderOptions = {}): Promise<st
             plantuml.generate(plot, {format: 'svg'}, (error: Error, buffer: Buffer) => {
                 if (error) return reject(error)
                 const raw = buffer.toString('utf-8')
-                const cleaned = raw.slice(54).replace(/(\r\n|\n|\r)/gm, '')
+                const cleaned = raw.slice(57).replace(/(\r\n|\n|\r)/gm, '')
                 return resolve(cleaned)
             })
         })

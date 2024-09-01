@@ -1,1 +1,1 @@
-<%= node.name.replaceAll(" ", "_") %> -(0- <%= relation.target.name.replaceAll(" ", "_") %> : <%= relation.name %>
+<%= node.name.replaceAll(" ", "_") %> <%- relation.isHostedOn() ? '-->' : '..>' %> <%= relation.target.name.replaceAll(" ", "_") %> : <%= relation.name %>

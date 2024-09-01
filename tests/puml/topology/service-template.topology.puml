@@ -19,10 +19,10 @@ rectangle "data" {
 ["compute"] <<example.nodes.Compute>> as compute
 
 
-application -(0- runtime : host
-application -(0- database : database
-runtime -(0- compute : host
-database -(0- dbms : host
-dbms -(0- compute : host
+application --> runtime : host
+application ..> database : database
+runtime --> compute : host
+database --> dbms : host
+dbms --> compute : host
 
 @enduml
