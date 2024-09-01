@@ -1,4 +1,5 @@
 @startuml
+skinparam defaultFontName SansSerif
 skinparam componentStyle rectangle
 
 rectangle "worker" {

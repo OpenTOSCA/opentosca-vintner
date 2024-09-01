@@ -7,7 +7,6 @@ import {ArtifactTypeMap} from '#spec/artifact-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyAssignmentRule, TechnologyAssignmentRulesMap} from '#spec/technology-template'
-import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
 import {constructRuleName} from '#technologies/utils'
@@ -34,15 +33,19 @@ async function main() {
      * Pattern
      */
     const svgs: {[key: string]: string} = {}
+    const renderPromises = []
     for (const [technology, rules] of Object.entries(map)) {
         for (const [index, rule] of rules.entries()) {
             const id = 'rule.' + technology + '.' + (index + 1)
             const template = generateTopology(rule)
             const graph = new Graph(template)
-            std.log(`rendering ${id}`)
-            svgs[id] = await puml.renderTopology(graph, {format: 'svg'})
+            const promise = puml.renderTopology(graph, {format: 'svg'}).then(svg => {
+                svgs[id] = svg
+            })
+            renderPromises.push(promise)
         }
     }
+    await Promise.all(renderPromises)
 
     /**
      * Documentation

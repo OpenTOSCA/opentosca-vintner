@@ -2,7 +2,7 @@ site_name: OpenTOSCA Vintner
 site_url: https://vintner.opentosca.org
 repo_url: https://github.com/opentosca/opentosca-vintner
 repo_name: opentosca/opentosca-vintner
-copyright: 'Copyright &copy; 2022 - 2023 University of Stuttgart'
+copyright: 'Copyright &copy; 2022 - 2024 University of Stuttgart'
 edit_uri: ''
 theme:
     name: material
@@ -78,7 +78,6 @@ plugins:
     - macros:
           on_error_fail: true
           module_name: macros
-    #- glightbox
     - include_dir_to_nav
     - git-revision-date-localized:
           enabled: !ENV [MKDOCS_REVISION_ENABLED, true]

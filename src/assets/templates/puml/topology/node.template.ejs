@@ -1,4 +1,4 @@
-["<%= node.name %>"] <<<%- include('type.link.ejs', {element: node}) -%>>> as <%= node.name.replaceAll(" ", "_") %>
+[<%= node.name %>] <<<%- include('type.link.ejs', {element: node}) -%>>> as <%= node.name.replaceAll(" ", "_") %>
 <% node.artifacts.forEach(artifact => { -%>
 <%- include('artifact.template.ejs', {artifact}) %>
 <% }) -%>
