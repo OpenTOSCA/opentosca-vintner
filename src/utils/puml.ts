@@ -2,8 +2,6 @@ import * as files from '#files'
 import Graph from '#graph/graph'
 import {EntityTypes} from '#spec/service-template'
 import * as utils from '#utils'
-// TODO: provide typescript
-//@ts-ignore
 import plantuml from 'node-plantuml'
 import path from 'path'
 
@@ -46,9 +44,9 @@ async function renderPUML(plot: string, options: RenderOptions = {}): Promise<st
 
     if (options.format === 'svg') {
         return new Promise((resolve, reject) => {
-            plantuml.generate(plot, {format: 'svg'}, (error: Error, data: Buffer) => {
+            plantuml.generate(plot, {format: 'svg'}, (error: Error, buffer: Buffer) => {
                 if (error) return reject(error)
-                const raw = data.toString('utf-8')
+                const raw = buffer.toString('utf-8')
                 const cleaned = raw.slice(54).replace(/(\r\n|\n|\r)/gm, '')
                 return resolve(cleaned)
             })

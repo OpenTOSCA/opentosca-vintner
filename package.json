@@ -120,8 +120,5 @@
         "typescript": "^5.0.4",
         "why-is-node-running": "^3.2.0"
     },
-    "scripts": {
-        "postinstall": "patch-package"
-    },
     "packageManager": "yarn@3.6.3"
 }
