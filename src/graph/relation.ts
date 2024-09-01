@@ -104,6 +104,11 @@ export default class Relation extends Element {
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.relationSemanticPruning
     }
 
+    getType() {
+        if (this.types.length > 1) throw new Error(`${this.Display} has more than one type`)
+        return this.types[0]
+    }
+
     getTypeSpecificConditionWrapper() {
         // Not supported when conditional types are used
         if (this.types.length > 1) return

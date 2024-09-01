@@ -1,5 +1,5 @@
 rectangle "<%= group.name %>" {
 <% group.members.filter(it => it.isNode()).forEach(node => { -%>
-    <%- include('node.template.ejs', {node}) %>
+<%- include('node.template.ejs', {node}) %>
 <% }) -%>
 }

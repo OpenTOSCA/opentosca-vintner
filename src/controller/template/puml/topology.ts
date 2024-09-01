@@ -1,7 +1,12 @@
 import * as assert from '#assert'
 import * as files from '#files'
+import Artifact from '#graph/artifact'
 import Graph from '#graph/graph'
+import Group from '#graph/group'
 import Loader from '#graph/loader'
+import Node from '#graph/node'
+import Policy from '#graph/policy'
+import Relation from '#graph/relation'
 import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
@@ -21,9 +26,19 @@ export default async function (options: TemplatePUMLTopologyOptions) {
     const graph = new Graph(new Loader(options.path).raw())
     validate(graph)
 
+    // TODO: refactor for all kind of elements with types? maybe even as own ejs template?
+    const enlink = (element: Artifact | Group | Node | Policy | Relation) => {
+        const type = element.types[0]
+        const definition = type.getDefinition()
+        const link = definition?.metadata?.['vintner_link']
+        if (link) return `[[${link} ${type.name}]]`
+        return type.name
+    }
+
     const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'topology', 'template.template.ejs'), {
         graph,
         utils,
+        enlink,
     })
 
     std.log(`Writing file "${path.resolve(output)}" if changed`)
