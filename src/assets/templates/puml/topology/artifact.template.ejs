@@ -1,2 +1,2 @@
-file <%= artifact.name %> <<<%- include('type.link.ejs', {element: artifact}) -%>>> as <%= artifact.container.name %>_<%= artifact.index %>
-<%= artifact.container.name %>_<%= artifact.index %> - <%= artifact.container.name %>
+file <%= artifact.name %> <<<%- include('type.link.ejs', {element: artifact}) -%>>> as <%= artifact.container.name.replaceAll(" ", "_") %>_artifact_<%= artifact.index %>
+<%= artifact.container.name.replaceAll(" ", "_") %>_artifact_<%= artifact.index %> - <%= artifact.container.name.replaceAll(" ", "_") %>

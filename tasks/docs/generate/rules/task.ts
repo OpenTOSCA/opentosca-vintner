@@ -9,6 +9,7 @@ import {TechnologyAssignmentRule, TechnologyAssignmentRulesMap} from '#spec/tech
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
+import {constructRuleName} from '#technologies/utils'
 import * as utils from '#utils'
 import * as puml from '#utils/puml'
 import path from 'path'
@@ -56,16 +57,13 @@ async function main() {
                 if (type === '*') return type
                 return `[${type}](${generateLink(type)}){target=_blank}`
             },
+            constructRuleName,
             descriptions,
         },
         path.join(dir, 'index.md')
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const why = await import('why-is-node-running')
-    console.log(why)
-    //@ts-ignore
-    why.default()
+    // Something keeps us hostage
     process.exit(0)
 }
 
@@ -116,7 +114,7 @@ function generateTopology(rule: TechnologyAssignmentRule) {
      */
     assert.isArray(rule.hosting)
     rule.hosting.forEach((type, index) => {
-        const name = 'host' + index
+        const name = 'host ' + (index + 1)
 
         node_templates[name] = {type}
 
@@ -131,7 +129,7 @@ function generateTopology(rule: TechnologyAssignmentRule) {
         if (index === 0) {
             component.requirements = [{host: name}]
         } else {
-            const previous = node_templates['host' + (index - 1)]
+            const previous = node_templates['host ' + index]
             assert.isDefined(previous)
             previous.requirements = [{host: name}]
         }

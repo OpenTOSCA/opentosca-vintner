@@ -27,30 +27,28 @@ Find out [more](<%- description.link %>){target=_blank}.
 
 ### Overview
 
-| Component | Artifact | Hosting | Quality | Reason |
+| # | Component | Artifact | Hosting | Quality |
 | --- | --- | --- | --- | --- |
-<% rules.forEach(rule => {-%>
-| <%= link(rule.component) -%> | <%= rule.artifact ? link(rule.artifact) : '' -%> | <%= rule.hosting.map(link).join(" -> ") -%> | <%= rule.weight -%> | <%= rule.reason -%> |
+<% rules.forEach((rule, index) => {-%>
+| <%= index + 1 %> | <%= link(rule.component) -%> | <%= rule.artifact ? link(rule.artifact) : '' -%> | <%= rule.hosting.map(link).join(" -> ") -%> | <%= rule.weight -%> |
 <% }) %>
 
 <% rules.forEach((rule, index) => {-%>
 ### <%= description.name %> Rule #<%= index + 1 %>
-
-<%= rule.component %>
-
-<%= rule.artifact %>
-
-<%= rule.hosting %>
-
-<%= rule.quality %>
-
-<%= rule.reason %>
-
-<%= rule.details %>
-
-<figure markdown>
-  <%- svgs["rule." + technology + "." + (index + 1)] %>
-</figure>
+| Attribute | Value |
+| --- | --- |
+| Identifier | <%= constructRuleName({technology, ...rule}) %> |
+| Component | <%= link(rule.component) %> |
+<% if (rule.artifact) {-%>
+| Artifact | <%= link(rule.artifact) %> |
+<% } -%>
+<% if (rule.hosting.length !== 0) {-%>
+| Hosting | <%= rule.hosting.map(link).join(" -> ") %> |
+<% } -%>
+| Quality | <%= rule.weight %> |
+| Reason | <%= rule.reason %> |
+| Details | <%= rule.details %> |
+| Graph |<figure markdown><%- svgs["rule." + technology + "." + (index + 1)]%></figure>|
 
 <% }) %>
 <% }) %>

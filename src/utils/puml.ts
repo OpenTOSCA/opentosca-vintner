@@ -7,9 +7,9 @@ import * as utils from '#utils'
 import plantuml from 'node-plantuml'
 import path from 'path'
 
-export async function renderTopology(graph: Graph, options: {format?: 'puml' | 'svg'} = {}): Promise<string> {
-    options.format = options.format ?? 'puml'
+type RenderOptions = {format?: 'puml' | 'svg' | 'fkc'}
 
+export async function renderTopology(graph: Graph, options: RenderOptions = {}): Promise<string> {
     validateTopology(graph)
 
     const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'topology', 'template.template.ejs'), {
@@ -17,18 +17,17 @@ export async function renderTopology(graph: Graph, options: {format?: 'puml' | '
         utils,
     })
 
-    if (options.format === 'puml') return plot
+    return renderPUML(plot, options)
+}
 
-    if (options.format === 'svg') {
-        return new Promise((resolve, reject) => {
-            plantuml.generate(plot, {format: 'svg'}, (error: Error, data: Buffer) => {
-                if (error) return reject(error)
-                return resolve(data.toString('utf-8'))
-            })
-        })
-    }
+export async function renderTypes(graph: Graph, key: keyof EntityTypes, options: RenderOptions = {}): Promise<string> {
+    const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'types', 'types.template.ejs'), {
+        graph,
+        utils,
+        key,
+    })
 
-    throw new Error(`Format "${options.format}" not supported`)
+    return renderPUML(plot, options)
 }
 
 function validateTopology(graph: Graph) {
@@ -40,10 +39,21 @@ function validateTopology(graph: Graph) {
     }
 }
 
-export async function renderTypes(graph: Graph, key: keyof EntityTypes) {
-    return await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'types', 'types.template.ejs'), {
-        graph,
-        utils,
-        key,
-    })
+async function renderPUML(plot: string, options: RenderOptions = {}): Promise<string> {
+    options.format = options.format ?? 'puml'
+
+    if (options.format === 'puml') return plot
+
+    if (options.format === 'svg') {
+        return new Promise((resolve, reject) => {
+            plantuml.generate(plot, {format: 'svg'}, (error: Error, data: Buffer) => {
+                if (error) return reject(error)
+                const raw = data.toString('utf-8')
+                const cleaned = raw.slice(54).replace(/(\r\n|\n|\r)/gm, '')
+                return resolve(cleaned)
+            })
+        })
+    }
+
+    throw new Error(`Format "${options.format}" not supported`)
 }
