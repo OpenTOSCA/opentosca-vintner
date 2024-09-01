@@ -6,13 +6,13 @@ import path from 'path'
 import descriptions from './technologies'
 
 async function main() {
-    const dir = path.join('docs', 'docs', 'rules')
+    const dir = path.join('docs', 'docs', 'variability4tosca', 'rules')
     const rules = Registry.rules
     files.storeYAML<TechnologyAssignmentRulesMap>(path.join(dir, 'technology-rules.yaml'), rules)
 
     const link = (type: string) => {
         if (type === '*') return type
-        return `[${type}](../normative/index.md#${type.replaceAll('.', '')}){target=_blank}`
+        return `[${type}](../../normative/index.md#${type.replaceAll('.', '')}){target=_blank}`
     }
 
     await files.renderFile(
