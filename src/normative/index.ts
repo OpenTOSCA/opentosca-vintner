@@ -3,6 +3,7 @@ import unfurlCore from '#normative/dialects/unfurl/core'
 import unfurlExtended from '#normative/dialects/unfurl/extended'
 import normativeCore from '#normative/types/core'
 import normativeExtended from '#normative/types/extended'
+import {MetadataNormative} from '#normative/types/utils'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
 import * as _ from 'lodash'
@@ -58,11 +59,13 @@ export function NormativeTypes(orchestrator?: string) {
         short: 'Profile',
         template: {
             tosca_definitions_version: TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3,
-            description: 'TOSCA Profile for Vintner.',
+            description: 'TOSCA Profile for OpenTOSCA Vintner',
             metadata: {
+                ...MetadataNormative(),
                 template_name: 'TOSCA Vintner Profile',
                 template_author: 'Miles Stötzner',
                 template_contact: 'miles.stoetzner@iste.uni-stuttgart.de',
+                template_link: 'https://vintner.opentosca.org',
                 template_version: '1.0.0-draft',
                 template_id: 'tosca-vintner-profile',
                 template_license: 'https://www.apache.org/licenses/LICENSE-2.0',

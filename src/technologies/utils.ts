@@ -93,7 +93,7 @@ export function isAbstract(type: NodeType) {
     return check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_ABSTRACT] === 'true'
 }
 
-export function isGenerate(type: NodeType) {
+export function isIgnore(type: NodeType) {
     if (check.isUndefined(type.metadata)) return true
-    return type.metadata[METADATA.VINTNER_GENERATE] !== 'false'
+    return type.metadata[METADATA.VINTNER_IGNORE] !== 'false'
 }

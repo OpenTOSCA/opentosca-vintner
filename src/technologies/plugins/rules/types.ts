@@ -3,7 +3,6 @@ import {NodeType} from '#spec/node-type'
 import {constructRuleName} from '#technologies/utils'
 
 export enum METADATA {
-    VINTNER_GENERATE = 'vintner_generate',
     VINTNER_IGNORE = 'vintner_ignore',
     VINTNER_NAME = 'vintner_name',
     VINTNER_GENERATED = 'vintner_generated',
