@@ -1,4 +1,5 @@
-rectangle "<%= puml.toText(node) %>" as <%= puml.toId(node) %>
+rectangle "<%= puml.toText(node) %>" as <%= puml.toId(node) -%><%= puml.isAsterisk(node) ? ' #line.dashed' : '' -%>
+
 <% if(puml.hasLink(node)) {-%>
 url of <%= puml.toId(node) %> is [[ <%= puml.getLink(node) %> ]]
 <% } -%>

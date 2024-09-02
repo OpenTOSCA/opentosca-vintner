@@ -34,6 +34,9 @@ export async function renderTopology(graph: Graph, options: RenderOptions = {}):
             getLink: (element: Node | Artifact) => {
                 return element.types[0].getDefinition()?.metadata?.['vintner_link']
             },
+            isAsterisk: (element: Node | Artifact) => {
+                return element.types[0].name === '*'
+            },
         },
     })
 
