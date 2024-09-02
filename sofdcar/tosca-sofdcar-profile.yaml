@@ -4,6 +4,7 @@ metadata:
     template_name: TOSCA SofDCar Profile
     template_author: Miles Stötzner
     template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_link: https://vintner.opentosca.org
     template_version: 1.0.0-draft
     template_id: tosca-sofdcar-profile
     template_license: https://www.apache.org/licenses/LICENSE-2.0
