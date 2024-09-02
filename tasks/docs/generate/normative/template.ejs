@@ -23,6 +23,21 @@ The specification is under active development and is not backwards compatible wi
 
 The core normative TOSCA type definitions contain high-level type definitions.
 
+
+### Metadata
+
+We define the following metadata.
+
+| Metadata | Description |
+| --- | --- |
+| `vintner_ignore` | Flag for ignoring an entity (type) during generation, e.g., to omit a property from the environment. |
+| `vintner_name` | Overrides the original name, e.g., override a property name with its correct environment name. |
+| `vintner_generated` | Flag for marking an entity (type) that has been generated. |
+| `vintner_orchestrator` | Orchestrator name for which the entity (type) has been generated. |
+| `vintner_abstract` | Flag for marking an entity type as abstract. |
+| `vintner_normative` | Flag for marking an entity type as normative (considering this specification). |
+| `vintner_link` | URL which points, e.g., to the documentation page of the entity type. |
+
 <%- include('../.utils/profile.template.ejs', {profile: core, utils}) %>
 
 ## TOSCA Vintner Extended Profile

@@ -16,8 +16,8 @@ import {
     GENERATION_NOTICE,
     TECHNOLOGY_RULES_FILENAME,
     isAbstract,
-    isGenerate,
     isGenerated,
+    isIgnore,
     isImplementation,
 } from '#technologies/utils'
 import * as utils from '#utils'
@@ -126,7 +126,7 @@ export default async function (options: TemplateImplementOptions) {
             if (isImplementation(baseName)) continue
 
             // Ignore manual ignored types
-            if (!isGenerate(baseType)) continue
+            if (isIgnore(baseType)) continue
 
             // Ignore abstract types
             if (isAbstract(baseType)) continue

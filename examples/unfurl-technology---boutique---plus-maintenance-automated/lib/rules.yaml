@@ -12,6 +12,7 @@ ansible:
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks'
     - component: gcp.service
+      hosting: []
       weight: 1
       reason: Ansible provides a declarative module
       details: '"google.cloud.gcp_serviceusage_service" task'
@@ -57,7 +58,7 @@ ansible:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized
+      reason: Docker Compose is more specialized
       details: '"community.docker.docker_container" task'
     - component: mysql.dbms
       hosting:
@@ -83,7 +84,7 @@ ansible:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"community.docker.docker_container" task'
     - component: service.application
       artifact: docker.image
@@ -161,6 +162,7 @@ terraform:
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"remote-exec" provider'
     - component: gcp.service
+      hosting: []
       weight: 1
       reason: Terraform provides a declarative module.
       details: '"google_project_service" resource'
@@ -206,7 +208,7 @@ terraform:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: mysql.dbms
       hosting:
@@ -232,7 +234,7 @@ terraform:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: service.application
       artifact: docker.image
