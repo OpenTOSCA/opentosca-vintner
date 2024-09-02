@@ -1,4 +1,3 @@
-import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
@@ -6,12 +5,6 @@ import {
     MetadataGenerated,
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: use https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_exec_module.html#ansible-collections-kubernetes-core-k8s-exec-module ?
-
-// TODO: use  https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
-
-// TODO: use https://stackoverflow.com/questions/37288500/how-to-undo-a-kubectl-port-forward
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -41,29 +34,22 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'create service',
-                                            'ansible.builtin.copy': {
-                                                dest: '/etc/systemd/system/kubectl-port-forward.service',
-                                                content: files.toINI({
-                                                    Unit: {
-                                                        After: 'network.target',
-                                                    },
-                                                    Service: {
-                                                        Type: 'simple',
-                                                        ExecStart: `kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306"`,
-                                                    },
-                                                    Install: {
-                                                        WantedBy: 'multi-user.target',
-                                                    },
-                                                }),
+                                            name: 'forward port',
+                                            'ansible.builtin.shell':
+                                                'kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306',
+                                            args: {
+                                                executable: '/usr/bin/bash',
                                             },
+                                            async: 30,
+                                            poll: 0,
                                         },
                                         {
-                                            name: 'enable service',
-                                            'ansible.builtin.systemd': {
-                                                name: 'kubectl-port-forward',
-                                                state: 'started',
-                                                daemon_reload: 'yes',
+                                            name: 'wait for port',
+                                            'ansible.builtin.wait_for': {
+                                                host: '127.0.0.1',
+                                                port: 23306,
+                                                delay: 5,
+                                                timeout: 30,
                                             },
                                         },
                                         {
@@ -90,23 +76,11 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'stop service',
-                                            'ansible.builtin.systemd': {
-                                                name: 'kubectl-port-forward',
-                                                state: 'stopped',
-                                            },
-                                        },
-                                        {
-                                            name: 'delete systemd service',
-                                            'ansible.builtin.file': {
-                                                path: '/etc/systemd/system/kubectl-port-forward.service',
-                                                state: 'absent',
-                                            },
-                                        },
-                                        {
-                                            name: 'reload daemon',
-                                            'ansible.builtin.systemd': {
-                                                daemon_reload: true,
+                                            name: 'unforward port',
+                                            'ansible.builtin.shell':
+                                                'pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"',
+                                            args: {
+                                                executable: '/usr/bin/bash',
                                             },
                                         },
                                     ],
