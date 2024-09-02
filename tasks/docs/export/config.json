@@ -8,12 +8,36 @@
         "name": "Variability4TOSCA - 02 - Specification"
     },
     {
+        "page": "variability4tosca/specification",
+        "name": "Variability4TOSCA - 03 - Technology Rules"
+    },
+    {
         "page": "variability4tosca/testing",
-        "name": "Variability4TOSCA - 03 - Testing"
+        "name": "Variability4TOSCA - 04 - Testing"
+    },
+    {
+        "page": "variability4tosca/dynamic",
+        "name": "Variability4TOSCA - 05 - Dynamic Deployment Artifacts"
     },
     {
         "page": "variability4tosca/feature-ide",
-        "name": "Variability4TOSCA - 04 - FeatureIDE"
+        "name": "Variability4TOSCA - 06 - FeatureIDE"
+    },
+    {
+        "page": "variability4tosca/guides/artifacts",
+        "name": "Variability4TOSCA - 07 - Guide - Conditional Deployment Artifacts and Conditional Properties"
+    },
+    {
+        "page": "variability4tosca/guides/pruning",
+        "name": "Variability4TOSCA - 08 - Guide - Pruning Elements"
+    },
+    {
+        "page": "variability4tosca/guides/modes",
+        "name": "Variability4TOSCA - 09 - Guide - Pruning Modes"
+    },
+    {
+        "page": "variability4tosca/guides/aware",
+        "name": "Variability4TOSCA - 10 - Guide - Hosting-Aware Pruning"
     },
     {
         "page": "queries4tosca/getting-started",
@@ -22,6 +46,18 @@
     {
         "page": "queries4tosca/specification",
         "name": "Queries4TOSCA - 02 - Specification"
+    },
+    {
+        "page": "scsar",
+        "name": "Secure Cloud Service Archive"
+    },
+    {
+        "page": "edmm",
+        "name": "EDMM Compliance"
+    },
+    {
+        "page": "normative",
+        "name": "TOSCA Vintner Profile"
     },
     {
         "page": "sofdcar/profile",

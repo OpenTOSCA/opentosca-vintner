@@ -124,6 +124,30 @@ export default class Type extends Element {
         throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
+    getDefinition() {
+        if (this.container.isArtifact()) {
+            return this.graph.inheritance.getArtifactType(this.name)
+        }
+
+        if (this.container.isGroup()) {
+            return this.graph.inheritance.getGroupType(this.name)
+        }
+
+        if (this.container.isNode()) {
+            return this.graph.inheritance.getNodeType(this.name)
+        }
+
+        if (this.container.isPolicy()) {
+            return this.graph.inheritance.getPolicyType(this.name)
+        }
+
+        if (this.container.isRelation()) {
+            return this.graph.inheritance.getRelationshipType(this.name)
+        }
+
+        throw new Error(`${this.Display} does not support checking type inheritance`)
+    }
+
     isType() {
         return true
     }

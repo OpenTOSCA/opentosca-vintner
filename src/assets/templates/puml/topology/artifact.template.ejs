@@ -1,0 +1,5 @@
+file "<%= puml.toText(artifact) %>" as <%= puml.toId(artifact) %>
+<% if(puml.hasLink(artifact)) {-%>
+url of <%= puml.toId(artifact) %> is [[ <%= puml.getLink(artifact) %> ]]
+<% } -%>
+<%= puml.toId(artifact) %> - <%= puml.toId(artifact.container) %>
