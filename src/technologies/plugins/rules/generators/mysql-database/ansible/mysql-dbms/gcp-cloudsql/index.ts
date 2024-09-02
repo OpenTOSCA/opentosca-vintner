@@ -54,10 +54,10 @@ const generator: ImplementationGenerator = {
                                         // https://cloud.google.com/sql/docs/mysql/sql-proxy
                                         {
                                             name: 'install GCP CloudSQL Proxy',
-                                            'ansible.builtin.shell':
-                                                'curl -o /tmp/gcp-cloudsql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.13.0/cloud-sql-proxy.linux.amd64 && chmod +x /tmp/cloud-sql-proxy',
-                                            args: {
-                                                executable: '/usr/bin/bash',
+                                            'ansible.builtin.get_url': {
+                                                url: 'https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.13.0/cloud-sql-proxy.linux.amd64',
+                                                dest: '/tmp/gcp-cloudsql-proxy',
+                                                mode: '0755',
                                             },
                                         },
                                         // https://github.com/GoogleCloudPlatform/cloud-sql-proxy

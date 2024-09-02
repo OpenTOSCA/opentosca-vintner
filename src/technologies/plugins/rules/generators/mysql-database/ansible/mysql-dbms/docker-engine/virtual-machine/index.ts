@@ -8,13 +8,14 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: we assume that dbms is exposed
+// TODO: next: test networking
 
-// TODO: could use https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward or https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
-
-// Could use "docker exec" but then its imperative ...
-// Maybe one can ssh tunnel the dbms in container to local
-
+/**
+ * Inspiration
+ *
+ * - https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward
+ * - https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
+ */
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
@@ -60,6 +61,25 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
+                                            name: 'forward port',
+                                            'community.docker.docker_container': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                image: 'nicolaka/netshoot:v0.13',
+                                                command: 'socat TCP6-LISTEN:3306,fork TCP:{{ HOST.dbms_name }}:3306',
+                                                ports: ['23306:3306'],
+                                            },
+                                        },
+                                        {
+                                            name: 'create forwarding network',
+                                            'community.docker.docker_network': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                connected: [
+                                                    '{{ HOST.dbms_name }}-port-forward',
+                                                    '{{ HOST.dbms_name }}',
+                                                ],
+                                            },
+                                        },
+                                        {
                                             name: 'create database',
                                             'community.mysql.mysql_db': {
                                                 name: '{{ SELF.database_name }}',
@@ -80,6 +100,22 @@ const generator: ImplementationGenerator = {
                                                 login_password: '{{ HOST.dbms_password }}',
                                                 login_port: '{{ HOST.application_port }}',
                                                 login_user: 'root',
+                                            },
+                                        },
+                                        {
+                                            name: 'unforward port',
+                                            'community.docker.docker_container': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                image: 'nicolaka/netshoot:v0.13',
+                                                network_mode: 'host',
+                                                state: 'absent',
+                                            },
+                                        },
+                                        {
+                                            name: 'remove forwarding network',
+                                            'community.docker.docker_network': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                state: 'absent',
                                             },
                                         },
                                     ],
