@@ -1,5 +1,25 @@
 @startuml
+skinparam defaultFontName SansSerif
 skinparam componentStyle rectangle
+skinparam backgroundColor transparent
+skinparam ArrowThickness 1.5
+
+skinparam file {
+    BorderColor black
+    BorderThickness 1.5
+}
+
+skinparam interface {
+    BorderColor black
+    BorderThickness 1.5
+}
+
+skinparam rectangle {
+    BorderColor black
+    BorderThickness 1.5
+    FontStyle normal
+}
+
 
 <% graph.groups.forEach(group => { -%>
 <%- include('group.template.ejs', {group}); %>

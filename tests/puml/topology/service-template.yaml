@@ -1,5 +1,15 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+node_types:
+    example.nodes.Application:
+        metadata:
+            vintner_link: https://vintner.opentosca.org
+
+artifact_types:
+    tar.archive:
+        metadata:
+            vintner_link: https://vintner.opentosca.org
+
 topology_template:
     node_templates:
         application:
@@ -7,6 +17,10 @@ topology_template:
             requirements:
                 - host: runtime
                 - database: database
+            artifacts:
+                - tar_archive:
+                      type: tar.archive
+                      file: application.tar
 
         runtime:
             type: example.nodes.Runtime

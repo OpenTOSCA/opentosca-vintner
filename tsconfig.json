@@ -31,6 +31,7 @@
             "#std": ["src/utils/std"],
             "#check": ["src/utils/check"],
             "#assert": ["src/utils/assert"],
+            "#puml": ["src/utils/puml"],
             "#machines/*": ["src/machines/*"],
             "#technologies/*": ["src/technologies/*"],
             "#normative/*": ["src/normative/*"]

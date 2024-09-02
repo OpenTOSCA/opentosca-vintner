@@ -9,6 +9,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'gcp.service',
     technology: 'terraform',
+    hosting: [],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
     details: '"google_project_service" resource',

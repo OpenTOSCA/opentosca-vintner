@@ -84,20 +84,5 @@ The specification is under active development and is not backwards compatible wi
 1. A node type cannot have conditional deployment artifacts.
 1. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
 
-
-## Technology Rules
-
-1. Technology rules might collide. The technology implementation is selected based on the quality (and possibly on the technology count).
-1. Qualities are defined based on the following aspects.
-    1. _(Critical)_ Custom module vs battle-proven module
-    1. _(Critical)_ Imperative vs declarative technology
-    1. _(Critical)_ Imperative flow of declarative tasks vs pure declarative tasks (e.g., Ansible Playbook Tasks vs Terraform Module)
-    1. Generic vs specialized/ native technology, e.g., Ansible vs Docker to start docker container (up to date modules, bug fixes ...)
-    1. Depth of technology toolchain
-    1. Number of workarounds
-    1. Number of tasks/ resources/ artifacts/ manifests to be defined
-    1. Length of the template
-    1. Usage of deprecated or not recommended features
-    1. More specialized node type, e.g., `software.application` vs `service.application`.
    
 --8<-- "acd.md"

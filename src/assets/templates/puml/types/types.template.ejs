@@ -1,14 +1,14 @@
 @startuml
 skinparam componentStyle rectangle
 
-<% if (graph.serviceTemplate[type]) {
-const entries = Object.entries(graph.serviceTemplate[type])
+<% if (graph.serviceTemplate[key]) {
+const entries = Object.entries(graph.serviceTemplate[key])
 for ([name, definition] of entries) { %>
 rectangle "<%= name %>"
 <% }} -%>
 
-<% if (graph.serviceTemplate[type]) {
-const entries = Object.entries(graph.serviceTemplate[type])
+<% if (graph.serviceTemplate[key]) {
+const entries = Object.entries(graph.serviceTemplate[key])
 for ([name, definition] of entries) { %>
 "<%= definition.derived_from %>" <|-- "<%= name %>"
 <% }} -%>

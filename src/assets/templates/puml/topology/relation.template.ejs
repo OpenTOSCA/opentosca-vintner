@@ -1,1 +1,1 @@
-<%= node.name %> -(0- <%= relation.target.name %> : <%= relation.name %>
+<%= puml.toId(node) %> <%- relation.isHostedOn() ? '-->' : '..>' %> <%= puml.toId(relation.target) %> : "  <%= relation.name %>"

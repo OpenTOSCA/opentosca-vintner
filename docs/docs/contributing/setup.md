@@ -159,4 +159,5 @@ The following directories should be excluded from search by the IDE.
 - `coverage`
 - `yarn`
 - `dist`
+- `dist-docs`
 - `node_modules`

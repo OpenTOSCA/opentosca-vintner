@@ -155,6 +155,10 @@ export function toFirstUpperCase(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
+export function enquote(value: string) {
+    return '"' + value + '"'
+}
+
 export function sumObjects<T>(objects: {[key: string]: number}[]): T {
     return objects.reduce((a, b) => {
         for (const key in b) {
