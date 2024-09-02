@@ -7983,39 +7983,23 @@ Therefore, run the following command.</p>
 </code></pre></div></td></tr></table></div>
 <h2 id="plantuml">PlantUML<a class="headerlink" href="#plantuml" title="Permanent link">&para;</a></h2>
 <p>We use <a href="http://plantuml.com">PlantUML</a> for visualizing UML diagrams.
-Read <a href="https://plantuml.com/de/guide">PlantUML Guide</a> for modeling instructions.</p>
-<p>The following command generates PlantUML files for registered service templates.
-This command is also executed during the Release workflow and overwrites committed files.
-Furthermore, <a href="https://github.com/quantorconsulting/mkdocs_build_plantuml" target="_blank">mkdocs_build_plantuml</a> is used to plot PlantUML to SVGs when building the documentation.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>./task<span class="w"> </span>docs:generate:puml
-</code></pre></div></td></tr></table></div>
-<p>Note, we use the public PlantUML server <a href="https://www.plantuml.com/plantuml" target="_blank">https://www.plantuml.com/plantuml</a> for plotting SVGs.
-It is also possible to start a local PlantUML server using Docker.
-Therefore, run the following command.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>./task<span class="w"> </span>puml:up<span class="w"> </span>
-</code></pre></div></td></tr></table></div>
-<p>However, you also need to configure the following environment variables in <code>docs/.env</code>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="l l-Scalar l-Scalar-Plain">MKDOCS_PUML_SERVER=http://localhost:8080</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="l l-Scalar l-Scalar-Plain">MKDOCS_PUML_SERVER_SSL=true</span>
-</code></pre></div></td></tr></table></div>
-<p>To stop the local PlantUML server, run the following command.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a>./task<span class="w"> </span>puml:down
-</code></pre></div></td></tr></table></div>
+Read <a href="https://plantuml.com/de/guide">PlantUML Guide</a> for modeling instructions.
+We use <a href="https://github.com/quantorconsulting/mkdocs_build_plantuml" target="_blank">mkdocs_build_plantuml</a> to plot PlantUML to SVGs when building the documentation.
+Note, we use the public PlantUML server <a href="https://www.plantuml.com/plantuml" target="_blank">https://www.plantuml.com/plantuml</a> for plotting SVGs.</p>
 <h2 id="queries4tosca">Queries4TOSCA<a class="headerlink" href="#queries4tosca" title="Permanent link">&para;</a></h2>
 <p>To generate the conformance tests for Queries4TOSCA, run the following command.
 This command is also executed during the Release workflow and overwrites committed files.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a>./task<span class="w"> </span>docs:generate:query
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>./task<span class="w"> </span>docs:generate:query
 </code></pre></div></td></tr></table></div>
 <h2 id="tosca-sofdcar-profile">TOSCA SofDCar Profile<a class="headerlink" href="#tosca-sofdcar-profile" title="Permanent link">&para;</a></h2>
 <p>To generate the TOSCA SofDCar Profile, run the following command.
 This command is also executed during the Release workflow and overwrites committed files.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a>./task<span class="w"> </span>docs:generate:query
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a>./task<span class="w"> </span>docs:generate:query
 </code></pre></div></td></tr></table></div>
 <h2 id="variability4tosca">Variability4TOSCA<a class="headerlink" href="#variability4tosca" title="Permanent link">&para;</a></h2>
 <p>To generate the conformance tests for Variability4TOSCA, run the following command.
 This command is also executed during the Release workflow and overwrites committed files.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a>./task<span class="w"> </span>docs:generate:query
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>./task<span class="w"> </span>docs:generate:query
 </code></pre></div></td></tr></table></div>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <ul>
@@ -8091,7 +8075,7 @@ This command is also executed during the Release workflow and overwrites committ
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
     <a href="https://www.uni-stuttgart.de/impressum/" target="_blank" rel="noopener">
-        Copyright © 2022 - 2024 University of Stuttgart (Legal Notice)
+        Copyright © 2022 - 2025 University of Stuttgart (Legal Notice)
     </a>
 
     <br />

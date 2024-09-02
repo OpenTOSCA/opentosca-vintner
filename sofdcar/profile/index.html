@@ -9354,9 +9354,9 @@
 
 <h1 id="tosca-software-defined-car-sofdcar-profile-10-release-candidate">TOSCA Software-Defined Car (SofDCar) Profile 1.0 Release Candidate<a class="headerlink" href="#tosca-software-defined-car-sofdcar-profile-10-release-candidate" title="Permanent link">&para;</a></h1>
 <p>This document specifies the TOSCA Software-Defined Car (SofDCar) profile.
-This profile includes normative TOSCA types for the domain of software-defined cars. 
+This profile includes normative TOSCA types for the domain of software-defined cars.
 Standardizing such normative TOSCA types improves interoperability.
-For example, an ECU supplier can model and distribute the deployment and management of their ECUs using these types. 
+For example, an ECU supplier can model and distribute the deployment and management of their ECUs using these types.
 Various OEMs can then import provided models and integrate them into their cars.
 The specification is under active development and is not backwards compatible with any previous versions.</p>
 <h2 id="tosca-sofdcar-core-profile">TOSCA SofDCar Core Profile<a class="headerlink" href="#tosca-sofdcar-core-profile" title="Permanent link">&para;</a></h2>
@@ -9364,11 +9364,11 @@ The specification is under active development and is not backwards compatible wi
 These types mainly concern the following topics.</p>
 <ul>
 <li>Hardware and software of electronic computing units (ECUs) which are typically microcontrollers</li>
-<li>Hardware and software of high performance computing platforms (HPCs) which are typically microprocessors </li>
+<li>Hardware and software of high performance computing platforms (HPCs) which are typically microprocessors</li>
 <li>Sensors and actuators</li>
 <li>Communication channels</li>
 </ul>
-<p>Considering the modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components. 
+<p>Considering the modeling communication, the TOSCA modeling approach is application centric meaning that, e.g., a CAN communication is modeled by relationships between the communicating software components.
 Thus, no (physical) CAN bus is modeled between the ECUs.
 However, this might not provide all required information.
 This issue is also discussed in the <a href="https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969482" target="_blank">networking section of the TOSCA specification</a>.
@@ -9376,10 +9376,10 @@ In this section, the authors of TOSCA propose to have a TOSCA model for the appl
 Therefore, we provide type definitions to model such an automotive TOSCA networking model which includes, e.g., a physical CAN bus.</p>
 <h3 id="artifact-types">Artifact Types<a class="headerlink" href="#artifact-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative artifact types.
-An overview is given in Figure c1.</p>
+An overview is given in Figure tosca-sofdcar-profile-core1.</p>
 <figure>
 <p><img alt="Artifact Types" src="../tosca-sofdcar-profile-core.artifact-types.svg" /></p>
-<figcaption>Figure c1:  Artifact Types</figcaption>
+<figcaption>Figure C1: TOSCA SofDCar Core Artifact Types</figcaption>
 </figure>
 <h4 id="sofdcarartifactsroot">sofdcar.artifacts.Root<a class="headerlink" href="#sofdcarartifactsroot" title="Permanent link">&para;</a></h4>
 <p>The artifact all other artifacts are derived from.</p>
@@ -9401,10 +9401,10 @@ An overview is given in Figure c1.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="capability-types">Capability Types<a class="headerlink" href="#capability-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative capability types.
-An overview is given in Figure c2.</p>
+An overview is given in Figure tosca-sofdcar-profile-core2.</p>
 <figure>
 <p><img alt="Capability Types" src="../tosca-sofdcar-profile-core.capability-types.svg" /></p>
-<figcaption>Figure c2:  Capability Types</figcaption>
+<figcaption>Figure C2: TOSCA SofDCar Core Capability Types</figcaption>
 </figure>
 <h4 id="sofdcarcapabilitiesroot">sofdcar.capabilities.Root<a class="headerlink" href="#sofdcarcapabilitiesroot" title="Permanent link">&para;</a></h4>
 <p>The capability all other capabilities are derived from.</p>
@@ -9454,10 +9454,10 @@ An overview is given in Figure c2.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="data-types">Data Types<a class="headerlink" href="#data-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative data types.
-An overview is given in Figure c3.</p>
+An overview is given in Figure tosca-sofdcar-profile-core3.</p>
 <figure>
 <p><img alt="Data Types" src="../tosca-sofdcar-profile-core.data-types.svg" /></p>
-<figcaption>Figure c3:  Data Types</figcaption>
+<figcaption>Figure C3: TOSCA SofDCar Core Data Types</figcaption>
 </figure>
 <h4 id="sofdcardataroot">sofdcar.data.Root<a class="headerlink" href="#sofdcardataroot" title="Permanent link">&para;</a></h4>
 <p>The data all other data are derived from.</p>
@@ -9467,10 +9467,10 @@ An overview is given in Figure c3.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="group-types">Group Types<a class="headerlink" href="#group-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative group types.
-An overview is given in Figure c4.</p>
+An overview is given in Figure tosca-sofdcar-profile-core4.</p>
 <figure>
 <p><img alt="Group Types" src="../tosca-sofdcar-profile-core.group-types.svg" /></p>
-<figcaption>Figure c4:  Group Types</figcaption>
+<figcaption>Figure C4: TOSCA SofDCar Core Group Types</figcaption>
 </figure>
 <h4 id="sofdcargroupsroot">sofdcar.groups.Root<a class="headerlink" href="#sofdcargroupsroot" title="Permanent link">&para;</a></h4>
 <p>The group all other groups are derived from.</p>
@@ -9498,10 +9498,10 @@ An overview is given in Figure c4.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="interface-types">Interface Types<a class="headerlink" href="#interface-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative interface types.
-An overview is given in Figure c5.</p>
+An overview is given in Figure tosca-sofdcar-profile-core5.</p>
 <figure>
 <p><img alt="Interface Types" src="../tosca-sofdcar-profile-core.interface-types.svg" /></p>
-<figcaption>Figure c5:  Interface Types</figcaption>
+<figcaption>Figure C5: TOSCA SofDCar Core Interface Types</figcaption>
 </figure>
 <h4 id="sofdcarinterfacesroot">sofdcar.interfaces.Root<a class="headerlink" href="#sofdcarinterfacesroot" title="Permanent link">&para;</a></h4>
 <p>The interface all other interfaces are derived from.</p>
@@ -9529,10 +9529,10 @@ An overview is given in Figure c5.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="node-types">Node Types<a class="headerlink" href="#node-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative node types.
-An overview is given in Figure c6.</p>
+An overview is given in Figure tosca-sofdcar-profile-core6.</p>
 <figure>
 <p><img alt="Node Types" src="../tosca-sofdcar-profile-core.node-types.svg" /></p>
-<figcaption>Figure c6:  Node Types</figcaption>
+<figcaption>Figure C6: TOSCA SofDCar Core Node Types</figcaption>
 </figure>
 <h4 id="sofdcarnodesroot">sofdcar.nodes.Root<a class="headerlink" href="#sofdcarnodesroot" title="Permanent link">&para;</a></h4>
 <p>The node all other nodes are derived from.</p>
@@ -9738,10 +9738,10 @@ An overview is given in Figure c6.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="policy-types">Policy Types<a class="headerlink" href="#policy-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative policy types.
-An overview is given in Figure c7.</p>
+An overview is given in Figure tosca-sofdcar-profile-core7.</p>
 <figure>
 <p><img alt="Policy Types" src="../tosca-sofdcar-profile-core.policy-types.svg" /></p>
-<figcaption>Figure c7:  Policy Types</figcaption>
+<figcaption>Figure C7: TOSCA SofDCar Core Policy Types</figcaption>
 </figure>
 <h4 id="sofdcarpoliciesroot">sofdcar.policies.Root<a class="headerlink" href="#sofdcarpoliciesroot" title="Permanent link">&para;</a></h4>
 <p>The policy all other policies are derived from.</p>
@@ -9763,10 +9763,10 @@ An overview is given in Figure c7.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="relationship-types">Relationship Types<a class="headerlink" href="#relationship-types" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative relationship types.
-An overview is given in Figure c8.</p>
+An overview is given in Figure tosca-sofdcar-profile-core8.</p>
 <figure>
 <p><img alt="Relationship Types" src="../tosca-sofdcar-profile-core.relationship-types.svg" /></p>
-<figcaption>Figure c8:  Relationship Types</figcaption>
+<figcaption>Figure C8: TOSCA SofDCar Core Relationship Types</figcaption>
 </figure>
 <h4 id="sofdcarrelationshipsroot">sofdcar.relationships.Root<a class="headerlink" href="#sofdcarrelationshipsroot" title="Permanent link">&para;</a></h4>
 <p>The relationship all other relationships are derived from.</p>
@@ -9779,10 +9779,10 @@ An overview is given in Figure c8.</p>
 These types mainly concern specific communications, such as CAN or FlexRay, but also ECUs and HPCs, such as Arduino or Raspberry Pi.</p>
 <h3 id="capability-types_1">Capability Types<a class="headerlink" href="#capability-types_1" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative capability types.
-An overview is given in Figure e1.</p>
+An overview is given in Figure tosca-sofdcar-profile-extended1.</p>
 <figure>
 <p><img alt="Capability Types" src="../tosca-sofdcar-profile-extended.capability-types.svg" /></p>
-<figcaption>Figure e1:  Capability Types</figcaption>
+<figcaption>Figure E1:  Capability Types</figcaption>
 </figure>
 <h4 id="sofdcarcapabilitiesendpointcan">sofdcar.capabilities.Endpoint.CAN<a class="headerlink" href="#sofdcarcapabilitiesendpointcan" title="Permanent link">&para;</a></h4>
 <p>The capability to provide a CAN endpoint.</p>
@@ -9840,10 +9840,10 @@ An overview is given in Figure e1.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="data-types_1">Data Types<a class="headerlink" href="#data-types_1" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative data types.
-An overview is given in Figure e2.</p>
+An overview is given in Figure tosca-sofdcar-profile-extended2.</p>
 <figure>
 <p><img alt="Data Types" src="../tosca-sofdcar-profile-extended.data-types.svg" /></p>
-<figcaption>Figure e2:  Data Types</figcaption>
+<figcaption>Figure E2:  Data Types</figcaption>
 </figure>
 <h4 id="sofdcardatagpiopin">sofdcar.data.GPIO.Pin<a class="headerlink" href="#sofdcardatagpiopin" title="Permanent link">&para;</a></h4>
 <p>The GPIO pin used, e.g., when connecting using GPIO.</p>
@@ -9873,10 +9873,10 @@ An overview is given in Figure e2.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="node-types_1">Node Types<a class="headerlink" href="#node-types_1" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative node types.
-An overview is given in Figure e3.</p>
+An overview is given in Figure tosca-sofdcar-profile-extended3.</p>
 <figure>
 <p><img alt="Node Types" src="../tosca-sofdcar-profile-extended.node-types.svg" /></p>
-<figcaption>Figure e3:  Node Types</figcaption>
+<figcaption>Figure E3:  Node Types</figcaption>
 </figure>
 <h4 id="sofdcarnodescan">sofdcar.nodes.CAN<a class="headerlink" href="#sofdcarnodescan" title="Permanent link">&para;</a></h4>
 <p>The CAN channel all other CAN channels are derived from.</p>
@@ -10116,10 +10116,10 @@ An overview is given in Figure e3.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="policy-types_1">Policy Types<a class="headerlink" href="#policy-types_1" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative policy types.
-An overview is given in Figure e4.</p>
+An overview is given in Figure tosca-sofdcar-profile-extended4.</p>
 <figure>
 <p><img alt="Policy Types" src="../tosca-sofdcar-profile-extended.policy-types.svg" /></p>
-<figcaption>Figure e4:  Policy Types</figcaption>
+<figcaption>Figure E4:  Policy Types</figcaption>
 </figure>
 <h4 id="sofdcarpoliciesasil">sofdcar.policies.ASIL<a class="headerlink" href="#sofdcarpoliciesasil" title="Permanent link">&para;</a></h4>
 <p>The policy that all other ASIL policies are derived from.</p>
@@ -10153,10 +10153,10 @@ An overview is given in Figure e4.</p>
 </code></pre></div></td></tr></table></div>
 <h3 id="relationship-types_1">Relationship Types<a class="headerlink" href="#relationship-types_1" title="Permanent link">&para;</a></h3>
 <p>We specify the following normative relationship types.
-An overview is given in Figure e5.</p>
+An overview is given in Figure tosca-sofdcar-profile-extended5.</p>
 <figure>
 <p><img alt="Relationship Types" src="../tosca-sofdcar-profile-extended.relationship-types.svg" /></p>
-<figcaption>Figure e5:  Relationship Types</figcaption>
+<figcaption>Figure E5:  Relationship Types</figcaption>
 </figure>
 <h4 id="sofdcarrelationshipscan">sofdcar.relationships.CAN<a class="headerlink" href="#sofdcarrelationshipscan" title="Permanent link">&para;</a></h4>
 <p>The relationship for CAN connections.</p>
@@ -11403,7 +11403,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
     <a href="https://www.uni-stuttgart.de/impressum/" target="_blank" rel="noopener">
-        Copyright © 2022 - 2024 University of Stuttgart (Legal Notice)
+        Copyright © 2022 - 2025 University of Stuttgart (Legal Notice)
     </a>
 
     <br />

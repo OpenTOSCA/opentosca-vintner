@@ -52,7 +52,7 @@ ansible:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized
+      reason: Docker Compose is more specialized
       details: '"community.docker.docker_container" task'
     - component: mysql.dbms
       hosting:
@@ -78,7 +78,7 @@ ansible:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"community.docker.docker_container" task'
     - component: service.application
       artifact: docker.image
@@ -202,7 +202,7 @@ terraform:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: mysql.dbms
       hosting:
@@ -228,7 +228,7 @@ terraform:
           - docker.engine
           - virtual.machine
       weight: 0.5
-      reason: Docker is more specialized.
+      reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: service.application
       artifact: docker.image
