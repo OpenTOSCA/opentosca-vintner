@@ -243,18 +243,20 @@ export function AnsibleWaitForSSHTask() {
     }
 }
 
-export function TerraformStandardOperations() {
+export function TerraformStandardOperations(env?: {[key: string]: any}) {
     return {
         Standard: {
             operations: {
                 configure: {
                     implementation: {
                         primary: 'Terraform',
+                        environment: env,
                     },
                 },
                 delete: {
                     implementation: {
                         primary: 'Terraform',
+                        environment: env,
                     },
                 },
             },

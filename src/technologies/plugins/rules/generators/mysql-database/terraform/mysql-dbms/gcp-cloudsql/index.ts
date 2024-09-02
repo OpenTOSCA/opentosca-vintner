@@ -6,7 +6,7 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: we assume that dbms is exposed
+// TODO: next: test cloudsql proxy connection
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -27,7 +27,11 @@ const generator: ImplementationGenerator = {
             },
 
             interfaces: {
-                ...TerraformStandardOperations(),
+                ...TerraformStandardOperations({
+                    GOOGLE_APPLICATION_CREDENTIALS: {
+                        eval: '.::gcp_service_account_file',
+                    },
+                }),
                 defaults: {
                     inputs: {
                         main: {
@@ -55,10 +59,11 @@ const generator: ImplementationGenerator = {
                                         region: '{{ SELF.gcp_region }}',
                                     },
                                 ],
-                                // TODO: could also use GCP CloudSQL connection support, see https://registry.terraform.io/providers/petoju/mysql/latest/docs#gcp-cloudsql-connection
+                                // https://registry.terraform.io/providers/petoju/mysql/latest/docs#gcp-cloudsql-connection
                                 mysql: [
                                     {
-                                        endpoint: '{{ HOST.management_address }}',
+                                        endpoint:
+                                            'cloudsql://{{ SELF.gcp_project }}:{{ SELF.gcp_region }}:{{ HOST.dbms_name }}',
                                         password: '{{ HOST.dbms_password }}',
                                         username: 'root',
                                     },

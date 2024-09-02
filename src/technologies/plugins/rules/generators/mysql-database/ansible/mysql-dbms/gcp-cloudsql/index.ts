@@ -6,14 +6,14 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: we assume that dbms is exposed
+// TODO: next: test cloudsql proxy connection
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
     hosting: ['mysql.dbms', 'gcp.cloudsql'],
-    weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
+    weight: 0.5,
+    reason: 'Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.',
 
     generate: (name, type) => {
         return {
@@ -51,6 +51,36 @@ const generator: ImplementationGenerator = {
                                                 project: '{{ SELF.gcp_project }}',
                                             },
                                         },
+                                        // https://cloud.google.com/sql/docs/mysql/sql-proxy
+                                        {
+                                            name: 'install GCP CloudSQL Proxy',
+                                            'ansible.builtin.shell':
+                                                'curl -o /tmp/gcp-cloudsql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.13.0/cloud-sql-proxy.linux.amd64 && chmod +x /tmp/cloud-sql-proxy',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        // https://github.com/GoogleCloudPlatform/cloud-sql-proxy
+                                        {
+                                            name: 'forward port',
+                                            'ansible.builtin.shell':
+                                                '/tmp/gcp-cloudsql-proxy {{ SELF.gcp_project }}:{{ SELF.gcp_region }}:{{ HOST.dbms_name }} --credentials-file {{ SELF.gcp_service_account_file }} --port 23306 ',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                            async: 30,
+                                            poll: 0,
+                                        },
+                                        {
+                                            name: 'wait for port',
+                                            'ansible.builtin.wait_for': {
+                                                host: '127.0.0.1',
+                                                port: 23306,
+                                                delay: 5,
+                                                timeout: 30,
+                                            },
+                                        },
+                                        // We do not use https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_sql_user_module.html since we can not manage privileges with it, see https://cloud.google.com/sql/docs/mysql/create-manage-users#creating
                                         {
                                             name: 'create user (with privileges)',
                                             'community.mysql.mysql_user': {
@@ -58,10 +88,18 @@ const generator: ImplementationGenerator = {
                                                 password: '{{ SELF.database_password }}',
                                                 host: '%',
                                                 priv: '*.*:ALL',
-                                                login_host: '{{ HOST.management_address }}',
+                                                login_host: '127.0.0.1',
                                                 login_password: '{{ HOST.dbms_password }}',
-                                                login_port: 3306,
+                                                login_port: 23306,
                                                 login_user: 'root',
+                                            },
+                                        },
+                                        {
+                                            name: 'unforward port',
+                                            'ansible.builtin.shell':
+                                                'pkill -f "/tmp/gcp-cloudsql-proxy {{ SELF.gcp_project }}:{{ SELF.gcp_region }}:{{ HOST.dbms_name }}"',
+                                            args: {
+                                                executable: '/usr/bin/bash',
                                             },
                                         },
                                     ],

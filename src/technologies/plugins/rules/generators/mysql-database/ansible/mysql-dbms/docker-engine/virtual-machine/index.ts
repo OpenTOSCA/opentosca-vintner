@@ -8,7 +8,7 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: we assume that dbms is exposed
+// TODO: next: we assume that dbms is exposed
 
 // TODO: could use https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward or https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
 
