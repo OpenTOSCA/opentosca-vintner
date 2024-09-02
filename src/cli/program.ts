@@ -540,6 +540,7 @@ puml.command('topology')
     .description('plot topology as PlantUML')
     .requiredOption('--path <string>', 'path to service template')
     .option('--output [string]', 'path of the output')
+    .addOption(new Option('--format [string]', 'output format').default('puml').choices(['puml', 'svg']))
     .action(
         hae.exit(async options => {
             await Controller.template.puml.topology(options)
@@ -551,6 +552,7 @@ puml.command('types')
     .requiredOption('--path <string>', 'path to service template')
     .option('--output [string]', 'path of the output directory (default: the directory of the service template)')
     .option('--types [string...]', 'entity types to consider, e.g., "node_types" (default: Every defined entity type)')
+    .addOption(new Option('--format [string]', 'output format').default('puml').choices(['puml', 'svg']))
     .action(
         hae.exit(async options => {
             await Controller.template.puml.types(options)
