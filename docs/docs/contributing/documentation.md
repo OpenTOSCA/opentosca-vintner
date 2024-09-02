@@ -159,35 +159,8 @@ To validate all registered service templates, run the following command.
 
 We use [PlantUML](http://plantuml.com) for visualizing UML diagrams.
 Read [PlantUML Guide](https://plantuml.com/de/guide) for modeling instructions.
-
-The following command generates PlantUML files for registered service templates.
-This command is also executed during the Release workflow and overwrites committed files.
-Furthermore, [mkdocs_build_plantuml](https://github.com/quantorconsulting/mkdocs_build_plantuml){target=_blank} is used to plot PlantUML to SVGs when building the documentation.
-
-```shell linenums="1"
-./task docs:generate:puml
-```
-
+We use [mkdocs_build_plantuml](https://github.com/quantorconsulting/mkdocs_build_plantuml){target=_blank} to plot PlantUML to SVGs when building the documentation.
 Note, we use the public PlantUML server [https://www.plantuml.com/plantuml](https://www.plantuml.com/plantuml){target=_blank} for plotting SVGs.
-It is also possible to start a local PlantUML server using Docker.
-Therefore, run the following command.
-
-```shell linenums="1"
-./task puml:up 
-```
-
-However, you also need to configure the following environment variables in `docs/.env`.
-
-```yaml linenums="1"
-MKDOCS_PUML_SERVER=http://localhost:8080
-MKDOCS_PUML_SERVER_SSL=true
-```
-
-To stop the local PlantUML server, run the following command.
-
-```shell linenums="1"
-./task puml:down
-```
 
 ## Queries4TOSCA
 

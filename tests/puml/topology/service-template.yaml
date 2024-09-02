@@ -39,6 +39,16 @@ topology_template:
 
         compute:
             type: example.nodes.Compute
+            requirements:
+                - host: hosting
+
+        hosting:
+            type: '*'
+            requirements:
+                - host: provider
+
+        provider:
+            type: some.provider
 
     groups:
         worker:

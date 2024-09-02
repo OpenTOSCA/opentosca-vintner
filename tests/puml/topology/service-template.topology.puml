@@ -40,11 +40,17 @@ rectangle "dbms\n(example.nodes.DBMS)" as node_dbms
 
 rectangle "compute\n(example.nodes.Compute)" as node_compute
 
+rectangle "hosting\n(*)" as node_hosting #line.dashed
+
+rectangle "provider\n(some.provider)" as node_provider
+
 
 node_application --> node_runtime : "  host"
 node_application ..> node_database : "  database"
 node_runtime --> node_compute : "  host"
 node_database --> node_dbms : "  host"
 node_dbms --> node_compute : "  host"
+node_compute --> node_hosting : "  host"
+node_hosting --> node_provider : "  host"
 
 @enduml

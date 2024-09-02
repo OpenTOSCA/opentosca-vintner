@@ -58,7 +58,7 @@ A node template whose node type is or is derived from the node type <%= link(gro
  and which has an artifact whose artifact type is or is derived from <%= link(group.artifact) -%>,
 <% } -%>
 <% if (group.hosting.length !== 0) { -%>
- and which <%- group.hosting.map(it => `is hosted on a node template whose node type is or is derived from ${link(it)}`).join(", which ") -%>
+ and which <%- group.hosting.map(it => it === "*" ? "is hosted on an arbitrary hosting stack" : `is hosted on a node template whose node type is or is derived from ${link(it)}`).join(", which ") -%>
 <% } -%>
 .
 

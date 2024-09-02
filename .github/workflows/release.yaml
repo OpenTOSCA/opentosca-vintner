@@ -198,9 +198,6 @@ jobs:
             - name: (DOCS) Generate TOSCA Vintner Profile Page
               run: ./task docs:generate:normative
 
-            - name: (DOCS) Generate PlantUML of Service Templates
-              run: ./task docs:generate:puml
-
             - name: (DOCS) Generate Technology Rules
               run: ./task docs:generate:rules
 
