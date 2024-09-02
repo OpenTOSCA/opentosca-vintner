@@ -1,4 +1,7 @@
-[<%= node.name %>] <<<%- include('type.link.ejs', {element: node}) -%>>> as <%= node.name.replaceAll(" ", "_") %>
+rectangle "<%= puml.toText(node) %>" as <%= puml.toId(node) %>
+<% if(puml.hasLink(node)) {-%>
+url of <%= puml.toId(node) %> is [[ <%= puml.getLink(node) %> ]]
+<% } -%>
 <% node.artifacts.forEach(artifact => { -%>
 <%- include('artifact.template.ejs', {artifact}) %>
 <% }) -%>

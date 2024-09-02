@@ -1,5 +1,9 @@
+import * as check from '#check'
 import * as files from '#files'
+import Artifact from '#graph/artifact'
+import Element from '#graph/element'
 import Graph from '#graph/graph'
+import Node from '#graph/node'
 import {EntityTypes} from '#spec/service-template'
 import * as utils from '#utils'
 import plantuml from 'node-plantuml'
@@ -13,6 +17,24 @@ export async function renderTopology(graph: Graph, options: RenderOptions = {}):
     const plot = await files.renderFile(path.join(files.TEMPLATES_DIR, 'puml', 'topology', 'template.template.ejs'), {
         graph,
         utils,
+        puml: {
+            toText: (element: Node | Artifact) => {
+                const name = element.name
+                const type = element.types[0].name
+                const text = `${name}\\n(${type})`
+
+                return text //.padStart(2 * (type.length + 2), ' ')
+            },
+            toId: (element: Element) => {
+                return element.id.replaceAll('@', '_').replaceAll('.', '_').replaceAll(' ', '_')
+            },
+            hasLink: (element: Node | Artifact) => {
+                return check.isDefined(element.types[0].getDefinition()?.metadata?.['vintner_link'])
+            },
+            getLink: (element: Node | Artifact) => {
+                return element.types[0].getDefinition()?.metadata?.['vintner_link']
+            },
+        },
     })
 
     return renderPUML(plot, options)

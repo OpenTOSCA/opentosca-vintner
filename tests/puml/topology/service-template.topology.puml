@@ -1,29 +1,50 @@
 @startuml
 skinparam defaultFontName SansSerif
 skinparam componentStyle rectangle
+skinparam backgroundColor transparent
+skinparam ArrowThickness 1.5
 
-rectangle "worker" {
-["application"] <<[[https://vintner.opentosca.org example.nodes.Application]]>> as application
-file tar_archive <<[[https://vintner.opentosca.org tar.archive]]>> as application_artifact_0
-application_artifact_0 - application
-
-["runtime"] <<example.nodes.Runtime>> as runtime
-
-}
-rectangle "data" {
-["database"] <<example.nodes.Database>> as database
-
-["dbms"] <<example.nodes.DBMS>> as dbms
-
+skinparam file {
+    BorderColor black
+    BorderThickness 1.5
 }
 
-["compute"] <<example.nodes.Compute>> as compute
+skinparam interface {
+    BorderColor black
+    BorderThickness 1.5
+}
+
+skinparam rectangle {
+    BorderColor black
+    BorderThickness 1.5
+    FontStyle normal
+}
 
 
-application --> runtime : host
-application ..> database : database
-runtime --> compute : host
-database --> dbms : host
-dbms --> compute : host
+rectangle "worker" #line.dashed {
+rectangle "application\n(example.nodes.Application)" as node_application
+url of node_application is [[ https://vintner.opentosca.org ]]
+file "tar_archive\n(tar.archive)" as artifact_tar_archive_0_node_application
+url of artifact_tar_archive_0_node_application is [[ https://vintner.opentosca.org ]]
+artifact_tar_archive_0_node_application - node_application
+
+rectangle "runtime\n(example.nodes.Runtime)" as node_runtime
+
+}
+rectangle "data" #line.dashed {
+rectangle "database\n(example.nodes.Database)" as node_database
+
+rectangle "dbms\n(example.nodes.DBMS)" as node_dbms
+
+}
+
+rectangle "compute\n(example.nodes.Compute)" as node_compute
+
+
+node_application --> node_runtime : "  host"
+node_application ..> node_database : "  database"
+node_runtime --> node_compute : "  host"
+node_database --> node_dbms : "  host"
+node_dbms --> node_compute : "  host"
 
 @enduml
