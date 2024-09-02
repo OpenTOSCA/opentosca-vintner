@@ -2,7 +2,7 @@ site_name: OpenTOSCA Vintner
 site_url: https://vintner.opentosca.org
 repo_url: https://github.com/opentosca/opentosca-vintner
 repo_name: opentosca/opentosca-vintner
-copyright: 'Copyright &copy; 2022 - 2024 University of Stuttgart'
+copyright: 'Copyright &copy; 2022 - 2025 University of Stuttgart'
 edit_uri: ''
 theme:
     name: material

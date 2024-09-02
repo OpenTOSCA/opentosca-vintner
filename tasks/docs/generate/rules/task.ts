@@ -30,10 +30,10 @@ async function main() {
     files.storeYAML<TechnologyAssignmentRulesMap>(path.join(dir, 'technology-rules.yaml'), map)
 
     /**
-     * Pattern
+     * SVGs
      */
     const svgs: {[key: string]: string} = {}
-    const renderPromises = []
+    const promises = []
     for (const [technology, rules] of Object.entries(map)) {
         for (const [index, rule] of rules.entries()) {
             const id = 'rule.' + technology + '.' + (index + 1)
@@ -42,27 +42,14 @@ async function main() {
             const promise = puml.renderTopology(graph, {format: 'svg'}).then(svg => {
                 svgs[id] = svg
             })
-            renderPromises.push(promise)
+            promises.push(promise)
         }
     }
-    await Promise.all(renderPromises)
+    await Promise.all(promises)
 
     /**
      * Groups
      */
-    type TechnologyRuleGroup = {
-        key: string
-        component: string
-        artifact?: string
-        hosting: string[]
-        svg: string
-        technologies: {
-            name: string
-            quality: number
-            reason: string
-            details: string
-        }[]
-    }
     const groups: TechnologyRuleGroup[] = []
     for (const [technology, rules] of Object.entries(map)) {
         const description = descriptions.find(it => it.id === technology)
@@ -122,6 +109,20 @@ async function main() {
 
     // Something keeps us hostage
     process.exit(0)
+}
+
+type TechnologyRuleGroup = {
+    key: string
+    component: string
+    artifact?: string
+    hosting: string[]
+    svg: string
+    technologies: {
+        name: string
+        quality: number
+        reason: string
+        details: string
+    }[]
 }
 
 function generateLink(type: string) {

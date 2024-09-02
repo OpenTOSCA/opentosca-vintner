@@ -37,6 +37,4 @@ const compose: TechnologyDescription = {
     link: 'https://docs.docker.com/compose',
 }
 
-const descriptions: TechnologyDescription[] = [ansible, terraform, kubernetes, compose]
-
-export default descriptions
+export default [ansible, terraform, kubernetes, compose]
