@@ -1,52 +1,88 @@
 @startuml
+skinparam defaultFontName SansSerif
 skinparam componentStyle rectangle
+skinparam backgroundColor transparent
+skinparam ArrowThickness 1.5
 
-rectangle "cloud" {
-    [cloud_service] <<example.nodes.Cloud.Service>>
-    [cloud_provider] <<example.nodes.Cloud.Provider>>
+skinparam file {
+    BorderColor black
+    BorderThickness 1.5
 }
-rectangle "zone_a" {
-    [zone_a_control_unit_software] <<example.nodes.ZCU.Software>>
-    [zone_a_control_unit_hardware] <<example.nodes.ZCU.Hardware>>
-    [zone_a_ethernet] <<sofdcar.nodes.Ethernet>>
-    [zone_a_can_bus] <<sofdcar.nodes.CAN>>
-    [zone_a_actuator] <<example.nodes.Actuator>>
-    [zone_a_sensor] <<example.nodes.Sensor>>
+
+skinparam interface {
+    BorderColor black
+    BorderThickness 1.5
 }
-rectangle "zone_b" {
-    [zone_b_control_unit_software] <<example.nodes.ZCU.Software>>
-    [zone_b_control_unit_hardware] <<example.nodes.ZCU.Hardware>>
-    [zone_b_ethernet] <<sofdcar.nodes.Ethernet>>
-    [zone_b_can_bus] <<sofdcar.nodes.CAN>>
-    [zone_b_actuator] <<example.nodes.Actuator>>
-    [zone_b_sensor] <<example.nodes.Sensor>>
-}
-rectangle "zone_c" {
-    [vehicle_control_unit_software] <<example.nodes.VCU.Software>>
-    [vehicle_control_unit_hardware] <<example.nodes.VCU.Hardware>>
+
+skinparam rectangle {
+    BorderColor black
+    BorderThickness 1.5
+    FontStyle normal
 }
 
 
-cloud_service -(0- cloud_provider : host
-vehicle_control_unit_software -(0- vehicle_control_unit_hardware : host
-vehicle_control_unit_software -(0- cloud_service : cloud
-vehicle_control_unit_hardware -(0- zone_a_ethernet : ethernet
-vehicle_control_unit_hardware -(0- zone_b_ethernet : ethernet
-zone_a_control_unit_software -(0- zone_a_control_unit_hardware : host
-zone_a_control_unit_software -(0- vehicle_control_unit_software : vcu
-zone_a_control_unit_hardware -(0- zone_a_ethernet : ethernet
-zone_a_control_unit_hardware -(0- zone_a_can_bus : can
-zone_a_actuator -(0- zone_a_can_bus : can
-zone_a_actuator -(0- zone_a_control_unit_software : zcu
-zone_a_sensor -(0- zone_a_can_bus : can
-zone_a_sensor -(0- zone_a_control_unit_software : zcu
-zone_b_control_unit_software -(0- zone_b_control_unit_hardware : host
-zone_b_control_unit_software -(0- vehicle_control_unit_software : vcu
-zone_b_control_unit_hardware -(0- zone_b_ethernet : ethernet
-zone_b_control_unit_hardware -(0- zone_b_can_bus : can
-zone_b_actuator -(0- zone_b_can_bus : can
-zone_b_actuator -(0- zone_b_control_unit_software : zcu
-zone_b_sensor -(0- zone_b_can_bus : can
-zone_b_sensor -(0- zone_b_control_unit_software : zcu
+rectangle "cloud" #line.dashed {
+rectangle "cloud_service\n(example.nodes.Cloud.Service)" as node_cloud_service
+
+rectangle "cloud_provider\n(example.nodes.Cloud.Provider)" as node_cloud_provider
+
+}
+rectangle "zone_a" #line.dashed {
+rectangle "zone_a_control_unit_software\n(example.nodes.ZCU.Software)" as node_zone_a_control_unit_software
+
+rectangle "zone_a_control_unit_hardware\n(example.nodes.ZCU.Hardware)" as node_zone_a_control_unit_hardware
+
+rectangle "zone_a_ethernet\n(sofdcar.nodes.Ethernet)" as node_zone_a_ethernet
+
+rectangle "zone_a_can_bus\n(sofdcar.nodes.CAN)" as node_zone_a_can_bus
+
+rectangle "zone_a_actuator\n(example.nodes.Actuator)" as node_zone_a_actuator
+
+rectangle "zone_a_sensor\n(example.nodes.Sensor)" as node_zone_a_sensor
+
+}
+rectangle "zone_b" #line.dashed {
+rectangle "zone_b_control_unit_software\n(example.nodes.ZCU.Software)" as node_zone_b_control_unit_software
+
+rectangle "zone_b_control_unit_hardware\n(example.nodes.ZCU.Hardware)" as node_zone_b_control_unit_hardware
+
+rectangle "zone_b_ethernet\n(sofdcar.nodes.Ethernet)" as node_zone_b_ethernet
+
+rectangle "zone_b_can_bus\n(sofdcar.nodes.CAN)" as node_zone_b_can_bus
+
+rectangle "zone_b_actuator\n(example.nodes.Actuator)" as node_zone_b_actuator
+
+rectangle "zone_b_sensor\n(example.nodes.Sensor)" as node_zone_b_sensor
+
+}
+rectangle "zone_c" #line.dashed {
+rectangle "vehicle_control_unit_software\n(example.nodes.VCU.Software)" as node_vehicle_control_unit_software
+
+rectangle "vehicle_control_unit_hardware\n(example.nodes.VCU.Hardware)" as node_vehicle_control_unit_hardware
+
+}
+
+
+node_cloud_service --> node_cloud_provider : "  host"
+node_vehicle_control_unit_software --> node_vehicle_control_unit_hardware : "  host"
+node_vehicle_control_unit_software ..> node_cloud_service : "  cloud"
+node_vehicle_control_unit_hardware ..> node_zone_a_ethernet : "  ethernet"
+node_vehicle_control_unit_hardware ..> node_zone_b_ethernet : "  ethernet"
+node_zone_a_control_unit_software --> node_zone_a_control_unit_hardware : "  host"
+node_zone_a_control_unit_software ..> node_vehicle_control_unit_software : "  vcu"
+node_zone_a_control_unit_hardware ..> node_zone_a_ethernet : "  ethernet"
+node_zone_a_control_unit_hardware ..> node_zone_a_can_bus : "  can"
+node_zone_a_actuator ..> node_zone_a_can_bus : "  can"
+node_zone_a_actuator ..> node_zone_a_control_unit_software : "  zcu"
+node_zone_a_sensor ..> node_zone_a_can_bus : "  can"
+node_zone_a_sensor ..> node_zone_a_control_unit_software : "  zcu"
+node_zone_b_control_unit_software --> node_zone_b_control_unit_hardware : "  host"
+node_zone_b_control_unit_software ..> node_vehicle_control_unit_software : "  vcu"
+node_zone_b_control_unit_hardware ..> node_zone_b_ethernet : "  ethernet"
+node_zone_b_control_unit_hardware ..> node_zone_b_can_bus : "  can"
+node_zone_b_actuator ..> node_zone_b_can_bus : "  can"
+node_zone_b_actuator ..> node_zone_b_control_unit_software : "  zcu"
+node_zone_b_sensor ..> node_zone_b_can_bus : "  can"
+node_zone_b_sensor ..> node_zone_b_control_unit_software : "  zcu"
 
 @enduml
