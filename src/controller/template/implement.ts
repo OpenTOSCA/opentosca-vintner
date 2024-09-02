@@ -126,7 +126,7 @@ export default async function (options: TemplateImplementOptions) {
             if (isImplementation(baseName)) continue
 
             // Ignore manual ignored types
-            if (!isIgnore(baseType)) continue
+            if (isIgnore(baseType)) continue
 
             // Ignore abstract types
             if (isAbstract(baseType)) continue

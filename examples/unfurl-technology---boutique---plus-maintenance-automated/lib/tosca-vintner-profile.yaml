@@ -5,11 +5,13 @@
 ###################################################
 
 tosca_definitions_version: tosca_simple_yaml_1_3
-description: TOSCA Profile for Vintner.
+description: TOSCA Profile for OpenTOSCA Vintner
 metadata:
+    vintner_normative: 'true'
     template_name: TOSCA Vintner Profile
     template_author: Miles Stötzner
     template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_link: https://vintner.opentosca.org
     template_version: 1.0.0-draft
     template_id: tosca-vintner-profile
     template_license: https://www.apache.org/licenses/LICENSE-2.0

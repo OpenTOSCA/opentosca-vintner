@@ -94,6 +94,6 @@ export function isAbstract(type: NodeType) {
 }
 
 export function isIgnore(type: NodeType) {
-    if (check.isUndefined(type.metadata)) return true
-    return type.metadata[METADATA.VINTNER_IGNORE] !== 'false'
+    if (check.isUndefined(type.metadata)) return false
+    return type.metadata[METADATA.VINTNER_IGNORE] === 'true'
 }
