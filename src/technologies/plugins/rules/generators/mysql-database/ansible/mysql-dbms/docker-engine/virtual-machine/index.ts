@@ -8,7 +8,7 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: test networking
+// TODO: still need to test port forwarding, i.e., if dbms not in host
 
 /**
  * Inspiration
@@ -61,13 +61,21 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
+                                            name: 'get dbms container info',
+                                            'community.docker.docker_container_info': {
+                                                name: '{{ HOST.dbms_name }}',
+                                            },
+                                            register: 'dbms_container_info',
+                                        },
+                                        {
                                             name: 'forward port',
                                             'community.docker.docker_container': {
                                                 name: '{{ HOST.dbms_name }}-port-forward',
                                                 image: 'nicolaka/netshoot:v0.13',
                                                 command: 'socat TCP6-LISTEN:3306,fork TCP:{{ HOST.dbms_name }}:3306',
-                                                ports: ['23306:3306'],
+                                                ports: ['{{ HOST.application_port }}:3306'],
                                             },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                         {
                                             name: 'create forwarding network',
@@ -78,6 +86,7 @@ const generator: ImplementationGenerator = {
                                                     '{{ HOST.dbms_name }}',
                                                 ],
                                             },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                         {
                                             name: 'create database',
@@ -110,6 +119,7 @@ const generator: ImplementationGenerator = {
                                                 network_mode: 'host',
                                                 state: 'absent',
                                             },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                         {
                                             name: 'remove forwarding network',
@@ -117,6 +127,7 @@ const generator: ImplementationGenerator = {
                                                 name: '{{ HOST.dbms_name }}-port-forward',
                                                 state: 'absent',
                                             },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                     ],
                                 },

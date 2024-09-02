@@ -6,8 +6,6 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: test cloudsql proxy connection
-
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

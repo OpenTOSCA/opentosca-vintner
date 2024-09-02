@@ -65,8 +65,9 @@ export function SecureApplicationProtocolPropertyDefinition(type: NodeType): {[k
     }
 }
 
-// TODO: fix this hotfix
-export const HOTFIX_SECURE_PROTOCOL_FILTER = 'regex_replace("^(.*[^s])$", "\\\\1s")'
+export function JinjaSecureApplicationProtocol() {
+    return 'SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s"'
+}
 
 export function MetadataGenerated() {
     return {[METADATA.VINTNER_GENERATED]: 'true'}
@@ -506,7 +507,9 @@ cd {{ SELF.application_directory }}
 export function Operation(operation: MANAGEMENT_OPERATIONS) {
     return `${BASH_HEADER}
 
-{{ (${SelfOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}" ) | ternary("echo 0", foo) }}
+{{ (${SelfOperation(operation)} == "${VINTNER_MANAGEMENT_OPERATION_UNDEFINED}" ) | ternary("echo 0", ${SelfOperation(
+        operation
+    )}) }}
 `.trim()
 }
 

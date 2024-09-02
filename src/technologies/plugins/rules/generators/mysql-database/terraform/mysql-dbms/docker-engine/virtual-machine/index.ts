@@ -7,7 +7,7 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: we assume that dbms is exposed
+// TODO: next: we assume that dbms is exposed
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

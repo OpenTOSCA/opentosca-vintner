@@ -5,9 +5,17 @@
 ###################################################
 
 tosca_definitions_version: tosca_simple_yaml_1_3
-description: OpenTOSCA Vintner - Normative Core Types
+description: TOSCA Profile for OpenTOSCA Vintner (Core)
 metadata:
     vintner_normative: 'true'
+    template_name: TOSCA Vintner Profile (Core)
+    template_author: Miles Stötzner
+    template_contact: miles.stoetzner@iste.uni-stuttgart.de
+    template_link: https://vintner.opentosca.org
+    template_version: 1.0.0-draft
+    template_id: tosca-vintner-profile
+    template_license: https://www.apache.org/licenses/LICENSE-2.0
+    acknowledgments: Partially funded by the [German Federal Ministry for Economic Affairs and Climate Action (BMWK)](https://www.bmwk.de) as part of the research project [SofDCar (19S21002)](https://sofdcar.de).
     vintner_orchestrator: unfurl
 artifact_types:
     artifact:
@@ -72,10 +80,15 @@ interface_types:
             vintner_normative: 'true'
         operations:
             create:
+                description: management lifecycle create operation.
             configure:
+                description: management lifecycle configure operation.
             start:
+                description: management lifecycle start operation.
             stop:
+                description: management lifecycle stop operation.
             delete:
+                description: management lifecycle delete operation.
 node_types:
     node:
         derived_from: tosca.nodes.Root
@@ -244,6 +257,36 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
+    physical.machine:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            machine_name:
+                type: string
+            ports:
+                type: list
+                entry_schema:
+                    type: string
+            flavor:
+                type: string
+                default: m1.medium
+            network:
+                type: string
+            ssh_user:
+                type: string
+            ssh_key_name:
+                type: string
+            ssh_key_file:
+                type: string
+        attributes:
+            management_address:
+                type: string
+            application_address:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
     database:
         derived_from: node
         metadata:
