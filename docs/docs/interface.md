@@ -2850,6 +2850,7 @@ plot topology as PlantUML
 | --- | --- | --- | --- |
 | path |  true  | string | path to service template |
 | output |  false  | string | path of the output |
+| format |  false  | string | output format (choices: ["puml","svg"], default: "puml") |
 
 ## vintner template puml types
 
@@ -2898,6 +2899,7 @@ plot types as PlantUML (each entity types is plotted separately)
 | path |  true  | string | path to service template |
 | output |  false  | string | path of the output directory (default: the directory of the service template) |
 | types |  false  | string... | entity types to consider, e.g., "node_types" (default: Every defined entity type) |
+| format |  false  | string | output format (choices: ["puml","svg"], default: "puml") |
 
 ## vintner template quality
 
@@ -3816,4 +3818,43 @@ returns normative types
 | no-base |  false  | boolean |  |
 | specific |  false  | boolean | include specific types (default: true) |
 | no-specific |  false  | boolean |  |
+| format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |
+
+## vintner utils rules
+
+returns technology rules
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils rules 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/utils/rules
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/rules")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/rules")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/rules")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
 | format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |
