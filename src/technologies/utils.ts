@@ -61,14 +61,18 @@ export function destructImplementationName(name: string) {
     }
 }
 
-export function constructRuleName(data: RuleData) {
+export function constructRuleName(data: RuleData, options: {technology?: boolean} = {}) {
+    options.technology = options.technology ?? true
+
     let output = data.component
 
     if (check.isDefined(data.artifact)) {
         output += '#' + data.artifact
     }
 
-    output += '::' + data.technology
+    if (options.technology) {
+        output += '::' + data.technology
+    }
 
     if (check.isDefined(data.hosting) && !utils.isEmpty(data.hosting)) {
         output += '@' + data.hosting.join('->')

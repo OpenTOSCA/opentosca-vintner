@@ -48,6 +48,59 @@ async function main() {
     await Promise.all(renderPromises)
 
     /**
+     * Groups
+     */
+    type TechnologyRuleGroup = {
+        key: string
+        component: string
+        artifact?: string
+        hosting: string[]
+        svg: string
+        technologies: {
+            name: string
+            quality: number
+            reason: string
+            details: string
+        }[]
+    }
+    const groups: TechnologyRuleGroup[] = []
+    for (const [technology, rules] of Object.entries(map)) {
+        const description = descriptions.find(it => it.id === technology)
+        assert.isDefined(description)
+
+        for (const [index, rule] of rules.entries()) {
+            assert.isArray(rule.hosting)
+
+            const key = constructRuleName(
+                {technology, component: rule.component, artifact: rule.artifact, hosting: rule.hosting},
+                {technology: false}
+            )
+
+            const entry = {
+                name: description.name,
+                quality: rule.weight!,
+                reason: rule.reason!,
+                details: rule.details!,
+            }
+
+            const found = groups.find(it => it.key === key)
+
+            if (found) {
+                found.technologies.push(entry)
+            } else {
+                groups.push({
+                    key,
+                    component: rule.component,
+                    artifact: rule.artifact,
+                    hosting: rule.hosting,
+                    svg: svgs['rule.' + technology + '.' + (index + 1)],
+                    technologies: [entry],
+                })
+            }
+        }
+    }
+
+    /**
      * Documentation
      */
     await files.renderFile(
@@ -55,6 +108,7 @@ async function main() {
         {
             data: map,
             svgs,
+            groups,
             utils,
             link: (type: string) => {
                 if (type === '*') return type
