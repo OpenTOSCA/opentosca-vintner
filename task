@@ -42,6 +42,7 @@ fi
 # Run task.js
 TASK_JS=build-tasks/tasks/${REPLACED}/task.js
 if [ -f "${TASK_JS}" ]; then
+  echo "Running already transpiled Javascript ..."
   node ${TASK_JS} "${@:2}"
   exit 0
 fi

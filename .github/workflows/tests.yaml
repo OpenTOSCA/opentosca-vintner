@@ -153,8 +153,5 @@ jobs:
             - name: (DOCS) Generate TOSCA SofDCar Profile Page
               run: ./task docs:generate:sofdcar
 
-            - name: (DOCS) Generate PlantUML of Service Templates
-              run: ./task docs:generate:puml
-
             - name: (DOCS) Build Docs
               run: ./task docs:build

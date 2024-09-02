@@ -8,5 +8,4 @@ echo "Generating docs ..."
 ./task docs:generate:query
 ./task docs:generate:sofdcar
 ./task docs:generate:normative
-./task docs:generate:puml
 ./task docs:generate:rules
