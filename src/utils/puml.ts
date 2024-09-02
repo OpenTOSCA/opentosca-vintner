@@ -9,7 +9,7 @@ import * as utils from '#utils'
 import plantuml from 'node-plantuml'
 import path from 'path'
 
-type RenderOptions = {format?: 'puml' | 'svg' | 'fkc'}
+export type RenderOptions = {format?: 'puml' | 'svg'}
 
 export async function renderTopology(graph: Graph, options: RenderOptions = {}): Promise<string> {
     validateTopology(graph)

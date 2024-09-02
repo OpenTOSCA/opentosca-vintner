@@ -14,7 +14,7 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 0.5,
-    reason: 'Docker is more specialized.',
+    reason: 'Docker Compose is more specialized.',
     details: '"docker_container" and "docker_image" resources',
 
     generate: (name, type) => {

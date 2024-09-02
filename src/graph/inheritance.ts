@@ -37,7 +37,7 @@ export default class Inheritance {
                     )
                 ) {
                     // Sanity check
-                    const expectedArtifactName = artifact.replace('.', '_')
+                    const expectedArtifactName = artifact.replaceAll('.', '_')
                     if (artifactName !== expectedArtifactName)
                         throw new Error(
                             `Node type "${node}" has artifact "${artifactName}" of type "${artifact}" but must be named "${expectedArtifactName}" per convention.`
