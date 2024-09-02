@@ -1,0 +1,36 @@
+<%
+    const toTitle = (value) => value.split('_').map(it => utils.toFirstUpperCase(it)).join(' ')
+    const toText = (value) => value.split('_').join(' ')
+    const toFigure = (value, id) => id + '.' + value.replaceAll('_', '-') + '.svg'
+ -%>
+<% Object.entries(profile.template).filter(([key, _]) => key.endsWith('_types')).sort((a, b) => a[0].localeCompare(b[0])).forEach(([types_key, types], index) => { %>
+### <%= toTitle(types_key) %>
+
+We specify the following normative <%= toText(types_key) %>.
+An overview is given in Figure <%= profile.id %><%= index + 1%>.
+
+<figure markdown>
+![<%= toTitle(types_key) %>](<%= toFigure(types_key, profile.id) %>)
+<figcaption>Figure <%= profile.figure %><%= index + 1%>: <%= profile.name %> <%= toTitle(types_key) %></figcaption>
+</figure>
+<%
+
+Object.entries(types).forEach(([type_key, type]) => {
+    const description = type.description
+
+    delete type.description
+    const definition = {}
+    definition[type_key] = type
+
+%>
+#### <%= type_key %>
+
+<%= description %>
+
+```yaml linenums="1"
+<%- utils.toYAML(definition) -%>
+```
+<% }) -%>
+<% }) -%>
+
+
