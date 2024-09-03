@@ -7897,19 +7897,19 @@ The specification is under active development and is not backwards compatible wi
 <ol>
 <li>A <code>software.application</code> node template always requires a <code>source.archive</code> or <code>system.package</code> deployment artifact.</li>
 <li>A <code>software.application</code> node template with an <code>source.archive</code> deployment artifact always requires the <code>start</code> operation and the <code>stop</code> operation.</li>
-<li>A <code>software.application</code> node template with a <code>source.archive</code> deployment artifact implicitly requires an <code>virtual.machine</code> or <code>gcp.appengine</code> node template as host.</li>
-<li>A <code>software.application</code> node template with a <code>system.package</code> deployment artifact implicitly requires an <code>virtual.machine</code> node template as host.</li>
+<li>A <code>software.application</code> node template with a <code>source.archive</code> deployment artifact implicitly requires an <code>remote.machine</code> or <code>gcp.appengine</code> node template as host.</li>
+<li>A <code>software.application</code> node template with a <code>system.package</code> deployment artifact implicitly requires an <code>remote.machine</code> node template as host.</li>
 </ol>
 <h2 id="service-applications">Service Applications<a class="headerlink" href="#service-applications" title="Permanent link">&para;</a></h2>
 <ol>
-<li>A <code>service.application</code> node template on a <code>virtual.machine</code> host is started as <code>systemd</code> service.</li>
+<li>A <code>service.application</code> node template on a <code>remote.machine</code> host is started as <code>systemd</code> service.</li>
 <li>A <code>service.appcliation</code> always requires a  <code>source.archive</code> or <code>container.image</code> deployment artifact. </li>
 <li>A <code>service.application</code> does not require a <code>stop</code> operation.</li>
 <li>A <code>service.application</code> node template with a <code>container.image</code> deployment artifact implicitly requires a <code>docker.engine</code>, <code>gcp.cloudrun</code>, or <code>kubernetes</code> node template as host.</li>
 </ol>
 <h2 id="virtual-machine">Virtual Machine<a class="headerlink" href="#virtual-machine" title="Permanent link">&para;</a></h2>
 <ol>
-<li>A <code>virtual.machine</code> node template always requires a <code>machine.image</code> deployment artifact.</li>
+<li>A <code>remote.machine</code> node template always requires a <code>machine.image</code> deployment artifact.</li>
 </ol>
 <h2 id="management-operations">Management Operations<a class="headerlink" href="#management-operations" title="Permanent link">&para;</a></h2>
 <ol>
@@ -7934,7 +7934,7 @@ The specification is under active development and is not backwards compatible wi
 </ol>
 <h2 id="application-directory">Application Directory<a class="headerlink" href="#application-directory" title="Permanent link">&para;</a></h2>
 <ol>
-<li>A <code>software.application</code> node template hosted on a <code>virtual.machine</code> node template has its own dedicated application directory.</li>
+<li>A <code>software.application</code> node template hosted on a <code>remote.machine</code> node template has its own dedicated application directory.</li>
 <li>The <code>.vintner</code> directory is a reserved directory in the application directory.</li>
 </ol>
 <h2 id="deployment-artifacts">Deployment Artifacts<a class="headerlink" href="#deployment-artifacts" title="Permanent link">&para;</a></h2>

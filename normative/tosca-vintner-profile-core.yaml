@@ -65,6 +65,11 @@ artifact_types:
         description: expects image reference in "file"
         metadata:
             vintner_normative: 'true'
+    dbms.image:
+        derived_from: artifact
+        description: expects image reference in "file"
+        metadata:
+            vintner_normative: 'true'
 interface_types:
     interface:
         derived_from: tosca.interfaces.Root
@@ -158,66 +163,55 @@ node_types:
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
+    machine:
+        derived_from: node
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        properties:
+            machine_name:
+                type: string
+    local.machine:
+        derived_from: machine
+        metadata:
+            vintner_normative: 'true'
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
+    remote.machine:
+        derived_from: machine
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            machine_name:
+                type: string
+            ports:
+                type: list
+                entry_schema:
+                    type: string
+            flavor:
+                type: string
+                default: m1.medium
+            network:
+                type: string
+            ssh_user:
+                type: string
+            ssh_key_name:
+                type: string
+            ssh_key_file:
+                type: string
+        attributes:
+            management_address:
+                type: string
+            application_address:
+                type: string
+        capabilities:
+            host:
+                type: tosca.capabilities.Compute
     virtual.machine:
-        derived_from: node
-        metadata:
-            vintner_normative: 'true'
-        properties:
-            machine_name:
-                type: string
-            ports:
-                type: list
-                entry_schema:
-                    type: string
-            flavor:
-                type: string
-                default: m1.medium
-            network:
-                type: string
-            ssh_user:
-                type: string
-            ssh_key_name:
-                type: string
-            ssh_key_file:
-                type: string
-        attributes:
-            management_address:
-                type: string
-            application_address:
-                type: string
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
+        derived_from: remote.machine
     physical.machine:
-        derived_from: node
-        metadata:
-            vintner_normative: 'true'
-        properties:
-            machine_name:
-                type: string
-            ports:
-                type: list
-                entry_schema:
-                    type: string
-            flavor:
-                type: string
-                default: m1.medium
-            network:
-                type: string
-            ssh_user:
-                type: string
-            ssh_key_name:
-                type: string
-            ssh_key_file:
-                type: string
-        attributes:
-            management_address:
-                type: string
-            application_address:
-                type: string
-        capabilities:
-            host:
-                type: tosca.capabilities.Compute
+        derived_from: remote.machine
     database:
         derived_from: node
         metadata:
