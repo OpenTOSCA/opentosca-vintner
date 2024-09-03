@@ -6,6 +6,8 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: use k8s auth
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

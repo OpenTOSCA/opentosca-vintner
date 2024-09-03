@@ -1,7 +1,14 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
 
-// TODO: next: implement this
+// TODO: next: test this
+
+// TODO: use k8s auth
 
 /**
  * Official Kubernetes provider does not provide "kubectl exec", https://registry.terraform.io/providers/hashicorp/kubernetes
@@ -34,6 +41,96 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...KubernetesCredentials(),
+            },
+            interfaces: {
+                ...TerraformStandardOperations(),
+                defaults: {
+                    inputs: {
+                        main: {
+                            terraform: [
+                                {
+                                    required_providers: [
+                                        {
+                                            mysql: {
+                                                source: 'petoju/mysql',
+                                                version: '3.0.48',
+                                            },
+                                        },
+                                    ],
+                                },
+                            ],
+                            provider: {
+                                mysql: [
+                                    {
+                                        endpoint: '${terraform_data.forward_port.endpoint}',
+                                        password: '{{ HOST.dbms_password }}',
+                                        username: 'root',
+                                    },
+                                ],
+                            },
+                            resource: {
+                                terraform_data: {
+                                    forward_port: [
+                                        {
+                                            input: {
+                                                endpoint: '127.0.0.1:23306',
+                                            },
+                                            provisioner: {
+                                                'local-exec': {
+                                                    command: [
+                                                        'nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 &',
+                                                        'sleep 5s',
+                                                    ].join('\n'),
+                                                    interpreter: ['/bin/bash', '-c'],
+                                                },
+                                            },
+                                        },
+                                    ],
+
+                                    unforward_port: [
+                                        {
+                                            depends_on: ['mysql_grant.user'],
+                                            provisioner: {
+                                                'local-exec': {
+                                                    command:
+                                                        'pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"',
+                                                    interpreter: ['/bin/bash', '-c'],
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                                mysql_database: {
+                                    database: [
+                                        {
+                                            name: '{{ SELF.database_name }}',
+                                        },
+                                    ],
+                                },
+                                mysql_user: {
+                                    user: [
+                                        {
+                                            host: '%',
+                                            plaintext_password: '{{ SELF.database_password }}',
+                                            user: '{{ SELF.database_user }}',
+                                        },
+                                    ],
+                                },
+                                mysql_grant: {
+                                    user: [
+                                        {
+                                            database: '{{ SELF.database_name }}',
+                                            host: '%',
+                                            table: '*',
+                                            privileges: ['ALL'],
+                                            user: '${mysql_user.user.user}',
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
             },
         }
     },
