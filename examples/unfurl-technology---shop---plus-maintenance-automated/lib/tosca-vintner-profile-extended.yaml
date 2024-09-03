@@ -9440,39 +9440,42 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: forward port
-                                      ansible.builtin.shell: kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306
-                                      args:
-                                          executable: /usr/bin/bash
-                                      async: 30
-                                      poll: 0
-                                    - name: wait for port
-                                      ansible.builtin.wait_for:
-                                          host: 127.0.0.1
-                                          port: 23306
-                                          delay: 5
-                                          timeout: 30
-                                    - name: create database
-                                      community.mysql.mysql_db:
-                                          name: '{{ SELF.database_name }}'
-                                          login_host: 127.0.0.1
-                                          login_password: '{{ HOST.dbms_password }}'
-                                          login_port: '23306'
-                                          login_user: root
-                                    - name: create user (with privileges)
-                                      community.mysql.mysql_user:
-                                          name: '{{ SELF.database_user }}'
-                                          password: '{{ SELF.database_password }}'
-                                          host: '%'
-                                          priv: '*.*:ALL'
-                                          login_host: 127.0.0.1
-                                          login_password: '{{ HOST.dbms_password }}'
-                                          login_port: '23306'
-                                          login_user: root
-                                    - name: unforward port
-                                      ansible.builtin.shell: pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"
-                                      args:
-                                          executable: /usr/bin/bash
+                                    - name: deploy database
+                                      block:
+                                          - name: forward port
+                                            ansible.builtin.shell: kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306
+                                            args:
+                                                executable: /usr/bin/bash
+                                            async: 30
+                                            poll: 0
+                                          - name: wait for port
+                                            ansible.builtin.wait_for:
+                                                host: 127.0.0.1
+                                                port: 23306
+                                                delay: 5
+                                                timeout: 30
+                                          - name: create database
+                                            community.mysql.mysql_db:
+                                                name: '{{ SELF.database_name }}'
+                                                login_host: 127.0.0.1
+                                                login_password: '{{ HOST.dbms_password }}'
+                                                login_port: '23306'
+                                                login_user: root
+                                          - name: create user (with privileges)
+                                            community.mysql.mysql_user:
+                                                name: '{{ SELF.database_user }}'
+                                                password: '{{ SELF.database_password }}'
+                                                host: '%'
+                                                priv: '*.*:ALL'
+                                                login_host: 127.0.0.1
+                                                login_password: '{{ HOST.dbms_password }}'
+                                                login_port: '23306'
+                                                login_user: root
+                                      always:
+                                          - name: unforward port
+                                            ansible.builtin.shell: pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"
+                                            args:
+                                                executable: /usr/bin/bash
     mysql.database~mysql.database::ansible@mysql.dbms->virtual.machine:
         derived_from: mysql.database
         metadata:
@@ -9718,18 +9721,17 @@ node_types:
                                         version: 3.0.48
                         provider:
                             mysql:
-                                - endpoint: ${terraform_data.forward_port.endpoint}
+                                - endpoint: ${terraform_data.forward_port.input}
                                   password: '{{ HOST.dbms_password }}'
                                   username: root
                         resource:
                             terraform_data:
                                 forward_port:
-                                    - input:
-                                          endpoint: 127.0.0.1:23306
+                                    - input: 127.0.0.1:23306
                                       provisioner:
                                           local-exec:
                                               command: |-
-                                                  nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 &
+                                                  (nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 > /dev/null 2>&1 &)
                                                   sleep 5s
                                               interpreter:
                                                   - /bin/bash
@@ -9947,3 +9949,57 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job'
+                                                      image: mysql:{{ HOST.dbms_version }}
+                                                      network_mode: host
+                                                      command:
+                                                          - mysql
+                                                          - '--host={{ HOST.management_address }}'
+                                                          - '--port={{ HOST.management_port }}'
+                                                          - '--user=root'
+                                                          - '--password={{ HOST.dbms_password }}'
+                                                          - '-e'
+                                                          - CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: give job some time
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete: exit 0

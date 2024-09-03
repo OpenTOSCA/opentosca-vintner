@@ -337,7 +337,7 @@ compose:
           - docker.engine
           - virtual.machine
       weight: 0
-      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
     - component: mysql.dbms
       hosting:
           - docker.engine
