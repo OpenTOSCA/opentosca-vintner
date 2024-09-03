@@ -135,6 +135,17 @@ machine.image:
         vintner_normative: 'true'
 ```
 
+#### dbms.image
+
+expects image reference in &#34;file&#34;
+
+```yaml linenums="1"
+dbms.image:
+    derived_from: artifact
+    metadata:
+        vintner_normative: 'true'
+```
+
 ### Interface Types
 
 We specify the following normative interface types.
@@ -309,13 +320,42 @@ container.runtime:
         vintner_abstract: 'true'
 ```
 
-#### virtual.machine
+#### machine
 
 
 
 ```yaml linenums="1"
-virtual.machine:
+machine:
     derived_from: node
+    metadata:
+        vintner_normative: 'true'
+        vintner_abstract: 'true'
+    properties:
+        machine_name:
+            type: string
+```
+
+#### local.machine
+
+
+
+```yaml linenums="1"
+local.machine:
+    derived_from: machine
+    metadata:
+        vintner_normative: 'true'
+    capabilities:
+        host:
+            type: tosca.capabilities.Compute
+```
+
+#### remote.machine
+
+
+
+```yaml linenums="1"
+remote.machine:
+    derived_from: machine
     metadata:
         vintner_normative: 'true'
     properties:
@@ -346,41 +386,22 @@ virtual.machine:
             type: tosca.capabilities.Compute
 ```
 
+#### virtual.machine
+
+
+
+```yaml linenums="1"
+virtual.machine:
+    derived_from: remote.machine
+```
+
 #### physical.machine
 
 
 
 ```yaml linenums="1"
 physical.machine:
-    derived_from: node
-    metadata:
-        vintner_normative: 'true'
-    properties:
-        machine_name:
-            type: string
-        ports:
-            type: list
-            entry_schema:
-                type: string
-        flavor:
-            type: string
-            default: m1.medium
-        network:
-            type: string
-        ssh_user:
-            type: string
-        ssh_key_name:
-            type: string
-        ssh_key_file:
-            type: string
-    attributes:
-        management_address:
-            type: string
-        application_address:
-            type: string
-    capabilities:
-        host:
-            type: tosca.capabilities.Compute
+    derived_from: remote.machine
 ```
 
 #### database
@@ -998,9 +1019,6 @@ mysql.dbms:
             type: string
         application_name:
             type: string
-        dbms_version:
-            type: string
-            default: '5.7'
         dbms_password:
             type: string
         dbms_ssl_mode:

@@ -1,0 +1,99 @@
+import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {
+    BASH_HEADER,
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils'
+
+const script = `
+${BASH_HEADER}
+
+# Install caddy
+apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | tee /etc/apt/sources.list.d/caddy-stable.list
+apt-get update
+apt-get install caddy -y
+
+# Configure caddy
+cat <<EOF > /etc/caddy/Caddyfile
+:80 {
+        reverse_proxy localhost:{{ SELF.application_port }}
+}
+EOF
+
+# Restart caddy
+systemctl reload caddy
+`
+
+const generator: ImplementationGenerator = {
+    component: 'ingress',
+    technology: 'terraform',
+    hosting: ['remote.machine'],
+    weight: 0,
+    reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
+    details:
+        '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner',
+
+    generate: (name, type) => {
+        return {
+            derived_from: name,
+            metadata: {
+                ...MetadataGenerated(),
+                ...MetadataUnfurl(),
+            },
+            properties: {...OpenstackMachineCredentials(), ...OpenstackMachineHost()},
+            attributes: {
+                // TODO: application address
+                application_address: {
+                    type: 'string',
+                    default: {eval: '.::.requirements::[.name=host]::.target::application_address'},
+                },
+            },
+
+            interfaces: {
+                ...TerraformStandardOperations(),
+                defaults: {
+                    inputs: {
+                        main: {
+                            resource: {
+                                terraform_data: {
+                                    vm: [
+                                        {
+                                            connection: [
+                                                {
+                                                    host: '{{ SELF.os_ssh_host }}',
+                                                    private_key: '${file("{{ SELF.os_ssh_key_file }}")}',
+                                                    type: 'ssh',
+                                                    user: '{{ SELF.os_ssh_user }}',
+                                                },
+                                            ],
+                                            provisioner: {
+                                                file: [
+                                                    {
+                                                        content: script,
+                                                        destination: '/tmp/install-ingress.sh',
+                                                    },
+                                                ],
+                                                'remote-exec': [
+                                                    {
+                                                        inline: ['sudo bash /tmp/install-ingress.sh'],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    },
+}
+
+export default generator

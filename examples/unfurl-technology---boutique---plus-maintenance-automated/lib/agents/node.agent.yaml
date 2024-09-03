@@ -25,7 +25,7 @@ node_types:
     #
     ################################################################
 
-    node.agent~service.application#docker.image::ansible@docker.engine->virtual.machine:
+    node.agent~service.application#docker.image::ansible@docker.engine->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -268,7 +268,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    node.agent~service.application#tar.archive::ansible@*->virtual.machine:
+    node.agent~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -513,7 +513,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.agent~service.application#zip.archive::ansible@*->virtual.machine:
+    node.agent~service.application#zip.archive::ansible@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -855,7 +855,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    node.agent~software.application#apt.package::ansible@*->virtual.machine:
+    node.agent~software.application#apt.package::ansible@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -1077,7 +1077,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.agent~software.application#tar.archive::ansible@*->virtual.machine:
+    node.agent~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -1294,7 +1294,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.agent~software.application#zip.archive::ansible@*->virtual.machine:
+    node.agent~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -1514,7 +1514,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    node.agent~service.application#docker.image::terraform@docker.engine->virtual.machine:
+    node.agent~service.application#docker.image::terraform@docker.engine->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -1728,7 +1728,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    node.agent~service.application#tar.archive::terraform@*->virtual.machine:
+    node.agent~service.application#tar.archive::terraform@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -1914,7 +1914,7 @@ node_types:
                                                     - sudo bash /tmp/stop-node.agent.sh
                                                     - sudo bash /tmp/delete-node.agent.sh
                                                 when: destroy
-    node.agent~service.application#zip.archive::terraform@*->virtual.machine:
+    node.agent~service.application#zip.archive::terraform@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -2184,7 +2184,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-    node.agent~software.application#apt.archive::terraform@*->virtual.machine:
+    node.agent~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -2381,7 +2381,7 @@ node_types:
                                                     - sudo bash /tmp/stop-node.agent.sh
                                                     - sudo bash /tmp/delete-node.agent.sh
                                                 when: destroy
-    node.agent~software.application#tar.archive::terraform@*->virtual.machine:
+    node.agent~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -2564,7 +2564,7 @@ node_types:
                                                     - sudo bash /tmp/stop-node.agent.sh
                                                     - sudo bash /tmp/delete-node.agent.sh
                                                 when: destroy
-    node.agent~software.application#zip.archive::terraform@*->virtual.machine:
+    node.agent~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'
@@ -2823,7 +2823,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    node.agent~service.application#docker.image::compose@docker.engine->virtual.machine:
+    node.agent~service.application#docker.image::compose@docker.engine->remote.machine:
         derived_from: node.agent
         metadata:
             vintner_generated: 'true'

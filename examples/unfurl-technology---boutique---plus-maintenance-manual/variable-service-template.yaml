@@ -420,6 +420,10 @@ topology_template:
                 - host: docker_engine
                 - host: kubernetes_cluster
                 - host: gcp_cloudsql
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         ###################################################
         #

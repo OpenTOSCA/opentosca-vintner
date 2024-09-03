@@ -7,7 +7,7 @@ const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'ansible',
     artifact: 'zip.archive',
-    hosting: ['virtual.machine'],
+    hosting: ['remote.machine'],
 
     generate: (name, type) => {
         return {

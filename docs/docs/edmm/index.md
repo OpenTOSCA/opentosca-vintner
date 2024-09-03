@@ -32,20 +32,20 @@ The specification is under active development and is not backwards compatible wi
 
 1. A `software.application` node template always requires a `source.archive` or `system.package` deployment artifact.
 1. A `software.application` node template with an `source.archive` deployment artifact always requires the `start` operation and the `stop` operation.
-1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `virtual.machine` or `gcp.appengine` node template as host.
-1. A `software.application` node template with a `system.package` deployment artifact implicitly requires an `virtual.machine` node template as host.
+1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `remote.machine` or `gcp.appengine` node template as host.
+1. A `software.application` node template with a `system.package` deployment artifact implicitly requires an `remote.machine` node template as host.
 
 
 ## Service Applications
 
-1. A `service.application` node template on a `virtual.machine` host is started as `systemd` service.
+1. A `service.application` node template on a `remote.machine` host is started as `systemd` service.
 1. A `service.appcliation` always requires a  `source.archive` or `container.image` deployment artifact. 
 1. A `service.application` does not require a `stop` operation.
 1. A `service.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
 
 ## Virtual Machine 
 
-1. A `virtual.machine` node template always requires a `machine.image` deployment artifact.
+1. A `remote.machine` node template always requires a `machine.image` deployment artifact.
 
 ## Management Operations
 
@@ -73,7 +73,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## Application Directory
 
-1. A `software.application` node template hosted on a `virtual.machine` node template has its own dedicated application directory.
+1. A `software.application` node template hosted on a `remote.machine` node template has its own dedicated application directory.
 1. The `.vintner` directory is a reserved directory in the application directory.
 
 

@@ -89,7 +89,7 @@ const nodes: RecursivePartial<NodeTypeMap> = {
             },
         },
     },
-    'virtual.machine': {
+    'remote.machine': {
         capabilities: {
             ...UnfurlSSHEndpointCapability(),
         },

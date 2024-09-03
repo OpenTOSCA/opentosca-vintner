@@ -378,6 +378,10 @@ topology_template:
             requirements:
                 - host: docker_engine
                 - host: gcp_cloudsql
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         ###################################################
         #

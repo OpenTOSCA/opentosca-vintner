@@ -401,9 +401,6 @@ node_types:
                 type: string
                 default:
                     eval: .::dbms_name
-            dbms_version:
-                type: string
-                default: '5.7'
             dbms_password:
                 type: string
             dbms_ssl_mode:
@@ -461,7 +458,7 @@ node_types:
     #
     ################################################################
 
-    nodejs.runtime~software.application#apt.package::ansible@*->virtual.machine:
+    nodejs.runtime~software.application#apt.package::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -683,7 +680,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#tar.archive::ansible@*->virtual.machine:
+    nodejs.runtime~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -900,7 +897,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#zip.archive::ansible@*->virtual.machine:
+    nodejs.runtime~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1120,7 +1117,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#apt.archive::terraform@*->virtual.machine:
+    nodejs.runtime~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1317,7 +1314,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#tar.archive::terraform@*->virtual.machine:
+    nodejs.runtime~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1500,7 +1497,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#zip.archive::terraform@*->virtual.machine:
+    nodejs.runtime~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1683,7 +1680,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#apt.package::ansible@*->virtual.machine:
+    python.runtime~software.application#apt.package::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -1905,7 +1902,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#tar.archive::ansible@*->virtual.machine:
+    python.runtime~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2122,7 +2119,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#zip.archive::ansible@*->virtual.machine:
+    python.runtime~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2342,7 +2339,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#apt.archive::terraform@*->virtual.machine:
+    python.runtime~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2539,7 +2536,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#tar.archive::terraform@*->virtual.machine:
+    python.runtime~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2722,7 +2719,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#zip.archive::terraform@*->virtual.machine:
+    python.runtime~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -2905,7 +2902,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#apt.package::ansible@*->virtual.machine:
+    java.runtime~software.application#apt.package::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -3127,7 +3124,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#tar.archive::ansible@*->virtual.machine:
+    java.runtime~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -3344,7 +3341,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#zip.archive::ansible@*->virtual.machine:
+    java.runtime~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -3564,7 +3561,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#apt.archive::terraform@*->virtual.machine:
+    java.runtime~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -3761,7 +3758,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#tar.archive::terraform@*->virtual.machine:
+    java.runtime~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -3944,7 +3941,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#zip.archive::terraform@*->virtual.machine:
+    java.runtime~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -4127,7 +4124,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#apt.package::ansible@*->virtual.machine:
+    dotnet.runtime~software.application#apt.package::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -4349,7 +4346,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#tar.archive::ansible@*->virtual.machine:
+    dotnet.runtime~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -4566,7 +4563,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#zip.archive::ansible@*->virtual.machine:
+    dotnet.runtime~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -4786,7 +4783,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#apt.archive::terraform@*->virtual.machine:
+    dotnet.runtime~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -4983,7 +4980,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#tar.archive::terraform@*->virtual.machine:
+    dotnet.runtime~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -5166,7 +5163,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#zip.archive::terraform@*->virtual.machine:
+    dotnet.runtime~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -5764,7 +5761,7 @@ node_types:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
-    docker.engine~docker.engine::ansible@virtual.machine:
+    docker.engine~docker.engine::ansible@remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -5809,7 +5806,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    docker.engine~software.application#apt.package::ansible@*->virtual.machine:
+    docker.engine~software.application#apt.package::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6031,7 +6028,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~software.application#tar.archive::ansible@*->virtual.machine:
+    docker.engine~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6250,7 +6247,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~software.application#zip.archive::ansible@*->virtual.machine:
+    docker.engine~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6472,7 +6469,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~docker.engine::terraform@virtual.machine:
+    docker.engine~docker.engine::terraform@remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6520,7 +6517,7 @@ node_types:
                                                     - curl -sSL https://get.docker.com | sudo sh
                                                     - sudo groupadd -f docker
                                                     - sudo usermod -aG docker {{ SELF.os_ssh_user }}
-    docker.engine~software.application#apt.archive::terraform@*->virtual.machine:
+    docker.engine~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6718,7 +6715,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#tar.archive::terraform@*->virtual.machine:
+    docker.engine~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -6902,7 +6899,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#zip.archive::terraform@*->virtual.machine:
+    docker.engine~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -7086,7 +7083,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    mysql.dbms~mysql.dbms::ansible@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#dbms.image::ansible@docker.engine->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7131,7 +7128,7 @@ node_types:
                                     - name: start container
                                       community.docker.docker_container:
                                           name: '{{ SELF.dbms_name }}'
-                                          image: mysql:{{ SELF.dbms_version }}
+                                          image: mysql:{{ ".artifacts::dbms_image::file" | eval }}
                                           network_mode: host
                                           env:
                                               MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}'
@@ -7140,7 +7137,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms~mysql.dbms::ansible@gcp.cloudsql:
+    mysql.dbms~mysql.dbms#dbms.image::ansible@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7191,7 +7188,7 @@ node_types:
                                       register: instance_info
                                       google.cloud.gcp_sql_instance:
                                           name: '{{  SELF.dbms_name }}'
-                                          database_version: MYSQL_{{ SELF.dbms_version | replace(".", "_") }}
+                                          database_version: MYSQL_{{ ".artifacts::dbms_image::file" | eval | replace(".", "_") }}
                                           settings:
                                               tier: db-f1-micro
                                               availability_type: REGIONAL
@@ -7234,7 +7231,7 @@ node_types:
                                       ansible.builtin.shell: gcloud sql instances delete {{ SELF.dbms_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    mysql.dbms~mysql.dbms::ansible@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#dbms.image::ansible@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7310,7 +7307,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_version }}
+                                                              - image: mysql:{{ ".artifacts::dbms_image::file" | eval }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -7335,7 +7332,7 @@ node_types:
                                                       app: '{{ SELF.dbms_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    mysql.dbms~mysql.dbms::ansible@virtual.machine:
+    mysql.dbms~mysql.dbms#dbms.image::ansible@remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7451,7 +7448,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms~software.application#apt.package::ansible@*->virtual.machine:
+    mysql.dbms~software.application#apt.package::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7673,7 +7670,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~software.application#tar.archive::ansible@*->virtual.machine:
+    mysql.dbms~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7736,7 +7733,6 @@ node_types:
                                           content: |-
                                               DBMS_NAME="{{ SELF.dbms_name }}"
                                               APPLICATION_NAME="{{ SELF.application_name }}"
-                                              DBMS_VERSION="{{ SELF.dbms_version }}"
                                               DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                               DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                     - name: copy management operation
@@ -7895,7 +7891,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~software.application#zip.archive::ansible@*->virtual.machine:
+    mysql.dbms~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7961,7 +7957,6 @@ node_types:
                                           content: |-
                                               DBMS_NAME="{{ SELF.dbms_name }}"
                                               APPLICATION_NAME="{{ SELF.application_name }}"
-                                              DBMS_VERSION="{{ SELF.dbms_version }}"
                                               DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                               DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                     - name: copy management operation
@@ -8120,7 +8115,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~mysql.dbms::terraform@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#dbms.image::terraform@docker.engine->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8200,8 +8195,8 @@ node_types:
                                           - MYSQL_ROOT_PASSWORD={{ SELF.dbms_password }}
                             docker_image:
                                 image:
-                                    - name: mysql:{{ SELF.dbms_version }}
-    mysql.dbms~mysql.dbms::terraform@gcp.cloudsql:
+                                    - name: mysql:{{ ".artifacts::dbms_image::file" | eval }}
+    mysql.dbms~mysql.dbms#dbms.image::terraform@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8264,7 +8259,7 @@ node_types:
                         resource:
                             google_sql_database_instance:
                                 dbms:
-                                    - database_version: MYSQL_{{ SELF.dbms_version | replace(".", "_") }}
+                                    - database_version: MYSQL_{{ ".artifacts::dbms_image::file" | eval | replace(".", "_") }}
                                       deletion_protection: false
                                       name: '{{ SELF.dbms_name }}'
                                       root_password: '{{ SELF.dbms_password }}'
@@ -8285,7 +8280,7 @@ node_types:
                                       instance: ${google_sql_database_instance.dbms.name}
                                       name: root
                                       password: ${google_sql_database_instance.dbms.root_password}
-    mysql.dbms~mysql.dbms::terraform@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#dbms.image::terraform@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8363,7 +8358,7 @@ node_types:
                                                   spec:
                                                       - container:
                                                             - name: '{{ SELF.dbms_name }}'
-                                                              image: mysql:{{ SELF.dbms_version }}
+                                                              image: mysql:{{ ".artifacts::dbms_image::file" | eval }}
                                                               env:
                                                                   - name: MYSQL_ROOT_PASSWORD
                                                                     value: '{{ SELF.dbms_password }}'
@@ -8382,7 +8377,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.dbms_name }}'
                                             type: ClusterIP
-    mysql.dbms~mysql.dbms::terraform@virtual.machine:
+    mysql.dbms~mysql.dbms#dbms.image::terraform@remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8487,7 +8482,7 @@ node_types:
                                           remote-exec:
                                               - inline:
                                                     - sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} {{ SELF.application_port }}
-    mysql.dbms~software.application#apt.archive::terraform@*->virtual.machine:
+    mysql.dbms~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8571,7 +8566,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -8688,7 +8682,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#tar.archive::terraform@*->virtual.machine:
+    mysql.dbms~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8749,7 +8743,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -8875,7 +8868,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#zip.archive::terraform@*->virtual.machine:
+    mysql.dbms~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8936,7 +8929,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -9062,7 +9054,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~mysql.dbms::kubernetes@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#dbms.image::kubernetes@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -9138,7 +9130,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_version }}
+                                                              - image: mysql:{{ ".artifacts::dbms_image::file" | eval }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -9171,7 +9163,7 @@ node_types:
                                       ansible.builtin.pause:
                                           seconds: 10
                     delete: exit 0
-    mysql.dbms~mysql.dbms::compose@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -9234,7 +9226,7 @@ node_types:
                                               services:
                                                   application:
                                                       container_name: '{{ SELF.dbms_name }}'
-                                                      image: mysql:{{ SELF.dbms_version }}
+                                                      image: mysql:{{ ".artifacts::dbms_image::file" | eval }}
                                                       network_mode: host
                                                       environment:
                                                           MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}'
@@ -9250,7 +9242,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -9476,7 +9468,7 @@ node_types:
                                             ansible.builtin.shell: pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"
                                             args:
                                                 executable: /usr/bin/bash
-    mysql.database~mysql.database::ansible@mysql.dbms->virtual.machine:
+    mysql.database~mysql.database::ansible@mysql.dbms->remote.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -9534,7 +9526,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.database~mysql.database::terraform@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::terraform@mysql.dbms->docker.engine->remote.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -9761,7 +9753,7 @@ node_types:
                                       privileges:
                                           - ALL
                                       user: ${mysql_user.user.user}
-    mysql.database~mysql.database::terraform@mysql.dbms->virtual.machine:
+    mysql.database~mysql.database::terraform@mysql.dbms->remote.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'
@@ -9935,7 +9927,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    mysql.database~mysql.database::compose@mysql.dbms->docker.engine->virtual.machine:
+    mysql.database~mysql.database::compose@mysql.dbms->docker.engine->remote.machine:
         derived_from: mysql.database
         metadata:
             vintner_generated: 'true'

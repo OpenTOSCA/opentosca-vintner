@@ -75,7 +75,7 @@ node_types:
     #
     ################################################################
 
-    shop.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::ansible@docker.engine->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -364,7 +364,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    shop.component~service.application#tar.archive::ansible@*->virtual.machine:
+    shop.component~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -618,7 +618,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~service.application#zip.archive::ansible@*->virtual.machine:
+    shop.component~service.application#zip.archive::ansible@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -980,7 +980,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    shop.component~software.application#apt.package::ansible@*->virtual.machine:
+    shop.component~software.application#apt.package::ansible@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1202,7 +1202,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~software.application#tar.archive::ansible@*->virtual.machine:
+    shop.component~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1428,7 +1428,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~software.application#zip.archive::ansible@*->virtual.machine:
+    shop.component~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1657,7 +1657,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    shop.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::terraform@docker.engine->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -1917,7 +1917,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    shop.component~service.application#tar.archive::terraform@*->virtual.machine:
+    shop.component~service.application#tar.archive::terraform@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -2111,7 +2111,7 @@ node_types:
                                                     - sudo bash /tmp/stop-shop.component.sh
                                                     - sudo bash /tmp/delete-shop.component.sh
                                                 when: destroy
-    shop.component~service.application#zip.archive::terraform@*->virtual.machine:
+    shop.component~service.application#zip.archive::terraform@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -2400,7 +2400,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-    shop.component~software.application#apt.archive::terraform@*->virtual.machine:
+    shop.component~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -2605,7 +2605,7 @@ node_types:
                                                     - sudo bash /tmp/stop-shop.component.sh
                                                     - sudo bash /tmp/delete-shop.component.sh
                                                 when: destroy
-    shop.component~software.application#tar.archive::terraform@*->virtual.machine:
+    shop.component~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -2796,7 +2796,7 @@ node_types:
                                                     - sudo bash /tmp/stop-shop.component.sh
                                                     - sudo bash /tmp/delete-shop.component.sh
                                                 when: destroy
-    shop.component~software.application#zip.archive::terraform@*->virtual.machine:
+    shop.component~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'
@@ -3081,7 +3081,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    shop.component~service.application#docker.image::compose@docker.engine->virtual.machine:
+    shop.component~service.application#docker.image::compose@docker.engine->remote.machine:
         derived_from: shop.component
         metadata:
             vintner_generated: 'true'

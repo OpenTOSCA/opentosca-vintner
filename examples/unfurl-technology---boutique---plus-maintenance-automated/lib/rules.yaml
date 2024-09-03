@@ -7,7 +7,7 @@
 ansible:
     - component: docker.engine
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks'
@@ -24,7 +24,7 @@ ansible:
       details: '"kubernetes.core.k8s" task'
     - component: ingress
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks'
@@ -32,7 +32,7 @@ ansible:
       hosting:
           - mysql.dbms
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
     - component: mysql.database
@@ -50,31 +50,35 @@ ansible:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized
       details: '"community.docker.docker_container" task'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - gcp.cloudsql
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
       reason: Kubernetes is more specialized.
       details: '"kubernetes.core.k8s" tasks'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks'
@@ -82,7 +86,7 @@ ansible:
       artifact: docker.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized.
       details: '"community.docker.docker_container" task'
@@ -104,7 +108,7 @@ ansible:
       artifact: tar.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
       details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
@@ -112,7 +116,7 @@ ansible:
       artifact: zip.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
       details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
@@ -127,7 +131,7 @@ ansible:
       artifact: apt.package
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
@@ -135,7 +139,7 @@ ansible:
       artifact: tar.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., "service.application".
       details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
@@ -143,7 +147,7 @@ ansible:
       artifact: zip.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
       details: '"ansible.builtin.apt", "ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
@@ -157,7 +161,7 @@ ansible:
 terraform:
     - component: docker.engine
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"remote-exec" provider'
@@ -174,7 +178,7 @@ terraform:
       details: '"kubernetes_service_v1" resource'
     - component: ingress
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
@@ -182,7 +186,7 @@ terraform:
       hosting:
           - mysql.dbms
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: mysql.database
@@ -200,31 +204,35 @@ terraform:
     - component: mysql.database
       hosting:
           - mysql.dbms
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - gcp.cloudsql
       weight: 1
       reason: Terraform provides a declarative module.
       details: '"google_sql_database_instance" and "google_sql_user" resources'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
       reason: Kubernetes is more specialized.
       details: '"kubernetes_deployment_v1" and "kubernetes_service_v1" resources'
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
@@ -232,7 +240,7 @@ terraform:
       artifact: docker.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
@@ -254,7 +262,7 @@ terraform:
       artifact: tar.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
@@ -262,7 +270,7 @@ terraform:
       artifact: zip.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
@@ -277,7 +285,7 @@ terraform:
       artifact: apt.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"file" provisioner to upload scripts and "remote-exec" to execute scripts'
@@ -285,7 +293,7 @@ terraform:
       artifact: tar.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
@@ -293,7 +301,7 @@ terraform:
       artifact: zip.archive
       hosting:
           - '*'
-          - virtual.machine
+          - remote.machine
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
@@ -318,6 +326,7 @@ kubernetes:
       weight: 0
       reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - kubernetes.cluster
       weight: 1
@@ -335,13 +344,14 @@ compose:
       hosting:
           - mysql.dbms
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 0
-      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
     - component: mysql.dbms
+      artifact: dbms.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Docker is the underlying technology.
       details: docker-compose manifest generated and applied
@@ -349,7 +359,7 @@ compose:
       artifact: docker.image
       hosting:
           - docker.engine
-          - virtual.machine
+          - remote.machine
       weight: 1
       reason: Docker is the underlying technology.
       details: docker compose manifest generated and applied

@@ -1,4 +1,4 @@
 import kubernetesCluster from './kubernetes-cluster'
-import virtualMachine from './virtual-machine'
+import remoteMachine from './remote-machine'
 
-export default [kubernetesCluster, virtualMachine]
+export default [kubernetesCluster, remoteMachine]

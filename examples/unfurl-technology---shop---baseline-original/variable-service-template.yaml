@@ -161,6 +161,7 @@ topology_template:
                 - database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms_terraform
+            artifacts:
 
         mysql_dbms_ansible:
             type: mysql.dbms
@@ -170,6 +171,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         mysql_dbms_terraform:
             type: mysql.dbms
@@ -179,6 +184,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         ###################################################
         #

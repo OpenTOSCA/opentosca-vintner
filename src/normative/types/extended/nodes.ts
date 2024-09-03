@@ -455,10 +455,6 @@ const nodes: NodeTypeMap = {
             application_name: {
                 type: 'string',
             },
-            dbms_version: {
-                type: 'string',
-                default: '5.7',
-            },
             dbms_password: {
                 type: 'string',
             },

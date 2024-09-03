@@ -257,6 +257,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: virtual_machine
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         mysql_dbms_terraform:
             type: mysql.dbms
@@ -266,6 +270,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         mysql_dbms_kubernetes:
             type: mysql.dbms
@@ -275,6 +283,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: kubernetes_cluster
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
 
         ###################################################
         #

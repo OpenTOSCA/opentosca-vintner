@@ -213,12 +213,16 @@ topology_template:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms~mysql.dbms::terraform@gcp.cloudsql
+            type: mysql.dbms~mysql.dbms#dbms.image::terraform@gcp.cloudsql
             properties:
                 dbms_name: unfurl-technology-boutique-cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
 
         ###################################################
         #

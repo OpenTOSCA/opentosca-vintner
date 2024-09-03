@@ -188,7 +188,7 @@ We ensure, that only the licenses 0BSD, Apache-2.0, BSD-2-Clause, BSD-3-Clause, 
 | 173  | on-finished@2.4.1 | MIT | [https://github.com/jshttp/on-finished](https://github.com/jshttp/on-finished){target=_blank} |
 | 174  | once@1.4.0 | ISC | [https://github.com/isaacs/once](https://github.com/isaacs/once){target=_blank} |
 | 175  | open@7.4.2 | MIT | [https://github.com/sindresorhus/open](https://github.com/sindresorhus/open){target=_blank} |
-| 176  | opentosca-vintner@0.1.4 | Apache-2.0 | [https://github.com/OpenTOSCA/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner){target=_blank} |
+| 176  | opentosca-vintner@0.1.5 | Apache-2.0 | [https://github.com/OpenTOSCA/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner){target=_blank} |
 | 177  | os-tmpdir@1.0.2 | MIT | [https://github.com/sindresorhus/os-tmpdir](https://github.com/sindresorhus/os-tmpdir){target=_blank} |
 | 178  | papaparse@5.4.1 | MIT | [https://github.com/mholt/PapaParse](https://github.com/mholt/PapaParse){target=_blank} |
 | 179  | parseurl@1.3.3 | MIT | [https://github.com/pillarjs/parseurl](https://github.com/pillarjs/parseurl){target=_blank} |
