@@ -250,6 +250,12 @@ export function AnsibleKubernetesCredentialsEnvironment() {
     }
 }
 
+export function AnsibleDockerHostEnvironment() {
+    return {
+        DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+    }
+}
+
 export function AnsibleHostOperationPlaybookArgs() {
     return ['--become', '--key-file={{ SELF.os_ssh_key_file }}', '--user={{ SELF.os_ssh_user }}']
 }

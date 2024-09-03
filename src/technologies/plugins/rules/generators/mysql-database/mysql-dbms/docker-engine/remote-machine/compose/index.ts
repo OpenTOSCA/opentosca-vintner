@@ -1,9 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
-    OpenstackMachineCredentials,
+    OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils'
 
 // TODO: we assume that dbms is exposed
@@ -23,7 +24,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...OpenstackMachineCredentials(),
+                ...OpenstackMachineHost(),
             },
             interfaces: {
                 Standard: {
@@ -78,7 +79,7 @@ const generator: ImplementationGenerator = {
                                                 executable: '/usr/bin/bash',
                                             },
                                             environment: {
-                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                                ...AnsibleDockerHostEnvironment(),
                                             },
                                         },
                                         {
@@ -94,7 +95,7 @@ const generator: ImplementationGenerator = {
                                                 executable: '/usr/bin/bash',
                                             },
                                             environment: {
-                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                                ...AnsibleDockerHostEnvironment(),
                                             },
                                         },
                                     ],

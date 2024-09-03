@@ -6,7 +6,7 @@ import {
     mapProperties,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: does not use k8s auth
+// TODO: use k8s auth
 
 const generator: ImplementationGenerator = {
     component: 'service.application',

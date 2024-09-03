@@ -1,12 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerHostEnvironment,
     AnsibleHostEndpointCapability,
     AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: do not use ansible ssh
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -55,6 +55,9 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
+            properties: {
+                ...OpenstackMachineHost(),
+            },
             attributes: {
                 application_address: {
                     type: 'string',
@@ -97,7 +100,7 @@ const generator: ImplementationGenerator = {
                                                 executable: '/usr/bin/bash',
                                             },
                                             environment: {
-                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                                ...AnsibleDockerHostEnvironment(),
                                             },
                                         },
                                         {
@@ -126,7 +129,7 @@ const generator: ImplementationGenerator = {
                                                 executable: '/usr/bin/bash',
                                             },
                                             environment: {
-                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                                ...AnsibleDockerHostEnvironment(),
                                             },
                                         },
                                     ],
