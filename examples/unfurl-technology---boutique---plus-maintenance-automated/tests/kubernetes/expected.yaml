@@ -222,15 +222,15 @@ topology_template:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms~mysql.dbms#mysql.dbms.image::kubernetes@kubernetes.cluster
+            type: mysql.dbms~mysql.dbms#dbms.image::kubernetes@kubernetes.cluster
             properties:
                 dbms_name: unfurl-technology-boutique-cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: kubernetes_cluster
             artifacts:
-                mysql_dbms_image:
-                    type: mysql.dbms.image
+                dbms_image:
+                    type: dbms.image
                     file: 5.7
 
         ###################################################

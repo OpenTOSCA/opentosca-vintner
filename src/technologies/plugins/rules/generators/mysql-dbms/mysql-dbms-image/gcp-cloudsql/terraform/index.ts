@@ -9,7 +9,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
-    artifact: 'mysql.dbms.image',
+    artifact: 'dbms.image',
     hosting: ['gcp.cloudsql'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
@@ -88,7 +88,7 @@ const generator: ImplementationGenerator = {
                                     dbms: [
                                         {
                                             database_version:
-                                                'MYSQL_{{ ".artifacts::mysql_dbms_image::file" | eval | replace(".", "_") }}',
+                                                'MYSQL_{{ ".artifacts::dbms_image::file" | eval | replace(".", "_") }}',
                                             deletion_protection: false,
                                             name: '{{ SELF.dbms_name }}',
                                             root_password: '{{ SELF.dbms_password }}',

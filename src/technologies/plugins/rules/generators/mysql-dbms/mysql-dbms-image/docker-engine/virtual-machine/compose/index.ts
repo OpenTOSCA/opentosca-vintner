@@ -12,8 +12,8 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'compose',
-    artifact: 'mysql.dbms.image',
-    hosting: ['docker.engine', 'virtual.machine'],
+    artifact: 'dbms.image',
+    hosting: ['docker.engine', 'remote.machine'],
     weight: 1,
     reason: 'Docker is the underlying technology.',
     details: 'docker-compose manifest generated and applied',
@@ -81,7 +81,7 @@ const generator: ImplementationGenerator = {
                                                     services: {
                                                         application: {
                                                             container_name: '{{ SELF.dbms_name }}',
-                                                            image: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
+                                                            image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                                             network_mode: 'host',
                                                             environment: {
                                                                 MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',

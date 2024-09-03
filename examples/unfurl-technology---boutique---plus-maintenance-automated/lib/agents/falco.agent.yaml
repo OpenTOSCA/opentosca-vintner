@@ -27,7 +27,7 @@ node_types:
     #
     ################################################################
 
-    falco.agent~software.application#apt.package::ansible@*->virtual.machine:
+    falco.agent~software.application#apt.package::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -249,7 +249,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#tar.archive::ansible@*->virtual.machine:
+    falco.agent~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -466,7 +466,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#zip.archive::ansible@*->virtual.machine:
+    falco.agent~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -686,7 +686,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#apt.archive::terraform@*->virtual.machine:
+    falco.agent~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -883,7 +883,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#tar.archive::terraform@*->virtual.machine:
+    falco.agent~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1066,7 +1066,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#zip.archive::terraform@*->virtual.machine:
+    falco.agent~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'

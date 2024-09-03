@@ -66,7 +66,7 @@ node_types:
     #
     ################################################################
 
-    product.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
+    product.component~service.application#docker.image::ansible@docker.engine->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -320,7 +320,7 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    product.component~service.application#tar.archive::ansible@*->virtual.machine:
+    product.component~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -567,7 +567,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    product.component~service.application#zip.archive::ansible@*->virtual.machine:
+    product.component~service.application#zip.archive::ansible@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -915,7 +915,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    product.component~software.application#apt.package::ansible@*->virtual.machine:
+    product.component~software.application#apt.package::ansible@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -1137,7 +1137,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    product.component~software.application#tar.archive::ansible@*->virtual.machine:
+    product.component~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -1356,7 +1356,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    product.component~software.application#zip.archive::ansible@*->virtual.machine:
+    product.component~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -1578,7 +1578,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    product.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
+    product.component~service.application#docker.image::terraform@docker.engine->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -1803,7 +1803,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    product.component~service.application#tar.archive::terraform@*->virtual.machine:
+    product.component~service.application#tar.archive::terraform@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -1990,7 +1990,7 @@ node_types:
                                                     - sudo bash /tmp/stop-product.component.sh
                                                     - sudo bash /tmp/delete-product.component.sh
                                                 when: destroy
-    product.component~service.application#zip.archive::terraform@*->virtual.machine:
+    product.component~service.application#zip.archive::terraform@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -2265,7 +2265,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-    product.component~software.application#apt.archive::terraform@*->virtual.machine:
+    product.component~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -2463,7 +2463,7 @@ node_types:
                                                     - sudo bash /tmp/stop-product.component.sh
                                                     - sudo bash /tmp/delete-product.component.sh
                                                 when: destroy
-    product.component~software.application#tar.archive::terraform@*->virtual.machine:
+    product.component~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -2647,7 +2647,7 @@ node_types:
                                                     - sudo bash /tmp/stop-product.component.sh
                                                     - sudo bash /tmp/delete-product.component.sh
                                                 when: destroy
-    product.component~software.application#zip.archive::terraform@*->virtual.machine:
+    product.component~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'
@@ -2911,7 +2911,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                     delete: exit 0
-    product.component~service.application#docker.image::compose@docker.engine->virtual.machine:
+    product.component~service.application#docker.image::compose@docker.engine->remote.machine:
         derived_from: product.component
         metadata:
             vintner_generated: 'true'

@@ -172,8 +172,8 @@ topology_template:
             requirements:
                 - host: virtual_machine
             artifacts:
-                - mysql_dbms_image:
-                      type: mysql.dbms.image
+                - dbms_image:
+                      type: dbms.image
                       file: 5.7
 
         mysql_dbms_terraform:
@@ -185,8 +185,8 @@ topology_template:
             requirements:
                 - host: gcp_cloudsql
             artifacts:
-                - mysql_dbms_image:
-                      type: mysql.dbms.image
+                - dbms_image:
+                      type: dbms.image
                       file: 5.7
 
         ###################################################

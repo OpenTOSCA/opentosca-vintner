@@ -25,7 +25,7 @@ node_types:
     #
     ################################################################
 
-    promtail.agent~software.application#apt.package::ansible@*->virtual.machine:
+    promtail.agent~software.application#apt.package::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -247,7 +247,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#tar.archive::ansible@*->virtual.machine:
+    promtail.agent~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -464,7 +464,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#zip.archive::ansible@*->virtual.machine:
+    promtail.agent~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -684,7 +684,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#apt.archive::terraform@*->virtual.machine:
+    promtail.agent~software.application#apt.archive::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -881,7 +881,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#tar.archive::terraform@*->virtual.machine:
+    promtail.agent~software.application#tar.archive::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1064,7 +1064,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#zip.archive::terraform@*->virtual.machine:
+    promtail.agent~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'

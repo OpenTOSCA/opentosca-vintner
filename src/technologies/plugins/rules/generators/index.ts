@@ -5,7 +5,7 @@ import mysqlDatabase from './mysql-database'
 import mysqlDBMS from './mysql-dbms'
 import serviceApplication from './service-application'
 import softwareApplication from './software-application'
-import virtualMachine from './virtual-machine'
+import remoteMachine from './virtual-machine'
 
 export default [
     dockerEngine,
@@ -15,5 +15,5 @@ export default [
     mysqlDBMS,
     serviceApplication,
     softwareApplication,
-    virtualMachine,
+    remoteMachine,
 ]

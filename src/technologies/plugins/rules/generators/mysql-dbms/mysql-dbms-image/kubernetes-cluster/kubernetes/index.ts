@@ -11,7 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'kubernetes',
-    artifact: 'mysql.dbms.image',
+    artifact: 'dbms.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
     reason: 'Kubernetes is the underlying technology.',
@@ -95,7 +95,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
+                                                                        image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                                                         name: '{{ SELF.dbms_name }}',
                                                                         env: [
                                                                             {

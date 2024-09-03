@@ -1,3 +1,3 @@
-import virtualMachine from './virtual-machine'
+import remoteMachine from './remote-machine'
 
-export default [virtualMachine]
+export default [remoteMachine]

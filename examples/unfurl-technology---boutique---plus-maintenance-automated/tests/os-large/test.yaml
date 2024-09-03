@@ -2,7 +2,7 @@ merge:
     topology_template:
         node_templates:
             analytics_component:
-                type: analytics.component~service.application#docker.image::compose@docker.engine->virtual.machine
+                type: analytics.component~service.application#docker.image::compose@docker.engine->remote.machine
                 properties:
                     application_name: analytics
                     application_port: 7001

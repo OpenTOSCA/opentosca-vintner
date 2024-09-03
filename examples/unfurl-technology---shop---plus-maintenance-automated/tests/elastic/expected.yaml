@@ -63,15 +63,15 @@ topology_template:
                 - host: mysql_dbms
 
         mysql_dbms:
-            type: mysql.dbms~mysql.dbms#mysql.dbms.image::terraform@gcp.cloudsql
+            type: mysql.dbms~mysql.dbms#dbms.image::terraform@gcp.cloudsql
             properties:
                 dbms_name: unfurl-technology-shop-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
             artifacts:
-                mysql_dbms_image:
-                    type: mysql.dbms.image
+                dbms_image:
+                    type: dbms.image
                     file: 5.7
 
         ###################################################

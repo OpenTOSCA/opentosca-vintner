@@ -9,13 +9,6 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
     },
-    'mysql.dbms.image': {
-        derived_from: 'artifact',
-        description: 'expects image reference in "file"',
-        metadata: {
-            ...MetadataNormative(),
-        },
-    },
     'zip.archive': {
         derived_from: 'source.archive',
         metadata: {

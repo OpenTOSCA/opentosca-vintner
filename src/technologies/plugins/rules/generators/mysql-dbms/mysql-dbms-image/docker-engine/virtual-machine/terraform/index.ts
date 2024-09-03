@@ -11,8 +11,8 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
-    artifact: 'mysql.dbms.image',
-    hosting: ['docker.engine', 'virtual.machine'],
+    artifact: 'dbms.image',
+    hosting: ['docker.engine', 'remote.machine'],
     weight: 0.5,
     reason: 'Docker Compose is more specialized.',
     details: '"docker_container" and "docker_image" resources',
@@ -101,7 +101,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
+                                            name: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                         },
                                     ],
                                 },

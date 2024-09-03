@@ -19,7 +19,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
-    hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
+    hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
 
