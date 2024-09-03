@@ -18,6 +18,86 @@ const generator: ImplementationGenerator = {
     details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
+        const AnsibleTouchManifestTask = {
+            name: 'touch manifest',
+            register: 'manifest',
+            'ansible.builtin.tempfile': {
+                suffix: '{{ SELF.dbms_name }}.dbms.manifest.yaml',
+            },
+        }
+
+        const AnsibleCreateMainfestTask = {
+            name: 'create manifest',
+            'ansible.builtin.copy': {
+                dest: '{{ manifest.path }}',
+                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
+            },
+            vars: {
+                deployment: {
+                    apiVersion: 'apps/v1',
+                    kind: 'Deployment',
+                    metadata: {
+                        name: '{{ SELF.dbms_name }}',
+                        namespace: 'default',
+                    },
+                    spec: {
+                        selector: {
+                            matchLabels: {
+                                app: '{{ SELF.dbms_name }}',
+                            },
+                        },
+                        template: {
+                            metadata: {
+                                labels: {
+                                    app: '{{ SELF.dbms_name }}',
+                                },
+                            },
+                            spec: {
+                                containers: [
+                                    {
+                                        image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
+                                        name: '{{ SELF.dbms_name }}',
+                                        env: [
+                                            {
+                                                name: 'MYSQL_ROOT_PASSWORD',
+                                                value: '{{ SELF.dbms_password }}',
+                                            },
+                                        ],
+                                        ports: [
+                                            {
+                                                containerPort: 3306,
+                                                name: 'mysql',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                },
+                service: {
+                    apiVersion: 'v1',
+                    kind: 'Service',
+                    metadata: {
+                        name: '{{ SELF.dbms_name }}',
+                    },
+                    spec: {
+                        ports: [
+                            {
+                                name: 'mysql',
+                                port: 3306,
+                                targetPort: 3306,
+                            },
+                        ],
+                        selector: {
+                            app: '{{ SELF.dbms_name }}',
+                        },
+                        type: 'ClusterIP',
+                    },
+                },
+            },
+        }
+
         return {
             derived_from: name,
             metadata: {
@@ -59,84 +139,8 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        {
-                                            name: 'touch manifest',
-                                            register: 'manifest',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.dbms_name }}.dbms.manifest.yaml',
-                                            },
-                                        },
-                                        {
-                                            name: 'create manifest',
-                                            'ansible.builtin.copy': {
-                                                dest: '{{ manifest.path }}',
-                                                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
-                                            },
-                                            vars: {
-                                                deployment: {
-                                                    apiVersion: 'apps/v1',
-                                                    kind: 'Deployment',
-                                                    metadata: {
-                                                        name: '{{ SELF.dbms_name }}',
-                                                        namespace: 'default',
-                                                    },
-                                                    spec: {
-                                                        selector: {
-                                                            matchLabels: {
-                                                                app: '{{ SELF.dbms_name }}',
-                                                            },
-                                                        },
-                                                        template: {
-                                                            metadata: {
-                                                                labels: {
-                                                                    app: '{{ SELF.dbms_name }}',
-                                                                },
-                                                            },
-                                                            spec: {
-                                                                containers: [
-                                                                    {
-                                                                        image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
-                                                                        name: '{{ SELF.dbms_name }}',
-                                                                        env: [
-                                                                            {
-                                                                                name: 'MYSQL_ROOT_PASSWORD',
-                                                                                value: '{{ SELF.dbms_password }}',
-                                                                            },
-                                                                        ],
-                                                                        ports: [
-                                                                            {
-                                                                                containerPort: 3306,
-                                                                                name: 'mysql',
-                                                                            },
-                                                                        ],
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                                service: {
-                                                    apiVersion: 'v1',
-                                                    kind: 'Service',
-                                                    metadata: {
-                                                        name: '{{ SELF.dbms_name }}',
-                                                    },
-                                                    spec: {
-                                                        ports: [
-                                                            {
-                                                                name: 'mysql',
-                                                                port: 3306,
-                                                                targetPort: 3306,
-                                                            },
-                                                        ],
-                                                        selector: {
-                                                            app: '{{ SELF.dbms_name }}',
-                                                        },
-                                                        type: 'ClusterIP',
-                                                    },
-                                                },
-                                            },
-                                        },
+                                        AnsibleTouchManifestTask,
+                                        AnsibleCreateMainfestTask,
                                         {
                                             name: 'apply manifest',
                                             'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
@@ -153,7 +157,7 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'give DBMS some time',
+                                            name: 'let it cook',
                                             'ansible.builtin.pause': {
                                                 seconds: 10,
                                             },
@@ -162,7 +166,26 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleOrchestratorOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        AnsibleTouchManifestTask,
+                                        AnsibleCreateMainfestTask,
+                                        {
+                                            name: 'unapply manifest',
+                                            'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
                     },
                 },
             },

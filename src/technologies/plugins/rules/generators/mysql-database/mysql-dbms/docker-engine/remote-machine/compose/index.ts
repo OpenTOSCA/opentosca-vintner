@@ -1,22 +1,19 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleHostEndpointCapability,
-    AnsibleHostOperation,
-    AnsibleHostOperationPlaybookArgs,
-    AnsibleWaitForSSHTask,
+    AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: we assume that dbms is exposed
+
 const generator: ImplementationGenerator = {
-    component: 'mysql.dbms',
+    component: 'mysql.database',
     technology: 'compose',
-    artifact: 'dbms.image',
-    hosting: ['docker.engine', 'remote.machine'],
-    weight: 1,
-    reason: 'Docker is the underlying technology.',
-    details: 'docker-compose manifest generated and applied',
+    hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
+    weight: 0,
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         return {
@@ -25,48 +22,24 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {...OpenstackMachineCredentials()},
-            attributes: {
-                application_address: {
-                    type: 'string',
-                    default: '127.0.0.1',
-                },
-                application_port: {
-                    type: 'integer',
-                    default: 3306,
-                },
-                management_address: {
-                    type: 'string',
-                    default: {
-                        eval: '.::.requirements::[.name=host]::.target::management_address',
-                    },
-                },
-                management_port: {
-                    type: 'integer',
-                    default: 3306,
-                },
-            },
-            capabilities: {
-                ...AnsibleHostEndpointCapability(),
+            properties: {
+                ...OpenstackMachineCredentials(),
             },
             interfaces: {
                 Standard: {
                     operations: {
                         create: {
                             implementation: {
-                                ...AnsibleHostOperation(),
+                                ...AnsibleOrchestratorOperation(),
                             },
                             inputs: {
                                 playbook: {
                                     q: [
                                         {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        {
                                             name: 'touch compose',
                                             register: 'compose',
                                             'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.dbms_name }}.compose.yaml',
+                                                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.compose.yaml',
                                             },
                                         },
                                         {
@@ -77,15 +50,22 @@ const generator: ImplementationGenerator = {
                                             },
                                             vars: {
                                                 manifest: {
-                                                    name: '{{ SELF.dbms_name }}',
+                                                    name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
                                                     services: {
-                                                        application: {
-                                                            container_name: '{{ SELF.dbms_name }}',
-                                                            image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
+                                                        job: {
+                                                            container_name:
+                                                                '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
+                                                            image: 'mysql:{{ HOST.dbms_version }}',
                                                             network_mode: 'host',
-                                                            environment: {
-                                                                MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',
-                                                            },
+                                                            command: [
+                                                                'mysql',
+                                                                '--host={{ HOST.management_address }}',
+                                                                '--port={{ HOST.management_port }}',
+                                                                '--user=root',
+                                                                '--password={{ HOST.dbms_password }}',
+                                                                '-e',
+                                                                "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';",
+                                                            ],
                                                         },
                                                     },
                                                 },
@@ -97,18 +77,31 @@ const generator: ImplementationGenerator = {
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
+                                            environment: {
+                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                            },
                                         },
                                         {
-                                            name: 'give DBMS some time',
+                                            name: 'give job some time',
                                             'ansible.builtin.pause': {
                                                 seconds: 10,
                                             },
                                         },
+                                        {
+                                            name: 'unapply compose',
+                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                            environment: {
+                                                DOCKER_HOST: '{{ SELF.os_ssh_host }}',
+                                            },
+                                        },
                                     ],
                                 },
-                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
+                        // TODO: delete
                         delete: 'exit 0',
                     },
                 },

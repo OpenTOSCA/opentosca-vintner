@@ -339,6 +339,7 @@ const nodes: NodeTypeMap = {
     },
     'docker.engine': {
         derived_from: 'container.runtime',
+        description: 'Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375',
         metadata: {
             ...MetadataNormative(),
         },

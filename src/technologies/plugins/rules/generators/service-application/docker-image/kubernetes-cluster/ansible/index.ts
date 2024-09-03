@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleKubernetesCredentialsEnvironment,
     AnsibleOrchestratorOperation,
     KubernetesCredentials,
     MetadataGenerated,
@@ -39,18 +40,7 @@ const generator: ImplementationGenerator = {
                             implementation: {
                                 ...AnsibleOrchestratorOperation(),
                                 environment: {
-                                    K8S_AUTH_HOST: {
-                                        eval: '.::k8s_host',
-                                    },
-                                    K8S_AUTH_SSL_CA_CERT: {
-                                        eval: '.::k8s_ca_cert_file',
-                                    },
-                                    K8S_AUTH_CERT_FILE: {
-                                        eval: '.::k8s_client_cert_file',
-                                    },
-                                    K8S_AUTH_KEY_FILE: {
-                                        eval: '.::k8s_client_key_file',
-                                    },
+                                    ...AnsibleKubernetesCredentialsEnvironment(),
                                 },
                             },
                             inputs: {
@@ -101,7 +91,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'create service',
-                                            'kubernetes.core.k8s': {
+                                            ch: {
                                                 definition: {
                                                     apiVersion: 'v1',
                                                     kind: 'Service',
@@ -129,7 +119,40 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleOrchestratorOperation(),
+                                environment: {
+                                    ...AnsibleKubernetesCredentialsEnvironment(),
+                                },
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            name: 'delete service',
+                                            'kubernetes.core.k8s': {
+                                                state: 'absent',
+                                                api_version: 'v1',
+                                                kind: 'Service',
+                                                namespace: 'default',
+                                                name: '{{ SELF.application_name }}',
+                                            },
+                                        },
+                                        {
+                                            name: 'delete deployment',
+                                            'kubernetes.core.k8s': {
+                                                state: 'absent',
+                                                api_version: 'app/v1',
+                                                kind: 'Deployment',
+                                                namespace: 'default',
+                                                name: '{{ SELF.application_name }}',
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
                     },
                 },
             },

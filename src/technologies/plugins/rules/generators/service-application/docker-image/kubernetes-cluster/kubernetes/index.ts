@@ -18,6 +18,81 @@ const generator: ImplementationGenerator = {
     details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
+        const AnsibleTouchManifestTask = {
+            name: 'touch manifest',
+            register: 'manifest',
+            'ansible.builtin.tempfile': {
+                suffix: '{{ SELF.application_name }}.application.manifest.yaml',
+            },
+        }
+
+        const AnsibleCreateManifestTak = {
+            name: 'create manifest',
+            'ansible.builtin.copy': {
+                dest: '{{ manifest.path }}',
+                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
+            },
+            vars: {
+                deployment: {
+                    apiVersion: 'apps/v1',
+                    kind: 'Deployment',
+                    metadata: {
+                        name: '{{ SELF.application_name }}',
+                        namespace: 'default',
+                    },
+                    spec: {
+                        selector: {
+                            matchLabels: {
+                                app: '{{ SELF.application_name }}',
+                            },
+                        },
+                        template: {
+                            metadata: {
+                                labels: {
+                                    app: '{{ SELF.application_name }}',
+                                },
+                            },
+                            spec: {
+                                containers: [
+                                    {
+                                        image: '{{ ".artifacts::docker_image::file" | eval }}',
+                                        name: '{{ SELF.application_name }}',
+                                        env: mapProperties(type),
+                                        ports: [
+                                            {
+                                                containerPort: '{{ SELF.application_port }}',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                },
+                service: {
+                    apiVersion: 'v1',
+                    kind: 'Service',
+                    metadata: {
+                        name: '{{ SELF.application_name }}',
+                        namespace: 'default',
+                    },
+                    spec: {
+                        ports: [
+                            {
+                                name: '{{ SELF.application_protocol }}',
+                                port: '{{ SELF.application_port }}',
+                                targetPort: '{{ SELF.application_port }}',
+                            },
+                        ],
+                        selector: {
+                            app: '{{ SELF.application_name }}',
+                        },
+                        type: 'ClusterIP',
+                    },
+                },
+            },
+        }
+
         return {
             derived_from: name,
             metadata: {
@@ -42,80 +117,8 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        {
-                                            name: 'touch manifest',
-                                            register: 'manifest',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.application_name }}.application.manifest.yaml',
-                                            },
-                                        },
-                                        {
-                                            name: 'create manifest',
-                                            'ansible.builtin.copy': {
-                                                dest: '{{ manifest.path }}',
-                                                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
-                                            },
-                                            vars: {
-                                                deployment: {
-                                                    apiVersion: 'apps/v1',
-                                                    kind: 'Deployment',
-                                                    metadata: {
-                                                        name: '{{ SELF.application_name }}',
-                                                        namespace: 'default',
-                                                    },
-                                                    spec: {
-                                                        selector: {
-                                                            matchLabels: {
-                                                                app: '{{ SELF.application_name }}',
-                                                            },
-                                                        },
-                                                        template: {
-                                                            metadata: {
-                                                                labels: {
-                                                                    app: '{{ SELF.application_name }}',
-                                                                },
-                                                            },
-                                                            spec: {
-                                                                containers: [
-                                                                    {
-                                                                        image: '{{ ".artifacts::docker_image::file" | eval }}',
-                                                                        name: '{{ SELF.application_name }}',
-                                                                        env: mapProperties(type),
-                                                                        ports: [
-                                                                            {
-                                                                                containerPort:
-                                                                                    '{{ SELF.application_port }}',
-                                                                            },
-                                                                        ],
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                                service: {
-                                                    apiVersion: 'v1',
-                                                    kind: 'Service',
-                                                    metadata: {
-                                                        name: '{{ SELF.application_name }}',
-                                                        namespace: 'default',
-                                                    },
-                                                    spec: {
-                                                        ports: [
-                                                            {
-                                                                name: '{{ SELF.application_protocol }}',
-                                                                port: '{{ SELF.application_port }}',
-                                                                targetPort: '{{ SELF.application_port }}',
-                                                            },
-                                                        ],
-                                                        selector: {
-                                                            app: '{{ SELF.application_name }}',
-                                                        },
-                                                        type: 'ClusterIP',
-                                                    },
-                                                },
-                                            },
-                                        },
+                                        AnsibleTouchManifestTask,
+                                        AnsibleCreateManifestTak,
                                         {
                                             name: 'apply manifest',
                                             'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
@@ -135,7 +138,26 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleOrchestratorOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        AnsibleTouchManifestTask,
+                                        AnsibleCreateManifestTak,
+                                        {
+                                            name: 'unapply manifest',
+                                            'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
                     },
                 },
             },

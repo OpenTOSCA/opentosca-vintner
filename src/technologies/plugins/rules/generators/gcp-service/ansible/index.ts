@@ -51,6 +51,7 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
+                        // We do not disable services
                         delete: 'exit 0',
                     },
                 },

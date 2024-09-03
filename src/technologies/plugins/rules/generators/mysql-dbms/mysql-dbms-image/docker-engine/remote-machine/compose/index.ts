@@ -1,28 +1,28 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleHostEndpointCapability,
     AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
-    mapProperties,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: do not use ansible ssh
+
 const generator: ImplementationGenerator = {
-    component: 'service.application',
+    component: 'mysql.dbms',
     technology: 'compose',
-    artifact: 'docker.image',
+    artifact: 'dbms.image',
     hosting: ['docker.engine', 'remote.machine'],
     weight: 1,
     reason: 'Docker is the underlying technology.',
-    details: 'docker compose manifest generated and applied',
+    details: 'docker-compose manifest generated and applied',
 
     generate: (name, type) => {
         const AnsibleTouchComposeTask = {
             name: 'touch compose',
             register: 'compose',
             'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.application_name }}.compose.yaml',
+                suffix: '{{ SELF.dbms_name }}.compose.yaml',
             },
         }
 
@@ -34,13 +34,15 @@ const generator: ImplementationGenerator = {
             },
             vars: {
                 manifest: {
-                    name: '{{ SELF.application_name }}',
+                    name: '{{ SELF.dbms_name }}',
                     services: {
                         application: {
-                            container_name: '{{ SELF.application_name }}',
-                            image: '{{ ".artifacts::docker_image::file" | eval }}',
+                            container_name: '{{ SELF.dbms_name }}',
+                            image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                             network_mode: 'host',
-                            environment: mapProperties(type, {format: 'map'}),
+                            environment: {
+                                MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',
+                            },
                         },
                     },
                 },
@@ -53,15 +55,28 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
-            },
             attributes: {
                 application_address: {
                     type: 'string',
                     default: '127.0.0.1',
                 },
+                application_port: {
+                    type: 'integer',
+                    default: 3306,
+                },
+                management_address: {
+                    type: 'string',
+                    default: {
+                        eval: '.::.requirements::[.name=host]::.target::management_address',
+                    },
+                },
+                management_port: {
+                    type: 'integer',
+                    default: 3306,
+                },
+            },
+            capabilities: {
+                ...AnsibleHostEndpointCapability(),
             },
             interfaces: {
                 Standard: {
@@ -85,6 +100,12 @@ const generator: ImplementationGenerator = {
                                                 DOCKER_HOST: '{{ SELF.os_ssh_host }}',
                                             },
                                         },
+                                        {
+                                            name: 'let it cook',
+                                            'ansible.builtin.pause': {
+                                                seconds: 10,
+                                            },
+                                        },
                                     ],
                                 },
                             },
@@ -99,7 +120,7 @@ const generator: ImplementationGenerator = {
                                         AnsibleTouchComposeTask,
                                         AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
+                                            name: 'unapply compose',
                                             'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
                                             args: {
                                                 executable: '/usr/bin/bash',

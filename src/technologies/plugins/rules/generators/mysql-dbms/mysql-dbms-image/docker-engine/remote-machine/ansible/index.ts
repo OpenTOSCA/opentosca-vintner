@@ -74,7 +74,28 @@ const generator: ImplementationGenerator = {
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            name: 'delete container',
+                                            'community.docker.docker_container': {
+                                                name: '{{ SELF.dbms_name }}',
+                                                state: 'absent',
+                                            },
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
                     },
                 },
             },

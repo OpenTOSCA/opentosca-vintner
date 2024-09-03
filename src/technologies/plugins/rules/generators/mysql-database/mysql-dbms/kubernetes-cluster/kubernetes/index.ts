@@ -120,7 +120,6 @@ const generator: ImplementationGenerator = {
                                                 executable: '/usr/bin/bash',
                                             },
                                         },
-
                                         {
                                             name: 'wait for deployment',
                                             'ansible.builtin.shell':
@@ -141,6 +140,7 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
+                        // TODO: delete
                         delete: 'exit 0',
                     },
                 },

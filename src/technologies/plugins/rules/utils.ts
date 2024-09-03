@@ -233,6 +233,23 @@ export function AnsibleOrchestratorOperation() {
     }
 }
 
+export function AnsibleKubernetesCredentialsEnvironment() {
+    return {
+        K8S_AUTH_HOST: {
+            eval: '.::k8s_host',
+        },
+        K8S_AUTH_SSL_CA_CERT: {
+            eval: '.::k8s_ca_cert_file',
+        },
+        K8S_AUTH_CERT_FILE: {
+            eval: '.::k8s_client_cert_file',
+        },
+        K8S_AUTH_KEY_FILE: {
+            eval: '.::k8s_client_key_file',
+        },
+    }
+}
+
 export function AnsibleHostOperationPlaybookArgs() {
     return ['--become', '--key-file={{ SELF.os_ssh_key_file }}', '--user={{ SELF.os_ssh_user }}']
 }
