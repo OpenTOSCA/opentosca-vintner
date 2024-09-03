@@ -335,6 +335,8 @@ topology_template:
 
         cart_database:
             type: mysql.database
+            # TODO: remove this
+            technology: compose
             properties:
                 - database_name: cart
                 - database_user: cart

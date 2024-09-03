@@ -8,8 +8,6 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: test this
-
 // TODO: we assume that dbms is exposed
 
 const generator: ImplementationGenerator = {
@@ -17,7 +15,7 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['mysql.dbms', 'docker.engine', 'virtual.machine'],
     weight: 0,
-    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.',
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         return {
@@ -57,7 +55,7 @@ const generator: ImplementationGenerator = {
                                             },
                                             vars: {
                                                 manifest: {
-                                                    name: '{{ SELF.dbms_name }}',
+                                                    name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
                                                     services: {
                                                         job: {
                                                             container_name:

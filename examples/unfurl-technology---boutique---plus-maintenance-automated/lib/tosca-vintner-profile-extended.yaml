@@ -9949,3 +9949,57 @@ node_types:
                 type: string
                 default:
                     get_input: os_ssh_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job'
+                                                      image: mysql:{{ HOST.dbms_version }}
+                                                      network_mode: host
+                                                      command:
+                                                          - mysql
+                                                          - '--host={{ HOST.management_address }}'
+                                                          - '--port={{ HOST.management_port }}'
+                                                          - '--user=root'
+                                                          - '--password={{ HOST.dbms_password }}'
+                                                          - '-e'
+                                                          - CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: give job some time
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete: exit 0
