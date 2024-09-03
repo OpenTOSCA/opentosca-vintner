@@ -1,4 +1,4 @@
-import ansible from './ansible'
-import terraform from './terraform'
+import asterisk from './asterisk'
+import gcpAppEngine from './gcp-appengine'
 
-export default [ansible, terraform]
+export default [asterisk, gcpAppEngine]

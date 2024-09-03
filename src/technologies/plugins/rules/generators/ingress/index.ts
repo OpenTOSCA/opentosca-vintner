@@ -1,5 +1,4 @@
-import ansible from './ansible'
-import kubernetes from './kubernetes'
-import terraform from './terraform'
+import kubernetesCluster from './kubernetes-cluster'
+import virtualMachine from './virtual-machine'
 
-export default [ansible, kubernetes, terraform]
+export default [kubernetesCluster, virtualMachine]

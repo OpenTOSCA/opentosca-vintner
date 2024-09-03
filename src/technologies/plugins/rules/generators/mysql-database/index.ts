@@ -1,6 +1,3 @@
-import ansible from './ansible'
-import compose from './compose'
-import kubernetes from './kubernetes'
-import terraform from './terraform'
+import mysqlDBMS from './mysql-dbms'
 
-export default [ansible, compose, kubernetes, terraform]
+export default [mysqlDBMS]
