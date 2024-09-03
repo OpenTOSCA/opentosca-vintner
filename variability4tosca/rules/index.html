@@ -9096,16 +9096,16 @@ Find out <a href="https://docs.docker.com/compose" target="_blank">more</a>.</p>
 </div>
 <div class="admonition failure">
 <p class="admonition-title">Docker Compose (Quality: 0)</p>
-<p>One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while declarative other technologies provide declarative modules.</p>
+<p>One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while other technologies provide declarative modules.</p>
 </div>
 <h3 id="scenario-6">Scenario #6<a class="headerlink" href="#scenario-6" title="Permanent link">&para;</a></h3>
 <p>A node template whose node type is or is derived from the node type <a href="/normative#mysqldatabase" target="_blank">mysql.database</a> and which is hosted on a node template whose node type is or is derived from <a href="/normative#mysqldbms" target="_blank">mysql.dbms</a>, which is hosted on a node template whose node type is or is derived from <a href="/normative#gcpcloudsql" target="_blank">gcp.cloudsql</a>.</p>
 <figure>
 <p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="325px" preserveAspectRatio="none" style="width:151px;height:325px;" version="1.1" viewBox="0 0 151 325" width="151px" zoomAndPan="magnify"><defs/><g><!--entity node_component--><g id="elem_node_component"><a href="/normative#mysqldatabase" target="_top" title="/normative#mysqldatabase" xlink:actuate="onRequest" xlink:href="/normative#mysqldatabase" xlink:show="new" xlink:title="/normative#mysqldatabase" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="138" x="7" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="17" y="29.9951">component</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118" x="17" y="46.292">(mysql.database)</text></a></g><!--entity node_host_1--><g id="elem_node_host_1"><a href="/normative#mysqldbms" target="_top" title="/normative#mysqldbms" xlink:actuate="onRequest" xlink:href="/normative#mysqldbms" xlink:show="new" xlink:title="/normative#mysqldbms" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="113" x="19.5" y="137"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="29.5" y="159.9951">host 1</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93" x="29.5" y="176.292">(mysql.dbms)</text></a></g><!--entity node_host_2--><g id="elem_node_host_2"><a href="/normative#gcpcloudsql" target="_top" title="/normative#gcpcloudsql" xlink:actuate="onRequest" xlink:href="/normative#gcpcloudsql" xlink:show="new" xlink:title="/normative#gcpcloudsql" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="118" x="17" y="267"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="27" y="289.9951">host 2</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98" x="27" y="306.292">(gcp.cloudsql)</text></a></g><!--link node_component to node_host_1--><g id="link_node_component_node_host_1"><path d="M76,60.1 C76,80.76 76,109.91 76,131.83 " fill="none" id="node_component-to-node_host_1" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="76,136.95,80,127.95,76,131.95,72,127.95,76,136.95" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="85" y="103.0669">host</text></g><!--link node_host_1 to node_host_2--><g id="link_node_host_1_node_host_2"><path d="M76,190.1 C76,210.76 76,239.91 76,261.83 " fill="none" id="node_host_1-to-node_host_2" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="76,266.95,80,257.95,76,261.95,72,257.95,76,266.95" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="85" y="233.0669">host</text></g><!--SRC=[fP0zJyCm48Pt_ufJM61eK2EnC2014YDBs4fLNPnBQyKVuUo0AiH_nsdLr6bXG7Yoxjvx7ljygso7Z0PgQh3NuSdPy8o6e4JhIsBL23zcf3ETisH36RQQW4a6j6jDIQH2sQxPzRP-TDen18wSs8f3IUgUsNsyR9HiBNaFy_n69Dr6HVYdW7WU7DV4UrIb8pkfJkU_KeAoWRX1-K_C-C4_OuRwiChzegnZWtfW2t5aPkCwN-sbsVetdTSOi49FLncWZsCrhSQGw5c3Qqwge3mi5d2zKmJrJXSxqW44o-L4kN4-mFpegunFN4DtDP-8zgNVB77yHqCH3MlPvLAxlex1KqTnxYZE7P5m0EmiukJhizdTv96ta04CzqoavMciI6FV]--></g></svg></p>
 </figure>
-<div class="admonition success">
-<p class="admonition-title">Ansible (Quality: 1)</p>
-<p>Primary use case due to the specialization of Ansible.</p>
+<div class="admonition info">
+<p class="admonition-title">Ansible (Quality: 0.5)</p>
+<p>Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.</p>
 </div>
 <div class="admonition success">
 <p class="admonition-title">Terraform (Quality: 1)</p>
@@ -9571,11 +9571,11 @@ Find out <a href="https://docs.docker.com/compose" target="_blank">more</a>.</p>
 </tr>
 <tr>
 <td>Quality</td>
-<td>1</td>
+<td>0.5</td>
 </tr>
 <tr>
 <td>Reason</td>
-<td>Primary use case due to the specialization of Ansible.</td>
+<td>Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.</td>
 </tr>
 <tr>
 <td>Details</td>
@@ -11332,7 +11332,7 @@ Find out <a href="https://docs.docker.com/compose" target="_blank">more</a>.</p>
 </tr>
 <tr>
 <td>Reason</td>
-<td>One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while declarative other technologies provide declarative modules.</td>
+<td>One-time use docker container (&#34;fake Kubernetes job&#34;) with imperative parts, while other technologies provide declarative modules.</td>
 </tr>
 <tr>
 <td>Details</td>
@@ -11812,8 +11812,8 @@ The rules are also available as <a download="technology-rules.yaml" href="techno
 <a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">      </span><span class="nt">hosting</span><span class="p">:</span>
 <a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql.dbms</span>
 <a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcp.cloudsql</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">      </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Primary use case due to the specialization of Ansible.</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">      </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.</span>
 <a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql.database</span>
 <a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">      </span><span class="nt">hosting</span><span class="p">:</span>
 <a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql.dbms</span>
@@ -12110,7 +12110,7 @@ The rules are also available as <a download="technology-rules.yaml" href="techno
 <a id="__codelineno-0-331" name="__codelineno-0-331"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.engine</span>
 <a id="__codelineno-0-332" name="__codelineno-0-332"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">virtual.machine</span>
 <a id="__codelineno-0-333" name="__codelineno-0-333"></a><span class="w">      </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<a id="__codelineno-0-334" name="__codelineno-0-334"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">One-time use docker container (&quot;fake Kubernetes job&quot;) with imperative parts, while declarative other technologies provide declarative modules.</span>
+<a id="__codelineno-0-334" name="__codelineno-0-334"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">One-time use docker container (&quot;fake Kubernetes job&quot;) with imperative parts, while other technologies provide declarative modules.</span>
 <a id="__codelineno-0-335" name="__codelineno-0-335"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql.dbms</span>
 <a id="__codelineno-0-336" name="__codelineno-0-336"></a><span class="w">      </span><span class="nt">hosting</span><span class="p">:</span>
 <a id="__codelineno-0-337" name="__codelineno-0-337"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.engine</span>
@@ -12148,7 +12148,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 2, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 3, 2024</span>
       
     
   </small>

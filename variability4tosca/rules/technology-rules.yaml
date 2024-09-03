@@ -33,8 +33,8 @@ ansible:
       hosting:
           - mysql.dbms
           - gcp.cloudsql
-      weight: 1
-      reason: Primary use case due to the specialization of Ansible.
+      weight: 0.5
+      reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
     - component: mysql.database
       hosting:
           - mysql.dbms
@@ -331,7 +331,7 @@ compose:
           - docker.engine
           - virtual.machine
       weight: 0
-      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
     - component: mysql.dbms
       hosting:
           - docker.engine
