@@ -1,4 +1,3 @@
-import ansible from './ansible'
-import terraform from './terraform'
+import asterisk from './asterisk'
 
-export default [ansible, terraform]
+export default [asterisk]

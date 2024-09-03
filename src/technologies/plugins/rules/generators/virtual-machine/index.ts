@@ -1,4 +1,3 @@
-import ansible from './ansible'
-import terraform from './terraform'
+import openstackProvider from './openstack-provider'
 
-export default [ansible, terraform]
+export default [openstackProvider]

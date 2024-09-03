@@ -1,4 +1,3 @@
-import ansible from './ansible'
-import terraform from './terraform'
+import virtualMachine from './virtual-machine'
 
-export default [ansible, terraform]
+export default [virtualMachine]

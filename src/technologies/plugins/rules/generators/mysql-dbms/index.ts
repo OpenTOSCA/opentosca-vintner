@@ -1,6 +1,6 @@
-import ansible from './ansible'
-import compose from './compose'
-import kubernetes from './kubernetes'
-import terraform from './terraform'
+import dockerEngine from './docker-engine'
+import gcpCloudSQL from './gcp-cloudsql'
+import kubernetesCluster from './kubernetes-cluster'
+import virtualMachine from './virtual-machine'
 
-export default [ansible, compose, kubernetes, terraform]
+export default [dockerEngine, gcpCloudSQL, kubernetesCluster, virtualMachine]
