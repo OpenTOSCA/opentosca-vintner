@@ -6,11 +6,7 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: use https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_exec_module.html#ansible-collections-kubernetes-core-k8s-exec-module ?
-
-// TODO: use  https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/ ?
-
-// https://stackoverflow.com/questions/37288500/how-to-undo-a-kubectl-port-forward
+// TODO: use k8s auth
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -40,28 +36,61 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'create database',
-                                            'ansible.builtin.shell':
-                                                'kubectl exec deploy/{{ HOST.dbms_name }} -- mysql --password={{ HOST.dbms_password }} -e "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}"',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
-                                        {
-                                            name: 'create user',
-                                            'ansible.builtin.shell':
-                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'\"",
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
-                                        {
-                                            name: 'grant privileges',
-                                            'ansible.builtin.shell':
-                                                "kubectl exec deploy/{{ HOST.dbms_name }}  -- mysql --password={{ HOST.dbms_password }} -e \"GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'\"",
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            name: 'deploy database',
+                                            block: [
+                                                {
+                                                    name: 'forward port',
+                                                    'ansible.builtin.shell':
+                                                        'kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306',
+                                                    args: {
+                                                        executable: '/usr/bin/bash',
+                                                    },
+                                                    async: 30,
+                                                    poll: 0,
+                                                },
+                                                {
+                                                    name: 'wait for port',
+                                                    'ansible.builtin.wait_for': {
+                                                        host: '127.0.0.1',
+                                                        port: 23306,
+                                                        delay: 5,
+                                                        timeout: 30,
+                                                    },
+                                                },
+                                                {
+                                                    name: 'create database',
+                                                    'community.mysql.mysql_db': {
+                                                        name: '{{ SELF.database_name }}',
+                                                        login_host: '127.0.0.1',
+                                                        login_password: '{{ HOST.dbms_password }}',
+                                                        login_port: '23306',
+                                                        login_user: 'root',
+                                                    },
+                                                },
+                                                {
+                                                    name: 'create user (with privileges)',
+                                                    'community.mysql.mysql_user': {
+                                                        name: '{{ SELF.database_user }}',
+                                                        password: '{{ SELF.database_password }}',
+                                                        host: '%',
+                                                        priv: '*.*:ALL',
+                                                        login_host: '127.0.0.1',
+                                                        login_password: '{{ HOST.dbms_password }}',
+                                                        login_port: '23306',
+                                                        login_user: 'root',
+                                                    },
+                                                },
+                                            ],
+                                            always: [
+                                                {
+                                                    name: 'unforward port',
+                                                    'ansible.builtin.shell':
+                                                        'pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"',
+                                                    args: {
+                                                        executable: '/usr/bin/bash',
+                                                    },
+                                                },
+                                            ],
                                         },
                                     ],
                                 },

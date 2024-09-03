@@ -8,13 +8,14 @@ import {
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: we assume that dbms is exposed
+// TODO: still need to test port forwarding, i.e., if dbms not in host
 
-// TODO: could use https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward or https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
-
-// Could use "docker exec" but then its imperative ...
-// Maybe one can ssh tunnel the dbms in container to local
-
+/**
+ * Inspiration
+ *
+ * - https://stackoverflow.com/questions/70477529/is-there-a-docker-daemon-equivalent-to-kubectl-port-forward
+ * - https://stackoverflow.com/questions/65537166/is-there-a-kubectl-port-forward-equivalent-in-podman
+ */
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
@@ -60,6 +61,34 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
+                                            name: 'get dbms container info',
+                                            'community.docker.docker_container_info': {
+                                                name: '{{ HOST.dbms_name }}',
+                                            },
+                                            register: 'dbms_container_info',
+                                        },
+                                        {
+                                            name: 'forward port',
+                                            'community.docker.docker_container': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                image: 'nicolaka/netshoot:v0.13',
+                                                command: 'socat TCP6-LISTEN:3306,fork TCP:{{ HOST.dbms_name }}:3306',
+                                                ports: ['{{ HOST.application_port }}:3306'],
+                                            },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                        },
+                                        {
+                                            name: 'create forwarding network',
+                                            'community.docker.docker_network': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                connected: [
+                                                    '{{ HOST.dbms_name }}-port-forward',
+                                                    '{{ HOST.dbms_name }}',
+                                                ],
+                                            },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                        },
+                                        {
                                             name: 'create database',
                                             'community.mysql.mysql_db': {
                                                 name: '{{ SELF.database_name }}',
@@ -81,6 +110,24 @@ const generator: ImplementationGenerator = {
                                                 login_port: '{{ HOST.application_port }}',
                                                 login_user: 'root',
                                             },
+                                        },
+                                        {
+                                            name: 'unforward port',
+                                            'community.docker.docker_container': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                image: 'nicolaka/netshoot:v0.13',
+                                                network_mode: 'host',
+                                                state: 'absent',
+                                            },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                        },
+                                        {
+                                            name: 'remove forwarding network',
+                                            'community.docker.docker_network': {
+                                                name: '{{ HOST.dbms_name }}-port-forward',
+                                                state: 'absent',
+                                            },
+                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                     ],
                                 },

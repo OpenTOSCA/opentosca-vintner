@@ -1,7 +1,7 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - ../specific.yaml
+    - ../tosca-vintner-profile.yaml
 
 node_types:
     ###################################################
@@ -104,7 +104,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -135,7 +135,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -166,7 +166,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -197,7 +197,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -228,7 +228,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -317,7 +317,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -348,7 +348,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -383,7 +383,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -418,7 +418,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -449,7 +449,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -537,7 +537,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -568,7 +568,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -603,7 +603,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -638,7 +638,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -669,7 +669,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -787,7 +787,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -805,7 +805,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -823,7 +823,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -841,7 +841,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -859,7 +859,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -961,7 +961,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -979,7 +979,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -1003,7 +1003,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -1027,7 +1027,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -1045,7 +1045,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -1144,7 +1144,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -1162,7 +1162,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -1186,7 +1186,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -1210,7 +1210,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -1228,7 +1228,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 

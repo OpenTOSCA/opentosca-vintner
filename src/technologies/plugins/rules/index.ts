@@ -95,7 +95,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     continue
                 }
 
-                std.log(`Generating implementation "${implementationName}" based on generator "${generatorName}"`)
                 const implementation = generator.generate(name, type)
                 assert.isDefined(implementation.metadata)
                 assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])

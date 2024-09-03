@@ -92,8 +92,6 @@ export default async function (options: TemplateImplementOptions) {
      * Implement
      */
     for (const file of files.walkDirectory(lib, {extensions: YAML_EXTENSIONS})) {
-        std.log(`processing file "${file}"`)
-
         const templateString = files.loadFile(file)
         const templateData: ServiceTemplate = files.loadYAML<ServiceTemplate>(file)
 
@@ -130,8 +128,6 @@ export default async function (options: TemplateImplementOptions) {
 
             // Ignore abstract types
             if (isAbstract(baseType)) continue
-
-            std.log(`processing node type "${baseName}"`)
 
             for (const plugin of graph.plugins.technology) {
                 for (const [implementationName, implementationType] of Object.entries(

@@ -3,7 +3,7 @@ import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/t
 import {
     AnsibleOrchestratorOperation,
     GCPProviderCredentials,
-    HOTFIX_SECURE_PROTOCOL_FILTER,
+    JinjaSecureApplicationProtocol,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
@@ -125,7 +125,7 @@ const generator: ImplementationGenerator = {
                                             name: 'set attributes',
                                             set_fact: {
                                                 application_address: '{{ browse_app.stdout[8:] | trim }}',
-                                                application_endpoint: `{{ SELF.application_protocol | ${HOTFIX_SECURE_PROTOCOL_FILTER} }}://{{ browse_app.stdout[8:] | trim }}:443`,
+                                                application_endpoint: `{{ ${JinjaSecureApplicationProtocol()} }}://{{ browse_app.stdout[8:] | trim }}:443`,
                                             },
                                         },
                                     ],

@@ -1,7 +1,7 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-    - specific.yaml
+    - tosca-vintner-profile.yaml
 
 node_types:
     ###################################################
@@ -75,6 +75,58 @@ node_types:
     #
     ################################################################
 
+    shop.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: start container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                          network_mode: host
+                                          env:
+                                              PORT: '"{{ SELF.application_port }}"'
+                                              DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                              DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                              DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                              DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                              DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                              DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                              FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                              FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete: exit 0
     shop.component~service.application#docker.image::ansible@gcp.cloudrun:
         derived_from: shop.component
         metadata:
@@ -183,7 +235,7 @@ node_types:
                                     - name: set attributes
                                       set_fact:
                                           application_address: '{{ (service_description.stdout | from_json ).status.url[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
+                                          application_endpoint: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://{{ (service_description.stdout | from_json ).status.url[8:] | trim }}:443'
                             resultTemplate: |
                                 name: SELF
                                 attributes:
@@ -312,163 +364,6 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    shop.component~service.application#zip.archive::ansible@gcp.appengine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            application_protocol:
-                type: string
-                default: https
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: activate service account
-                                      ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
-                                      args:
-                                          executable: /bin/bash
-                                    - name: enable GCP AppEngine
-                                      ansible.builtin.shell: gcloud app create --region {{ SELF.gcp_region }} --quiet
-                                      args:
-                                          executable: /bin/bash
-                                      register: app_create_command
-                                      failed_when:
-                                          - "'Created' not in app_create_command.stderr"
-                                          - "'already contains' not in app_create_command.stderr"
-                                    - name: create working directory
-                                      register: directory
-                                      ansible.builtin.tempfile:
-                                          state: directory
-                                    - name: extract deployment artifact in working directory
-                                      ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-                                          dest: '{{ directory.path }}'
-                                    - name: create specification
-                                      ansible.builtin.copy:
-                                          dest: '{{ directory.path }}/app.yaml'
-                                          content: '{{ manifest | to_yaml }}'
-                                      vars:
-                                          manifest:
-                                              runtime: '{{ SELF.application_language }}'
-                                              service: '{{ SELF.application_name }}'
-                                              instance_class: F1
-                                              env_variables:
-                                                  DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
-                                                  DB_NAME: '"{{ SELF.DB_NAME }}"'
-                                                  DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
-                                                  DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
-                                                  DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
-                                                  DB_PORT: '"{{ SELF.DB_PORT }}"'
-                                                  FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
-                                                  FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
-                                    - name: create app
-                                      ansible.builtin.shell: gcloud app deploy {{ directory.path }} --quiet
-                                      args:
-                                          executable: /bin/bash
-                                    - name: browse app
-                                      register: browse_app
-                                      ansible.builtin.shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet '
-                                      args:
-                                          executable: /bin/bash
-                                    - name: set attributes
-                                      set_fact:
-                                          application_address: '{{ browse_app.stdout[8:] | trim }}'
-                                          application_endpoint: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ browse_app.stdout[8:] | trim }}:443'
-                            resultTemplate: |
-                                name: SELF
-                                attributes:
-                                    application_address: '{{ outputs.application_address | trim }}'
-                                    application_endpoint: '{{ outputs.application_endpoint | trim }}'
-                        outputs:
-                            application_address:
-                            application_endpoint:
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: activate service account
-                                      ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
-                                      args:
-                                          executable: /bin/bash
-                                    - name: delete app
-                                      ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
-                                      args:
-                                          executable: /bin/bash
-    shop.component~service.application#docker.image::ansible@docker.engine->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-        attributes:
-            application_address:
-                type: string
-                default: 127.0.0.1
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
-                                    - name: start container
-                                      community.docker.docker_container:
-                                          name: '{{ SELF.application_name }}'
-                                          image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                          network_mode: host
-                                          env:
-                                              PORT: '"{{ SELF.application_port }}"'
-                                              DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
-                                              DB_NAME: '"{{ SELF.DB_NAME }}"'
-                                              DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
-                                              DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
-                                              DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
-                                              DB_PORT: '"{{ SELF.DB_PORT }}"'
-                                              FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
-                                              FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    delete: exit 0
     shop.component~service.application#tar.archive::ansible@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -546,7 +441,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -598,7 +493,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -633,7 +528,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
@@ -664,7 +559,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -699,7 +594,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -803,7 +698,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -855,7 +750,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -890,7 +785,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
@@ -921,7 +816,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -956,7 +851,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -980,6 +875,111 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    shop.component~service.application#zip.archive::ansible@gcp.appengine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_protocol:
+                type: string
+                default: https
+            gcp_service_account_file:
+                type: string
+                default:
+                    get_input: gcp_service_account_file
+            gcp_region:
+                type: string
+                default:
+                    get_input: gcp_region
+            gcp_project:
+                type: string
+                default:
+                    get_input: gcp_project
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: activate service account
+                                      ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
+                                      args:
+                                          executable: /bin/bash
+                                    - name: enable GCP AppEngine
+                                      ansible.builtin.shell: gcloud app create --region {{ SELF.gcp_region }} --quiet
+                                      args:
+                                          executable: /bin/bash
+                                      register: app_create_command
+                                      failed_when:
+                                          - "'Created' not in app_create_command.stderr"
+                                          - "'already contains' not in app_create_command.stderr"
+                                    - name: create working directory
+                                      register: directory
+                                      ansible.builtin.tempfile:
+                                          state: directory
+                                    - name: extract deployment artifact in working directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ directory.path }}'
+                                    - name: create specification
+                                      ansible.builtin.copy:
+                                          dest: '{{ directory.path }}/app.yaml'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              runtime: '{{ SELF.application_language }}'
+                                              service: '{{ SELF.application_name }}'
+                                              instance_class: F1
+                                              env_variables:
+                                                  DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                                  DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                                  DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                                  DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                                  DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                                  DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                                  FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                                  FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                                    - name: create app
+                                      ansible.builtin.shell: gcloud app deploy {{ directory.path }} --quiet
+                                      args:
+                                          executable: /bin/bash
+                                    - name: browse app
+                                      register: browse_app
+                                      ansible.builtin.shell: 'gcloud app browse --service {{ SELF.application_name }} --no-launch-browser --quiet '
+                                      args:
+                                          executable: /bin/bash
+                                    - name: set attributes
+                                      set_fact:
+                                          application_address: '{{ browse_app.stdout[8:] | trim }}'
+                                          application_endpoint: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://{{ browse_app.stdout[8:] | trim }}:443'
+                            resultTemplate: |
+                                name: SELF
+                                attributes:
+                                    application_address: '{{ outputs.application_address | trim }}'
+                                    application_endpoint: '{{ outputs.application_endpoint | trim }}'
+                        outputs:
+                            application_address:
+                            application_endpoint:
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: activate service account
+                                      ansible.builtin.shell: gcloud auth activate-service-account --key-file {{ SELF.gcp_service_account_file }} --project {{ SELF.gcp_project }}
+                                      args:
+                                          executable: /bin/bash
+                                    - name: delete app
+                                      ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
+                                      args:
+                                          executable: /bin/bash
     shop.component~software.application#apt.package::ansible@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -1057,7 +1057,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1088,7 +1088,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1119,7 +1119,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1150,7 +1150,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1181,7 +1181,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1279,7 +1279,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1310,7 +1310,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1345,7 +1345,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1380,7 +1380,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1411,7 +1411,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1508,7 +1508,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                           mode: '0755'
                                       when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1539,7 +1539,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                           mode: '0755'
                                       when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1574,7 +1574,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1609,7 +1609,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                           mode: '0755'
                                       when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1640,7 +1640,7 @@ node_types:
                                               #!/usr/bin/bash
                                               set -e
 
-                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                           mode: '0755'
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: call management operation
@@ -1657,6 +1657,78 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    shop.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                        provider:
+                            docker:
+                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
+                                  ssh_opts:
+                                      - '-i'
+                                      - '{{ SELF.os_ssh_key_file }}'
+                                      - '-o'
+                                      - IdentitiesOnly=yes
+                                      - '-o'
+                                      - BatchMode=yes
+                                      - '-o'
+                                      - UserKnownHostsFile=/dev/null
+                                      - '-o'
+                                      - StrictHostKeyChecking=no
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - PORT={{ SELF.application_port }}
+                                          - DB_DIALECT={{ SELF.DB_DIALECT }}
+                                          - DB_NAME={{ SELF.DB_NAME }}
+                                          - DB_USERNAME={{ SELF.DB_USERNAME }}
+                                          - DB_PASSWORD={{ SELF.DB_PASSWORD }}
+                                          - DB_ADDRESS={{ SELF.DB_ADDRESS }}
+                                          - DB_PORT={{ SELF.DB_PORT }}
+                                          - FEATURE_OPTIONAL={{ SELF.optional_feature }}
+                                          - FEATURE_PREMIUM={{ SELF.premium_feature }}
+                                      image: ${docker_image.image.image_id}
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
     shop.component~service.application#docker.image::terraform@gcp.cloudrun:
         derived_from: shop.component
         metadata:
@@ -1707,7 +1779,7 @@ node_types:
                             application_address:
                                 - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
                             application_endpoint:
-                                - value: '{{ SELF.application_protocol  | regex_replace("^(.*[^s])$", "\\1s") }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
+                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
                         resource:
                             google_cloud_run_v2_service:
                                 application:
@@ -1845,173 +1917,6 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    shop.component~service.application#zip.archive::terraform@gcp.appengine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            application_protocol:
-                type: string
-                default: https
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                outputs:
-                    application_address: application_address
-                    application_endpoint: application_endpoint
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - google:
-                                        source: hashicorp/google
-                                        version: 5.39.1
-                        provider:
-                            google:
-                                - credentials: '{{ SELF.gcp_service_account_file }}'
-                                  project: '{{ SELF.gcp_project }}'
-                                  region: '{{ SELF.gcp_region }}'
-                        output:
-                            application_address:
-                                - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
-                            application_endpoint:
-                                - value: '{{ SELF.application_protocol | regex_replace("^(.*[^s])$", "\\1s") }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
-                        resource:
-                            google_app_engine_standard_app_version:
-                                app:
-                                    - delete_service_on_destroy: true
-                                      deployment:
-                                          - zip:
-                                                - source_url: https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}
-                                      entrypoint:
-                                          - shell: '{{ SELF._management_start }}'
-                                      env_variables:
-                                          DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
-                                          DB_NAME: '"{{ SELF.DB_NAME }}"'
-                                          DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
-                                          DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
-                                          DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
-                                          DB_PORT: '"{{ SELF.DB_PORT }}"'
-                                          FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
-                                          FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
-                                      runtime: '{{ SELF.application_language }}'
-                                      service: '{{ SELF.application_name }}'
-                                      service_account: ${google_service_account.custom_service_account.email}
-                                      version_id: v1
-                            google_project_iam_member:
-                                gae_api:
-                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
-                                      project: ${google_service_account.custom_service_account.project}
-                                      role: roles/compute.networkUser
-                                storage_viewer:
-                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
-                                      project: ${google_service_account.custom_service_account.project}
-                                      role: roles/storage.objectViewer
-                            google_service_account:
-                                custom_service_account:
-                                    - account_id: '{{ SELF.application_name }}-account'
-                                      display_name: Custom Service Account
-                            google_storage_bucket:
-                                bucket:
-                                    - location: EU
-                                      name: '{{ SELF.gcp_project }}-{{ SELF.application_name }}'
-                            google_storage_bucket_object:
-                                object:
-                                    - bucket: ${google_storage_bucket.bucket.name}
-                                      name: object.zip
-                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-    shop.component~service.application#docker.image::terraform@docker.engine->virtual.machine:
-        derived_from: shop.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-        attributes:
-            application_address:
-                type: string
-                default: 127.0.0.1
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - docker:
-                                        source: kreuzwerker/docker
-                                        version: 3.0.2
-                        provider:
-                            docker:
-                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
-                                  ssh_opts:
-                                      - '-i'
-                                      - '{{ SELF.os_ssh_key_file }}'
-                                      - '-o'
-                                      - IdentitiesOnly=yes
-                                      - '-o'
-                                      - BatchMode=yes
-                                      - '-o'
-                                      - UserKnownHostsFile=/dev/null
-                                      - '-o'
-                                      - StrictHostKeyChecking=no
-                        resource:
-                            docker_container:
-                                application:
-                                    - env:
-                                          - PORT={{ SELF.application_port }}
-                                          - DB_DIALECT={{ SELF.DB_DIALECT }}
-                                          - DB_NAME={{ SELF.DB_NAME }}
-                                          - DB_USERNAME={{ SELF.DB_USERNAME }}
-                                          - DB_PASSWORD={{ SELF.DB_PASSWORD }}
-                                          - DB_ADDRESS={{ SELF.DB_ADDRESS }}
-                                          - DB_PORT={{ SELF.DB_PORT }}
-                                          - FEATURE_OPTIONAL={{ SELF.optional_feature }}
-                                          - FEATURE_PREMIUM={{ SELF.premium_feature }}
-                                      image: ${docker_image.image.image_id}
-                                      name: '{{ SELF.application_name }}'
-                                      network_mode: host
-                            docker_image:
-                                image:
-                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
     shop.component~service.application#tar.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -2121,7 +2026,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -2158,7 +2063,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -2179,7 +2084,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -2315,7 +2220,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -2352,7 +2257,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -2373,7 +2278,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -2400,6 +2305,101 @@ node_types:
                                                     - sudo bash /tmp/stop-shop.component.sh
                                                     - sudo bash /tmp/delete-shop.component.sh
                                                 when: destroy
+    shop.component~service.application#zip.archive::terraform@gcp.appengine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_protocol:
+                type: string
+                default: https
+            gcp_service_account_file:
+                type: string
+                default:
+                    get_input: gcp_service_account_file
+            gcp_region:
+                type: string
+                default:
+                    get_input: gcp_region
+            gcp_project:
+                type: string
+                default:
+                    get_input: gcp_project
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                outputs:
+                    application_address: application_address
+                    application_endpoint: application_endpoint
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        output:
+                            application_address:
+                                - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
+                            application_endpoint:
+                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
+                        resource:
+                            google_app_engine_standard_app_version:
+                                app:
+                                    - delete_service_on_destroy: true
+                                      deployment:
+                                          - zip:
+                                                - source_url: https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}
+                                      entrypoint:
+                                          - shell: '{{ SELF._management_start }}'
+                                      env_variables:
+                                          DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                          DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                          DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                          DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                          DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                          DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                          FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                          FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                                      runtime: '{{ SELF.application_language }}'
+                                      service: '{{ SELF.application_name }}'
+                                      service_account: ${google_service_account.custom_service_account.email}
+                                      version_id: v1
+                            google_project_iam_member:
+                                gae_api:
+                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
+                                      project: ${google_service_account.custom_service_account.project}
+                                      role: roles/compute.networkUser
+                                storage_viewer:
+                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
+                                      project: ${google_service_account.custom_service_account.project}
+                                      role: roles/storage.objectViewer
+                            google_service_account:
+                                custom_service_account:
+                                    - account_id: '{{ SELF.application_name }}-account'
+                                      display_name: Custom Service Account
+                            google_storage_bucket:
+                                bucket:
+                                    - location: EU
+                                      name: '{{ SELF.gcp_project }}-{{ SELF.application_name }}'
+                            google_storage_bucket_object:
+                                object:
+                                    - bucket: ${google_storage_bucket.bucket.name}
+                                      name: object.zip
+                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
     shop.component~software.application#apt.archive::terraform@*->virtual.machine:
         derived_from: shop.component
         metadata:
@@ -2509,7 +2509,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -2527,7 +2527,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -2545,7 +2545,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -2563,7 +2563,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -2581,7 +2581,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -2691,7 +2691,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -2709,7 +2709,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -2733,7 +2733,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -2757,7 +2757,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -2775,7 +2775,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
@@ -2882,7 +2882,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
@@ -2900,7 +2900,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
@@ -2924,7 +2924,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
@@ -2948,7 +2948,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
@@ -2966,7 +2966,7 @@ node_types:
                                                     #!/usr/bin/bash
                                                     set -e
 
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", foo) }}
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
                                                     EOF>>
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
