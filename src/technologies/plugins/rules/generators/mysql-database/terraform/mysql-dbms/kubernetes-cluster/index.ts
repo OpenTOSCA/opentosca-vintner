@@ -6,8 +6,6 @@ import {
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
 
-// TODO: next: test this
-
 // TODO: use k8s auth
 
 /**
@@ -62,7 +60,7 @@ const generator: ImplementationGenerator = {
                             provider: {
                                 mysql: [
                                     {
-                                        endpoint: '${terraform_data.forward_port.endpoint}',
+                                        endpoint: '${terraform_data.forward_port.input}',
                                         password: '{{ HOST.dbms_password }}',
                                         username: 'root',
                                     },
@@ -72,13 +70,11 @@ const generator: ImplementationGenerator = {
                                 terraform_data: {
                                     forward_port: [
                                         {
-                                            input: {
-                                                endpoint: '127.0.0.1:23306',
-                                            },
+                                            input: '127.0.0.1:23306',
                                             provisioner: {
                                                 'local-exec': {
                                                     command: [
-                                                        'nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 &',
+                                                        '(nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 > /dev/null 2>&1 &)',
                                                         'sleep 5s',
                                                     ].join('\n'),
                                                     interpreter: ['/bin/bash', '-c'],
@@ -86,7 +82,6 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                     ],
-
                                     unforward_port: [
                                         {
                                             depends_on: ['mysql_grant.user'],
