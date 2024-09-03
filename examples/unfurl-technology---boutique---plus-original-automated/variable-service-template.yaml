@@ -351,6 +351,10 @@ topology_template:
                 - host: docker_engine
                 - host: kubernetes_cluster
                 - host: gcp_cloudsql
+            artifacts:
+                - mysql_dbms_image:
+                      type: mysql.dbms.image
+                      file: 5.7
 
         ###################################################
         #

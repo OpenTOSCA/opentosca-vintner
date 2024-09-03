@@ -22,6 +22,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
+    artifact: 'mysql.dbms.image',
     hosting: ['virtual.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',

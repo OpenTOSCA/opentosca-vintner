@@ -69,6 +69,9 @@ artifact_types:
     machine.image:
         derived_from: artifact
         description: expects image reference in "file"
+    dbms.image:
+        derived_from: artifact
+        description: expects image reference in "file"
 interface_types:
     interface:
         derived_from: tosca.interfaces.Root

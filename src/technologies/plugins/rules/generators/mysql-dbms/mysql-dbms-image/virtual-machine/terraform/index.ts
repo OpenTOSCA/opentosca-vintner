@@ -53,6 +53,7 @@ systemctl restart mysql
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
+    artifact: 'mysql.dbms.image',
     hosting: ['virtual.machine'],
     weight: 0,
     reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',

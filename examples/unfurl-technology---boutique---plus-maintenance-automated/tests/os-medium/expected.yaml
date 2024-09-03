@@ -242,12 +242,16 @@ topology_template:
                 - host: cart_dbms
 
         cart_dbms:
-            type: mysql.dbms~mysql.dbms::compose@docker.engine->virtual.machine
+            type: mysql.dbms~mysql.dbms#mysql.dbms.image::compose@docker.engine->virtual.machine
             properties:
                 dbms_name: unfurl-technology-boutique-cart-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_engine
+            artifacts:
+                mysql_dbms_image:
+                    type: mysql.dbms.image
+                    file: 5.7
 
         ###################################################
         #

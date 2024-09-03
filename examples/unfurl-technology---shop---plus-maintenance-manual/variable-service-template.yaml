@@ -181,6 +181,10 @@ topology_template:
                 - host: virtual_machine
                 - host: kubernetes_cluster
                 - host: gcp_cloudsql
+            artifacts:
+                - mysql_dbms_image:
+                      type: mysql.dbms.image
+                      file: 5.7
 
         ###################################################
         #

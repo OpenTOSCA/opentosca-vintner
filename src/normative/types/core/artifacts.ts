@@ -76,6 +76,13 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
     },
+    'dbms.image': {
+        derived_from: 'artifact',
+        description: 'expects image reference in "file"',
+        metadata: {
+            ...MetadataNormative(),
+        },
+    },
 }
 
 export default artifacts

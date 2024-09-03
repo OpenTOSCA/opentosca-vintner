@@ -10,6 +10,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
+    artifact: 'mysql.dbms.image',
     hosting: ['gcp.cloudsql'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
@@ -69,7 +70,8 @@ const generator: ImplementationGenerator = {
                                             register: 'instance_info',
                                             'google.cloud.gcp_sql_instance': {
                                                 name: '{{  SELF.dbms_name }}',
-                                                database_version: 'MYSQL_{{ SELF.dbms_version | replace(".", "_") }}',
+                                                database_version:
+                                                    'MYSQL_{{ ".artifacts::mysql_dbms_image::file" | eval | replace(".", "_") }}',
                                                 settings: {
                                                     tier: 'db-f1-micro',
                                                     availability_type: 'REGIONAL',

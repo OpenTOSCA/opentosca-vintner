@@ -684,7 +684,6 @@ topology_template:
                 - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
                 - mysql_table: 'cart'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
-
             requirements:
                 - database: cart_database_terraform
                 - host: gcp_cloudrun
@@ -726,6 +725,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_engine
+            artifacts:
+                - mysql_dbms_image:
+                      type: mysql.dbms.image
+                      file: 5.7
 
         cart_dbms_kubernetes:
             type: mysql.dbms
@@ -735,6 +738,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: kubernetes_cluster
+            artifacts:
+                - mysql_dbms_image:
+                      type: mysql.dbms.image
+                      file: 5.7
 
         cart_dbms_terraform:
             type: mysql.dbms
@@ -744,6 +751,10 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: gcp_cloudsql
+            artifacts:
+                - mysql_dbms_image:
+                      type: mysql.dbms.image
+                      file: 5.7
 
         ###################################################
         #

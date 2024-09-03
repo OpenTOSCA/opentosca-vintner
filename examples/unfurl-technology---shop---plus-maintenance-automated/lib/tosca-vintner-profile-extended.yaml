@@ -23,6 +23,9 @@ artifact_types:
     docker.image:
         derived_from: container.image
         description: expects image reference in "file"
+    mysql.dbms.image:
+        derived_from: artifact
+        description: expects image reference in "file"
     zip.archive:
         derived_from: source.archive
     tar.archive:
@@ -401,9 +404,6 @@ node_types:
                 type: string
                 default:
                     eval: .::dbms_name
-            dbms_version:
-                type: string
-                default: '5.7'
             dbms_password:
                 type: string
             dbms_ssl_mode:
@@ -7086,7 +7086,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    mysql.dbms~mysql.dbms::ansible@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::ansible@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7131,7 +7131,7 @@ node_types:
                                     - name: start container
                                       community.docker.docker_container:
                                           name: '{{ SELF.dbms_name }}'
-                                          image: mysql:{{ SELF.dbms_version }}
+                                          image: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
                                           network_mode: host
                                           env:
                                               MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}'
@@ -7140,7 +7140,7 @@ node_types:
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
                     delete: exit 0
-    mysql.dbms~mysql.dbms::ansible@gcp.cloudsql:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::ansible@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7191,7 +7191,7 @@ node_types:
                                       register: instance_info
                                       google.cloud.gcp_sql_instance:
                                           name: '{{  SELF.dbms_name }}'
-                                          database_version: MYSQL_{{ SELF.dbms_version | replace(".", "_") }}
+                                          database_version: MYSQL_{{ ".artifacts::mysql_dbms_image::file" | eval | replace(".", "_") }}
                                           settings:
                                               tier: db-f1-micro
                                               availability_type: REGIONAL
@@ -7234,7 +7234,7 @@ node_types:
                                       ansible.builtin.shell: gcloud sql instances delete {{ SELF.dbms_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    mysql.dbms~mysql.dbms::ansible@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::ansible@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7310,7 +7310,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_version }}
+                                                              - image: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -7335,7 +7335,7 @@ node_types:
                                                       app: '{{ SELF.dbms_name }}'
                                                   type: ClusterIP
                     delete: exit 0
-    mysql.dbms~mysql.dbms::ansible@virtual.machine:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::ansible@virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -7736,7 +7736,6 @@ node_types:
                                           content: |-
                                               DBMS_NAME="{{ SELF.dbms_name }}"
                                               APPLICATION_NAME="{{ SELF.application_name }}"
-                                              DBMS_VERSION="{{ SELF.dbms_version }}"
                                               DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                               DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                     - name: copy management operation
@@ -7961,7 +7960,6 @@ node_types:
                                           content: |-
                                               DBMS_NAME="{{ SELF.dbms_name }}"
                                               APPLICATION_NAME="{{ SELF.application_name }}"
-                                              DBMS_VERSION="{{ SELF.dbms_version }}"
                                               DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                               DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                     - name: copy management operation
@@ -8120,7 +8118,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~mysql.dbms::terraform@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::terraform@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8200,8 +8198,8 @@ node_types:
                                           - MYSQL_ROOT_PASSWORD={{ SELF.dbms_password }}
                             docker_image:
                                 image:
-                                    - name: mysql:{{ SELF.dbms_version }}
-    mysql.dbms~mysql.dbms::terraform@gcp.cloudsql:
+                                    - name: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
+    mysql.dbms~mysql.dbms#mysql.dbms.image::terraform@gcp.cloudsql:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8264,7 +8262,7 @@ node_types:
                         resource:
                             google_sql_database_instance:
                                 dbms:
-                                    - database_version: MYSQL_{{ SELF.dbms_version | replace(".", "_") }}
+                                    - database_version: MYSQL_{{ ".artifacts::mysql_dbms_image::file" | eval | replace(".", "_") }}
                                       deletion_protection: false
                                       name: '{{ SELF.dbms_name }}'
                                       root_password: '{{ SELF.dbms_password }}'
@@ -8285,7 +8283,7 @@ node_types:
                                       instance: ${google_sql_database_instance.dbms.name}
                                       name: root
                                       password: ${google_sql_database_instance.dbms.root_password}
-    mysql.dbms~mysql.dbms::terraform@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::terraform@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8363,7 +8361,7 @@ node_types:
                                                   spec:
                                                       - container:
                                                             - name: '{{ SELF.dbms_name }}'
-                                                              image: mysql:{{ SELF.dbms_version }}
+                                                              image: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
                                                               env:
                                                                   - name: MYSQL_ROOT_PASSWORD
                                                                     value: '{{ SELF.dbms_password }}'
@@ -8382,7 +8380,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.dbms_name }}'
                                             type: ClusterIP
-    mysql.dbms~mysql.dbms::terraform@virtual.machine:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::terraform@virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -8571,7 +8569,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -8749,7 +8746,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -8936,7 +8932,6 @@ node_types:
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
                                                     DBMS_NAME="{{ SELF.dbms_name }}"
                                                     APPLICATION_NAME="{{ SELF.application_name }}"
-                                                    DBMS_VERSION="{{ SELF.dbms_version }}"
                                                     DBMS_PASSWORD="{{ SELF.dbms_password }}"
                                                     DBMS_SSL_MODE="{{ SELF.dbms_ssl_mode }}"
                                                     EOF>>
@@ -9062,7 +9057,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~mysql.dbms::kubernetes@kubernetes.cluster:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::kubernetes@kubernetes.cluster:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -9138,7 +9133,7 @@ node_types:
                                                               app: '{{ SELF.dbms_name }}'
                                                       spec:
                                                           containers:
-                                                              - image: mysql:{{ SELF.dbms_version }}
+                                                              - image: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
                                                                 name: '{{ SELF.dbms_name }}'
                                                                 env:
                                                                     - name: MYSQL_ROOT_PASSWORD
@@ -9171,7 +9166,7 @@ node_types:
                                       ansible.builtin.pause:
                                           seconds: 10
                     delete: exit 0
-    mysql.dbms~mysql.dbms::compose@docker.engine->virtual.machine:
+    mysql.dbms~mysql.dbms#mysql.dbms.image::compose@docker.engine->virtual.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -9234,7 +9229,7 @@ node_types:
                                               services:
                                                   application:
                                                       container_name: '{{ SELF.dbms_name }}'
-                                                      image: mysql:{{ SELF.dbms_version }}
+                                                      image: mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}
                                                       network_mode: host
                                                       environment:
                                                           MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}'

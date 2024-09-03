@@ -6,13 +6,16 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
 
+// TODO: does not use k8s auth
+
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
-    technology: 'ansible',
+    technology: 'kubernetes',
+    artifact: 'mysql.dbms.image',
     hosting: ['kubernetes.cluster'],
-    weight: 0.5,
-    reason: 'Kubernetes is more specialized.',
-    details: '"kubernetes.core.k8s" tasks',
+    weight: 1,
+    reason: 'Kubernetes is the underlying technology.',
+    details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
         return {
@@ -52,29 +55,25 @@ const generator: ImplementationGenerator = {
                         create: {
                             implementation: {
                                 ...AnsibleOrchestratorOperation(),
-                                environment: {
-                                    K8S_AUTH_HOST: {
-                                        eval: '.::k8s_host',
-                                    },
-                                    K8S_AUTH_SSL_CA_CERT: {
-                                        eval: '.::k8s_ca_cert_file',
-                                    },
-                                    K8S_AUTH_CERT_FILE: {
-                                        eval: '.::k8s_client_cert_file',
-                                    },
-                                    K8S_AUTH_KEY_FILE: {
-                                        eval: '.::k8s_client_key_file',
-                                    },
-                                },
                             },
                             inputs: {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'create deployment',
-                                            'kubernetes.core.k8s': {
-                                                wait: true,
-                                                definition: {
+                                            name: 'touch manifest',
+                                            register: 'manifest',
+                                            'ansible.builtin.tempfile': {
+                                                suffix: '{{ SELF.dbms_name }}.dbms.manifest.yaml',
+                                            },
+                                        },
+                                        {
+                                            name: 'create manifest',
+                                            'ansible.builtin.copy': {
+                                                dest: '{{ manifest.path }}',
+                                                content: '{{ deployment | to_yaml }}\n---\n{{ service | to_yaml }}\n',
+                                            },
+                                            vars: {
+                                                deployment: {
                                                     apiVersion: 'apps/v1',
                                                     kind: 'Deployment',
                                                     metadata: {
@@ -96,7 +95,7 @@ const generator: ImplementationGenerator = {
                                                             spec: {
                                                                 containers: [
                                                                     {
-                                                                        image: 'mysql:{{ SELF.dbms_version }}',
+                                                                        image: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
                                                                         name: '{{ SELF.dbms_name }}',
                                                                         env: [
                                                                             {
@@ -116,17 +115,11 @@ const generator: ImplementationGenerator = {
                                                         },
                                                     },
                                                 },
-                                            },
-                                        },
-                                        {
-                                            name: 'create service',
-                                            'kubernetes.core.k8s': {
-                                                definition: {
+                                                service: {
                                                     apiVersion: 'v1',
                                                     kind: 'Service',
                                                     metadata: {
                                                         name: '{{ SELF.dbms_name }}',
-                                                        namespace: 'default',
                                                     },
                                                     spec: {
                                                         ports: [
@@ -142,6 +135,27 @@ const generator: ImplementationGenerator = {
                                                         type: 'ClusterIP',
                                                     },
                                                 },
+                                            },
+                                        },
+                                        {
+                                            name: 'apply manifest',
+                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        {
+                                            name: 'wait for deployment',
+                                            'ansible.builtin.shell':
+                                                'kubectl rollout status deployment/{{ SELF.dbms_name }} --timeout 60s',
+                                            args: {
+                                                executable: '/usr/bin/bash',
+                                            },
+                                        },
+                                        {
+                                            name: 'give DBMS some time',
+                                            'ansible.builtin.pause': {
+                                                seconds: 10,
                                             },
                                         },
                                     ],

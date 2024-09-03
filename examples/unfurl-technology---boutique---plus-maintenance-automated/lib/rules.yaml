@@ -54,6 +54,7 @@ ansible:
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - docker.engine
           - virtual.machine
@@ -61,18 +62,21 @@ ansible:
       reason: Docker Compose is more specialized
       details: '"community.docker.docker_container" task'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - gcp.cloudsql
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
       reason: Kubernetes is more specialized.
       details: '"kubernetes.core.k8s" tasks'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - virtual.machine
       weight: 1
@@ -204,6 +208,7 @@ terraform:
       weight: 0.5
       reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - docker.engine
           - virtual.machine
@@ -211,18 +216,21 @@ terraform:
       reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - gcp.cloudsql
       weight: 1
       reason: Terraform provides a declarative module.
       details: '"google_sql_database_instance" and "google_sql_user" resources'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - kubernetes.cluster
       weight: 0.5
       reason: Kubernetes is more specialized.
       details: '"kubernetes_deployment_v1" and "kubernetes_service_v1" resources'
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - virtual.machine
       weight: 0
@@ -318,6 +326,7 @@ kubernetes:
       weight: 0
       reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - kubernetes.cluster
       weight: 1
@@ -337,8 +346,9 @@ compose:
           - docker.engine
           - virtual.machine
       weight: 0
-      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while declarative other technologies provide declarative modules.
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
     - component: mysql.dbms
+      artifact: mysql.dbms.image
       hosting:
           - docker.engine
           - virtual.machine

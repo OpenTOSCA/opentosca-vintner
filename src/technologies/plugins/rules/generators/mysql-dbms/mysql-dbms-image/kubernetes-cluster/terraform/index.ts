@@ -9,6 +9,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'terraform',
+    artifact: 'mysql.dbms.image',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
     reason: 'Kubernetes is more specialized.',
@@ -106,7 +107,7 @@ const generator: ImplementationGenerator = {
                                                                     container: [
                                                                         {
                                                                             name: '{{ SELF.dbms_name }}',
-                                                                            image: 'mysql:{{ SELF.dbms_version }}',
+                                                                            image: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
                                                                             env: [
                                                                                 {
                                                                                     name: 'MYSQL_ROOT_PASSWORD',

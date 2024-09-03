@@ -11,6 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
     technology: 'ansible',
+    artifact: 'mysql.dbms.image',
     hosting: ['docker.engine', 'virtual.machine'],
     weight: 0.5,
     reason: 'Docker Compose is more specialized',
@@ -61,7 +62,7 @@ const generator: ImplementationGenerator = {
                                             name: 'start container',
                                             'community.docker.docker_container': {
                                                 name: '{{ SELF.dbms_name }}',
-                                                image: 'mysql:{{ SELF.dbms_version }}',
+                                                image: 'mysql:{{ ".artifacts::mysql_dbms_image::file" | eval }}',
                                                 network_mode: 'host',
                                                 env: {
                                                     MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}',
