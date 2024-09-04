@@ -53,14 +53,15 @@ We assess the deployment quality of the following scenarios.
 
 ### Scenario #<%= index + 1 %>
 
-A node template whose node type is or is derived from the node type <%= link(group.component) -%>
+In this scenario, the node template "component" of node type <%= link(group.component) -%> is deployed.
 <% if (group.artifact) { -%>
- and which has an artifact whose artifact type is or is derived from <%= link(group.artifact) -%>,
+This node template is implemented by its deployment artifact "artifact" of artifact type <%= link(group.artifact) -%>.
 <% } -%>
 <% if (group.hosting.length !== 0) { -%>
- and which <%- group.hosting.map(it => it === "*" ? "is hosted on an arbitrary hosting stack" : `is hosted on a node template whose node type is or is derived from ${link(it)}`).join(", which ") -%>
+The node template <%- group.hosting.map((type, index) => type === "*" ? "is hosted on an arbitrary hosting stack of arbitrary length" : `is hosted on the node template "host ${index + 1}" of node type ${link(type)}`).join(", which ") -%>.
+<% } else { -%>
+The scenario does not require a specific hosting.
 <% } -%>
-.
 
 <figure markdown><%- group.svg %></figure>
 
