@@ -16,6 +16,81 @@ const generator: ImplementationGenerator = {
     reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
+        const AnsibleTouchJobTask = {
+            name: 'touch manifest',
+            register: 'manifest',
+            'ansible.builtin.tempfile': {
+                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.manifest.yaml',
+            },
+        }
+
+        const AnsibleCreateJobTask = (query: string) => {
+            return {
+                name: 'create manifest',
+                'ansible.builtin.copy': {
+                    dest: '{{ manifest.path }}',
+                    content: '{{ job | to_yaml }}',
+                },
+                vars: {
+                    job: {
+                        apiVersion: 'batch/v1',
+                        kind: 'Job',
+                        metadata: {
+                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                        },
+                        spec: {
+                            template: {
+                                spec: {
+                                    restartPolicy: 'Never',
+                                    containers: [
+                                        {
+                                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                                            image: 'mysql:{{ HOST.dbms_version }}',
+                                            command: [
+                                                'mysql',
+                                                '--host={{ HOST.management_address }}',
+                                                '--port={{ HOST.management_port }}',
+                                                '--user=root',
+                                                '--password={{ HOST.dbms_password }}',
+                                                '-e',
+                                                query,
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            }
+        }
+
+        const AnsibleApplyJobTasks = [
+            {
+                name: 'apply manifest',
+                'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                args: {
+                    executable: '/usr/bin/bash',
+                },
+            },
+            {
+                name: 'wait for deployment',
+                'ansible.builtin.shell':
+                    'kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                args: {
+                    executable: '/usr/bin/bash',
+                },
+            },
+
+            {
+                name: 'cleanup',
+                'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
+                args: {
+                    executable: '/usr/bin/bash',
+                },
+            },
+        ]
+
         return {
             derived_from: name,
             metadata: {
@@ -35,113 +110,31 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        {
-                                            name: 'touch manifest',
-                                            register: 'manifest',
-                                            'ansible.builtin.tempfile': {
-                                                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.manifest.yaml',
-                                            },
-                                        },
-                                        {
-                                            name: 'create manifest',
-                                            'ansible.builtin.copy': {
-                                                dest: '{{ manifest.path }}',
-                                                content: '{{ job | to_yaml }}',
-                                            },
-                                            vars: {
-                                                job: {
-                                                    apiVersion: 'batch/v1',
-                                                    kind: 'Job',
-                                                    metadata: {
-                                                        name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                                                    },
-                                                    spec: {
-                                                        template: {
-                                                            spec: {
-                                                                restartPolicy: 'Never',
-                                                                initContainers: [
-                                                                    {
-                                                                        name: 'create-database',
-                                                                        image: 'mysql:{{ HOST.dbms_version }}',
-                                                                        command: [
-                                                                            'mysql',
-                                                                            '--host={{ HOST.management_address }}',
-                                                                            '--port={{ HOST.management_port }}',
-                                                                            '--user=root',
-                                                                            '--password={{ HOST.dbms_password }}',
-                                                                            '-e',
-                                                                            'CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}',
-                                                                        ],
-                                                                    },
-                                                                    {
-                                                                        name: 'create-user',
-                                                                        image: 'mysql:{{ HOST.dbms_version }}',
-                                                                        command: [
-                                                                            'mysql',
-                                                                            '--host={{ HOST.management_address }}',
-                                                                            '--port={{ HOST.management_port }}',
-                                                                            '--user=root',
-                                                                            '--password={{ HOST.dbms_password }}',
-                                                                            '-e',
-                                                                            "CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'",
-                                                                        ],
-                                                                    },
-                                                                    {
-                                                                        name: 'grant-privileges',
-                                                                        image: 'mysql:{{ HOST.dbms_version }}',
-                                                                        command: [
-                                                                            'mysql',
-                                                                            '--host={{ HOST.management_address }}',
-                                                                            '--port={{ HOST.management_port }}',
-                                                                            '--user=root',
-                                                                            '--password={{ HOST.dbms_password }}',
-                                                                            '-e',
-                                                                            "GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%'",
-                                                                        ],
-                                                                    },
-                                                                ],
-                                                                containers: [
-                                                                    {
-                                                                        name: 'none',
-                                                                        image: 'busybox',
-                                                                        command: ['echo', "'done'"],
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        {
-                                            name: 'apply manifest',
-                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
-                                        {
-                                            name: 'wait for deployment',
-                                            'ansible.builtin.shell':
-                                                'kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
-
-                                        {
-                                            name: 'cleanup',
-                                            'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
-                                        },
+                                        AnsibleTouchJobTask,
+                                        AnsibleCreateJobTask(
+                                            "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';"
+                                        ),
+                                        ...AnsibleApplyJobTasks,
                                     ],
                                 },
                             },
                         },
-                        // TODO: delete
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleOrchestratorOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        AnsibleTouchJobTask,
+                                        AnsibleCreateJobTask(
+                                            "DROP USER IF EXISTS '{{ SELF.database_user }}'@'%'; DROP DATABASE IF EXISTS {{ SELF.database_name }};"
+                                        ),
+                                        ...AnsibleApplyJobTasks,
+                                    ],
+                                },
+                            },
+                        },
                     },
                 },
             },
