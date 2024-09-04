@@ -1,9 +1,8 @@
 <% if (puml.isAsterisk(node)) { -%>
-rectangle "..." as <%= puml.toId(node) -%> #white;line.dotted -%>
+rectangle "    ...    " as <%= puml.toId(node) -%> #white;line.dotted
 <% } else { -%>
-rectangle "<%= puml.toText(node) %>" as <%= puml.toId(node) -%>
+rectangle "<%= puml.toText(node) %>" as <%= puml.toId(node) %>
 <% } -%>
-
 <% if(puml.hasLink(node)) {-%>
 url of <%= puml.toId(node) %> is [[ <%= puml.getLink(node) %> ]]
 <% } -%>

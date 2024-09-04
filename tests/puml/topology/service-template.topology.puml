@@ -41,7 +41,7 @@ rectangle "dbms\n(example.nodes.DBMS)" as node_dbms
 
 rectangle "compute\n(example.nodes.Compute)" as node_compute
 
-rectangle "..." as node_hosting #white;line.dotted
+rectangle "    ...    " as node_hosting #white;line.dotted
 
 rectangle "provider\n(some.provider)" as node_provider
 
