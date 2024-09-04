@@ -7,6 +7,7 @@ skinparam ArrowThickness 1.5
 skinparam file {
     BorderColor black
     BorderThickness 1.5
+    BackgroundColor white
 }
 
 skinparam interface {
@@ -26,7 +27,7 @@ rectangle "application\n(example.nodes.Application)" as node_application
 url of node_application is [[ https://vintner.opentosca.org ]]
 file "tar_archive\n(tar.archive)" as artifact_tar_archive_0_node_application
 url of artifact_tar_archive_0_node_application is [[ https://vintner.opentosca.org ]]
-artifact_tar_archive_0_node_application - node_application
+artifact_tar_archive_0_node_application . node_application
 
 rectangle "runtime\n(example.nodes.Runtime)" as node_runtime
 
@@ -40,7 +41,7 @@ rectangle "dbms\n(example.nodes.DBMS)" as node_dbms
 
 rectangle "compute\n(example.nodes.Compute)" as node_compute
 
-rectangle "hosting\n(*)" as node_hosting #line.dashed
+rectangle "..." as node_hosting #white;line.dotted
 
 rectangle "provider\n(some.provider)" as node_provider
 
