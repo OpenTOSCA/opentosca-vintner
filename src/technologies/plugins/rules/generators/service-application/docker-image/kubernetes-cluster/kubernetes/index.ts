@@ -1,12 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
+    BASH_KUBECTL,
     MetadataGenerated,
     MetadataUnfurl,
     mapProperties,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: use k8s auth
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -121,15 +120,14 @@ const generator: ImplementationGenerator = {
                                         AnsibleCreateManifestTak,
                                         {
                                             name: 'apply manifest',
-                                            'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                                            'ansible.builtin.shell': `${BASH_KUBECTL} apply -f {{ manifest.path }}`,
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
                                         },
                                         {
                                             name: 'wait for deployment',
-                                            'ansible.builtin.shell':
-                                                'kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s',
+                                            'ansible.builtin.shell': `${BASH_KUBECTL} rollout status deployment/{{ SELF.application_name }} --timeout 60s`,
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },
@@ -149,7 +147,7 @@ const generator: ImplementationGenerator = {
                                         AnsibleCreateManifestTak,
                                         {
                                             name: 'unapply manifest',
-                                            'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
+                                            'ansible.builtin.shell': `${BASH_KUBECTL} delete -f {{ manifest.path }}`,
                                             args: {
                                                 executable: '/usr/bin/bash',
                                             },

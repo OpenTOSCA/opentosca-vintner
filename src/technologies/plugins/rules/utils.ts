@@ -204,6 +204,9 @@ export function KubernetesCredentials() {
     }
 }
 
+export const BASH_KUBECTL =
+    'kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }}'
+
 export function AnsibleHostEndpointCapability() {
     return {
         endpoint: {

@@ -1,12 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
+    BASH_KUBECTL,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: use k8s auth
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -68,15 +67,14 @@ const generator: ImplementationGenerator = {
         const AnsibleApplyJobTasks = [
             {
                 name: 'apply manifest',
-                'ansible.builtin.shell': 'kubectl apply -f {{ manifest.path }}',
+                'ansible.builtin.shell': `${BASH_KUBECTL} apply -f {{ manifest.path }}`,
                 args: {
                     executable: '/usr/bin/bash',
                 },
             },
             {
                 name: 'wait for deployment',
-                'ansible.builtin.shell':
-                    'kubectl wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                'ansible.builtin.shell': `${BASH_KUBECTL} wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}`,
                 args: {
                     executable: '/usr/bin/bash',
                 },
@@ -84,7 +82,7 @@ const generator: ImplementationGenerator = {
 
             {
                 name: 'cleanup',
-                'ansible.builtin.shell': 'kubectl delete -f {{ manifest.path }}',
+                'ansible.builtin.shell': `${BASH_KUBECTL} delete -f {{ manifest.path }}`,
                 args: {
                     executable: '/usr/bin/bash',
                 },
