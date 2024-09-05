@@ -1,12 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleOrchestratorOperation,
+    BASH_KUBECTL,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: use k8s auth
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -40,8 +39,7 @@ const generator: ImplementationGenerator = {
                                             block: [
                                                 {
                                                     name: 'forward port',
-                                                    'ansible.builtin.shell':
-                                                        'kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306',
+                                                    'ansible.builtin.shell': `${BASH_KUBECTL} port-forward service/{{ HOST.dbms_name }} 23306:3306`,
                                                     args: {
                                                         executable: '/usr/bin/bash',
                                                     },
@@ -85,7 +83,7 @@ const generator: ImplementationGenerator = {
                                                 {
                                                     name: 'unforward port',
                                                     'ansible.builtin.shell':
-                                                        'pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"',
+                                                        'pkill -f "port-forward service/{{ HOST.dbms_name }}"',
                                                     args: {
                                                         executable: '/usr/bin/bash',
                                                     },

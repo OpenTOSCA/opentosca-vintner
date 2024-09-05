@@ -76,21 +76,20 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'Installing mysql',
+                                            name: 'installing mysql',
                                             'ansible.builtin.apt': {
-                                                name: '{{ item }}',
+                                                name: [
+                                                    'mysql-server',
+                                                    'mysql-client',
+                                                    'python3-mysqldb',
+                                                    'libmysqlclient-dev',
+                                                ],
                                                 state: 'present',
                                                 update_cache: 'yes',
                                             },
-                                            loop: [
-                                                'mysql-server',
-                                                'mysql-client',
-                                                'python3-mysqldb',
-                                                'libmysqlclient-dev',
-                                            ],
                                         },
                                         {
-                                            name: 'Start and enable mysql service',
+                                            name: 'start and enable mysql service',
                                             'ansible.builtin.systemd': {
                                                 name: 'mysql',
                                                 state: 'started',
@@ -98,7 +97,7 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Enable passwordless login',
+                                            name: 'enable passwordless login',
                                             'ansible.builtin.copy': {
                                                 dest: '{{ item }}',
                                                 content: files.toINI({
@@ -111,7 +110,7 @@ const generator: ImplementationGenerator = {
                                             loop: ['/root/.my.cnf', '/home/{{ SELF.os_ssh_user }}/.my.cnf'],
                                         },
                                         {
-                                            name: 'Configure port (e.g., since 3306 is blocked by the provider)',
+                                            name: 'configure port (e.g., since 3306 is blocked by the provider)',
                                             'ansible.builtin.lineinfile': {
                                                 path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
                                                 regexp: '^# port',
@@ -120,7 +119,7 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Enable remote login',
+                                            name: 'enable remote login',
                                             'ansible.builtin.lineinfile': {
                                                 path: '/etc/mysql/mysql.conf.d/mysqld.cnf',
                                                 regexp: '^bind-address',
@@ -129,14 +128,14 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Restart mysql',
+                                            name: 'restart mysql',
                                             'ansible.builtin.systemd': {
                                                 name: 'mysql',
                                                 state: 'restarted',
                                             },
                                         },
                                         {
-                                            name: 'Create all root',
+                                            name: 'create all root',
                                             'community.mysql.mysql_user': {
                                                 name: 'root',
                                                 password: '{{ SELF.dbms_password }}',
@@ -150,7 +149,7 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                         {
-                                            name: 'Delete localhost root',
+                                            name: 'delete localhost root',
                                             'community.mysql.mysql_user': {
                                                 name: 'root',
                                                 host: 'localhost',
@@ -166,7 +165,41 @@ const generator: ImplementationGenerator = {
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            name: 'uninstalling mysql',
+                                            'ansible.builtin.apt': {
+                                                name: [
+                                                    'mysql-server',
+                                                    'mysql-client',
+                                                    'python3-mysqldb',
+                                                    'libmysqlclient-dev',
+                                                ],
+                                                state: 'absent',
+                                            },
+                                        },
+                                        {
+                                            name: 'remove passwordless login',
+                                            'ansible.builtin.file': {
+                                                name: '{{ item }}',
+                                                state: 'absent',
+                                            },
+                                            loop: ['/root/.my.cnf', '/home/{{ SELF.os_ssh_user }}/.my.cnf'],
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
                     },
                 },
             },

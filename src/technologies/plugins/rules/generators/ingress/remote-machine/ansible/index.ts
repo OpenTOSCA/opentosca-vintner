@@ -91,7 +91,28 @@ const generator: ImplementationGenerator = {
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            name: 'uninstall package',
+                                            'ansible.builtin.apt': {
+                                                name: 'caddy',
+                                                state: 'absent',
+                                            },
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
                     },
                 },
             },

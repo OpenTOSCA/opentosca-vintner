@@ -1,62 +1,54 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
-    BASH_KUBECTL,
-    KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils'
+
+// TODO: we assume that dbms is exposed
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
-    technology: 'kubernetes',
-    hosting: ['mysql.dbms', 'kubernetes.cluster'],
+    technology: 'compose',
+    hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
     weight: 0,
-    reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const AnsibleTouchJobTask = {
-            name: 'touch manifest',
-            register: 'manifest',
+            name: 'touch compose',
+            register: 'compose',
             'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.manifest.yaml',
+                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.compose.yaml',
             },
         }
 
         const AnsibleCreateJobTask = (query: string) => {
             return {
-                name: 'create manifest',
+                name: 'create compose',
                 'ansible.builtin.copy': {
-                    dest: '{{ manifest.path }}',
-                    content: '{{ job | to_yaml }}',
+                    dest: '{{ compose.path }}',
+                    content: '{{ manifest | to_yaml }}',
                 },
                 vars: {
-                    job: {
-                        apiVersion: 'batch/v1',
-                        kind: 'Job',
-                        metadata: {
-                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                        },
-                        spec: {
-                            template: {
-                                spec: {
-                                    restartPolicy: 'Never',
-                                    containers: [
-                                        {
-                                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                                            image: 'mysql:{{ HOST.dbms_version }}',
-                                            command: [
-                                                'mysql',
-                                                '--host={{ HOST.management_address }}',
-                                                '--port={{ HOST.management_port }}',
-                                                '--user=root',
-                                                '--password={{ HOST.dbms_password }}',
-                                                '-e',
-                                                query,
-                                            ],
-                                        },
-                                    ],
-                                },
+                    manifest: {
+                        name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
+                        services: {
+                            job: {
+                                container_name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
+                                image: 'mysql:{{ HOST.dbms_version }}',
+                                network_mode: 'host',
+                                command: [
+                                    'mysql',
+                                    '--host={{ HOST.management_address }}',
+                                    '--port={{ HOST.management_port }}',
+                                    '--user=root',
+                                    '--password={{ HOST.dbms_password }}',
+                                    '-e',
+                                    query,
+                                ],
                             },
                         },
                     },
@@ -66,25 +58,29 @@ const generator: ImplementationGenerator = {
 
         const AnsibleApplyJobTasks = [
             {
-                name: 'apply manifest',
-                'ansible.builtin.shell': `${BASH_KUBECTL} apply -f {{ manifest.path }}`,
+                name: 'apply compose',
+                'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
                 args: {
                     executable: '/usr/bin/bash',
                 },
+                environment: {
+                    ...AnsibleDockerHostEnvironment(),
+                },
             },
             {
-                name: 'wait for deployment',
-                'ansible.builtin.shell': `${BASH_KUBECTL} wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}`,
+                name: 'give job some time',
+                'ansible.builtin.pause': {
+                    seconds: 10,
+                },
+            },
+            {
+                name: 'unapply compose',
+                'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
                 args: {
                     executable: '/usr/bin/bash',
                 },
-            },
-
-            {
-                name: 'cleanup',
-                'ansible.builtin.shell': `${BASH_KUBECTL} delete -f {{ manifest.path }}`,
-                args: {
-                    executable: '/usr/bin/bash',
+                environment: {
+                    ...AnsibleDockerHostEnvironment(),
                 },
             },
         ]
@@ -96,7 +92,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...KubernetesCredentials(),
+                ...OpenstackMachineHost(),
             },
             interfaces: {
                 Standard: {

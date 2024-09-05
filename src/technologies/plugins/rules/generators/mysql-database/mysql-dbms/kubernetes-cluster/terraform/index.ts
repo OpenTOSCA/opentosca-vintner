@@ -1,12 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    BASH_KUBECTL,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
-
-// TODO: use k8s auth
 
 /**
  * Official Kubernetes provider does not provide "kubectl exec", https://registry.terraform.io/providers/hashicorp/kubernetes
@@ -74,7 +73,7 @@ const generator: ImplementationGenerator = {
                                             provisioner: {
                                                 'local-exec': {
                                                     command: [
-                                                        '(nohup kubectl port-forward service/{{ HOST.dbms_name }} 23306:3306 > /dev/null 2>&1 &)',
+                                                        `(nohup ${BASH_KUBECTL} port-forward service/{{ HOST.dbms_name }} 23306:3306 > /dev/null 2>&1 &)`,
                                                         'sleep 5s',
                                                     ].join('\n'),
                                                     interpreter: ['/bin/bash', '-c'],
@@ -87,8 +86,7 @@ const generator: ImplementationGenerator = {
                                             depends_on: ['mysql_grant.user'],
                                             provisioner: {
                                                 'local-exec': {
-                                                    command:
-                                                        'pkill -f "kubectl port-forward service/{{ HOST.dbms_name }}"',
+                                                    command: `pkill -f "port-forward service/{{ HOST.dbms_name }}"`,
                                                     interpreter: ['/bin/bash', '-c'],
                                                 },
                                             },

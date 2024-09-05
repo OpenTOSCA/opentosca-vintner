@@ -204,6 +204,9 @@ export function KubernetesCredentials() {
     }
 }
 
+export const BASH_KUBECTL =
+    'kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }}'
+
 export function AnsibleHostEndpointCapability() {
     return {
         endpoint: {
@@ -230,6 +233,29 @@ export function AnsibleOrchestratorOperation() {
     return {
         primary: 'Ansible',
         operation_host: 'ORCHESTRATOR',
+    }
+}
+
+export function AnsibleKubernetesCredentialsEnvironment() {
+    return {
+        K8S_AUTH_HOST: {
+            eval: '.::k8s_host',
+        },
+        K8S_AUTH_SSL_CA_CERT: {
+            eval: '.::k8s_ca_cert_file',
+        },
+        K8S_AUTH_CERT_FILE: {
+            eval: '.::k8s_client_cert_file',
+        },
+        K8S_AUTH_KEY_FILE: {
+            eval: '.::k8s_client_key_file',
+        },
+    }
+}
+
+export function AnsibleDockerHostEnvironment() {
+    return {
+        DOCKER_HOST: '{{ SELF.os_ssh_host }}',
     }
 }
 

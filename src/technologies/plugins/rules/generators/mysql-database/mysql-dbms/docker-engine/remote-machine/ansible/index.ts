@@ -24,6 +24,20 @@ const generator: ImplementationGenerator = {
     reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
+        const user = {
+            name: '{{ SELF.database_user }}',
+            password: '{{ SELF.database_password }}',
+            host: '%',
+            priv: '*.*:ALL',
+        }
+
+        const login = {
+            login_host: '{{ HOST.application_address }}',
+            login_password: '{{ HOST.dbms_password }}',
+            login_port: '{{ HOST.application_port }}',
+            login_user: 'root',
+        }
+
         return {
             derived_from: name,
             metadata: {
@@ -92,23 +106,14 @@ const generator: ImplementationGenerator = {
                                             name: 'create database',
                                             'community.mysql.mysql_db': {
                                                 name: '{{ SELF.database_name }}',
-                                                login_host: '{{ HOST.application_address }}',
-                                                login_password: '{{ HOST.dbms_password }}',
-                                                login_port: '{{ HOST.application_port }}',
-                                                login_user: 'root',
+                                                ...login,
                                             },
                                         },
                                         {
                                             name: 'create user (with privileges)',
                                             'community.mysql.mysql_user': {
-                                                name: '{{ SELF.database_user }}',
-                                                password: '{{ SELF.database_password }}',
-                                                host: '%',
-                                                priv: '*.*:ALL',
-                                                login_host: '{{ HOST.application_address }}',
-                                                login_password: '{{ HOST.dbms_password }}',
-                                                login_port: '{{ HOST.application_port }}',
-                                                login_user: 'root',
+                                                ...user,
+                                                ...login,
                                             },
                                         },
                                         {
@@ -134,7 +139,37 @@ const generator: ImplementationGenerator = {
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
-                        delete: 'exit 0',
+                        delete: {
+                            implementation: {
+                                ...AnsibleHostOperation(),
+                            },
+                            inputs: {
+                                playbook: {
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        {
+                                            name: 'delete user (with privileges)',
+                                            'community.mysql.mysql_user': {
+                                                state: 'absent',
+                                                ...user,
+                                                ...login,
+                                            },
+                                        },
+                                        {
+                                            name: 'delete database',
+                                            'community.mysql.mysql_db': {
+                                                name: '{{ SELF.database_name }}',
+                                                state: 'absent',
+                                                ...login,
+                                            },
+                                        },
+                                    ],
+                                },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
+                            },
+                        },
                     },
                 },
             },
