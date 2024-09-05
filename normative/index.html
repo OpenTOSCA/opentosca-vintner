@@ -9862,6 +9862,7 @@ An overview is given in Figure tosca-vintner-profile-extended2.</p>
 <a id="__codelineno-45-8" name="__codelineno-45-8"></a><span class="w">            </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudbuild.googleapis.com</span>
 </code></pre></div></td></tr></table></div>
 <h4 id="dockerengine">docker.engine<a class="headerlink" href="#dockerengine" title="Permanent link">&para;</a></h4>
+<p>Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-46-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-46-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-46-3"> 3</a></span>
@@ -11059,7 +11060,8 @@ The profile is also available as <a download="tosca-vintner-profile-extended.yam
 <span class="normal"><a href="#__codelineno-53-396">396</a></span>
 <span class="normal"><a href="#__codelineno-53-397">397</a></span>
 <span class="normal"><a href="#__codelineno-53-398">398</a></span>
-<span class="normal"><a href="#__codelineno-53-399">399</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_simple_yaml_1_3</span>
+<span class="normal"><a href="#__codelineno-53-399">399</a></span>
+<span class="normal"><a href="#__codelineno-53-400">400</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_simple_yaml_1_3</span>
 <a id="__codelineno-53-2" name="__codelineno-53-2"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TOSCA Profile for OpenTOSCA Vintner (Extended)</span>
 <a id="__codelineno-53-3" name="__codelineno-53-3"></a><span class="nt">metadata</span><span class="p">:</span>
 <a id="__codelineno-53-4" name="__codelineno-53-4"></a><span class="w">    </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
@@ -11337,127 +11339,128 @@ The profile is also available as <a download="tosca-vintner-profile-extended.yam
 <a id="__codelineno-53-276" name="__codelineno-53-276"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudbuild.googleapis.com</span>
 <a id="__codelineno-53-277" name="__codelineno-53-277"></a><span class="w">    </span><span class="nt">docker.engine</span><span class="p">:</span>
 <a id="__codelineno-53-278" name="__codelineno-53-278"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container.runtime</span>
-<a id="__codelineno-53-279" name="__codelineno-53-279"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<a id="__codelineno-53-280" name="__codelineno-53-280"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-281" name="__codelineno-53-281"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-53-282" name="__codelineno-53-282"></a><span class="w">            </span><span class="nt">application_name</span><span class="p">:</span>
-<a id="__codelineno-53-283" name="__codelineno-53-283"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-284" name="__codelineno-53-284"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
-<a id="__codelineno-53-285" name="__codelineno-53-285"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
-<a id="__codelineno-53-286" name="__codelineno-53-286"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-287" name="__codelineno-53-287"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
-<a id="__codelineno-53-288" name="__codelineno-53-288"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
-<a id="__codelineno-53-289" name="__codelineno-53-289"></a><span class="w">            </span><span class="nt">management_address</span><span class="p">:</span>
-<a id="__codelineno-53-290" name="__codelineno-53-290"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-291" name="__codelineno-53-291"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
-<a id="__codelineno-53-292" name="__codelineno-53-292"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-53-293" name="__codelineno-53-293"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
-<a id="__codelineno-53-294" name="__codelineno-53-294"></a><span class="w">    </span><span class="nt">kubernetes.cluster</span><span class="p">:</span>
-<a id="__codelineno-53-295" name="__codelineno-53-295"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.service</span>
-<a id="__codelineno-53-296" name="__codelineno-53-296"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<a id="__codelineno-53-297" name="__codelineno-53-297"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-298" name="__codelineno-53-298"></a><span class="w">            </span><span class="nt">vintner_abstract</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-299" name="__codelineno-53-299"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-53-300" name="__codelineno-53-300"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
-<a id="__codelineno-53-301" name="__codelineno-53-301"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-302" name="__codelineno-53-302"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes</span>
-<a id="__codelineno-53-303" name="__codelineno-53-303"></a><span class="w">            </span><span class="nt">k8s_host</span><span class="p">:</span>
-<a id="__codelineno-53-304" name="__codelineno-53-304"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-305" name="__codelineno-53-305"></a><span class="w">            </span><span class="nt">k8s_ca_cert_file</span><span class="p">:</span>
-<a id="__codelineno-53-306" name="__codelineno-53-306"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-307" name="__codelineno-53-307"></a><span class="w">            </span><span class="nt">k8s_client_cert_file</span><span class="p">:</span>
-<a id="__codelineno-53-308" name="__codelineno-53-308"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-309" name="__codelineno-53-309"></a><span class="w">            </span><span class="nt">k8s_client_key_file</span><span class="p">:</span>
-<a id="__codelineno-53-310" name="__codelineno-53-310"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-311" name="__codelineno-53-311"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
-<a id="__codelineno-53-312" name="__codelineno-53-312"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-53-313" name="__codelineno-53-313"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
-<a id="__codelineno-53-314" name="__codelineno-53-314"></a><span class="w">        </span><span class="nt">interfaces</span><span class="p">:</span>
-<a id="__codelineno-53-315" name="__codelineno-53-315"></a><span class="w">            </span><span class="nt">Standard</span><span class="p">:</span>
-<a id="__codelineno-53-316" name="__codelineno-53-316"></a><span class="w">                </span><span class="nt">operations</span><span class="p">:</span>
-<a id="__codelineno-53-317" name="__codelineno-53-317"></a><span class="w">                    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
-<a id="__codelineno-53-318" name="__codelineno-53-318"></a><span class="w">                    </span><span class="nt">delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
-<a id="__codelineno-53-319" name="__codelineno-53-319"></a><span class="w">    </span><span class="nt">openstack.provider</span><span class="p">:</span>
-<a id="__codelineno-53-320" name="__codelineno-53-320"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.provider</span>
-<a id="__codelineno-53-321" name="__codelineno-53-321"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<a id="__codelineno-53-322" name="__codelineno-53-322"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-323" name="__codelineno-53-323"></a><span class="w">            </span><span class="nt">vintner_abstract</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-324" name="__codelineno-53-324"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-53-325" name="__codelineno-53-325"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
-<a id="__codelineno-53-326" name="__codelineno-53-326"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-327" name="__codelineno-53-327"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openstack</span>
-<a id="__codelineno-53-328" name="__codelineno-53-328"></a><span class="w">            </span><span class="nt">os_region_name</span><span class="p">:</span>
-<a id="__codelineno-53-329" name="__codelineno-53-329"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-330" name="__codelineno-53-330"></a><span class="w">            </span><span class="nt">os_auth_type</span><span class="p">:</span>
-<a id="__codelineno-53-331" name="__codelineno-53-331"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-332" name="__codelineno-53-332"></a><span class="w">            </span><span class="nt">os_auth_url</span><span class="p">:</span>
-<a id="__codelineno-53-333" name="__codelineno-53-333"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-334" name="__codelineno-53-334"></a><span class="w">            </span><span class="nt">os_identity_api_version</span><span class="p">:</span>
-<a id="__codelineno-53-335" name="__codelineno-53-335"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-336" name="__codelineno-53-336"></a><span class="w">            </span><span class="nt">os_interface</span><span class="p">:</span>
-<a id="__codelineno-53-337" name="__codelineno-53-337"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-338" name="__codelineno-53-338"></a><span class="w">            </span><span class="nt">os_application_credential_id</span><span class="p">:</span>
-<a id="__codelineno-53-339" name="__codelineno-53-339"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-340" name="__codelineno-53-340"></a><span class="w">            </span><span class="nt">os_application_credential_secret</span><span class="p">:</span>
-<a id="__codelineno-53-341" name="__codelineno-53-341"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-342" name="__codelineno-53-342"></a><span class="w">        </span><span class="nt">interfaces</span><span class="p">:</span>
-<a id="__codelineno-53-343" name="__codelineno-53-343"></a><span class="w">            </span><span class="nt">Standard</span><span class="p">:</span>
-<a id="__codelineno-53-344" name="__codelineno-53-344"></a><span class="w">                </span><span class="nt">operations</span><span class="p">:</span>
-<a id="__codelineno-53-345" name="__codelineno-53-345"></a><span class="w">                    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
-<a id="__codelineno-53-346" name="__codelineno-53-346"></a><span class="w">                    </span><span class="nt">delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
-<a id="__codelineno-53-347" name="__codelineno-53-347"></a><span class="w">    </span><span class="nt">mysql.dbms</span><span class="p">:</span>
-<a id="__codelineno-53-348" name="__codelineno-53-348"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">relational.dbms</span>
-<a id="__codelineno-53-349" name="__codelineno-53-349"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<a id="__codelineno-53-350" name="__codelineno-53-350"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-351" name="__codelineno-53-351"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-53-352" name="__codelineno-53-352"></a><span class="w">            </span><span class="nt">dbms_name</span><span class="p">:</span>
-<a id="__codelineno-53-353" name="__codelineno-53-353"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-354" name="__codelineno-53-354"></a><span class="w">            </span><span class="nt">application_name</span><span class="p">:</span>
-<a id="__codelineno-53-355" name="__codelineno-53-355"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-356" name="__codelineno-53-356"></a><span class="w">            </span><span class="nt">dbms_password</span><span class="p">:</span>
-<a id="__codelineno-53-357" name="__codelineno-53-357"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-358" name="__codelineno-53-358"></a><span class="w">            </span><span class="nt">dbms_ssl_mode</span><span class="p">:</span>
-<a id="__codelineno-53-359" name="__codelineno-53-359"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-360" name="__codelineno-53-360"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">None</span>
-<a id="__codelineno-53-361" name="__codelineno-53-361"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
-<a id="__codelineno-53-362" name="__codelineno-53-362"></a><span class="w">            </span><span class="nt">application_address</span><span class="p">:</span>
-<a id="__codelineno-53-363" name="__codelineno-53-363"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-364" name="__codelineno-53-364"></a><span class="w">            </span><span class="nt">application_port</span><span class="p">:</span>
-<a id="__codelineno-53-365" name="__codelineno-53-365"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-366" name="__codelineno-53-366"></a><span class="w">            </span><span class="nt">management_address</span><span class="p">:</span>
-<a id="__codelineno-53-367" name="__codelineno-53-367"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-368" name="__codelineno-53-368"></a><span class="w">            </span><span class="nt">management_port</span><span class="p">:</span>
-<a id="__codelineno-53-369" name="__codelineno-53-369"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-370" name="__codelineno-53-370"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
-<a id="__codelineno-53-371" name="__codelineno-53-371"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-53-372" name="__codelineno-53-372"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
-<a id="__codelineno-53-373" name="__codelineno-53-373"></a><span class="w">        </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-53-374" name="__codelineno-53-374"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-53-375" name="__codelineno-53-375"></a><span class="w">                  </span><span class="nt">capability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
-<a id="__codelineno-53-376" name="__codelineno-53-376"></a><span class="w">                  </span><span class="nt">relationship</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.relationships.HostedOn</span>
-<a id="__codelineno-53-377" name="__codelineno-53-377"></a><span class="w">    </span><span class="nt">mysql.database</span><span class="p">:</span>
-<a id="__codelineno-53-378" name="__codelineno-53-378"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">relational.database</span>
-<a id="__codelineno-53-379" name="__codelineno-53-379"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
-<a id="__codelineno-53-380" name="__codelineno-53-380"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
-<a id="__codelineno-53-381" name="__codelineno-53-381"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-53-382" name="__codelineno-53-382"></a><span class="w">            </span><span class="nt">database_name</span><span class="p">:</span>
-<a id="__codelineno-53-383" name="__codelineno-53-383"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-384" name="__codelineno-53-384"></a><span class="w">            </span><span class="nt">database_user</span><span class="p">:</span>
-<a id="__codelineno-53-385" name="__codelineno-53-385"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-386" name="__codelineno-53-386"></a><span class="w">            </span><span class="nt">database_password</span><span class="p">:</span>
-<a id="__codelineno-53-387" name="__codelineno-53-387"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-388" name="__codelineno-53-388"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
-<a id="__codelineno-53-389" name="__codelineno-53-389"></a><span class="w">            </span><span class="nt">application_address</span><span class="p">:</span>
-<a id="__codelineno-53-390" name="__codelineno-53-390"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-391" name="__codelineno-53-391"></a><span class="w">            </span><span class="nt">application_port</span><span class="p">:</span>
-<a id="__codelineno-53-392" name="__codelineno-53-392"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<a id="__codelineno-53-393" name="__codelineno-53-393"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
-<a id="__codelineno-53-394" name="__codelineno-53-394"></a><span class="w">            </span><span class="nt">database</span><span class="p">:</span>
-<a id="__codelineno-53-395" name="__codelineno-53-395"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Endpoint.Database</span>
-<a id="__codelineno-53-396" name="__codelineno-53-396"></a><span class="w">        </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-53-397" name="__codelineno-53-397"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-53-398" name="__codelineno-53-398"></a><span class="w">                  </span><span class="nt">capability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
-<a id="__codelineno-53-399" name="__codelineno-53-399"></a><span class="w">                  </span><span class="nt">relationship</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.relationships.HostedOn</span>
+<a id="__codelineno-53-279" name="__codelineno-53-279"></a><span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375</span>
+<a id="__codelineno-53-280" name="__codelineno-53-280"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-53-281" name="__codelineno-53-281"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-282" name="__codelineno-53-282"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-53-283" name="__codelineno-53-283"></a><span class="w">            </span><span class="nt">application_name</span><span class="p">:</span>
+<a id="__codelineno-53-284" name="__codelineno-53-284"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-285" name="__codelineno-53-285"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
+<a id="__codelineno-53-286" name="__codelineno-53-286"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
+<a id="__codelineno-53-287" name="__codelineno-53-287"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-288" name="__codelineno-53-288"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
+<a id="__codelineno-53-289" name="__codelineno-53-289"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
+<a id="__codelineno-53-290" name="__codelineno-53-290"></a><span class="w">            </span><span class="nt">management_address</span><span class="p">:</span>
+<a id="__codelineno-53-291" name="__codelineno-53-291"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-292" name="__codelineno-53-292"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
+<a id="__codelineno-53-293" name="__codelineno-53-293"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-53-294" name="__codelineno-53-294"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
+<a id="__codelineno-53-295" name="__codelineno-53-295"></a><span class="w">    </span><span class="nt">kubernetes.cluster</span><span class="p">:</span>
+<a id="__codelineno-53-296" name="__codelineno-53-296"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.service</span>
+<a id="__codelineno-53-297" name="__codelineno-53-297"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-53-298" name="__codelineno-53-298"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-299" name="__codelineno-53-299"></a><span class="w">            </span><span class="nt">vintner_abstract</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-300" name="__codelineno-53-300"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-53-301" name="__codelineno-53-301"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
+<a id="__codelineno-53-302" name="__codelineno-53-302"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-303" name="__codelineno-53-303"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes</span>
+<a id="__codelineno-53-304" name="__codelineno-53-304"></a><span class="w">            </span><span class="nt">k8s_host</span><span class="p">:</span>
+<a id="__codelineno-53-305" name="__codelineno-53-305"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-306" name="__codelineno-53-306"></a><span class="w">            </span><span class="nt">k8s_ca_cert_file</span><span class="p">:</span>
+<a id="__codelineno-53-307" name="__codelineno-53-307"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-308" name="__codelineno-53-308"></a><span class="w">            </span><span class="nt">k8s_client_cert_file</span><span class="p">:</span>
+<a id="__codelineno-53-309" name="__codelineno-53-309"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-310" name="__codelineno-53-310"></a><span class="w">            </span><span class="nt">k8s_client_key_file</span><span class="p">:</span>
+<a id="__codelineno-53-311" name="__codelineno-53-311"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-312" name="__codelineno-53-312"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
+<a id="__codelineno-53-313" name="__codelineno-53-313"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-53-314" name="__codelineno-53-314"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
+<a id="__codelineno-53-315" name="__codelineno-53-315"></a><span class="w">        </span><span class="nt">interfaces</span><span class="p">:</span>
+<a id="__codelineno-53-316" name="__codelineno-53-316"></a><span class="w">            </span><span class="nt">Standard</span><span class="p">:</span>
+<a id="__codelineno-53-317" name="__codelineno-53-317"></a><span class="w">                </span><span class="nt">operations</span><span class="p">:</span>
+<a id="__codelineno-53-318" name="__codelineno-53-318"></a><span class="w">                    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
+<a id="__codelineno-53-319" name="__codelineno-53-319"></a><span class="w">                    </span><span class="nt">delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
+<a id="__codelineno-53-320" name="__codelineno-53-320"></a><span class="w">    </span><span class="nt">openstack.provider</span><span class="p">:</span>
+<a id="__codelineno-53-321" name="__codelineno-53-321"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud.provider</span>
+<a id="__codelineno-53-322" name="__codelineno-53-322"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-53-323" name="__codelineno-53-323"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-324" name="__codelineno-53-324"></a><span class="w">            </span><span class="nt">vintner_abstract</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-325" name="__codelineno-53-325"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-53-326" name="__codelineno-53-326"></a><span class="w">            </span><span class="nt">_hosting</span><span class="p">:</span>
+<a id="__codelineno-53-327" name="__codelineno-53-327"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-328" name="__codelineno-53-328"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openstack</span>
+<a id="__codelineno-53-329" name="__codelineno-53-329"></a><span class="w">            </span><span class="nt">os_region_name</span><span class="p">:</span>
+<a id="__codelineno-53-330" name="__codelineno-53-330"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-331" name="__codelineno-53-331"></a><span class="w">            </span><span class="nt">os_auth_type</span><span class="p">:</span>
+<a id="__codelineno-53-332" name="__codelineno-53-332"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-333" name="__codelineno-53-333"></a><span class="w">            </span><span class="nt">os_auth_url</span><span class="p">:</span>
+<a id="__codelineno-53-334" name="__codelineno-53-334"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-335" name="__codelineno-53-335"></a><span class="w">            </span><span class="nt">os_identity_api_version</span><span class="p">:</span>
+<a id="__codelineno-53-336" name="__codelineno-53-336"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-337" name="__codelineno-53-337"></a><span class="w">            </span><span class="nt">os_interface</span><span class="p">:</span>
+<a id="__codelineno-53-338" name="__codelineno-53-338"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-339" name="__codelineno-53-339"></a><span class="w">            </span><span class="nt">os_application_credential_id</span><span class="p">:</span>
+<a id="__codelineno-53-340" name="__codelineno-53-340"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-341" name="__codelineno-53-341"></a><span class="w">            </span><span class="nt">os_application_credential_secret</span><span class="p">:</span>
+<a id="__codelineno-53-342" name="__codelineno-53-342"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-343" name="__codelineno-53-343"></a><span class="w">        </span><span class="nt">interfaces</span><span class="p">:</span>
+<a id="__codelineno-53-344" name="__codelineno-53-344"></a><span class="w">            </span><span class="nt">Standard</span><span class="p">:</span>
+<a id="__codelineno-53-345" name="__codelineno-53-345"></a><span class="w">                </span><span class="nt">operations</span><span class="p">:</span>
+<a id="__codelineno-53-346" name="__codelineno-53-346"></a><span class="w">                    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
+<a id="__codelineno-53-347" name="__codelineno-53-347"></a><span class="w">                    </span><span class="nt">delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exit 0</span>
+<a id="__codelineno-53-348" name="__codelineno-53-348"></a><span class="w">    </span><span class="nt">mysql.dbms</span><span class="p">:</span>
+<a id="__codelineno-53-349" name="__codelineno-53-349"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">relational.dbms</span>
+<a id="__codelineno-53-350" name="__codelineno-53-350"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-53-351" name="__codelineno-53-351"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-352" name="__codelineno-53-352"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-53-353" name="__codelineno-53-353"></a><span class="w">            </span><span class="nt">dbms_name</span><span class="p">:</span>
+<a id="__codelineno-53-354" name="__codelineno-53-354"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-355" name="__codelineno-53-355"></a><span class="w">            </span><span class="nt">application_name</span><span class="p">:</span>
+<a id="__codelineno-53-356" name="__codelineno-53-356"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-357" name="__codelineno-53-357"></a><span class="w">            </span><span class="nt">dbms_password</span><span class="p">:</span>
+<a id="__codelineno-53-358" name="__codelineno-53-358"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-359" name="__codelineno-53-359"></a><span class="w">            </span><span class="nt">dbms_ssl_mode</span><span class="p">:</span>
+<a id="__codelineno-53-360" name="__codelineno-53-360"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-361" name="__codelineno-53-361"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">None</span>
+<a id="__codelineno-53-362" name="__codelineno-53-362"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
+<a id="__codelineno-53-363" name="__codelineno-53-363"></a><span class="w">            </span><span class="nt">application_address</span><span class="p">:</span>
+<a id="__codelineno-53-364" name="__codelineno-53-364"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-365" name="__codelineno-53-365"></a><span class="w">            </span><span class="nt">application_port</span><span class="p">:</span>
+<a id="__codelineno-53-366" name="__codelineno-53-366"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-367" name="__codelineno-53-367"></a><span class="w">            </span><span class="nt">management_address</span><span class="p">:</span>
+<a id="__codelineno-53-368" name="__codelineno-53-368"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-369" name="__codelineno-53-369"></a><span class="w">            </span><span class="nt">management_port</span><span class="p">:</span>
+<a id="__codelineno-53-370" name="__codelineno-53-370"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-371" name="__codelineno-53-371"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
+<a id="__codelineno-53-372" name="__codelineno-53-372"></a><span class="w">            </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-53-373" name="__codelineno-53-373"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
+<a id="__codelineno-53-374" name="__codelineno-53-374"></a><span class="w">        </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-53-375" name="__codelineno-53-375"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-53-376" name="__codelineno-53-376"></a><span class="w">                  </span><span class="nt">capability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
+<a id="__codelineno-53-377" name="__codelineno-53-377"></a><span class="w">                  </span><span class="nt">relationship</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.relationships.HostedOn</span>
+<a id="__codelineno-53-378" name="__codelineno-53-378"></a><span class="w">    </span><span class="nt">mysql.database</span><span class="p">:</span>
+<a id="__codelineno-53-379" name="__codelineno-53-379"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">relational.database</span>
+<a id="__codelineno-53-380" name="__codelineno-53-380"></a><span class="w">        </span><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-53-381" name="__codelineno-53-381"></a><span class="w">            </span><span class="nt">vintner_normative</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
+<a id="__codelineno-53-382" name="__codelineno-53-382"></a><span class="w">        </span><span class="nt">properties</span><span class="p">:</span>
+<a id="__codelineno-53-383" name="__codelineno-53-383"></a><span class="w">            </span><span class="nt">database_name</span><span class="p">:</span>
+<a id="__codelineno-53-384" name="__codelineno-53-384"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-385" name="__codelineno-53-385"></a><span class="w">            </span><span class="nt">database_user</span><span class="p">:</span>
+<a id="__codelineno-53-386" name="__codelineno-53-386"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-387" name="__codelineno-53-387"></a><span class="w">            </span><span class="nt">database_password</span><span class="p">:</span>
+<a id="__codelineno-53-388" name="__codelineno-53-388"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-389" name="__codelineno-53-389"></a><span class="w">        </span><span class="nt">attributes</span><span class="p">:</span>
+<a id="__codelineno-53-390" name="__codelineno-53-390"></a><span class="w">            </span><span class="nt">application_address</span><span class="p">:</span>
+<a id="__codelineno-53-391" name="__codelineno-53-391"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-392" name="__codelineno-53-392"></a><span class="w">            </span><span class="nt">application_port</span><span class="p">:</span>
+<a id="__codelineno-53-393" name="__codelineno-53-393"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<a id="__codelineno-53-394" name="__codelineno-53-394"></a><span class="w">        </span><span class="nt">capabilities</span><span class="p">:</span>
+<a id="__codelineno-53-395" name="__codelineno-53-395"></a><span class="w">            </span><span class="nt">database</span><span class="p">:</span>
+<a id="__codelineno-53-396" name="__codelineno-53-396"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Endpoint.Database</span>
+<a id="__codelineno-53-397" name="__codelineno-53-397"></a><span class="w">        </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-53-398" name="__codelineno-53-398"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-53-399" name="__codelineno-53-399"></a><span class="w">                  </span><span class="nt">capability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.capabilities.Compute</span>
+<a id="__codelineno-53-400" name="__codelineno-53-400"></a><span class="w">                  </span><span class="nt">relationship</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.relationships.HostedOn</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="acknowledgments">Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permanent link">&para;</a></h2>
 <p>This specification is developed for the purpose of research by the <a href="https://www.iste.uni-stuttgart.de" target="_blank">Institute of Software Engineering (ISTE)</a> and the <a href="https://www.iaas.uni-stuttgart.de" target="_blank">Institute of Architecture of Application Systems (IAAS)</a> of the <a href="https://www.uni-stuttgart.de" target="_blank">University of Stuttgart, Germany</a>.
@@ -11476,7 +11479,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 4, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 5, 2024</span>
       
     
   </small>

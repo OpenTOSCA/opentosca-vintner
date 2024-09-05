@@ -276,6 +276,7 @@ node_types:
                 default: cloudbuild.googleapis.com
     docker.engine:
         derived_from: container.runtime
+        description: Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375
         metadata:
             vintner_normative: 'true'
         properties:
