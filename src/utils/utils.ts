@@ -217,10 +217,14 @@ export function replace(data: string, entries: [find: string, replace: string][]
     return data
 }
 
-export function indent(str: string, spaces = 4) {
+export function indent(value: string, spaces = 4) {
     const padding = ' '.repeat(spaces)
-    return str
+    return value
         .split('\n')
         .map(line => padding + line)
         .join('\n')
+}
+
+export function trim(value: string): string {
+    return value.trim() + `\n`
 }

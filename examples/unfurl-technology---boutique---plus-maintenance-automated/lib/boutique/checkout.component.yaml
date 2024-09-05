@@ -175,7 +175,25 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-                    delete: exit 0
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: stop container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
     checkout.component~service.application#docker.image::ansible@gcp.cloudrun:
         derived_from: checkout.component
         metadata:
@@ -401,7 +419,7 @@ node_types:
                                                                 ports:
                                                                     - containerPort: '{{ SELF.application_port }}'
                                     - name: create service
-                                      kubernetes.core.k8s:
+                                      ch:
                                           definition:
                                               apiVersion: v1
                                               kind: Service
@@ -416,7 +434,36 @@ node_types:
                                                   selector:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
-                    delete: exit 0
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                            environment:
+                                K8S_AUTH_HOST:
+                                    eval: .::k8s_host
+                                K8S_AUTH_SSL_CA_CERT:
+                                    eval: .::k8s_ca_cert_file
+                                K8S_AUTH_CERT_FILE:
+                                    eval: .::k8s_client_cert_file
+                                K8S_AUTH_KEY_FILE:
+                                    eval: .::k8s_client_key_file
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: delete service
+                                      kubernetes.core.k8s:
+                                          state: absent
+                                          api_version: v1
+                                          kind: Service
+                                          namespace: default
+                                          name: '{{ SELF.application_name }}'
+                                    - name: delete deployment
+                                      kubernetes.core.k8s:
+                                          state: absent
+                                          api_version: app/v1
+                                          kind: Deployment
+                                          namespace: default
+                                          name: '{{ SELF.application_name }}'
     checkout.component~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
@@ -3144,28 +3191,101 @@ node_types:
                                                       app: '{{ SELF.application_name }}'
                                                   type: ClusterIP
                                     - name: apply manifest
-                                      ansible.builtin.shell: kubectl apply -f {{ manifest.path }}
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
                                     - name: wait for deployment
-                                      ansible.builtin.shell: kubectl rollout status deployment/{{ SELF.application_name }} --timeout 60s
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} rollout status deployment/{{ SELF.application_name }} --timeout 60s
                                       args:
                                           executable: /usr/bin/bash
-                    delete: exit 0
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: |
+                                              {{ deployment | to_yaml }}
+                                              ---
+                                              {{ service | to_yaml }}
+                                      vars:
+                                          deployment:
+                                              apiVersion: apps/v1
+                                              kind: Deployment
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  selector:
+                                                      matchLabels:
+                                                          app: '{{ SELF.application_name }}'
+                                                  template:
+                                                      metadata:
+                                                          labels:
+                                                              app: '{{ SELF.application_name }}'
+                                                      spec:
+                                                          containers:
+                                                              - image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                                name: '{{ SELF.application_name }}'
+                                                                env:
+                                                                    - name: PORT
+                                                                      value: '"{{ SELF.application_port }}"'
+                                                                    - name: PRODUCT_CATALOG_SERVICE_ADDR
+                                                                      value: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
+                                                                    - name: SHIPPING_SERVICE_ADDR
+                                                                      value: '"{{ SELF.SHIPPING_SERVICE_ADDR }}"'
+                                                                    - name: PAYMENT_SERVICE_ADDR
+                                                                      value: '"{{ SELF.PAYMENT_SERVICE_ADDR }}"'
+                                                                    - name: EMAIL_SERVICE_ADDR
+                                                                      value: '"{{ SELF.EMAIL_SERVICE_ADDR }}"'
+                                                                    - name: CURRENCY_SERVICE_ADDR
+                                                                      value: '"{{ SELF.CURRENCY_SERVICE_ADDR }}"'
+                                                                    - name: CART_SERVICE_ADDR
+                                                                      value: '"{{ SELF.CART_SERVICE_ADDR }}"'
+                                                                    - name: OPTIONAL_PAYMENT_FEATURE
+                                                                      value: '"{{ SELF.optional_payment_feature }}"'
+                                                                    - name: PREMIUM_PAYMENT_FEATURE
+                                                                      value: '"{{ SELF.premium_payment_feature }}"'
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '"{{ SELF.disable_profiler }}"'
+                                                                ports:
+                                                                    - containerPort: '{{ SELF.application_port }}'
+                                          service:
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  ports:
+                                                      - name: '{{ SELF.application_protocol }}'
+                                                        port: '{{ SELF.application_port }}'
+                                                        targetPort: '{{ SELF.application_port }}'
+                                                  selector:
+                                                      app: '{{ SELF.application_name }}'
+                                                  type: ClusterIP
+                                    - name: unapply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
     checkout.component~service.application#docker.image::compose@docker.engine->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
-            os_ssh_user:
+            os_ssh_host:
                 type: string
                 default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
+                    eval: .::.requirements::[.name=host]::.target::management_address
         attributes:
             application_address:
                 type: string
@@ -3176,14 +3296,10 @@ node_types:
                     create:
                         implementation:
                             primary: Ansible
-                            operation_host: HOST
-                            environment:
-                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                            operation_host: ORCHESTRATOR
                         inputs:
                             playbook:
                                 q:
-                                    - name: wait for ssh
-                                      wait_for_connection:
                                     - name: touch compose
                                       register: compose
                                       ansible.builtin.tempfile:
@@ -3215,8 +3331,45 @@ node_types:
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
-                            playbookArgs:
-                                - '--become'
-                                - '--key-file={{ SELF.os_ssh_key_file }}'
-                                - '--user={{ SELF.os_ssh_user }}'
-                    delete: exit 0
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          PRODUCT_CATALOG_SERVICE_ADDR: '"{{ SELF.PRODUCT_CATALOG_SERVICE_ADDR }}"'
+                                                          SHIPPING_SERVICE_ADDR: '"{{ SELF.SHIPPING_SERVICE_ADDR }}"'
+                                                          PAYMENT_SERVICE_ADDR: '"{{ SELF.PAYMENT_SERVICE_ADDR }}"'
+                                                          EMAIL_SERVICE_ADDR: '"{{ SELF.EMAIL_SERVICE_ADDR }}"'
+                                                          CURRENCY_SERVICE_ADDR: '"{{ SELF.CURRENCY_SERVICE_ADDR }}"'
+                                                          CART_SERVICE_ADDR: '"{{ SELF.CART_SERVICE_ADDR }}"'
+                                                          OPTIONAL_PAYMENT_FEATURE: '"{{ SELF.optional_payment_feature }}"'
+                                                          PREMIUM_PAYMENT_FEATURE: '"{{ SELF.premium_payment_feature }}"'
+                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'

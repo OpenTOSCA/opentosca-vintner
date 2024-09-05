@@ -3865,13 +3865,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ini@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "ini@npm:4.1.3"
-  checksum: 004b2be42388877c58add606149f1a0c7985c90a0ba5dbf45a4738fdc70b0798d922caecaa54617029626505898ac451ff0537a08b949836b49d3267f66542c9
-  languageName: node
-  linkType: hard
-
 "ini@npm:~1.3.0":
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
@@ -4360,6 +4353,13 @@ __metadata:
   bin:
     jake: ./bin/cli.js
   checksum: 56c913ecf5a8d74325d0af9bc17a233bad50977438d44864d925bb6c45c946e0fee8c4c1f5fe2225471ef40df5222e943047982717ebff0d624770564d3c46ba
+  languageName: node
+  linkType: hard
+
+"js-ini@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "js-ini@npm:1.6.0"
+  checksum: 84392889ee4c97574747b37a49ecb69705df8ab28d74710e5819c59246d6f7086ced24b899198e71ff3a748abe8655cc399367952ea3ce72b0e38bfdf4665b13
   languageName: node
   linkType: hard
 
@@ -5606,8 +5606,8 @@ __metadata:
     fs-extra: ^11.2.0
     glob: ^10.4.1
     http-errors: ^2.0.0
-    ini: ^4.1.3
     is-wsl: ^2.2.0
+    js-ini: ^1.6.0
     js-yaml: ^4.1.0
     json-diff: ^1.0.6
     license-checker: ^25.0.1

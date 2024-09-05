@@ -18,6 +18,36 @@ const generator: ImplementationGenerator = {
     details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
 
     generate: (name, type) => {
+        const content = files.toINI({
+            Unit: {
+                Description: 'Docker Application Container Engine',
+                Documentation: 'https://docs.docker.com',
+                After: 'network-online.target docker.socket firewalld.service containerd.service time-set.target',
+                Wants: 'network-online.target containerd.service',
+                Requires: 'docker.socket',
+            },
+            Service: {
+                Type: 'notify',
+                ExecStart:
+                    '/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock',
+                ExecReload: '/bin/kill -s HUP $MAINPID',
+                TimeoutStartSec: '0',
+                RestartSec: '2',
+                Restart: 'always',
+                StartLimitBurst: '3',
+                StartLimitInterval: '60s',
+                LimitNPROC: 'infinity',
+                LimitCORE: 'infinity',
+                TasksMax: 'infinity',
+                Delegate: 'yes',
+                KillMode: 'process',
+                OOMScoreAdjust: '-500',
+            },
+            Install: {
+                WantedBy: 'multi-user.target',
+            },
+        })
+
         return {
             derived_from: name,
             metadata: {
@@ -49,35 +79,7 @@ const generator: ImplementationGenerator = {
                                             name: 'update service',
                                             'ansible.builtin.copy': {
                                                 dest: '/lib/systemd/system/docker.service',
-                                                content: files.toINI({
-                                                    Unit: {
-                                                        Description: 'Docker Application Container Engine',
-                                                        Documentation: 'https://docs.docker.com',
-                                                        After: 'network-online.target docker.socket firewalld.service containerd.service time-set.target',
-                                                        Wants: 'network-online.target containerd.service',
-                                                        Requires: 'docker.socket',
-                                                    },
-                                                    Service: {
-                                                        Type: 'notify',
-                                                        ExecStart:
-                                                            '/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock',
-                                                        ExecReload: '/bin/kill -s HUP $MAINPID',
-                                                        TimeoutStartSec: '0',
-                                                        RestartSec: '2',
-                                                        Restart: 'always',
-                                                        StartLimitBurst: '3',
-                                                        StartLimitInterval: '60s',
-                                                        LimitNPROC: 'infinity',
-                                                        LimitCORE: 'infinity',
-                                                        TasksMax: 'infinity',
-                                                        Delegate: 'yes',
-                                                        KillMode: 'process',
-                                                        OOMScoreAdjust: '-500',
-                                                    },
-                                                    Install: {
-                                                        WantedBy: 'multi-user.target',
-                                                    },
-                                                }),
+                                                content: content,
                                             },
                                         },
                                         {
