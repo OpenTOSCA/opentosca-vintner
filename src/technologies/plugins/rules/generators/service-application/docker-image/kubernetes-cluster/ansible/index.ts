@@ -91,7 +91,7 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'create service',
-                                            ch: {
+                                            'kubernetes.core.k8s': {
                                                 definition: {
                                                     apiVersion: 'v1',
                                                     kind: 'Service',

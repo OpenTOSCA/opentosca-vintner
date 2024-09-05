@@ -6583,7 +6583,6 @@ node_types:
                                       provisioner:
                                           file:
                                               - content: |
-
                                                     [Unit]
                                                     Description=Docker Application Container Engine
                                                     Documentation=https://docs.docker.com
@@ -6636,6 +6635,7 @@ node_types:
                                                     - curl -sSL https://get.docker.com | sudo sh
                                                     - sudo groupadd -f docker
                                                     - sudo usermod -aG docker {{ SELF.os_ssh_user }}
+                                                    - sleep 10s
                                                     - cat /tmp/docker.service | sudo tee /lib/systemd/system/docker.service
                                                     - sudo systemctl daemon-reload
                                                     - sudo systemctl restart docker.service

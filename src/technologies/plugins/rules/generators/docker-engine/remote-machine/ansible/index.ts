@@ -18,7 +18,7 @@ const generator: ImplementationGenerator = {
     details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
 
     generate: (name, type) => {
-        const content = files.toINI({
+        const service = files.toINI({
             Unit: {
                 Description: 'Docker Application Container Engine',
                 Documentation: 'https://docs.docker.com',
@@ -79,7 +79,7 @@ const generator: ImplementationGenerator = {
                                             name: 'update service',
                                             'ansible.builtin.copy': {
                                                 dest: '/lib/systemd/system/docker.service',
-                                                content: content,
+                                                content: service,
                                             },
                                         },
                                         {

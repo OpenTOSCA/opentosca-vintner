@@ -51,7 +51,7 @@ const generator: ImplementationGenerator = {
                                 },
                             },
                         },
-                        // We do not disable services
+                        // We do not disable gcp services
                         delete: 'exit 0',
                     },
                 },

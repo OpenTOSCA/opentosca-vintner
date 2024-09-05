@@ -6,8 +6,9 @@ import {
     OpenstackMachineHost,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils'
+import * as utils from '#utils'
 
-const service = `
+const service = utils.trim(`
 [Unit]
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
@@ -54,7 +55,7 @@ OOMScoreAdjust=-500
 
 [Install]
 WantedBy=multi-user.target
-`
+`)
 
 const generator: ImplementationGenerator = {
     component: 'docker.engine',
@@ -112,6 +113,7 @@ const generator: ImplementationGenerator = {
                                                             'curl -sSL https://get.docker.com | sudo sh',
                                                             'sudo groupadd -f docker',
                                                             'sudo usermod -aG docker {{ SELF.os_ssh_user }}',
+                                                            'sleep 10s',
                                                             'cat /tmp/docker.service | sudo tee /lib/systemd/system/docker.service',
                                                             'sudo systemctl daemon-reload',
                                                             'sudo systemctl restart docker.service',
