@@ -1,4 +1,35 @@
 ansible:
+    - component: bucket
+      hosting:
+          - gcp.cloudstorage
+      weight: 0.5
+      reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
+    - component: bucket
+      hosting:
+          - minio.server
+          - '*'
+          - local.machine
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
+    - component: bucket
+      hosting:
+          - minio.server
+          - '*'
+          - remote.machine
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
+    - component: bucket
+      hosting:
+          - minio.server
+          - kubernetes.cluster
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
+    - component: docker.engine
+      hosting:
+          - local.machine
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
+      details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks'
     - component: docker.engine
       hosting:
           - remote.machine
@@ -22,6 +53,13 @@ ansible:
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks'
+    - component: mysql.database
+      hosting:
+          - mysql.dbms
+          - docker.engine
+          - local.machine
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
     - component: mysql.database
       hosting:
           - mysql.dbms
@@ -51,6 +89,14 @@ ansible:
       artifact: dbms.image
       hosting:
           - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized
+      details: '"community.docker.docker_container" task'
+    - component: mysql.dbms
+      artifact: dbms.image
+      hosting:
+          - docker.engine
           - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized
@@ -76,6 +122,41 @@ ansible:
       weight: 1
       reason: Primary use case due to the specialization of Ansible.
       details: '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks'
+    - component: bucket
+      artifact: cache.image
+      hosting:
+          - gcp.memorystore
+      weight: 0.5
+      reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"community.docker.docker_container" task'
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - remote.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"community.docker.docker_container" task'
+    - component: redis.server
+      hosting:
+          - kubernetes.cluster
+      weight: 1
+      reason: Primary use case due to the specialization of Ansible.
+    - component: service.application
+      artifact: docker.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"community.docker.docker_container" task'
     - component: service.application
       artifact: docker.image
       hosting:
@@ -153,6 +234,37 @@ ansible:
       reason: Terraform is more specialized.
       details: '"openstack.cloud.security_group", "openstack.cloud.security_group_rule" and "openstack.cloud.server" tasks'
 terraform:
+    - component: bucket
+      hosting:
+          - gcp.cloudstorage
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: bucket
+      hosting:
+          - minio.server
+          - '*'
+          - local.machine
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: bucket
+      hosting:
+          - minio.server
+          - '*'
+          - remote.machine
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: bucket
+      hosting:
+          - minio.server
+          - kubernetes.cluster
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: docker.engine
+      hosting:
+          - local.machine
+      weight: 0
+      reason: Ansible is more specialized. Also using provisioners is a "last resort".
+      details: '"local-exec" provider'
     - component: docker.engine
       hosting:
           - remote.machine
@@ -176,6 +288,13 @@ terraform:
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
+    - component: mysql.database
+      hosting:
+          - mysql.dbms
+          - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
     - component: mysql.database
       hosting:
           - mysql.dbms
@@ -205,6 +324,14 @@ terraform:
       artifact: dbms.image
       hosting:
           - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"docker_container" and "docker_image" resources'
+    - component: mysql.dbms
+      artifact: dbms.image
+      hosting:
+          - docker.engine
           - remote.machine
       weight: 0.5
       reason: Docker Compose is more specialized.
@@ -230,6 +357,41 @@ terraform:
       weight: 0
       reason: Ansible is more specialized. Also using provisioners is a "last resort".
       details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - gcp.memorystore
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"docker_container" and "docker_image" resources'
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - remote.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"docker_container" and "docker_image" resources'
+    - component: redis.server
+      hosting:
+          - kubernetes.cluster
+      weight: 1
+      reason: Terraform provides a declarative module.
+    - component: service.application
+      artifact: docker.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 0.5
+      reason: Docker Compose is more specialized.
+      details: '"docker_container" and "docker_image" resources'
     - component: service.application
       artifact: docker.image
       hosting:
@@ -338,9 +500,24 @@ compose:
       hosting:
           - mysql.dbms
           - docker.engine
+          - local.machine
+      weight: 0
+      reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+    - component: mysql.database
+      hosting:
+          - mysql.dbms
+          - docker.engine
           - remote.machine
       weight: 0
       reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+    - component: mysql.dbms
+      artifact: dbms.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 1
+      reason: Docker is the underlying technology.
+      details: docker-compose manifest generated and applied
     - component: mysql.dbms
       artifact: dbms.image
       hosting:
@@ -349,6 +526,30 @@ compose:
       weight: 1
       reason: Docker is the underlying technology.
       details: docker-compose manifest generated and applied
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 1
+      reason: Docker is the underlying technology.
+      details: docker compose manifest generated and applied
+    - component: redis.server
+      artifact: cache.image
+      hosting:
+          - docker.engine
+          - remote.machine
+      weight: 1
+      reason: Docker is the underlying technology.
+      details: docker compose manifest generated and applied
+    - component: service.application
+      artifact: docker.image
+      hosting:
+          - docker.engine
+          - local.machine
+      weight: 1
+      reason: Docker is the underlying technology.
+      details: docker compose manifest generated and applied
     - component: service.application
       artifact: docker.image
       hosting:

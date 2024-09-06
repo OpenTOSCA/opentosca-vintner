@@ -375,6 +375,18 @@ const nodes: NodeTypeMap = {
             },
         },
     },
+    'gcp.memorystore': {
+        derived_from: 'gcp.service',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            gcp_service: {
+                type: 'string',
+                default: 'redis.googleapis.com',
+            },
+        },
+    },
     'docker.engine': {
         derived_from: 'container.runtime',
         description: 'Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375',
@@ -569,10 +581,28 @@ const nodes: NodeTypeMap = {
         ],
     },
     'minio.server': {
-        derived_from: 'software.application',
+        derived_from: 'service.application',
+        metadata: {
+            ...MetadataNormative(),
+        },
     },
     'redis.server': {
         derived_from: 'cache',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            cache_name: {
+                type: 'string',
+            },
+            cache_port: {
+                type: 'string',
+            },
+            application_protocol: {
+                type: 'string',
+                default: 'redis',
+            },
+        },
     },
 }
 

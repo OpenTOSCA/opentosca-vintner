@@ -88,8 +88,8 @@ topology_template:
 
     variability:
         expressions:
-            has_info_logging: {equal: [{variability_input: ERROR}, true]}
-            has_debug_logging: {equal: [{variability_input: DEBUG}, true]}
+            has_info_logging: {equal: [{variability_input: logging}, ERROR]}
+            has_debug_logging: {equal: [{variability_input: logging}, DEBUG]}
             has_error_masking: {equal: [{variability_input: errors}, true]}
 
             has_coffee: {equal: [{variability_input: coffee}, true]}
@@ -98,47 +98,63 @@ topology_template:
             has_playground: {equal: [{variability_input: playground}, true]}
 
             has_import: {equal: [{variability_input: import}, true]}
-            has_import_schema_a: {equal: [{variability_input: import_schema_a}, A]}
-            has_import_schema_b: {equal: [{variability_input: import_schema_b}, B]}
+            has_import_schema_a: {equal: [{variability_input: import_schema}, A]}
+            has_import_schema_b: {equal: [{variability_input: import_schema}, B]}
 
             has_payment_merchant_a: {equal: [{variability_input: payment_merchant_a}, true]}
             has_payment_merchant_b: {equal: [{variability_input: payment_merchant_b}, true]}
 
-            is_gcp: {equal: [{variability_input: env}, GCP]}
+            is_hyperscaler: {equal: [{variability_input: env}, HYPERSCALER]}
             is_local: {equal: [{variability_input: env}, LOCAL]}
             is_customer: {equal: [{variability_input: env}, CUSTOMER]}
-            is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
+            is_development: {equal: [{variability_input: env}, DEVELOPMENT]}
+
+        # TODO: remove these
+        options:
+            technology_constraint: false
+            required_artifact_constraint: false
+            required_incoming_relation_constraint: false
+
         inputs:
             env:
                 type: string
-                default: OPENSTACK
+                default: DEVELOPMENT
 
             errors:
                 type: boolean
+                default: false
 
             logging:
                 type: string
+                default: INFO
 
             coffee:
                 type: boolean
+                default: false
 
             introspection:
                 type: boolean
+                default: false
 
             playground:
                 type: boolean
+                default: false
 
             import:
                 type: boolean
+                default: false
 
             import_schema:
                 type: string
+                default: A
 
             payment_merchant_a:
                 type: boolean
+                default: true
 
             payment_merchant_b:
                 type: boolean
+                default: true
 
     node_templates:
         ###################################################
@@ -245,11 +261,11 @@ topology_template:
 
                 - has_error_masking:
                       value: true
-                      conditions: {logic_expression: has_errors}
+                      conditions: {logic_expression: has_error_masking}
 
                 - has_error_masking:
                       value: false
-                      conditions: {not: {logic_expression: has_errors}}
+                      conditions: {not: {logic_expression: has_error_masking}}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
                 - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
@@ -275,6 +291,7 @@ topology_template:
                       type: docker.image
                       file: retailer.service.gateway:vX.Y.Z
 
+        # TODO: frontends brauchen auch ingressessesesss
         retailer_gateway_ingress:
             type: ingress
             requirements:
@@ -438,14 +455,14 @@ topology_template:
             requirements:
                 - host: retailer_dbms
 
-        # TODO: needs implementations
+        # TODO: is missing implementation if minio is hosted on k8s
         retailer_bucket_stores:
             type: bucket
             properties:
                 - bucket_name: stores
                 - bucket_dialect:
                       value: minio
-                      conditions: {node_presence: minio}
+                      conditions: {node_presence: retailer_minio}
 
                 - bucket_dialect:
                       value: gcp
@@ -531,7 +548,7 @@ topology_template:
                 - bucket_name: products
                 - bucket_dialect:
                       value: minio
-                      conditions: {node_presence: minio}
+                      conditions: {node_presence: retailer_minio}
 
                 - bucket_dialect:
                       value: gcp
@@ -685,6 +702,7 @@ topology_template:
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
+                - host: gcp_cloudsql
             artifacts:
                 - dbms_image:
                       type: dbms.image
@@ -699,17 +717,20 @@ topology_template:
         retailer_cache_redis:
             type: redis.server
             properties:
-                - application_name: retailer-cache-redis
-                - application_port: 6379
-                - application_protocol: redis
+                - cache_name: retailer-cache-redis
+                - cache_port: 6379
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
-                - host: kubernetes_cluster
+                - host: gcp_memorystore
+                - host:
+                      node: kubernetes_cluster
+                      # TODO: this might not be required
+                      conditions: {logic_expression: is_customer}
             artifacts:
-                - docker_image:
-                      type: docker.image
-                      file: redis:7.4.0
+                - cache_image:
+                      type: cache.image
+                      file: 7.4.0
 
         ###################################################
         #
@@ -719,6 +740,8 @@ topology_template:
 
         retailer_minio:
             type: minio.server
+            # TODO: remove this? but complains about ambiguous in when hyperscaler
+            conditions: {not: {logic_expression: is_hyperscaler}}
             properties:
                 - application_name: retailer-minio-server
                 - application_port: 9000
@@ -726,9 +749,7 @@ topology_template:
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
-                - host:
-                      node: kubernetes_cluster
-                      conditions: {logic_expression: is_customer}
+                - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
@@ -740,8 +761,6 @@ topology_template:
         #
         ###################################################
 
-        # TODO: handle local docker engine: we do not deploy the docker engine, but assumed its already installed. we might ping it to verify it!
-        # TODO: handle applications hosted on local docker engine
         local_docker_engine:
             type: docker.engine
             requirements:
@@ -749,6 +768,7 @@ topology_template:
 
         local_machine:
             type: local.machine
+            conditions: {logic_expression: is_local}
 
         ###################################################
         #
@@ -766,12 +786,7 @@ topology_template:
             properties:
                 - machine_name: unfurl-technology-boutique
                 - ports: ['80', '2375', '9100']
-                - flavor:
-                      value: m1.medium
-                      conditions: {equal: [{variability_input: tier}, MEDIUM]}
-                - flavor:
-                      value: m1.large
-                      conditions: {equal: [{variability_input: tier}, LARGE]}
+                - flavor: m1.medium
                 - network: {get_input: os_network}
                 - ssh_user: {get_input: os_ssh_user}
                 - ssh_key_name: {get_input: os_ssh_key_name}
@@ -785,7 +800,7 @@ topology_template:
 
         openstack_provider:
             type: openstack.provider
-            conditions: {logic_expression: is_openstack}
+            conditions: {logic_expression: is_development}
             properties:
                 - os_region_name: {get_input: os_region_name}
                 - os_auth_type: {get_input: os_auth_type}
@@ -800,6 +815,11 @@ topology_template:
         # GCP
         #
         ###################################################
+
+        gcp_memorystore:
+            type: gcp.memorystore
+            requirements:
+                - host: gcp_provider
 
         gcp_kubernetesengine:
             type: gcp.kubernetesengine
@@ -823,7 +843,7 @@ topology_template:
 
         gcp_provider:
             type: gcp.provider
-            conditions: {logic_expression: is_gcp}
+            conditions: {logic_expression: is_hyperscaler}
             properties:
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}

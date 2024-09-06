@@ -125,11 +125,20 @@ const nodes: NodeTypeMap = {
                 type: 'string',
             },
         },
+        attributes: {
+            application_address: {
+                type: 'string',
+            },
+            management_address: {
+                type: 'string',
+            },
+        },
     },
     'local.machine': {
         derived_from: 'machine',
         metadata: {
             ...MetadataNormative(),
+            ...MetadataAbstract(),
         },
         capabilities: {
             host: {
@@ -166,14 +175,6 @@ const nodes: NodeTypeMap = {
                 type: 'string',
             },
             ssh_key_file: {
-                type: 'string',
-            },
-        },
-        attributes: {
-            management_address: {
-                type: 'string',
-            },
-            application_address: {
                 type: 'string',
             },
         },
