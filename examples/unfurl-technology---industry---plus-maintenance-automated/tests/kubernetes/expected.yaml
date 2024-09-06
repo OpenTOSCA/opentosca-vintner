@@ -1,0 +1,340 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
+        k8s_host:
+            type: string
+
+        k8s_ca_cert_file:
+            type: string
+
+        k8s_client_cert_file:
+            type: string
+
+        k8s_client_key_file:
+            type: string
+
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_component:
+            type: frontend.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: frontend
+                application_port: 8080
+                application_protocol: http
+                disable_profiler: '1'
+                CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                AD_SERVICE_ADDR: {eval: '.::.requirements::[.name=advertisement]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+                SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
+            requirements:
+                - checkout: checkout_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - recommendation: recommendation_component
+                - advertisement: advertisement_component
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-frontend:v8
+
+        frontend_ingress:
+            type: ingress~ingress::kubernetes@kubernetes.cluster
+            requirements:
+                - application: frontend_component
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_component:
+            type: checkout.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: checkout
+                application_port: 7003
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                PAYMENT_SERVICE_ADDR: {eval: '.::.requirements::[.name=payment]::.target::application_endpoint'}
+                EMAIL_SERVICE_ADDR: {eval: '.::.requirements::[.name=email]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+            requirements:
+                - email: email_component
+                - payment: payment_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-checkout:v8
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_component:
+            type: email.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: email
+                application_port: 7005
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-email:v8
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_component:
+            type: payment.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: payment
+                application_port: 7006
+                application_protocol: grpc
+                disable_profiler: '1'
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-payment:v8
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_component:
+            type: currency.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: currency
+                application_port: 7004
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-currency:v8
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_component:
+            type: shipping.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: shipping
+                application_port: 7009
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-shipping:v8
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_component:
+            type: cart.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: cart
+                application_port: 7070
+                application_protocol: grpc
+                disable_profiler: '1'
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'cart'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+            requirements:
+                - database: cart_database
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-cart:v8
+
+        cart_database:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->kubernetes.cluster
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
+            requirements:
+                - host: cart_dbms
+
+        cart_dbms:
+            type: mysql.dbms~mysql.dbms#dbms.image::kubernetes@kubernetes.cluster
+            properties:
+                dbms_name: unfurl-technology-boutique-cart-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_component:
+            type: product.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: product
+                application_port: 7007
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-product:v8
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_component:
+            type: recommendation.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: recommendation
+                application_port: 7008
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+            requirements:
+                - product: product_component
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-recommendation:v8
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_component:
+            type: advertisement.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: advertisement
+                application_port: 7000
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-advertisement:v8
+
+        ###################################################
+        #
+        # Analytical
+        #
+        ###################################################
+
+        analytics_component:
+            type: analytics.component~service.application#docker.image::kubernetes@kubernetes.cluster
+            properties:
+                application_name: analytics
+                application_port: 7001
+                application_protocol: grpc
+                CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                optional_analytical_feature: 'false'
+                premium_analytical_feature: 'false'
+            requirements:
+                - checkout: checkout_component
+                - recommendation: recommendation_component
+                - host: kubernetes_cluster
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-analytics:v8
+
+        ###################################################
+        #
+        # Kubernetes
+        #
+        ###################################################
+
+        kubernetes_cluster:
+            type: kubernetes.cluster
+            properties:
+                k8s_host: {get_input: k8s_host}
+                k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
+                k8s_client_cert_file: {get_input: k8s_client_cert_file}
+                k8s_client_key_file: {get_input: k8s_client_key_file}
+            requirements:
+                - host: kubernetes_provider
+
+        kubernetes_provider:
+            type: cloud.provider

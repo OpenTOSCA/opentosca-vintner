@@ -1,0 +1,35 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - ../tosca-vintner-profile.yaml
+
+node_types:
+    retailer.frontend.dashboard:
+        derived_from: reactjs.service.application
+
+    retailer.frontend.terminal:
+        derived_from: reactjs.service.application
+
+    retailer.service.gateway:
+        derived_from: nodejs.service.application
+
+    retailer.service.core:
+        derived_from: nodejs.service.application
+
+    retailer.service.jobs:
+        derived_from: nodejs.service.application
+
+    retailer.service.stores:
+        derived_from: nodejs.service.application
+
+    retailer.service.products:
+        derived_from: nodejs.service.application
+
+    retailer.service.stocks:
+        derived_from: nodejs.service.application
+
+    retailer.service.orders:
+        derived_from: nodejs.service.application
+
+    retailer.service.global:
+        derived_from: nodejs.service.application

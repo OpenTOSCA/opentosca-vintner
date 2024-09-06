@@ -195,6 +195,14 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
             ...MetadataAbstract(),
         },
+        requirements: [
+            {
+                host: {
+                    capability: 'tosca.capabilities.Compute',
+                    relationship: 'tosca.relationships.HostedOn',
+                },
+            },
+        ],
     },
     'relational.database': {
         derived_from: 'database',
@@ -216,6 +224,51 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
             ...MetadataAbstract(),
         },
+    },
+    cache: {
+        derived_from: 'software.application',
+    },
+    storage: {
+        derived_from: 'node',
+    },
+    'block.storage': {
+        derived_from: 'storage',
+    },
+    'object.storage': {
+        derived_from: 'storage',
+    },
+    'file.storage': {
+        derived_from: 'storage',
+    },
+    bucket: {
+        derived_from: 'object.storage',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            bucket_name: {
+                type: 'string',
+            },
+            bucket_dialect: {
+                type: 'string',
+            },
+        },
+        attributes: {
+            bucket_endpoint: {
+                type: 'string',
+            },
+            bucket_token: {
+                type: 'string',
+            },
+        },
+        requirements: [
+            {
+                host: {
+                    capability: 'tosca.capabilities.Compute',
+                    relationship: 'tosca.relationships.HostedOn',
+                },
+            },
+        ],
     },
     ingress: {
         derived_from: 'node',

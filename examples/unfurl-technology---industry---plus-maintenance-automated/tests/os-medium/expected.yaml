@@ -1,0 +1,402 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        database_password:
+            type: string
+
+        dbms_password:
+            type: string
+
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        ###################################################
+        #
+        # Frontend
+        #
+        ###################################################
+
+        frontend_component:
+            type: frontend.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: frontend
+                application_port: 8080
+                application_protocol: http
+                disable_profiler: '1'
+                CHECKOUT_SERVICE_ADDR: {eval: '.::.requirements::[.name=checkout]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                RECOMMENDATION_SERVICE_ADDR: {eval: '.::.requirements::[.name=recommendation]::.target::application_endpoint'}
+                AD_SERVICE_ADDR: {eval: '.::.requirements::[.name=advertisement]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+                SHOPPING_ASSISTANT_SERVICE_ADDR: 'required-but-not-used'
+            requirements:
+                - checkout: checkout_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - recommendation: recommendation_component
+                - advertisement: advertisement_component
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-frontend:v8
+
+        frontend_ingress:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: frontend_component
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Checkout
+        #
+        ###################################################
+
+        checkout_component:
+            type: checkout.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: checkout
+                application_port: 7003
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+                SHIPPING_SERVICE_ADDR: {eval: '.::.requirements::[.name=shipping]::.target::application_endpoint'}
+                PAYMENT_SERVICE_ADDR: {eval: '.::.requirements::[.name=payment]::.target::application_endpoint'}
+                EMAIL_SERVICE_ADDR: {eval: '.::.requirements::[.name=email]::.target::application_endpoint'}
+                CURRENCY_SERVICE_ADDR: {eval: '.::.requirements::[.name=currency]::.target::application_endpoint'}
+                CART_SERVICE_ADDR: {eval: '.::.requirements::[.name=cart]::.target::application_endpoint'}
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+            requirements:
+                - email: email_component
+                - payment: payment_component
+                - currency: currency_component
+                - shipping: shipping_component
+                - cart: cart_component
+                - product: product_component
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-checkout:v8
+
+        ###################################################
+        #
+        # Email
+        #
+        ###################################################
+
+        email_component:
+            type: email.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: email
+                application_port: 7005
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-email:v8
+
+        ###################################################
+        #
+        # Payment
+        #
+        ###################################################
+
+        payment_component:
+            type: payment.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: payment
+                application_port: 7006
+                application_protocol: grpc
+                disable_profiler: '1'
+                optional_payment_feature: 'false'
+                premium_payment_feature: 'false'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-payment:v8
+
+        ###################################################
+        #
+        # Currency
+        #
+        ###################################################
+
+        currency_component:
+            type: currency.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: currency
+                application_port: 7004
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-currency:v8
+
+        ###################################################
+        #
+        # Shipping
+        #
+        ###################################################
+
+        shipping_component:
+            type: shipping.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: shipping
+                application_port: 7009
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-shipping:v8
+
+        ###################################################
+        #
+        # Cart
+        #
+        ###################################################
+
+        cart_component:
+            type: cart.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: cart
+                application_port: 7070
+                application_protocol: grpc
+                disable_profiler: '1'
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'cart'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: cart_database
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-cart:v8
+
+        cart_database:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: cart
+                database_user: cart
+                database_password: {get_input: database_password}
+            requirements:
+                - host: cart_dbms
+
+        cart_dbms:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-boutique-cart-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: docker_engine
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+
+        ###################################################
+        #
+        # Product
+        #
+        ###################################################
+
+        product_component:
+            type: product.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: product
+                application_port: 7007
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-product:v8
+
+        ###################################################
+        #
+        # Recommendation
+        #
+        ###################################################
+
+        recommendation_component:
+            type: recommendation.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: recommendation
+                application_port: 7008
+                application_protocol: grpc
+                disable_profiler: '1'
+                PRODUCT_CATALOG_SERVICE_ADDR: {eval: '.::.requirements::[.name=product]::.target::application_endpoint'}
+            requirements:
+                - product: product_component
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-recommendation:v8
+
+        ###################################################
+        #
+        # Advertisement
+        #
+        ###################################################
+
+        advertisement_component:
+            type: advertisement.component~service.application#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: advertisement
+                application_port: 7000
+                application_protocol: grpc
+                disable_profiler: '1'
+            requirements:
+                - host: docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: milesstoetzner/boutique-advertisement:v8
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        docker_engine:
+            type: docker.engine~docker.engine::ansible@remote.machine
+            requirements:
+                - host: virtual_machine
+
+        node_agent:
+            type: node.agent~service.application#tar.archive::ansible@*->remote.machine
+            properties:
+                application_name: node_exporter
+                application_port: 9100
+                application_protocol: http
+            requirements:
+                - host: virtual_machine
+            artifacts:
+                tar_archive:
+                    type: tar.archive
+                    file: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-amd64.tar.gz
+                    properties:
+                        extra_opts:
+                            - '--strip-components=1'
+
+        promtail_agent:
+            type: promtail.agent~software.application#apt.package::ansible@*->remote.machine
+            properties:
+                application_name: promtail
+            requirements:
+                - host: virtual_machine
+            artifacts:
+                apt_package:
+                    type: apt.package
+                    file: promtail
+                    properties:
+                        repository: grafana
+                        key: https://apt.grafana.com/gpg.key
+                        source: https://apt.grafana.com stable main
+
+        falco_agent:
+            type: falco.agent~software.application#apt.package::ansible@*->remote.machine
+            properties:
+                application_name: falco
+            requirements:
+                - host: virtual_machine
+            artifacts:
+                apt_package:
+                    type: apt.package
+                    file: falco
+                    properties:
+                        repository: falco
+                        key: https://falco.org/repo/falcosecurity-packages.asc
+                        source: https://download.falco.org/packages/deb stable main
+                        env: FALCO_FRONTEND=noninteractive
+
+        virtual_machine:
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
+            properties:
+                machine_name: unfurl-technology-boutique
+                ports: ['80', '2375', '9100']
+                flavor: m1.medium
+                network: {get_input: os_network}
+                ssh_key_name: {get_input: os_ssh_key_name}
+                ssh_user: {get_input: os_ssh_user}
+                ssh_key_file: {get_input: os_ssh_key_file}
+            requirements:
+                - host: openstack_provider
+            artifacts:
+                machine_image:
+                    type: machine.image
+                    file: Ubuntu 22.04
+
+        openstack_provider:
+            type: openstack.provider
+            properties:
+                os_region_name: {get_input: os_region_name}
+                os_auth_type: {get_input: os_auth_type}
+                os_auth_url: {get_input: os_auth_url}
+                os_identity_api_version: {get_input: os_identity_api_version}
+                os_interface: {get_input: os_interface}
+                os_application_credential_id: {get_input: os_application_credential_id}
+                os_application_credential_secret: {get_input: os_application_credential_secret}

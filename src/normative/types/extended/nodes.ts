@@ -55,6 +55,20 @@ const nodes: NodeTypeMap = {
             },
         },
     },
+    'reactjs.service.application': {
+        derived_from: 'service.application',
+        metadata: {
+            ...MetadataNormative(),
+            ...MetadataAbstract(),
+        },
+        properties: {
+            // TODO: which language?!
+            application_language: {
+                type: 'string',
+                default: 'nodejs18',
+            },
+        },
+    },
     'python.runtime': {
         derived_from: 'software.runtime',
         metadata: {
@@ -337,6 +351,30 @@ const nodes: NodeTypeMap = {
             },
         },
     },
+    'gcp.kubernetesengine': {
+        derived_from: 'gcp.service',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            gcp_service: {
+                type: 'string',
+                default: 'container.googleapis.com',
+            },
+        },
+    },
+    'gcp.cloudstorage': {
+        derived_from: 'gcp.service',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            gcp_service: {
+                type: 'string',
+                default: 'storage.googleapis.com',
+            },
+        },
+    },
     'docker.engine': {
         derived_from: 'container.runtime',
         description: 'Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375',
@@ -529,6 +567,12 @@ const nodes: NodeTypeMap = {
                 },
             },
         ],
+    },
+    'minio.server': {
+        derived_from: 'software.application',
+    },
+    'redis.server': {
+        derived_from: 'cache',
     },
 }
 
