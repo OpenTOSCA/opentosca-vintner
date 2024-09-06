@@ -188,6 +188,13 @@ topology_template:
                       type: docker.image
                       file: retailer.frontend.dashboard:vX.Y.Z
 
+        retailer_ingress_dashboard:
+            type: ingress
+            requirements:
+                - application: retailer_frontend_dashboard
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
         ###################################################
         #
         # Retailer Terminal
@@ -218,6 +225,13 @@ topology_template:
                 - docker_image:
                       type: docker.image
                       file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_ingress_terminal:
+            type: ingress
+            requirements:
+                - application: retailer_frontend_terminal
+                - host: virtual_machine
+                - host: kubernetes_cluster
 
         ###################################################
         #
@@ -291,8 +305,7 @@ topology_template:
                       type: docker.image
                       file: retailer.service.gateway:vX.Y.Z
 
-        # TODO: frontends brauchen auch ingressessesesss
-        retailer_gateway_ingress:
+        retailer_ingress_gateway:
             type: ingress
             requirements:
                 - application: retailer_service_gateway
@@ -455,7 +468,6 @@ topology_template:
             requirements:
                 - host: retailer_dbms
 
-        # TODO: is missing implementation if minio is hosted on k8s
         retailer_bucket_stores:
             type: bucket
             properties:
@@ -725,7 +737,6 @@ topology_template:
                 - host: gcp_memorystore
                 - host:
                       node: kubernetes_cluster
-                      # TODO: this might not be required
                       conditions: {logic_expression: is_customer}
             artifacts:
                 - cache_image:
@@ -740,7 +751,6 @@ topology_template:
 
         retailer_minio:
             type: minio.server
-            # TODO: remove this? but complains about ambiguous in when hyperscaler
             conditions: {not: {logic_expression: is_hyperscaler}}
             properties:
                 - application_name: retailer-minio-server
