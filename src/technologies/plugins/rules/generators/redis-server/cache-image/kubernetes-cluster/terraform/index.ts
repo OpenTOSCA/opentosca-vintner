@@ -11,6 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'terraform',
+    artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',

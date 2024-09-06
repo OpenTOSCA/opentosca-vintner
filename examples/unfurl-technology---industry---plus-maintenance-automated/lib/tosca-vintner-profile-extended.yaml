@@ -14545,7 +14545,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    redis.server~redis.server::ansible@kubernetes.cluster:
+    redis.server~redis.server#cache.image::ansible@kubernetes.cluster:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -15411,7 +15411,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    redis.server~redis.server::terraform@kubernetes.cluster:
+    redis.server~redis.server#cache.image::terraform@kubernetes.cluster:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'

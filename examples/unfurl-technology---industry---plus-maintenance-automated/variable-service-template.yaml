@@ -111,9 +111,9 @@ topology_template:
 
         # TODO: remove these
         options:
-            technology_constraint: false
-            required_artifact_constraint: false
-            required_incoming_relation_constraint: false
+            #technology_constraint: false
+            #required_artifact_constraint: false
+            #expected_artifact_check: true
 
         inputs:
             env:

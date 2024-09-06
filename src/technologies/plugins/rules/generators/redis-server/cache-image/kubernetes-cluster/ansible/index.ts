@@ -11,6 +11,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'ansible',
+    artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',

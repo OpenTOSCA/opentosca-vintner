@@ -151,6 +151,7 @@ ansible:
       reason: Docker Compose is more specialized.
       details: '"community.docker.docker_container" task'
     - component: redis.server
+      artifact: cache.image
       hosting:
           - kubernetes.cluster
       weight: 1
@@ -386,6 +387,7 @@ terraform:
       reason: Docker Compose is more specialized.
       details: '"docker_container" and "docker_image" resources'
     - component: redis.server
+      artifact: cache.image
       hosting:
           - kubernetes.cluster
       weight: 1
