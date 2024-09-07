@@ -1,3 +1,3 @@
-import mysqlDBMSimage from './mysql-dbms-image'
+import mysqlDBMSimage from './dbms-image'
 
 export default [mysqlDBMSimage]
