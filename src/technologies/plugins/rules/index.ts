@@ -87,6 +87,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             if (check.isDefined(types[implementationName]))
                 throw new Error(`Implementation "${implementationName}" already generated`)
+
             types[implementationName] = implementation
         }
 

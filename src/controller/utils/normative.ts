@@ -1,5 +1,5 @@
-import {NormativeTypes} from '#/normative'
 import * as files from '#files'
+import {NormativeTypes} from '#normative'
 import * as utils from '#utils'
 
 export type NormativeOptions = {
