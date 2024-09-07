@@ -81,19 +81,11 @@ The scenario does not require a specific hosting.
 
 This appendix contains the deployment technology rules.
 
-<%
-let count = 0
-Object.entries(data).forEach(([technology, rules]) => {
-  const description = descriptions.find(it => it.id === technology)
--%>
-
-<% rules.forEach((rule, index) => {
-    count++
--%>
-### Rule #<%= count %>
+<% data.forEach((rule, index) => { -%>
+### Rule #<%= index + 1 %>
 | Attribute | Value |
 | --- | --- |
-| Identifier | <%= constructRuleName({technology, ...rule}) %> |
+| Identifier | <%= constructRuleName(rule) %> |
 | Component | <%= link(rule.component) %> |
 <% if (rule.artifact) {-%>
 | Artifact | <%= link(rule.artifact) %> |
@@ -104,9 +96,8 @@ Object.entries(data).forEach(([technology, rules]) => {
 | Quality | <%= rule.weight %> |
 | Reason | <%= rule.reason %> |
 | Details | <%= rule.details %> |
-| Graph |<figure markdown><%- svgs["rule." + technology + "." + (index + 1)]%></figure>|
+| Graph |<figure markdown><%- svgs["rule." + rule.technology + "." + (index + 1)]%></figure>|
 
-<% }) %>
 <% }) %>
 
 
