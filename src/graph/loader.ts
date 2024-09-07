@@ -3,7 +3,7 @@ import * as check from '#check'
 import * as files from '#files'
 import {PROFILES_DIR, YAML_EXTENSIONS} from '#files'
 import {EntityTypesKeys, ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyRule} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
 import {TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
@@ -94,13 +94,13 @@ export default class Loader {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
         if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
-        let rules = this.serviceTemplate.topology_template.variability?.technology_assignment_rules
+        let rules = this.serviceTemplate.topology_template.variability?.technology_rules
 
         /**
          * Load rules from specified file
          */
         if (check.isString(rules)) {
-            rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, rules))
+            rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, rules))
         }
 
         /**
@@ -108,7 +108,7 @@ export default class Loader {
          */
         if (check.isUndefined(rules)) {
             if (files.exists(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))
+                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))
             }
         }
 
@@ -117,15 +117,13 @@ export default class Loader {
          */
         if (check.isUndefined(rules)) {
             if (files.exists(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME))) {
-                rules = files.loadYAML<TechnologyAssignmentRulesMap>(
-                    path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME)
-                )
+                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME))
             }
         }
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}
-        this.serviceTemplate.topology_template.variability.technology_assignment_rules = rules
+        this.serviceTemplate.topology_template.variability.technology_rules = rules
     }
 
     private async loadTechnologyPluginBuilders() {

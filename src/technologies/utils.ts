@@ -1,10 +1,11 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
+import {TechnologyRule} from '#spec/technology-template'
 import {METADATA} from '#technologies/plugins/rules/types'
 import * as utils from '#utils'
 
-export const TECHNOLOGY_RULES_FILENAME = 'rules.yaml'
+export const TECHNOLOGY_RULES_FILENAME = 'technology-rules.yaml'
 
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 
@@ -21,9 +22,7 @@ export const GENERATION_NOTICE = `
 ################################################################
 `.trim()
 
-export type RuleData = {component: string; technology: string; artifact?: string; hosting?: string[]}
-
-export function constructImplementationName(data: {type: string; rule: RuleData}) {
+export function constructImplementationName(data: {type: string; rule: TechnologyRule}) {
     return `${data.type}~${constructRuleName(data.rule)}`
 }
 
@@ -61,7 +60,7 @@ export function destructImplementationName(name: string) {
     }
 }
 
-export function constructRuleName(data: RuleData, options: {technology?: boolean} = {}) {
+export function constructRuleName(data: TechnologyRule, options: {technology?: boolean} = {}) {
     options.technology = options.technology ?? true
 
     let output = data.component

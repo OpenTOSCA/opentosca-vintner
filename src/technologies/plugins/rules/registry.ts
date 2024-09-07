@@ -1,5 +1,4 @@
-import * as check from '#check'
-import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyRule} from '#spec/technology-template'
 import generators from '#technologies/plugins/rules/generators'
 import {constructRuleName} from '#technologies/utils'
 import * as utils from '#utils'
@@ -24,16 +23,13 @@ class Registry {
         }
     }
 
-    get rules(): TechnologyAssignmentRulesMap {
-        const map: TechnologyAssignmentRulesMap = {}
+    get rules(): TechnologyRule[] {
+        const list: TechnologyRule[] = []
 
         for (const generator of this.map.values()) {
-            if (check.isUndefined(map[generator.technology])) {
-                map[generator.technology] = []
-            }
-
-            map[generator.technology].push(
+            list.push(
                 utils.copy({
+                    technology: generator.technology,
                     component: generator.component,
                     artifact: generator.artifact,
                     hosting: generator.hosting,
@@ -44,7 +40,7 @@ class Registry {
             )
         }
 
-        return map
+        return list
     }
 }
 

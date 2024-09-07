@@ -15,12 +15,11 @@ export type TechnologyTemplate = VariabilityAlternative & {
     assign?: string
 }
 
-export type TechnologyAssignmentRulesMap = {[technology: string]: TechnologyAssignmentRule[]}
-
-export type TechnologyAssignmentRule = {
+export type TechnologyRule = {
+    technology: string
     component: string
     artifact?: string
-    hosting?: string | string[]
+    hosting?: string[]
     conditions?: LogicExpression | LogicExpression[]
     weight?: number
     assign?: string

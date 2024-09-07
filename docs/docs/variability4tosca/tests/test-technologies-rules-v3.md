@@ -31,7 +31,7 @@ node_types:
         derived_from: tosca.nodes.Root
 topology_template:
     variability:
-        technology_assignment_rules:
+        technology_rules:
             terraform:
                 - component: application
                   hosting: terraform_host

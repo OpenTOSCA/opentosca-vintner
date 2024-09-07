@@ -610,6 +610,132 @@ node_types:
                                                   selector:
                                                       app: '{{ SELF.application_name }}'
                                                   type: LoadBalancer
+    ingress~ingress::kubernetes@kubernetes.cluster:
+        derived_from: ingress
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        attributes:
+            application_address:
+                type: string
+                default: not implemented
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.ingress.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: '{{ service | to_yaml }}'
+                                      vars:
+                                          service:
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}-external'
+                                              spec:
+                                                  ports:
+                                                      - name: '{{ SELF.application_protocol }}'
+                                                        port: '{{ SELF.application_port }}'
+                                                        targetPort: '{{ SELF.application_port }}'
+                                                  selector:
+                                                      app: '{{ SELF.application_name }}'
+                                                  type: LoadBalancer
+                                    - name: apply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+    ingress~ingress::terraform@kubernetes.cluster:
+        derived_from: ingress
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        attributes:
+            application_address:
+                type: string
+                default: not implemented
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - kubernetes:
+                                        source: hashicorp/kubernetes
+                                        version: 2.31.0
+                              required_version: '>= 0.14.0'
+                        provider:
+                            kubernetes:
+                                - client_certificate: ${file("{{ SELF.k8s_client_cert_file }}")}
+                                  client_key: ${file("{{ SELF.k8s_client_key_file }}")}
+                                  cluster_ca_certificate: ${file("{{ SELF.k8s_ca_cert_file }}")}
+                                  host: '{{ SELF.k8s_host }}'
+                        resource:
+                            kubernetes_service_v1:
+                                application:
+                                    - metadata:
+                                          - name: '{{ SELF.application_name }}-external'
+                                      wait_for_load_balancer: false
+                                      spec:
+                                          - port:
+                                                - name: '{{ SELF.application_protocol }}'
+                                                  port: 80
+                                                  target_port: '{{ SELF.application_port }}'
+                                            selector:
+                                                app: '{{ SELF.application_name }}'
+                                            type: LoadBalancer
     ingress~ingress::ansible@remote.machine:
         derived_from: ingress
         metadata:
@@ -692,70 +818,6 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    ingress~ingress::terraform@kubernetes.cluster:
-        derived_from: ingress
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            k8s_host:
-                type: string
-                default:
-                    get_input: k8s_host
-            k8s_ca_cert_file:
-                type: string
-                default:
-                    get_input: k8s_ca_cert_file
-            k8s_client_cert_file:
-                type: string
-                default:
-                    get_input: k8s_client_cert_file
-            k8s_client_key_file:
-                type: string
-                default:
-                    get_input: k8s_client_key_file
-        attributes:
-            application_address:
-                type: string
-                default: not implemented
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - kubernetes:
-                                        source: hashicorp/kubernetes
-                                        version: 2.31.0
-                              required_version: '>= 0.14.0'
-                        provider:
-                            kubernetes:
-                                - client_certificate: ${file("{{ SELF.k8s_client_cert_file }}")}
-                                  client_key: ${file("{{ SELF.k8s_client_key_file }}")}
-                                  cluster_ca_certificate: ${file("{{ SELF.k8s_ca_cert_file }}")}
-                                  host: '{{ SELF.k8s_host }}'
-                        resource:
-                            kubernetes_service_v1:
-                                application:
-                                    - metadata:
-                                          - name: '{{ SELF.application_name }}-external'
-                                      wait_for_load_balancer: false
-                                      spec:
-                                          - port:
-                                                - name: '{{ SELF.application_protocol }}'
-                                                  port: 80
-                                                  target_port: '{{ SELF.application_port }}'
-                                            selector:
-                                                app: '{{ SELF.application_name }}'
-                                            type: LoadBalancer
     ingress~ingress::terraform@remote.machine:
         derived_from: ingress
         metadata:
@@ -826,65 +888,3 @@ node_types:
                                           remote-exec:
                                               - inline:
                                                     - sudo bash /tmp/install-ingress.sh
-    ingress~ingress::kubernetes@kubernetes.cluster:
-        derived_from: ingress
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            k8s_host:
-                type: string
-                default:
-                    get_input: k8s_host
-            k8s_ca_cert_file:
-                type: string
-                default:
-                    get_input: k8s_ca_cert_file
-            k8s_client_cert_file:
-                type: string
-                default:
-                    get_input: k8s_client_cert_file
-            k8s_client_key_file:
-                type: string
-                default:
-                    get_input: k8s_client_key_file
-        attributes:
-            application_address:
-                type: string
-                default: not implemented
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: touch manifest
-                                      register: manifest
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.ingress.manifest.yaml'
-                                    - name: create manifest
-                                      ansible.builtin.copy:
-                                          dest: '{{ manifest.path }}'
-                                          content: '{{ service | to_yaml }}'
-                                      vars:
-                                          service:
-                                              apiVersion: v1
-                                              kind: Service
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}-external'
-                                              spec:
-                                                  ports:
-                                                      - name: '{{ SELF.application_protocol }}'
-                                                        port: '{{ SELF.application_port }}'
-                                                        targetPort: '{{ SELF.application_port }}'
-                                                  selector:
-                                                      app: '{{ SELF.application_name }}'
-                                                  type: LoadBalancer
-                                    - name: apply manifest
-                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
-                                      args:
-                                          executable: /usr/bin/bash

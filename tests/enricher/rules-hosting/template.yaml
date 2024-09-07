@@ -41,17 +41,18 @@ node_types:
 
 topology_template:
     variability:
-        technology_assignment_rules:
-            terraform:
-                - component: application
-                  hosting:
-                      - first_host
-                      - first_host_host
-                      - first_host_host_second_host
+        technology_rules:
+            - component: application
+              technology: terraform
+              hosting:
+                  - first_host
+                  - first_host_host
+                  - first_host_host_second_host
 
-                - component: application
-                  hosting:
-                      - second_host
+            - component: application
+              technology: terraform
+              hosting:
+                  - second_host
 
         options:
             enrich_technologies: true

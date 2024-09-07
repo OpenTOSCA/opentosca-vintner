@@ -34,7 +34,8 @@
             "#puml": ["src/utils/puml"],
             "#machines/*": ["src/machines/*"],
             "#technologies/*": ["src/technologies/*"],
-            "#normative/*": ["src/normative/*"]
+            "#normative/*": ["src/normative/*"],
+            "#normative": ["src/normative"]
         },
         "outDir": "build",
         "allowSyntheticDefaultImports": true,

@@ -6,13 +6,13 @@ node_types:
 
 topology_template:
     variability:
-        technology_assignment_rules:
-            terraform:
-                - component: application
+        technology_rules:
+            - component: application
+              technology: terraform
 
-            override:
-                - component: application
-                  assign: override-assign
+            - component: application
+              assign: override-assign
+              technology: override
 
         options:
             enrich_technologies: true

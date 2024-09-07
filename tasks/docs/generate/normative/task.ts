@@ -1,6 +1,6 @@
-import {NormativeTypes} from '#/normative'
 import Controller from '#controller'
 import * as files from '#files'
+import {NormativeTypes} from '#normative'
 import {ServiceTemplate} from '#spec/service-template'
 import * as utils from '#utils'
 import path from 'path'
