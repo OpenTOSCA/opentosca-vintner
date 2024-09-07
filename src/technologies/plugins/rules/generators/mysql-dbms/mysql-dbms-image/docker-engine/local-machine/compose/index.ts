@@ -1,10 +1,14 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleApplyComposeTask,
+    AnsibleCreateComposeTask,
     AnsibleHostEndpointCapability,
     AnsibleOrchestratorOperation,
-    MetadataGenerated,
-    MetadataUnfurl,
-} from '#technologies/plugins/rules/utils'
+    AnsibleTouchComposeTask,
+    AnsibleUnapplyComposeTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -16,32 +20,16 @@ const generator: ImplementationGenerator = {
     details: 'docker-compose manifest generated and applied',
 
     generate: (name, type) => {
-        const AnsibleTouchComposeTask = {
-            name: 'touch compose',
-            register: 'compose',
-            'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.dbms_name }}.compose.yaml',
-            },
-        }
-
-        const AnsibleCreateComposeTask = {
-            name: 'create compose',
-            'ansible.builtin.copy': {
-                dest: '{{ compose.path }}',
-                content: '{{ manifest | to_yaml }}',
-            },
-            vars: {
-                manifest: {
-                    name: '{{ SELF.dbms_name }}',
-                    services: {
-                        application: {
-                            container_name: '{{ SELF.dbms_name }}',
-                            image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
-                            network_mode: 'host',
-                            environment: {
-                                MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',
-                            },
-                        },
+        const suffix = '{{ SELF.dbms_name }}'
+        const manifest: DockerCompose = {
+            name: '{{ SELF.dbms_name }}',
+            services: {
+                application: {
+                    container_name: '{{ SELF.dbms_name }}',
+                    image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
+                    network_mode: 'host',
+                    environment: {
+                        MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password }}',
                     },
                 },
             },
@@ -86,14 +74,14 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
+                                        {
+                                            ...AnsibleApplyComposeTask(),
                                         },
                                         {
                                             name: 'let it cook',
@@ -112,14 +100,14 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
                                         {
-                                            name: 'unapply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
+                                        {
+                                            ...AnsibleUnapplyComposeTask(),
                                         },
                                     ],
                                 },

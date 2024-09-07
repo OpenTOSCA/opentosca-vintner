@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

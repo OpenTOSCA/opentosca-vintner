@@ -1,12 +1,16 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerContainerTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -28,7 +32,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
                 application_port: {
                     type: 'string',
@@ -59,15 +63,17 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'start container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.dbms_name }}',
-                                                image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
-                                                network_mode: 'host',
-                                                env: {
-                                                    MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}',
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'start container',
+                                                container: {
+                                                    name: '{{ SELF.dbms_name }}',
+                                                    image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
+                                                    network_mode: 'host',
+                                                    env: {
+                                                        MYSQL_ROOT_PASSWORD: '{{ SELF.dbms_password | string }}',
+                                                    },
                                                 },
-                                            },
+                                            }),
                                         },
                                     ],
                                 },
@@ -85,11 +91,13 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'delete container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.dbms_name }}',
-                                                state: 'absent',
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'stop container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    state: 'absent',
+                                                },
+                                            }),
                                         },
                                     ],
                                 },

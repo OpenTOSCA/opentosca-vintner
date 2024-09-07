@@ -1,12 +1,12 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
+    ApplicationProperties,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -74,7 +74,7 @@ const generator: ImplementationGenerator = {
                                 docker_container: {
                                     application: [
                                         {
-                                            env: mapProperties(type, {format: 'env', quote: false}),
+                                            env: ApplicationProperties(type, {quote: false}).toEnv(),
                                             image: '${docker_image.image.image_id}',
                                             name: '{{ SELF.application_name }}',
                                             network_mode: 'host',

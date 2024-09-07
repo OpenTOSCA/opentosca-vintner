@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     BASH_KUBECTL,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 /**
  * Official Kubernetes provider does not provide "kubectl exec", https://registry.terraform.io/providers/hashicorp/kubernetes

@@ -1,15 +1,15 @@
 import * as files from '#files'
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {
-    AnsibleOrchestratorOperation,
+    ApplicationProperties,
     GCPProviderCredentials,
     JinjaSecureApplicationProtocol,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
     SourceArchiveFile,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: port is now 443
 
@@ -94,10 +94,9 @@ const generator: ImplementationGenerator = {
                                                     runtime: '{{ SELF.application_language }}',
                                                     service: '{{ SELF.application_name }}',
                                                     instance_class: 'F1',
-                                                    env_variables: mapProperties(type, {
-                                                        format: 'map',
+                                                    env_variables: ApplicationProperties(type, {
                                                         ignore: [PROPERTIES.PORT],
-                                                    }),
+                                                    }).toMap(),
                                                 },
                                             },
                                         },

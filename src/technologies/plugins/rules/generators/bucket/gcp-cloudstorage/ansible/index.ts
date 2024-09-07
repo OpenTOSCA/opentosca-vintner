@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    AnsibleOrchestratorOperation,
-    GCPProviderCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-} from '#technologies/plugins/rules/utils'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this, see https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_storage_object_module.html
 

@@ -1,12 +1,14 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleAptTask,
+    AnsibleDockerContainerTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
+    AnsibleMySQLDatabaseTask,
+    AnsibleMySQLUserTask,
     AnsibleWaitForSSHTask,
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/ansible'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: still need to test port forwarding, i.e., if dbms not in host
 
@@ -61,15 +63,17 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'install pip',
-                                            apt: {
-                                                name: 'python3-pip',
-                                                state: 'present',
-                                            },
+                                            ...AnsibleAptTask({
+                                                name: 'install pip',
+                                                apt: {
+                                                    name: 'python3-pip',
+                                                    state: 'present',
+                                                },
+                                            }),
                                         },
                                         {
                                             name: 'install pymysql',
-                                            pip: {
+                                            'ansible.builtin.pip': {
                                                 name: 'pymysql',
                                                 state: 'present',
                                             },
@@ -82,14 +86,17 @@ const generator: ImplementationGenerator = {
                                             register: 'dbms_container_info',
                                         },
                                         {
-                                            name: 'forward port',
-                                            'community.docker.docker_container': {
-                                                name: '{{ HOST.dbms_name }}-port-forward',
-                                                image: 'nicolaka/netshoot:v0.13',
-                                                command: 'socat TCP6-LISTEN:3306,fork TCP:{{ HOST.dbms_name }}:3306',
-                                                ports: ['{{ HOST.application_port }}:3306'],
-                                            },
-                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'forward port',
+                                                container: {
+                                                    name: '{{ HOST.dbms_name }}-port-forward',
+                                                    image: 'nicolaka/netshoot:v0.13',
+                                                    command:
+                                                        'socat TCP6-LISTEN:3306,fork TCP:{{ HOST.dbms_name }}:3306',
+                                                    ports: ['{{ HOST.application_port }}:3306'],
+                                                },
+                                                when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                            }),
                                         },
                                         {
                                             name: 'create forwarding network',
@@ -103,28 +110,32 @@ const generator: ImplementationGenerator = {
                                             when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
                                         },
                                         {
-                                            name: 'create database',
-                                            'community.mysql.mysql_db': {
-                                                name: '{{ SELF.database_name }}',
-                                                ...login,
-                                            },
+                                            ...AnsibleMySQLDatabaseTask({
+                                                name: 'create database',
+                                                database: {
+                                                    name: '{{ SELF.database_name }}',
+                                                    ...login,
+                                                },
+                                            }),
                                         },
                                         {
-                                            name: 'create user (with privileges)',
-                                            'community.mysql.mysql_user': {
-                                                ...user,
-                                                ...login,
-                                            },
+                                            ...AnsibleMySQLUserTask({
+                                                name: 'create user (with privileges)',
+                                                user: {
+                                                    ...user,
+                                                    ...login,
+                                                },
+                                            }),
                                         },
                                         {
-                                            name: 'unforward port',
-                                            'community.docker.docker_container': {
-                                                name: '{{ HOST.dbms_name }}-port-forward',
-                                                image: 'nicolaka/netshoot:v0.13',
-                                                network_mode: 'host',
-                                                state: 'absent',
-                                            },
-                                            when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'unforward port',
+                                                container: {
+                                                    name: '{{ HOST.dbms_name }}-port-forward',
+                                                    state: 'absent',
+                                                },
+                                                when: "'host' not in dbms_container_info.container.NetworkSettings.Networks",
+                                            }),
                                         },
                                         {
                                             name: 'remove forwarding network',
@@ -150,20 +161,24 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'delete user (with privileges)',
-                                            'community.mysql.mysql_user': {
-                                                state: 'absent',
-                                                ...user,
-                                                ...login,
-                                            },
+                                            ...AnsibleMySQLUserTask({
+                                                name: 'delete user (with privileges)',
+                                                user: {
+                                                    state: 'absent',
+                                                    ...user,
+                                                    ...login,
+                                                },
+                                            }),
                                         },
                                         {
-                                            name: 'delete database',
-                                            'community.mysql.mysql_db': {
-                                                name: '{{ SELF.database_name }}',
-                                                state: 'absent',
-                                                ...login,
-                                            },
+                                            ...AnsibleMySQLDatabaseTask({
+                                                name: 'delete database',
+                                                database: {
+                                                    name: '{{ SELF.database_name }}',
+                                                    state: 'absent',
+                                                    ...login,
+                                                },
+                                            }),
                                         },
                                     ],
                                 },

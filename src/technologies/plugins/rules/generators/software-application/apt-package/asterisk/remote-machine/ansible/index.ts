@@ -1,18 +1,20 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleCallOperationTask,
-    AnsibleCopyOperationTask,
+    AnsibleCallManagementOperationTask,
+    AnsibleCopyManagementOperationTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleDeleteApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
     ApplicationDirectory,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'software.application',
@@ -103,10 +105,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationDirectoryTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                     ],
                                 },
@@ -124,10 +126,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
                                         },
                                     ],
                                 },
@@ -145,10 +147,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.START),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                     ],
                                 },
@@ -166,10 +168,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                     ],
                                 },
@@ -187,10 +189,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
                                             ...AnsibleDeleteApplicationDirectoryTask(),

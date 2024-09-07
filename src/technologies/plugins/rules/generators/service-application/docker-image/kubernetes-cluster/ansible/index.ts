@@ -2,11 +2,13 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleKubernetesCredentialsEnvironment,
     AnsibleOrchestratorOperation,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    ApplicationProperties,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -74,7 +76,7 @@ const generator: ImplementationGenerator = {
                                                                     {
                                                                         image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                                         name: '{{ SELF.application_name }}',
-                                                                        env: mapProperties(type),
+                                                                        env: ApplicationProperties(type).toList(),
                                                                         ports: [
                                                                             {
                                                                                 containerPort:

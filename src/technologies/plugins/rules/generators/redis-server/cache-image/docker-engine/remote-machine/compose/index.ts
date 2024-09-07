@@ -1,12 +1,16 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleApplyComposeTask,
     AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
+    AnsibleUnapplyComposeTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    ApplicationProperties,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineHost,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this
 
@@ -42,7 +46,7 @@ const generator: ImplementationGenerator = {
                             container_name: '{{ SELF.application_name }}',
                             image: '{{ ".artifacts::docker_image::file" | eval }}',
                             network_mode: 'host',
-                            environment: mapProperties(type, {format: 'map'}),
+                            environment: ApplicationProperties(type).toMap(),
                         },
                     },
                 },
@@ -77,11 +81,7 @@ const generator: ImplementationGenerator = {
                                         AnsibleTouchComposeTask,
                                         AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleApplyComposeTask(),
                                             environment: {
                                                 ...AnsibleDockerHostEnvironment(),
                                             },
@@ -100,11 +100,7 @@ const generator: ImplementationGenerator = {
                                         AnsibleTouchComposeTask,
                                         AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleUnapplyComposeTask(),
                                             environment: {
                                                 ...AnsibleDockerHostEnvironment(),
                                             },

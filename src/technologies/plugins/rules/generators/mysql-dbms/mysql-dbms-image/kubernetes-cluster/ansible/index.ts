@@ -2,10 +2,8 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleKubernetesCredentialsEnvironment,
     AnsibleOrchestratorOperation,
-    KubernetesCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/ansible'
+import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',

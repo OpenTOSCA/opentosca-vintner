@@ -1,13 +1,14 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
+import {TerraformSSHConnection, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     ApplicationDirectory,
     ApplicationSystemdUnit,
     BASH_HEADER,
-    BashAssertOperation,
-    BashCallOperation,
-    BashCopyOperation,
+    BashAssertManagementOperation,
+    BashCallManagementOperation,
+    BashCopyManagementOperation,
     BashCreateApplicationDirectory,
     BashCreateApplicationEnvironment,
     BashCreateVintnerDirectory,
@@ -19,8 +20,7 @@ import {
     OpenstackMachineCredentials,
     OpenstackMachineHost,
     SourceArchiveFile,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 class Generator extends GeneratorAbstract {
     component = 'service.application'
@@ -51,10 +51,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             connection: [
                                                 {
-                                                    host: '{{ SELF.os_ssh_host }}',
-                                                    private_key: '${file("{{ SELF.os_ssh_key_file }}")}',
-                                                    type: 'ssh',
-                                                    user: '{{ SELF.os_ssh_user }}',
+                                                    ...TerraformSSHConnection(),
                                                 },
                                             ],
                                             provisioner: {
@@ -150,10 +147,10 @@ systemctl enable {{ SELF.application_name }}
         return `${BASH_HEADER}
 
 # Copy operation
-${BashCopyOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
 
 # Execute operation
-${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
 `
     }
 
@@ -161,7 +158,7 @@ ${BashCallOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
         return `${BASH_HEADER}
 
 # Assert operation
-${BashAssertOperation(MANAGEMENT_OPERATIONS.START)}
+${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.START)}
 
 # Start service 
 systemctl start {{ SELF.application_name }}
@@ -172,13 +169,13 @@ systemctl start {{ SELF.application_name }}
         return `${BASH_HEADER}
 
 # Assert operation
-${BashAssertOperation(MANAGEMENT_OPERATIONS.STOP)}
+${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
 
 # Copy operation
-${BashCopyOperation(MANAGEMENT_OPERATIONS.STOP)}
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
 
 # Execute operation
-${BashCallOperation(MANAGEMENT_OPERATIONS.STOP)}
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
 
 # Stop service 
 systemctl stop {{ SELF.application_name }}
@@ -189,10 +186,10 @@ systemctl stop {{ SELF.application_name }}
         return `${BASH_HEADER}
 
 # Copy operation
-${BashCopyOperation(MANAGEMENT_OPERATIONS.DELETE)}
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Execute operation
-${BashCallOperation(MANAGEMENT_OPERATIONS.DELETE)}
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.DELETE)}
 
 # Delete application directory
 ${BashDeleteApplicationDirectory()}

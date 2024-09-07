@@ -1,10 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    KubernetesCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
+    TerraformKubernetesProviderConfiguration,
+    TerraformKubernetesProviderImport,
+    TerraformRequiredVersion,
     TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/terraform'
+import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'ingress',
@@ -39,21 +40,17 @@ const generator: ImplementationGenerator = {
                                     required_providers: [
                                         {
                                             kubernetes: {
-                                                source: 'hashicorp/kubernetes',
-                                                version: '2.31.0',
+                                                ...TerraformKubernetesProviderImport(),
                                             },
                                         },
                                     ],
-                                    required_version: '>= 0.14.0',
+                                    ...TerraformRequiredVersion(),
                                 },
                             ],
                             provider: {
                                 kubernetes: [
                                     {
-                                        client_certificate: '${file("{{ SELF.k8s_client_cert_file }}")}',
-                                        client_key: '${file("{{ SELF.k8s_client_key_file }}")}',
-                                        cluster_ca_certificate: '${file("{{ SELF.k8s_ca_cert_file }}")}',
-                                        host: '{{ SELF.k8s_host }}',
+                                        ...TerraformKubernetesProviderConfiguration(),
                                     },
                                 ],
                             },

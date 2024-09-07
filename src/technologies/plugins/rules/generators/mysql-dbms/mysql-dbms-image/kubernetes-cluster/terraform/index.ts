@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    KubernetesCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
+import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',

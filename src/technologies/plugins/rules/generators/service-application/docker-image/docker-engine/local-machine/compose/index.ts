@@ -1,10 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleApplyComposeTask,
+    AnsibleCreateComposeTask,
     AnsibleOrchestratorOperation,
-    MetadataGenerated,
-    MetadataUnfurl,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+    AnsibleTouchComposeTask,
+    AnsibleUnapplyComposeTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
+import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -16,31 +19,15 @@ const generator: ImplementationGenerator = {
     details: 'docker compose manifest generated and applied',
 
     generate: (name, type) => {
-        const AnsibleTouchComposeTask = {
-            name: 'touch compose',
-            register: 'compose',
-            'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.application_name }}.compose.yaml',
-            },
-        }
-
-        const AnsibleCreateComposeTask = {
-            name: 'create compose',
-            'ansible.builtin.copy': {
-                dest: '{{ compose.path }}',
-                content: '{{ manifest | to_yaml }}',
-            },
-            vars: {
-                manifest: {
-                    name: '{{ SELF.application_name }}',
-                    services: {
-                        application: {
-                            container_name: '{{ SELF.application_name }}',
-                            image: '{{ ".artifacts::docker_image::file" | eval }}',
-                            network_mode: 'host',
-                            environment: mapProperties(type, {format: 'map'}),
-                        },
-                    },
+        const suffix = '{{ SELF.application_name }}'
+        const manifest: DockerCompose = {
+            name: '{{ SELF.application_name }}',
+            services: {
+                application: {
+                    container_name: '{{ SELF.application_name }}',
+                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                    network_mode: 'host',
+                    environment: ApplicationProperties(type).toMap(),
                 },
             },
         }
@@ -67,14 +54,14 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
+                                        {
+                                            ...AnsibleApplyComposeTask(),
                                         },
                                     ],
                                 },
@@ -87,14 +74,14 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
                                         {
-                                            name: 'apply compose',
-                                            'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
-                                            args: {
-                                                executable: '/usr/bin/bash',
-                                            },
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
+                                        {
+                                            ...AnsibleUnapplyComposeTask(),
                                         },
                                     ],
                                 },

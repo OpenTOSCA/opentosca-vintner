@@ -1,10 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    GCPProviderCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
+    TerraformGoogleProviderConfiguration,
+    TerraformGoogleProviderImport,
+    TerraformRequiredVersion,
     TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/terraform'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'gcp.service',
@@ -33,20 +34,16 @@ const generator: ImplementationGenerator = {
                                 {
                                     required_providers: [
                                         {
-                                            google: {
-                                                source: 'hashicorp/google',
-                                                version: '4.67.0',
-                                            },
+                                            google: {...TerraformGoogleProviderImport()},
                                         },
                                     ],
+                                    ...TerraformRequiredVersion(),
                                 },
                             ],
                             provider: {
                                 google: [
                                     {
-                                        credentials: '{{ SELF.gcp_service_account_file }}',
-                                        project: '{{ SELF.gcp_project }}',
-                                        region: '{{ SELF.gcp_region }}',
+                                        ...TerraformGoogleProviderConfiguration(),
                                     },
                                 ],
                             },

@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleApplyComposeTask,
     AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineHost,
-} from '#technologies/plugins/rules/utils'
+    AnsibleUnapplyComposeTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: we assume that dbms is exposed
 
@@ -58,11 +58,7 @@ const generator: ImplementationGenerator = {
 
         const AnsibleApplyJobTasks = [
             {
-                name: 'apply compose',
-                'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
-                args: {
-                    executable: '/usr/bin/bash',
-                },
+                ...AnsibleApplyComposeTask(),
                 environment: {
                     ...AnsibleDockerHostEnvironment(),
                 },
@@ -74,11 +70,7 @@ const generator: ImplementationGenerator = {
                 },
             },
             {
-                name: 'unapply compose',
-                'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
-                args: {
-                    executable: '/usr/bin/bash',
-                },
+                ...AnsibleUnapplyComposeTask(),
                 environment: {
                     ...AnsibleDockerHostEnvironment(),
                 },

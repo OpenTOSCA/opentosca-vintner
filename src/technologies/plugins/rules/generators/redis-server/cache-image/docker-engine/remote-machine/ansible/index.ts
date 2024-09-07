@@ -1,13 +1,16 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerContainerTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    ApplicationProperties,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this
 
@@ -48,13 +51,15 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'start container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                image: '{{ ".artifacts::docker_image::file" | eval }}',
-                                                network_mode: 'host',
-                                                env: mapProperties(type, {format: 'map'}),
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'start container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                                                    network_mode: 'host',
+                                                    env: ApplicationProperties(type).toMap(),
+                                                },
+                                            }),
                                         },
                                     ],
                                 },
@@ -72,11 +77,13 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'stop container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                state: 'absent',
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'stop container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    state: 'absent',
+                                                },
+                                            }),
                                         },
                                     ],
                                 },

@@ -1,5 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {AnsibleOrchestratorOperation, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',

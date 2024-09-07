@@ -1,12 +1,16 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {AnsibleHostEndpointCapability} from '#technologies/plugins/rules/utils/ansible'
 import {
-    AnsibleHostEndpointCapability,
+    TerraformDockerProviderImport,
+    TerraformDockerProviderLocalConfiguration,
+    TerraformStandardOperations,
+} from '#technologies/plugins/rules/utils/terraform'
+import {
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -61,8 +65,7 @@ const generator: ImplementationGenerator = {
                                     required_providers: [
                                         {
                                             docker: {
-                                                source: 'kreuzwerker/docker',
-                                                version: '3.0.2',
+                                                ...TerraformDockerProviderImport(),
                                             },
                                         },
                                     ],
@@ -71,7 +74,7 @@ const generator: ImplementationGenerator = {
                             provider: {
                                 docker: [
                                     {
-                                        host: 'unix:///var/run/docker.sock',
+                                        ...TerraformDockerProviderLocalConfiguration(),
                                     },
                                 ],
                             },

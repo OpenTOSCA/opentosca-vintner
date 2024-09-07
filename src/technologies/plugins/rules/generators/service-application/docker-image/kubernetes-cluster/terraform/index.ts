@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
+    ApplicationProperties,
     KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
-    TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -91,7 +91,7 @@ const generator: ImplementationGenerator = {
                                                                 {
                                                                     container: [
                                                                         {
-                                                                            env: mapProperties(type),
+                                                                            env: ApplicationProperties(type).toList(),
                                                                             image: '{{ ".artifacts::docker_image::file" | eval }}',
                                                                             name: '{{ SELF.application_name }}',
                                                                             port: [

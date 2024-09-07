@@ -3,10 +3,8 @@ import {
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/ansible'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -54,14 +52,14 @@ const generator: ImplementationGenerator = {
                                         },
                                         {
                                             name: 'install pip',
-                                            apt: {
+                                            'ansible.builtin.apt': {
                                                 name: 'python3-pip',
                                                 state: 'present',
                                             },
                                         },
                                         {
                                             name: 'install pymysql',
-                                            pip: {
+                                            'ansible.builtin.pip': {
                                                 name: 'pymysql',
                                                 state: 'present',
                                             },

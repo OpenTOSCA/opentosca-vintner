@@ -1,10 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    MetadataGenerated,
-    MetadataUnfurl,
+    TerraformDockerProviderImport,
+    TerraformDockerProviderLocalConfiguration,
+    TerraformRequiredVersion,
     TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/terraform'
+import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -38,17 +39,17 @@ const generator: ImplementationGenerator = {
                                     required_providers: [
                                         {
                                             docker: {
-                                                source: 'kreuzwerker/docker',
-                                                version: '3.0.2',
+                                                ...TerraformDockerProviderImport(),
                                             },
                                         },
                                     ],
+                                    ...TerraformRequiredVersion(),
                                 },
                             ],
                             provider: {
                                 docker: [
                                     {
-                                        host: 'unix:///var/run/docker.sock',
+                                        ...TerraformDockerProviderLocalConfiguration(),
                                     },
                                 ],
                             },
@@ -56,7 +57,7 @@ const generator: ImplementationGenerator = {
                                 docker_container: {
                                     application: [
                                         {
-                                            env: mapProperties(type, {format: 'env', quote: false}),
+                                            env: ApplicationProperties(type, {quote: false}).toEnv(),
                                             image: '${docker_image.image.image_id}',
                                             name: '{{ SELF.application_name }}',
                                             network_mode: 'host',

@@ -2,8 +2,8 @@ import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleAssertOperationTask,
-    AnsibleCallOperationTask,
-    AnsibleCopyOperationTask,
+    AnsibleCallManagementOperationTask,
+    AnsibleCopyManagementOperationTask,
     AnsibleCreateApplicationDirectoryTask,
     AnsibleCreateApplicationEnvironment,
     AnsibleCreateApplicationSystemdUnit,
@@ -14,11 +14,13 @@ import {
     AnsibleUnarchiveSourceArchiveFileTask,
     AnsibleUnarchiveSourceArchiveUrlTask,
     AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
     ApplicationDirectory,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const artifact = 'tar.archive'
 
@@ -72,10 +74,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleCreateApplicationEnvironment(type),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
                                         },
                                         {
                                             ...AnsibleCreateApplicationSystemdUnit(),
@@ -105,10 +107,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
                                         },
                                     ],
                                 },
@@ -129,7 +131,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.START),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.START),
                                         },
                                         {
                                             name: 'start service',
@@ -156,10 +158,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.STOP),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
                                         },
                                         {
                                             name: 'stop service',
@@ -184,10 +186,10 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            ...AnsibleCopyOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
-                                            ...AnsibleCallOperationTask(MANAGEMENT_OPERATIONS.DELETE),
+                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.DELETE),
                                         },
                                         {
                                             name: 'delete systemd service',

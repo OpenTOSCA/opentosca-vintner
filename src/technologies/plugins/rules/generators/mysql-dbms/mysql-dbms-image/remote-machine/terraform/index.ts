@@ -1,13 +1,13 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {AnsibleHostEndpointCapability} from '#technologies/plugins/rules/utils/ansible'
+import {TerraformSSHConnection, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
-    AnsibleHostEndpointCapability,
     BASH_HEADER,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const script = `
 ${BASH_HEADER}
@@ -105,10 +105,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             connection: [
                                                 {
-                                                    host: '{{ SELF.os_ssh_host }}',
-                                                    private_key: '${file("{{ SELF.os_ssh_key_file }}")}',
-                                                    type: 'ssh',
-                                                    user: '{{ SELF.os_ssh_user }}',
+                                                    ...TerraformSSHConnection(),
                                                 },
                                             ],
                                             provisioner: {

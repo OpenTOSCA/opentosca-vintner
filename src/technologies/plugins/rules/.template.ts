@@ -1,5 +1,5 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {MetadataGenerated} from '#technologies/plugins/rules/utils'
+import {MetadataGenerated} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     reason: '',

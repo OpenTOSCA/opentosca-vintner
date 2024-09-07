@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    MetadataGenerated,
-    MetadataUnfurl,
-    TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
+import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this
 
@@ -58,7 +54,7 @@ const generator: ImplementationGenerator = {
                                 docker_container: {
                                     application: [
                                         {
-                                            env: mapProperties(type, {format: 'env', quote: false}),
+                                            env: ApplicationProperties(type, {quote: false}).toEnv(),
                                             image: '${docker_image.image.image_id}',
                                             name: '{{ SELF.application_name }}',
                                             network_mode: 'host',

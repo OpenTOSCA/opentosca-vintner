@@ -1,13 +1,17 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
+    AnsibleDockerContainerTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    ApplicationProperties,
+    LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -29,7 +33,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
             },
             interfaces: {
@@ -46,13 +50,15 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'start container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                image: '{{ ".artifacts::docker_image::file" | eval }}',
-                                                network_mode: 'host',
-                                                env: mapProperties(type, {format: 'map'}),
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'start container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                                                    network_mode: 'host',
+                                                    env: ApplicationProperties(type).toMap(),
+                                                },
+                                            }),
                                         },
                                     ],
                                 },
@@ -70,11 +76,13 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleWaitForSSHTask(),
                                         },
                                         {
-                                            name: 'stop container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                state: 'absent',
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'stop container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    state: 'absent',
+                                                },
+                                            }),
                                         },
                                     ],
                                 },

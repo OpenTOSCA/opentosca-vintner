@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    AnsibleOrchestratorOperation,
-    MetadataGenerated,
-    MetadataUnfurl,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+import {AnsibleDockerContainerTask, AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
+import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this
 
@@ -41,13 +37,15 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'start container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                image: '{{ ".artifacts::docker_image::file" | eval }}',
-                                                network_mode: 'host',
-                                                env: mapProperties(type, {format: 'map'}),
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'start container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                                                    network_mode: 'host',
+                                                    env: ApplicationProperties(type).toMap(),
+                                                },
+                                            }),
                                         },
                                     ],
                                 },
@@ -61,11 +59,13 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         {
-                                            name: 'stop container',
-                                            'community.docker.docker_container': {
-                                                name: '{{ SELF.application_name }}',
-                                                state: 'absent',
-                                            },
+                                            ...AnsibleDockerContainerTask({
+                                                name: 'stop container',
+                                                container: {
+                                                    name: '{{ SELF.application_name }}',
+                                                    state: 'absent',
+                                                },
+                                            }),
                                         },
                                     ],
                                 },

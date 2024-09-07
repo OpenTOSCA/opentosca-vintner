@@ -1,11 +1,7 @@
 import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    AnsibleOrchestratorOperation,
-    GCPProviderCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-} from '#technologies/plugins/rules/utils'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',

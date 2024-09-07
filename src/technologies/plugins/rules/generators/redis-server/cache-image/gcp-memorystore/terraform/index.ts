@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    GCPProviderCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this, see https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/redis_instance
 
