@@ -222,7 +222,7 @@ export function AnsibleCreateComposeTask(options: {manifest: DockerCompose}) {
 
 export function AnsibleApplyComposeTask() {
     return {
-        name: 'unapply compose',
+        name: 'apply compose',
         'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
         args: {
             executable: '/usr/bin/bash',
@@ -242,7 +242,9 @@ export function AnsibleUnapplyComposeTask() {
 
 export function AnsibleTask(options: {task: AnsibleTaskOptions; module: string; options: any}) {
     return {
-        ...options.task,
+        name: options.task.name,
+        when: options.task.when,
+        register: options.task.register,
         [options.module]: {
             ...options.options,
         },

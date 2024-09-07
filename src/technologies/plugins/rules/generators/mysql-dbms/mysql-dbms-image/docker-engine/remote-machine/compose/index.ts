@@ -21,7 +21,7 @@ const generator: ImplementationGenerator = {
     details: 'docker-compose manifest generated and applied',
 
     generate: (name, type) => {
-        const suffix = '{{ SELF.dbms_name}}'
+        const suffix = '{{ SELF.dbms_name }}'
         const manifest: DockerCompose = {
             name: '{{ SELF.dbms_name }}',
             services: {

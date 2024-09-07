@@ -75,6 +75,186 @@ node_types:
     #
     ################################################################
 
+    shop.component~service.application#docker.image::ansible@docker.engine->local.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: start container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                          network_mode: host
+                                          env:
+                                              PORT: '"{{ SELF.application_port }}"'
+                                              DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                              DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                              DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                              DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                              DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                              DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                              FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                              FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: stop container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          state: absent
+    shop.component~service.application#docker.image::compose@docker.engine->local.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                                          DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                                          DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                                          DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                                          DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                                          DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                                          FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                                          FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DB_DIALECT: '"{{ SELF.DB_DIALECT }}"'
+                                                          DB_NAME: '"{{ SELF.DB_NAME }}"'
+                                                          DB_USERNAME: '"{{ SELF.DB_USERNAME }}"'
+                                                          DB_PASSWORD: '"{{ SELF.DB_PASSWORD }}"'
+                                                          DB_ADDRESS: '"{{ SELF.DB_ADDRESS }}"'
+                                                          DB_PORT: '"{{ SELF.DB_PORT }}"'
+                                                          FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
+                                                          FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+    shop.component~service.application#docker.image::terraform@docker.engine->local.machine:
+        derived_from: shop.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                              required_version: '>= 0.14.0'
+                        provider:
+                            docker:
+                                - host: unix:///var/run/docker.sock
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - PORT={{ SELF.application_port }}
+                                          - DB_DIALECT={{ SELF.DB_DIALECT }}
+                                          - DB_NAME={{ SELF.DB_NAME }}
+                                          - DB_USERNAME={{ SELF.DB_USERNAME }}
+                                          - DB_PASSWORD={{ SELF.DB_PASSWORD }}
+                                          - DB_ADDRESS={{ SELF.DB_ADDRESS }}
+                                          - DB_PORT={{ SELF.DB_PORT }}
+                                          - FEATURE_OPTIONAL={{ SELF.optional_feature }}
+                                          - FEATURE_PREMIUM={{ SELF.premium_feature }}
+                                      image: ${docker_image.image.image_id}
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
     shop.component~service.application#docker.image::ansible@docker.engine->remote.machine:
         derived_from: shop.component
         metadata:
@@ -234,7 +414,7 @@ node_types:
                                                           DB_PORT: '"{{ SELF.DB_PORT }}"'
                                                           FEATURE_OPTIONAL: '"{{ SELF.optional_feature }}"'
                                                           FEATURE_PREMIUM: '"{{ SELF.premium_feature }}"'
-                                    - name: apply compose
+                                    - name: unapply compose
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} down
                                       args:
                                           executable: /usr/bin/bash
