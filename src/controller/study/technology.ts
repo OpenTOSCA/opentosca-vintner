@@ -1,11 +1,9 @@
 import * as assert from '#assert'
-import * as check from '#check'
 import Controller from '#controller'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import * as utils from '#utils'
-import {UnexpectedError} from '#utils/error'
 import path from 'path'
 
 export type StudyTechnologyOptions = {
@@ -103,26 +101,21 @@ export default async function (options: StudyTechnologyOptions) {
      */
     const template = await new Loader(templateFile).load()
     const graph = new Graph(template)
-    const map = graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules ?? {}
-    if (check.isString(map)) throw new UnexpectedError()
+    const rules = graph.serviceTemplate.topology_template?.variability?.technology_rules ?? []
+    assert.isArray(rules)
 
     /**
      * Table
      */
-    const ruleData: RuleData[] = []
-    Object.entries(map).forEach(([name, rules]) => {
-        rules.forEach(rule => {
-            ruleData.push({
-                Technology: name,
-                Component: rule.component,
-                Artifact: rule.artifact,
-                Hosting: rule.hosting,
-                Quality: rule.weight,
-                Reason: rule.reason,
-                // Details: rule.details,
-            })
-        })
-    })
+    const ruleData: RuleData[] = rules.map(it => ({
+        Technology: it.technology,
+        Component: it.component,
+        Artifact: it.artifact,
+        Hosting: it.hosting,
+        Quality: it.weight,
+        Reason: it.reason,
+        // Details: it.details,
+    }))
 
     printTable<RuleData>('The technology rules of our case study. Qualities range from bad (0) to good (1).', ruleData)
 

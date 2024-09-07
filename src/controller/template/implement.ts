@@ -7,7 +7,7 @@ import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import {NodeType} from '#spec/node-type'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyRule} from '#spec/technology-template'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {
@@ -78,7 +78,7 @@ export default async function (options: TemplateImplementOptions) {
     /**
      * Technology Rules
      */
-    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(lib, TECHNOLOGY_RULES_FILENAME), Registry.rules, {
+    files.storeYAML<TechnologyRule[]>(path.join(lib, TECHNOLOGY_RULES_FILENAME), Registry.rules, {
         generated: true,
     })
 
@@ -95,12 +95,7 @@ export default async function (options: TemplateImplementOptions) {
         const templateString = files.loadFile(file)
         const templateData: ServiceTemplate = files.loadYAML<ServiceTemplate>(file)
 
-        if (check.isUndefined(templateData.tosca_definitions_version)) {
-            std.log(
-                `ignoring file "${file}" since has no TOSCA Definitions Version and, hence, most likely is not a TOSCA Service Template`
-            )
-            continue
-        }
+        if (check.isUndefined(templateData.tosca_definitions_version)) continue
 
         if (templateData.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3) {
             std.log(
@@ -109,10 +104,7 @@ export default async function (options: TemplateImplementOptions) {
             continue
         }
 
-        if (check.isUndefined(templateData.node_types)) {
-            std.log(`ignoring file "${file}" since it does not define Node Types`)
-            continue
-        }
+        if (check.isUndefined(templateData.node_types)) continue
 
         const implementations: {[key: string]: NodeType} = {}
 

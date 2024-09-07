@@ -1146,6 +1146,17 @@ utils
         })
     )
 
+utils
+    .command('scenarios')
+    .description('returns deployment scenarios')
+    .option('--component [string]', 'node type')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.rules(options))
+        })
+    )
+
 /**
  * Query
  */

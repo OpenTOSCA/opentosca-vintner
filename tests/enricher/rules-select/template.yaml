@@ -6,9 +6,9 @@ node_types:
 
 topology_template:
     variability:
-        technology_assignment_rules:
-            terraform:
-                - component: application
+        technology_rules:
+            - component: application
+              technology: terraform
 
         options:
             enrich_technologies: true

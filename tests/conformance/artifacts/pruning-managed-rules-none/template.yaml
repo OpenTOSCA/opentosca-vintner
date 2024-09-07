@@ -13,10 +13,10 @@ node_types:
 
 topology_template:
     variability:
-        technology_assignment_rules:
-            ansible:
-                - component: application
-                  artifact: first.artifact.type
+        technology_rules:
+            - component: application
+              technology: ansible
+              artifact: first.artifact.type
 
     node_templates:
         application:

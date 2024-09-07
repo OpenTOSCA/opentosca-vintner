@@ -26,7 +26,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     getRules() {
-        const rules = this.graph.serviceTemplate.topology_template?.variability?.technology_assignment_rules
+        const rules = this.graph.serviceTemplate.topology_template?.variability?.technology_rules
         if (check.isUndefined(rules)) return rules
         assert.isObject(rules, 'Rules not loaded')
         return rules
@@ -37,72 +37,57 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     implement(name: string, type: NodeType): NodeTypeMap {
-        const map = this.getRules()
-        if (check.isUndefined(map)) return {}
+        const rules = this.getRules()
+        if (check.isUndefined(rules)) return {}
 
         const types: NodeTypeMap = {}
 
-        for (const technology of Object.keys(map)) {
-            const rules = utils.copy(map[technology])
+        for (const entry of rules) {
+            const rule = utils.copy(entry)
+            assert.isDefined(rule.hosting)
 
-            for (const rule of rules) {
-                assert.isArray(rule.hosting)
+            /**
+             * Note, we do not need to check for a present type here (also we cannot since artifact might be attached to the node template).
+             * Such a check is conducted during assignment.
+             */
+            if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
 
-                /**
-                 * Note, we do not need to check for a present type here (also we cannot since artifact might be attached to the node template).
-                 * Such a check is conducted during assignment.
-                 */
-                if (!this.graph.inheritance.isNodeType(name, rule.component)) continue
+            const implementationName = constructImplementationName({
+                type: name,
+                rule,
+            })
 
-                const implementationName = constructImplementationName({
-                    type: name,
-                    rule: {
-                        component: rule.component,
-                        technology,
-                        artifact: rule.artifact,
-                        hosting: rule.hosting,
-                    },
-                })
+            const generatorName = constructRuleName(rule)
+            const generator = Registry.get(generatorName)
 
-                const generatorName = constructRuleName({
-                    component: rule.component,
-                    technology,
-                    artifact: rule.artifact,
-                    hosting: rule.hosting,
-                })
-                const generator = Registry.get(generatorName)
+            // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
+            if (check.isUndefined(generator)) {
+                std.log(`Generator "${generatorName}" does not exist`)
 
-                // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
-                if (check.isUndefined(generator)) {
-                    std.log(`Generator "${generatorName}" does not exist`)
+                const existing = this.graph.inheritance.getNodeType(implementationName)
 
-                    const existing = this.graph.inheritance.getNodeType(implementationName)
-
-                    if (check.isUndefined(existing)) {
-                        throw new Error(
-                            `Implementation "${implementationName}" can not be generated and does not exist`
-                        )
-                    }
-
-                    // Ensure that implementation is not generated and, hence, not removed when writing back the newly generated implementations
-                    if (isGenerated(existing)) {
-                        throw new Error(
-                            `Implementation "${implementationName}" can not be generated but exists only generated and not manually defined`
-                        )
-                    }
-
-                    std.log(`Implementation "${implementationName}" can not be generated but exists manually defined`)
-                    continue
+                if (check.isUndefined(existing)) {
+                    throw new Error(`Implementation "${implementationName}" can not be generated and does not exist`)
                 }
 
-                const implementation = generator.generate(name, type)
-                assert.isDefined(implementation.metadata)
-                assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
+                // Ensure that implementation is not generated and, hence, not removed when writing back the newly generated implementations
+                if (isGenerated(existing)) {
+                    throw new Error(
+                        `Implementation "${implementationName}" can not be generated but exists only generated and not manually defined`
+                    )
+                }
 
-                if (check.isDefined(types[implementationName]))
-                    throw new Error(`Implementation "${implementationName}" already generated`)
-                types[implementationName] = implementation
+                std.log(`Implementation "${implementationName}" can not be generated but exists manually defined`)
+                continue
             }
+
+            const implementation = generator.generate(name, type)
+            assert.isDefined(implementation.metadata)
+            assert.isDefined(implementation.metadata[METADATA.VINTNER_GENERATED])
+
+            if (check.isDefined(types[implementationName]))
+                throw new Error(`Implementation "${implementationName}" already generated`)
+            types[implementationName] = implementation
         }
 
         return types
@@ -111,91 +96,81 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     assign(node: Node): TechnologyTemplateMap[] {
         const maps: TechnologyTemplateMap[] = []
 
-        const map = this.getRules()
-        if (check.isUndefined(map)) return maps
+        const rules = this.getRules()
+        if (check.isUndefined(rules)) return maps
 
-        for (const technology of Object.keys(map)) {
-            const rules = utils.copy(map[technology])
+        for (const entry of rules) {
+            const rule = utils.copy(entry)
+            assert.isDefined(rule.hosting)
 
-            for (const rule of rules) {
-                assert.isArray(rule.hosting)
+            if (!node.getType().isA(rule.component)) continue
 
-                if (!node.getType().isA(rule.component)) continue
-
-                let artifactCondition: LogicExpression | undefined
-                if (check.isDefined(rule.artifact)) {
-                    // Check for artifact in template
-                    const artifactsByTemplate = node.artifacts.filter(it => {
-                        assert.isDefined(rule.artifact)
-                        return it.getType().isA(rule.artifact)
-                    })
-                    // TODO: check naming convention?
-                    const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
-
-                    // Check for artifact in type
-                    const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
-                        node.getType().name,
-                        rule.artifact
-                    )
-
-                    // Ignore if artifact not found
-                    if (!hasArtifactInTemplate && !hasArtifactInType) continue
-
-                    if (hasArtifactInTemplate) {
-                        /**
-                         * Case: hasArtifactInTemplate
-                         *
-                         * Add condition checking if any artifact is present (note, at max one can be present)
-                         */
-                        artifactCondition = {or: artifactsByTemplate.map(it => it.presenceCondition)}
-                    } else {
-                        /**
-                         * Case: hasArtifactInType
-                         *
-                         * Artifacts in types are always present.
-                         * Hence, nothing to do.
-                         */
-                    }
-                }
-
-                // TODO: rule.conditions
-
-                const implementationName = constructImplementationName({
-                    type: node.getType().name,
-                    rule: {
-                        component: rule.component,
-                        technology,
-                        artifact: rule.artifact,
-                        hosting: rule.hosting,
-                    },
+            let artifactCondition: LogicExpression | undefined
+            if (check.isDefined(rule.artifact)) {
+                // Check for artifact in template
+                const artifactsByTemplate = node.artifacts.filter(it => {
+                    assert.isDefined(rule.artifact)
+                    return it.getType().isA(rule.artifact)
                 })
+                // TODO: check naming convention?
+                const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
 
-                // TODO: merge then and else block
-                if (rule.hosting.length !== 0) {
-                    const output: LogicExpression[][] = []
-                    this.search(node, utils.copy(rule.hosting), [], output)
-                    output.forEach(it => {
-                        assert.isArray(rule.hosting)
+                // Check for artifact in type
+                const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
+                    node.getType().name,
+                    rule.artifact
+                )
 
-                        if (check.isDefined(artifactCondition)) it.push(artifactCondition)
+                // Ignore if artifact not found
+                if (!hasArtifactInTemplate && !hasArtifactInType) continue
 
-                        maps.push({
-                            [technology]: {
-                                conditions: it,
-                                weight: rule.weight,
-                                assign: rule.assign ?? implementationName,
-                            },
-                        })
-                    })
+                if (hasArtifactInTemplate) {
+                    /**
+                     * Case: hasArtifactInTemplate
+                     *
+                     * Add condition checking if any artifact is present (note, at max one can be present)
+                     */
+                    artifactCondition = {or: artifactsByTemplate.map(it => it.presenceCondition)}
                 } else {
+                    /**
+                     * Case: hasArtifactInType
+                     *
+                     * Artifacts in types are always present.
+                     * Hence, nothing to do.
+                     */
+                }
+            }
+
+            // TODO: rule.conditions
+
+            const implementationName = constructImplementationName({
+                type: node.getType().name,
+                rule,
+            })
+
+            // TODO: merge then and else block
+            if (rule.hosting.length !== 0) {
+                const output: LogicExpression[][] = []
+                this.search(node, utils.copy(rule.hosting), [], output)
+                output.forEach(it => {
+                    if (check.isDefined(artifactCondition)) it.push(artifactCondition)
+
                     maps.push({
-                        [technology]: {
-                            conditions: artifactCondition,
+                        [rule.technology]: {
+                            conditions: it,
                             weight: rule.weight,
                             assign: rule.assign ?? implementationName,
                         },
                     })
-                }
+                })
+            } else {
+                maps.push({
+                    [rule.technology]: {
+                        conditions: artifactCondition,
+                        weight: rule.weight,
+                        assign: rule.assign ?? implementationName,
+                    },
+                })
             }
         }
 

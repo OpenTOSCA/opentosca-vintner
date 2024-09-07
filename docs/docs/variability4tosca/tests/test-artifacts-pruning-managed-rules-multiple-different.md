@@ -24,7 +24,7 @@ node_types:
             vintner_abstract: 'true'
 topology_template:
     variability:
-        technology_assignment_rules:
+        technology_rules:
             ansible:
                 - component: application
                   artifact: first.artifact.type
