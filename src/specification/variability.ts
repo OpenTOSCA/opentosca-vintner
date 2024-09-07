@@ -10,7 +10,6 @@ export type VariabilityDefinition = {
     constraints?: LogicExpression[]
     options?: VariabilityOptions
     type_specific_conditions?: string | TypeSpecificLogicExpressions
-    // TODO: migrate examples
     technology_rules?: string | TechnologyRule[]
     plugins?: PluginDefinitionMap
 }
