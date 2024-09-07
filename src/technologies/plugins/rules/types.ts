@@ -17,6 +17,8 @@ export enum PROPERTIES {
     PORT = 'PORT',
 }
 
+export const ASTERISK = '*'
+
 export type ImplementationGenerator = {
     technology: string
     component: string

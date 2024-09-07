@@ -6,9 +6,9 @@ import Graph from '#graph/graph'
 import {NormativeTypes} from '#normative'
 import {ServiceTemplate} from '#spec/service-template'
 import Registry from '#technologies/plugins/rules/registry'
+import {ASTERISK} from '#technologies/plugins/rules/types'
 import * as utils from '#utils'
 import * as _ from 'lodash'
-import * as console from 'node:console'
 import path from 'path'
 
 export type ScenariosOptions = {
@@ -80,29 +80,7 @@ export default async function (options: ScenariosOptions) {
             if (check.isFalse(options.hosting)) return utils.isEmpty(rule.hosting)
 
             assert.isArray(options.hosting)
-            const hosting = utils.copy(options.hosting)
-            let host = hosting.shift()
-            let depth = 0
-
-            // TODO: handle asterisk in options.hosting?
-            // TODO: handle asterisk in rule.hosting
-            while (check.isDefined(host)) {
-                const question = rule.hosting[depth]
-                if (check.isUndefined(question)) {
-                    console.log('did not find', {depth}, rule.hosting)
-                    return false
-                }
-                if (!graph.inheritance.isNodeType(host, question)) {
-                    console.log('does not match', {host, question})
-                    return false
-                }
-                console.log('does match', {host, question})
-
-                host = hosting.shift()
-                depth++
-            }
-
-            return true
+            return matches(graph, utils.copy(options.hosting), utils.copy(rule.hosting))
         })
     }
 
@@ -122,4 +100,30 @@ export default async function (options: ScenariosOptions) {
      */
     options.format = options.format ?? 'yaml'
     return files.toFormat(rules, options.format)
+}
+
+function matches(graph: Graph, input: string[], hosting: string[]): boolean {
+    const asterisk = hosting[0] === ASTERISK
+    const question = asterisk ? hosting[1] : hosting[0]
+    // Must be defined. To model "on any hosting" simply do not model hosting.
+    assert.isDefined(question)
+
+    const is = input.shift()
+
+    // Accept that user provided hosting is shorter than rule
+    if (check.isUndefined(is)) return true
+
+    if (graph.inheritance.isNodeType(is, question)) {
+        const hostingCopy = utils.copy(hosting)
+        if (asterisk) hostingCopy.shift()
+        hostingCopy.shift()
+
+        if (utils.isEmpty(hostingCopy)) return true
+
+        return matches(graph, utils.copy(input), hostingCopy)
+    }
+
+    if (asterisk) return matches(graph, utils.copy(input), utils.copy(hosting))
+
+    return false
 }

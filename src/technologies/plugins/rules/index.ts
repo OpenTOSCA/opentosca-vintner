@@ -7,7 +7,7 @@ import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
-import {METADATA} from '#technologies/plugins/rules/types'
+import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {constructImplementationName, constructRuleName, isGenerated} from '#technologies/utils'
 import * as utils from '#utils'
@@ -179,7 +179,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
-        const asterisk = hosting[0] === '*'
+        const asterisk = hosting[0] === ASTERISK
         const search = asterisk ? hosting[1] : hosting[0]
         // Must be defined. To model "on any hosting" simply do not model hosting.
         assert.isDefined(search)
