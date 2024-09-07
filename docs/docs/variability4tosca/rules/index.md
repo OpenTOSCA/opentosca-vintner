@@ -58,9 +58,11 @@ We use the following derivation rules to assess deployment qualities.
 1. Usage of deprecated or not recommended features
 1. More specialized node type, e.g., `software.application` vs `service.application`.
 
-## Deployment Scenarios
 
-We assess the deployment quality of the following scenarios.
+
+## Component "docker.engine"
+
+The following scenarios deploy a node template of node type [docker.engine](/normative#dockerengine){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
 
 
 ### Scenario #1
@@ -79,7 +81,12 @@ The node template is hosted on the node template "host 1" of node type [remote.m
 
 
 
-### Scenario #2
+## Component "gcp.service"
+
+The following scenarios deploy a node template of node type [gcp.service](/normative#gcpservice){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [gcp.service](/normative#gcpservice){target=_blank} is deployed.
 The scenario does not require a specific hosting.
@@ -95,7 +102,12 @@ The scenario does not require a specific hosting.
 
 
 
-### Scenario #3
+## Component "ingress"
+
+The following scenarios deploy a node template of node type [ingress](/normative#ingress){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [ingress](/normative#ingress){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [kubernetes.cluster](/normative#kubernetescluster){target=_blank}.
@@ -114,7 +126,7 @@ The node template is hosted on the node template "host 1" of node type [kubernet
 
 
 
-### Scenario #4
+### Scenario #2
 
 In this scenario, the node template "component" of node type [ingress](/normative#ingress){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [remote.machine](/normative#remotemachine){target=_blank}.
@@ -130,7 +142,12 @@ The node template is hosted on the node template "host 1" of node type [remote.m
 
 
 
-### Scenario #5
+## Component "mysql.database"
+
+The following scenarios deploy a node template of node type [mysql.database](/normative#mysqldatabase){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [mysql.database](/normative#mysqldatabase){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [mysql.dbms](/normative#mysqldbms){target=_blank}, which is hosted on the node template "host 2" of node type [docker.engine](/normative#dockerengine){target=_blank}, which is hosted on the node template "host 3" of node type [remote.machine](/normative#remotemachine){target=_blank}.
@@ -149,7 +166,7 @@ The node template is hosted on the node template "host 1" of node type [mysql.db
 
 
 
-### Scenario #6
+### Scenario #2
 
 In this scenario, the node template "component" of node type [mysql.database](/normative#mysqldatabase){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [mysql.dbms](/normative#mysqldbms){target=_blank}, which is hosted on the node template "host 2" of node type [gcp.cloudsql](/normative#gcpcloudsql){target=_blank}.
@@ -165,7 +182,7 @@ The node template is hosted on the node template "host 1" of node type [mysql.db
 
 
 
-### Scenario #7
+### Scenario #3
 
 In this scenario, the node template "component" of node type [mysql.database](/normative#mysqldatabase){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [mysql.dbms](/normative#mysqldbms){target=_blank}, which is hosted on the node template "host 2" of node type [kubernetes.cluster](/normative#kubernetescluster){target=_blank}.
@@ -184,7 +201,7 @@ The node template is hosted on the node template "host 1" of node type [mysql.db
 
 
 
-### Scenario #8
+### Scenario #4
 
 In this scenario, the node template "component" of node type [mysql.database](/normative#mysqldatabase){target=_blank} is deployed.
 The node template is hosted on the node template "host 1" of node type [mysql.dbms](/normative#mysqldbms){target=_blank}, which is hosted on the node template "host 2" of node type [remote.machine](/normative#remotemachine){target=_blank}.
@@ -200,7 +217,12 @@ The node template is hosted on the node template "host 1" of node type [mysql.db
 
 
 
-### Scenario #9
+## Component "mysql.dbms"
+
+The following scenarios deploy a node template of node type [mysql.dbms](/normative#mysqldbms){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [mysql.dbms](/normative#mysqldbms){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [dbms.image](/normative#dbmsimage){target=_blank}.
@@ -220,7 +242,7 @@ The node template is hosted on the node template "host 1" of node type [docker.e
 
 
 
-### Scenario #10
+### Scenario #2
 
 In this scenario, the node template "component" of node type [mysql.dbms](/normative#mysqldbms){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [dbms.image](/normative#dbmsimage){target=_blank}.
@@ -237,7 +259,7 @@ The node template is hosted on the node template "host 1" of node type [gcp.clou
 
 
 
-### Scenario #11
+### Scenario #3
 
 In this scenario, the node template "component" of node type [mysql.dbms](/normative#mysqldbms){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [dbms.image](/normative#dbmsimage){target=_blank}.
@@ -257,7 +279,7 @@ The node template is hosted on the node template "host 1" of node type [kubernet
 
 
 
-### Scenario #12
+### Scenario #4
 
 In this scenario, the node template "component" of node type [mysql.dbms](/normative#mysqldbms){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [dbms.image](/normative#dbmsimage){target=_blank}.
@@ -274,7 +296,12 @@ The node template is hosted on the node template "host 1" of node type [remote.m
 
 
 
-### Scenario #13
+## Component "service.application"
+
+The following scenarios deploy a node template of node type [service.application](/normative#serviceapplication){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [docker.image](/normative#dockerimage){target=_blank}.
@@ -294,7 +321,7 @@ The node template is hosted on the node template "host 1" of node type [docker.e
 
 
 
-### Scenario #14
+### Scenario #2
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [docker.image](/normative#dockerimage){target=_blank}.
@@ -311,7 +338,7 @@ The node template is hosted on the node template "host 1" of node type [gcp.clou
 
 
 
-### Scenario #15
+### Scenario #3
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [docker.image](/normative#dockerimage){target=_blank}.
@@ -331,7 +358,7 @@ The node template is hosted on the node template "host 1" of node type [kubernet
 
 
 
-### Scenario #16
+### Scenario #4
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [tar.archive](/normative#tararchive){target=_blank}.
@@ -348,7 +375,7 @@ The node template is hosted on an arbitrary hosting stack of arbitrary length, w
 
 
 
-### Scenario #17
+### Scenario #5
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [zip.archive](/normative#ziparchive){target=_blank}.
@@ -365,7 +392,7 @@ The node template is hosted on an arbitrary hosting stack of arbitrary length, w
 
 
 
-### Scenario #18
+### Scenario #6
 
 In this scenario, the node template "component" of node type [service.application](/normative#serviceapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [zip.archive](/normative#ziparchive){target=_blank}.
@@ -382,7 +409,12 @@ The node template is hosted on the node template "host 1" of node type [gcp.appe
 
 
 
-### Scenario #19
+## Component "software.application"
+
+The following scenarios deploy a node template of node type [software.application](/normative#softwareapplication){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [software.application](/normative#softwareapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [apt.package](/normative#aptpackage){target=_blank}.
@@ -396,7 +428,7 @@ The node template is hosted on an arbitrary hosting stack of arbitrary length, w
 
 
 
-### Scenario #20
+### Scenario #2
 
 In this scenario, the node template "component" of node type [software.application](/normative#softwareapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [tar.archive](/normative#tararchive){target=_blank}.
@@ -413,7 +445,7 @@ The node template is hosted on an arbitrary hosting stack of arbitrary length, w
 
 
 
-### Scenario #21
+### Scenario #3
 
 In this scenario, the node template "component" of node type [software.application](/normative#softwareapplication){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [zip.archive](/normative#ziparchive){target=_blank}.
@@ -430,7 +462,26 @@ The node template is hosted on an arbitrary hosting stack of arbitrary length, w
 
 
 
-### Scenario #22
+### Scenario #4
+
+In this scenario, the node template "component" of node type [software.application](/normative#softwareapplication){target=_blank} is deployed.
+This node template is implemented by its deployment artifact "artifact" of artifact type [apt.archive](/normative#aptarchive){target=_blank}.
+The node template is hosted on an arbitrary hosting stack of arbitrary length, which is hosted on the node template "host 2" of node type [remote.machine](/normative#remotemachine){target=_blank}.
+
+<figure markdown><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="308px" preserveAspectRatio="none" style="width:319px;height:308px;" version="1.1" viewBox="0 0 319 308" width="319px" zoomAndPan="magnify"><defs/><g><!--entity node_component--><g id="elem_node_component"><a href="/normative#softwareapplication" target="_top" title="/normative#softwareapplication" xlink:actuate="onRequest" xlink:href="/normative#softwareapplication" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="167" x="146" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="156" y="29.9951">component</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147" x="156" y="46.292">(software.application)</text></a></g><!--entity artifact_artifact_0_node_component--><g id="elem_artifact_artifact_0_node_component"><a href="/normative#aptarchive" target="_top" title="/normative#aptarchive" xlink:actuate="onRequest" xlink:href="/normative#aptarchive" xlink:show="new" xlink:title="/normative#aptarchive" xlink:type="simple"><path d="M6,9.5 L6,57.0938 A2.5,2.5 0 0 0 8.5,59.5938 L108.5,59.5938 A2.5,2.5 0 0 0 111,57.0938 L111,17 L101,7 L8.5,7 A2.5,2.5 0 0 0 6,9.5 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.5;"/><path d="M101,7 L101,14.5 A2.5,2.5 0 0 0 103.5,17 L111,17 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46" x="16" y="29.9951">artifact</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="16" y="46.292">(apt.archive)</text></a></g><!--entity node_host_1--><g id="elem_node_host_1"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:1.0,3.0;" width="64" x="197.5" y="137"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="12" x="223.5" y="159.9951">...</text></g><!--entity node_host_2--><g id="elem_node_host_2"><a href="/normative#remotemachine" target="_top" title="/normative#remotemachine" xlink:actuate="onRequest" xlink:href="/normative#remotemachine" xlink:show="new" xlink:title="/normative#remotemachine" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="143" x="158" y="250"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="168" y="272.9951">host 2</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="168" y="289.292">(remote.machine)</text></a></g><!--link artifact_artifact_0_node_component to node_component--><g id="link_artifact_artifact_0_node_component_node_component"><path d="M111.27,33.5 C122.82,33.5 134.36,33.5 145.91,33.5 " fill="none" id="artifact_artifact_0_node_component-node_component" style="stroke:#181818;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/></g><!--link node_component to node_host_1--><g id="link_node_component_node_host_1"><path d="M229.5,60.14 C229.5,81.41 229.5,111.37 229.5,131.68 " fill="none" id="node_component-to-node_host_1" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="229.5,136.88,233.5,127.88,229.5,131.88,225.5,127.88,229.5,136.88" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="238.5" y="103.0669">host</text></g><!--link node_host_1 to node_host_2--><g id="link_node_host_1_node_host_2"><path d="M229.5,173.12 C229.5,191.72 229.5,221.82 229.5,244.58 " fill="none" id="node_host_1-to-node_host_2" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="229.5,249.61,233.5,240.61,229.5,244.61,225.5,240.61,229.5,249.61" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="238.5" y="216.0669">host</text></g><!--SRC=[dP9FJyCm3CNl-HJHTc671JQ92qX8WCIHoxYDQV9QTusM9fNZCI74ToTPjoxjaFZJIoBd-VVif_gDjZKGL3B70hQ6dvpbPwXGpi3w6P8kX6yrcQjgPz7oZDyDIiACmQuD9f8LP9irkQtD7vrn99a29po5faHrJ-HsBwNEDXQzbnDrBPBNGWVuXv3XUt2K8pMebGdifDhjtzTxvhjICuhFbAqj8nMG_TsWWsbN_zUSCUGcGkke0XFPGfoOWpReLtlXNS6x4A22kZOw0zREZWOIV6ZESTbAnPQCT4MlAhMNyxcyt1knViFXaPVWv68Xzg4FW5Y7TA8lrAo0iZBqD7R7jsLxkLf-FyBFolEnWjt1BKxp2uBgxvy665DMIiNZ55NfF2ydShZ_BMwDjgXonunvfpMgv3G4G5WvHbL1cChYgCUPTl9kIkTRDOm38YucH6-DyVYkCzrD73xU1o8jTsNJLFO5]--></g></svg></figure>
+
+
+!!! failure "Terraform (Quality: 0)"
+    Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
+
+
+
+## Component "virtual.machine"
+
+The following scenarios deploy a node template of node type [virtual.machine](/normative#virtualmachine){target=_blank} with various hosting stacks, artifacts, deployment technologies, and qualities.
+
+
+### Scenario #1
 
 In this scenario, the node template "component" of node type [virtual.machine](/normative#virtualmachine){target=_blank} is deployed.
 This node template is implemented by its deployment artifact "artifact" of artifact type [machine.image](/normative#machineimage){target=_blank}.
@@ -444,20 +495,6 @@ The node template is hosted on the node template "host 1" of node type [openstac
 
 !!! success "Terraform (Quality: 1)"
     Terraform provides a declarative module.
-
-
-
-### Scenario #23
-
-In this scenario, the node template "component" of node type [software.application](/normative#softwareapplication){target=_blank} is deployed.
-This node template is implemented by its deployment artifact "artifact" of artifact type [apt.archive](/normative#aptarchive){target=_blank}.
-The node template is hosted on an arbitrary hosting stack of arbitrary length, which is hosted on the node template "host 2" of node type [remote.machine](/normative#remotemachine){target=_blank}.
-
-<figure markdown><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="308px" preserveAspectRatio="none" style="width:319px;height:308px;" version="1.1" viewBox="0 0 319 308" width="319px" zoomAndPan="magnify"><defs/><g><!--entity node_component--><g id="elem_node_component"><a href="/normative#softwareapplication" target="_top" title="/normative#softwareapplication" xlink:actuate="onRequest" xlink:href="/normative#softwareapplication" xlink:show="new" xlink:title="/normative#softwareapplication" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="167" x="146" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80" x="156" y="29.9951">component</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147" x="156" y="46.292">(software.application)</text></a></g><!--entity artifact_artifact_0_node_component--><g id="elem_artifact_artifact_0_node_component"><a href="/normative#aptarchive" target="_top" title="/normative#aptarchive" xlink:actuate="onRequest" xlink:href="/normative#aptarchive" xlink:show="new" xlink:title="/normative#aptarchive" xlink:type="simple"><path d="M6,9.5 L6,57.0938 A2.5,2.5 0 0 0 8.5,59.5938 L108.5,59.5938 A2.5,2.5 0 0 0 111,57.0938 L111,17 L101,7 L8.5,7 A2.5,2.5 0 0 0 6,9.5 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.5;"/><path d="M101,7 L101,14.5 A2.5,2.5 0 0 0 103.5,17 L111,17 " fill="#FFFFFF" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46" x="16" y="29.9951">artifact</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="16" y="46.292">(apt.archive)</text></a></g><!--entity node_host_1--><g id="elem_node_host_1"><rect fill="#FFFFFF" height="36.2969" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:1.0,3.0;" width="64" x="197.5" y="137"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="12" x="223.5" y="159.9951">...</text></g><!--entity node_host_2--><g id="elem_node_host_2"><a href="/normative#remotemachine" target="_top" title="/normative#remotemachine" xlink:actuate="onRequest" xlink:href="/normative#remotemachine" xlink:show="new" xlink:title="/normative#remotemachine" xlink:type="simple"><rect fill="#F1F1F1" height="52.5938" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1.5;" width="143" x="158" y="250"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44" x="168" y="272.9951">host 2</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="168" y="289.292">(remote.machine)</text></a></g><!--link artifact_artifact_0_node_component to node_component--><g id="link_artifact_artifact_0_node_component_node_component"><path d="M111.27,33.5 C122.82,33.5 134.36,33.5 145.91,33.5 " fill="none" id="artifact_artifact_0_node_component-node_component" style="stroke:#181818;stroke-width:1.5;stroke-dasharray:7.0,7.0;"/></g><!--link node_component to node_host_1--><g id="link_node_component_node_host_1"><path d="M229.5,60.14 C229.5,81.41 229.5,111.37 229.5,131.68 " fill="none" id="node_component-to-node_host_1" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="229.5,136.88,233.5,127.88,229.5,131.88,225.5,127.88,229.5,136.88" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="238.5" y="103.0669">host</text></g><!--link node_host_1 to node_host_2--><g id="link_node_host_1_node_host_2"><path d="M229.5,173.12 C229.5,191.72 229.5,221.82 229.5,244.58 " fill="none" id="node_host_1-to-node_host_2" style="stroke:#181818;stroke-width:1.5;"/><polygon fill="#181818" points="229.5,249.61,233.5,240.61,229.5,244.61,225.5,240.61,229.5,249.61" style="stroke:#181818;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="28" x="238.5" y="216.0669">host</text></g><!--SRC=[dP9FJyCm3CNl-HJHTc671JQ92qX8WCIHoxYDQV9QTusM9fNZCI74ToTPjoxjaFZJIoBd-VVif_gDjZKGL3B70hQ6dvpbPwXGpi3w6P8kX6yrcQjgPz7oZDyDIiACmQuD9f8LP9irkQtD7vrn99a29po5faHrJ-HsBwNEDXQzbnDrBPBNGWVuXv3XUt2K8pMebGdifDhjtzTxvhjICuhFbAqj8nMG_TsWWsbN_zUSCUGcGkke0XFPGfoOWpReLtlXNS6x4A22kZOw0zREZWOIV6ZESTbAnPQCT4MlAhMNyxcyt1knViFXaPVWv68Xzg4FW5Y7TA8lrAo0iZBqD7R7jsLxkLf-FyBFolEnWjt1BKxp2uBgxvy665DMIiNZ55NfF2ydShZ_BMwDjgXonunvfpMgv3G4G5WvHbL1cChYgCUPTl9kIkTRDOm38YucH6-DyVYkCzrD73xU1o8jTsNJLFO5]--></g></svg></figure>
-
-
-!!! failure "Terraform (Quality: 0)"
-    Ansible is more specialized. Also using provisioners is a &#34;last resort&#34;.
 
 
 

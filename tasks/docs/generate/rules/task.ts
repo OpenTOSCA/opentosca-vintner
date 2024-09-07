@@ -48,9 +48,9 @@ async function main() {
     await Promise.all(promises)
 
     /**
-     * Groups
+     * Scenarios
      */
-    const groups: TechnologyRuleGroup[] = []
+    const scenarios: TechnologyRuleScenario[] = []
     for (const [technology, rules] of Object.entries(map)) {
         const description = descriptions.find(it => it.id === technology)
         assert.isDefined(description)
@@ -70,12 +70,12 @@ async function main() {
                 details: rule.details!,
             }
 
-            const found = groups.find(it => it.key === key)
+            const found = scenarios.find(it => it.key === key)
 
             if (found) {
                 found.technologies.push(entry)
             } else {
-                groups.push({
+                scenarios.push({
                     key,
                     component: rule.component,
                     artifact: rule.artifact,
@@ -86,6 +86,11 @@ async function main() {
             }
         }
     }
+
+    /**
+     * Groups
+     */
+    const groups = utils.groupBy(scenarios, it => it.component)
 
     /**
      * Documentation
@@ -111,7 +116,7 @@ async function main() {
     process.exit(0)
 }
 
-type TechnologyRuleGroup = {
+type TechnologyRuleScenario = {
     key: string
     component: string
     artifact?: string
@@ -123,6 +128,11 @@ type TechnologyRuleGroup = {
         reason: string
         details: string
     }[]
+}
+
+type TechnologyRuleGroup = {
+    component: string
+    scenarios: TechnologyRuleScenario[]
 }
 
 function generateLink(type: string) {
