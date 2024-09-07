@@ -18,17 +18,18 @@ node_types:
 
 topology_template:
     variability:
-        technology_assignment_rules:
-            ansible:
-                - component: application
-                  artifact: first.artifact.type
-                  hosting: [host]
-                  weight: 1
+        technology_rules:
+            - component: application
+              technology: ansible
+              artifact: first.artifact.type
+              hosting: [host]
+              weight: 1
 
-                - component: application
-                  artifact: first.artifact.type
-                  hosting: [host]
-                  weight: 0
+            - component: application
+              technology: ansible
+              artifact: first.artifact.type
+              hosting: [host]
+              weight: 0
 
     node_templates:
         application:

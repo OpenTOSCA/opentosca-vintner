@@ -299,34 +299,21 @@ export default class Normalizer {
     }
 
     private normalizeTechnologyRules() {
-        const map = this.serviceTemplate.topology_template?.variability?.technology_assignment_rules
-        if (check.isUndefined(map)) return
-        assert.isObject(map, 'Rules not loaded')
+        const rules = this.serviceTemplate.topology_template?.variability?.technology_rules
+        if (check.isUndefined(rules)) return
+        assert.isObject(rules, 'Rules not loaded')
 
-        for (const technology of Object.keys(map)) {
-            const rules = map[technology]
-            assert.isArray(rules)
+        for (const rule of rules) {
+            assert.isString(rule.component)
 
-            for (const rule of rules) {
-                assert.isString(rule.component)
+            if (check.isUndefined(rule.hosting)) rule.hosting = []
+            // TODO: dont allow short form
+            assert.isArray(rule.hosting)
+            rule.hosting.forEach(it => assert.isString(it))
 
-                /**
-                 * "host" is deprecated
-                 */
-                if (check.isDefined((rule as any).host))
-                    throw new Error(`Technology rule must not define "host" but "hosting"`)
-
-                /**
-                 * Ensure that hosting is always an array
-                 */
-                if (check.isUndefined(rule.hosting)) rule.hosting = []
-                if (check.isString(rule.hosting)) rule.hosting = [rule.hosting]
-                rule.hosting.forEach(it => assert.isString(it))
-
-                if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
-                if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
-                if (check.isDefined(rule.assign)) assert.isString(rule.assign)
-            }
+            if (check.isDefined(rule.conditions)) assert.isObject(rule.conditions)
+            if (check.isDefined(rule.weight)) assert.isNumber(rule.weight)
+            if (check.isDefined(rule.assign)) assert.isString(rule.assign)
         }
     }
 

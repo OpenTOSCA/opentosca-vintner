@@ -6,10 +6,10 @@ import * as puml from '#puml'
 import {ArtifactTypeMap} from '#spec/artifact-type'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
-import {TechnologyAssignmentRule, TechnologyAssignmentRulesMap} from '#spec/technology-template'
+import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {constructRuleName} from '#technologies/utils'
+import {TECHNOLOGY_RULES_FILENAME, constructRuleName} from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
 import process from 'process'
@@ -26,66 +26,67 @@ async function main() {
     /**
      * Rules
      */
-    const map = Registry.rules
-    files.storeYAML<TechnologyAssignmentRulesMap>(path.join(dir, 'technology-rules.yaml'), map)
+    const rules = Registry.rules
+    files.storeYAML<TechnologyRule[]>(path.join(dir, TECHNOLOGY_RULES_FILENAME), rules)
 
     /**
      * SVGs
      */
     const svgs: {[key: string]: string} = {}
     const promises = []
-    for (const [technology, rules] of Object.entries(map)) {
-        for (const [index, rule] of rules.entries()) {
-            const id = 'rule.' + technology + '.' + (index + 1)
-            const template = generateTopology(rule)
-            const graph = new Graph(template)
-            const promise = puml.renderTopology(graph, {format: 'svg'}).then(svg => {
-                svgs[id] = svg
-            })
-            promises.push(promise)
-        }
+    for (const [index, rule] of rules.entries()) {
+        const id = 'rule.' + rule.technology + '.' + (index + 1)
+        const template = generateTopology(rule)
+        const graph = new Graph(template)
+        const promise = puml.renderTopology(graph, {format: 'svg'}).then(svg => {
+            svgs[id] = svg
+        })
+        promises.push(promise)
     }
     await Promise.all(promises)
 
     /**
-     * Groups
+     * Scenarios
      */
-    const groups: TechnologyRuleGroup[] = []
-    for (const [technology, rules] of Object.entries(map)) {
-        const description = descriptions.find(it => it.id === technology)
+    const scenarios: TechnologyRuleScenario[] = []
+    for (const [index, rule] of rules.entries()) {
+        assert.isDefined(rule.weight)
+        assert.isDefined(rule.reason)
+        assert.isDefined(rule.details)
+        assert.isDefined(rule.hosting)
+
+        const description = descriptions.find(it => it.id === rule.technology)
         assert.isDefined(description)
 
-        for (const [index, rule] of rules.entries()) {
-            assert.isArray(rule.hosting)
+        const key = constructRuleName(rule, {technology: false})
 
-            const key = constructRuleName(
-                {technology, component: rule.component, artifact: rule.artifact, hosting: rule.hosting},
-                {technology: false}
-            )
+        const entry = {
+            name: description.name,
+            quality: rule.weight,
+            reason: rule.reason,
+            details: rule.details,
+        }
 
-            const entry = {
-                name: description.name,
-                quality: rule.weight!,
-                reason: rule.reason!,
-                details: rule.details!,
-            }
+        const found = scenarios.find(it => it.key === key)
 
-            const found = groups.find(it => it.key === key)
-
-            if (found) {
-                found.technologies.push(entry)
-            } else {
-                groups.push({
-                    key,
-                    component: rule.component,
-                    artifact: rule.artifact,
-                    hosting: rule.hosting,
-                    svg: svgs['rule.' + technology + '.' + (index + 1)],
-                    technologies: [entry],
-                })
-            }
+        if (found) {
+            found.technologies.push(entry)
+        } else {
+            scenarios.push({
+                key,
+                component: rule.component,
+                artifact: rule.artifact,
+                hosting: rule.hosting,
+                svg: svgs['rule.' + rule.technology + '.' + (index + 1)],
+                technologies: [entry],
+            })
         }
     }
+
+    /**
+     * Groups
+     */
+    const groups = utils.groupBy(scenarios, it => it.component)
 
     /**
      * Documentation
@@ -93,7 +94,7 @@ async function main() {
     await files.renderFile(
         path.join(__dirname, 'template.ejs'),
         {
-            data: map,
+            data: rules,
             svgs,
             groups,
             utils,
@@ -111,7 +112,7 @@ async function main() {
     process.exit(0)
 }
 
-type TechnologyRuleGroup = {
+type TechnologyRuleScenario = {
     key: string
     component: string
     artifact?: string
@@ -129,7 +130,9 @@ function generateLink(type: string) {
     return `/normative#${type.replaceAll('.', '')}`
 }
 
-function generateTopology(rule: TechnologyAssignmentRule) {
+function generateTopology(rule: TechnologyRule) {
+    assert.isDefined(rule.hosting)
+
     const artifact_types: ArtifactTypeMap = {}
     const node_types: ArtifactTypeMap = {}
     const node_templates: NodeTemplateMap = {}
@@ -170,7 +173,6 @@ function generateTopology(rule: TechnologyAssignmentRule) {
     /**
      * Hosting
      */
-    assert.isArray(rule.hosting)
     rule.hosting.forEach((type, index) => {
         const name = 'host ' + (index + 1)
 

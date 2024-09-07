@@ -123,6 +123,152 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    email.component~service.application#docker.image::compose@docker.engine->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+    email.component~service.application#docker.image::terraform@docker.engine->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                        provider:
+                            docker:
+                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
+                                  ssh_opts:
+                                      - '-i'
+                                      - '{{ SELF.os_ssh_key_file }}'
+                                      - '-o'
+                                      - IdentitiesOnly=yes
+                                      - '-o'
+                                      - BatchMode=yes
+                                      - '-o'
+                                      - UserKnownHostsFile=/dev/null
+                                      - '-o'
+                                      - StrictHostKeyChecking=no
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - PORT={{ SELF.application_port }}
+                                          - DISABLE_PROFILER={{ SELF.disable_profiler }}
+                                      image: ${docker_image.image.image_id}
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
     email.component~service.application#docker.image::ansible@gcp.cloudrun:
         derived_from: email.component
         metadata:
@@ -241,6 +387,79 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
+    email.component~service.application#docker.image::terraform@gcp.cloudrun:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_protocol:
+                type: string
+                default: grpcs
+            gcp_service_account_file:
+                type: string
+                default:
+                    get_input: gcp_service_account_file
+            gcp_region:
+                type: string
+                default:
+                    get_input: gcp_region
+            gcp_project:
+                type: string
+                default:
+                    get_input: gcp_project
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                outputs:
+                    application_address: application_address
+                    application_endpoint: application_endpoint
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        output:
+                            application_address:
+                                - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
+                            application_endpoint:
+                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
+                        resource:
+                            google_cloud_run_v2_service:
+                                application:
+                                    - ingress: INGRESS_TRAFFIC_ALL
+                                      location: '{{ SELF.gcp_region }}'
+                                      name: '{{ SELF.application_name }}'
+                                      template:
+                                          - containers:
+                                                - image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                  ports:
+                                                      - name: http1
+                                                        container_port: '{{ SELF.application_port }}'
+                                                  env:
+                                                      - name: DISABLE_PROFILER
+                                                        value: '"{{ SELF.disable_profiler }}"'
+                            google_cloud_run_service_iam_binding:
+                                application:
+                                    - location: '{{ SELF.gcp_region }}'
+                                      members:
+                                          - allUsers
+                                      role: roles/run.invoker
+                                      service: '{{ SELF.application_name }}'
     email.component~service.application#docker.image::ansible@kubernetes.cluster:
         derived_from: email.component
         metadata:
@@ -361,6 +580,234 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
+    email.component~service.application#docker.image::kubernetes@kubernetes.cluster:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default:
+                    eval: .::application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: |
+                                              {{ deployment | to_yaml }}
+                                              ---
+                                              {{ service | to_yaml }}
+                                      vars:
+                                          deployment:
+                                              apiVersion: apps/v1
+                                              kind: Deployment
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  selector:
+                                                      matchLabels:
+                                                          app: '{{ SELF.application_name }}'
+                                                  template:
+                                                      metadata:
+                                                          labels:
+                                                              app: '{{ SELF.application_name }}'
+                                                      spec:
+                                                          containers:
+                                                              - image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                                name: '{{ SELF.application_name }}'
+                                                                env:
+                                                                    - name: PORT
+                                                                      value: '"{{ SELF.application_port }}"'
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '"{{ SELF.disable_profiler }}"'
+                                                                ports:
+                                                                    - containerPort: '{{ SELF.application_port }}'
+                                          service:
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  ports:
+                                                      - name: '{{ SELF.application_protocol }}'
+                                                        port: '{{ SELF.application_port }}'
+                                                        targetPort: '{{ SELF.application_port }}'
+                                                  selector:
+                                                      app: '{{ SELF.application_name }}'
+                                                  type: ClusterIP
+                                    - name: apply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} rollout status deployment/{{ SELF.application_name }} --timeout 60s
+                                      args:
+                                          executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: |
+                                              {{ deployment | to_yaml }}
+                                              ---
+                                              {{ service | to_yaml }}
+                                      vars:
+                                          deployment:
+                                              apiVersion: apps/v1
+                                              kind: Deployment
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  selector:
+                                                      matchLabels:
+                                                          app: '{{ SELF.application_name }}'
+                                                  template:
+                                                      metadata:
+                                                          labels:
+                                                              app: '{{ SELF.application_name }}'
+                                                      spec:
+                                                          containers:
+                                                              - image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                                name: '{{ SELF.application_name }}'
+                                                                env:
+                                                                    - name: PORT
+                                                                      value: '"{{ SELF.application_port }}"'
+                                                                    - name: DISABLE_PROFILER
+                                                                      value: '"{{ SELF.disable_profiler }}"'
+                                                                ports:
+                                                                    - containerPort: '{{ SELF.application_port }}'
+                                          service:
+                                              apiVersion: v1
+                                              kind: Service
+                                              metadata:
+                                                  name: '{{ SELF.application_name }}'
+                                                  namespace: default
+                                              spec:
+                                                  ports:
+                                                      - name: '{{ SELF.application_protocol }}'
+                                                        port: '{{ SELF.application_port }}'
+                                                        targetPort: '{{ SELF.application_port }}'
+                                                  selector:
+                                                      app: '{{ SELF.application_name }}'
+                                                  type: ClusterIP
+                                    - name: unapply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+    email.component~service.application#docker.image::terraform@kubernetes.cluster:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        attributes:
+            application_address:
+                type: string
+                default:
+                    eval: .::application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - kubernetes:
+                                        source: hashicorp/kubernetes
+                                        version: 2.31.0
+                              required_version: '>= 0.14.0'
+                        provider:
+                            kubernetes:
+                                - client_certificate: ${file("{{ SELF.k8s_client_cert_file }}")}
+                                  client_key: ${file("{{ SELF.k8s_client_key_file }}")}
+                                  cluster_ca_certificate: ${file("{{ SELF.k8s_ca_cert_file }}")}
+                                  host: '{{ SELF.k8s_host }}'
+                        resource:
+                            kubernetes_deployment_v1:
+                                application:
+                                    - metadata:
+                                          - name: '{{ SELF.application_name }}'
+                                      spec:
+                                          - selector:
+                                                - match_labels:
+                                                      app: '{{ SELF.application_name }}'
+                                            template:
+                                                - metadata:
+                                                      - labels:
+                                                            app: '{{ SELF.application_name }}'
+                                                  spec:
+                                                      - container:
+                                                            - env:
+                                                                  - name: PORT
+                                                                    value: '"{{ SELF.application_port }}"'
+                                                                  - name: DISABLE_PROFILER
+                                                                    value: '"{{ SELF.disable_profiler }}"'
+                                                              image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                              name: '{{ SELF.application_name }}'
+                                                              port:
+                                                                  - container_port: '{{ SELF.application_port }}'
+                            kubernetes_service_v1:
+                                application:
+                                    - metadata:
+                                          - name: '{{ SELF.application_name }}'
+                                      spec:
+                                          - port:
+                                                - name: '{{ SELF.application_protocol }}'
+                                                  port: '{{ SELF.application_port }}'
+                                                  target_port: '{{ SELF.application_port }}'
+                                            selector:
+                                                app: '{{ SELF.application_name }}'
+                                            type: ClusterIP
     email.component~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -608,6 +1055,193 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    email.component~service.application#tar.archive::terraform@*->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                                destination: /tmp/artifact-email.component
+                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    [Unit]
+                                                    After=network.target
+
+                                                    [Service]
+                                                    Type=simple
+                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                                    WorkingDirectory={{ SELF.application_directory }}
+                                                    EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                                    [Install]
+                                                    WantedBy=multi-user.target
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    tar -xzf /tmp/artifact-email.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Reload systemd daemon
+                                                    systemctl daemon-reload
+
+                                                    # Enable service 
+                                                    systemctl enable {{ SELF.application_name }}
+                                                destination: /tmp/create-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Start service 
+                                                    systemctl start {{ SELF.application_name }}
+                                                destination: /tmp/start-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+
+                                                    # Stop service 
+                                                    systemctl stop {{ SELF.application_name }}
+                                                destination: /tmp/stop-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Delete systemd service 
+                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                                    # Reload system daemon
+                                                    systemctl daemon-reload
+                                                destination: /tmp/delete-email.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-email.component.sh
+                                                    - sudo bash /tmp/configure-email.component.sh
+                                                    - sudo bash /tmp/start-email.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-email.component.sh
+                                                    - sudo bash /tmp/delete-email.component.sh
+                                                when: destroy
     email.component~service.application#zip.archive::ansible@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -858,6 +1492,193 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    email.component~service.application#zip.archive::terraform@*->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                                destination: /tmp/artifact-email.component
+                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    [Unit]
+                                                    After=network.target
+
+                                                    [Service]
+                                                    Type=simple
+                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                                    WorkingDirectory={{ SELF.application_directory }}
+                                                    EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                                    [Install]
+                                                    WantedBy=multi-user.target
+                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    unzip /tmp/artifact-email.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Reload systemd daemon
+                                                    systemctl daemon-reload
+
+                                                    # Enable service 
+                                                    systemctl enable {{ SELF.application_name }}
+                                                destination: /tmp/create-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Start service 
+                                                    systemctl start {{ SELF.application_name }}
+                                                destination: /tmp/start-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+
+                                                    # Stop service 
+                                                    systemctl stop {{ SELF.application_name }}
+                                                destination: /tmp/stop-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Delete systemd service 
+                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                                    # Reload system daemon
+                                                    systemctl daemon-reload
+                                                destination: /tmp/delete-email.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-email.component.sh
+                                                    - sudo bash /tmp/configure-email.component.sh
+                                                    - sudo bash /tmp/start-email.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-email.component.sh
+                                                    - sudo bash /tmp/delete-email.component.sh
+                                                when: destroy
     email.component~service.application#zip.archive::ansible@gcp.appengine:
         derived_from: email.component
         metadata:
@@ -956,6 +1777,94 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
+    email.component~service.application#zip.archive::terraform@gcp.appengine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_protocol:
+                type: string
+                default: grpcs
+            gcp_service_account_file:
+                type: string
+                default:
+                    get_input: gcp_service_account_file
+            gcp_region:
+                type: string
+                default:
+                    get_input: gcp_region
+            gcp_project:
+                type: string
+                default:
+                    get_input: gcp_project
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                outputs:
+                    application_address: application_address
+                    application_endpoint: application_endpoint
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - google:
+                                        source: hashicorp/google
+                                        version: 5.39.1
+                        provider:
+                            google:
+                                - credentials: '{{ SELF.gcp_service_account_file }}'
+                                  project: '{{ SELF.gcp_project }}'
+                                  region: '{{ SELF.gcp_region }}'
+                        output:
+                            application_address:
+                                - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
+                            application_endpoint:
+                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
+                        resource:
+                            google_app_engine_standard_app_version:
+                                app:
+                                    - delete_service_on_destroy: true
+                                      deployment:
+                                          - zip:
+                                                - source_url: https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}
+                                      entrypoint:
+                                          - shell: '{{ SELF._management_start }}'
+                                      env_variables:
+                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                      runtime: '{{ SELF.application_language }}'
+                                      service: '{{ SELF.application_name }}'
+                                      service_account: ${google_service_account.custom_service_account.email}
+                                      version_id: v1
+                            google_project_iam_member:
+                                gae_api:
+                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
+                                      project: ${google_service_account.custom_service_account.project}
+                                      role: roles/compute.networkUser
+                                storage_viewer:
+                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
+                                      project: ${google_service_account.custom_service_account.project}
+                                      role: roles/storage.objectViewer
+                            google_service_account:
+                                custom_service_account:
+                                    - account_id: '{{ SELF.application_name }}-account'
+                                      display_name: Custom Service Account
+                            google_storage_bucket:
+                                bucket:
+                                    - location: EU
+                                      name: '{{ SELF.gcp_project }}-{{ SELF.application_name }}'
+                            google_storage_bucket_object:
+                                object:
+                                    - bucket: ${google_storage_bucket.bucket.name}
+                                      name: object.zip
+                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
     email.component~software.application#apt.package::ansible@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -1178,6 +2087,204 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    email.component~software.application#apt.archive::terraform@*->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Run setup script 
+                                                    if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
+                                                        curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                                    fi
+
+                                                    # Add apt key
+                                                    if [[ "{{ ".artifacts::apt_package::key" | eval }}" != "" ]]; then 
+                                                        curl -1sLf {{ ".artifacts::apt_package::key" | eval }} | gpg --dearmor --yes -o /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                                    fi
+
+                                                    # Add apt repository
+                                                    if [[ "{{ ".artifacts::apt_package::source" | eval }}" != "" ]]; then 
+                                                        echo "deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}" | tee {{ ".artifacts::apt_package::repository" | eval }}
+                                                    fi
+
+                                                    # Update apt cache
+                                                    apt-get update -y
+
+                                                    # Install dependencies
+                                                    if [[ "{{ ".artifacts::apt_package::dependencies" | eval }}" != "" ]]; then 
+                                                        apt-get install {{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }} -y
+                                                    fi
+
+                                                    # Install package
+                                                    {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::apt_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::apt_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    undefined
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/create.sh
+                                                destination: /tmp/create-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/start.sh
+                                                destination: /tmp/start-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+                                                destination: /tmp/stop-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+
+                                                    # Uninstall package
+                                                    apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
+                                                destination: /tmp/delete-email.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-email.component.sh
+                                                    - sudo bash /tmp/configure-email.component.sh
+                                                    - sudo bash /tmp/start-email.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-email.component.sh
+                                                    - sudo bash /tmp/delete-email.component.sh
+                                                when: destroy
     email.component~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -1397,6 +2504,190 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
+    email.component~software.application#tar.archive::terraform@*->remote.machine:
+        derived_from: email.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            terraform_data:
+                                vm:
+                                    - connection:
+                                          - host: '{{ SELF.os_ssh_host }}'
+                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
+                                            type: ssh
+                                            user: '{{ SELF.os_ssh_user }}'
+                                      provisioner:
+                                          file:
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                                destination: /tmp/artifact-email.component
+                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Create application directory
+                                                    mkdir -p {{ SELF.application_directory }}
+
+                                                    # Create application environment
+                                                    cat <<EOF > {{ SELF.application_directory }}/.env
+                                                    PORT="{{ SELF.application_port }}"
+                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                                    EOF>>
+
+                                                    # Download deployment artifact if required
+                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    fi
+
+                                                    # Extract deployment artifact
+                                                    tar -xzf /tmp/artifact-email.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                                    # Create vintner directory
+                                                    mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/create.sh
+                                                destination: /tmp/create-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/configure.sh
+                                                destination: /tmp/configure-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "start" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/start.sh
+                                                destination: /tmp/start-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Assert operation
+                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                                        echo 'Management operation "stop" missing'
+                                                        exit 1 
+                                                    fi
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/stop.sh
+                                                destination: /tmp/stop-email.component.sh
+                                              - content: |
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    # Copy operation
+                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                                    #!/usr/bin/bash
+                                                    set -e
+
+                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                                    EOF>>
+                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                                    # Execute operation
+                                                    cd {{ SELF.application_directory }}
+                                                    . .env
+                                                    . .vintner/delete.sh
+
+                                                    # Delete application directory
+                                                    rm -rf "{{ SELF.application_directory }}"
+                                                destination: /tmp/delete-email.component.sh
+                                          remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-email.component.sh
+                                                    - sudo bash /tmp/configure-email.component.sh
+                                                    - sudo bash /tmp/start-email.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-email.component.sh
+                                                    - sudo bash /tmp/delete-email.component.sh
+                                                when: destroy
     email.component~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -1619,1075 +2910,6 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    email.component~service.application#docker.image::terraform@docker.engine->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-        attributes:
-            application_address:
-                type: string
-                default: 127.0.0.1
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - docker:
-                                        source: kreuzwerker/docker
-                                        version: 3.0.2
-                        provider:
-                            docker:
-                                - host: ssh://{{ SELF.os_ssh_user }}@{{ SELF.os_ssh_host }}:22
-                                  ssh_opts:
-                                      - '-i'
-                                      - '{{ SELF.os_ssh_key_file }}'
-                                      - '-o'
-                                      - IdentitiesOnly=yes
-                                      - '-o'
-                                      - BatchMode=yes
-                                      - '-o'
-                                      - UserKnownHostsFile=/dev/null
-                                      - '-o'
-                                      - StrictHostKeyChecking=no
-                        resource:
-                            docker_container:
-                                application:
-                                    - env:
-                                          - PORT={{ SELF.application_port }}
-                                          - DISABLE_PROFILER={{ SELF.disable_profiler }}
-                                      image: ${docker_image.image.image_id}
-                                      name: '{{ SELF.application_name }}'
-                                      network_mode: host
-                            docker_image:
-                                image:
-                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    email.component~service.application#docker.image::terraform@gcp.cloudrun:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            application_protocol:
-                type: string
-                default: grpcs
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                outputs:
-                    application_address: application_address
-                    application_endpoint: application_endpoint
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - google:
-                                        source: hashicorp/google
-                                        version: 5.39.1
-                        provider:
-                            google:
-                                - credentials: '{{ SELF.gcp_service_account_file }}'
-                                  project: '{{ SELF.gcp_project }}'
-                                  region: '{{ SELF.gcp_region }}'
-                        output:
-                            application_address:
-                                - value: ${substr(google_cloud_run_v2_service.application.uri, 8, -1)}
-                            application_endpoint:
-                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://${substr(google_cloud_run_v2_service.application.uri, 8, -1)}:443'
-                        resource:
-                            google_cloud_run_v2_service:
-                                application:
-                                    - ingress: INGRESS_TRAFFIC_ALL
-                                      location: '{{ SELF.gcp_region }}'
-                                      name: '{{ SELF.application_name }}'
-                                      template:
-                                          - containers:
-                                                - image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                  ports:
-                                                      - name: http1
-                                                        container_port: '{{ SELF.application_port }}'
-                                                  env:
-                                                      - name: DISABLE_PROFILER
-                                                        value: '"{{ SELF.disable_profiler }}"'
-                            google_cloud_run_service_iam_binding:
-                                application:
-                                    - location: '{{ SELF.gcp_region }}'
-                                      members:
-                                          - allUsers
-                                      role: roles/run.invoker
-                                      service: '{{ SELF.application_name }}'
-    email.component~service.application#docker.image::terraform@kubernetes.cluster:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            k8s_host:
-                type: string
-                default:
-                    get_input: k8s_host
-            k8s_ca_cert_file:
-                type: string
-                default:
-                    get_input: k8s_ca_cert_file
-            k8s_client_cert_file:
-                type: string
-                default:
-                    get_input: k8s_client_cert_file
-            k8s_client_key_file:
-                type: string
-                default:
-                    get_input: k8s_client_key_file
-        attributes:
-            application_address:
-                type: string
-                default:
-                    eval: .::application_name
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - kubernetes:
-                                        source: hashicorp/kubernetes
-                                        version: 2.31.0
-                              required_version: '>= 0.14.0'
-                        provider:
-                            kubernetes:
-                                - client_certificate: ${file("{{ SELF.k8s_client_cert_file }}")}
-                                  client_key: ${file("{{ SELF.k8s_client_key_file }}")}
-                                  cluster_ca_certificate: ${file("{{ SELF.k8s_ca_cert_file }}")}
-                                  host: '{{ SELF.k8s_host }}'
-                        resource:
-                            kubernetes_deployment_v1:
-                                application:
-                                    - metadata:
-                                          - name: '{{ SELF.application_name }}'
-                                      spec:
-                                          - selector:
-                                                - match_labels:
-                                                      app: '{{ SELF.application_name }}'
-                                            template:
-                                                - metadata:
-                                                      - labels:
-                                                            app: '{{ SELF.application_name }}'
-                                                  spec:
-                                                      - container:
-                                                            - env:
-                                                                  - name: PORT
-                                                                    value: '"{{ SELF.application_port }}"'
-                                                                  - name: DISABLE_PROFILER
-                                                                    value: '"{{ SELF.disable_profiler }}"'
-                                                              image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                              name: '{{ SELF.application_name }}'
-                                                              port:
-                                                                  - container_port: '{{ SELF.application_port }}'
-                            kubernetes_service_v1:
-                                application:
-                                    - metadata:
-                                          - name: '{{ SELF.application_name }}'
-                                      spec:
-                                          - port:
-                                                - name: '{{ SELF.application_protocol }}'
-                                                  port: '{{ SELF.application_port }}'
-                                                  target_port: '{{ SELF.application_port }}'
-                                            selector:
-                                                app: '{{ SELF.application_name }}'
-                                            type: ClusterIP
-    email.component~service.application#tar.archive::terraform@*->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-            application_directory:
-                type: string
-                default:
-                    concat:
-                        - /var/lib/
-                        - get_property:
-                              - SELF
-                              - application_name
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        resource:
-                            terraform_data:
-                                vm:
-                                    - connection:
-                                          - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
-                                            type: ssh
-                                            user: '{{ SELF.os_ssh_user }}'
-                                      provisioner:
-                                          file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
-                                                destination: /tmp/artifact-email.component
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
-                                              - content: |
-                                                    [Unit]
-                                                    After=network.target
-
-                                                    [Service]
-                                                    Type=simple
-                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
-                                                    WorkingDirectory={{ SELF.application_directory }}
-                                                    EnvironmentFile={{ SELF.application_directory }}/.env
-
-                                                    [Install]
-                                                    WantedBy=multi-user.target
-                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Create application directory
-                                                    mkdir -p {{ SELF.application_directory }}
-
-                                                    # Create application environment
-                                                    cat <<EOF > {{ SELF.application_directory }}/.env
-                                                    PORT="{{ SELF.application_port }}"
-                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::tar_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-email.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
-
-                                                    # Create vintner directory
-                                                    mkdir -p {{ SELF.application_directory }}/.vintner
-
-                                                    # Reload systemd daemon
-                                                    systemctl daemon-reload
-
-                                                    # Enable service 
-                                                    systemctl enable {{ SELF.application_name }}
-                                                destination: /tmp/create-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/configure.sh
-                                                destination: /tmp/configure-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "start" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Start service 
-                                                    systemctl start {{ SELF.application_name }}
-                                                destination: /tmp/start-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "stop" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/stop.sh
-
-                                                    # Stop service 
-                                                    systemctl stop {{ SELF.application_name }}
-                                                destination: /tmp/stop-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/delete.sh
-
-                                                    # Delete application directory
-                                                    rm -rf "{{ SELF.application_directory }}"
-
-                                                    # Delete systemd service 
-                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
-
-                                                    # Reload system daemon
-                                                    systemctl daemon-reload
-                                                destination: /tmp/delete-email.component.sh
-                                          remote-exec:
-                                              - inline:
-                                                    - sudo bash /tmp/create-email.component.sh
-                                                    - sudo bash /tmp/configure-email.component.sh
-                                                    - sudo bash /tmp/start-email.component.sh
-                                              - inline:
-                                                    - sudo bash /tmp/stop-email.component.sh
-                                                    - sudo bash /tmp/delete-email.component.sh
-                                                when: destroy
-    email.component~service.application#zip.archive::terraform@*->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-            application_directory:
-                type: string
-                default:
-                    concat:
-                        - /var/lib/
-                        - get_property:
-                              - SELF
-                              - application_name
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        resource:
-                            terraform_data:
-                                vm:
-                                    - connection:
-                                          - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
-                                            type: ssh
-                                            user: '{{ SELF.os_ssh_user }}'
-                                      provisioner:
-                                          file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-                                                destination: /tmp/artifact-email.component
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
-                                              - content: |
-                                                    [Unit]
-                                                    After=network.target
-
-                                                    [Service]
-                                                    Type=simple
-                                                    ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
-                                                    WorkingDirectory={{ SELF.application_directory }}
-                                                    EnvironmentFile={{ SELF.application_directory }}/.env
-
-                                                    [Install]
-                                                    WantedBy=multi-user.target
-                                                destination: /etc/systemd/system/{{ SELF.application_name }}.service
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Create application directory
-                                                    mkdir -p {{ SELF.application_directory }}
-
-                                                    # Create application environment
-                                                    cat <<EOF > {{ SELF.application_directory }}/.env
-                                                    PORT="{{ SELF.application_port }}"
-                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::zip_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    unzip /tmp/artifact-email.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
-
-                                                    # Create vintner directory
-                                                    mkdir -p {{ SELF.application_directory }}/.vintner
-
-                                                    # Reload systemd daemon
-                                                    systemctl daemon-reload
-
-                                                    # Enable service 
-                                                    systemctl enable {{ SELF.application_name }}
-                                                destination: /tmp/create-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/configure.sh
-                                                destination: /tmp/configure-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "start" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Start service 
-                                                    systemctl start {{ SELF.application_name }}
-                                                destination: /tmp/start-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "stop" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/stop.sh
-
-                                                    # Stop service 
-                                                    systemctl stop {{ SELF.application_name }}
-                                                destination: /tmp/stop-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/delete.sh
-
-                                                    # Delete application directory
-                                                    rm -rf "{{ SELF.application_directory }}"
-
-                                                    # Delete systemd service 
-                                                    rm -f /etc/systemd/system/{{ SELF.application_name }}.service
-
-                                                    # Reload system daemon
-                                                    systemctl daemon-reload
-                                                destination: /tmp/delete-email.component.sh
-                                          remote-exec:
-                                              - inline:
-                                                    - sudo bash /tmp/create-email.component.sh
-                                                    - sudo bash /tmp/configure-email.component.sh
-                                                    - sudo bash /tmp/start-email.component.sh
-                                              - inline:
-                                                    - sudo bash /tmp/stop-email.component.sh
-                                                    - sudo bash /tmp/delete-email.component.sh
-                                                when: destroy
-    email.component~service.application#zip.archive::terraform@gcp.appengine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            application_protocol:
-                type: string
-                default: grpcs
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                outputs:
-                    application_address: application_address
-                    application_endpoint: application_endpoint
-                inputs:
-                    main:
-                        terraform:
-                            - required_providers:
-                                  - google:
-                                        source: hashicorp/google
-                                        version: 5.39.1
-                        provider:
-                            google:
-                                - credentials: '{{ SELF.gcp_service_account_file }}'
-                                  project: '{{ SELF.gcp_project }}'
-                                  region: '{{ SELF.gcp_region }}'
-                        output:
-                            application_address:
-                                - value: '{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com'
-                            application_endpoint:
-                                - value: '{{ SELF.application_protocol if SELF.application_protocol.endswith("s") else SELF.application_protocol + "s" }}://{{ SELF.application_name }}-dot-{{ SELF.gcp_project }}.ey.r.appspot.com:443'
-                        resource:
-                            google_app_engine_standard_app_version:
-                                app:
-                                    - delete_service_on_destroy: true
-                                      deployment:
-                                          - zip:
-                                                - source_url: https://storage.googleapis.com/${google_storage_bucket.bucket.name}/${google_storage_bucket_object.object.name}
-                                      entrypoint:
-                                          - shell: '{{ SELF._management_start }}'
-                                      env_variables:
-                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
-                                      runtime: '{{ SELF.application_language }}'
-                                      service: '{{ SELF.application_name }}'
-                                      service_account: ${google_service_account.custom_service_account.email}
-                                      version_id: v1
-                            google_project_iam_member:
-                                gae_api:
-                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
-                                      project: ${google_service_account.custom_service_account.project}
-                                      role: roles/compute.networkUser
-                                storage_viewer:
-                                    - member: serviceAccount:${google_service_account.custom_service_account.email}
-                                      project: ${google_service_account.custom_service_account.project}
-                                      role: roles/storage.objectViewer
-                            google_service_account:
-                                custom_service_account:
-                                    - account_id: '{{ SELF.application_name }}-account'
-                                      display_name: Custom Service Account
-                            google_storage_bucket:
-                                bucket:
-                                    - location: EU
-                                      name: '{{ SELF.gcp_project }}-{{ SELF.application_name }}'
-                            google_storage_bucket_object:
-                                object:
-                                    - bucket: ${google_storage_bucket.bucket.name}
-                                      name: object.zip
-                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
-    email.component~software.application#apt.archive::terraform@*->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-            application_directory:
-                type: string
-                default:
-                    concat:
-                        - /var/lib/
-                        - get_property:
-                              - SELF
-                              - application_name
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        resource:
-                            terraform_data:
-                                vm:
-                                    - connection:
-                                          - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
-                                            type: ssh
-                                            user: '{{ SELF.os_ssh_user }}'
-                                      provisioner:
-                                          file:
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Run setup script 
-                                                    if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
-                                                        curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
-                                                    fi
-
-                                                    # Add apt key
-                                                    if [[ "{{ ".artifacts::apt_package::key" | eval }}" != "" ]]; then 
-                                                        curl -1sLf {{ ".artifacts::apt_package::key" | eval }} | gpg --dearmor --yes -o /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
-                                                    fi
-
-                                                    # Add apt repository
-                                                    if [[ "{{ ".artifacts::apt_package::source" | eval }}" != "" ]]; then 
-                                                        echo "deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}" | tee {{ ".artifacts::apt_package::repository" | eval }}
-                                                    fi
-
-                                                    # Update apt cache
-                                                    apt-get update -y
-
-                                                    # Install dependencies
-                                                    if [[ "{{ ".artifacts::apt_package::dependencies" | eval }}" != "" ]]; then 
-                                                        apt-get install {{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }} -y
-                                                    fi
-
-                                                    # Install package
-                                                    {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
-
-                                                    # Create application directory
-                                                    mkdir -p {{ SELF.application_directory }}
-
-                                                    # Create application environment
-                                                    cat <<EOF > {{ SELF.application_directory }}/.env
-                                                    PORT="{{ SELF.application_port }}"
-                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::apt_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::apt_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    undefined
-
-                                                    # Create vintner directory
-                                                    mkdir -p {{ SELF.application_directory }}/.vintner
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/create.sh
-                                                destination: /tmp/create-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/configure.sh
-                                                destination: /tmp/configure-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/start.sh
-                                                destination: /tmp/start-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/stop.sh
-                                                destination: /tmp/stop-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/delete.sh
-
-                                                    # Delete application directory
-                                                    rm -rf "{{ SELF.application_directory }}"
-
-                                                    # Uninstall package
-                                                    apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
-                                                destination: /tmp/delete-email.component.sh
-                                          remote-exec:
-                                              - inline:
-                                                    - sudo bash /tmp/create-email.component.sh
-                                                    - sudo bash /tmp/configure-email.component.sh
-                                                    - sudo bash /tmp/start-email.component.sh
-                                              - inline:
-                                                    - sudo bash /tmp/stop-email.component.sh
-                                                    - sudo bash /tmp/delete-email.component.sh
-                                                when: destroy
-    email.component~software.application#tar.archive::terraform@*->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-        properties:
-            os_ssh_user:
-                type: string
-                default:
-                    get_input: os_ssh_user
-            os_ssh_key_file:
-                type: string
-                default:
-                    get_input: os_ssh_key_file
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-            application_directory:
-                type: string
-                default:
-                    concat:
-                        - /var/lib/
-                        - get_property:
-                              - SELF
-                              - application_name
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                    delete:
-                        implementation:
-                            primary: Terraform
-            defaults:
-                inputs:
-                    main:
-                        resource:
-                            terraform_data:
-                                vm:
-                                    - connection:
-                                          - host: '{{ SELF.os_ssh_host }}'
-                                            private_key: ${file("{{ SELF.os_ssh_key_file }}")}
-                                            type: ssh
-                                            user: '{{ SELF.os_ssh_user }}'
-                                      provisioner:
-                                          file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
-                                                destination: /tmp/artifact-email.component
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Create application directory
-                                                    mkdir -p {{ SELF.application_directory }}
-
-                                                    # Create application environment
-                                                    cat <<EOF > {{ SELF.application_directory }}/.env
-                                                    PORT="{{ SELF.application_port }}"
-                                                    DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-email.component {{ ".artifacts::tar_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-email.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
-
-                                                    # Create vintner directory
-                                                    mkdir -p {{ SELF.application_directory }}/.vintner
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/create.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/create.sh
-                                                destination: /tmp/create-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/configure.sh
-                                                destination: /tmp/configure-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "start" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/start.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/start.sh
-                                                destination: /tmp/start-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Assert operation
-                                                    if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
-                                                        echo 'Management operation "stop" missing'
-                                                        exit 1 
-                                                    fi
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/stop.sh
-                                                destination: /tmp/stop-email.component.sh
-                                              - content: |
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    # Copy operation
-                                                    cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
-                                                    #!/usr/bin/bash
-                                                    set -e
-
-                                                    {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
-                                                    chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
-
-                                                    # Execute operation
-                                                    cd {{ SELF.application_directory }}
-                                                    . .env
-                                                    . .vintner/delete.sh
-
-                                                    # Delete application directory
-                                                    rm -rf "{{ SELF.application_directory }}"
-                                                destination: /tmp/delete-email.component.sh
-                                          remote-exec:
-                                              - inline:
-                                                    - sudo bash /tmp/create-email.component.sh
-                                                    - sudo bash /tmp/configure-email.component.sh
-                                                    - sudo bash /tmp/start-email.component.sh
-                                              - inline:
-                                                    - sudo bash /tmp/stop-email.component.sh
-                                                    - sudo bash /tmp/delete-email.component.sh
-                                                when: destroy
     email.component~software.application#zip.archive::terraform@*->remote.machine:
         derived_from: email.component
         metadata:
@@ -2872,225 +3094,3 @@ node_types:
                                                     - sudo bash /tmp/stop-email.component.sh
                                                     - sudo bash /tmp/delete-email.component.sh
                                                 when: destroy
-    email.component~service.application#docker.image::kubernetes@kubernetes.cluster:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        attributes:
-            application_address:
-                type: string
-                default:
-                    eval: .::application_name
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: touch manifest
-                                      register: manifest
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
-                                    - name: create manifest
-                                      ansible.builtin.copy:
-                                          dest: '{{ manifest.path }}'
-                                          content: |
-                                              {{ deployment | to_yaml }}
-                                              ---
-                                              {{ service | to_yaml }}
-                                      vars:
-                                          deployment:
-                                              apiVersion: apps/v1
-                                              kind: Deployment
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  selector:
-                                                      matchLabels:
-                                                          app: '{{ SELF.application_name }}'
-                                                  template:
-                                                      metadata:
-                                                          labels:
-                                                              app: '{{ SELF.application_name }}'
-                                                      spec:
-                                                          containers:
-                                                              - image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                                name: '{{ SELF.application_name }}'
-                                                                env:
-                                                                    - name: PORT
-                                                                      value: '"{{ SELF.application_port }}"'
-                                                                    - name: DISABLE_PROFILER
-                                                                      value: '"{{ SELF.disable_profiler }}"'
-                                                                ports:
-                                                                    - containerPort: '{{ SELF.application_port }}'
-                                          service:
-                                              apiVersion: v1
-                                              kind: Service
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  ports:
-                                                      - name: '{{ SELF.application_protocol }}'
-                                                        port: '{{ SELF.application_port }}'
-                                                        targetPort: '{{ SELF.application_port }}'
-                                                  selector:
-                                                      app: '{{ SELF.application_name }}'
-                                                  type: ClusterIP
-                                    - name: apply manifest
-                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
-                                      args:
-                                          executable: /usr/bin/bash
-                                    - name: wait for deployment
-                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} rollout status deployment/{{ SELF.application_name }} --timeout 60s
-                                      args:
-                                          executable: /usr/bin/bash
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: touch manifest
-                                      register: manifest
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.application.manifest.yaml'
-                                    - name: create manifest
-                                      ansible.builtin.copy:
-                                          dest: '{{ manifest.path }}'
-                                          content: |
-                                              {{ deployment | to_yaml }}
-                                              ---
-                                              {{ service | to_yaml }}
-                                      vars:
-                                          deployment:
-                                              apiVersion: apps/v1
-                                              kind: Deployment
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  selector:
-                                                      matchLabels:
-                                                          app: '{{ SELF.application_name }}'
-                                                  template:
-                                                      metadata:
-                                                          labels:
-                                                              app: '{{ SELF.application_name }}'
-                                                      spec:
-                                                          containers:
-                                                              - image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                                name: '{{ SELF.application_name }}'
-                                                                env:
-                                                                    - name: PORT
-                                                                      value: '"{{ SELF.application_port }}"'
-                                                                    - name: DISABLE_PROFILER
-                                                                      value: '"{{ SELF.disable_profiler }}"'
-                                                                ports:
-                                                                    - containerPort: '{{ SELF.application_port }}'
-                                          service:
-                                              apiVersion: v1
-                                              kind: Service
-                                              metadata:
-                                                  name: '{{ SELF.application_name }}'
-                                                  namespace: default
-                                              spec:
-                                                  ports:
-                                                      - name: '{{ SELF.application_protocol }}'
-                                                        port: '{{ SELF.application_port }}'
-                                                        targetPort: '{{ SELF.application_port }}'
-                                                  selector:
-                                                      app: '{{ SELF.application_name }}'
-                                                  type: ClusterIP
-                                    - name: unapply manifest
-                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
-                                      args:
-                                          executable: /usr/bin/bash
-    email.component~service.application#docker.image::compose@docker.engine->remote.machine:
-        derived_from: email.component
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            os_ssh_host:
-                type: string
-                default:
-                    eval: .::.requirements::[.name=host]::.target::management_address
-        attributes:
-            application_address:
-                type: string
-                default: 127.0.0.1
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: touch compose
-                                      register: compose
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.compose.yaml'
-                                    - name: create compose
-                                      ansible.builtin.copy:
-                                          dest: '{{ compose.path }}'
-                                          content: '{{ manifest | to_yaml }}'
-                                      vars:
-                                          manifest:
-                                              name: '{{ SELF.application_name }}'
-                                              services:
-                                                  application:
-                                                      container_name: '{{ SELF.application_name }}'
-                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                      network_mode: host
-                                                      environment:
-                                                          PORT: '"{{ SELF.application_port }}"'
-                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
-                                    - name: apply compose
-                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
-                                      args:
-                                          executable: /usr/bin/bash
-                                      environment:
-                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q:
-                                    - name: touch compose
-                                      register: compose
-                                      ansible.builtin.tempfile:
-                                          suffix: '{{ SELF.application_name }}.compose.yaml'
-                                    - name: create compose
-                                      ansible.builtin.copy:
-                                          dest: '{{ compose.path }}'
-                                          content: '{{ manifest | to_yaml }}'
-                                      vars:
-                                          manifest:
-                                              name: '{{ SELF.application_name }}'
-                                              services:
-                                                  application:
-                                                      container_name: '{{ SELF.application_name }}'
-                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
-                                                      network_mode: host
-                                                      environment:
-                                                          PORT: '"{{ SELF.application_port }}"'
-                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
-                                    - name: apply compose
-                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
-                                      args:
-                                          executable: /usr/bin/bash
-                                      environment:
-                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'

@@ -49,16 +49,16 @@ Such a topology template is also called variable topology template.
 
 A variability definition defines variability inputs, variability presets, variability expressions, and variability options.
 
-| Keyname                     | Mandatory | Type                                                | Description                                                                                                                                                 |
-|-----------------------------|-----------|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| inputs                      | false     | Map(String, VariabilityInput)                       | An optional map of input parameters used inside variability expressions.                                                                                    |
-| presets                     | false     | Map(String, VariabilityPreset)                      | An optional map of variability preset definitions.                                                                                                          |
-| expressions                 | false     | Map(String, VariabilityExpression)                  | An optional map of variability expressions.                                                                                                                 |
-| constraints                 | false     | List(LogicExpression)                               | An optional list of constraints respected when resolving variability.                                                                                       |
-| options                     | false     | Map(String, Boolean)                                | An optional map of variability options.                                                                                                                     |
-| type_specific_conditions    | false     | String &#124; List(TypeSpecificDefaultCondition)    | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
-| technology_assignment_rules | false     | String &#124; Map(String, TechnologyAssignmentRule) | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).  |
-| plugins                     | false     | PluginDefinition                                    | An optional definition of plugins.                                                                                                                          |
+| Keyname                  | Mandatory | Type                                             | Description                                                                                                                                                 |
+|--------------------------|-----------|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| inputs                   | false     | Map(String, VariabilityInput)                    | An optional map of input parameters used inside variability expressions.                                                                                    |
+| presets                  | false     | Map(String, VariabilityPreset)                   | An optional map of variability preset definitions.                                                                                                          |
+| expressions              | false     | Map(String, VariabilityExpression)               | An optional map of variability expressions.                                                                                                                 |
+| constraints              | false     | List(LogicExpression)                            | An optional list of constraints respected when resolving variability.                                                                                       |
+| options                  | false     | Map(String, Boolean)                             | An optional map of variability options.                                                                                                                     |
+| type_specific_conditions | false     | String &#124; List(TypeSpecificDefaultCondition) | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
+| technology_rules         | false     | String &#124; List(TechnologyRule)               | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).  |
+| plugins                  | false     | PluginDefinition                                 | An optional definition of plugins.                                                                                                                          |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
 input `mode` and  two variability presets `dev` and `prod` are defined which either assigns `mode` the value `dev` or `prod`.
@@ -428,18 +428,18 @@ type_specific_conditions:
             semantic: true
 ```
 
-## Technology Assignment Rules
+## Technology Rules
 
 _Conditional types conflict with this feature!_
 
-Technology assignment rules can be defined to automatically select a deployment technology for a component.
-A technology assignment rule is defined as follows.
+Technology rules can be defined to automatically select a deployment technology for a component.
+A technology rule is defined as follows.
 
 | Keyname    | Mandatory | Type                                                   | Description                                                                                                     |
 |------------|-----------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| technology | true      | String                                                 | The name of the deployment technology.                                                                          |
 | component  | true      | String                                                 | The type of the component to which the technology can be assigned.                                              |
-| host       | false     | String                                                 | The type of the host of the component which the technology requires (deprecated).                               |
-| hosting    | false     | String &#124; List(String)                             | The type of the host of the component which the technology requires. If list, then refers to the hosting stack. |
+| hosting    | false     | List(String)                                           | The type of the host of the component which the technology requires. If list, then refers to the hosting stack. |
 | conditions | false     | VariabilityCondition &#124; List(VariabilityCondition) | The conditions under which a technology can be assigned to a component.                                         |
 | weight     | false     | Number                                                 | The weight which is minimized (default is 1).                                                                   |
 | assign     | false     | String                                                 | Configure the node type that is assigned (default: `${current_type}.${technology_name}.${host_type_prefix}`).   |                                                                                                                                             |                                                                                                                                                                               |
@@ -447,7 +447,7 @@ A technology assignment rule is defined as follows.
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 
 ```yaml linenums="1"
-technology_assignment_rules:
+technology_rules:
     terraform:
         - component: application
           hosting: terraform_host

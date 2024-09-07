@@ -1,10 +1,11 @@
-import {constructImplementationName, destructImplementationName, RuleData} from '#technologies/utils'
+import {TechnologyRule} from '#spec/technology-template'
+import {constructImplementationName, destructImplementationName} from '#technologies/utils'
 import {expect} from 'chai'
 
 describe('(con/de)struct implementation name', () => {
     it('shop.component~service.application#source.archive::terraform@gcp.appengine', function () {
         const type = 'shop.component'
-        const rule: RuleData = {
+        const rule: TechnologyRule = {
             component: 'service.application',
             artifact: 'source.archive',
             technology: 'terraform',
@@ -20,7 +21,7 @@ describe('(con/de)struct implementation name', () => {
 
     it('gcp.appengine~gcp.service::terraform', function () {
         const type = 'gcp.appengine'
-        const rule: RuleData = {
+        const rule: TechnologyRule = {
             component: 'gcp.service',
             artifact: undefined,
             technology: 'terraform',

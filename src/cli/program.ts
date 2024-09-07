@@ -1146,6 +1146,23 @@ utils
         })
     )
 
+utils
+    .command('scenarios')
+    .description('returns deployment scenarios')
+    .option('--component [string]', 'component')
+    .option('--artifact [string]', 'artifact')
+    .option('--no-artifact [boolean]')
+    .option('--technology [string]', 'technology')
+    .option('--hosting [string...]', 'hosting')
+    .option('--no-hosting [boolean]')
+    .option('--quality [number]')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.scenarios(options))
+        })
+    )
+
 /**
  * Query
  */

@@ -1,7 +1,7 @@
-import {NormativeTypes} from '#/normative'
 import * as assert from '#assert'
 import * as files from '#files'
 import {YAML_EXTENSIONS} from '#files'
+import {NormativeTypes} from '#normative'
 import std from '#std'
 import {GENERATION_MARK_REGEX, TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
 import path from 'path'

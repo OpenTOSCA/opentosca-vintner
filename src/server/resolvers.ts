@@ -677,6 +677,14 @@ resolvers.post(
     })
 )
 
+resolvers.post(
+    '/utils/scenarios',
+    hae.express(async (req, res, next) => {
+        const scenarios = await Controller.utils.scenarios(req.body)
+        res.json({scenarios})
+    })
+)
+
 /**
  * Query
  */
