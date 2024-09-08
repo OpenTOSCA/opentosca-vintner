@@ -15,7 +15,7 @@ const generator: ImplementationGenerator = {
     weight: 0,
     reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
     details:
-        '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner',
+        '"local_file" resource to create the installation script and "terraform_data" to execute the script using the "local-exec" provisioner',
 
     generate: (name, type) => {
         return {

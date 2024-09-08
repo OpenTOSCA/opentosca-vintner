@@ -49,15 +49,6 @@ const generator: ImplementationGenerator = {
                                     ...TerraformRequiredVersion(),
                                 },
                             ],
-                            provider: {
-                                local: [
-                                    {
-                                        endpoint: `${LOCALHOST}:{{ HOST.management_port }}`,
-                                        password: '{{ HOST.dbms_password }}',
-                                        username: 'root',
-                                    },
-                                ],
-                            },
                             resource: {
                                 local_file: {
                                     tmp_service: {
@@ -66,7 +57,7 @@ const generator: ImplementationGenerator = {
                                     },
                                 },
                                 terraform_data: {
-                                    docker: [
+                                    local: [
                                         {
                                             depends_on: 'local_file.tmp_service',
                                             provisioner: {

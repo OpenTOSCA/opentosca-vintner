@@ -1,11 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
-} from '#technologies/plugins/rules/utils/utils'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: we assume that dbms is exposed
 
@@ -13,10 +8,8 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'docker.engine', 'local.machine'],
-
-    // TODO: what is about the weight? SSH workaround not used anymore
-    weight: 0.5,
-    reason: 'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
+    weight: 1,
+    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {
@@ -24,10 +17,6 @@ const generator: ImplementationGenerator = {
             metadata: {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
-            },
-            properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
             },
             interfaces: {
                 ...TerraformStandardOperations(),

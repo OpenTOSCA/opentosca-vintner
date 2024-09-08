@@ -9,12 +9,7 @@ import {
 } from '#technologies/plugins/rules/generators/software-application/utils'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {
-    ApplicationDirectory,
-    MetadataGenerated,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
-} from '#technologies/plugins/rules/utils/utils'
+import {ApplicationDirectory, MetadataGenerated} from '#technologies/plugins/rules/utils/utils'
 import * as utils from '#utils'
 
 class Generator extends GeneratorAbstract {
@@ -31,8 +26,6 @@ class Generator extends GeneratorAbstract {
             derived_from: name,
             metadata: {...MetadataGenerated()},
             properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
                 ...ApplicationDirectory(),
             },
             interfaces: {

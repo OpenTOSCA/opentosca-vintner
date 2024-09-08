@@ -7,7 +7,7 @@ import mysqlDBMS from './mysql-dbms'
 import redisServer from './redis-server'
 import serviceApplication from './service-application'
 import softwareApplication from './software-application'
-import remoteMachine from './virtual-machine'
+import virtualMachine from './virtual-machine'
 
 export default [
     bucket,
@@ -19,5 +19,5 @@ export default [
     redisServer,
     serviceApplication,
     softwareApplication,
-    remoteMachine,
+    virtualMachine,
 ]

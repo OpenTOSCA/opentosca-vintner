@@ -7,7 +7,7 @@ import {
     AnsibleSoftwareApplicationStopTasks,
 } from '#technologies/plugins/rules/generators/software-application/utils'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
-import {AnsibleOrchestratorOperation, AnsibleWaitForSSHTask} from '#technologies/plugins/rules/utils/ansible'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {ApplicationDirectory, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 class Generator extends GeneratorAbstract {
@@ -42,9 +42,6 @@ class Generator extends GeneratorAbstract {
                                 playbook: {
                                     q: [
                                         {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        {
                                             name: 'install operational dependencies',
                                             'ansible.builtin.apt': {
                                                 name: 'unzip',
@@ -65,12 +62,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [
-                                        {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        ...AnsibleSoftwareApplicationConfigureTasks(),
-                                    ],
+                                    q: [...AnsibleSoftwareApplicationConfigureTasks()],
                                 },
                             },
                         },
@@ -80,12 +72,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [
-                                        {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        ...AnsibleSoftwareApplicationStartTasks(),
-                                    ],
+                                    q: [...AnsibleSoftwareApplicationStartTasks()],
                                 },
                             },
                         },
@@ -95,12 +82,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [
-                                        {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        ...AnsibleSoftwareApplicationStopTasks(),
-                                    ],
+                                    q: [...AnsibleSoftwareApplicationStopTasks()],
                                 },
                             },
                         },
@@ -110,12 +92,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [
-                                        {
-                                            ...AnsibleWaitForSSHTask(),
-                                        },
-                                        ...AnsibleSoftwareApplicationDeleteTasks(),
-                                    ],
+                                    q: [...AnsibleSoftwareApplicationDeleteTasks()],
                                 },
                             },
                         },

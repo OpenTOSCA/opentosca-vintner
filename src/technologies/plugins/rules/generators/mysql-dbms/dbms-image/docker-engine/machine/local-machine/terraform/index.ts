@@ -5,12 +5,7 @@ import {
     TerraformDockerProviderLocalConfiguration,
     TerraformStandardOperations,
 } from '#technologies/plugins/rules/utils/terraform'
-import {
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
-} from '#technologies/plugins/rules/utils/utils'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -27,10 +22,6 @@ const generator: ImplementationGenerator = {
             metadata: {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
-            },
-            properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
             },
             attributes: {
                 application_address: {

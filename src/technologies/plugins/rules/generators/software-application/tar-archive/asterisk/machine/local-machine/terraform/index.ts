@@ -12,8 +12,6 @@ import {
     ApplicationDirectory,
     JinjaWhenSourceArchiveFile,
     MetadataGenerated,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
     SourceArchiveFile,
 } from '#technologies/plugins/rules/utils/utils'
 
@@ -31,8 +29,6 @@ class Generator extends GeneratorAbstract {
             derived_from: name,
             metadata: {...MetadataGenerated()},
             properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
                 ...ApplicationDirectory(),
             },
             interfaces: {
