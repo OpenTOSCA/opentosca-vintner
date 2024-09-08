@@ -2,8 +2,8 @@
   component: bucket
   hosting:
       - gcp.cloudstorage
-  weight: 0.5
-  reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: bucket
   hosting:
@@ -15,8 +15,8 @@
   artifact: cache.image
   hosting:
       - gcp.memorystore
-  weight: 0.5
-  reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
 - technology: ansible
   component: bucket
   hosting:
@@ -174,8 +174,8 @@
       - mysql.dbms
       - docker.engine
       - local.machine
-  weight: 0.5
-  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+  weight: 1
+  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
@@ -372,7 +372,7 @@
       - local.machine
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
-  details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
+  details: '"local_file" resource to create the installation script and "terraform_data" to execute the script using the "local-exec" provisioner'
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
@@ -455,15 +455,15 @@
   artifact: cache.image
   hosting:
       - kubernetes.cluster
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
+  weight: 0.5
+  reason: Kubernetes is more specialized.
 - technology: terraform
   component: redis.server
   artifact: cache.image
   hosting:
       - kubernetes.cluster
-  weight: 1
-  reason: Terraform provides a declarative module.
+  weight: 0.5
+  reason: Kubernetes is more specialized.
 - technology: ansible
   component: service.application
   artifact: docker.image
