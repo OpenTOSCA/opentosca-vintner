@@ -1,4 +1,3 @@
-import localMachine from './local-machine'
-import remoteMachine from './remote-machine'
+import machine from './machine'
 
-export default [localMachine, remoteMachine]
+export default [machine]

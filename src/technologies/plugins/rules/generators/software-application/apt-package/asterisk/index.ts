@@ -1,5 +1,3 @@
-import remoteMachine from './remote-machine'
+import machine from './machine'
 
-// TODO: local machine
-
-export default [remoteMachine]
+export default [machine]
