@@ -70,6 +70,11 @@ artifact_types:
         description: expects image reference in "file"
         metadata:
             vintner_normative: 'true'
+    cache.image:
+        derived_from: artifact
+        description: expects image reference in "file"
+        metadata:
+            vintner_normative: 'true'
 interface_types:
     interface:
         derived_from: tosca.interfaces.Root
@@ -171,10 +176,16 @@ node_types:
         properties:
             machine_name:
                 type: string
+        attributes:
+            application_address:
+                type: string
+            management_address:
+                type: string
     local.machine:
         derived_from: machine
         metadata:
             vintner_normative: 'true'
+            vintner_abstract: 'true'
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -200,11 +211,6 @@ node_types:
                 type: string
             ssh_key_file:
                 type: string
-        attributes:
-            management_address:
-                type: string
-            application_address:
-                type: string
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -217,6 +223,10 @@ node_types:
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
     relational.database:
         derived_from: database
         metadata:
@@ -232,6 +242,34 @@ node_types:
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
+    cache:
+        derived_from: software.application
+    storage:
+        derived_from: node
+    block.storage:
+        derived_from: storage
+    object.storage:
+        derived_from: storage
+    file.storage:
+        derived_from: storage
+    bucket:
+        derived_from: object.storage
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            bucket_name:
+                type: string
+            bucket_dialect:
+                type: string
+        attributes:
+            bucket_endpoint:
+                type: string
+            bucket_token:
+                type: string
+        requirements:
+            - host:
+                  capability: tosca.capabilities.Compute
+                  relationship: tosca.relationships.HostedOn
     ingress:
         derived_from: node
         metadata:

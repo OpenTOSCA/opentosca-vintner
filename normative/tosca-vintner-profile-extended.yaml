@@ -91,6 +91,15 @@ node_types:
                 operations:
                     configure: npm ci
                     start: npm start
+    reactjs.service.application:
+        derived_from: service.application
+        metadata:
+            vintner_normative: 'true'
+            vintner_abstract: 'true'
+        properties:
+            application_language:
+                type: string
+                default: nodejs18
     python.runtime:
         derived_from: software.runtime
         metadata:
@@ -274,6 +283,30 @@ node_types:
             gcp_service:
                 type: string
                 default: cloudbuild.googleapis.com
+    gcp.kubernetesengine:
+        derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            gcp_service:
+                type: string
+                default: container.googleapis.com
+    gcp.cloudstorage:
+        derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            gcp_service:
+                type: string
+                default: storage.googleapis.com
+    gcp.memorystore:
+        derived_from: gcp.service
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            gcp_service:
+                type: string
+                default: redis.googleapis.com
     docker.engine:
         derived_from: container.runtime
         description: Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375
@@ -398,3 +431,19 @@ node_types:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+    minio.server:
+        derived_from: service.application
+        metadata:
+            vintner_normative: 'true'
+    redis.server:
+        derived_from: cache
+        metadata:
+            vintner_normative: 'true'
+        properties:
+            cache_name:
+                type: string
+            cache_port:
+                type: string
+            application_protocol:
+                type: string
+                default: redis

@@ -7783,19 +7783,19 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">            </span><span class="nt">vintner_abstract</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;true&#39;</span>
 <a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="nt">topology_template</span><span class="p">:</span>
 <a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="nt">variability</span><span class="p">:</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="nt">technology_assignment_rules</span><span class="p">:</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">            </span><span class="nt">ansible</span><span class="p">:</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">                  </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">first.artifact.type</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">                  </span><span class="nt">hosting</span><span class="p">:</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">                      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">                  </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">            </span><span class="nt">terraform</span><span class="p">:</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">                  </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second.artifact.type</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">                  </span><span class="nt">hosting</span><span class="p">:</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">                      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">                  </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="nt">technology_rules</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">              </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">first.artifact.type</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">              </span><span class="nt">hosting</span><span class="p">:</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">                  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">              </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">              </span><span class="nt">artifact</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second.artifact.type</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">              </span><span class="nt">hosting</span><span class="p">:</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">                  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">              </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
 <a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">        </span><span class="nt">application</span><span class="p">:</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
@@ -7870,7 +7870,7 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 5, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 8, 2024</span>
       
     
   </small>

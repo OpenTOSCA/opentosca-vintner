@@ -1520,6 +1520,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vintner-utils-scenarios" class="md-nav__link">
+    vintner utils scenarios
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8959,6 +8966,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vintner-utils-scenarios" class="md-nav__link">
+    vintner utils scenarios
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -15210,13 +15224,109 @@
 </tr>
 </tbody>
 </table>
+<h2 id="vintner-utils-scenarios">vintner utils scenarios<a class="headerlink" href="#vintner-utils-scenarios" title="Permanent link">&para;</a></h2>
+<p>returns deployment scenarios</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="94:5"><input checked="checked" id="__tabbed_94_1" name="__tabbed_94" type="radio" /><input id="__tabbed_94_2" name="__tabbed_94" type="radio" /><input id="__tabbed_94_3" name="__tabbed_94" type="radio" /><input id="__tabbed_94_4" name="__tabbed_94" type="radio" /><input id="__tabbed_94_5" name="__tabbed_94" type="radio" /><div class="tabbed-labels"><label for="__tabbed_94_1">CLI</label><label for="__tabbed_94_2">cURL</label><label for="__tabbed_94_3">JavaScript</label><label for="__tabbed_94_4">Python</label><label for="__tabbed_94_5">Kotlin</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-419-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-419-1" name="__codelineno-419-1"></a>vintner<span class="w"> </span>utils<span class="w"> </span>scenarios<span class="w"> </span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-420-1">1</a></span>
+<span class="normal"><a href="#__codelineno-420-2">2</a></span>
+<span class="normal"><a href="#__codelineno-420-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-420-1" name="__codelineno-420-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-420-2" name="__codelineno-420-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-420-3" name="__codelineno-420-3"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/utils/scenarios
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-421-1">1</a></span>
+<span class="normal"><a href="#__codelineno-421-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-421-1" name="__codelineno-421-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;axios&quot;</span><span class="p">)</span>
+<a id="__codelineno-421-2" name="__codelineno-421-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;/utils/scenarios&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-422-1">1</a></span>
+<span class="normal"><a href="#__codelineno-422-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-422-1" name="__codelineno-422-1"></a><span class="kn">import</span> <span class="nn">requests</span>
+<a id="__codelineno-422-2" name="__codelineno-422-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">&quot;/utils/scenarios&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-423-1">1</a></span>
+<span class="normal"><a href="#__codelineno-423-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-423-1" name="__codelineno-423-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
+<a id="__codelineno-423-2" name="__codelineno-423-2"></a><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;/utils/scenarios&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>component</td>
+<td>false</td>
+<td>string</td>
+<td>component</td>
+</tr>
+<tr>
+<td>artifact</td>
+<td>false</td>
+<td>string</td>
+<td>artifact</td>
+</tr>
+<tr>
+<td>no-artifact</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>technology</td>
+<td>false</td>
+<td>string</td>
+<td>technology</td>
+</tr>
+<tr>
+<td>hosting</td>
+<td>false</td>
+<td>string...</td>
+<td>hosting</td>
+</tr>
+<tr>
+<td>no-hosting</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+</tr>
+<tr>
+<td>quality</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>format</td>
+<td>false</td>
+<td>string</td>
+<td>output format (choices: ["yaml","json"], default: "yaml")</td>
+</tr>
+</tbody>
+</table>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 5, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 8, 2024</span>
       
     
   </small>

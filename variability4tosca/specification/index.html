@@ -1200,8 +1200,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#technology-assignment-rules" class="md-nav__link">
-    Technology Assignment Rules
+  <a href="#technology-rules" class="md-nav__link">
+    Technology Rules
   </a>
   
 </li>
@@ -8310,8 +8310,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#technology-assignment-rules" class="md-nav__link">
-    Technology Assignment Rules
+  <a href="#technology-rules" class="md-nav__link">
+    Technology Rules
   </a>
   
 </li>
@@ -8836,9 +8836,9 @@ Such a topology template is also called variable topology template.</p>
 <td>An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml")</td>
 </tr>
 <tr>
-<td>technology_assignment_rules</td>
+<td>technology_rules</td>
 <td>false</td>
-<td>String &#124; Map(String, TechnologyAssignmentRule)</td>
+<td>String &#124; List(TechnologyRule)</td>
 <td>An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).</td>
 </tr>
 <tr>
@@ -10176,10 +10176,10 @@ A type-specific default condition is defined as follows and is supported for nod
 <a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">host_presence</span><span class="p">:</span><span class="w"> </span><span class="nv">SELF</span><span class="p p-Indicator">}</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">            </span><span class="nt">semantic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="technology-assignment-rules">Technology Assignment Rules<a class="headerlink" href="#technology-assignment-rules" title="Permanent link">&para;</a></h2>
+<h2 id="technology-rules">Technology Rules<a class="headerlink" href="#technology-rules" title="Permanent link">&para;</a></h2>
 <p><em>Conditional types conflict with this feature!</em></p>
-<p>Technology assignment rules can be defined to automatically select a deployment technology for a component.
-A technology assignment rule is defined as follows.</p>
+<p>Technology rules can be defined to automatically select a deployment technology for a component.
+A technology rule is defined as follows.</p>
 <table>
 <thead>
 <tr>
@@ -10191,21 +10191,21 @@ A technology assignment rule is defined as follows.</p>
 </thead>
 <tbody>
 <tr>
+<td>technology</td>
+<td>true</td>
+<td>String</td>
+<td>The name of the deployment technology.</td>
+</tr>
+<tr>
 <td>component</td>
 <td>true</td>
 <td>String</td>
 <td>The type of the component to which the technology can be assigned.</td>
 </tr>
 <tr>
-<td>host</td>
-<td>false</td>
-<td>String</td>
-<td>The type of the host of the component which the technology requires (deprecated).</td>
-</tr>
-<tr>
 <td>hosting</td>
 <td>false</td>
-<td>String &#124; List(String)</td>
+<td>List(String)</td>
 <td>The type of the host of the component which the technology requires. If list, then refers to the hosting stack.</td>
 </tr>
 <tr>
@@ -10232,7 +10232,7 @@ A technology assignment rule is defined as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
 <span class="normal"><a href="#__codelineno-6-2">2</a></span>
 <span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nt">technology_assignment_rules</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="nt">technology_rules</span><span class="p">:</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">    </span><span class="nt">terraform</span><span class="p">:</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">          </span><span class="nt">hosting</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
@@ -12409,7 +12409,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 5, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 8, 2024</span>
       
     
   </small>

@@ -7768,7 +7768,11 @@
 <span class="normal"><a href="#__codelineno-0-56">56</a></span>
 <span class="normal"><a href="#__codelineno-0-57">57</a></span>
 <span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0_rc_3</span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0_rc_3</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">node_types</span><span class="p">:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">application</span><span class="p">:</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.nodes.Root</span>
@@ -7790,43 +7794,47 @@
 <a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">            </span><span class="nt">optimization_technologies_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">            </span><span class="nt">technology_pruning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">            </span><span class="nt">technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">        </span><span class="nt">technology_assignment_rules</span><span class="p">:</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">            </span><span class="nt">terraform</span><span class="p">:</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">        </span><span class="nt">application</span><span class="p">:</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">            </span><span class="nt">persistent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">                      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">                      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">database</span><span class="p">:</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="w">        </span><span class="nt">ansible_host</span><span class="p">:</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">        </span><span class="nt">terraform_host</span><span class="p">:</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">        </span><span class="nt">ansible_terraform_host</span><span class="p">:</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">        </span><span class="nt">database</span><span class="p">:</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="w">            </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="w">        </span><span class="nt">dbms</span><span class="p">:</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">            </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">        </span><span class="nt">technology_rules</span><span class="p">:</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">              </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">        </span><span class="nt">application</span><span class="p">:</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">            </span><span class="nt">persistent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">                      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">                      </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">database</span><span class="p">:</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">        </span><span class="nt">ansible_host</span><span class="p">:</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_host</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">        </span><span class="nt">terraform_host</span><span class="p">:</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform_host</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="w">        </span><span class="nt">ansible_terraform_host</span><span class="p">:</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_terraform_host</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="w">        </span><span class="nt">database</span><span class="p">:</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="w">            </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="w">        </span><span class="nt">dbms</span><span class="p">:</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dbms</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="w">            </span><span class="nt">technology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">terraform</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="expected-error">Expected Error<a class="headerlink" href="#expected-error" title="Permanent link">&para;</a></h2>
 <p>The following error is expected to be thrown, when resolving variability.</p>
@@ -7838,7 +7846,7 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 5, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 8, 2024</span>
       
     
   </small>
