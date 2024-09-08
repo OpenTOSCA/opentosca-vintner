@@ -90,6 +90,7 @@ This appendix contains the deployment technology rules.
 <% if (rule.artifact) {-%>
 | Artifact | <%= link(rule.artifact) %> |
 <% } -%>
+| Technology | <%= rule.technology %> |
 <% if (rule.hosting.length !== 0) {-%>
 | Hosting | <%= rule.hosting.map(link).join(" -> ") %> |
 <% } -%>
