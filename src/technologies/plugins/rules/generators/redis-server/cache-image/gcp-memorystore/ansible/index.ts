@@ -5,7 +5,7 @@ import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#techno
 // TODO: next: implement this, see https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_redis_instance_module.html
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'redis.server',
     technology: 'ansible',
     artifact: 'cache.image',
     hosting: ['gcp.memorystore'],
