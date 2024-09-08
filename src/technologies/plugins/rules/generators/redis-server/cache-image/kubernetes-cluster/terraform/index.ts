@@ -9,8 +9,8 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
-    weight: 1,
-    reason: 'Terraform provides a declarative module.',
+    weight: 0.5,
+    reason: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {
@@ -24,11 +24,7 @@ const generator: ImplementationGenerator = {
             },
 
             interfaces: {
-                ...TerraformStandardOperations({
-                    GOOGLE_APPLICATION_CREDENTIALS: {
-                        eval: '.::gcp_service_account_file',
-                    },
-                }),
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

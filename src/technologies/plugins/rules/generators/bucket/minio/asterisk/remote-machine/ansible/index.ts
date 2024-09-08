@@ -8,7 +8,6 @@ const generator: ImplementationGenerator = {
     component: 'bucket',
     technology: 'ansible',
     hosting: ['minio.server', '*', 'remote.machine'],
-    // TODO: which weight? most likely 1
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
 

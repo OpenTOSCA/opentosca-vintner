@@ -9,8 +9,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
-    weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
+    weight: 0.5,
+    reason: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {
