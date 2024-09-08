@@ -592,12 +592,6 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
         },
         properties: {
-            cache_name: {
-                type: 'string',
-            },
-            cache_port: {
-                type: 'string',
-            },
             application_protocol: {
                 type: 'string',
                 default: 'redis',

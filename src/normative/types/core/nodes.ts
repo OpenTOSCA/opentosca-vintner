@@ -228,6 +228,22 @@ const nodes: NodeTypeMap = {
     },
     cache: {
         derived_from: 'software.application',
+        properties: {
+            cache_name: {
+                type: 'string',
+            },
+            cache_port: {
+                type: 'string',
+            },
+        },
+        attributes: {
+            application_endpoint: {
+                type: 'string',
+            },
+            application_address: {
+                type: 'string',
+            },
+        },
     },
     storage: {
         derived_from: 'node',

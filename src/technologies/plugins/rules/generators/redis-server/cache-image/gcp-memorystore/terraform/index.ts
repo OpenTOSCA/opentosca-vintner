@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this, see https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/redis_instance
+// TODO: next: connectivity
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -40,10 +40,6 @@ const generator: ImplementationGenerator = {
                                                 source: 'hashicorp/google',
                                                 version: '5.39.1',
                                             },
-                                            mysql: {
-                                                source: 'petoju/mysql',
-                                                version: '3.0.48',
-                                            },
                                         },
                                     ],
                                 },
@@ -57,8 +53,43 @@ const generator: ImplementationGenerator = {
                                     },
                                 ],
                             },
-                            resource: {},
+                            resource: {
+                                // https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/redis_instance
+                                google_redis_instance: {
+                                    cache: [
+                                        {
+                                            name: '{{ SELF.cache_name }}',
+                                            memory_size_gb: 1,
+                                            lifecycle: {
+                                                prevent_destroy: true,
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                            output: {
+                                application_endpoint: [
+                                    {
+                                        value: '${google_redis_instance.cache.host}:${google_redis_instance.cache.port}',
+                                    },
+                                ],
+                                application_address: [
+                                    {
+                                        value: '${google_redis_instance.cache.host}',
+                                    },
+                                ],
+                                application_port: [
+                                    {
+                                        value: '${google_redis_instance.cache.port}',
+                                    },
+                                ],
+                            },
                         },
+                    },
+                    outputs: {
+                        application_endpoint: 'application_endpoint',
+                        application_address: 'application_address',
+                        application_port: 'application_port',
                     },
                 },
             },

@@ -2,8 +2,6 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this, see https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
-
 const generator: ImplementationGenerator = {
     component: 'bucket',
     technology: 'terraform',
@@ -21,7 +19,22 @@ const generator: ImplementationGenerator = {
             properties: {
                 ...GCPProviderCredentials(),
             },
-
+            attributes: {
+                // TODO: connectivity
+                bucket_endpoint: {
+                    type: 'string',
+                    default: '{{ SELF.bucket_name }}',
+                },
+                // TODO: auth
+                bucket_token: {
+                    type: 'string',
+                    default: '',
+                },
+                bucket_dialect: {
+                    type: 'string',
+                    default: 'gcp',
+                },
+            },
             interfaces: {
                 ...TerraformStandardOperations({
                     GOOGLE_APPLICATION_CREDENTIALS: {
@@ -39,10 +52,6 @@ const generator: ImplementationGenerator = {
                                                 source: 'hashicorp/google',
                                                 version: '5.39.1',
                                             },
-                                            mysql: {
-                                                source: 'petoju/mysql',
-                                                version: '3.0.48',
-                                            },
                                         },
                                     ],
                                 },
@@ -56,7 +65,18 @@ const generator: ImplementationGenerator = {
                                     },
                                 ],
                             },
-                            resource: {},
+                            resource: {
+                                // https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
+                                google_storage_bucket: {
+                                    bucket: [
+                                        {
+                                            name: '{{ SELF.bucket_name }}',
+                                            location: 'EU',
+                                            force_destroy: true,
+                                        },
+                                    ],
+                                },
+                            },
                         },
                     },
                 },

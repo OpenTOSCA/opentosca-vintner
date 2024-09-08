@@ -10,6 +10,7 @@ import {
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
 import {
     ApplicationProperties,
+    LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineHost,
@@ -51,7 +52,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
             },
             interfaces: {

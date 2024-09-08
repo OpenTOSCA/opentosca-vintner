@@ -2,8 +2,6 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this, see https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_storage_object_module.html
-
 const generator: ImplementationGenerator = {
     component: 'bucket',
     technology: 'ansible',
@@ -21,6 +19,22 @@ const generator: ImplementationGenerator = {
             properties: {
                 ...GCPProviderCredentials(),
             },
+            attributes: {
+                // TODO: connectivity
+                bucket_endpoint: {
+                    type: 'string',
+                    default: '{{ SELF.bucket_name }}',
+                },
+                // TODO: auth
+                bucket_token: {
+                    type: 'string',
+                    default: '',
+                },
+                bucket_dialect: {
+                    type: 'string',
+                    default: 'gcp',
+                },
+            },
             interfaces: {
                 Standard: {
                     operations: {
@@ -36,7 +50,17 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        // https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_storage_bucket_module.html#ansible-collections-google-cloud-gcp-storage-bucket-module
+                                        {
+                                            name: 'create bucket',
+                                            'google.cloud.gcp_storage_bucket': {
+                                                name: '{{ SELF.bucket_name }}',
+                                                location: 'EU',
+                                                project: '{{ SELF.gcp_project }}',
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },
@@ -52,7 +76,16 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            name: 'delete bucket',
+                                            'google.cloud.gcp_storage_bucket': {
+                                                name: '{{ SELF.bucket_name }}',
+                                                project: '{{ SELF.gcp_project }}',
+                                                state: 'absent',
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },

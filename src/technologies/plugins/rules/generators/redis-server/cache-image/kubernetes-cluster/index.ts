@@ -1,6 +1,5 @@
 import ansible from './ansible'
+import kubernetes from './kubernetes'
 import terraform from './terraform'
 
-// TODO: kubernetes
-
-export default [ansible, terraform]
+export default [ansible, kubernetes, terraform]
