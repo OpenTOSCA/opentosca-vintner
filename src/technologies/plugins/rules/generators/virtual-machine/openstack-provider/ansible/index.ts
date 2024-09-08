@@ -1,12 +1,12 @@
 import * as files from '#files'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {
-    AnsibleOrchestratorOperation,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackProviderCredentials,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',

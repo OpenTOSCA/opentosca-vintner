@@ -83,6 +83,13 @@ const artifacts: ArtifactTypeMap = {
             ...MetadataNormative(),
         },
     },
+    'cache.image': {
+        derived_from: 'artifact',
+        description: 'expects image reference in "file"',
+        metadata: {
+            ...MetadataNormative(),
+        },
+    },
 }
 
 export default artifacts

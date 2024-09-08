@@ -1,13 +1,13 @@
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
+    ApplicationProperties,
     GCPProviderCredentials,
     JinjaSecureApplicationProtocol,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: application port is now 443 (also applies to other GCP deployments)
 
@@ -91,7 +91,9 @@ const generator: ImplementationGenerator = {
                                                                     container_port: '{{ SELF.application_port }}',
                                                                 },
                                                             ],
-                                                            env: mapProperties(type, {ignore: [PROPERTIES.PORT]}),
+                                                            env: ApplicationProperties(type, {
+                                                                ignore: [PROPERTIES.PORT],
+                                                            }).toList(),
                                                         },
                                                     ],
                                                 },

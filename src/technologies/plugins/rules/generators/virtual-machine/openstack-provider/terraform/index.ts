@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {TerraformRequiredVersion, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackProviderCredentials,
-    TerraformStandardOperations,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'virtual.machine',
@@ -46,7 +46,7 @@ const generator: ImplementationGenerator = {
                                             },
                                         },
                                     ],
-                                    required_version: '>= 0.14.0',
+                                    ...TerraformRequiredVersion(),
                                 },
                             ],
                             provider: {

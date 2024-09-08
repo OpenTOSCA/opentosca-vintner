@@ -1,10 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {
-    AnsibleOrchestratorOperation,
-    GCPProviderCredentials,
-    MetadataGenerated,
-    MetadataUnfurl,
-} from '#technologies/plugins/rules/utils'
+import {AnsibleGCPCredentialsEnvironment, AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
+import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'gcp.service',
@@ -31,10 +27,7 @@ const generator: ImplementationGenerator = {
                             implementation: {
                                 ...AnsibleOrchestratorOperation(),
                                 environment: {
-                                    GCP_SERVICE_ACCOUNT_FILE: {
-                                        eval: '.::gcp_service_account_file',
-                                    },
-                                    GCP_AUTH_KIND: 'serviceaccount',
+                                    ...AnsibleGCPCredentialsEnvironment(),
                                 },
                             },
                             inputs: {

@@ -228,3 +228,7 @@ export function indent(value: string, spaces = 4) {
 export function trim(value: string): string {
     return value.trim() + `\n`
 }
+
+export function concat(values: string[]) {
+    return values.join(`\n`)
+}

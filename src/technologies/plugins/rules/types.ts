@@ -47,7 +47,9 @@ export abstract class GeneratorAbstract implements ImplementationGenerator {
     abstract hosting: string[]
     abstract weight: number
     abstract reason: string
-    abstract details: string
+
+    // TODO: make this mandatory
+    abstract details?: string
 
     abstract generate(name: string, type: NodeType): NodeType
 }

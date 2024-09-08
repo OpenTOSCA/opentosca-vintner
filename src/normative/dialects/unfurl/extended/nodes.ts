@@ -103,6 +103,20 @@ const nodes: RecursivePartial<NodeTypeMap> = {
             },
         },
     },
+    'redis.server': {
+        properties: {
+            application_name: {
+                default: {
+                    eval: '.::cache_name',
+                },
+            },
+            application_port: {
+                default: {
+                    eval: '.::cache_port',
+                },
+            },
+        },
+    },
 }
 
 export default nodes

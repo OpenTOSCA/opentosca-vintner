@@ -1,14 +1,14 @@
 import * as files from '#files'
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
+import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {
-    AnsibleOrchestratorOperation,
+    ApplicationProperties,
     GCPProviderCredentials,
     JinjaSecureApplicationProtocol,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -88,9 +88,9 @@ const generator: ImplementationGenerator = {
                                                                                     '{{ SELF.application_port }}',
                                                                             },
                                                                         ],
-                                                                        env: mapProperties(type, {
+                                                                        env: ApplicationProperties(type, {
                                                                             ignore: [PROPERTIES.PORT],
-                                                                        }),
+                                                                        }).toList(),
                                                                     },
                                                                 ],
                                                             },

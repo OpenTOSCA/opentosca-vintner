@@ -1,16 +1,16 @@
 import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {ImplementationGenerator, PROPERTIES} from '#technologies/plugins/rules/types'
+import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
+    ApplicationProperties,
     GCPProviderCredentials,
     JinjaSecureApplicationProtocol,
     MetadataGenerated,
     MetadataUnfurl,
     SecureApplicationProtocolPropertyDefinition,
-    SelfOperation,
+    SelfManagementOperation,
     SourceArchiveFile,
-    TerraformStandardOperations,
-    mapProperties,
-} from '#technologies/plugins/rules/utils'
+} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: application port is now 443
 
@@ -96,13 +96,14 @@ const generator: ImplementationGenerator = {
                                             ],
                                             entrypoint: [
                                                 {
-                                                    shell: `{{ ${SelfOperation(MANAGEMENT_OPERATIONS.START)} }}`,
+                                                    shell: `{{ ${SelfManagementOperation(
+                                                        MANAGEMENT_OPERATIONS.START
+                                                    )} }}`,
                                                 },
                                             ],
-                                            env_variables: mapProperties(type, {
-                                                format: 'map',
+                                            env_variables: ApplicationProperties(type, {
                                                 ignore: [PROPERTIES.PORT],
-                                            }),
+                                            }).toMap(),
                                             runtime: '{{ SELF.application_language }}',
                                             service: '{{ SELF.application_name }}',
                                             service_account: '${google_service_account.custom_service_account.email}',
