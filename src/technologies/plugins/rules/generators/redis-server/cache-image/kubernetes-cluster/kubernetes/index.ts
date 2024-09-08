@@ -10,9 +10,9 @@ import {
 // TODO: next: implement this
 
 const generator: ImplementationGenerator = {
-    component: 'service.application',
+    component: 'redis.server',
     technology: 'kubernetes',
-    artifact: 'docker.image',
+    artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
     reason: 'Kubernetes is the underlying technology.',

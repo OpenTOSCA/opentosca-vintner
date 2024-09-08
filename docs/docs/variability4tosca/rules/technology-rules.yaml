@@ -457,6 +457,14 @@
       - kubernetes.cluster
   weight: 0.5
   reason: Kubernetes is more specialized.
+- technology: kubernetes
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - kubernetes.cluster
+  weight: 1
+  reason: Kubernetes is the underlying technology.
+  details: Kubernetes manifest generated and applied
 - technology: terraform
   component: redis.server
   artifact: cache.image
