@@ -1,10 +1,10 @@
 import {NodeType} from '#spec/node-type'
 import {
-    AnsibleSoftwareApplicationSourceArchiveConfigure,
+    AnsibleSoftwareApplicationConfigureTasks,
+    AnsibleSoftwareApplicationDeleteTasks,
     AnsibleSoftwareApplicationSourceArchiveCreate,
-    AnsibleSoftwareApplicationSourceArchiveDelete,
-    AnsibleSoftwareApplicationSourceArchiveStart,
-    AnsibleSoftwareApplicationSourceArchiveStop,
+    AnsibleSoftwareApplicationStartTasks,
+    AnsibleSoftwareApplicationStopTasks,
 } from '#technologies/plugins/rules/generators/software-application/utils'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation, AnsibleWaitForSSHTask} from '#technologies/plugins/rules/utils/ansible'
@@ -69,7 +69,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveConfigure(),
+                                        ...AnsibleSoftwareApplicationConfigureTasks(),
                                     ],
                                 },
                             },
@@ -84,7 +84,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveStart(),
+                                        ...AnsibleSoftwareApplicationStartTasks(),
                                     ],
                                 },
                             },
@@ -99,7 +99,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveStop(),
+                                        ...AnsibleSoftwareApplicationStopTasks(),
                                     ],
                                 },
                             },
@@ -114,7 +114,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveDelete(),
+                                        ...AnsibleSoftwareApplicationDeleteTasks(),
                                     ],
                                 },
                             },

@@ -326,6 +326,22 @@
   component: mysql.dbms
   artifact: dbms.image
   hosting:
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+  details: '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks'
+- technology: terraform
+  component: mysql.dbms
+  artifact: dbms.image
+  hosting:
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
+- technology: ansible
+  component: mysql.dbms
+  artifact: dbms.image
+  hosting:
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
@@ -586,6 +602,24 @@
   details: '"file" provisioner to upload scripts and "remote-exec" to execute scripts'
 - technology: ansible
   component: software.application
+  artifact: apt.package
+  hosting:
+      - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+  details: '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: apt.package
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
+- technology: ansible
+  component: software.application
   artifact: tar.archive
   hosting:
       - '*'
@@ -604,6 +638,24 @@
   details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
 - technology: ansible
   component: software.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0.5
+  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+  details: '"ansible.builtin.apt", "ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
+- technology: ansible
+  component: software.application
   artifact: zip.archive
   hosting:
       - '*'
@@ -620,6 +672,24 @@
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
+- technology: ansible
+  component: software.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0.5
+  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+  details: '"ansible.builtin.apt", "ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
 - technology: ansible
   component: virtual.machine
   artifact: machine.image

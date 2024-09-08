@@ -1,16 +1,14 @@
-import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
 import {
-    AnsibleSoftwareApplicationSourceArchiveConfigure,
-    AnsibleSoftwareApplicationSourceArchiveDelete,
-    AnsibleSoftwareApplicationSourceArchiveStart,
-    AnsibleSoftwareApplicationSourceArchiveStop,
+    AnsibleSoftwareApplicationAptPackageCreateTasks,
+    AnsibleSoftwareApplicationAptPackageDeleteTask,
+    AnsibleSoftwareApplicationConfigureTasks,
+    AnsibleSoftwareApplicationDeleteTasks,
+    AnsibleSoftwareApplicationStartTasks,
+    AnsibleSoftwareApplicationStopTasks,
 } from '#technologies/plugins/rules/generators/software-application/utils'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {
-    AnsibleCallManagementOperationTask,
-    AnsibleCopyManagementOperationTask,
-    AnsibleCreateApplicationDirectoryTask,
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
     AnsibleWaitForSSHTask,
@@ -56,66 +54,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        {
-                                            name: 'run setup script',
-                                            'ansible.builtin.shell':
-                                                'curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -',
-                                            args: {
-                                                executable: '/bin/bash',
-                                            },
-                                            when: '".artifacts::apt_package::script" | eval != ""',
-                                        },
-                                        {
-                                            name: 'add apt key',
-                                            'ansible.builtin.apt_key': {
-                                                url: '{{ ".artifacts::apt_package::key" | eval }}',
-                                                keyring:
-                                                    '/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::apt_package::key" | eval != ""',
-                                        },
-                                        {
-                                            name: 'add apt repository',
-                                            'ansible.builtin.apt_repository': {
-                                                repo: 'deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}',
-                                                filename: '{{ ".artifacts::apt_package::repository" | eval }}',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::apt_package::source" | eval != ""',
-                                        },
-                                        {
-                                            name: 'update apt cache',
-                                            'ansible.builtin.apt': {
-                                                update_cache: 'yes',
-                                            },
-                                        },
-                                        {
-                                            name: 'install dependencies',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}',
-                                                state: 'present',
-                                            },
-                                            when: '".artifacts::apt_package::dependencies" | eval != ""',
-                                        },
-                                        {
-                                            name: 'install package',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::apt_package::file" | eval }}',
-                                                state: 'present',
-                                            },
-                                            environment:
-                                                '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}',
-                                        },
-                                        {
-                                            ...AnsibleCreateApplicationDirectoryTask(),
-                                        },
-                                        {
-                                            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
-                                        },
-                                        {
-                                            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
-                                        },
+                                        ...AnsibleSoftwareApplicationAptPackageCreateTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -131,7 +70,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveConfigure(),
+                                        ...AnsibleSoftwareApplicationConfigureTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -147,7 +86,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveStart(),
+                                        ...AnsibleSoftwareApplicationStartTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -163,7 +102,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveStop(),
+                                        ...AnsibleSoftwareApplicationStopTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -179,13 +118,9 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveDelete(),
+                                        ...AnsibleSoftwareApplicationDeleteTasks(),
                                         {
-                                            name: 'uninstall package',
-                                            'ansible.builtin.apt': {
-                                                name: '{{ ".artifacts::apt_package::file" | eval }}',
-                                                state: 'absent',
-                                            },
+                                            ...AnsibleSoftwareApplicationAptPackageDeleteTask(),
                                         },
                                     ],
                                 },

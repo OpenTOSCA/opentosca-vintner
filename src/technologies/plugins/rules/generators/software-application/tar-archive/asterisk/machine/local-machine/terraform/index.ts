@@ -24,7 +24,7 @@ class Generator extends GeneratorAbstract {
     hosting = ['*', 'local.machine']
     weight = 0
     reason = 'Ansible is more specialized. Also using provisioners is a "last resort".'
-    details = '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
+    details = '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
 
     generate(name: string, type: NodeType) {
         return {

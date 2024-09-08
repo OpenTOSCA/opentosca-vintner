@@ -1,8 +1,9 @@
 import {NodeType} from '#spec/node-type'
 import {
+    BashSoftwareApplicationAptPackageCreate,
+    BashSoftwareApplicationAptPackageDelete,
     BashSoftwareApplicationConfigure,
     BashSoftwareApplicationDelete,
-    BashSoftwareApplicationSourceArchiveCreate,
     BashSoftwareApplicationStart,
     BashSoftwareApplicationStop,
 } from '#technologies/plugins/rules/generators/software-application/utils'
@@ -10,17 +11,16 @@ import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     ApplicationDirectory,
-    JinjaWhenSourceArchiveFile,
     MetadataGenerated,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
-    SourceArchiveFile,
 } from '#technologies/plugins/rules/utils/utils'
+import * as utils from '#utils'
 
 class Generator extends GeneratorAbstract {
     component = 'software.application'
     technology = 'terraform'
-    artifact = 'zip.archive'
+    artifact = 'apt.package'
     hosting = ['*', 'local.machine']
     weight = 0
     reason = 'Ansible is more specialized. Also using provisioners is a "last resort".'
@@ -42,13 +42,8 @@ class Generator extends GeneratorAbstract {
                         main: {
                             resource: {
                                 local_file: {
-                                    tmp_artifact: {
-                                        source: SourceArchiveFile(this.artifact),
-                                        filename: `/tmp/artifact-${name}`,
-                                        count: `{{ (${JinjaWhenSourceArchiveFile(this.artifact)}) | ternary(1, 0) }}`,
-                                    },
                                     tmp_create: {
-                                        content: BashSoftwareApplicationSourceArchiveCreate({
+                                        content: BashSoftwareApplicationAptPackageCreate({
                                             name,
                                             type,
                                             artifact: this.artifact,
@@ -60,30 +55,33 @@ class Generator extends GeneratorAbstract {
                                         filename: `/tmp/configure-${name}.sh`,
                                     },
                                     tmp_start: {
-                                        content: BashSoftwareApplicationStart(),
+                                        content: BashSoftwareApplicationStart({assert: false}),
                                         filename: `/tmp/start-${name}.sh`,
                                     },
                                     tmp_stop: {
-                                        content: BashSoftwareApplicationStop(),
+                                        content: BashSoftwareApplicationStop({assert: false}),
                                         filename: `/tmp/stop-${name}.sh`,
                                     },
                                     tmp_delete: {
-                                        content: BashSoftwareApplicationDelete(),
+                                        content: utils.concat([
+                                            BashSoftwareApplicationDelete(),
+                                            BashSoftwareApplicationAptPackageDelete(),
+                                        ]),
                                         filename: `/tmp/delete-${name}.sh`,
                                     },
                                 },
                                 terraform_data: {
                                     vm: [
                                         {
-                                            depends_on: [
-                                                'local_file.tmp_artifact',
-                                                'local_file.tmp_create',
-                                                'local_file.tmp_configure',
-                                                'local_file.tmp_start',
-                                                'local_file.tmp_stop',
-                                                'local_file.tmp_delete',
-                                            ],
                                             provisioner: {
+                                                depends_on: [
+                                                    'local_file.tmp_artifact',
+                                                    'local_file.tmp_create',
+                                                    'local_file.tmp_configure',
+                                                    'local_file.tmp_start',
+                                                    'local_file.tmp_stop',
+                                                    'local_file.tmp_delete',
+                                                ],
                                                 'local-exec': [
                                                     {
                                                         inline: [

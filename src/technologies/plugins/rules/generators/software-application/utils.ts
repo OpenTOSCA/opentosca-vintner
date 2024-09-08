@@ -51,7 +51,7 @@ export function AnsibleSoftwareApplicationSourceArchiveCreate(options: {artifact
     ]
 }
 
-export function AnsibleSoftwareApplicationSourceArchiveConfigure() {
+export function AnsibleSoftwareApplicationConfigureTasks() {
     return [
         {
             ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CONFIGURE),
@@ -62,7 +62,7 @@ export function AnsibleSoftwareApplicationSourceArchiveConfigure() {
     ]
 }
 
-export function AnsibleSoftwareApplicationSourceArchiveStart() {
+export function AnsibleSoftwareApplicationStartTasks() {
     return [
         {
             ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.START),
@@ -76,7 +76,7 @@ export function AnsibleSoftwareApplicationSourceArchiveStart() {
     ]
 }
 
-export function AnsibleSoftwareApplicationSourceArchiveStop() {
+export function AnsibleSoftwareApplicationStopTasks() {
     return [
         {
             ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.STOP),
@@ -90,7 +90,7 @@ export function AnsibleSoftwareApplicationSourceArchiveStop() {
     ]
 }
 
-export function AnsibleSoftwareApplicationSourceArchiveDelete() {
+export function AnsibleSoftwareApplicationDeleteTasks() {
     return [
         {
             ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.DELETE),
@@ -192,8 +192,83 @@ ${BashDeleteApplicationDirectory()}
 `)
 }
 
-export function BashSoftwareApplicationAptPackageCreate() {
+export function AnsibleSoftwareApplicationAptPackageCreateTasks() {
+    return [
+        {
+            name: 'run setup script',
+            'ansible.builtin.shell': 'curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -',
+            args: {
+                executable: '/bin/bash',
+            },
+            when: '".artifacts::apt_package::script" | eval != ""',
+        },
+        {
+            name: 'add apt key',
+            'ansible.builtin.apt_key': {
+                url: '{{ ".artifacts::apt_package::key" | eval }}',
+                keyring: '/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg',
+                state: 'present',
+            },
+            when: '".artifacts::apt_package::key" | eval != ""',
+        },
+        {
+            name: 'add apt repository',
+            'ansible.builtin.apt_repository': {
+                repo: 'deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}',
+                filename: '{{ ".artifacts::apt_package::repository" | eval }}',
+                state: 'present',
+            },
+            when: '".artifacts::apt_package::source" | eval != ""',
+        },
+        {
+            name: 'update apt cache',
+            'ansible.builtin.apt': {
+                update_cache: 'yes',
+            },
+        },
+        {
+            name: 'install dependencies',
+            'ansible.builtin.apt': {
+                name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}',
+                state: 'present',
+            },
+            when: '".artifacts::apt_package::dependencies" | eval != ""',
+        },
+        {
+            name: 'install package',
+            'ansible.builtin.apt': {
+                name: '{{ ".artifacts::apt_package::file" | eval }}',
+                state: 'present',
+            },
+            environment:
+                '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}',
+        },
+        {
+            ...AnsibleCreateApplicationDirectoryTask(),
+        },
+        {
+            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+        },
+        {
+            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.CREATE),
+        },
+    ]
+}
+
+export function AnsibleSoftwareApplicationAptPackageDeleteTask() {
+    return {
+        name: 'uninstall package',
+        'ansible.builtin.apt': {
+            name: '{{ ".artifacts::apt_package::file" | eval }}',
+            state: 'absent',
+        },
+    }
+}
+
+export function BashSoftwareApplicationAptPackageCreate(options: {name: string; type: NodeType; artifact: string}) {
     return utils.trim(`
+${BASH_HEADER}
+
 # Run setup script 
 if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
     curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
@@ -219,6 +294,21 @@ fi
 
 # Install package
 {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
+
+# Create application directory
+${BashCreateApplicationDirectory()}
+
+# Create application environment
+${BashCreateApplicationEnvironment(options.type)}
+
+# Create vintner directory
+${BashCreateVintnerDirectory()}
+
+# Copy operation
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.CREATE)}
+
+# Execute operation
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.CREATE)}
 `)
 }
 

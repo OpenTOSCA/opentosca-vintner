@@ -4,7 +4,6 @@ import {
     BashSoftwareApplicationAptPackageDelete,
     BashSoftwareApplicationConfigure,
     BashSoftwareApplicationDelete,
-    BashSoftwareApplicationSourceArchiveCreate,
     BashSoftwareApplicationStart,
     BashSoftwareApplicationStop,
 } from '#technologies/plugins/rules/generators/software-application/utils'
@@ -53,14 +52,11 @@ class Generator extends GeneratorAbstract {
                                             provisioner: {
                                                 file: [
                                                     {
-                                                        content: utils.concat([
-                                                            BashSoftwareApplicationSourceArchiveCreate({
-                                                                name,
-                                                                type,
-                                                                artifact: this.artifact,
-                                                            }),
-                                                            BashSoftwareApplicationAptPackageCreate(),
-                                                        ]),
+                                                        content: BashSoftwareApplicationAptPackageCreate({
+                                                            name,
+                                                            type,
+                                                            artifact: this.artifact,
+                                                        }),
                                                         destination: `/tmp/create-${name}.sh`,
                                                     },
                                                     {
