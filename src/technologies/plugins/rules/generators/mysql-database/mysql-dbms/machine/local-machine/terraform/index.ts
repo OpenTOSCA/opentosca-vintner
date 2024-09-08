@@ -1,29 +1,23 @@
-import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {NodeType} from '#spec/node-type'
+import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {
-    MetadataGenerated,
-    MetadataUnfurl,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
-} from '#technologies/plugins/rules/utils/utils'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-const generator: ImplementationGenerator = {
-    component: 'mysql.database',
-    technology: 'terraform',
-    hosting: ['mysql.dbms', 'remote.machine'],
-    weight: 0.5,
-    reason: 'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
+class Generator extends GeneratorAbstract {
+    component = 'mysql.database'
+    technology = 'terraform'
+    artifact = undefined
+    hosting = ['mysql.dbms', 'local.machine']
+    weight = 1
+    reason = 'Terraform provides a declarative module.'
+    details = undefined
 
-    generate: (name, type) => {
+    generate(name: string, type: NodeType) {
         return {
             derived_from: name,
             metadata: {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
-            },
-            properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
             },
             interfaces: {
                 ...TerraformStandardOperations(),
@@ -38,46 +32,16 @@ const generator: ImplementationGenerator = {
                                                 source: 'petoju/mysql',
                                                 version: '3.0.48',
                                             },
-                                            ssh: {
-                                                source: 'AndrewChubatiuk/ssh',
-                                                version: '0.2.3',
-                                            },
                                         },
                                     ],
                                 },
                             ],
-                            data: {
-                                ssh_tunnel: {
-                                    mysql: [
-                                        {
-                                            remote: {
-                                                host: '{{ HOST.application_address }}',
-                                                port: '{{ HOST.application_port }}',
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
                             provider: {
                                 mysql: [
                                     {
-                                        endpoint: '${data.ssh_tunnel.mysql.local.address}',
+                                        endpoint: '{{ HOST.application_address }}:{{ HOST.application_port }}',
                                         password: '{{ HOST.dbms_password }}',
                                         username: 'root',
-                                    },
-                                ],
-                                ssh: [
-                                    {
-                                        auth: {
-                                            private_key: {
-                                                content: '${file(pathexpand("{{ SELF.os_ssh_key_file }}"))}',
-                                            },
-                                        },
-                                        server: {
-                                            host: '{{ HOST.management_address }}',
-                                            port: 22,
-                                        },
-                                        user: '{{ SELF.os_ssh_user }}',
                                     },
                                 ],
                             },
@@ -115,7 +79,7 @@ const generator: ImplementationGenerator = {
                 },
             },
         }
-    },
+    }
 }
 
-export default generator
+export default new Generator()

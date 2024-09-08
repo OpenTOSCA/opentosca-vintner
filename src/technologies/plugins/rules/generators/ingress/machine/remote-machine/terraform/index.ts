@@ -1,33 +1,12 @@
+import {BashIngressInstallationScript} from '#technologies/plugins/rules/generators/ingress/machine/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformSSHConnection, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
-    BASH_HEADER,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
     OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils/utils'
-
-const script = `
-${BASH_HEADER}
-
-# Install caddy
-apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
-curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | tee /etc/apt/sources.list.d/caddy-stable.list
-apt-get update
-apt-get install caddy -y
-
-# Configure caddy
-cat <<EOF > /etc/caddy/Caddyfile
-:80 {
-        reverse_proxy localhost:{{ SELF.application_port }}
-}
-EOF
-
-# Restart caddy
-systemctl reload caddy
-`
 
 const generator: ImplementationGenerator = {
     component: 'ingress',
@@ -71,7 +50,7 @@ const generator: ImplementationGenerator = {
                                             provisioner: {
                                                 file: [
                                                     {
-                                                        content: script,
+                                                        content: BashIngressInstallationScript,
                                                         destination: '/tmp/install-ingress.sh',
                                                     },
                                                 ],

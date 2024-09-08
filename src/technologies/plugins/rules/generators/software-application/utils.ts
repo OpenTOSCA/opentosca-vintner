@@ -25,7 +25,7 @@ import {
 } from '#technologies/plugins/rules/utils/utils'
 import * as utils from '#utils'
 
-export function AnsibleSoftwareApplicationSourceArchiveCreate(options: {artifact: string; type: NodeType}) {
+export function AnsibleSoftwareApplicationSourceArchiveCreateTasks(options: {artifact: string; type: NodeType}) {
     return [
         {
             ...AnsibleCreateApplicationDirectoryTask(),

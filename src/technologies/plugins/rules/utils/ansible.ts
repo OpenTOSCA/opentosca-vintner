@@ -162,6 +162,59 @@ export function AnsibleCreateApplicationSystemdUnit() {
     }
 }
 
+export function AnsibleEnableApplicationSystemdUnit() {
+    return {
+        name: 'enable service',
+        'ansible.builtin.systemd': {
+            name: '{{ SELF.application_name }}',
+            state: 'stopped',
+            enabled: 'yes',
+            daemon_reload: 'yes',
+        },
+    }
+}
+
+export function AnsibleStartApplicationSystemdUnit() {
+    return {
+        name: 'start service',
+        'ansible.builtin.systemd': {
+            name: '{{ SELF.application_name }}',
+            state: 'started',
+            enabled: 'yes',
+            daemon_reload: 'yes',
+        },
+    }
+}
+
+export function AnsibleStopApplicationSystemdUnit() {
+    return {
+        name: 'stop service',
+        'ansible.builtin.systemd': {
+            name: '{{ SELF.application_name }}',
+            state: 'stopped',
+        },
+    }
+}
+
+export function AnsibleDeleteApplicationSystemdUnit() {
+    return {
+        name: 'delete systemd service',
+        'ansible.builtin.file': {
+            path: '/etc/systemd/system/{{ SELF.application_name }}.service',
+            state: 'absent',
+        },
+    }
+}
+
+export function AnsibleSystemdDaemonReload() {
+    return {
+        name: 'reload daemon',
+        'ansible.builtin.systemd': {
+            daemon_reload: true,
+        },
+    }
+}
+
 export function AnsibleCreateApplicationEnvironment(type: NodeType) {
     return {
         name: 'create .env file',

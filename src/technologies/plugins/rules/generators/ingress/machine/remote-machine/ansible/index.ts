@@ -1,3 +1,4 @@
+import {AnsibleIngressCreateTasks} from '#technologies/plugins/rules/generators/ingress/machine/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostOperation,
@@ -45,45 +46,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        {
-                                            name: 'add apt key',
-                                            'ansible.builtin.apt_key': {
-                                                url: 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key',
-                                                keyring: '/usr/share/keyrings/caddy-stable-archive-keyring.gpg',
-                                                state: 'present',
-                                            },
-                                        },
-                                        {
-                                            name: 'add apt repository',
-                                            'ansible.builtin.apt_repository': {
-                                                repo: 'deb [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main',
-                                                filename: 'caddy-stable',
-                                                state: 'present',
-                                            },
-                                        },
-                                        {
-                                            name: 'install package',
-                                            'ansible.builtin.apt': {
-                                                name: 'caddy',
-                                                state: 'present',
-                                                update_cache: 'yes',
-                                            },
-                                        },
-                                        {
-                                            name: 'configure caddy',
-                                            'ansible.builtin.copy': {
-                                                dest: '/etc/caddy/Caddyfile',
-                                                content:
-                                                    ':80 {\n        reverse_proxy localhost:{{ SELF.application_port }}\n}\n',
-                                            },
-                                        },
-                                        {
-                                            name: 'restart caddy',
-                                            'ansible.builtin.systemd': {
-                                                name: 'caddy',
-                                                state: 'reloaded',
-                                            },
-                                        },
+                                        ...AnsibleIngressCreateTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],

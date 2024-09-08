@@ -2,7 +2,7 @@ import {NodeType} from '#spec/node-type'
 import {
     AnsibleSoftwareApplicationConfigureTasks,
     AnsibleSoftwareApplicationDeleteTasks,
-    AnsibleSoftwareApplicationSourceArchiveCreate,
+    AnsibleSoftwareApplicationSourceArchiveCreateTasks,
     AnsibleSoftwareApplicationStartTasks,
     AnsibleSoftwareApplicationStopTasks,
 } from '#technologies/plugins/rules/generators/software-application/utils'
@@ -51,7 +51,7 @@ class Generator extends GeneratorAbstract {
                                                 update_cache: 'yes',
                                             },
                                         },
-                                        ...AnsibleSoftwareApplicationSourceArchiveCreate({
+                                        ...AnsibleSoftwareApplicationSourceArchiveCreateTasks({
                                             type,
                                             artifact: this.artifact,
                                         }),

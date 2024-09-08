@@ -1,4 +1,5 @@
-import {ImplementationGenerator} from '#technologies/plugins/rules/types'
+import {NodeType} from '#spec/node-type'
+import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {
     AnsibleHostOperation,
     AnsibleHostOperationPlaybookArgs,
@@ -6,14 +7,16 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils/utils'
 
-const generator: ImplementationGenerator = {
-    component: 'mysql.database',
-    technology: 'ansible',
-    hosting: ['mysql.dbms', 'remote.machine'],
-    weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
+class Generator extends GeneratorAbstract {
+    component = 'mysql.database'
+    technology = 'ansible'
+    artifact = undefined
+    hosting = ['mysql.dbms', 'remote.machine']
+    weight = 1
+    reason = 'Primary use case due to the specialization of Ansible.'
+    details = undefined
 
-    generate: (name, type) => {
+    generate(name: string, type: NodeType) {
         const user = {
             name: '{{ SELF.database_user }}',
             password: '{{ SELF.database_password }}',
@@ -118,7 +121,7 @@ const generator: ImplementationGenerator = {
                 },
             },
         }
-    },
+    }
 }
 
-export default generator
+export default new Generator()
