@@ -62,7 +62,7 @@ const generator: ImplementationGenerator = {
                                     },
                                 },
                                 terraform_data: {
-                                    vm: [
+                                    local: [
                                         {
                                             depends_on: 'local_file.tmp_script',
                                             provisioner: {

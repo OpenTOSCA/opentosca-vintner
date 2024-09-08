@@ -1,26 +1,29 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
-import {
-    BashSoftwareApplicationConfigure,
-    BashSoftwareApplicationDelete,
-    BashSoftwareApplicationSourceArchiveCreate,
-    BashSoftwareApplicationStart,
-    BashSoftwareApplicationStop,
-} from '#technologies/plugins/rules/generators/software-application/utils'
 import {GeneratorAbstract} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {
     ApplicationDirectory,
+    ApplicationSystemdUnit,
+    BASH_HEADER,
+    BashAssertManagementOperation,
+    BashCallManagementOperation,
+    BashCopyManagementOperation,
+    BashCreateApplicationDirectory,
+    BashCreateApplicationEnvironment,
+    BashCreateVintnerDirectory,
+    BashDeleteApplicationDirectory,
+    BashDownloadSourceArchive,
+    BashUnarchiveSourceArchiveFile,
     JinjaWhenSourceArchiveFile,
     MetadataGenerated,
-    OpenstackMachineCredentials,
-    OpenstackMachineHost,
     SourceArchiveFile,
 } from '#technologies/plugins/rules/utils/utils'
 
 class Generator extends GeneratorAbstract {
-    component = 'software.application'
+    component = 'service.application'
     technology = 'terraform'
-    artifact = 'zip.archive'
+    artifact = 'tar.archive'
     hosting = ['*', 'local.machine']
     weight = 0
     reason = 'Ansible is more specialized. Also using provisioners is a "last resort".'
@@ -31,8 +34,6 @@ class Generator extends GeneratorAbstract {
             derived_from: name,
             metadata: {...MetadataGenerated()},
             properties: {
-                ...OpenstackMachineCredentials(),
-                ...OpenstackMachineHost(),
                 ...ApplicationDirectory(),
             },
             interfaces: {
@@ -47,28 +48,28 @@ class Generator extends GeneratorAbstract {
                                         filename: `/tmp/artifact-${name}`,
                                         count: `{{ (${JinjaWhenSourceArchiveFile(this.artifact)}) | ternary(1, 0) }}`,
                                     },
+                                    tmp_service: {
+                                        content: ApplicationSystemdUnit(),
+                                        filename: '/etc/systemd/system/{{ SELF.application_name }}.service',
+                                    },
                                     tmp_create: {
-                                        content: BashSoftwareApplicationSourceArchiveCreate({
-                                            name,
-                                            type,
-                                            artifact: this.artifact,
-                                        }),
+                                        content: this.create(name, type),
                                         filename: `/tmp/create-${name}.sh`,
                                     },
                                     tmp_configure: {
-                                        content: BashSoftwareApplicationConfigure(),
+                                        content: this.configure(),
                                         filename: `/tmp/configure-${name}.sh`,
                                     },
                                     tmp_start: {
-                                        content: BashSoftwareApplicationStart(),
+                                        content: this.start(),
                                         filename: `/tmp/start-${name}.sh`,
                                     },
                                     tmp_stop: {
-                                        content: BashSoftwareApplicationStop(),
+                                        content: this.stop(),
                                         filename: `/tmp/stop-${name}.sh`,
                                     },
                                     tmp_delete: {
-                                        content: BashSoftwareApplicationDelete(),
+                                        content: this.delete(),
                                         filename: `/tmp/delete-${name}.sh`,
                                     },
                                 },
@@ -77,6 +78,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             depends_on: [
                                                 'local_file.tmp_artifact',
+                                                'local_file.tmp_service',
                                                 'local_file.tmp_create',
                                                 'local_file.tmp_configure',
                                                 'local_file.tmp_start',
@@ -110,6 +112,91 @@ class Generator extends GeneratorAbstract {
                 },
             },
         }
+    }
+
+    private create(name: string, type: NodeType) {
+        return `${BASH_HEADER}
+
+# Create application directory
+${BashCreateApplicationDirectory()}
+
+# Create application environment
+${BashCreateApplicationEnvironment(type)}
+
+# Download deployment artifact if required
+${BashDownloadSourceArchive(name, this.artifact)}
+
+# Extract deployment artifact
+${BashUnarchiveSourceArchiveFile(name, this.artifact)}
+
+# Create vintner directory
+${BashCreateVintnerDirectory()}
+
+# Reload systemd daemon
+systemctl daemon-reload
+
+# Enable service 
+systemctl enable {{ SELF.application_name }}
+`
+    }
+
+    private configure() {
+        return `${BASH_HEADER}
+
+# Copy operation
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+
+# Execute operation
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
+`
+    }
+
+    private start() {
+        return `${BASH_HEADER}
+
+# Assert operation
+${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.START)}
+
+# Start service 
+systemctl start {{ SELF.application_name }}
+`
+    }
+
+    private stop() {
+        return `${BASH_HEADER}
+
+# Assert operation
+${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Copy operation
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Execute operation
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
+
+# Stop service 
+systemctl stop {{ SELF.application_name }}
+`
+    }
+
+    private delete() {
+        return `${BASH_HEADER}
+
+# Copy operation
+${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.DELETE)}
+
+# Execute operation
+${BashCallManagementOperation(MANAGEMENT_OPERATIONS.DELETE)}
+
+# Delete application directory
+${BashDeleteApplicationDirectory()}
+
+# Delete systemd service 
+rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+# Reload system daemon
+systemctl daemon-reload
+`
     }
 }
 

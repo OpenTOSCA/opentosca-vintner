@@ -71,7 +71,7 @@ class Generator extends GeneratorAbstract {
                                     },
                                 },
                                 terraform_data: {
-                                    vm: [
+                                    local: [
                                         {
                                             provisioner: {
                                                 depends_on: [

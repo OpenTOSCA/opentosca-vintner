@@ -563,6 +563,24 @@
   artifact: tar.archive
   hosting:
       - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
+  details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
+- technology: terraform
+  component: service.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
+- technology: ansible
+  component: service.application
+  artifact: tar.archive
+  hosting:
+      - '*'
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
@@ -576,6 +594,24 @@
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
+- technology: ansible
+  component: service.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
+  details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
+- technology: terraform
+  component: service.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
 - technology: ansible
   component: service.application
   artifact: zip.archive
@@ -699,7 +735,7 @@
       - local.machine
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
-  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
 - technology: ansible
   component: software.application
   artifact: zip.archive
