@@ -8,8 +8,6 @@ import {
     OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this
-
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'terraform',
@@ -87,7 +85,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ ".artifacts::cache_image::file" | eval }}',
+                                            name: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
                                         },
                                     ],
                                 },

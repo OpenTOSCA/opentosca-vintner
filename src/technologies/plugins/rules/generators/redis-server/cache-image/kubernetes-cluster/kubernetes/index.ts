@@ -7,8 +7,6 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this
-
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'kubernetes',
@@ -38,30 +36,31 @@ const generator: ImplementationGenerator = {
                     apiVersion: 'apps/v1',
                     kind: 'Deployment',
                     metadata: {
-                        name: '{{ SELF.application_name }}',
+                        name: '{{ SELF.cache_name }}',
                         namespace: 'default',
                     },
                     spec: {
                         selector: {
                             matchLabels: {
-                                app: '{{ SELF.application_name }}',
+                                app: '{{ SELF.cache_name }}',
                             },
                         },
                         template: {
                             metadata: {
                                 labels: {
-                                    app: '{{ SELF.application_name }}',
+                                    app: '{{ SELF.cache_name }}',
                                 },
                             },
                             spec: {
                                 containers: [
                                     {
-                                        image: '{{ ".artifacts::docker_image::file" | eval }}',
-                                        name: '{{ SELF.application_name }}',
+                                        image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
+                                        name: '{{ SELF.cache_name }}',
                                         env: ApplicationProperties(type).toList(),
+                                        command: 'redis --port {{ SELF.application_port }}',
                                         ports: [
                                             {
-                                                containerPort: '{{ SELF.application_port }}',
+                                                containerPort: '{{ SELF.cache_port }}',
                                             },
                                         ],
                                     },
@@ -74,19 +73,19 @@ const generator: ImplementationGenerator = {
                     apiVersion: 'v1',
                     kind: 'Service',
                     metadata: {
-                        name: '{{ SELF.application_name }}',
+                        name: '{{ SELF.cache_name }}',
                         namespace: 'default',
                     },
                     spec: {
                         ports: [
                             {
-                                name: '{{ SELF.application_protocol }}',
-                                port: '{{ SELF.application_port }}',
-                                targetPort: '{{ SELF.application_port }}',
+                                name: 'redis',
+                                port: '{{ SELF.cache_port }}',
+                                targetPort: '{{ SELF.cache_port }}',
                             },
                         ],
                         selector: {
-                            app: '{{ SELF.application_name }}',
+                            app: '{{ SELF.cache_name }}',
                         },
                         type: 'ClusterIP',
                     },
@@ -104,7 +103,7 @@ const generator: ImplementationGenerator = {
                 application_address: {
                     type: 'string',
                     default: {
-                        eval: '.::application_name',
+                        eval: '.::cache_name',
                     },
                 },
             },

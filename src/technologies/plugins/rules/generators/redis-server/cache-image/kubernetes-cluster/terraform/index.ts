@@ -1,8 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
+import {
+    ApplicationProperties,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -19,18 +22,123 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {
-                ...GCPProviderCredentials(),
+            properties: {...KubernetesCredentials()},
+            attributes: {
+                application_address: {
+                    type: 'string',
+                    default: {
+                        eval: '.::application_name',
+                    },
+                },
             },
-
             interfaces: {
                 ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {
-                            terraform: [],
-                            provider: {},
-                            resource: {},
+                            terraform: [
+                                {
+                                    required_providers: [
+                                        {
+                                            kubernetes: {
+                                                source: 'hashicorp/kubernetes',
+                                                version: '2.31.0',
+                                            },
+                                        },
+                                    ],
+                                    required_version: '>= 0.14.0',
+                                },
+                            ],
+                            provider: {
+                                kubernetes: [
+                                    {
+                                        client_certificate: '${file("{{ SELF.k8s_client_cert_file }}")}',
+                                        client_key: '${file("{{ SELF.k8s_client_key_file }}")}',
+                                        cluster_ca_certificate: '${file("{{ SELF.k8s_ca_cert_file }}")}',
+                                        host: '{{ SELF.k8s_host }}',
+                                    },
+                                ],
+                            },
+                            resource: {
+                                kubernetes_deployment_v1: {
+                                    application: [
+                                        {
+                                            metadata: [
+                                                {
+                                                    name: '{{ SELF.application_name }}',
+                                                },
+                                            ],
+                                            spec: [
+                                                {
+                                                    selector: [
+                                                        {
+                                                            match_labels: {
+                                                                app: '{{ SELF.application_name }}',
+                                                            },
+                                                        },
+                                                    ],
+                                                    template: [
+                                                        {
+                                                            metadata: [
+                                                                {
+                                                                    labels: {
+                                                                        app: '{{ SELF.application_name }}',
+                                                                    },
+                                                                },
+                                                            ],
+                                                            spec: [
+                                                                {
+                                                                    container: [
+                                                                        {
+                                                                            env: ApplicationProperties(type).toList(),
+                                                                            image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
+                                                                            name: '{{ SELF.application_name }}',
+                                                                            command:
+                                                                                'redis --port {{ SELF.application_port }}',
+                                                                            port: [
+                                                                                {
+                                                                                    container_port:
+                                                                                        '{{ SELF.application_port }}',
+                                                                                },
+                                                                            ],
+                                                                        },
+                                                                    ],
+                                                                },
+                                                            ],
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                                kubernetes_service_v1: {
+                                    application: [
+                                        {
+                                            metadata: [
+                                                {
+                                                    name: '{{ SELF.application_name }}',
+                                                },
+                                            ],
+                                            spec: [
+                                                {
+                                                    port: [
+                                                        {
+                                                            name: '{{ SELF.application_protocol }}',
+                                                            port: '{{ SELF.application_port }}',
+                                                            target_port: '{{ SELF.application_port }}',
+                                                        },
+                                                    ],
+                                                    selector: {
+                                                        app: '{{ SELF.application_name }}',
+                                                    },
+                                                    type: 'ClusterIP',
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
                         },
                     },
                 },
