@@ -15,7 +15,7 @@ import {
 const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'terraform',
-    hosting: ['minio.server', '*', 'remote.machine'],
+    hosting: ['minio.server', 'docker.engine', 'remote.machine'],
     weight: 0.5,
     reason: 'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
 

@@ -10,7 +10,7 @@ import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/uti
 const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'terraform',
-    hosting: ['minio.server', '*', 'local.machine'],
+    hosting: ['minio.server', 'docker.engine', 'local.machine'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
 

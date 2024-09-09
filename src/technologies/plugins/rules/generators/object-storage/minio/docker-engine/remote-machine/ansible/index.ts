@@ -13,7 +13,7 @@ import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technolo
 const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'ansible',
-    hosting: ['minio.server', '*', 'remote.machine'],
+    hosting: ['minio.server', 'docker.engine', 'remote.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
 

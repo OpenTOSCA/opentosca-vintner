@@ -1,6 +1,4 @@
-import asterisk from './asterisk'
+import dockerEngine from './docker-engine'
 import kubernetesCluster from './kubernetes-cluster'
 
-// TODO: migrate to docker.engine and add compose tasks with quality of 0?
-
-export default [asterisk, kubernetesCluster]
+export default [dockerEngine, kubernetesCluster]

@@ -9,7 +9,7 @@ import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/uti
 const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'ansible',
-    hosting: ['minio.server', '*', 'local.machine'],
+    hosting: ['minio.server', 'docker.engine', 'local.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
 
