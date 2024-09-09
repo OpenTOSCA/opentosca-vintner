@@ -269,6 +269,12 @@ const nodes: NodeTypeMap = {
             storage_dialect: {
                 type: 'string',
             },
+            storage_user: {
+                type: 'string',
+            },
+            storage_token: {
+                type: 'string',
+            },
         },
         attributes: {
             storage_endpoint: {

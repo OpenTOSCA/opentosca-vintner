@@ -1,4 +1,5 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {METADATA} from '#technologies/plugins/rules/types'
 import {MetadataAbstract, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
@@ -584,6 +585,20 @@ const nodes: NodeTypeMap = {
         derived_from: 'service.application',
         metadata: {
             ...MetadataNormative(),
+        },
+        properties: {
+            access_key: {
+                type: 'string',
+                metadata: {
+                    [METADATA.VINTNER_NAME]: 'MINIO_ROOT_USER',
+                },
+            },
+            secret_key: {
+                type: 'string',
+                metadata: {
+                    [METADATA.VINTNER_NAME]: 'MINIO_ROOT_PASSWORD',
+                },
+            },
         },
     },
     'redis.server': {

@@ -1,8 +1,12 @@
+import {TerraformMinoBucketResources} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this, see https://registry.terraform.io/providers/aminueza/minio/latest
+import {
+    BASH_KUBECTL,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'object.storage',
@@ -21,7 +25,6 @@ const generator: ImplementationGenerator = {
             properties: {
                 ...KubernetesCredentials(),
             },
-
             interfaces: {
                 ...TerraformStandardOperations(),
                 defaults: {
@@ -29,7 +32,36 @@ const generator: ImplementationGenerator = {
                         main: {
                             terraform: [],
                             provider: {},
-                            resource: {},
+                            resource: {
+                                terraform_data: {
+                                    forward_port: [
+                                        {
+                                            input: '127.0.0.1:{{ HOST.cache_port }}',
+                                            provisioner: {
+                                                'local-exec': {
+                                                    command: [
+                                                        `(nohup ${BASH_KUBECTL} port-forward service/{{ HOST.cache_name }} {{ HOST.cache_port }}:{{ HOST.cache_port }} > /dev/null 2>&1 &)`,
+                                                        'sleep 5s',
+                                                    ].join('\n'),
+                                                    interpreter: ['/bin/bash', '-c'],
+                                                },
+                                            },
+                                        },
+                                    ],
+                                    unforward_port: [
+                                        {
+                                            depends_on: ['minio_iam_policy.policy'],
+                                            provisioner: {
+                                                'local-exec': {
+                                                    command: `pkill -f "port-forward service/{{ HOST.cache_name }}"`,
+                                                    interpreter: ['/bin/bash', '-c'],
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                                ...TerraformMinoBucketResources(),
+                            },
                         },
                     },
                 },

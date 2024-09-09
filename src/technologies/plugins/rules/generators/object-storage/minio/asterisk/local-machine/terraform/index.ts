@@ -1,8 +1,11 @@
+import {
+    TerraformMinioProviderConfiguration,
+    TerraformMinioProviderImport,
+    TerraformMinoBucketResources,
+} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this, see https://registry.terraform.io/providers/aminueza/minio/latest
+import {TerraformRequiredVersion, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'object.storage',
@@ -18,18 +21,25 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {
-                ...GCPProviderCredentials(),
-            },
-
             interfaces: {
                 ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {
-                            terraform: [],
-                            provider: {},
-                            resource: {},
+                            terraform: [
+                                {
+                                    required_providers: [
+                                        {
+                                            minio: TerraformMinioProviderImport(),
+                                        },
+                                    ],
+                                    ...TerraformRequiredVersion(),
+                                },
+                            ],
+                            provider: {
+                                minio: [TerraformMinioProviderConfiguration()],
+                            },
+                            resource: TerraformMinoBucketResources(),
                         },
                     },
                 },

@@ -1,8 +1,16 @@
+import {
+    TerraformMinioProviderConfiguration,
+    TerraformMinioProviderImport,
+    TerraformMinoBucketResources,
+} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this, see https://registry.terraform.io/providers/aminueza/minio/latest
+import {TerraformRequiredVersion, TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'object.storage',
@@ -19,21 +27,58 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...GCPProviderCredentials(),
+                ...OpenstackMachineCredentials(),
+                ...OpenstackMachineHost(),
             },
-
             interfaces: {
-                ...TerraformStandardOperations({
-                    GOOGLE_APPLICATION_CREDENTIALS: {
-                        eval: '.::gcp_service_account_file',
-                    },
-                }),
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {
-                            terraform: [],
-                            provider: {},
-                            resource: {},
+                            terraform: [
+                                {
+                                    required_providers: [
+                                        {
+                                            minio: TerraformMinioProviderImport(),
+                                            ssh: {
+                                                source: 'AndrewChubatiuk/ssh',
+                                                version: '0.2.3',
+                                            },
+                                        },
+                                    ],
+                                    ...TerraformRequiredVersion(),
+                                },
+                            ],
+                            data: {
+                                ssh_tunnel: {
+                                    mysql: [
+                                        {
+                                            remote: {
+                                                host: '{{ HOST.application_address }}',
+                                                port: '{{ HOST.application_port }}',
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                            provider: {
+                                minio: [TerraformMinioProviderConfiguration()],
+                                ssh: [
+                                    {
+                                        auth: {
+                                            private_key: {
+                                                content: '${file(pathexpand("{{ SELF.os_ssh_key_file }}"))}',
+                                            },
+                                        },
+                                        server: {
+                                            host: '{{ HOST.management_address }}',
+                                            port: 22,
+                                        },
+                                        user: '{{ SELF.os_ssh_user }}',
+                                    },
+                                ],
+                            },
+                            resource: TerraformMinoBucketResources(),
                         },
                     },
                 },
