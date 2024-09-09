@@ -3,7 +3,7 @@ import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/ter
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'object.storage',
     technology: 'terraform',
     hosting: ['gcp.cloudstorage'],
     weight: 1,

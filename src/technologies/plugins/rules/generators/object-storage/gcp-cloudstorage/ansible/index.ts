@@ -3,7 +3,7 @@ import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/an
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'object.storage',
     technology: 'ansible',
     hosting: ['gcp.cloudstorage'],
     weight: 1,

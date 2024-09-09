@@ -5,9 +5,9 @@ import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#techno
 // TODO: next: implement this
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'object.storage',
     technology: 'ansible',
-    hosting: ['minio.server', '*', 'remote.machine'],
+    hosting: ['minio.server', '*', 'local.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
 

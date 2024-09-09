@@ -5,7 +5,7 @@ import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#techno
 // TODO: next: implement this, see https://registry.terraform.io/providers/aminueza/minio/latest
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'object.storage',
     technology: 'terraform',
     hosting: ['minio.server', '*', 'remote.machine'],
     weight: 1,
