@@ -143,38 +143,52 @@ ${BashCallManagementOperation(MANAGEMENT_OPERATIONS.CONFIGURE)}
 `)
 }
 
-// TODO: assert
 export function BashSoftwareApplicationStart(options: {assert?: boolean} = {}) {
     options.assert = options.assert ?? true
 
-    return utils.trim(`
-${BASH_HEADER}
+    const parts = [BASH_HEADER]
 
+    if (options.assert)
+        parts.push(`
 # Assert operation
 ${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.START)}
+`)
 
+    parts.push(`    
 # Copy operation
 ${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.START)}
+`)
 
+    parts.push(`    
 # Execute operation
 ${BashCallManagementOperation(MANAGEMENT_OPERATIONS.START)}
 `)
+
+    return utils.concat(parts.map(utils.trim))
 }
 
-// TODO: assert
 export function BashSoftwareApplicationStop(options: {assert?: boolean} = {}) {
-    return utils.trim(`    
-${BASH_HEADER}
+    options.assert = options.assert ?? true
 
+    const parts = [BASH_HEADER]
+
+    if (options.assert)
+        parts.push(`
 # Assert operation
 ${BashAssertManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
+`)
 
+    parts.push(`    
 # Copy operation
 ${BashCopyManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
+`)
 
+    parts.push(`    
 # Execute operation
 ${BashCallManagementOperation(MANAGEMENT_OPERATIONS.STOP)}
 `)
+
+    return utils.concat(parts.map(utils.trim))
 }
 
 export function BashSoftwareApplicationDelete() {
