@@ -1,62 +1,4 @@
 - technology: ansible
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
   component: docker.engine
   hosting:
       - local.machine
@@ -382,6 +324,64 @@
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
+- technology: ansible
+  component: object.storage
+  hosting:
+      - gcp.cloudstorage
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - gcp.cloudstorage
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - '*'
+      - local.machine
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - '*'
+      - remote.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - '*'
+      - remote.machine
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 1
+  reason: Terraform provides a declarative module.
 - technology: ansible
   component: redis.server
   artifact: cache.image
