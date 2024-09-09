@@ -21,16 +21,16 @@ const generator: ImplementationGenerator = {
             },
             attributes: {
                 // TODO: connectivity
-                bucket_endpoint: {
+                storage_endpoint: {
                     type: 'string',
-                    default: '{{ SELF.bucket_name }}',
+                    default: '{{ SELF.storage_name }}',
                 },
                 // TODO: auth
-                bucket_token: {
+                storage_token: {
                     type: 'string',
                     default: '',
                 },
-                bucket_dialect: {
+                storage_dialect: {
                     type: 'string',
                     default: 'gcp',
                 },
@@ -70,7 +70,7 @@ const generator: ImplementationGenerator = {
                                 google_storage_bucket: {
                                     bucket: [
                                         {
-                                            name: '{{ SELF.bucket_name }}',
+                                            name: '{{ SELF.storage_name }}',
                                             location: 'EU',
                                             force_destroy: true,
                                         },

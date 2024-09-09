@@ -21,16 +21,16 @@ const generator: ImplementationGenerator = {
             },
             attributes: {
                 // TODO: connectivity
-                bucket_endpoint: {
+                storage_endpoint: {
                     type: 'string',
-                    default: '{{ SELF.bucket_name }}',
+                    default: '{{ SELF.storage_name }}',
                 },
                 // TODO: auth
-                bucket_token: {
+                storage_token: {
                     type: 'string',
                     default: '',
                 },
-                bucket_dialect: {
+                storage_dialect: {
                     type: 'string',
                     default: 'gcp',
                 },
@@ -55,7 +55,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'create bucket',
                                             'google.cloud.gcp_storage_bucket': {
-                                                name: '{{ SELF.bucket_name }}',
+                                                name: '{{ SELF.storage_name }}',
                                                 location: 'EU',
                                                 project: '{{ SELF.gcp_project }}',
                                             },
@@ -80,7 +80,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             name: 'delete bucket',
                                             'google.cloud.gcp_storage_bucket': {
-                                                name: '{{ SELF.bucket_name }}',
+                                                name: '{{ SELF.storage_name }}',
                                                 project: '{{ SELF.gcp_project }}',
                                                 state: 'absent',
                                             },

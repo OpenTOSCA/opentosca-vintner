@@ -1,8 +1,14 @@
+import {
+    AnsibleCreateBucketTasks,
+    AnsibleDeleteBucketTasks,
+} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
+import {
+    AnsibleHostOperation,
+    AnsibleHostOperationPlaybookArgs,
+    AnsibleWaitForSSHTask,
+} from '#technologies/plugins/rules/utils/ansible'
+import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'object.storage',
@@ -19,29 +25,41 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...GCPProviderCredentials(),
+                ...OpenstackMachineHost(),
             },
             interfaces: {
                 Standard: {
                     operations: {
                         create: {
                             implementation: {
-                                ...AnsibleOrchestratorOperation(),
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        ...AnsibleCreateBucketTasks(),
+                                    ],
                                 },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
                         delete: {
                             implementation: {
-                                ...AnsibleOrchestratorOperation(),
+                                ...AnsibleHostOperation(),
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            ...AnsibleWaitForSSHTask(),
+                                        },
+                                        ...AnsibleDeleteBucketTasks(),
+                                    ],
                                 },
+                                playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
                             },
                         },
                     },

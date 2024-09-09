@@ -1,6 +1,6 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
+import {KubernetesCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 // TODO: next: implement this, see https://registry.terraform.io/providers/aminueza/minio/latest
 
@@ -8,8 +8,8 @@ const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'terraform',
     hosting: ['minio.server', 'kubernetes.cluster'],
-    weight: 1,
-    reason: 'Terraform provides a declarative module.',
+    weight: 0,
+    reason: 'Ansible is more specialized.',
 
     generate: (name, type) => {
         return {
@@ -19,15 +19,11 @@ const generator: ImplementationGenerator = {
                 ...MetadataUnfurl(),
             },
             properties: {
-                ...GCPProviderCredentials(),
+                ...KubernetesCredentials(),
             },
 
             interfaces: {
-                ...TerraformStandardOperations({
-                    GOOGLE_APPLICATION_CREDENTIALS: {
-                        eval: '.::gcp_service_account_file',
-                    },
-                }),
+                ...TerraformStandardOperations(),
                 defaults: {
                     inputs: {
                         main: {

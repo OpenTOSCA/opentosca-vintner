@@ -1,8 +1,10 @@
+import {
+    AnsibleCreateBucketTasks,
+    AnsibleDeleteBucketTasks,
+} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
+import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'object.storage',
@@ -18,9 +20,6 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {
-                ...GCPProviderCredentials(),
-            },
             interfaces: {
                 Standard: {
                     operations: {
@@ -30,7 +29,7 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: AnsibleCreateBucketTasks(),
                                 },
                             },
                         },
@@ -40,7 +39,7 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: AnsibleDeleteBucketTasks(),
                                 },
                             },
                         },

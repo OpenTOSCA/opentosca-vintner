@@ -8,8 +8,8 @@ const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'terraform',
     hosting: ['minio.server', '*', 'remote.machine'],
-    weight: 1,
-    reason: 'Terraform provides a declarative module.',
+    weight: 0.5,
+    reason: 'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.',
 
     generate: (name, type) => {
         return {
