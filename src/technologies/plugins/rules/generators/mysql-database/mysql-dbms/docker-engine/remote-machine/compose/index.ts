@@ -38,7 +38,7 @@ const generator: ImplementationGenerator = {
                         services: {
                             job: {
                                 container_name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
-                                image: 'mysql:{{ HOST.dbms_version }}',
+                                image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                 network_mode: 'host',
                                 command: [
                                     'mysql',

@@ -1,3 +1,4 @@
+import {BashCreateBucket, BashDeleteBucket} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {
@@ -7,8 +8,6 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: migrate this
-
 const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'kubernetes',
@@ -17,15 +16,17 @@ const generator: ImplementationGenerator = {
     reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
+        const job = '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+
         const AnsibleTouchJobTask = {
             name: 'touch manifest',
             register: 'manifest',
             'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.manifest.yaml',
+                suffix: `${job}.object-storage.manifest.yaml`,
             },
         }
 
-        const AnsibleCreateJobTask = (query: string) => {
+        const AnsibleCreateJobTask = (command: string) => {
             return {
                 name: 'create manifest',
                 'ansible.builtin.copy': {
@@ -37,7 +38,7 @@ const generator: ImplementationGenerator = {
                         apiVersion: 'batch/v1',
                         kind: 'Job',
                         metadata: {
-                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
+                            name: job,
                         },
                         spec: {
                             template: {
@@ -45,17 +46,10 @@ const generator: ImplementationGenerator = {
                                     restartPolicy: 'Never',
                                     containers: [
                                         {
-                                            name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                                            image: 'mysql:{{ HOST.dbms_version }}',
-                                            command: [
-                                                'mysql',
-                                                '--host={{ HOST.management_address }}',
-                                                '--port={{ HOST.management_port }}',
-                                                '--user=root',
-                                                '--password={{ HOST.dbms_password }}',
-                                                '-e',
-                                                query,
-                                            ],
+                                            name: job,
+                                            // TODO: the image tags do not match
+                                            image: 'minio/mc:{{ ".artifacts::cache_image::file" | eval }}',
+                                            command: ['/bin/bash', '-c', command],
                                         },
                                     ],
                                 },
@@ -76,7 +70,7 @@ const generator: ImplementationGenerator = {
             },
             {
                 name: 'wait for deployment',
-                'ansible.builtin.shell': `${BASH_KUBECTL} wait --for=condition=complete --timeout=30s job/{{ SELF.database_name }}-{{ HOST.dbms_name }}`,
+                'ansible.builtin.shell': `${BASH_KUBECTL} wait --for=condition=complete --timeout=30s job/${job}`,
                 args: {
                     executable: '/usr/bin/bash',
                 },
@@ -111,9 +105,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         AnsibleTouchJobTask,
-                                        AnsibleCreateJobTask(
-                                            "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';"
-                                        ),
+                                        AnsibleCreateJobTask(BashCreateBucket()),
                                         ...AnsibleApplyJobTasks,
                                     ],
                                 },
@@ -127,9 +119,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         AnsibleTouchJobTask,
-                                        AnsibleCreateJobTask(
-                                            "DROP USER IF EXISTS '{{ SELF.database_user }}'@'%'; DROP DATABASE IF EXISTS {{ SELF.database_name }};"
-                                        ),
+                                        AnsibleCreateJobTask(BashDeleteBucket()),
                                         ...AnsibleApplyJobTasks,
                                     ],
                                 },

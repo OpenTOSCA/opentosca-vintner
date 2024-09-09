@@ -44,7 +44,7 @@ const generator: ImplementationGenerator = {
                                     containers: [
                                         {
                                             name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}',
-                                            image: 'mysql:{{ HOST.dbms_version }}',
+                                            image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                             command: [
                                                 'mysql',
                                                 '--host={{ HOST.management_address }}',
