@@ -435,15 +435,20 @@ node_types:
         derived_from: service.application
         metadata:
             vintner_normative: 'true'
+        properties:
+            access_key:
+                type: string
+                metadata:
+                    vintner_name: MINIO_ROOT_USER
+            secret_key:
+                type: string
+                metadata:
+                    vintner_name: MINIO_ROOT_PASSWORD
     redis.server:
         derived_from: cache
         metadata:
             vintner_normative: 'true'
         properties:
-            cache_name:
-                type: string
-            cache_port:
-                type: string
             application_protocol:
                 type: string
                 default: redis

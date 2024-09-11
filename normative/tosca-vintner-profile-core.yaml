@@ -244,32 +244,50 @@ node_types:
             vintner_abstract: 'true'
     cache:
         derived_from: software.application
+        properties:
+            cache_name:
+                type: string
+            cache_port:
+                type: string
+        attributes:
+            application_endpoint:
+                type: string
+            application_address:
+                type: string
     storage:
         derived_from: node
+        metadata:
+            vintner_normative: 'true'
     block.storage:
         derived_from: storage
+        metadata:
+            vintner_normative: 'true'
     object.storage:
         derived_from: storage
-    file.storage:
-        derived_from: storage
-    bucket:
-        derived_from: object.storage
         metadata:
             vintner_normative: 'true'
         properties:
-            bucket_name:
+            storage_name:
                 type: string
-            bucket_dialect:
+            storage_dialect:
+                type: string
+            storage_user:
+                type: string
+            storage_token:
                 type: string
         attributes:
-            bucket_endpoint:
+            storage_endpoint:
                 type: string
-            bucket_token:
+            storage_token:
                 type: string
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+    file.storage:
+        derived_from: storage
+        metadata:
+            vintner_normative: 'true'
     ingress:
         derived_from: node
         metadata:
