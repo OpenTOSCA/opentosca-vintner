@@ -53,6 +53,10 @@ The specification is under active development and is not backwards compatible wi
 1. Only use strings as data types.
 1. Always quote string values.
 
+## Attributes
+
+_The prototype currently does not support custom template attributes, i.e., writing back outputs from management operations_.
+
 
 ## Application Directory
 
