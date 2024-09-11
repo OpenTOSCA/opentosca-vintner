@@ -50,6 +50,8 @@ The specification is under active development and is not backwards compatible wi
 1. A _built-in_ node type can define property assignments.
 1. A _custom_ and _abstract_ node type can define property assignments.
 1. A _custom_ and _concrete_ node type must not define property assignments.
+1. Only use strings as data types.
+1. Always quote string values.
 
 
 ## Application Directory
@@ -62,7 +64,7 @@ The specification is under active development and is not backwards compatible wi
 
 1. A node template can have conditional deployment artifacts.
 1. A node type cannot have conditional deployment artifacts.
-1. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
-
+1. A _custom node type_ cannot have deployment artifacts.
+2. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
    
 --8<-- "acd.md"
