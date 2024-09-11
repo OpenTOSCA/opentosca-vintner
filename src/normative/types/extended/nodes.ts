@@ -1,4 +1,5 @@
 import {NodeTypeMap} from '#spec/node-type'
+import {METADATA} from '#technologies/plugins/rules/types'
 import {MetadataAbstract, MetadataNormative} from '../utils'
 
 const nodes: NodeTypeMap = {
@@ -585,6 +586,20 @@ const nodes: NodeTypeMap = {
         metadata: {
             ...MetadataNormative(),
         },
+        properties: {
+            access_key: {
+                type: 'string',
+                metadata: {
+                    [METADATA.VINTNER_NAME]: 'MINIO_ROOT_USER',
+                },
+            },
+            secret_key: {
+                type: 'string',
+                metadata: {
+                    [METADATA.VINTNER_NAME]: 'MINIO_ROOT_PASSWORD',
+                },
+            },
+        },
     },
     'redis.server': {
         derived_from: 'cache',
@@ -592,12 +607,6 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
         },
         properties: {
-            cache_name: {
-                type: 'string',
-            },
-            cache_port: {
-                type: 'string',
-            },
             application_protocol: {
                 type: 'string',
                 default: 'redis',

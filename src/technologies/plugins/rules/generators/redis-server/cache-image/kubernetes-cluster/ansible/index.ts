@@ -1,8 +1,14 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
-import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
-import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
+import {
+    AnsibleKubernetesCredentialsEnvironment,
+    AnsibleOrchestratorOperation,
+} from '#technologies/plugins/rules/utils/ansible'
+import {
+    ApplicationProperties,
+    KubernetesCredentials,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -19,8 +25,14 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
-            properties: {
-                ...GCPProviderCredentials(),
+            properties: {...KubernetesCredentials()},
+            attributes: {
+                application_address: {
+                    type: 'string',
+                    default: {
+                        eval: '.::cache_name',
+                    },
+                },
             },
             interfaces: {
                 Standard: {
@@ -28,20 +40,119 @@ const generator: ImplementationGenerator = {
                         create: {
                             implementation: {
                                 ...AnsibleOrchestratorOperation(),
+                                environment: {
+                                    ...AnsibleKubernetesCredentialsEnvironment(),
+                                },
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            name: 'create deployment',
+                                            'kubernetes.core.k8s': {
+                                                wait: true,
+                                                definition: {
+                                                    apiVersion: 'apps/v1',
+                                                    kind: 'Deployment',
+                                                    metadata: {
+                                                        name: '{{ SELF.application_name }}',
+                                                        namespace: 'default',
+                                                    },
+                                                    spec: {
+                                                        selector: {
+                                                            matchLabels: {
+                                                                app: '{{ SELF.application_name }}',
+                                                            },
+                                                        },
+                                                        template: {
+                                                            metadata: {
+                                                                labels: {
+                                                                    app: '{{ SELF.application_name }}',
+                                                                },
+                                                            },
+                                                            spec: {
+                                                                containers: [
+                                                                    {
+                                                                        image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
+                                                                        name: '{{ SELF.application_name }}',
+                                                                        env: ApplicationProperties(type).toList(),
+                                                                        command:
+                                                                            'redis --port {{ SELF.application_port }}',
+                                                                        ports: [
+                                                                            {
+                                                                                containerPort:
+                                                                                    '{{ SELF.application_port }}',
+                                                                            },
+                                                                        ],
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            name: 'create service',
+                                            'kubernetes.core.k8s': {
+                                                definition: {
+                                                    apiVersion: 'v1',
+                                                    kind: 'Service',
+                                                    metadata: {
+                                                        name: '{{ SELF.application_name }}',
+                                                        namespace: 'default',
+                                                    },
+                                                    spec: {
+                                                        ports: [
+                                                            {
+                                                                name: '{{ SELF.application_protocol }}',
+                                                                port: '{{ SELF.application_port }}',
+                                                                targetPort: '{{ SELF.application_port }}',
+                                                            },
+                                                        ],
+                                                        selector: {
+                                                            app: '{{ SELF.application_name }}',
+                                                        },
+                                                        type: 'ClusterIP',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },
                         delete: {
                             implementation: {
                                 ...AnsibleOrchestratorOperation(),
+                                environment: {
+                                    ...AnsibleKubernetesCredentialsEnvironment(),
+                                },
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            name: 'delete service',
+                                            'kubernetes.core.k8s': {
+                                                state: 'absent',
+                                                api_version: 'v1',
+                                                kind: 'Service',
+                                                namespace: 'default',
+                                                name: '{{ SELF.application_name }}',
+                                            },
+                                        },
+                                        {
+                                            name: 'delete deployment',
+                                            'kubernetes.core.k8s': {
+                                                state: 'absent',
+                                                api_version: 'app/v1',
+                                                kind: 'Deployment',
+                                                namespace: 'default',
+                                                name: '{{ SELF.application_name }}',
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },

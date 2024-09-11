@@ -20,7 +20,7 @@ import * as utils from '#utils'
 class Generator extends GeneratorAbstract {
     component = 'software.application'
     technology = 'terraform'
-    artifact = 'apt.archive'
+    artifact = 'apt.package'
     hosting = ['*', 'remote.machine']
     weight = 0
     reason = 'Ansible is more specialized. Also using provisioners is a "last resort".'

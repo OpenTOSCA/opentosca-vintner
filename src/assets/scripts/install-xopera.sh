@@ -37,4 +37,4 @@ fi
 # pyyaml==5.3.1 is required, see https://github.com/yaml/pyyaml/issues/724#issuecomment-1638587228
 # requests==2.31.0 is required, see https://github.com/ansible-collections/community.docker/issues/868
 pip install opera==0.6.9 openstacksdk==0.61 python-openstackclient==6.0.0 pyyaml==5.3.1 pymysql==1.1.0 ansible==8.7.0 ansible-core==2.15.9
-ansible-galaxy collection install community.docker:3.9.0 kubernetes.core:3.2.0 google.cloud:1.2.0 --force
+ansible-galaxy collection install community.docker:3.9.0 kubernetes.core:3.2.0 google.cloud:1.2.0 dubzland.minio:1.2.0 --force

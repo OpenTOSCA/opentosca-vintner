@@ -120,6 +120,27 @@ const nodes: RecursivePartial<NodeTypeMap> = {
             },
         },
     },
+    cache: {
+        attributes: {
+            application_endpoint: {
+                default: {
+                    concat: [
+                        {
+                            eval: '.::application_protocol',
+                        },
+                        '://',
+                        {
+                            eval: '.::application_address',
+                        },
+                        ':',
+                        {
+                            eval: '.::application_port',
+                        },
+                    ],
+                },
+            },
+        },
+    },
 }
 
 export default nodes

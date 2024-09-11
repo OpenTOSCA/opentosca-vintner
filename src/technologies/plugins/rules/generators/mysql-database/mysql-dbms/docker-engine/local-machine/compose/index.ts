@@ -8,8 +8,6 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: we assume that dbms is exposed
-
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'compose',
@@ -39,7 +37,7 @@ const generator: ImplementationGenerator = {
                                             job: {
                                                 container_name:
                                                     '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
-                                                image: 'mysql:{{ HOST.dbms_version }}',
+                                                image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
                                                 network_mode: 'host',
                                                 command: [
                                                     'mysql',
@@ -59,7 +57,7 @@ const generator: ImplementationGenerator = {
                                 ...AnsibleApplyComposeTask(),
                             },
                             {
-                                name: 'give job some time',
+                                name: 'let it cook',
                                 'ansible.builtin.pause': {
                                     seconds: 10,
                                 },
