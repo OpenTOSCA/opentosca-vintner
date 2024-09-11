@@ -7,6 +7,8 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils/utils'
 
+// TODO: delete operation
+
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',

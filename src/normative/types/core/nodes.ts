@@ -228,37 +228,59 @@ const nodes: NodeTypeMap = {
     },
     cache: {
         derived_from: 'software.application',
-    },
-    storage: {
-        derived_from: 'node',
-    },
-    'block.storage': {
-        derived_from: 'storage',
-    },
-    'object.storage': {
-        derived_from: 'storage',
-    },
-    'file.storage': {
-        derived_from: 'storage',
-    },
-    bucket: {
-        derived_from: 'object.storage',
-        metadata: {
-            ...MetadataNormative(),
-        },
         properties: {
-            bucket_name: {
+            cache_name: {
                 type: 'string',
             },
-            bucket_dialect: {
+            cache_port: {
                 type: 'string',
             },
         },
         attributes: {
-            bucket_endpoint: {
+            application_endpoint: {
                 type: 'string',
             },
-            bucket_token: {
+            application_address: {
+                type: 'string',
+            },
+        },
+    },
+    storage: {
+        derived_from: 'node',
+        metadata: {
+            ...MetadataNormative(),
+        },
+    },
+    'block.storage': {
+        derived_from: 'storage',
+        metadata: {
+            ...MetadataNormative(),
+        },
+    },
+    'object.storage': {
+        derived_from: 'storage',
+        metadata: {
+            ...MetadataNormative(),
+        },
+        properties: {
+            storage_name: {
+                type: 'string',
+            },
+            storage_dialect: {
+                type: 'string',
+            },
+            storage_user: {
+                type: 'string',
+            },
+            storage_token: {
+                type: 'string',
+            },
+        },
+        attributes: {
+            storage_endpoint: {
+                type: 'string',
+            },
+            storage_token: {
                 type: 'string',
             },
         },
@@ -270,6 +292,12 @@ const nodes: NodeTypeMap = {
                 },
             },
         ],
+    },
+    'file.storage': {
+        derived_from: 'storage',
+        metadata: {
+            ...MetadataNormative(),
+        },
     },
     ingress: {
         derived_from: 'node',

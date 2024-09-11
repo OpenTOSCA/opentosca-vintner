@@ -2,10 +2,10 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this, see https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_redis_instance_module.html
+// TODO: connectivity
 
 const generator: ImplementationGenerator = {
-    component: 'bucket',
+    component: 'redis.server',
     technology: 'ansible',
     artifact: 'cache.image',
     hosting: ['gcp.memorystore'],
@@ -37,7 +37,27 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        // https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_redis_instance_module.html
+                                        {
+                                            name: 'create redis',
+                                            'google.cloud.gcp_redis_instance': {
+                                                name: '{{ SELF.cache_name }}',
+                                                memory_size_gb: 1,
+                                                region: '{{ SELF.gcp_region }}',
+                                                project: '{{ SELF.gcp_project }}',
+                                            },
+                                            register: 'redis_info',
+                                        },
+                                        {
+                                            name: 'set attributes',
+                                            set_fact: {
+                                                application_endpoint: '{{ redis_info.host }}:{{ redis_info.port }}',
+                                                application_address: '{{ redis_info.host }}',
+                                                application_port: '{{ redis_info.port }}',
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },
@@ -53,7 +73,16 @@ const generator: ImplementationGenerator = {
                             },
                             inputs: {
                                 playbook: {
-                                    q: [],
+                                    q: [
+                                        {
+                                            name: 'delete redis',
+                                            'google.cloud.gcp_redis_instance': {
+                                                name: '{{ SELF.cache_name }}',
+                                                project: '{{ SELF.gcp_project }}',
+                                                state: 'absent',
+                                            },
+                                        },
+                                    ],
                                 },
                             },
                         },

@@ -1,69 +1,4 @@
 - technology: ansible
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  artifact: cache.image
-  hosting:
-      - gcp.memorystore
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
   component: docker.engine
   hosting:
       - local.machine
@@ -390,6 +325,87 @@
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
 - technology: ansible
+  component: object.storage
+  hosting:
+      - gcp.cloudstorage
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - gcp.cloudstorage
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - local.machine
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - local.machine
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - remote.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - remote.machine
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - remote.machine
+  weight: 0.5
+  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+- technology: ansible
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: kubernetes
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 0
+  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 0
+  reason: Ansible is more specialized.
+- technology: ansible
   component: redis.server
   artifact: cache.image
   hosting:
@@ -443,6 +459,13 @@
   weight: 0.5
   reason: Docker Compose is more specialized.
   details: '"docker_container" and "docker_image" resources'
+- technology: ansible
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - gcp.memorystore
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: redis.server
   artifact: cache.image
@@ -457,6 +480,14 @@
       - kubernetes.cluster
   weight: 0.5
   reason: Kubernetes is more specialized.
+- technology: kubernetes
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - kubernetes.cluster
+  weight: 1
+  reason: Kubernetes is the underlying technology.
+  details: Kubernetes manifest generated and applied
 - technology: terraform
   component: redis.server
   artifact: cache.image
@@ -646,15 +677,6 @@
   weight: 1
   reason: Terraform provides a declarative module.
   details: '"google_app_engine_standard_app_version", "google_project_iam_member", "google_service_account", "google_storage_bucket", and "google_storage_bucket_object" resources'
-- technology: terraform
-  component: software.application
-  artifact: apt.archive
-  hosting:
-      - '*'
-      - remote.machine
-  weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
-  details: '"file" provisioner to upload scripts and "remote-exec" to execute scripts'
 - technology: ansible
   component: software.application
   artifact: apt.package
@@ -682,6 +704,15 @@
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
   details: '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: apt.package
+  hosting:
+      - '*'
+      - remote.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"file" provisioner to upload scripts and "remote-exec" to execute scripts'
 - technology: ansible
   component: software.application
   artifact: tar.archive

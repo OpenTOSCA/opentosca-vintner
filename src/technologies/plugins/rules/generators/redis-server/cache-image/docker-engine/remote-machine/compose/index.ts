@@ -1,18 +1,20 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleApplyComposeTask,
+    AnsibleCreateComposeTask,
     AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
+    AnsibleTouchComposeTask,
     AnsibleUnapplyComposeTask,
 } from '#technologies/plugins/rules/utils/ansible'
+import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
 import {
     ApplicationProperties,
+    LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -24,31 +26,17 @@ const generator: ImplementationGenerator = {
     details: 'docker compose manifest generated and applied',
 
     generate: (name, type) => {
-        const AnsibleTouchComposeTask = {
-            name: 'touch compose',
-            register: 'compose',
-            'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.application_name }}.compose.yaml',
-            },
-        }
+        const suffix = '{{ SELF.cache_name }}'
 
-        const AnsibleCreateComposeTask = {
-            name: 'create compose',
-            'ansible.builtin.copy': {
-                dest: '{{ compose.path }}',
-                content: '{{ manifest | to_yaml }}',
-            },
-            vars: {
-                manifest: {
-                    name: '{{ SELF.application_name }}',
-                    services: {
-                        application: {
-                            container_name: '{{ SELF.application_name }}',
-                            image: '{{ ".artifacts::docker_image::file" | eval }}',
-                            network_mode: 'host',
-                            environment: ApplicationProperties(type).toMap(),
-                        },
-                    },
+        const manifest: DockerCompose = {
+            name: '{{ SELF.cache_name }}',
+            services: {
+                application: {
+                    container_name: '{{ SELF.cache_name }}',
+                    image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
+                    network_mode: 'host',
+                    command: ['redis', '--port', '{{ SELF.application_port }}'],
+                    environment: ApplicationProperties(type).toMap(),
                 },
             },
         }
@@ -65,7 +53,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
             },
             interfaces: {
@@ -78,8 +66,12 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
+                                        {
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
                                         {
                                             ...AnsibleApplyComposeTask(),
                                             environment: {
@@ -97,8 +89,12 @@ const generator: ImplementationGenerator = {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        AnsibleTouchComposeTask,
-                                        AnsibleCreateComposeTask,
+                                        {
+                                            ...AnsibleTouchComposeTask({suffix}),
+                                        },
+                                        {
+                                            ...AnsibleCreateComposeTask({manifest}),
+                                        },
                                         {
                                             ...AnsibleUnapplyComposeTask(),
                                             environment: {

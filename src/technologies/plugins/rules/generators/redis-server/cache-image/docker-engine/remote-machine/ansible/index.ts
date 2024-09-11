@@ -7,12 +7,11 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {
     ApplicationProperties,
+    LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
     OpenstackMachineCredentials,
 } from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -34,7 +33,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
             },
             interfaces: {
@@ -50,13 +49,15 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
+                                        // https://hub.docker.com/_/redis
                                         {
                                             ...AnsibleDockerContainerTask({
                                                 name: 'start container',
                                                 container: {
-                                                    name: '{{ SELF.application_name }}',
-                                                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                                                    name: '{{ SELF.cache_name }}',
+                                                    image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
                                                     network_mode: 'host',
+                                                    command: 'redis --port {{ SELF.application_port }}',
                                                     env: ApplicationProperties(type).toMap(),
                                                 },
                                             }),
@@ -80,7 +81,7 @@ const generator: ImplementationGenerator = {
                                             ...AnsibleDockerContainerTask({
                                                 name: 'stop container',
                                                 container: {
-                                                    name: '{{ SELF.application_name }}',
+                                                    name: '{{ SELF.cache_name }}',
                                                     state: 'absent',
                                                 },
                                             }),

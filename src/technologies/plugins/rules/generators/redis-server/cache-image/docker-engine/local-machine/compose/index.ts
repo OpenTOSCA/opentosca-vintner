@@ -7,9 +7,12 @@ import {
     AnsibleUnapplyComposeTask,
 } from '#technologies/plugins/rules/utils/ansible'
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
-import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
-
-// TODO: next: implement this
+import {
+    ApplicationProperties,
+    LOCALHOST,
+    MetadataGenerated,
+    MetadataUnfurl,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
@@ -21,15 +24,16 @@ const generator: ImplementationGenerator = {
     details: 'docker compose manifest generated and applied',
 
     generate: (name, type) => {
-        const suffix = '{{ SELF.application_name }}'
+        const suffix = '{{ SELF.cache_name }}'
 
         const manifest: DockerCompose = {
-            name: '{{ SELF.application_name }}',
+            name: '{{ SELF.cache_name }}',
             services: {
                 application: {
-                    container_name: '{{ SELF.application_name }}',
-                    image: '{{ ".artifacts::docker_image::file" | eval }}',
+                    container_name: '{{ SELF.cache_name }}',
+                    image: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
                     network_mode: 'host',
+                    command: ['redis', '--port', '{{ SELF.application_port }}'],
                     environment: ApplicationProperties(type).toMap(),
                 },
             },
@@ -44,7 +48,7 @@ const generator: ImplementationGenerator = {
             attributes: {
                 application_address: {
                     type: 'string',
-                    default: '127.0.0.1',
+                    default: LOCALHOST,
                 },
             },
             interfaces: {

@@ -8,8 +8,6 @@ import {
     OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: implement this
-
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'terraform',
@@ -78,7 +76,8 @@ const generator: ImplementationGenerator = {
                                         {
                                             env: ApplicationProperties(type, {quote: false}).toEnv(),
                                             image: '${docker_image.image.image_id}',
-                                            name: '{{ SELF.application_name }}',
+                                            name: '{{ SELF.cache_name }}',
+                                            command: ['redis', '--port', '{{ SELF.application_port }}'],
                                             network_mode: 'host',
                                         },
                                     ],
@@ -86,7 +85,7 @@ const generator: ImplementationGenerator = {
                                 docker_image: {
                                     image: [
                                         {
-                                            name: '{{ ".artifacts::docker_image::file" | eval }}',
+                                            name: 'redis:{{ ".artifacts::cache_image::file" | eval }}',
                                         },
                                     ],
                                 },
