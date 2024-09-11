@@ -7,12 +7,10 @@ export type TemplateQualityOptions = {
     template: string
     presets?: string[]
     inputs?: string
-    experimental: boolean
 }
 
 export default async function (options: TemplateQualityOptions) {
     assert.isDefined(options.template, 'Template not defined')
-    assert.isTrue(options.experimental)
 
     /**
      * Note, checker does not run on these results!

@@ -7,7 +7,7 @@ export type NormativeOptions = {
     format?: string
     profile?: boolean
     base?: boolean
-    specific?: boolean
+    extended?: boolean
 }
 
 export default async function (options: NormativeOptions) {
@@ -16,7 +16,7 @@ export default async function (options: NormativeOptions) {
      */
     options.format = options.format ?? 'yaml'
     options.base = options.base ?? true
-    options.specific = options.specific ?? true
+    options.extended = options.extended ?? true
 
     /**
      * Normative types
@@ -29,7 +29,7 @@ export default async function (options: NormativeOptions) {
     const types = []
     if (options.profile) types.push(normative.profile.template)
     if (options.base) types.push(normative.core.template)
-    if (options.specific) types.push(normative.extended.template)
+    if (options.extended) types.push(normative.extended.template)
 
     /**
      * Simplify
