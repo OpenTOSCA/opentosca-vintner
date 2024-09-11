@@ -1,6 +1,5 @@
 import ansible from './ansible'
+import compose from './compose'
 import terraform from './terraform'
 
-// TODO: add docker compose job
-
-export default [ansible, terraform]
+export default [ansible, compose, terraform]

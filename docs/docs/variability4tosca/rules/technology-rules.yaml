@@ -340,15 +340,23 @@
   component: object.storage
   hosting:
       - minio.server
-      - '*'
+      - docker.engine
       - local.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - local.machine
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
       - minio.server
-      - '*'
+      - docker.engine
       - local.machine
   weight: 1
   reason: Terraform provides a declarative module.
@@ -356,18 +364,26 @@
   component: object.storage
   hosting:
       - minio.server
-      - '*'
+      - docker.engine
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
+  hosting:
+      - minio.server
+      - docker.engine
+      - remote.machine
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
       - minio.server
-      - '*'
+      - docker.engine
       - remote.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
+  weight: 0.5
+  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: object.storage
   hosting:
@@ -375,13 +391,20 @@
       - kubernetes.cluster
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
+- technology: kubernetes
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 0
+  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
       - minio.server
       - kubernetes.cluster
-  weight: 1
-  reason: Terraform provides a declarative module.
+  weight: 0
+  reason: Ansible is more specialized.
 - technology: ansible
   component: redis.server
   artifact: cache.image

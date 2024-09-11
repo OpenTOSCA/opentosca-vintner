@@ -1,3 +1,4 @@
+import {BashCreateBucket, BashDeleteBucket} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
     AnsibleApplyComposeTask,
@@ -7,25 +8,25 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: we assume that dbms is exposed
-
 const generator: ImplementationGenerator = {
-    component: 'mysql.database',
+    component: 'object.storage',
     technology: 'compose',
-    hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
+    hosting: ['minio.server', 'docker.engine', 'remote.machine'],
     weight: 0,
     reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
+        const job = '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+
         const AnsibleTouchJobTask = {
             name: 'touch compose',
             register: 'compose',
             'ansible.builtin.tempfile': {
-                suffix: '{{ SELF.database_name }}-{{ HOST.dbms_name }}.database.compose.yaml',
+                suffix: `${job}.database.compose.yaml`,
             },
         }
 
-        const AnsibleCreateJobTask = (query: string) => {
+        const AnsibleCreateJobTask = (command: string) => {
             return {
                 name: 'create compose',
                 'ansible.builtin.copy': {
@@ -34,21 +35,14 @@ const generator: ImplementationGenerator = {
                 },
                 vars: {
                     manifest: {
-                        name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
+                        name: job,
                         services: {
                             job: {
-                                container_name: '{{ SELF.database_name }}-{{ HOST.dbms_name }}-database-job',
-                                image: 'mysql:{{ ".artifacts::dbms_image::file" | eval }}',
+                                container_name: job,
+                                // TODO: the image tags do not match
+                                image: 'minio/mc:{{ ".artifacts::cache_image::file" | eval }}',
                                 network_mode: 'host',
-                                command: [
-                                    'mysql',
-                                    '--host={{ HOST.management_address }}',
-                                    '--port={{ HOST.management_port }}',
-                                    '--user=root',
-                                    '--password={{ HOST.dbms_password }}',
-                                    '-e',
-                                    query,
-                                ],
+                                command: ['/bin/bash', '-c', command],
                             },
                         },
                     },
@@ -97,9 +91,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         AnsibleTouchJobTask,
-                                        AnsibleCreateJobTask(
-                                            "CREATE DATABASE IF NOT EXISTS {{ SELF.database_name }}; CREATE USER IF NOT EXISTS '{{ SELF.database_user }}'@'%' IDENTIFIED BY '{{ SELF.database_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ SELF.database_user }}'@'%';"
-                                        ),
+                                        AnsibleCreateJobTask(BashCreateBucket()),
                                         ...AnsibleApplyJobTasks,
                                     ],
                                 },
@@ -113,9 +105,7 @@ const generator: ImplementationGenerator = {
                                 playbook: {
                                     q: [
                                         AnsibleTouchJobTask,
-                                        AnsibleCreateJobTask(
-                                            "DROP USER IF EXISTS '{{ SELF.database_user }}'@'%'; DROP DATABASE IF EXISTS {{ SELF.database_name }};"
-                                        ),
+                                        AnsibleCreateJobTask(BashDeleteBucket()),
                                         ...AnsibleApplyJobTasks,
                                     ],
                                 },
