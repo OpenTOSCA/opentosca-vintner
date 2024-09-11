@@ -26,15 +26,9 @@ import path from 'path'
 export type TemplateImplementOptions = {
     dir: string
     orchestrator: string
-    experimental: string
 }
 
 export default async function (options: TemplateImplementOptions) {
-    /**
-     * Experimental
-     */
-    assert.isTrue(options.experimental)
-
     /**
      * Orchestrator
      */
