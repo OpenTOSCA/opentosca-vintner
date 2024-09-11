@@ -7,8 +7,6 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: we assume that dbms is exposed
-
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'compose',

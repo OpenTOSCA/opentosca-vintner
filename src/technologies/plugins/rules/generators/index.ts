@@ -3,14 +3,14 @@ import gcpService from './gcp-service'
 import ingress from './ingress'
 import mysqlDatabase from './mysql-database'
 import mysqlDBMS from './mysql-dbms'
-import bucket from './object-storage'
+import objectStorage from './object-storage'
 import redisServer from './redis-server'
 import serviceApplication from './service-application'
 import softwareApplication from './software-application'
 import virtualMachine from './virtual-machine'
 
 export default [
-    bucket,
+    objectStorage,
     dockerEngine,
     gcpService,
     ingress,

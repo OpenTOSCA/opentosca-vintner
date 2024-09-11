@@ -2,8 +2,6 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: we assume that dbms is exposed
-
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',

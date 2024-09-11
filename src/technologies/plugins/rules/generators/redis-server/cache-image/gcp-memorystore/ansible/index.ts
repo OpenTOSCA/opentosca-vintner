@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: next: connectivity
+// TODO: connectivity
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',
