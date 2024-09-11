@@ -488,8 +488,7 @@ template
 
 template
     .command('quality')
-    .description('get quality of template (experimental)')
-    .requiredOption('--experimental', 'enable experimental feature')
+    .description('get quality of template')
     .requiredOption('--template <string>', 'path to service template')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
     .option(
@@ -516,7 +515,6 @@ template
     .command('implement')
     .description('implement node types')
     .requiredOption('--dir <string>', 'path to service template directory')
-    .requiredOption('--experimental', 'enable experimental feature')
     .option('--orchestrator [string]', 'the orchestrator for which node type should be implemented', 'unfurl')
     .action(
         hae.exit(async options => {
@@ -1127,8 +1125,8 @@ utils
     .option('--no-profile [boolean]')
     .option('--base [boolean]', 'include base types', true)
     .option('--no-base [boolean]')
-    .option('--specific [boolean]', 'include specific types', true)
-    .option('--no-specific [boolean]')
+    .option('--extended [boolean]', 'include extended types', true)
+    .option('--no-extended [boolean]')
     .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
     .action(
         hae.exit(async options => {

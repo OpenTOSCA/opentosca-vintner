@@ -8,5 +8,5 @@ source configuration.sh
 for dir in ../tests/*/;
 do
   dir=$(basename $dir)
-  echo "${dir}: $($VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml --experimental --inputs ${TEMPLATE_DIR}/tests/${dir}/inputs.yaml)"
+  echo "${dir}: $($VINTNER template quality --template ${TEMPLATE_DIR}/variable-service-template.yaml --inputs ${TEMPLATE_DIR}/tests/${dir}/inputs.yaml)"
 done

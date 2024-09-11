@@ -15,7 +15,7 @@ The specification is under active development and is not backwards compatible wi
 
 ## General
 
-1. Must use only features as defined by TOSCA Light and Variability4TOSCA.
+1. Must use only features as defined by TOSCA Light extended by Variability4TOSCA.
 
 
 ## Node Types
@@ -27,25 +27,6 @@ The specification is under active development and is not backwards compatible wi
 1. A _custom_ and _abstract_ type is a user-defined type, which cannot be instantiated since it is missing, e.g., its management operations or deployment artifact.
 1. A _custom_ and _concrete_ type is a user-defined type, which can be instantiated.
 
-
-## Software Applications
-
-1. A `software.application` node template always requires a `source.archive` or `system.package` deployment artifact.
-1. A `software.application` node template with an `source.archive` deployment artifact always requires the `start` operation and the `stop` operation.
-1. A `software.application` node template with a `source.archive` deployment artifact implicitly requires an `remote.machine` or `gcp.appengine` node template as host.
-1. A `software.application` node template with a `system.package` deployment artifact implicitly requires an `remote.machine` node template as host.
-
-
-## Service Applications
-
-1. A `service.application` node template on a `remote.machine` host is started as `systemd` service.
-1. A `service.appcliation` always requires a  `source.archive` or `container.image` deployment artifact. 
-1. A `service.application` does not require a `stop` operation.
-1. A `service.application` node template with a `container.image` deployment artifact implicitly requires a `docker.engine`, `gcp.cloudrun`, or `kubernetes` node template as host.
-
-## Virtual Machine 
-
-1. A `remote.machine` node template always requires a `machine.image` deployment artifact.
 
 ## Management Operations
 
@@ -69,6 +50,12 @@ The specification is under active development and is not backwards compatible wi
 1. A _built-in_ node type can define property assignments.
 1. A _custom_ and _abstract_ node type can define property assignments.
 1. A _custom_ and _concrete_ node type must not define property assignments.
+1. Only use strings as data types.
+1. Always quote string values.
+
+## Attributes
+
+_The prototype currently does not support custom template attributes, i.e., writing back outputs from management operations_.
 
 
 ## Application Directory
@@ -79,10 +66,9 @@ The specification is under active development and is not backwards compatible wi
 
 ## Deployment Artifacts
 
-1. A `source.archive` deployment artifact is extracted into the application directory.
 1. A node template can have conditional deployment artifacts.
 1. A node type cannot have conditional deployment artifacts.
-1. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
-
+1. A _custom node type_ cannot have deployment artifacts.
+2. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
    
 --8<-- "acd.md"
