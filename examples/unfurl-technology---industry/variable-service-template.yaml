@@ -11,6 +11,18 @@ topology_template:
         retailer_name:
             type: string
 
+        database_password:
+            type: string
+
+        storage_password:
+            type: string
+
+        minio_user:
+            type: string
+
+        minio_secret:
+            type: string
+
         global_service_gateway_endpoint:
             type: string
 
@@ -364,14 +376,14 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
 
-                - bucket_name: {eval: '.::.requirements::[.name=bucket]::.target::bucket_name'}
-                - bucket_endpoint: {eval: '.::.requirements::[.name=bucket]::.target::bucket_endpoint'}
-                - bucket_token: {eval: '.::.requirements::[.name=bucket]::.target::bucket_token'}
-                - bucket_dialect: {eval: '.::.requirements::[.name=bucket]::.target::bucket_dialect'}
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
                 - database: global_database_products
-                - bucket: global_bucket_products
+                - storage: global_storage_products
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -389,15 +401,16 @@ topology_template:
             requirements:
                 - host: global_dbms
 
-        global_bucket_products:
-            type: bucket
+        global_storage_products:
+            type: object.storage
             properties:
-                - bucket_name: products
-                - bucket_dialect:
+                - storage_name: products
+                - storage_token: {get_input: storage_password}
+                - storage_dialect:
                       value: minio
                       conditions: {node_presence: global_minio}
 
-                - bucket_dialect:
+                - storage_dialect:
                       value: gcp
                       conditions: {node_presence: gcp_cloudstorage}
             requirements:
@@ -434,14 +447,14 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
 
-                - bucket_name: {eval: '.::.requirements::[.name=bucket]::.target::bucket_name'}
-                - bucket_endpoint: {eval: '.::.requirements::[.name=bucket]::.target::bucket_endpoint'}
-                - bucket_token: {eval: '.::.requirements::[.name=bucket]::.target::bucket_token'}
-                - bucket_dialect: {eval: '.::.requirements::[.name=bucket]::.target::bucket_dialect'}
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
                 - database: global_database_calibrations
-                - bucket: global_bucket_calibrations
+                - storage: global_storage_calibrations
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -459,15 +472,16 @@ topology_template:
             requirements:
                 - host: global_dbms
 
-        global_bucket_calibrations:
-            type: bucket
+        global_storage_calibrations:
+            type: object.storage
             properties:
-                - bucket_name: calibrations
-                - bucket_dialect:
+                - storage_name: calibrations
+                - storage_token: {get_input: storage_password}
+                - storage_dialect:
                       value: minio
                       conditions: {node_presence: global_minio}
 
-                - bucket_dialect:
+                - storage_dialect:
                       value: gcp
                       conditions: {node_presence: gcp_cloudstorage}
             requirements:
@@ -585,6 +599,8 @@ topology_template:
                 - application_name: global-minio-server
                 - application_port: 9000
                 - application_protocol: http
+                - access_key: {get_input: minio_user}
+                - secret_key: {get_input: minio_secret}
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
@@ -881,14 +897,14 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
 
-                - bucket_name: {eval: '.::.requirements::[.name=bucket]::.target::bucket_name'}
-                - bucket_endpoint: {eval: '.::.requirements::[.name=bucket]::.target::bucket_endpoint'}
-                - bucket_token: {eval: '.::.requirements::[.name=bucket]::.target::bucket_token'}
-                - bucket_dialect: {eval: '.::.requirements::[.name=bucket]::.target::bucket_dialect'}
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
                 - database: retailer_database_stores
-                - bucket: retailer_bucket_stores
+                - storage: retailer_storage_stores
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -906,15 +922,16 @@ topology_template:
             requirements:
                 - host: retailer_dbms
 
-        retailer_bucket_stores:
-            type: bucket
+        retailer_storage_stores:
+            type: object.storage
             properties:
-                - bucket_name: stores
-                - bucket_dialect:
+                - storage_name: stores
+                - storage_token: {get_input: storage_password}
+                - storage_dialect:
                       value: minio
                       conditions: {node_presence: retailer_minio}
 
-                - bucket_dialect:
+                - storage_dialect:
                       value: gcp
                       conditions: {node_presence: gcp_cloudstorage}
             requirements:
@@ -967,14 +984,14 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
 
-                - bucket_name: {eval: '.::.requirements::[.name=bucket]::.target::bucket_name'}
-                - bucket_endpoint: {eval: '.::.requirements::[.name=bucket]::.target::bucket_endpoint'}
-                - bucket_token: {eval: '.::.requirements::[.name=bucket]::.target::bucket_token'}
-                - bucket_dialect: {eval: '.::.requirements::[.name=bucket]::.target::bucket_dialect'}
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
                 - database: retailer_database_products
-                - bucket: retailer_bucket_products
+                - storage: retailer_storage_products
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -992,15 +1009,16 @@ topology_template:
             requirements:
                 - host: retailer_dbms
 
-        retailer_bucket_products:
-            type: bucket
+        retailer_storage_products:
+            type: object.storage
             properties:
-                - bucket_name: products
-                - bucket_dialect:
+                - storage_name: products
+                - storage_token: {get_input: storage_password}
+                - storage_dialect:
                       value: minio
                       conditions: {node_presence: retailer_minio}
 
-                - bucket_dialect:
+                - storage_dialect:
                       value: gcp
                       conditions: {node_presence: gcp_cloudstorage}
             requirements:
@@ -1194,6 +1212,8 @@ topology_template:
                 - application_name: retailer-minio-server
                 - application_port: 9000
                 - application_protocol: http
+                - access_key: {get_input: minio_user}
+                - secret_key: {get_input: minio_secret}
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
