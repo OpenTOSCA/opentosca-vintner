@@ -235,7 +235,6 @@ export default async function (options: StudyTechnologyOptions) {
 
         const quality = await Controller.template.quality({
             template: templateFile,
-            experimental: true,
             inputs,
         })
 
