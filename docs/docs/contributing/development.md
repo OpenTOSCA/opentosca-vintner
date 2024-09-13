@@ -134,5 +134,11 @@ First, make changes to the package inside `node_modules`.
 Then, create the patch.
 
 ```shell linenums="1"
-./task patch-package --exclude 'nothing' ${package-name}
+yarn patch-package --exclude 'nothing' ${package-name}
 ```
+
+## Night
+
+The Night workflow is scheduled for every tuesday at 420.
+This workflow ensures that the latest release is correctly signed and can be executed.
+Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.
