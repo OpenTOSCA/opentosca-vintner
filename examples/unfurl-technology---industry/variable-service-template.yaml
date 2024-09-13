@@ -1323,7 +1323,6 @@ topology_template:
         #
         ###################################################
 
-        # TODO: credentials are only present at customer else they are dynamic!
         kubernetes_cluster:
             type: kubernetes.cluster
             properties:
