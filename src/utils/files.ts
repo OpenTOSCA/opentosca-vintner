@@ -169,8 +169,57 @@ export function toFormat(obj: any, format: string) {
     if (format === 'ini') return toINI(obj)
     if (format === 'env') return toENV(obj)
     if (format === 'xml') return toXML(obj)
+    if (format === 'latex') return toLatex(obj)
 
     throw new Error(`Format "${format}" not supported`)
+}
+
+export function toLatex(obj: any) {
+    assert.isArray(obj)
+    // TODO: this is dirty
+    const list = obj as {[key: string]: any}[]
+
+    /**
+     * Collect all possible keys
+     */
+    const keys = new Set<string>()
+    list.forEach(item => {
+        Object.keys(item).forEach(key => keys.add(key))
+    })
+
+    // TODO: remove this
+    keys.delete('details')
+    keys.delete('reason')
+
+    const data = []
+
+    /**
+     * Header
+     */
+    data.push('\\toprule')
+    data.push('index & ' + Array.from(keys).join(' & ') + '\\\\')
+    data.push('\\midrule')
+
+    /**
+     * Entries
+     */
+    list.forEach((item, index) => {
+        const tmp = [index]
+        for (const key of keys) {
+            const raw = item[key]
+            // TODO: not latex safe
+            const string = JSON.stringify(raw)
+            tmp.push(raw)
+        }
+        data.push(tmp.join(' & ') + '\\\\')
+    })
+
+    /**
+     * Footer
+     */
+    data.push('\\bottomrule')
+
+    return data.join('\n')
 }
 
 export function formatYAML(obj: any) {
