@@ -115,7 +115,7 @@ topology_template:
 
     variability:
         expressions:
-            has_info_logging: {equal: [{variability_input: logging}, ERROR]}
+            has_info_logging: {equal: [{variability_input: logging}, INFO]}
             has_debug_logging: {equal: [{variability_input: logging}, DEBUG]}
             has_error_masking: {equal: [{variability_input: errors}, true]}
 
@@ -125,8 +125,8 @@ topology_template:
             has_playground: {equal: [{variability_input: playground}, true]}
 
             has_import: {equal: [{variability_input: import}, true]}
-            has_import_schema_a: {equal: [{variability_input: import_schema}, A]}
-            has_import_schema_b: {equal: [{variability_input: import_schema}, B]}
+            has_import_schema_a: {and: [{logic_expression: has_import}, {equal: [{variability_input: import_schema}, A]}]}
+            has_import_schema_b: {and: [{logic_expression: has_import}, {equal: [{variability_input: import_schema}, B]}]}
 
             has_payment_merchant_a: {equal: [{variability_input: payment_merchant_a}, true]}
             has_payment_merchant_b: {equal: [{variability_input: payment_merchant_b}, true]}
@@ -150,7 +150,7 @@ topology_template:
 
             errors:
                 type: boolean
-                default: false
+                default: true
 
             logging:
                 type: string
@@ -178,11 +178,11 @@ topology_template:
 
             payment_merchant_a:
                 type: boolean
-                default: true
+                default: false
 
             payment_merchant_b:
                 type: boolean
-                default: true
+                default: false
 
     node_templates:
         ###################################################
@@ -193,6 +193,7 @@ topology_template:
 
         global_frontend_dashboard:
             type: global.frontend.dashboard
+            persistent: true
             properties:
                 - application_name: global-frontend-dashboard
                 - application_port: 3000
@@ -202,7 +203,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - global_service_gateway_endpoint: {eval: '.::.requirements::[.name=global_service_gateway]::.target::application_endpoint'}
@@ -231,7 +232,6 @@ topology_template:
 
         global_service_gateway:
             type: global.service.gateway
-            persistent: true
             properties:
                 - application_name: global-service-gateway
                 - application_port: 4000
@@ -242,7 +242,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - domain: {get_input: retailer_name}
@@ -314,7 +314,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
@@ -363,7 +363,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
@@ -434,7 +434,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
@@ -505,7 +505,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
@@ -618,6 +618,7 @@ topology_template:
 
         retailer_frontend_dashboard:
             type: retailer.frontend.dashboard
+            persistent: true
             properties:
                 - application_name: retailer-frontend-dashboard
                 - application_port: 3000
@@ -627,7 +628,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
@@ -656,6 +657,7 @@ topology_template:
 
         retailer_frontend_terminal:
             type: retailer.frontend.terminal
+            persistent: true
             properties:
                 - application_name: retailer-frontend-terminal
                 - application_port: 3000
@@ -665,7 +667,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
@@ -694,7 +696,6 @@ topology_template:
 
         retailer_service_gateway:
             type: retailer.service.gateway
-            persistent: true
             properties:
                 - application_name: retailer-service-gateway
                 - application_port: 4000
@@ -705,7 +706,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_name: {get_input: retailer_name}
@@ -783,7 +784,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -853,7 +854,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -884,7 +885,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -955,7 +956,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -1042,7 +1043,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -1090,7 +1091,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
@@ -1138,7 +1139,7 @@ topology_template:
                       conditions: {logic_expression: has_info_logging}
 
                 - logging_level:
-                      value: info
+                      value: debug
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
