@@ -1,6 +1,6 @@
 {
     "name": "opentosca-vintner",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "repository": "https://github.com/OpenTOSCA/opentosca-vintner",
     "homepage": "https://vintner.opentosca.org",
     "author": {
@@ -30,7 +30,9 @@
         "LICENSE",
         "README.md",
         "package.json",
-        "yarn.lock"
+        "yarn.lock",
+        "tasks",
+        "task"
     ],
     "dependencies": {
         "archiver": "^7.0.1",

@@ -134,5 +134,5 @@ First, make changes to the package inside `node_modules`.
 Then, create the patch.
 
 ```shell linenums="1"
-./task patch-package --exclude 'nothing' ${package-name}
+yarn patch-package --exclude 'nothing' ${package-name}
 ```
