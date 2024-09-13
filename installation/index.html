@@ -7993,11 +7993,7 @@
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">&quot;https://vintner.opentosca.org/install.ps1&quot;</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">powershell</span> <span class="n">-Command</span> <span class="s2">&quot;&amp; {Invoke-WebRequest -Uri &#39;https://vintner.opentosca.org/install.ps1&#39; -UseBasicParsing | Invoke-Expression}&quot;</span>
 </code></pre></div></td></tr></table></div>
 <p>Install a specific version as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
@@ -8402,7 +8398,7 @@ The public key is also available as <a href="https://vintner.opentosca.org/vintn
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 12, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 13, 2024</span>
       
     
   </small>
