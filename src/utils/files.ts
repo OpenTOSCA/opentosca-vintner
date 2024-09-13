@@ -181,7 +181,6 @@ export function toLatex(obj: any) {
 
     /**
      * Collect all possible keys
-     */
     const keys = new Set<string>()
     list.forEach(item => {
         Object.keys(item).forEach(key => keys.add(key))
@@ -190,6 +189,9 @@ export function toLatex(obj: any) {
     // TODO: remove this
     keys.delete('details')
     keys.delete('reason')
+     */
+
+    const keys = ['component', 'artifact', 'hosting', 'technology', 'weight']
 
     const data = []
 
