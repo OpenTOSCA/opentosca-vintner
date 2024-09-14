@@ -26,9 +26,7 @@ Vintner can be installed on Linux x64/ arm64 and Windows x64 using our installat
 
 === "Windows x64"
     ```powershell linenums="1"
-    Invoke-WebRequest -Uri "https://vintner.opentosca.org/install.ps1" -OutFile install.ps1
-    powershell -ExecutionPolicy Bypass -File .\install.ps1
-    Remove-Item install.ps1
+    powershell -Command "& {Invoke-WebRequest -Uri 'https://vintner.opentosca.org/install.ps1' -UseBasicParsing | Invoke-Expression}"
     ```
 
     Install a specific version as follows.

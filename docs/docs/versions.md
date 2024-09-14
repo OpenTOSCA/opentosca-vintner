@@ -20,8 +20,9 @@ These images are not removed.
 
 The versions used in package managers, such as npm, use semantic versioning.
 
-| Package Version | Vintner Version                           |
-|-----------------|-------------------------------------------|
-| 0.1.5           | 0ca9400c337530d629125c2080db3710824f77ad  |
-| 0.1.4           | 5e5e3bca56ad702ec0d3c3561a1eac3363576a3c  |
-| 0.1.3           | b75c2fdb75334a7f6ff531ad8b4e47bd188b964a  |
+| Package Version | Vintner Version                            |
+|-----------------|--------------------------------------------|
+| 0.1.7           | a3d1b58a49a02a274bc5c5124e44eca4a1b2b7a3   |
+| 0.1.5           | 0ca9400c337530d629125c2080db3710824f77ad   |
+| 0.1.4           | 5e5e3bca56ad702ec0d3c3561a1eac3363576a3c   |
+| 0.1.3           | b75c2fdb75334a7f6ff531ad8b4e47bd188b964a   |

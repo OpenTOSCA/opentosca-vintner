@@ -43,11 +43,6 @@ There is only one release at total.
 However, there is also the Build workflow. 
 This workflow basically has the same steps as the Release workflow but does create his own GitHub release and does not deploy the docs.
 
-## Night
-
-The Night workflow is scheduled for every tuesday at 420.
-This workflow ensures that the latest release is correctly signed and can be executed.
-Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.
 
 ## NPM
 
