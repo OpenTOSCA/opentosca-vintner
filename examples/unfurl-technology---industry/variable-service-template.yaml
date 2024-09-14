@@ -556,8 +556,10 @@ topology_template:
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudsql
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
             artifacts:
                 - dbms_image:
                       type: dbms.image
@@ -1170,8 +1172,10 @@ topology_template:
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudsql
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
             artifacts:
                 - dbms_image:
                       type: dbms.image

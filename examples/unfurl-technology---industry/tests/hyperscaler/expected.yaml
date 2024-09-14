@@ -17,12 +17,6 @@ topology_template:
         storage_password:
             type: string
 
-        minio_user:
-            type: string
-
-        minio_secret:
-            type: string
-
         global_service_gateway_endpoint:
             type: string
 
@@ -47,13 +41,25 @@ topology_template:
         sms_provider_token:
             type: string
 
-        coffee_provider_type:
+        gcp_region:
             type: string
 
-        coffee_provider_endpoint:
+        gcp_service_account_file:
             type: string
 
-        coffee_provider_token:
+        gcp_project:
+            type: string
+
+        k8s_host:
+            type: string
+
+        k8s_ca_cert_file:
+            type: string
+
+        k8s_client_cert_file:
+            type: string
+
+        k8s_client_key_file:
             type: string
 
     node_templates:
@@ -73,8 +79,6 @@ topology_template:
                 global_service_gateway_endpoint: {eval: '.::.requirements::[.name=global_service_gateway]::.target::application_endpoint'}
             requirements:
                 - global_service_gateway: global_service_gateway
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -85,7 +89,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: global_frontend_dashboard
-                - host: virtual_machine
                 - host: kubernetes_cluster
 
         ###################################################
@@ -104,7 +107,7 @@ topology_template:
                 domain: {get_input: retailer_name}
                 graphql_introspection: false
                 graphql_playground: false
-                has_error_masking: false
+                has_error_masking: true
                 global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
                 global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
                 global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
@@ -116,8 +119,6 @@ topology_template:
                 - global_service_products: global_service_products
                 - global_service_calibrations: global_service_calibrations
                 - global_service_accounts: global_service_accounts
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -128,7 +129,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: global_service_gateway
-                - host: virtual_machine
                 - host: kubernetes_cluster
 
         ###################################################
@@ -154,8 +154,6 @@ topology_template:
                 mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: global_database_retailers
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -199,8 +197,6 @@ topology_template:
             requirements:
                 - database: global_database_products
                 - storage: global_storage_products
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -221,9 +217,8 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: gcp
             requirements:
-                - host: global_minio
                 - host: gcp_cloudstorage
 
         ###################################################
@@ -254,8 +249,6 @@ topology_template:
             requirements:
                 - database: global_database_calibrations
                 - storage: global_storage_calibrations
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -276,9 +269,8 @@ topology_template:
             properties:
                 storage_name: calibrations
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: gcp
             requirements:
-                - host: global_minio
                 - host: gcp_cloudstorage
 
         ###################################################
@@ -308,8 +300,6 @@ topology_template:
                 sms_provider_token: {get_input: sms_provider_token}
             requirements:
                 - database: global_database_accounts
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -337,9 +327,6 @@ topology_template:
                 dbms_name: unfurl-technology-industry-global-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudsql
             artifacts:
                 dbms_image:
@@ -358,38 +345,11 @@ topology_template:
                 cache_name: global-cache-redis
                 cache_port: 6379
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: gcp_memorystore
-                - host:
-                      node: kubernetes_cluster
             artifacts:
                 cache_image:
                     type: cache.image
                     file: 7.4.0
-
-        ###################################################
-        #
-        # Global MinIO
-        #
-        ###################################################
-
-        global_minio:
-            type: minio.server
-            properties:
-                application_name: global-minio-server
-                application_port: 9000
-                application_protocol: http
-                access_key: {get_input: minio_user}
-                secret_key: {get_input: minio_secret}
-            requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
-                - host: kubernetes_cluster
-            artifacts:
-                docker_image:
-                    type: docker.image
-                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
 
         ###################################################
         #
@@ -407,8 +367,6 @@ topology_template:
                 retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
             requirements:
                 - retailer_service_gateway: retailer_service_gateway
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -419,7 +377,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: retailer_frontend_dashboard
-                - host: virtual_machine
                 - host: kubernetes_cluster
 
         ###################################################
@@ -438,8 +395,6 @@ topology_template:
                 retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
             requirements:
                 - retailer_service_gateway: retailer_service_gateway
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -450,7 +405,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: retailer_frontend_terminal
-                - host: virtual_machine
                 - host: kubernetes_cluster
 
         ###################################################
@@ -487,8 +441,6 @@ topology_template:
                 - retailer_service_stocks: retailer_service_stocks
                 - retailer_service_orders: retailer_service_orders
                 - retailer_service_global: retailer_service_global
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -499,7 +451,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: retailer_service_gateway
-                - host: virtual_machine
                 - host: kubernetes_cluster
 
         ###################################################
@@ -522,8 +473,6 @@ topology_template:
                 payment_merchant_a_enabled: false
                 payment_merchant_b_enabled: false
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -545,8 +494,6 @@ topology_template:
                 logging_level: info
                 retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -581,8 +528,6 @@ topology_template:
             requirements:
                 - database: retailer_database_stores
                 - storage: retailer_storage_stores
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -603,9 +548,8 @@ topology_template:
             properties:
                 storage_name: stores
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: gcp
             requirements:
-                - host: retailer_minio
                 - host: gcp_cloudstorage
 
         ###################################################
@@ -637,8 +581,6 @@ topology_template:
             requirements:
                 - database: retailer_database_products
                 - storage: retailer_storage_products
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -659,9 +601,8 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: gcp
             requirements:
-                - host: retailer_minio
                 - host: gcp_cloudstorage
 
         ###################################################
@@ -687,8 +628,6 @@ topology_template:
                 mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_stocks
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -727,8 +666,6 @@ topology_template:
                 mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_orders
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -762,8 +699,6 @@ topology_template:
                 global_service_gateway_token: {get_input: global_service_gateway_token}
             requirements:
                 - database: retailer_database_orders
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: kubernetes_cluster
             artifacts:
                 docker_image:
@@ -782,9 +717,6 @@ topology_template:
                 dbms_name: unfurl-technology-industry-retailer-dbms
                 dbms_password: {get_input: dbms_password}
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudsql
             artifacts:
                 dbms_image:
@@ -803,91 +735,11 @@ topology_template:
                 cache_name: retailer-cache-redis
                 cache_port: 6379
             requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
                 - host: gcp_memorystore
-                - host:
-                      node: kubernetes_cluster
             artifacts:
                 cache_image:
                     type: cache.image
                     file: 7.4.0
-
-        ###################################################
-        #
-        # Retailer MinIO
-        #
-        ###################################################
-
-        retailer_minio:
-            type: minio.server
-            properties:
-                application_name: retailer-minio-server
-                application_port: 9000
-                application_protocol: http
-                access_key: {get_input: minio_user}
-                secret_key: {get_input: minio_secret}
-            requirements:
-                - host: local_docker_engine
-                - host: remote_docker_engine
-                - host: kubernetes_cluster
-            artifacts:
-                docker_image:
-                    type: docker.image
-                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
-
-        ###################################################
-        #
-        # Local Machine
-        #
-        ###################################################
-
-        local_docker_engine:
-            type: docker.engine
-            requirements:
-                - host: local_machine
-
-        local_machine:
-            type: local.machine
-
-        ###################################################
-        #
-        # Virtual Machine
-        #
-        ###################################################
-
-        remote_docker_engine:
-            type: docker.engine
-            requirements:
-                - host: virtual_machine
-
-        virtual_machine:
-            type: virtual.machine
-            properties:
-                machine_name: unfurl-technology-boutique
-                ports: ['80', '2375', '9100']
-                flavor: m1.medium
-                network: {get_input: os_network}
-                ssh_user: {get_input: os_ssh_user}
-                ssh_key_name: {get_input: os_ssh_key_name}
-                ssh_key_file: {get_input: os_ssh_key_file}
-            requirements:
-                - host: openstack_provider
-            artifacts:
-                machine_image:
-                    type: machine.image
-                    file: Ubuntu 22.04
-
-        openstack_provider:
-            type: openstack.provider
-            properties:
-                os_region_name: {get_input: os_region_name}
-                os_auth_type: {get_input: os_auth_type}
-                os_auth_url: {get_input: os_auth_url}
-                os_identity_api_version: {get_input: os_identity_api_version}
-                os_interface: {get_input: os_interface}
-                os_application_credential_id: {get_input: os_application_credential_id}
-                os_application_credential_secret: {get_input: os_application_credential_secret}
 
         ###################################################
         #
@@ -941,8 +793,4 @@ topology_template:
                 k8s_client_cert_file: {get_input: k8s_client_cert_file}
                 k8s_client_key_file: {get_input: k8s_client_key_file}
             requirements:
-                - host: kubernetes_provider
                 - host: gcp_kubernetesengine
-
-        kubernetes_provider:
-            type: cloud.provider
