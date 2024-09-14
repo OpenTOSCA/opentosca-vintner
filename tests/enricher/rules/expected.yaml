@@ -41,22 +41,34 @@ topology_template:
                   - terraform:
                         assign: application~application::terraform@terraform_host
                         conditions:
-                            - {node_presence: terraform_host, _generated: true}
+                            - and:
+                                  - relation_presence: [application, 1]
+                                  - node_presence: terraform_host
+                              _generated: true
 
                   - terraform:
                         assign: application~application::terraform@ansible_terraform_host
                         conditions:
-                            - {node_presence: ansible_terraform_host, _generated: true}
+                            - and:
+                                  - relation_presence: [application, 2]
+                                  - node_presence: ansible_terraform_host
+                              _generated: true
 
                   - ansible:
                         assign: application~application::ansible@ansible_host
                         conditions:
-                            - {node_presence: ansible_host, _generated: true}
+                            - and:
+                                  - relation_presence: [application, 0]
+                                  - node_presence: ansible_host
+                              _generated: true
 
                   - ansible:
                         assign: application~application::ansible@ansible_terraform_host
                         conditions:
-                            - {node_presence: ansible_terraform_host, _generated: true}
+                            - and:
+                                  - relation_presence: [application, 2]
+                                  - node_presence: ansible_terraform_host
+                              _generated: true
 
         - ansible_host:
               type:
