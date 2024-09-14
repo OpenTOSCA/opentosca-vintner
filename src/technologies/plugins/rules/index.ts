@@ -185,6 +185,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         assert.isDefined(search)
 
         for (const host of node.hosts) {
+            // TODO: should assert somewhere that there is at max one hosting between the two nodes!
             const relation = node.outgoing.find(it => it.isHostedOn() && it.target === host)
             assert.isDefined(relation)
 
