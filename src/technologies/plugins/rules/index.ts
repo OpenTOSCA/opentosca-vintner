@@ -185,9 +185,14 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         assert.isDefined(search)
 
         for (const host of node.hosts) {
+            // TODO: should assert somewhere that there is at max one hosting between the two nodes!
+            const relation = node.outgoing.find(it => it.isHostedOn() && it.target === host)
+            assert.isDefined(relation)
+
             if (host.getType().isA(search)) {
                 // Deep copy since every child call changes the state of history
                 const historyCopy = utils.copy(history)
+                historyCopy.push({relation_presence: relation.toscaId})
                 historyCopy.push({node_presence: host.name})
 
                 // Deep copy since every child call changes the state of hosting
@@ -212,6 +217,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             if (asterisk) {
                 // Deep copy since every child call changes the state of history
                 const historyCopy = utils.copy(history)
+                historyCopy.push({relation_presence: relation.toscaId})
                 historyCopy.push({node_presence: host.name})
 
                 // Deep copy since every child call changes the state of hosting

@@ -63,15 +63,21 @@ topology_template:
                         assign: application~application::terraform@first_host->first_host_host->first_host_host_second_host
                         conditions:
                             - and:
+                                  - relation_presence: [application, 0]
                                   - node_presence: first_host
+                                  - relation_presence: [first_host, 0]
                                   - node_presence: first_host_host
+                                  - relation_presence: [first_host_host, 1]
                                   - node_presence: first_host_host_second_host
                               _generated: true
                   - terraform:
                         assign: application~application::terraform@second_host
                         conditions:
-                            - node_presence: second_host
+                            - and:
+                                  - relation_presence: [application, 1]
+                                  - node_presence: second_host
                               _generated: true
+
               conditions: []
         - first_host:
               type:
