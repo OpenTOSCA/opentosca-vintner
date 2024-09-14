@@ -88,7 +88,7 @@ topology_template:
         ###################################################
 
         global_frontend_dashboard:
-            type: global.frontend.dashboard
+            type: global.frontend.dashboard~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-frontend-dashboard
                 application_port: 3000
@@ -104,7 +104,7 @@ topology_template:
                     file: global.frontend.dashboard:vX.Y.Z
 
         global_ingress_dashboard:
-            type: ingress
+            type: ingress~ingress::ansible@remote.machine
             requirements:
                 - application: global_frontend_dashboard
                 - host: virtual_machine
@@ -116,7 +116,7 @@ topology_template:
         ###################################################
 
         global_service_gateway:
-            type: global.service.gateway
+            type: global.service.gateway~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-service-gateway
                 application_port: 4000
@@ -144,7 +144,7 @@ topology_template:
                     file: retailer.service.gateway:vX.Y.Z
 
         global_ingress_gateway:
-            type: ingress
+            type: ingress~ingress::ansible@remote.machine
             requirements:
                 - application: global_service_gateway
                 - host: virtual_machine
@@ -156,7 +156,7 @@ topology_template:
         ###################################################
 
         global_service_retailers:
-            type: global.service.retailers
+            type: global.service.retailers~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-service-retailers
                 application_port: 4000
@@ -179,7 +179,7 @@ topology_template:
                     file: global.service.retailers:vX.Y.Z
 
         global_database_retailers:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: retailers
                 database_user: retailers
@@ -194,7 +194,7 @@ topology_template:
         ###################################################
 
         global_service_products:
-            type: global.service.products
+            type: global.service.products~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-service-products
                 application_port: 4000
@@ -222,7 +222,7 @@ topology_template:
                     file: global.service.products:vX.Y.Z
 
         global_database_products:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: products
                 database_user: products
@@ -231,7 +231,7 @@ topology_template:
                 - host: global_dbms
 
         global_storage_products:
-            type: object.storage
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
@@ -246,7 +246,7 @@ topology_template:
         ###################################################
 
         global_service_calibrations:
-            type: global.service.calibrations
+            type: global.service.calibrations~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-service-calibrations
                 application_port: 4000
@@ -274,7 +274,7 @@ topology_template:
                     file: global.service.calibrations:vX.Y.Z
 
         global_database_calibrations:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: calibrations
                 database_user: calibrations
@@ -283,7 +283,7 @@ topology_template:
                 - host: global_dbms
 
         global_storage_calibrations:
-            type: object.storage
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
             properties:
                 storage_name: calibrations
                 storage_token: {get_input: storage_password}
@@ -298,7 +298,7 @@ topology_template:
         ###################################################
 
         global_service_accounts:
-            type: global.service.accounts
+            type: global.service.accounts~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-service-accounts
                 application_port: 4000
@@ -325,7 +325,7 @@ topology_template:
                     file: global.service.accounts:vX.Y.Z
 
         global_database_accounts:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: accounts
                 database_user: accounts
@@ -340,7 +340,7 @@ topology_template:
         ###################################################
 
         global_dbms:
-            type: mysql.dbms
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
             properties:
                 dbms_name: unfurl-technology-industry-global-dbms
                 dbms_password: {get_input: dbms_password}
@@ -358,7 +358,7 @@ topology_template:
         ###################################################
 
         global_cache_redis:
-            type: redis.server
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
             properties:
                 cache_name: global-cache-redis
                 cache_port: 6379
@@ -376,7 +376,7 @@ topology_template:
         ###################################################
 
         global_minio:
-            type: minio.server
+            type: minio.server~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: global-minio-server
                 application_port: 9000
@@ -397,7 +397,7 @@ topology_template:
         ###################################################
 
         retailer_frontend_dashboard:
-            type: retailer.frontend.dashboard
+            type: retailer.frontend.dashboard~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-frontend-dashboard
                 application_port: 3000
@@ -413,7 +413,7 @@ topology_template:
                     file: retailer.frontend.dashboard:vX.Y.Z
 
         retailer_ingress_dashboard:
-            type: ingress
+            type: ingress~ingress::ansible@remote.machine
             requirements:
                 - application: retailer_frontend_dashboard
                 - host: virtual_machine
@@ -425,7 +425,7 @@ topology_template:
         ###################################################
 
         retailer_frontend_terminal:
-            type: retailer.frontend.terminal
+            type: retailer.frontend.terminal~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-frontend-terminal
                 application_port: 3000
@@ -441,7 +441,7 @@ topology_template:
                     file: retailer.frontend.dashboard:vX.Y.Z
 
         retailer_ingress_terminal:
-            type: ingress
+            type: ingress~ingress::ansible@remote.machine
             requirements:
                 - application: retailer_frontend_terminal
                 - host: virtual_machine
@@ -453,7 +453,7 @@ topology_template:
         ###################################################
 
         retailer_service_gateway:
-            type: retailer.service.gateway
+            type: retailer.service.gateway~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-gateway
                 application_port: 4000
@@ -487,7 +487,7 @@ topology_template:
                     file: retailer.service.gateway:vX.Y.Z
 
         retailer_ingress_gateway:
-            type: ingress
+            type: ingress~ingress::ansible@remote.machine
             requirements:
                 - application: retailer_service_gateway
                 - host: virtual_machine
@@ -499,7 +499,7 @@ topology_template:
         ###################################################
 
         retailer_service_core:
-            type: retailer.service.core
+            type: retailer.service.core~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-core
                 application_port: 4000
@@ -525,7 +525,7 @@ topology_template:
         ###################################################
 
         retailer_service_jobs:
-            type: retailer.service.jobs
+            type: retailer.service.jobs~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-core
                 application_port: 4000
@@ -546,7 +546,7 @@ topology_template:
         ###################################################
 
         retailer_service_stores:
-            type: retailer.service.stores
+            type: retailer.service.stores~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-stores
                 application_port: 4000
@@ -574,7 +574,7 @@ topology_template:
                     file: retailer.service.stores:vX.Y.Z
 
         retailer_database_stores:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: stores
                 database_user: stores
@@ -583,7 +583,7 @@ topology_template:
                 - host: retailer_dbms
 
         retailer_storage_stores:
-            type: object.storage
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
             properties:
                 storage_name: stores
                 storage_token: {get_input: storage_password}
@@ -598,7 +598,7 @@ topology_template:
         ###################################################
 
         retailer_service_products:
-            type: retailer.service.products
+            type: retailer.service.products~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-products
                 application_port: 4000
@@ -627,7 +627,7 @@ topology_template:
                     file: retailer.service.products:vX.Y.Z
 
         retailer_database_products:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: products
                 database_user: products
@@ -636,7 +636,7 @@ topology_template:
                 - host: retailer_dbms
 
         retailer_storage_products:
-            type: object.storage
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
@@ -651,7 +651,7 @@ topology_template:
         ###################################################
 
         retailer_service_stocks:
-            type: retailer.service.stocks
+            type: retailer.service.stocks~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-stocks
                 application_port: 4000
@@ -674,7 +674,7 @@ topology_template:
                     file: retailer.service.stocks:vX.Y.Z
 
         retailer_database_stocks:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: stocks
                 database_user: stocks
@@ -689,7 +689,7 @@ topology_template:
         ###################################################
 
         retailer_service_orders:
-            type: retailer.service.orders
+            type: retailer.service.orders~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-orders
                 application_port: 4000
@@ -712,7 +712,7 @@ topology_template:
                     file: retailer.service.stocks:vX.Y.Z
 
         retailer_database_orders:
-            type: mysql.database
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
             properties:
                 database_name: orders
                 database_user: orders
@@ -727,7 +727,7 @@ topology_template:
         ###################################################
 
         retailer_service_global:
-            type: retailer.service.global
+            type: retailer.service.global~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-service-global
                 application_port: 4000
@@ -751,7 +751,7 @@ topology_template:
         ###################################################
 
         retailer_dbms:
-            type: mysql.dbms
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
             properties:
                 dbms_name: unfurl-technology-industry-retailer-dbms
                 dbms_password: {get_input: dbms_password}
@@ -769,7 +769,7 @@ topology_template:
         ###################################################
 
         retailer_cache_redis:
-            type: redis.server
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
             properties:
                 cache_name: retailer-cache-redis
                 cache_port: 6379
@@ -787,7 +787,7 @@ topology_template:
         ###################################################
 
         retailer_minio:
-            type: minio.server
+            type: minio.server~service.application#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: retailer-minio-server
                 application_port: 9000
@@ -808,12 +808,12 @@ topology_template:
         ###################################################
 
         remote_docker_engine:
-            type: docker.engine
+            type: docker.engine~docker.engine::ansible@remote.machine
             requirements:
                 - host: virtual_machine
 
         virtual_machine:
-            type: virtual.machine
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
             properties:
                 machine_name: unfurl-technology-boutique
                 ports: ['80', '2375', '9100']
