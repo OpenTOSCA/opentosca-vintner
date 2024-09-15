@@ -8,6 +8,7 @@ import std from '#std'
 import hae from '#utils/hae'
 import open from '#utils/open'
 import {Command, Option} from 'commander'
+import * as util from 'node:util'
 
 export const program = new Command()
 
@@ -497,7 +498,7 @@ template
     )
     .action(
         hae.exit(async options => {
-            std.out(await Controller.template.quality(options))
+            std.out(util.inspect(await Controller.template.quality(options), {depth: null}))
         })
     )
 

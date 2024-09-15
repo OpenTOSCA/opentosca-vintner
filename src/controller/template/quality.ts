@@ -73,9 +73,14 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
     )
      */
 
+    const minResult = utils.first(candidates)
+    const maxResult = utils.last(candidates)
+
     return {
-        min: utils.roundNumber(utils.first(candidates).quality.average),
-        max: utils.roundNumber(utils.last(candidates).quality.average),
+        weight: utils.roundNumber(minResult.quality.average),
+        direction,
+        min_count: minResult.technologies,
+        max_count: maxResult.technologies,
     }
 }
 
@@ -91,5 +96,11 @@ async function weightCount(options: TemplateQualityOptions) {
     })
     const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
     if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-    return utils.roundNumber(utils.first(optimized).quality.average)
+
+    const result = utils.first(optimized)
+
+    return {
+        max_weight: utils.roundNumber(result.quality.average),
+        min_count: result.technologies,
+    }
 }
