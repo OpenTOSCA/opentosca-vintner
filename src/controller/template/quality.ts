@@ -38,7 +38,14 @@ async function weight(options: TemplateQualityOptions, direction: 'min' | 'max')
     })
     const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
     if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-    return utils.roundNumber(utils.first(optimized).quality.average)
+
+    const result = utils.first(optimized)
+
+    return {
+        weight: utils.roundNumber(result.quality.average),
+        direction,
+        count: result.technologies,
+    }
 }
 
 async function count(options: TemplateQualityOptions, direction: 'min' | 'max') {
