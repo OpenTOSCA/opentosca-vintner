@@ -4,6 +4,7 @@ import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import * as utils from '#utils'
+import * as console from 'node:console'
 import path from 'path'
 
 export type StudyTechnologyOptions = {
@@ -240,12 +241,21 @@ export default async function (options: StudyTechnologyOptions) {
 
         qualityData.push({
             scenario: original,
-            expert: quality.max_weight.weight,
-            non_expert: [quality.min_weight, quality.max_weight],
-            random: [quality.min_weight.weight, quality.max_weight.weight],
-            counting: [quality.min_count.min.weight, quality.min_count.max.weight],
-            quality: quality.max_weight.weight,
-            quality_counting: quality.max_weight_min_count.weight,
+            expert: utils.roundNumber(quality.max_weight.technologies.weight_average),
+            non_expert: [
+                utils.roundNumber(quality.min_weight.technologies.weight_average),
+                utils.roundNumber(quality.max_weight.technologies.weight_average),
+            ],
+            random: [
+                utils.roundNumber(quality.min_weight.technologies.weight_average),
+                utils.roundNumber(quality.max_weight.technologies.weight_average),
+            ],
+            counting: [
+                utils.roundNumber(quality.min_count.min.technologies.weight_average),
+                utils.roundNumber(quality.min_count.max.technologies.weight_average),
+            ],
+            quality: utils.roundNumber(quality.max_weight.technologies.weight_average),
+            quality_counting: utils.roundNumber(quality.max_weight_min_count.technologies.weight_average),
         })
     }
 
@@ -341,6 +351,10 @@ export default async function (options: StudyTechnologyOptions) {
          */
         relativeMaintenanceDiff(vdmm_plus_automated_diff, vdmm_baseline_diff),
     ])
+
+    console.log()
+    console.log('CAUTION: Is this case study running with the latest implementation?')
+    console.log()
 }
 
 type StudyConfig = {

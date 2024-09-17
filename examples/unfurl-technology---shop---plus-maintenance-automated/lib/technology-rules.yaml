@@ -5,64 +5,6 @@
 ###################################################
 
 - technology: ansible
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 0.5
-  reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
-- technology: terraform
-  component: bucket
-  hosting:
-      - gcp.cloudstorage
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - local.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - '*'
-      - remote.machine
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Primary use case due to the specialization of Ansible.
-- technology: terraform
-  component: bucket
-  hosting:
-      - minio.server
-      - kubernetes.cluster
-  weight: 1
-  reason: Terraform provides a declarative module.
-- technology: ansible
   component: docker.engine
   hosting:
       - local.machine
@@ -126,6 +68,20 @@
 - technology: ansible
   component: ingress
   hosting:
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+  details: '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks'
+- technology: terraform
+  component: ingress
+  hosting:
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" resource to create the installation script and "terraform_data" to execute the script using the "local-exec" provisioner'
+- technology: ansible
+  component: ingress
+  hosting:
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
@@ -159,8 +115,8 @@
       - mysql.dbms
       - docker.engine
       - local.machine
-  weight: 0.5
-  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
+  weight: 1
+  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
@@ -220,6 +176,20 @@
       - kubernetes.cluster
   weight: 0
   reason: Ansible is more specialized.
+- technology: ansible
+  component: mysql.database
+  hosting:
+      - mysql.dbms
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: terraform
+  component: mysql.database
+  hosting:
+      - mysql.dbms
+      - local.machine
+  weight: 1
+  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
@@ -332,6 +302,22 @@
   component: mysql.dbms
   artifact: dbms.image
   hosting:
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+  details: '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks'
+- technology: terraform
+  component: mysql.dbms
+  artifact: dbms.image
+  hosting:
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" resource to create the installation script and "terraform_data" to execute the script using the "local-exec" provisioner'
+- technology: ansible
+  component: mysql.dbms
+  artifact: dbms.image
+  hosting:
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
@@ -345,87 +331,176 @@
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"terraform_data" resource with an "ssh" connection to the virtual machine to copy the install script using the "file" provisioner on the virtual machine and to execute the script using the "remote-exec" provisioner'
 - technology: ansible
-  component: bucket
-  artifact: cache.image
+  component: object.storage
   hosting:
-      - gcp.memorystore
-  weight: 0.5
-  reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
+      - gcp.cloudstorage
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
-  component: redis.server
-  artifact: cache.image
+  component: object.storage
   hosting:
-      - gcp.memorystore
+      - gcp.cloudstorage
   weight: 1
   reason: Terraform provides a declarative module.
 - technology: ansible
-  component: redis.server
-  artifact: cache.image
+  component: object.storage
   hosting:
-      - docker.engine
-      - local.machine
-  weight: 0.5
-  reason: Docker Compose is more specialized.
-  details: '"community.docker.docker_container" task'
-- technology: compose
-  component: redis.server
-  artifact: cache.image
-  hosting:
+      - minio.server
       - docker.engine
       - local.machine
   weight: 1
-  reason: Docker is the underlying technology.
-  details: docker compose manifest generated and applied
-- technology: terraform
-  component: redis.server
-  artifact: cache.image
+  reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
   hosting:
+      - minio.server
       - docker.engine
       - local.machine
-  weight: 0.5
-  reason: Docker Compose is more specialized.
-  details: '"docker_container" and "docker_image" resources'
-- technology: ansible
-  component: redis.server
-  artifact: cache.image
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
   hosting:
+      - minio.server
       - docker.engine
-      - remote.machine
-  weight: 0.5
-  reason: Docker Compose is more specialized.
-  details: '"community.docker.docker_container" task'
-- technology: compose
-  component: redis.server
-  artifact: cache.image
+      - local.machine
+  weight: 1
+  reason: Terraform provides a declarative module.
+- technology: ansible
+  component: object.storage
   hosting:
+      - minio.server
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Docker is the underlying technology.
-  details: docker compose manifest generated and applied
-- technology: terraform
-  component: redis.server
-  artifact: cache.image
+  reason: Primary use case due to the specialization of Ansible.
+- technology: compose
+  component: object.storage
   hosting:
+      - minio.server
+      - docker.engine
+      - remote.machine
+  weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
-  details: '"docker_container" and "docker_image" resources'
+  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
-  component: redis.server
-  artifact: cache.image
+  component: object.storage
   hosting:
+      - minio.server
       - kubernetes.cluster
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+- technology: kubernetes
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 0
+  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
+- technology: terraform
+  component: object.storage
+  hosting:
+      - minio.server
+      - kubernetes.cluster
+  weight: 0
+  reason: Ansible is more specialized.
+- technology: ansible
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - local.machine
+  weight: 0.5
+  reason: Docker Compose is more specialized.
+  details: '"community.docker.docker_container" task'
+- technology: compose
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - local.machine
+  weight: 1
+  reason: Docker is the underlying technology.
+  details: docker compose manifest generated and applied
+- technology: terraform
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - local.machine
+  weight: 0.5
+  reason: Docker Compose is more specialized.
+  details: '"docker_container" and "docker_image" resources'
+- technology: ansible
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - remote.machine
+  weight: 0.5
+  reason: Docker Compose is more specialized.
+  details: '"community.docker.docker_container" task'
+- technology: compose
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - remote.machine
+  weight: 1
+  reason: Docker is the underlying technology.
+  details: docker compose manifest generated and applied
+- technology: terraform
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - docker.engine
+      - remote.machine
+  weight: 0.5
+  reason: Docker Compose is more specialized.
+  details: '"docker_container" and "docker_image" resources'
+- technology: ansible
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - gcp.memorystore
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: redis.server
   artifact: cache.image
   hosting:
-      - kubernetes.cluster
+      - gcp.memorystore
   weight: 1
   reason: Terraform provides a declarative module.
+- technology: ansible
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - kubernetes.cluster
+  weight: 0.5
+  reason: Kubernetes is more specialized.
+- technology: kubernetes
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - kubernetes.cluster
+  weight: 1
+  reason: Kubernetes is the underlying technology.
+  details: Kubernetes manifest generated and applied
+- technology: terraform
+  component: redis.server
+  artifact: cache.image
+  hosting:
+      - kubernetes.cluster
+  weight: 0.5
+  reason: Kubernetes is more specialized.
 - technology: ansible
   component: service.application
   artifact: docker.image
@@ -525,6 +600,24 @@
   artifact: tar.archive
   hosting:
       - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
+  details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
+- technology: terraform
+  component: service.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
+- technology: ansible
+  component: service.application
+  artifact: tar.archive
+  hosting:
+      - '*'
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
@@ -538,6 +631,24 @@
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
+- technology: ansible
+  component: service.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
+  details: '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
+- technology: terraform
+  component: service.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
 - technology: ansible
   component: service.application
   artifact: zip.archive
@@ -577,19 +688,55 @@
   artifact: apt.package
   hosting:
       - '*'
+      - local.machine
+  weight: 1
+  reason: Primary use case due to the specialization of Ansible.
+  details: '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: apt.package
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
+- technology: ansible
+  component: software.application
+  artifact: apt.package
+  hosting:
+      - '*'
       - remote.machine
   weight: 1
   reason: Primary use case due to the specialization of Ansible.
   details: '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
 - technology: terraform
   component: software.application
-  artifact: apt.archive
+  artifact: apt.package
   hosting:
       - '*'
       - remote.machine
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"file" provisioner to upload scripts and "remote-exec" to execute scripts'
+- technology: ansible
+  component: software.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0.5
+  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+  details: '"ansible.builtin.apt", "ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: tar.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts'
 - technology: ansible
   component: software.application
   artifact: tar.archive
@@ -608,6 +755,24 @@
   weight: 0
   reason: Ansible is more specialized. Also using provisioners is a "last resort".
   details: '"file" provisioner to upload artifacts and scripts and "remote-exec" to execute scripts'
+- technology: ansible
+  component: software.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0.5
+  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
+  details: '"ansible.builtin.apt", "ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", and "ansible.builtin.shell" tasks with "when" statements'
+- technology: terraform
+  component: software.application
+  artifact: zip.archive
+  hosting:
+      - '*'
+      - local.machine
+  weight: 0
+  reason: Ansible is more specialized. Also using provisioners is a "last resort".
+  details: '"local_file" module to create scripts and artifacts and "local-exec" provisioner to execute scripts.'
 - technology: ansible
   component: software.application
   artifact: zip.archive

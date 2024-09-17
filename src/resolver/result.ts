@@ -44,7 +44,7 @@ export class Result {
             .map(([name, _]) => name)
     }
 
-    get topology(): {count: number; weight: number} {
+    get topology(): {count: number; weight: number; components: string[]} {
         /**
          * Present nodes
          */
@@ -60,15 +60,24 @@ export class Result {
          */
         const weight = present.reduce((sum, it) => sum + it.weight, 0)
 
-        return {count, weight}
+        /**
+         * Components (names of present components)
+         */
+        const components = present.map(it => it.name)
+
+        /**
+         * Result
+         */
+        return {count, weight, components}
     }
 
     get technologies(): {
-        count: number
+        count_groups: number
         count_total: number
         count_each: {[technology: string]: number}
         weight: number
         weight_each: {[technology: string]: number}
+        weight_average: number
         assignments: string[]
     } {
         /**
@@ -80,12 +89,14 @@ export class Result {
         /**
          * Count (total number of different technologies, i.e., number of groups by name)
          */
-        const count = Object.values(groups).length
+        const count_groups = Object.values(groups).length
 
         /**
          * Count Total (total number of all present technologies)
          */
         const count_total = present.length
+        assert.isNumber(count_total)
+        if (count_total === 0) throw new Error(`Technology count is 0`)
 
         /**
          * Count Each (number of technologies per group)
@@ -109,6 +120,11 @@ export class Result {
         }, {})
 
         /**
+         * Weight Average (average weight per technology
+         */
+        const weight_average = weight / count_total
+
+        /**
          * Presences
          */
         const assignments = this.getPresences('technology')
@@ -116,30 +132,6 @@ export class Result {
         /**
          * Result
          */
-        return {count, count_total, count_each, weight, weight_each, assignments}
-    }
-
-    get quality(): {count: number; weight: number; average: number} {
-        /**
-         * Count (total number of present technologies)
-         */
-        const count = this.graph.technologies.filter(it => this.isPresent(it)).length
-        assert.isNumber(count)
-        if (count === 0) throw new Error(`Technology count is 0`)
-
-        /**
-         * Weight (sum of all weights of all present technologies)
-         */
-        const weight = this.technologies.weight
-
-        /**
-         * Average (average weight per technology)
-         */
-        const average = this.technologies.weight / count
-
-        /**
-         * Result
-         */
-        return {count, weight, average}
+        return {count_groups, count_total, count_each, weight, weight_each, weight_average, assignments}
     }
 }

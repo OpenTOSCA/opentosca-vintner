@@ -311,32 +311,57 @@ node_types:
             vintner_abstract: 'true'
     cache:
         derived_from: software.application
+        properties:
+            cache_name:
+                type: string
+            cache_port:
+                type: string
+        attributes:
+            application_endpoint:
+                type: string
+                default:
+                    concat:
+                        - eval: .::application_protocol
+                        - '://'
+                        - eval: .::application_address
+                        - ':'
+                        - eval: .::application_port
+            application_address:
+                type: string
     storage:
         derived_from: node
+        metadata:
+            vintner_normative: 'true'
     block.storage:
         derived_from: storage
+        metadata:
+            vintner_normative: 'true'
     object.storage:
         derived_from: storage
-    file.storage:
-        derived_from: storage
-    bucket:
-        derived_from: object.storage
         metadata:
             vintner_normative: 'true'
         properties:
-            bucket_name:
+            storage_name:
                 type: string
-            bucket_dialect:
+            storage_dialect:
+                type: string
+            storage_user:
+                type: string
+            storage_token:
                 type: string
         attributes:
-            bucket_endpoint:
+            storage_endpoint:
                 type: string
-            bucket_token:
+            storage_token:
                 type: string
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
+    file.storage:
+        derived_from: storage
+        metadata:
+            vintner_normative: 'true'
     ingress:
         derived_from: node
         metadata:
@@ -587,6 +612,373 @@ node_types:
                             openstack_networking_secgroup_v2:
                                 ports:
                                     - name: '{{ SELF.machine_name }}'
+    cache~software.application#apt.package::ansible@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
+                                      when: '".artifacts::apt_package::script" | eval != ""'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::apt_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::apt_package::key" | eval != ""'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}
+                                          filename: '{{ ".artifacts::apt_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::apt_package::source" | eval != ""'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::apt_package::dependencies" | eval != ""'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
+                                          state: absent
+    cache~software.application#apt.package::terraform@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Run setup script 
+                                        if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
+                                            curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                        fi
+
+                                        # Add apt key
+                                        if [[ "{{ ".artifacts::apt_package::key" | eval }}" != "" ]]; then 
+                                            curl -1sLf {{ ".artifacts::apt_package::key" | eval }} | gpg --dearmor --yes -o /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                        fi
+
+                                        # Add apt repository
+                                        if [[ "{{ ".artifacts::apt_package::source" | eval }}" != "" ]]; then 
+                                            echo "deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}" | tee {{ ".artifacts::apt_package::repository" | eval }}
+                                        fi
+
+                                        # Update apt cache
+                                        apt-get update -y
+
+                                        # Install dependencies
+                                        if [[ "{{ ".artifacts::apt_package::dependencies" | eval }}" != "" ]]; then 
+                                            apt-get install {{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }} -y
+                                        fi
+
+                                        # Install package
+                                        {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        CACHE_NAME="{{ SELF.cache_name }}"
+                                        CACHE_PORT="{{ SELF.cache_port }}"
+                                        EOF>>
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-cache.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-cache.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-cache.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-cache.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+
+                                        # Uninstall package
+                                        apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
+                                    filename: /tmp/delete-cache.sh
+                            terraform_data:
+                                local:
+                                    - provisioner:
+                                          depends_on:
+                                              - local_file.tmp_artifact
+                                              - local_file.tmp_create
+                                              - local_file.tmp_configure
+                                              - local_file.tmp_start
+                                              - local_file.tmp_stop
+                                              - local_file.tmp_delete
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-cache.sh
+                                                    - sudo bash /tmp/configure-cache.sh
+                                                    - sudo bash /tmp/start-cache.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-cache.sh
+                                                    - sudo bash /tmp/delete-cache.sh
+                                                when: destroy
     cache~software.application#apt.package::ansible@*->remote.machine:
         derived_from: cache
         metadata:
@@ -719,6 +1111,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -750,6 +1146,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -809,7 +1209,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cache~software.application#apt.archive::terraform@*->remote.machine:
+    cache~software.application#apt.package::terraform@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -891,16 +1291,9 @@ node_types:
 
                                                     # Create application environment
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
-
+                                                    CACHE_NAME="{{ SELF.cache_name }}"
+                                                    CACHE_PORT="{{ SELF.cache_port }}"
                                                     EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::apt_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-cache {{ ".artifacts::apt_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    undefined
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -1006,6 +1399,371 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
+    cache~software.application#tar.archive::ansible@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              CACHE_NAME="{{ SELF.cache_name }}"
+                                              CACHE_PORT="{{ SELF.cache_port }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+    cache~software.application#tar.archive::terraform@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    filename: /tmp/artifact-cache
+                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        CACHE_NAME="{{ SELF.cache_name }}"
+                                        CACHE_PORT="{{ SELF.cache_port }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-cache {{ ".artifacts::tar_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        tar -xzf /tmp/artifact-cache -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-cache.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-cache.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-cache.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-cache.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+                                    filename: /tmp/delete-cache.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-cache.sh
+                                                    - sudo bash /tmp/configure-cache.sh
+                                                    - sudo bash /tmp/start-cache.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-cache.sh
+                                                    - sudo bash /tmp/delete-cache.sh
+                                                when: destroy
     cache~software.application#tar.archive::ansible@*->remote.machine:
         derived_from: cache
         metadata:
@@ -1066,7 +1824,9 @@ node_types:
                                     - name: create .env file
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: ''
+                                          content: |-
+                                              CACHE_NAME="{{ SELF.cache_name }}"
+                                              CACHE_PORT="{{ SELF.cache_port }}"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -1282,7 +2042,8 @@ node_types:
 
                                                     # Create application environment
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
-
+                                                    CACHE_NAME="{{ SELF.cache_name }}"
+                                                    CACHE_PORT="{{ SELF.cache_port }}"
                                                     EOF>>
 
                                                     # Download deployment artifact if required
@@ -1406,6 +2167,361 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
+    cache~software.application#zip.archive::ansible@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              CACHE_NAME="{{ SELF.cache_name }}"
+                                              CACHE_PORT="{{ SELF.cache_port }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+    cache~software.application#zip.archive::terraform@*->local.machine:
+        derived_from: cache
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    filename: /tmp/artifact-cache
+                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        CACHE_NAME="{{ SELF.cache_name }}"
+                                        CACHE_PORT="{{ SELF.cache_port }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-cache {{ ".artifacts::zip_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        unzip /tmp/artifact-cache -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-cache.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-cache.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-cache.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-cache.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+                                    filename: /tmp/delete-cache.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-cache.sh
+                                                    - sudo bash /tmp/configure-cache.sh
+                                                    - sudo bash /tmp/start-cache.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-cache.sh
+                                                    - sudo bash /tmp/delete-cache.sh
+                                                when: destroy
     cache~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: cache
         metadata:
@@ -1456,12 +2572,13 @@ node_types:
                                           dest: '{{ SELF.application_directory }}'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
                                       when: not (".artifacts::zip_archive::file" | eval).startswith("http")
-                                    - name: extract deployment artifact in application directory
+                                    - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -1469,7 +2586,9 @@ node_types:
                                     - name: create .env file
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.env'
-                                          content: ''
+                                          content: |-
+                                              CACHE_NAME="{{ SELF.cache_name }}"
+                                              CACHE_PORT="{{ SELF.cache_port }}"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/create.sh'
@@ -1685,7 +2804,8 @@ node_types:
 
                                                     # Create application environment
                                                     cat <<EOF > {{ SELF.application_directory }}/.env
-
+                                                    CACHE_NAME="{{ SELF.cache_name }}"
+                                                    CACHE_PORT="{{ SELF.cache_port }}"
                                                     EOF>>
 
                                                     # Download deployment artifact if required
@@ -1809,8 +2929,8 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    bucket~bucket::ansible@gcp.cloudstorage:
-        derived_from: bucket
+    object.storage~object.storage::ansible@gcp.cloudstorage:
+        derived_from: object.storage
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
@@ -1827,6 +2947,16 @@ node_types:
                 type: string
                 default:
                     get_input: gcp_project
+        attributes:
+            storage_endpoint:
+                type: string
+                default: '{{ SELF.storage_name }}'
+            storage_token:
+                type: string
+                default: ''
+            storage_dialect:
+                type: string
+                default: gcp
         interfaces:
             Standard:
                 operations:
@@ -1840,7 +2970,12 @@ node_types:
                                 GCP_AUTH_KIND: serviceaccount
                         inputs:
                             playbook:
-                                q: []
+                                q:
+                                    - name: create bucket
+                                      google.cloud.gcp_storage_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          location: EU
+                                          project: '{{ SELF.gcp_project }}'
                     delete:
                         implementation:
                             primary: Ansible
@@ -1851,9 +2986,14 @@ node_types:
                                 GCP_AUTH_KIND: serviceaccount
                         inputs:
                             playbook:
-                                q: []
-    bucket~bucket::terraform@gcp.cloudstorage:
-        derived_from: bucket
+                                q:
+                                    - name: delete bucket
+                                      google.cloud.gcp_storage_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          project: '{{ SELF.gcp_project }}'
+                                          state: absent
+    object.storage~object.storage::terraform@gcp.cloudstorage:
+        derived_from: object.storage
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
@@ -1870,6 +3010,16 @@ node_types:
                 type: string
                 default:
                     get_input: gcp_project
+        attributes:
+            storage_endpoint:
+                type: string
+                default: '{{ SELF.storage_name }}'
+            storage_token:
+                type: string
+                default: ''
+            storage_dialect:
+                type: string
+                default: gcp
         interfaces:
             Standard:
                 operations:
@@ -1893,33 +3043,22 @@ node_types:
                                   - google:
                                         source: hashicorp/google
                                         version: 5.39.1
-                                    mysql:
-                                        source: petoju/mysql
-                                        version: 3.0.48
                         provider:
                             google:
                                 - credentials: '{{ SELF.gcp_service_account_file }}'
                                   project: '{{ SELF.gcp_project }}'
                                   region: '{{ SELF.gcp_region }}'
-                        resource: {}
-    bucket~bucket::ansible@minio.server->*->local.machine:
-        derived_from: bucket
+                        resource:
+                            google_storage_bucket:
+                                bucket:
+                                    - name: '{{ SELF.storage_name }}'
+                                      location: EU
+                                      force_destroy: true
+    object.storage~object.storage::ansible@minio.server->docker.engine->local.machine:
+        derived_from: object.storage
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
         interfaces:
             Standard:
                 operations:
@@ -1929,32 +3068,719 @@ node_types:
                             operation_host: ORCHESTRATOR
                         inputs:
                             playbook:
-                                q: []
+                                q:
+                                    - name: create bucket
+                                      dubzland.minio.minio_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                    - name: create user
+                                      dubzland.minio.minio_user:
+                                          access_key: '{{ SELF.storage_user }}'
+                                          secret_key: '{{ SELF.storage_token }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                    - name: create policy
+                                      dubzland.minio.minio_policy:
+                                          name: '{{ SELF.user_name }}'
+                                          statements:
+                                              - effect: Allow
+                                                action: s3:*
+                                                resource: arn:aws:s3:::*
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
                     delete:
                         implementation:
                             primary: Ansible
                             operation_host: ORCHESTRATOR
                         inputs:
                             playbook:
-                                q: []
-    bucket~bucket::terraform@minio.server->*->local.machine:
-        derived_from: bucket
+                                q:
+                                    - name: delete policy
+                                      dubzland.minio.minio_policy:
+                                          name: '{{ SELF.user_name }}'
+                                          statements:
+                                              - effect: Allow
+                                                action: s3:*
+                                                resource: arn:aws:s3:::*
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+                                    - name: delete user
+                                      dubzland.minio.minio_user:
+                                          access_key: '{{ SELF.storage_user }}'
+                                          secret_key: '{{ SELF.storage_token }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+                                    - name: delete bucket
+                                      dubzland.minio.minio_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+    object.storage~object.storage::compose@minio.server->docker.engine->local.machine:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.database.compose.yaml.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                      image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                      network_mode: host
+                                                      command:
+                                                          - /bin/bash
+                                                          - '-c'
+                                                          - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc mb minio/{{ SELF.storage_name }} && mc admin user add minio {{ SELF.storage_user }} {{ SELF.storage_token }} && mc admin policy attach minio readwrite user={{ SELF.storage_user }}
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: let it cook
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.database.compose.yaml.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                      image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                      network_mode: host
+                                                      command:
+                                                          - /bin/bash
+                                                          - '-c'
+                                                          - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc admin policy detach minio readwrite user={{ SELF.storage_user }} && mc admin user rm minio {{ SELF.storage_user }} && mc rm --recursive minio/{{ SELF.storage_name }}
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: let it cook
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+    object.storage~object.storage::terraform@minio.server->docker.engine->local.machine:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - minio:
+                                        source: aminueza/minio
+                                        version: 2.5.0
+                              required_version: '>= 0.14.0'
+                        provider:
+                            minio:
+                                - minio_server: '{{ HOST.application_endpoint }}'
+                                  minio_user: '{{ HOST.access_key }}'
+                                  minio_password: '{{ HOST.secret_key }}'
+                        resource:
+                            minio_s3_bucket:
+                                bucket:
+                                    - bucket: '{{ SELF.storage_name }}'
+                            minio_iam_user:
+                                user:
+                                    - name: '{{ SELF.storage_user }}'
+                                      secret: '{{ SELF.storage_token }}'
+                            minio_iam_policy:
+                                depends_on:
+                                    - minio_s3_bucket.bucket
+                                    - minio_iam_user.user
+                                policy:
+                                    - name: '{{ SELF.storage_user }}'
+                                      policy: '{ "Version":"2012-10-17", "Statement": [ { "Effect": "Allow", "Action": ["s3:*"], "Principal": "{{ SELF.storage_user }}", "Resource": "arn:aws:s3:::*" } ] }'
+    object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine:
+        derived_from: object.storage
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
         properties:
-            gcp_service_account_file:
+            os_ssh_host:
                 type: string
                 default:
-                    get_input: gcp_service_account_file
-            gcp_region:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: create bucket
+                                      dubzland.minio.minio_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                    - name: create user
+                                      dubzland.minio.minio_user:
+                                          access_key: '{{ SELF.storage_user }}'
+                                          secret_key: '{{ SELF.storage_token }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                    - name: create policy
+                                      dubzland.minio.minio_policy:
+                                          name: '{{ SELF.user_name }}'
+                                          statements:
+                                              - effect: Allow
+                                                action: s3:*
+                                                resource: arn:aws:s3:::*
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: HOST
+                            environment:
+                                ANSIBLE_HOST_KEY_CHECKING: 'False'
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: delete policy
+                                      dubzland.minio.minio_policy:
+                                          name: '{{ SELF.user_name }}'
+                                          statements:
+                                              - effect: Allow
+                                                action: s3:*
+                                                resource: arn:aws:s3:::*
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+                                    - name: delete user
+                                      dubzland.minio.minio_user:
+                                          access_key: '{{ SELF.storage_user }}'
+                                          secret_key: '{{ SELF.storage_token }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+                                    - name: delete bucket
+                                      dubzland.minio.minio_bucket:
+                                          name: '{{ SELF.storage_name }}'
+                                          auth:
+                                              access_key: '{{ HOST.access_key }}'
+                                              secret_key: '{{ HOST.secret_key }}'
+                                              url: '{{ HOST.application_endpoint }}'
+                                          state: absent
+                            playbookArgs:
+                                - '--become'
+                                - '--key-file={{ SELF.os_ssh_key_file }}'
+                                - '--user={{ SELF.os_ssh_user }}'
+    object.storage~object.storage::compose@minio.server->docker.engine->remote.machine:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_host:
                 type: string
                 default:
-                    get_input: gcp_region
-            gcp_project:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.database.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                      image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                      network_mode: host
+                                                      command:
+                                                          - /bin/bash
+                                                          - '-c'
+                                                          - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc mb minio/{{ SELF.storage_name }} && mc admin user add minio {{ SELF.storage_user }} {{ SELF.storage_token }} && mc admin policy attach minio readwrite user={{ SELF.storage_user }}
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                                    - name: let it cook
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.database.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              services:
+                                                  job:
+                                                      container_name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                      image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                      network_mode: host
+                                                      command:
+                                                          - /bin/bash
+                                                          - '-c'
+                                                          - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc admin policy detach minio readwrite user={{ SELF.storage_user }} && mc admin user rm minio {{ SELF.storage_user }} && mc rm --recursive minio/{{ SELF.storage_name }}
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                                    - name: let it cook
+                                      ansible.builtin.pause:
+                                          seconds: 10
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+                                      environment:
+                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+    object.storage~object.storage::terraform@minio.server->docker.engine->remote.machine:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            os_ssh_user:
                 type: string
                 default:
-                    get_input: gcp_project
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
+            os_ssh_host:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::management_address
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - minio:
+                                        source: aminueza/minio
+                                        version: 2.5.0
+                                    ssh:
+                                        source: AndrewChubatiuk/ssh
+                                        version: 0.2.3
+                              required_version: '>= 0.14.0'
+                        data:
+                            ssh_tunnel:
+                                mysql:
+                                    - remote:
+                                          host: '{{ HOST.application_address }}'
+                                          port: '{{ HOST.application_port }}'
+                        provider:
+                            minio:
+                                - minio_server: '{{ HOST.application_endpoint }}'
+                                  minio_user: '{{ HOST.access_key }}'
+                                  minio_password: '{{ HOST.secret_key }}'
+                            ssh:
+                                - auth:
+                                      private_key:
+                                          content: ${file(pathexpand("{{ SELF.os_ssh_key_file }}"))}
+                                  server:
+                                      host: '{{ HOST.management_address }}'
+                                      port: 22
+                                  user: '{{ SELF.os_ssh_user }}'
+                        resource:
+                            minio_s3_bucket:
+                                bucket:
+                                    - bucket: '{{ SELF.storage_name }}'
+                            minio_iam_user:
+                                user:
+                                    - name: '{{ SELF.storage_user }}'
+                                      secret: '{{ SELF.storage_token }}'
+                            minio_iam_policy:
+                                depends_on:
+                                    - minio_s3_bucket.bucket
+                                    - minio_iam_user.user
+                                policy:
+                                    - name: '{{ SELF.storage_user }}'
+                                      policy: '{ "Version":"2012-10-17", "Statement": [ { "Effect": "Allow", "Action": ["s3:*"], "Principal": "{{ SELF.storage_user }}", "Resource": "arn:aws:s3:::*" } ] }'
+    object.storage~object.storage::ansible@minio.server->kubernetes.cluster:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: create bucket
+                                      block:
+                                          - name: forward port
+                                            ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} port-forward service/{{ HOST.cache_name }} {{ HOST.cache_port }}:{{ HOST.cache_port }}
+                                            args:
+                                                executable: /usr/bin/bash
+                                            async: 30
+                                            poll: 0
+                                          - name: create bucket
+                                            dubzland.minio.minio_bucket:
+                                                name: '{{ SELF.storage_name }}'
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                          - name: create user
+                                            dubzland.minio.minio_user:
+                                                access_key: '{{ SELF.storage_user }}'
+                                                secret_key: '{{ SELF.storage_token }}'
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                          - name: create policy
+                                            dubzland.minio.minio_policy:
+                                                name: '{{ SELF.user_name }}'
+                                                statements:
+                                                    - effect: Allow
+                                                      action: s3:*
+                                                      resource: arn:aws:s3:::*
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                      always:
+                                          - name: unforward port
+                                            ansible.builtin.shell: pkill -f "port-forward service/{{ HOST.cache_name }}"
+                                            args:
+                                                executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: delete bucket
+                                      block:
+                                          - name: forward port
+                                            ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} port-forward service/{{ HOST.cache_name }} {{ HOST.cache_port }}:{{ HOST.cache_port }}
+                                            args:
+                                                executable: /usr/bin/bash
+                                            async: 30
+                                            poll: 0
+                                          - name: delete policy
+                                            dubzland.minio.minio_policy:
+                                                name: '{{ SELF.user_name }}'
+                                                statements:
+                                                    - effect: Allow
+                                                      action: s3:*
+                                                      resource: arn:aws:s3:::*
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                                state: absent
+                                          - name: delete user
+                                            dubzland.minio.minio_user:
+                                                access_key: '{{ SELF.storage_user }}'
+                                                secret_key: '{{ SELF.storage_token }}'
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                                state: absent
+                                          - name: delete bucket
+                                            dubzland.minio.minio_bucket:
+                                                name: '{{ SELF.storage_name }}'
+                                                auth:
+                                                    access_key: '{{ HOST.access_key }}'
+                                                    secret_key: '{{ HOST.secret_key }}'
+                                                    url: '{{ HOST.application_endpoint }}'
+                                                state: absent
+                                      always:
+                                          - name: unforward port
+                                            ansible.builtin.shell: pkill -f "port-forward service/{{ HOST.cache_name }}"
+                                            args:
+                                                executable: /usr/bin/bash
+    object.storage~object.storage::kubernetes@minio.server->kubernetes.cluster:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.object-storage.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: '{{ job | to_yaml }}'
+                                      vars:
+                                          job:
+                                              apiVersion: batch/v1
+                                              kind: Job
+                                              metadata:
+                                                  name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              spec:
+                                                  template:
+                                                      spec:
+                                                          restartPolicy: Never
+                                                          containers:
+                                                              - name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                                image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                                command:
+                                                                    - /bin/bash
+                                                                    - '-c'
+                                                                    - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc mb minio/{{ SELF.storage_name }} && mc admin user add minio {{ SELF.storage_user }} {{ SELF.storage_token }} && mc admin policy attach minio readwrite user={{ SELF.storage_user }}
+                                    - name: apply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} wait --for=condition=complete --timeout=30s job/{{ SELF.storage_name }}-{{ HOST.cache_name }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: cleanup
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch manifest
+                                      register: manifest
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.storage_name }}-{{ HOST.cache_name }}.object-storage.manifest.yaml'
+                                    - name: create manifest
+                                      ansible.builtin.copy:
+                                          dest: '{{ manifest.path }}'
+                                          content: '{{ job | to_yaml }}'
+                                      vars:
+                                          job:
+                                              apiVersion: batch/v1
+                                              kind: Job
+                                              metadata:
+                                                  name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                              spec:
+                                                  template:
+                                                      spec:
+                                                          restartPolicy: Never
+                                                          containers:
+                                                              - name: '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
+                                                                image: minio/mc:{{ ".artifacts::cache_image::file" | eval }}
+                                                                command:
+                                                                    - /bin/bash
+                                                                    - '-c'
+                                                                    - mc alias set minio {{ HOST.application_endpoint }} {{ HOST.access_key }} {{ HOST.secret_key }} && mc admin policy detach minio readwrite user={{ SELF.storage_user }} && mc admin user rm minio {{ SELF.storage_user }} && mc rm --recursive minio/{{ SELF.storage_name }}
+                                    - name: apply manifest
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} apply -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: wait for deployment
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} wait --for=condition=complete --timeout=30s job/{{ SELF.storage_name }}-{{ HOST.cache_name }}
+                                      args:
+                                          executable: /usr/bin/bash
+                                    - name: cleanup
+                                      ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
+                                      args:
+                                          executable: /usr/bin/bash
+    object.storage~object.storage::terraform@minio.server->kubernetes.cluster:
+        derived_from: object.storage
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
         interfaces:
             Standard:
                 operations:
@@ -1969,198 +3795,41 @@ node_types:
                     main:
                         terraform: []
                         provider: {}
-                        resource: {}
-    bucket~bucket::ansible@minio.server->*->remote.machine:
-        derived_from: bucket
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q: []
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q: []
-    bucket~bucket::terraform@minio.server->*->remote.machine:
-        derived_from: bucket
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                            environment:
-                                GOOGLE_APPLICATION_CREDENTIALS:
-                                    eval: .::gcp_service_account_file
-                    delete:
-                        implementation:
-                            primary: Terraform
-                            environment:
-                                GOOGLE_APPLICATION_CREDENTIALS:
-                                    eval: .::gcp_service_account_file
-            defaults:
-                inputs:
-                    main:
-                        terraform: []
-                        provider: {}
-                        resource: {}
-    bucket~bucket::ansible@minio.server->kubernetes.cluster:
-        derived_from: bucket
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q: []
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                        inputs:
-                            playbook:
-                                q: []
-    bucket~bucket::terraform@minio.server->kubernetes.cluster:
-        derived_from: bucket
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    configure:
-                        implementation:
-                            primary: Terraform
-                            environment:
-                                GOOGLE_APPLICATION_CREDENTIALS:
-                                    eval: .::gcp_service_account_file
-                    delete:
-                        implementation:
-                            primary: Terraform
-                            environment:
-                                GOOGLE_APPLICATION_CREDENTIALS:
-                                    eval: .::gcp_service_account_file
-            defaults:
-                inputs:
-                    main:
-                        terraform: []
-                        provider: {}
-                        resource: {}
-    bucket~bucket#cache.image::ansible@gcp.memorystore:
-        derived_from: bucket
-        metadata:
-            vintner_generated: 'true'
-            vintner_orchestrator: unfurl
-        properties:
-            gcp_service_account_file:
-                type: string
-                default:
-                    get_input: gcp_service_account_file
-            gcp_region:
-                type: string
-                default:
-                    get_input: gcp_region
-            gcp_project:
-                type: string
-                default:
-                    get_input: gcp_project
-        interfaces:
-            Standard:
-                operations:
-                    create:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                            environment:
-                                GCP_SERVICE_ACCOUNT_FILE:
-                                    eval: .::gcp_service_account_file
-                                GCP_AUTH_KIND: serviceaccount
-                        inputs:
-                            playbook:
-                                q: []
-                    delete:
-                        implementation:
-                            primary: Ansible
-                            operation_host: ORCHESTRATOR
-                            environment:
-                                GCP_SERVICE_ACCOUNT_FILE:
-                                    eval: .::gcp_service_account_file
-                                GCP_AUTH_KIND: serviceaccount
-                        inputs:
-                            playbook:
-                                q: []
+                        resource:
+                            terraform_data:
+                                forward_port:
+                                    - input: 127.0.0.1:{{ HOST.cache_port }}
+                                      provisioner:
+                                          local-exec:
+                                              command: |-
+                                                  (nohup kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} port-forward service/{{ HOST.cache_name }} {{ HOST.cache_port }}:{{ HOST.cache_port }} > /dev/null 2>&1 &)
+                                                  sleep 5s
+                                              interpreter:
+                                                  - /bin/bash
+                                                  - '-c'
+                                unforward_port:
+                                    - depends_on:
+                                          - minio_iam_policy.policy
+                                      provisioner:
+                                          local-exec:
+                                              command: pkill -f "port-forward service/{{ HOST.cache_name }}"
+                                              interpreter:
+                                                  - /bin/bash
+                                                  - '-c'
+                            minio_s3_bucket:
+                                bucket:
+                                    - bucket: '{{ SELF.storage_name }}'
+                            minio_iam_user:
+                                user:
+                                    - name: '{{ SELF.storage_user }}'
+                                      secret: '{{ SELF.storage_token }}'
+                            minio_iam_policy:
+                                depends_on:
+                                    - minio_s3_bucket.bucket
+                                    - minio_iam_user.user
+                                policy:
+                                    - name: '{{ SELF.storage_user }}'
+                                      policy: '{ "Version":"2012-10-17", "Statement": [ { "Effect": "Allow", "Action": ["s3:*"], "Principal": "{{ SELF.storage_user }}", "Resource": "arn:aws:s3:::*" } ] }'
     ingress~ingress::ansible@kubernetes.cluster:
         derived_from: ingress
         metadata:
@@ -2348,6 +4017,118 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: LoadBalancer
+    ingress~ingress::ansible@local.machine:
+        derived_from: ingress
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::application_address
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+                                          keyring: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+                                          state: present
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main
+                                          filename: caddy-stable
+                                          state: present
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: caddy
+                                          state: present
+                                          update_cache: 'yes'
+                                    - name: configure caddy
+                                      ansible.builtin.copy:
+                                          dest: /etc/caddy/Caddyfile
+                                          content: |
+                                              :80 {
+                                                      reverse_proxy localhost:{{ SELF.application_port }}
+                                              }
+                                    - name: restart caddy
+                                      ansible.builtin.systemd:
+                                          name: caddy
+                                          state: reloaded
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: caddy
+                                          state: absent
+    ingress~ingress::terraform@local.machine:
+        derived_from: ingress
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default:
+                    eval: .::.requirements::[.name=host]::.target::application_address
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_script:
+                                    content: |
+
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Install caddy
+                                        apt-get install -y debian-keyring debian-archive-keyring apt-transport-https curl
+                                        curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+                                        curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | tee /etc/apt/sources.list.d/caddy-stable.list
+                                        apt-get update
+                                        apt-get install caddy -y
+
+                                        # Configure caddy
+                                        cat <<EOF > /etc/caddy/Caddyfile
+                                        :80 {
+                                                reverse_proxy localhost:{{ SELF.application_port }}
+                                        }
+                                        EOF
+
+                                        # Restart caddy
+                                        systemctl reload caddy
+                                    destination: /tmp/install-ingress.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_script
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/install-ingress.sh
     ingress~ingress::ansible@remote.machine:
         derived_from: ingress
         metadata:
