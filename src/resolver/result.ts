@@ -72,10 +72,10 @@ export class Result {
     }
 
     get technologies(): {
-        count_groups: number
         count_total: number
         count_each: {[technology: string]: number}
-        weight: number
+        count_groups: number
+        weight_total: number
         weight_each: {[technology: string]: number}
         weight_average: number
         assignments: string[]
@@ -109,7 +109,7 @@ export class Result {
         /**
          * Weight (sum of all weights of all present technologies)
          */
-        const weight = utils.sum(present.map(it => it.weight))
+        const weight_total = utils.sum(present.map(it => it.weight))
 
         /**
          * Weight Each (sum of all weight in a group of present technology)
@@ -122,7 +122,7 @@ export class Result {
         /**
          * Weight Average (average weight per technology
          */
-        const weight_average = weight / count_total
+        const weight_average = weight_total / count_total
 
         /**
          * Presences
@@ -132,6 +132,6 @@ export class Result {
         /**
          * Result
          */
-        return {count_groups, count_total, count_each, weight, weight_each, weight_average, assignments}
+        return {count_groups, count_total, count_each, weight_total, weight_each, weight_average, assignments}
     }
 }

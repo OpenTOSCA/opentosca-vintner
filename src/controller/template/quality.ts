@@ -41,11 +41,7 @@ async function weight(options: TemplateQualityOptions, direction: 'min' | 'max')
 
     const result = utils.first(optimized)
 
-    return {
-        direction,
-        topology: result.topology,
-        technologies: result.technologies,
-    }
+    return result.technologies
 }
 
 async function count(options: TemplateQualityOptions, direction: 'min' | 'max') {
@@ -84,15 +80,8 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
     const max = utils.last(candidates)
 
     return {
-        direction,
-        min: {
-            topology: min.topology,
-            technologies: min.technologies,
-        },
-        max: {
-            topology: max.topology,
-            technologies: max.technologies,
-        },
+        min_quality: min.technologies,
+        max_quality: max.technologies,
     }
 }
 
@@ -111,8 +100,5 @@ async function weightCount(options: TemplateQualityOptions) {
 
     const result = utils.first(optimized)
 
-    return {
-        topology: result.topology,
-        technologies: result.technologies,
-    }
+    return result.technologies
 }

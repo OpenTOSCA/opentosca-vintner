@@ -241,21 +241,21 @@ export default async function (options: StudyTechnologyOptions) {
 
         qualityData.push({
             scenario: original,
-            expert: utils.roundNumber(quality.max_weight.technologies.weight_average),
+            expert: utils.roundNumber(quality.max_weight.weight_average),
             non_expert: [
-                utils.roundNumber(quality.min_weight.technologies.weight_average),
-                utils.roundNumber(quality.max_weight.technologies.weight_average),
+                utils.roundNumber(quality.min_weight.weight_average),
+                utils.roundNumber(quality.max_weight.weight_average),
             ],
             random: [
-                utils.roundNumber(quality.min_weight.technologies.weight_average),
-                utils.roundNumber(quality.max_weight.technologies.weight_average),
+                utils.roundNumber(quality.min_weight.weight_average),
+                utils.roundNumber(quality.max_weight.weight_average),
             ],
             counting: [
-                utils.roundNumber(quality.min_count.min.technologies.weight_average),
-                utils.roundNumber(quality.min_count.max.technologies.weight_average),
+                utils.roundNumber(quality.min_count.min_quality.weight_average),
+                utils.roundNumber(quality.min_count.max_quality.weight_average),
             ],
-            quality: utils.roundNumber(quality.max_weight.technologies.weight_average),
-            quality_counting: utils.roundNumber(quality.max_weight_min_count.technologies.weight_average),
+            quality: utils.roundNumber(quality.max_weight.weight_average),
+            quality_counting: utils.roundNumber(quality.max_weight_min_count.weight_average),
         })
     }
 
