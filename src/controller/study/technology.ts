@@ -243,9 +243,9 @@ export default async function (options: StudyTechnologyOptions) {
             expert: quality.max_weight.weight,
             non_expert: [quality.min_weight, quality.max_weight],
             random: [quality.min_weight.weight, quality.max_weight.weight],
-            counting: [quality.min_count.min_count.weight, quality.min_count.max_count.weight],
+            counting: [quality.min_count.min.weight, quality.min_count.max.weight],
             quality: quality.max_weight.weight,
-            quality_counting: quality.max_weight_min_count.max_weight,
+            quality_counting: quality.max_weight_min_count.weight,
         })
     }
 

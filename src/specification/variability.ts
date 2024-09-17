@@ -312,6 +312,7 @@ export type LogicExpression =
           or?: LogicExpression[]
           not?: LogicExpression
           xor?: LogicExpression[]
+          exo?: LogicExpression[]
           implies?: [LogicExpression, LogicExpression]
           amo?: LogicExpression[]
 

@@ -69,7 +69,7 @@ export class Result {
         count_each: {[technology: string]: number}
         weight: number
         weight_each: {[technology: string]: number}
-        presences: string[]
+        assignments: string[]
     } {
         /**
          * Present technologies
@@ -111,12 +111,12 @@ export class Result {
         /**
          * Presences
          */
-        const presences = this.getPresences('technology')
+        const assignments = this.getPresences('technology')
 
         /**
          * Result
          */
-        return {count, count_total, count_each, weight, weight_each, presences}
+        return {count, count_total, count_each, weight, weight_each, assignments}
     }
 
     get quality(): {count: number; weight: number; average: number} {

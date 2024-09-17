@@ -407,7 +407,14 @@ export default class Solver {
          * xor
          */
         if (check.isDefined(expression.xor)) {
-            return MiniSat.exactlyOne(expression.xor.map(it => this.transformLogicExpression(it, context)))
+            return MiniSat.xor(expression.xor.map(it => this.transformLogicExpression(it, context)))
+        }
+
+        /**
+         * exo
+         */
+        if (check.isDefined(expression.exo)) {
+            return MiniSat.exactlyOne(expression.exo.map(it => this.transformLogicExpression(it, context)))
         }
 
         /**

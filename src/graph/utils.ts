@@ -65,6 +65,7 @@ export function simplify(conditions: LogicExpression): LogicExpression {
     }
 
     // TODO: xor
+    // TODO: exo
     // TODO: amo
     // TODO: implies
 

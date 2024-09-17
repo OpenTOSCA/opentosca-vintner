@@ -84,10 +84,10 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
     const maxResult = utils.last(candidates)
 
     return {
-        weight: utils.roundNumber(minResult.quality.average),
+        count: min,
         direction,
-        min_count: minResult.technologies,
-        max_count: maxResult.technologies,
+        min: minResult.technologies,
+        max: maxResult.technologies,
     }
 }
 
@@ -107,7 +107,7 @@ async function weightCount(options: TemplateQualityOptions) {
     const result = utils.first(optimized)
 
     return {
-        max_weight: utils.roundNumber(result.quality.average),
-        min_count: result.technologies,
+        weight: utils.roundNumber(result.quality.average),
+        count: result.technologies,
     }
 }

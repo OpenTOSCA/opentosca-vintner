@@ -127,7 +127,7 @@ export class ConstraintEnricher {
         if (this.graph.options.constraints.hostingStack) {
             for (const node of this.graph.nodes.filter(it => it.hasHost)) {
                 const hostings = node.outgoing.filter(it => it.isHostedOn())
-                const consequence = hostings.length === 1 ? hostings[0].id : {xor: hostings.map(it => it.id)}
+                const consequence = hostings.length === 1 ? hostings[0].id : {exo: hostings.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }
@@ -155,7 +155,7 @@ export class ConstraintEnricher {
         if (this.graph.options.constraints.requiredArtifact) {
             for (const node of this.graph.nodes) {
                 if (utils.isEmpty(node.artifacts)) continue
-                const consequence = {xor: node.artifacts.map(it => it.id)}
+                const consequence = {exo: node.artifacts.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }
@@ -166,7 +166,7 @@ export class ConstraintEnricher {
         if (this.graph.options.constraints.technology) {
             for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {
                 const consequence =
-                    node.technologies.length === 1 ? node.technologies[0].id : {xor: node.technologies.map(it => it.id)}
+                    node.technologies.length === 1 ? node.technologies[0].id : {exo: node.technologies.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})
             }
         }
