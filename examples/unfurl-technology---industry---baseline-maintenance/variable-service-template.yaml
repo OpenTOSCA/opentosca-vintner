@@ -382,8 +382,13 @@ topology_template:
                 - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
                 - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
             requirements:
-                - cache: global_cache_redis_kubernetes
-                - cache: global_cache_redis_terraform
+                - cache:
+                      node: global_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: global_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - global_service_retailers: global_service_retailers_kubernetes
                 - global_service_products: global_service_products_kubernetes
                 - global_service_calibrations: global_service_calibrations_kubernetes
@@ -479,10 +484,18 @@ topology_template:
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
 
             requirements:
-                - database: global_database_retailers_ansible
-                - database: global_database_retailers_terraform
-                - cache: global_cache_redis_kubernetes
-                - cache: global_cache_redis_terraform
+                - database:
+                      node: global_database_retailers_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: global_database_retailers_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+                - cache:
+                      node: global_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: global_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -592,12 +605,27 @@ topology_template:
                 - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
-                - database: global_database_products_ansible
-                - database: global_database_products_ansible
-                - cache: global_cache_redis_kubernetes
-                - cache: global_cache_redis_terraform
-                - storage: global_storage_products_ansible
-                - storage: global_storage_products_terraform
+                - database:
+                      node: global_database_products_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: global_database_products_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - cache:
+                      node: global_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: global_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - storage:
+                      node: global_storage_products_ansible
+                      conditions: {logic_expression: is_customer}
+                - storage:
+                      node: global_storage_products_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -727,12 +755,27 @@ topology_template:
                 - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
-                - database: global_database_calibrations_ansible
-                - database: global_database_calibrations_terraform
-                - cache: global_cache_redis_kubernetes
-                - cache: global_cache_redis_terraform
-                - storage: global_storage_calibrations_ansible
-                - storage: global_storage_calibrations_terraform
+                - database:
+                      node: global_database_calibrations_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: global_database_calibrations_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - cache:
+                      node: global_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: global_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - storage:
+                      node: global_storage_calibrations_ansible
+                      conditions: {logic_expression: is_customer}
+                - storage:
+                      node: global_storage_calibrations_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -863,10 +906,18 @@ topology_template:
                 - sms_provider_endpoint: {get_input: sms_provider_endpoint}
                 - sms_provider_token: {get_input: sms_provider_token}
             requirements:
-                - database: global_database_accounts_ansible
-                - database: global_database_accounts_terraform
-                - cache: global_cache_redis_kubernetes
-                - cache: global_cache_redis_terraform
+                - database:
+                      node: global_database_accounts_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: global_database_accounts_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+                - cache:
+                      node: global_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: global_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1326,8 +1377,13 @@ topology_template:
                 - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
                 - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
             requirements:
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - retailer_service_core: retailer_service_core_kubernetes
                 - retailer_service_jobs: retailer_service_jobs_kubernetes
                 - retailer_service_stores: retailer_service_stores_kubernetes
@@ -1487,8 +1543,12 @@ topology_template:
                       conditions: {not: {logic_expression: has_payment_merchant_b}}
 
             requirements:
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1521,7 +1581,6 @@ topology_template:
                       conditions: {logic_expression: has_debug_logging}
 
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
-
             requirements:
                 - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
@@ -1549,8 +1608,12 @@ topology_template:
                 - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
             requirements:
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1639,12 +1702,27 @@ topology_template:
                 - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
-                - database: retailer_database_stores_ansible
-                - database: retailer_database_stores_terraform
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
-                - storage: retailer_storage_stores_ansible
-                - storage: retailer_storage_stores_terraform
+                - database:
+                      node: retailer_database_stores_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: retailer_database_stores_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - storage:
+                      node: retailer_storage_stores_ansible
+                      conditions: {logic_expression: is_customer}
+                - storage:
+                      node: retailer_storage_stores_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1807,12 +1885,28 @@ topology_template:
                 - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
 
             requirements:
-                - database: retailer_database_products_ansible
-                - database: retailer_database_products_terraform
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
-                - storage: retailer_storage_products_ansible
-                - storage: retailer_storage_products_terraform
+                - database:
+                      node: retailer_database_products_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: retailer_database_products_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
+                - storage:
+                      node: retailer_storage_products_ansible
+                      conditions: {logic_expression: is_customer}
+
+                - storage:
+                      node: retailer_storage_products_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1930,10 +2024,18 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
-                - database: retailer_database_stocks_ansible
-                - database: retailer_database_stocks_terraform
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - database:
+                      node: retailer_database_stocks_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: retailer_database_stocks_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -2030,10 +2132,18 @@ topology_template:
                 - mysql_table: 'stores'
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
-                - database: retailer_database_orders_ansible
-                - database: retailer_database_orders_terraform
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - database:
+                      node: retailer_database_orders_ansible
+                      conditions: {logic_expression: is_customer}
+                - database:
+                      node: retailer_database_orders_terraform
+                      conditions: {logic_expression: is_hyperscaler}
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -2119,8 +2229,12 @@ topology_template:
                 - global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
                 - global_service_gateway_token: {get_input: global_service_gateway_token}
             requirements:
-                - cache: retailer_cache_redis_kubernetes
-                - cache: retailer_cache_redis_terraform
+                - cache:
+                      node: retailer_cache_redis_kubernetes
+                      conditions: {logic_expression: is_customer}
+                - cache:
+                      node: retailer_cache_redis_terraform
+                      conditions: {logic_expression: is_hyperscaler}
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -2389,6 +2503,7 @@ topology_template:
                 - k8s_client_key_file: {get_input: k8s_client_key_file}
             requirements:
                 - host: kubernetes_provider
+                - host: gcp_kubernetesengine
 
         kubernetes_provider:
             type: cloud.provider
