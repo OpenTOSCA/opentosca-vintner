@@ -283,13 +283,13 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
                 - global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
                 - global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
                 - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
                 - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
             requirements:
-                - global_cache_redis: global_cache_redis
+                - cache: global_cache_redis
                 - global_service_retailers: global_service_retailers
                 - global_service_products: global_service_products
                 - global_service_calibrations: global_service_calibrations
@@ -341,7 +341,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -353,6 +353,7 @@ topology_template:
 
             requirements:
                 - database: global_database_retailers
+                - cache: global_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -406,7 +407,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -423,6 +424,7 @@ topology_template:
 
             requirements:
                 - database: global_database_products
+                - cache: global_cache_redis
                 - storage: global_storage_products
                 - host: local_docker_engine
                 - host: remote_docker_engine
@@ -502,7 +504,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -519,6 +521,7 @@ topology_template:
 
             requirements:
                 - database: global_database_calibrations
+                - cache: global_cache_redis
                 - storage: global_storage_calibrations
                 - host: local_docker_engine
                 - host: remote_docker_engine
@@ -598,7 +601,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -615,6 +618,7 @@ topology_template:
                 - sms_provider_token: {get_input: sms_provider_token}
             requirements:
                 - database: global_database_accounts
+                - cache: global_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -893,7 +897,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
                 - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
                 - retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs]::.target::application_endpoint'}
                 - retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores]::.target::application_endpoint'}
@@ -902,6 +906,7 @@ topology_template:
                 - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
                 - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
             requirements:
+                - cache: retailer_cache_redis
                 - retailer_service_core: retailer_service_core
                 - retailer_service_jobs: retailer_service_jobs
                 - retailer_service_stores: retailer_service_stores
@@ -956,7 +961,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - coffee_enabled:
                       value: true
@@ -998,6 +1003,7 @@ topology_template:
                       conditions: {not: {logic_expression: has_payment_merchant_b}}
 
             requirements:
+                - cache: retailer_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -1033,9 +1039,10 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
             requirements:
+                - cache: retailer_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -1071,7 +1078,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1088,6 +1095,7 @@ topology_template:
 
             requirements:
                 - database: retailer_database_stores
+                - cache: retailer_cache_redis
                 - storage: retailer_storage_stores
                 - host: local_docker_engine
                 - host: remote_docker_engine
@@ -1167,7 +1175,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - import_enabled:
                       value: true
@@ -1200,6 +1208,7 @@ topology_template:
 
             requirements:
                 - database: retailer_database_products
+                - cache: retailer_cache_redis
                 - storage: retailer_storage_products
                 - host: local_docker_engine
                 - host: remote_docker_engine
@@ -1279,7 +1288,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1290,6 +1299,7 @@ topology_template:
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_stocks
+                - cache: retailer_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -1343,7 +1353,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1354,6 +1364,7 @@ topology_template:
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_orders
+                - cache: retailer_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster
@@ -1407,12 +1418,12 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
                 - global_service_gateway_token: {get_input: global_service_gateway_token}
             requirements:
-                - database: retailer_database_orders
+                - cache: retailer_cache_redis
                 - host: local_docker_engine
                 - host: remote_docker_engine
                 - host: kubernetes_cluster

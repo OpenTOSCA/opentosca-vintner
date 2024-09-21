@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0_rc_2
+tosca_definitions_version: tosca_variability_1_0_rc_3
 
 imports:
     - lib/types.yaml
@@ -296,13 +296,13 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
                 - global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
                 - global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
                 - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
                 - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
             requirements:
-                - global_cache_redis: global_cache_redis_compose
+                - cache: global_cache_redis_compose
                 - global_service_retailers: global_service_retailers_compose
                 - global_service_products: global_service_products_compose
                 - global_service_calibrations: global_service_calibrations_compose
@@ -356,13 +356,13 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
                 - global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
                 - global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
                 - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
                 - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
             requirements:
-                - global_cache_redis: global_cache_redis_kubernetes
+                - cache: global_cache_redis_kubernetes
                 - global_service_retailers: global_service_retailers_kubernetes
                 - global_service_products: global_service_products_kubernetes
                 - global_service_calibrations: global_service_calibrations_kubernetes
@@ -447,7 +447,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -727,7 +727,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=global_cache_redis]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -926,16 +926,14 @@ topology_template:
         #
         ###################################################
 
-        retailer_frontend_dashboard:
+        retailer_frontend_dashboard_compose:
             type: retailer.frontend.dashboard
             persistent: true
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-frontend-dashboard
                 - application_port: 3000
@@ -950,25 +948,51 @@ topology_template:
 
                 - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
             requirements:
-                - retailer_service_gateway: retailer_service_gateway
+                - retailer_service_gateway: retailer_service_gateway_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_frontend_dashboard_kubernetes:
+            type: retailer.frontend.dashboard
+            persistent: true
+            technology: kubernetes
+            properties:
+                - application_name: retailer-frontend-dashboard
+                - application_port: 3000
+                - application_protocol: http
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: retailer.frontend.dashboard:vX.Y.Z
 
-        retailer_ingress_dashboard:
+        retailer_ingress_dashboard_ansible:
             type: ingress
-            technology:
-                - ansible:
-                      conditions: {node_presence: virtual_machine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            technology: ansible
             requirements:
-                - application: retailer_frontend_dashboard
+                - application: retailer_frontend_dashboard_compose
                 - host: virtual_machine
+
+        retailer_ingress_dashboard_kubernetes:
+            type: ingress
+            technology: kubernetes
+            requirements:
+                - application: retailer_frontend_dashboard_kubernetes
                 - host: kubernetes_cluster
 
         ###################################################
@@ -977,16 +1001,14 @@ topology_template:
         #
         ###################################################
 
-        retailer_frontend_terminal:
+        retailer_frontend_terminal_compose:
             type: retailer.frontend.terminal
             persistent: true
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-frontend-terminal
                 - application_port: 3000
@@ -1001,25 +1023,51 @@ topology_template:
 
                 - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
             requirements:
-                - retailer_service_gateway: retailer_service_gateway
+                - retailer_service_gateway: retailer_service_gateway_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_frontend_terminal_kubernetes:
+            type: retailer.frontend.terminal
+            persistent: true
+            technology: kubernetes
+            properties:
+                - application_name: retailer-frontend-terminal
+                - application_port: 3000
+                - application_protocol: http
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: retailer.frontend.dashboard:vX.Y.Z
 
-        retailer_ingress_terminal:
+        retailer_ingress_terminal_ansible:
             type: ingress
-            technology:
-                - ansible:
-                      conditions: {node_presence: virtual_machine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            technology: ansible
             requirements:
-                - application: retailer_frontend_terminal
+                - application: retailer_frontend_terminal_compose
                 - host: virtual_machine
+
+        retailer_ingress_terminal_kubernetes:
+            type: ingress
+            technology: kubernetes
+            requirements:
+                - application: retailer_frontend_terminal_kubernetes
                 - host: kubernetes_cluster
 
         ###################################################
@@ -1028,15 +1076,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_gateway:
+        retailer_service_gateway_compose:
             type: retailer.service.gateway
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-gateway
                 - application_port: 4000
@@ -1077,7 +1123,7 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
                 - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
                 - retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs]::.target::application_endpoint'}
                 - retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores]::.target::application_endpoint'}
@@ -1086,31 +1132,99 @@ topology_template:
                 - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
                 - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
             requirements:
-                - retailer_service_core: retailer_service_core
-                - retailer_service_jobs: retailer_service_jobs
-                - retailer_service_stores: retailer_service_stores
-                - retailer_service_products: retailer_service_products
-                - retailer_service_stocks: retailer_service_stocks
-                - retailer_service_orders: retailer_service_orders
-                - retailer_service_global: retailer_service_global
+                - cache: retailer_cache_redis_compose
+                - retailer_service_core: retailer_service_core_compose
+                - retailer_service_jobs: retailer_service_jobs_compose
+                - retailer_service_stores: retailer_service_stores_compose
+                - retailer_service_products: retailer_service_products_compose
+                - retailer_service_stocks: retailer_service_stocks_compose
+                - retailer_service_orders: retailer_service_orders_compose
+                - retailer_service_global: retailer_service_global_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.gateway:vX.Y.Z
+
+        retailer_service_gateway_kubernetes:
+            type: retailer.service.gateway
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-gateway
+                - application_port: 4000
+                - application_protocol: graphql
+
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_name: {get_input: retailer_name}
+                - domain: {get_input: domain}
+
+                - graphql_introspection:
+                      value: true
+                      conditions: {logic_expression: has_introspection}
+
+                - graphql_introspection:
+                      value: false
+                      conditions: {not: {logic_expression: has_introspection}}
+
+                - graphql_playground:
+                      value: true
+                      conditions: {logic_expression: has_playground}
+
+                - graphql_playground:
+                      value: false
+                      conditions: {not: {logic_expression: has_playground}}
+
+                - has_error_masking:
+                      value: true
+                      conditions: {logic_expression: has_error_masking}
+
+                - has_error_masking:
+                      value: false
+                      conditions: {not: {logic_expression: has_error_masking}}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
+                - retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs]::.target::application_endpoint'}
+                - retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores]::.target::application_endpoint'}
+                - retailer_service_products_endpoint: {eval: '.::.requirements::[.name=retailer_service_products]::.target::application_endpoint'}
+                - retailer_service_stocks_endpoint: {eval: '.::.requirements::[.name=retailer_service_stocks]::.target::application_endpoint'}
+                - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
+                - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
+            requirements:
+                - cache: retailer_cache_redis_kubernetes
+                - retailer_service_core: retailer_service_core_kubernetes
+                - retailer_service_jobs: retailer_service_jobs_kubernetes
+                - retailer_service_stores: retailer_service_stores_kubernetes
+                - retailer_service_products: retailer_service_products_kubernetes
+                - retailer_service_stocks: retailer_service_stocks_kubernetes
+                - retailer_service_orders: retailer_service_orders_kubernetes
+                - retailer_service_global: retailer_service_global_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: retailer.service.gateway:vX.Y.Z
 
+        retailer_ingress_gateway_ansible:
+            type: ingress
+            technology: ansible
+            requirements:
+                - application: retailer_service_gateway_compose
+                - host: virtual_machine
+
         retailer_ingress_gateway:
             type: ingress
-            technology:
-                - ansible:
-                      conditions: {node_presence: virtual_machine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            technology: kubernetes
             requirements:
-                - application: retailer_service_gateway
-                - host: virtual_machine
+                - application: retailer_service_gateway_kubernetes
                 - host: kubernetes_cluster
 
         ###################################################
@@ -1119,15 +1233,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_core:
+        retailer_service_core_compose:
             type: retailer.service.core
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-core
                 - application_port: 4000
@@ -1140,7 +1252,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - coffee_enabled:
                       value: true
@@ -1182,29 +1294,17 @@ topology_template:
                       conditions: {not: {logic_expression: has_payment_merchant_b}}
 
             requirements:
+                - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
-                - host: kubernetes_cluster
             artifacts:
                 - docker_image:
                       type: docker.image
                       file: retailer.service.core:vX.Y.Z
 
-        ###################################################
-        #
-        # Retailer Jobs
-        #
-        ###################################################
-
-        retailer_service_jobs:
-            type: retailer.service.jobs
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+        retailer_service_core_kubernetes:
+            type: retailer.service.core
+            technology: kubernetes
             properties:
                 - application_name: retailer-service-core
                 - application_port: 4000
@@ -1217,11 +1317,110 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - coffee_enabled:
+                      value: true
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_coffee}}
+
+                - coffee_provider_type:
+                      value: {get_input: coffee_provider_type}
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_provider_endpoint:
+                      value: {get_input: coffee_provider_endpoint}
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_provider_token:
+                      value: {get_input: coffee_provider_token}
+                      conditions: {logic_expression: has_coffee}
+
+                - payment_provider_endpoint: {get_input: payment_provider_endpoint}
+                - payment_provider_token: {get_input: payment_provider_token}
+
+                - payment_merchant_a_enabled:
+                      value: true
+                      conditions: {logic_expression: has_payment_merchant_a}
+
+                - payment_merchant_a_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_payment_merchant_a}}
+
+                - payment_merchant_b_enabled:
+                      value: true
+                      conditions: {logic_expression: has_payment_merchant_b}
+
+                - payment_merchant_b_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_payment_merchant_b}}
 
             requirements:
+                - cache: retailer_cache_redis_kubernetes
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.core:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer Jobs
+        #
+        ###################################################
+
+        retailer_service_jobs_compose:
+            type: retailer.service.jobs
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
+            properties:
+                - application_name: retailer-service-core
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+            requirements:
+                - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.jobs:vX.Y.Z
+
+        retailer_service_jobs_kubernetes:
+            type: retailer.service.jobs
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-core
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+            requirements:
+                - cache: retailer_cache_redis_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1234,15 +1433,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_stores:
+        retailer_service_stores_compose:
             type: retailer.service.stores
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-stores
                 - application_port: 4000
@@ -1255,7 +1452,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1272,9 +1469,49 @@ topology_template:
 
             requirements:
                 - database: retailer_database_stores
+                - cache: retailer_cache_redis_compose
                 - storage: retailer_storage_stores
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stores:vX.Y.Z
+
+        retailer_service_stores_kubernetes:
+            type: retailer.service.stores
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-stores
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: retailer_database_stores
+                - cache: retailer_cache_redis_kubernetes
+                - storage: retailer_storage_stores
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1289,7 +1526,8 @@ topology_template:
                 - database_user: stores
                 - database_password: {get_input: database_password}
             requirements:
-                - host: retailer_dbms
+                - host: retailer_dbms_compose
+                - host: retailer_dbms_kubernetes
 
         retailer_storage_stores:
             type: object.storage
@@ -1299,7 +1537,8 @@ topology_template:
                 - storage_token: {get_input: storage_password}
                 - storage_dialect: minio
             requirements:
-                - host: retailer_minio
+                - host: retailer_minio_compose
+                - host: retailer_minio_kubernetes
 
         ###################################################
         #
@@ -1307,15 +1546,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_products:
+        retailer_service_products_compose:
             type: retailer.service.products
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-products
                 - application_port: 4000
@@ -1328,7 +1565,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - import_enabled:
                       value: true
@@ -1361,9 +1598,65 @@ topology_template:
 
             requirements:
                 - database: retailer_database_products
+                - cache: retailer_cache_redis_compose
                 - storage: retailer_storage_products
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.products:vX.Y.Z
+
+        retailer_service_products_kubernetes:
+            type: retailer.service.products
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-products
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - import_enabled:
+                      value: true
+                      conditions: {logic_expression: has_import}
+
+                - import_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_import}}
+
+                - import_schema:
+                      value: a
+                      conditions: {logic_expression: has_import_schema_a}
+
+                - import_schema:
+                      value: b
+                      conditions: {logic_expression: has_import_schema_b}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: retailer_database_products
+                - cache: retailer_cache_redis_kubernetes
+                - storage: retailer_storage_products
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1378,7 +1671,8 @@ topology_template:
                 - database_user: products
                 - database_password: {get_input: database_password}
             requirements:
-                - host: retailer_dbms
+                - host: retailer_dbms_compose
+                - host: retailer_dbms_kubernetes
 
         retailer_storage_products:
             type: object.storage
@@ -1388,7 +1682,8 @@ topology_template:
                 - storage_token: {get_input: storage_password}
                 - storage_dialect: minio
             requirements:
-                - host: retailer_minio
+                - host: retailer_minio_compose
+                - host: retailer_minio_kubernetes
 
         ###################################################
         #
@@ -1396,15 +1691,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_stocks:
+        retailer_service_stocks_compose:
             type: retailer.service.stocks
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-stocks
                 - application_port: 4000
@@ -1417,7 +1710,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1428,8 +1721,41 @@ topology_template:
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_stocks
+                - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        retailer_service_stocks_kubernetes:
+            type: retailer.service.stocks
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-stocks
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_stocks
+                - cache: retailer_cache_redis_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1444,7 +1770,8 @@ topology_template:
                 - database_user: stocks
                 - database_password: {get_input: database_password}
             requirements:
-                - host: retailer_dbms
+                - host: retailer_dbms_compose
+                - host: retailer_dbms_kubernetes
 
         ###################################################
         #
@@ -1452,15 +1779,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_orders:
+        retailer_service_orders_compose:
             type: retailer.service.orders
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-orders
                 - application_port: 4000
@@ -1473,7 +1798,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1484,8 +1809,41 @@ topology_template:
                 - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
             requirements:
                 - database: retailer_database_orders
+                - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        retailer_service_orders_kubernetes:
+            type: retailer.service.orders
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-orders
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_orders
+                - cache: retailer_cache_redis_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1500,7 +1858,8 @@ topology_template:
                 - database_user: orders
                 - database_password: {get_input: database_password}
             requirements:
-                - host: retailer_dbms
+                - host: retailer_dbms_compose
+                - host: retailer_dbms_kubernetes
 
         ###################################################
         #
@@ -1508,15 +1867,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_service_global:
+        retailer_service_global_compose:
             type: retailer.service.global
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-service-global
                 - application_port: 4000
@@ -1529,14 +1886,40 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=retailer_cache_redis]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
                 - global_service_gateway_token: {get_input: global_service_gateway_token}
             requirements:
-                - database: retailer_database_orders
+                - cache: retailer_cache_redis_compose
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        retailer_service_global_kubernetes:
+            type: retailer.service.global
+            technology: kubernetes
+            properties:
+                - application_name: retailer-service-global
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
+                - global_service_gateway_token: {get_input: global_service_gateway_token}
+            requirements:
+                - cache: retailer_cache_redis_kubernetes
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
@@ -1549,21 +1932,31 @@ topology_template:
         #
         ###################################################
 
-        retailer_dbms:
+        retailer_dbms_compose:
             type: mysql.dbms
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - dbms_name: unfurl-technology-industry-retailer-dbms
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
+
+        retailer_dbms_kubernetes:
+            type: mysql.dbms
+            technology: kubernetes
+            properties:
+                - dbms_name: unfurl-technology-industry-retailer-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
                 - host: kubernetes_cluster
             artifacts:
                 - dbms_image:
@@ -1576,21 +1969,31 @@ topology_template:
         #
         ###################################################
 
-        retailer_cache_redis:
+        retailer_cache_redis_compose:
             type: redis.server
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - cache_name: retailer-cache-redis
                 - cache_port: 6379
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - cache_image:
+                      type: cache.image
+                      file: 7.4.0
+
+        retailer_cache_redis_kubernetes:
+            type: redis.server
+            technology: kubernetes
+            properties:
+                - cache_name: retailer-cache-redis
+                - cache_port: 6379
+            requirements:
                 - host: kubernetes_cluster
             artifacts:
                 - cache_image:
@@ -1603,15 +2006,13 @@ topology_template:
         #
         ###################################################
 
-        retailer_minio:
+        retailer_minio_compose:
             type: minio.server
-            technology:
-                - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
-                - kubernetes:
-                      conditions: {node_presence: kubernetes_cluster}
+            conditions:
+                - or:
+                      - {node_presence: local_docker_engine}
+                      - {node_presence: remote_docker_engine}
+            technology: compose
             properties:
                 - application_name: retailer-minio-server
                 - application_port: 9000
@@ -1621,6 +2022,21 @@ topology_template:
             requirements:
                 - host: local_docker_engine
                 - host: remote_docker_engine
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+
+        retailer_minio_kubernetes:
+            type: minio.server
+            technology: kubernetes
+            properties:
+                - application_name: retailer-minio-server
+                - application_port: 9000
+                - application_protocol: http
+                - access_key: {get_input: minio_user}
+                - secret_key: {get_input: minio_secret}
+            requirements:
                 - host: kubernetes_cluster
             artifacts:
                 - docker_image:
