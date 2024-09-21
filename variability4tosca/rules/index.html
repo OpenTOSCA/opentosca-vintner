@@ -3065,6 +3065,48 @@
   
   
     <li class="md-nav__item">
+      <a href="../tests/test-boolean-operators-exo-false-all/" class="md-nav__link">
+        Operator "exo": all false -&gt; false
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-boolean-operators-exo-true-all/" class="md-nav__link">
+        Operator "exo": all true -&gt; false
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-boolean-operators-exo-true/" class="md-nav__link">
+        Operator "exo": One ture -&gt; true
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tests/test-boolean-operators-implies-false-false-true/" class="md-nav__link">
         Operator "implies": false false -&gt; true
       </a>
@@ -3193,48 +3235,6 @@
     <li class="md-nav__item">
       <a href="../tests/test-boolean-operators-or-true/" class="md-nav__link">
         Operator "or" Evaluates to "true"
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-boolean-operators-xor-false-all/" class="md-nav__link">
-        Operator "xor": all false -&gt; false
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-boolean-operators-xor-true-all/" class="md-nav__link">
-        Operator "xor": all true -&gt; false
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-boolean-operators-xor-true/" class="md-nav__link">
-        Operator "xor": One ture -&gt; true
       </a>
     </li>
   
@@ -10188,16 +10188,16 @@ The specification is under active development and is not backwards compatible wi
 <h2 id="deployment-technologies">Deployment Technologies<a class="headerlink" href="#deployment-technologies" title="Permanent link">&para;</a></h2>
 <p>Technology rules are defined in the context of the following deployment technologies.</p>
 <h3 id="ansible">Ansible<a class="headerlink" href="#ansible" title="Permanent link">&para;</a></h3>
-<p>Ansible is an open-source automation tool primarily used for configuration management, application deployment, and task automation. It allows IT administrators and DevOps teams to manage software on servers using SSH, without the need for agents on target nodes. Ansible uses simple, human-readable YAML files called playbooks to define tasks and configurations, enabling consistent management of IT environments across multiple servers. Its main purpose is to simplify the management of software configurations, reduce manual effort, and ensure consistency and reliability in IT operations, making it an ideal tool for automating repetitive tasks and orchestrating complex workflows across diverse environments.
+<p>Ansible is an automation tool primarily used for configuration management, application deployment, and task automation. It allows system administrators and DevOps teams to manage software on servers using SSH, without the need for agents on target nodes. Ansible uses simple, human-readable YAML files called playbooks to define tasks and configurations, enabling consistent management of IT environments across multiple servers.
 Find out <a href="https://ansible.com" target="_blank">more</a>.</p>
 <h3 id="terraform">Terraform<a class="headerlink" href="#terraform" title="Permanent link">&para;</a></h3>
-<p>Terraform is an open-source infrastructure as code (IaC) tool developed by HashiCorp that allows users to define, provision, and manage cloud infrastructure in a consistent, automated, and reproducible way. Using a declarative configuration language called HashiCorp Configuration Language (HCL) or JSON, Terraform enables users to define infrastructure components such as virtual machines, networks, and storage in human-readable configuration files. It supports a wide range of cloud providers, including AWS, Azure, Google Cloud, and many others, allowing for seamless multi-cloud management. By applying these configurations, Terraform creates and manages the defined resources through APIs, making it a powerful tool for automating infrastructure deployment, scaling, and version control. However, Terraform is specifically designed for managing infrastructure and is not intended for managing software on remote targets, which is outside its primary scope.
+<p>Terraform is an infrastructure as code (IaC) tool that allows users to define, provision, and manage cloud infrastructure in a consistent, automated, and reproducible way. Using a declarative configuration language called HashiCorp Configuration Language (HCL), Terraform enables users to define infrastructure components such as virtual machines, networks, and storage in human-readable configuration files. It supports a wide range of cloud providers, including AWS, Azure, Google Cloud, and many others, allowing for seamless multi-cloud management. By applying these configurations, Terraform creates and manages the defined resources through APIs.
 Find out <a href="https://terraform.io" target="_blank">more</a>.</p>
 <h3 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h3>
-<p>Kubernetes, also known as K8s, is an open-source system for automating the deployment, scaling, and management of containerized applications, offering production-grade container orchestration. It provides a robust platform for running and managing applications in clusters of servers, ensuring high availability, scalability, and efficient resource utilization. Kubernetes allows users to define the desired state of their applications using declarative manifests, which specify the configuration, deployment, and management of containerized workloads. By continuously monitoring and adjusting the cluster to match these desired states, Kubernetes simplifies the application deployment process, supports automated rollouts and rollbacks, and ensures the self-healing of applications, making it a critical tool for modern software delivery and operational efficiency.
+<p>Kubernetes is a system for automating the deployment, scaling, and management of containerized applications, offering production-grade container orchestration. It provides a platform for running and managing applications in clusters of servers, ensuring high availability, scalability, and efficient resource utilization. Kubernetes allows users to define the desired state of their applications using declarative manifests, which specify the configuration, deployment, and management of containerized workloads. By continuously monitoring and adjusting the cluster to match these desired states, Kubernetes simplifies the application deployment process, supports automated rollouts and rollbacks, and ensures the self-healing of applications.
 Find out <a href="https://kubernetes.io" target="_blank">more</a>.</p>
 <h3 id="docker-compose">Docker Compose<a class="headerlink" href="#docker-compose" title="Permanent link">&para;</a></h3>
-<p>Docker Compose is a tool that enables the definition and running of multi-container applications on a Docker Engine, using a single YAML configuration file. It streamlines the management of complex applications by simplifying the control of services, networks, and volumes, allowing developers to manage the entire stack effortlessly. Compose is particularly suited for development, testing, and single-host deployments, providing a consistent environment across various stages of the application lifecycle. However, it is limited to working within the Docker ecosystem, as it only deploys on Docker Engine, making it an ideal choice for those heavily invested in Docker-based workflows.
+<p>Docker Compose is a tool that enables the definition and running of multi-container applications on a Docker Engine, using a single YAML configuration file. It allows the management of services, networks, and volumes, in a declarative manner. Compose is particularly suited for single-host deployments, providing a consistent environment across various stages of the application lifecycle. However, it is limited to working within the Docker ecosystem.
 Find out <a href="https://docs.docker.com/compose" target="_blank">more</a>.</p>
 <h2 id="derivation-rules">Derivation Rules<a class="headerlink" href="#derivation-rules" title="Permanent link">&para;</a></h2>
 <p>We use the following derivation rules to assess deployment qualities.</p>
@@ -17079,7 +17079,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 14, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 21, 2024</span>
       
     
   </small>
