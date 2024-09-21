@@ -163,14 +163,66 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
-export function toFormat(obj: any, format: string) {
+export function toFormat(obj: any, format: string, options: {latex?: LatexOptions} = {}) {
     if (format === 'yaml') return toYAML(obj)
     if (format === 'json') return toJSON(obj)
     if (format === 'ini') return toINI(obj)
     if (format === 'env') return toENV(obj)
     if (format === 'xml') return toXML(obj)
+    if (format === 'latex') return toLatex(obj, options.latex)
 
     throw new Error(`Format "${format}" not supported`)
+}
+
+export type LatexOptions = {
+    headers?: string[]
+}
+
+export function toLatex(obj: any, options: LatexOptions = {}) {
+    assert.isArray(obj)
+    // TODO: this is dirty
+    const list = obj as {[key: string]: any}[]
+
+    // Collect all possible keys
+    const defaultKeys = () => {
+        const dk: string[] = []
+        list.forEach(item => {
+            Object.keys(item).forEach(key => keys.push(key))
+        })
+        return dk
+    }
+
+    const keys = options.headers ?? defaultKeys()
+
+    const data = []
+
+    /**
+     * Header
+     */
+    data.push('\\toprule')
+    data.push('index & ' + Array.from(keys).join(' & ') + '\\\\')
+    data.push('\\midrule')
+
+    /**
+     * Entries
+     */
+    list.forEach((item, index) => {
+        const tmp = [index]
+        for (const key of keys) {
+            const raw = item[key]
+            // TODO: not latex safe
+            const value = JSON.stringify(raw)
+            tmp.push(raw)
+        }
+        data.push(tmp.join(' & ') + '\\\\')
+    })
+
+    /**
+     * Footer
+     */
+    data.push('\\bottomrule')
+
+    return data.join('\n')
 }
 
 export function formatYAML(obj: any) {

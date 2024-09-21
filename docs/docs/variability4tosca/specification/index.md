@@ -962,14 +962,15 @@ The following intrinsic functions can be used inside a variability expression.
 
 The following logical operators can be used inside a logic expression.
 
-| Keyname  | Input                                       | Output  | Description                                        |
-|----------|---------------------------------------------|---------|----------------------------------------------------|
-| and      | List(BooleanExpression)                     | Boolean | Evaluates if all values are `true`.                |
-| or       | List(BooleanExpression)                     | Boolean | Evaluates if at least one value is `true`.         |
-| not      | BooleanExpression                           | Boolean | Negates the given value.                           |
-| xor      | List(BooleanExpression)                     | Boolean | Evaluates if exactly one value is `true`.          |
-| implies  | Tuple(BooleanExpression, BooleanExpression) | Boolean | Evaluates if first value implies the second value. |
-| amo      | List(BooleanExpression)                     | Boolean | Evaluates if at most one value is `true`.          |
+| Keyname | Input                                       | Output  | Description                                        |
+|---------|---------------------------------------------|---------|----------------------------------------------------|
+| and     | List(BooleanExpression)                     | Boolean | Evaluates if all values are `true`.                |
+| or      | List(BooleanExpression)                     | Boolean | Evaluates if at least one value is `true`.         |
+| not     | BooleanExpression                           | Boolean | Negates the given value.                           |
+| xor     | List(BooleanExpression)                     | Boolean | Evaluates if an odd number of arguments is `true`. |
+| exo     | List(BooleanExpression)                     | Boolean | Evaluates if exactly one value is `true`.          |
+| implies | Tuple(BooleanExpression, BooleanExpression) | Boolean | Evaluates if first value implies the second value. |
+| amo     | List(BooleanExpression)                     | Boolean | Evaluates if at most one value is `true`.          |
 
 ### Arithmetic Operators
 

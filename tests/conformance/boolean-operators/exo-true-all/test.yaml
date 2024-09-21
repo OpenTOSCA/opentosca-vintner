@@ -1,2 +1,2 @@
-name: 'Operator "xor": all true -> false'
+name: 'Operator "exo": all true -> false'
 description: Assigns "false" to the property "value" of the node "container" since the expression evaluates to "false".

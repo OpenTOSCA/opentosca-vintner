@@ -7,5 +7,7 @@ export type RuleOptions = {
 
 export default async function (options: RuleOptions) {
     options.format = options.format ?? 'yaml'
-    return files.toFormat(Registry.rules, options.format)
+    return files.toFormat(Registry.rules, options.format, {
+        latex: {headers: ['component', 'artifact', 'hosting', 'technology', 'weight']},
+    })
 }

@@ -60,6 +60,158 @@ node_types:
     #
     ################################################################
 
+    currency.component~service.application#docker.image::ansible@docker.engine->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: start container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                          network_mode: host
+                                          env:
+                                              PORT: '"{{ SELF.application_port }}"'
+                                              DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: stop container
+                                      community.docker.docker_container:
+                                          name: '{{ SELF.application_name }}'
+                                          state: absent
+    currency.component~service.application#docker.image::compose@docker.engine->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: apply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
+                                      args:
+                                          executable: /usr/bin/bash
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: touch compose
+                                      register: compose
+                                      ansible.builtin.tempfile:
+                                          suffix: '{{ SELF.application_name }}.compose.yaml'
+                                    - name: create compose
+                                      ansible.builtin.copy:
+                                          dest: '{{ compose.path }}'
+                                          content: '{{ manifest | to_yaml }}'
+                                      vars:
+                                          manifest:
+                                              name: '{{ SELF.application_name }}'
+                                              services:
+                                                  application:
+                                                      container_name: '{{ SELF.application_name }}'
+                                                      image: '{{ ".artifacts::docker_image::file" | eval }}'
+                                                      network_mode: host
+                                                      environment:
+                                                          PORT: '"{{ SELF.application_port }}"'
+                                                          DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: unapply compose
+                                      ansible.builtin.shell: docker compose -f {{ compose.path }} down
+                                      args:
+                                          executable: /usr/bin/bash
+    currency.component~service.application#docker.image::terraform@docker.engine->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        attributes:
+            application_address:
+                type: string
+                default: 127.0.0.1
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        terraform:
+                            - required_providers:
+                                  - docker:
+                                        source: kreuzwerker/docker
+                                        version: 3.0.2
+                              required_version: '>= 0.14.0'
+                        provider:
+                            docker:
+                                - host: unix:///var/run/docker.sock
+                        resource:
+                            docker_container:
+                                application:
+                                    - env:
+                                          - PORT={{ SELF.application_port }}
+                                          - DISABLE_PROFILER={{ SELF.disable_profiler }}
+                                      image: ${docker_image.image.image_id}
+                                      name: '{{ SELF.application_name }}'
+                                      network_mode: host
+                            docker_image:
+                                image:
+                                    - name: '{{ ".artifacts::docker_image::file" | eval }}'
     currency.component~service.application#docker.image::ansible@docker.engine->remote.machine:
         derived_from: currency.component
         metadata:
@@ -198,7 +350,7 @@ node_types:
                                                       environment:
                                                           PORT: '"{{ SELF.application_port }}"'
                                                           DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
-                                    - name: apply compose
+                                    - name: unapply compose
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} down
                                       args:
                                           executable: /usr/bin/bash
@@ -808,6 +960,400 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
+    currency.component~service.application#tar.archive::ansible@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: create service
+                                      ansible.builtin.copy:
+                                          dest: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          content: |
+                                              [Unit]
+                                              After=network.target
+
+                                              [Service]
+                                              Type=simple
+                                              ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                              WorkingDirectory={{ SELF.application_directory }}
+                                              EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                              [Install]
+                                              WantedBy=multi-user.target
+                                    - name: enable service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: start service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: started
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: stop service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                                    - name: delete systemd service
+                                      ansible.builtin.file:
+                                          path: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          state: absent
+                                    - name: reload daemon
+                                      ansible.builtin.systemd:
+                                          daemon_reload: true
+    currency.component~service.application#tar.archive::terraform@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    filename: /tmp/artifact-currency.component
+                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_service:
+                                    content: |
+                                        [Unit]
+                                        After=network.target
+
+                                        [Service]
+                                        Type=simple
+                                        ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                        WorkingDirectory={{ SELF.application_directory }}
+                                        EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                        [Install]
+                                        WantedBy=multi-user.target
+                                    filename: /etc/systemd/system/{{ SELF.application_name }}.service
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        PORT="{{ SELF.application_port }}"
+                                        DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-currency.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        tar -xzf /tmp/artifact-currency.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Reload systemd daemon
+                                        systemctl daemon-reload
+
+                                        # Enable service 
+                                        systemctl enable {{ SELF.application_name }}
+                                    filename: /tmp/create-currency.component.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-currency.component.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Start service 
+                                        systemctl start {{ SELF.application_name }}
+                                    filename: /tmp/start-currency.component.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+
+                                        # Stop service 
+                                        systemctl stop {{ SELF.application_name }}
+                                    filename: /tmp/stop-currency.component.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+
+                                        # Delete systemd service 
+                                        rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                        # Reload system daemon
+                                        systemctl daemon-reload
+                                    filename: /tmp/delete-currency.component.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_service
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-currency.component.sh
+                                                    - sudo bash /tmp/configure-currency.component.sh
+                                                    - sudo bash /tmp/start-currency.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-currency.component.sh
+                                                    - sudo bash /tmp/delete-currency.component.sh
+                                                when: destroy
     currency.component~service.application#tar.archive::ansible@*->remote.machine:
         derived_from: currency.component
         metadata:
@@ -968,6 +1514,12 @@ node_types:
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
                                       ansible.builtin.systemd:
                                           name: '{{ SELF.application_name }}'
@@ -989,6 +1541,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1040,6 +1596,10 @@ node_types:
                                           chdir: '{{ SELF.application_directory }}'
                                           executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: delete systemd service
                                       ansible.builtin.file:
                                           path: /etc/systemd/system/{{ SELF.application_name }}.service
@@ -1047,10 +1607,6 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-                                    - name: delete application directory
-                                      ansible.builtin.file:
-                                          path: '{{ SELF.application_directory }}'
-                                          state: absent
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -1242,6 +1798,404 @@ node_types:
                                                     - sudo bash /tmp/stop-currency.component.sh
                                                     - sudo bash /tmp/delete-currency.component.sh
                                                 when: destroy
+    currency.component~service.application#zip.archive::ansible@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: create service
+                                      ansible.builtin.copy:
+                                          dest: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          content: |
+                                              [Unit]
+                                              After=network.target
+
+                                              [Service]
+                                              Type=simple
+                                              ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                              WorkingDirectory={{ SELF.application_directory }}
+                                              EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                              [Install]
+                                              WantedBy=multi-user.target
+                                    - name: enable service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: start service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: started
+                                          enabled: 'yes'
+                                          daemon_reload: 'yes'
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: stop service
+                                      ansible.builtin.systemd:
+                                          name: '{{ SELF.application_name }}'
+                                          state: stopped
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                                    - name: delete systemd service
+                                      ansible.builtin.file:
+                                          path: /etc/systemd/system/{{ SELF.application_name }}.service
+                                          state: absent
+                                    - name: reload daemon
+                                      ansible.builtin.systemd:
+                                          daemon_reload: true
+    currency.component~service.application#zip.archive::terraform@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    filename: /tmp/artifact-currency.component
+                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_service:
+                                    content: |
+                                        [Unit]
+                                        After=network.target
+
+                                        [Service]
+                                        Type=simple
+                                        ExecStart=/usr/bin/bash -c ". ./.vintner/start.sh"
+                                        WorkingDirectory={{ SELF.application_directory }}
+                                        EnvironmentFile={{ SELF.application_directory }}/.env
+
+                                        [Install]
+                                        WantedBy=multi-user.target
+                                    filename: /etc/systemd/system/{{ SELF.application_name }}.service
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        PORT="{{ SELF.application_port }}"
+                                        DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-currency.component {{ ".artifacts::zip_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        unzip /tmp/artifact-currency.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Reload systemd daemon
+                                        systemctl daemon-reload
+
+                                        # Enable service 
+                                        systemctl enable {{ SELF.application_name }}
+                                    filename: /tmp/create-currency.component.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-currency.component.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Start service 
+                                        systemctl start {{ SELF.application_name }}
+                                    filename: /tmp/start-currency.component.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+
+                                        # Stop service 
+                                        systemctl stop {{ SELF.application_name }}
+                                    filename: /tmp/stop-currency.component.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+
+                                        # Delete systemd service 
+                                        rm -f /etc/systemd/system/{{ SELF.application_name }}.service
+
+                                        # Reload system daemon
+                                        systemctl daemon-reload
+                                    filename: /tmp/delete-currency.component.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_service
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-currency.component.sh
+                                                    - sudo bash /tmp/configure-currency.component.sh
+                                                    - sudo bash /tmp/start-currency.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-currency.component.sh
+                                                    - sudo bash /tmp/delete-currency.component.sh
+                                                when: destroy
     currency.component~service.application#zip.archive::ansible@*->remote.machine:
         derived_from: currency.component
         metadata:
@@ -1292,12 +2246,13 @@ node_types:
                                           dest: '{{ SELF.application_directory }}'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
                                       when: not (".artifacts::zip_archive::file" | eval).startswith("http")
-                                    - name: extract deployment artifact in application directory
+                                    - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -1405,6 +2360,12 @@ node_types:
                                               {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
                                           mode: '0755'
                                       when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: start service
                                       ansible.builtin.systemd:
                                           name: '{{ SELF.application_name }}'
@@ -1426,6 +2387,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1477,6 +2442,10 @@ node_types:
                                           chdir: '{{ SELF.application_directory }}'
                                           executable: /bin/bash
                                       when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
                                     - name: delete systemd service
                                       ansible.builtin.file:
                                           path: /etc/systemd/system/{{ SELF.application_name }}.service
@@ -1484,10 +2453,6 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-                                    - name: delete application directory
-                                      ansible.builtin.file:
-                                          path: '{{ SELF.application_directory }}'
-                                          state: absent
                             playbookArgs:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
@@ -1865,6 +2830,373 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+    currency.component~software.application#apt.package::ansible@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: run setup script
+                                      ansible.builtin.shell: curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                      args:
+                                          executable: /bin/bash
+                                      when: '".artifacts::apt_package::script" | eval != ""'
+                                    - name: add apt key
+                                      ansible.builtin.apt_key:
+                                          url: '{{ ".artifacts::apt_package::key" | eval }}'
+                                          keyring: /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                          state: present
+                                      when: '".artifacts::apt_package::key" | eval != ""'
+                                    - name: add apt repository
+                                      ansible.builtin.apt_repository:
+                                          repo: deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}
+                                          filename: '{{ ".artifacts::apt_package::repository" | eval }}'
+                                          state: present
+                                      when: '".artifacts::apt_package::source" | eval != ""'
+                                    - name: update apt cache
+                                      ansible.builtin.apt:
+                                          update_cache: 'yes'
+                                    - name: install dependencies
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }}'
+                                          state: present
+                                      when: '".artifacts::apt_package::dependencies" | eval != ""'
+                                    - name: install package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
+                                          state: present
+                                      environment: '{{ ".artifacts::apt_package::env" | eval | split | map("split", "=") | community.general.dict }}'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+                                    - name: uninstall package
+                                      ansible.builtin.apt:
+                                          name: '{{ ".artifacts::apt_package::file" | eval }}'
+                                          state: absent
+    currency.component~software.application#apt.package::terraform@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Run setup script 
+                                        if [[ "{{ ".artifacts::apt_package::script" | eval }}" != "" ]]; then 
+                                            curl -fsSL {{ ".artifacts::apt_package::script" | eval }} | sudo -E bash -
+                                        fi
+
+                                        # Add apt key
+                                        if [[ "{{ ".artifacts::apt_package::key" | eval }}" != "" ]]; then 
+                                            curl -1sLf {{ ".artifacts::apt_package::key" | eval }} | gpg --dearmor --yes -o /usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg
+                                        fi
+
+                                        # Add apt repository
+                                        if [[ "{{ ".artifacts::apt_package::source" | eval }}" != "" ]]; then 
+                                            echo "deb [signed-by=/usr/share/keyrings/{{ ".artifacts::apt_package::repository" | eval }}.gpg] {{ ".artifacts::apt_package::source" | eval }}" | tee {{ ".artifacts::apt_package::repository" | eval }}
+                                        fi
+
+                                        # Update apt cache
+                                        apt-get update -y
+
+                                        # Install dependencies
+                                        if [[ "{{ ".artifacts::apt_package::dependencies" | eval }}" != "" ]]; then 
+                                            apt-get install {{ ".artifacts::apt_package::dependencies" | eval | split(",") | map("trim") }} -y
+                                        fi
+
+                                        # Install package
+                                        {{ ".artifacts::apt_package::env" | eval }} apt-get install {{ ".artifacts::apt_package::file" | eval }} -y
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        PORT="{{ SELF.application_port }}"
+                                        DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                        EOF>>
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-currency.component.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-currency.component.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-currency.component.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-currency.component.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+
+                                        # Uninstall package
+                                        apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
+                                    filename: /tmp/delete-currency.component.sh
+                            terraform_data:
+                                local:
+                                    - provisioner:
+                                          depends_on:
+                                              - local_file.tmp_artifact
+                                              - local_file.tmp_create
+                                              - local_file.tmp_configure
+                                              - local_file.tmp_start
+                                              - local_file.tmp_stop
+                                              - local_file.tmp_delete
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-currency.component.sh
+                                                    - sudo bash /tmp/configure-currency.component.sh
+                                                    - sudo bash /tmp/start-currency.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-currency.component.sh
+                                                    - sudo bash /tmp/delete-currency.component.sh
+                                                when: destroy
     currency.component~software.application#apt.package::ansible@*->remote.machine:
         derived_from: currency.component
         metadata:
@@ -1997,6 +3329,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -2028,6 +3364,10 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -2087,7 +3427,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    currency.component~software.application#apt.archive::terraform@*->remote.machine:
+    currency.component~software.application#apt.package::terraform@*->remote.machine:
         derived_from: currency.component
         metadata:
             vintner_generated: 'true'
@@ -2172,14 +3512,6 @@ node_types:
                                                     PORT="{{ SELF.application_port }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
                                                     EOF>>
-
-                                                    # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::apt_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-currency.component {{ ".artifacts::apt_archive::file" | eval }} 
-                                                    fi
-
-                                                    # Extract deployment artifact
-                                                    undefined
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2277,6 +3609,371 @@ node_types:
                                                     apt-get uninstall {{ ".artifacts::apt_package::file" | eval }} -y
                                                 destination: /tmp/delete-currency.component.sh
                                           remote-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-currency.component.sh
+                                                    - sudo bash /tmp/configure-currency.component.sh
+                                                    - sudo bash /tmp/start-currency.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-currency.component.sh
+                                                    - sudo bash /tmp/delete-currency.component.sh
+                                                when: destroy
+    currency.component~software.application#tar.archive::ansible@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: wait for ssh
+                                      wait_for_connection:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+    currency.component~software.application#tar.archive::terraform@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    filename: /tmp/artifact-currency.component
+                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        PORT="{{ SELF.application_port }}"
+                                        DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-currency.component {{ ".artifacts::tar_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        tar -xzf /tmp/artifact-currency.component -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-currency.component.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-currency.component.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-currency.component.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-currency.component.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+                                    filename: /tmp/delete-currency.component.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
                                               - inline:
                                                     - sudo bash /tmp/create-currency.component.sh
                                                     - sudo bash /tmp/configure-currency.component.sh
@@ -2688,6 +4385,361 @@ node_types:
                                                     - sudo bash /tmp/stop-currency.component.sh
                                                     - sudo bash /tmp/delete-currency.component.sh
                                                 when: destroy
+    currency.component~software.application#zip.archive::ansible@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+            vintner_orchestrator: unfurl
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    create:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: install operational dependencies
+                                      ansible.builtin.apt:
+                                          name: unzip
+                                          update_cache: 'yes'
+                                    - name: create application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: directory
+                                    - name: extract deployment artifact in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: extract deployment artifact from URL in application directory
+                                      ansible.builtin.unarchive:
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
+                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                    - name: create vintner directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}/.vintner'
+                                          state: directory
+                                    - name: create .env file
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.env'
+                                          content: |-
+                                              PORT="{{ SELF.application_port }}"
+                                              DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/create.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                          mode: '0755'
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/create.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_create != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    configure:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/configure.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                          mode: '0755'
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/configure.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_configure != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    start:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "start" missing
+                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/start.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                          mode: '0755'
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/start.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_start != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    stop:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: assert management operation
+                                      ansible.builtin.fail:
+                                          dest: Management operation "stop" missing
+                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                          mode: '0755'
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/stop.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_stop != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                    delete:
+                        implementation:
+                            primary: Ansible
+                            operation_host: ORCHESTRATOR
+                        inputs:
+                            playbook:
+                                q:
+                                    - name: copy management operation
+                                      ansible.builtin.copy:
+                                          dest: '{{ SELF.application_directory }}/.vintner/delete.sh'
+                                          content: |-
+                                              #!/usr/bin/bash
+                                              set -e
+
+                                              {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                          mode: '0755'
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: call management operation
+                                      ansible.builtin.shell: . .env && . .vintner/delete.sh
+                                      args:
+                                          chdir: '{{ SELF.application_directory }}'
+                                          executable: /bin/bash
+                                      when: SELF._management_delete != "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
+                                    - name: delete application directory
+                                      ansible.builtin.file:
+                                          path: '{{ SELF.application_directory }}'
+                                          state: absent
+    currency.component~software.application#zip.archive::terraform@*->local.machine:
+        derived_from: currency.component
+        metadata:
+            vintner_generated: 'true'
+        properties:
+            application_directory:
+                type: string
+                default:
+                    concat:
+                        - /var/lib/
+                        - get_property:
+                              - SELF
+                              - application_name
+        interfaces:
+            Standard:
+                operations:
+                    configure:
+                        implementation:
+                            primary: Terraform
+                    delete:
+                        implementation:
+                            primary: Terraform
+            defaults:
+                inputs:
+                    main:
+                        resource:
+                            local_file:
+                                tmp_artifact:
+                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    filename: /tmp/artifact-currency.component
+                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                tmp_create:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Create application directory
+                                        mkdir -p {{ SELF.application_directory }}
+
+                                        # Create application environment
+                                        cat <<EOF > {{ SELF.application_directory }}/.env
+                                        PORT="{{ SELF.application_port }}"
+                                        DISABLE_PROFILER="{{ SELF.disable_profiler }}"
+                                        EOF>>
+
+                                        # Download deployment artifact if required
+                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-currency.component {{ ".artifacts::zip_archive::file" | eval }} 
+                                        fi
+
+                                        # Extract deployment artifact
+                                        unzip /tmp/artifact-currency.component -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+
+                                        # Create vintner directory
+                                        mkdir -p {{ SELF.application_directory }}/.vintner
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/create.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/create.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/create.sh
+                                    filename: /tmp/create-currency.component.sh
+                                tmp_configure:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/configure.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/configure.sh
+                                    filename: /tmp/configure-currency.component.sh
+                                tmp_start:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_start | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "start" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/start.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/start.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/start.sh
+                                    filename: /tmp/start-currency.component.sh
+                                tmp_stop:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Assert operation
+                                        if [[ "{{ SELF._management_stop | split('\n') | first }}" == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ]]; then
+                                            echo 'Management operation "stop" missing'
+                                            exit 1 
+                                        fi
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/stop.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/stop.sh
+                                    filename: /tmp/stop-currency.component.sh
+                                tmp_delete:
+                                    content: |
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        # Copy operation
+                                        cat <<EOF > {{ SELF.application_directory }}/.vintner/delete.sh
+                                        #!/usr/bin/bash
+                                        set -e
+
+                                        {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
+                                        EOF>>
+                                        chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
+
+                                        # Execute operation
+                                        cd {{ SELF.application_directory }}
+                                        . .env
+                                        . .vintner/delete.sh
+
+                                        # Delete application directory
+                                        rm -rf "{{ SELF.application_directory }}"
+                                    filename: /tmp/delete-currency.component.sh
+                            terraform_data:
+                                local:
+                                    - depends_on:
+                                          - local_file.tmp_artifact
+                                          - local_file.tmp_create
+                                          - local_file.tmp_configure
+                                          - local_file.tmp_start
+                                          - local_file.tmp_stop
+                                          - local_file.tmp_delete
+                                      provisioner:
+                                          local-exec:
+                                              - inline:
+                                                    - sudo bash /tmp/create-currency.component.sh
+                                                    - sudo bash /tmp/configure-currency.component.sh
+                                                    - sudo bash /tmp/start-currency.component.sh
+                                              - inline:
+                                                    - sudo bash /tmp/stop-currency.component.sh
+                                                    - sudo bash /tmp/delete-currency.component.sh
+                                                when: destroy
     currency.component~software.application#zip.archive::ansible@*->remote.machine:
         derived_from: currency.component
         metadata:
@@ -2738,12 +4790,13 @@ node_types:
                                           dest: '{{ SELF.application_directory }}'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
                                       when: not (".artifacts::zip_archive::file" | eval).startswith("http")
-                                    - name: extract deployment artifact in application directory
+                                    - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
+                                          remote_src: 'yes'
                                           extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'

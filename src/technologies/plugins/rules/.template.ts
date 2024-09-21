@@ -3,7 +3,7 @@ import {MetadataGenerated} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     reason: '',
-    weight: 0,
+    count: 0,
     component: 'service.application',
     technology: 'ansible',
     artifact: 'zip.archive',

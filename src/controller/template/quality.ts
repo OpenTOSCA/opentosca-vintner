@@ -38,7 +38,10 @@ async function weight(options: TemplateQualityOptions, direction: 'min' | 'max')
     })
     const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
     if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-    return utils.roundNumber(utils.first(optimized).quality.average)
+
+    const result = utils.first(optimized)
+
+    return result.technologies
 }
 
 async function count(options: TemplateQualityOptions, direction: 'min' | 'max') {
@@ -53,10 +56,10 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
         },
     })
     const all = new Resolver(loaded.graph, loaded.inputs).optimize({all: true})
-    const min = Math.min(...all.map(it => it.technologies.count))
+    const minCountGroups = Math.min(...all.map(it => it.technologies.count_groups))
     const candidates = all
-        .filter(it => it.technologies.count === min)
-        .sort((a, b) => a.quality.average - b.quality.average)
+        .filter(it => it.technologies.count_groups === minCountGroups)
+        .sort((a, b) => a.technologies.weight_average - b.technologies.weight_average)
 
     // TODO: remove this
     /*
@@ -67,15 +70,18 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
     console.log(
         candidates.map(it => ({
             technologies: it.technologies.count_each,
-            quality: it.quality.average,
+            quality: it.technologies.weight_average,
             presences: it.getPresences('technology'),
         }))
     )
      */
 
+    const min = utils.first(candidates)
+    const max = utils.last(candidates)
+
     return {
-        min: utils.roundNumber(utils.first(candidates).quality.average),
-        max: utils.roundNumber(utils.last(candidates).quality.average),
+        min_quality: min.technologies,
+        max_quality: max.technologies,
     }
 }
 
@@ -91,5 +97,8 @@ async function weightCount(options: TemplateQualityOptions) {
     })
     const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
     if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-    return utils.roundNumber(utils.first(optimized).quality.average)
+
+    const result = utils.first(optimized)
+
+    return result.technologies
 }
