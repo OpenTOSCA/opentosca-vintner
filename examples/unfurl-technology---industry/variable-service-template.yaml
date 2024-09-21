@@ -136,13 +136,6 @@ topology_template:
             is_customer: {equal: [{variability_input: env}, CUSTOMER]}
             is_development: {equal: [{variability_input: env}, DEVELOPMENT]}
 
-        # TODO: remove these
-        options:
-            #technology_constraint: false
-            #required_technology_check: false
-            #required_artifact_constraint: false
-            #expected_artifact_check: true
-
         inputs:
             env:
                 type: string

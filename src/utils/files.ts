@@ -163,35 +163,36 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
-export function toFormat(obj: any, format: string) {
+export function toFormat(obj: any, format: string, options: {latex?: LatexOptions} = {}) {
     if (format === 'yaml') return toYAML(obj)
     if (format === 'json') return toJSON(obj)
     if (format === 'ini') return toINI(obj)
     if (format === 'env') return toENV(obj)
     if (format === 'xml') return toXML(obj)
-    if (format === 'latex') return toLatex(obj)
+    if (format === 'latex') return toLatex(obj, options.latex)
 
     throw new Error(`Format "${format}" not supported`)
 }
 
-export function toLatex(obj: any) {
+export type LatexOptions = {
+    headers?: string[]
+}
+
+export function toLatex(obj: any, options: LatexOptions = {}) {
     assert.isArray(obj)
     // TODO: this is dirty
     const list = obj as {[key: string]: any}[]
 
-    /**
-     * Collect all possible keys
-    const keys = new Set<string>()
-    list.forEach(item => {
-        Object.keys(item).forEach(key => keys.add(key))
-    })
+    // Collect all possible keys
+    const defaultKeys = () => {
+        const dk: string[] = []
+        list.forEach(item => {
+            Object.keys(item).forEach(key => keys.push(key))
+        })
+        return dk
+    }
 
-    // TODO: remove this
-    keys.delete('details')
-    keys.delete('reason')
-     */
-
-    const keys = ['component', 'artifact', 'hosting', 'technology', 'weight']
+    const keys = options.headers ?? defaultKeys()
 
     const data = []
 
@@ -210,7 +211,7 @@ export function toLatex(obj: any) {
         for (const key of keys) {
             const raw = item[key]
             // TODO: not latex safe
-            const string = JSON.stringify(raw)
+            const value = JSON.stringify(raw)
             tmp.push(raw)
         }
         data.push(tmp.join(' & ') + '\\\\')
