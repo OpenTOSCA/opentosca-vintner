@@ -1,2 +1,15 @@
 expected: ../../../unfurl-technology---industry---plus-maintenance-automated/tests/local/expected.yaml
 inputs: ../../../unfurl-technology---industry---plus-maintenance-automated/tests/local/inputs.yaml
+
+replace:
+    - - _ansible
+      - ''
+
+    - - _terraform
+      - ''
+
+    - - _compose
+      - ''
+
+    - - _kubernetes
+      - ''
