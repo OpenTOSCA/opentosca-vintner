@@ -959,6 +959,7 @@ topology_template:
         retailer_frontend_dashboard_kubernetes:
             type: retailer.frontend.dashboard
             persistent: true
+            conditions: {logic_expression: is_customer}
             technology: kubernetes
             properties:
                 - application_name: retailer-frontend-dashboard
@@ -1034,6 +1035,7 @@ topology_template:
         retailer_frontend_terminal_kubernetes:
             type: retailer.frontend.terminal
             persistent: true
+            conditions: {logic_expression: is_customer}
             technology: kubernetes
             properties:
                 - application_name: retailer-frontend-terminal
