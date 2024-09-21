@@ -219,7 +219,7 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: gcp
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: gcp_cloudstorage
 
@@ -272,7 +272,7 @@ topology_template:
             properties:
                 storage_name: calibrations
                 storage_token: {get_input: storage_password}
-                storage_dialect: gcp
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: gcp_cloudstorage
 
@@ -556,7 +556,7 @@ topology_template:
             properties:
                 storage_name: stores
                 storage_token: {get_input: storage_password}
-                storage_dialect: gcp
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: gcp_cloudstorage
 
@@ -610,7 +610,7 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: gcp
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: gcp_cloudstorage
 

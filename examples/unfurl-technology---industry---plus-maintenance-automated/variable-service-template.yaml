@@ -401,13 +401,7 @@ topology_template:
             properties:
                 - storage_name: products
                 - storage_token: {get_input: storage_password}
-                - storage_dialect:
-                      value: minio
-                      conditions: {node_presence: global_minio}
-
-                - storage_dialect:
-                      value: gcp
-                      conditions: {node_presence: gcp_cloudstorage}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: global_minio
                 - host: gcp_cloudstorage
@@ -473,13 +467,7 @@ topology_template:
             properties:
                 - storage_name: calibrations
                 - storage_token: {get_input: storage_password}
-                - storage_dialect:
-                      value: minio
-                      conditions: {node_presence: global_minio}
-
-                - storage_dialect:
-                      value: gcp
-                      conditions: {node_presence: gcp_cloudstorage}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: global_minio
                 - host: gcp_cloudstorage
@@ -593,7 +581,6 @@ topology_template:
 
         global_minio:
             type: minio.server
-            conditions: {not: {logic_expression: is_hyperscaler}}
             properties:
                 - application_name: global-minio-server
                 - application_port: 9000
@@ -931,13 +918,7 @@ topology_template:
             properties:
                 - storage_name: stores
                 - storage_token: {get_input: storage_password}
-                - storage_dialect:
-                      value: minio
-                      conditions: {node_presence: retailer_minio}
-
-                - storage_dialect:
-                      value: gcp
-                      conditions: {node_presence: gcp_cloudstorage}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: retailer_minio
                 - host: gcp_cloudstorage
@@ -1019,13 +1000,7 @@ topology_template:
             properties:
                 - storage_name: products
                 - storage_token: {get_input: storage_password}
-                - storage_dialect:
-                      value: minio
-                      conditions: {node_presence: retailer_minio}
-
-                - storage_dialect:
-                      value: gcp
-                      conditions: {node_presence: gcp_cloudstorage}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: retailer_minio
                 - host: gcp_cloudstorage
@@ -1216,7 +1191,6 @@ topology_template:
 
         retailer_minio:
             type: minio.server
-            conditions: {not: {logic_expression: is_hyperscaler}}
             properties:
                 - application_name: retailer-minio-server
                 - application_port: 9000

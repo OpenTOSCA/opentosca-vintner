@@ -192,7 +192,7 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: global_minio
 
@@ -245,7 +245,7 @@ topology_template:
             properties:
                 storage_name: calibrations
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: global_minio
 
@@ -532,7 +532,7 @@ topology_template:
             properties:
                 storage_name: stores
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: retailer_minio
 
@@ -586,7 +586,7 @@ topology_template:
             properties:
                 storage_name: products
                 storage_token: {get_input: storage_password}
-                storage_dialect: minio
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
             requirements:
                 - host: retailer_minio
 
