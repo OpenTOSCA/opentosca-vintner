@@ -13,7 +13,7 @@ describe('examples', async () => {
 
         for (const example of examples) {
             // TODO: remove this
-            if (!example.includes('industry---plus-maintenance-manual')) continue
+            if (!example.includes('industry')) continue
 
             const exampleDir = path.join(examplesDir, example)
             const testsPath = path.join(exampleDir, 'tests')
