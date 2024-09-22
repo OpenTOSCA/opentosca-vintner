@@ -12,9 +12,6 @@ describe('examples', async () => {
         const examples = files.listDirectories(examplesDir).filter(it => !it.startsWith('.'))
 
         for (const example of examples) {
-            // TODO: remove this
-            if (!example.includes('industry')) continue
-
             const exampleDir = path.join(examplesDir, example)
             const testsPath = path.join(exampleDir, 'tests')
             if (!files.exists(testsPath)) continue
