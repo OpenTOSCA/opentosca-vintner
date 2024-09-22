@@ -13,75 +13,57 @@ topology_template:
 
         os_network:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_name:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_user:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_ssh_key_file:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_region_name:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_type:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_auth_url:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_identity_api_version:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_interface:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_id:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         os_application_credential_secret:
             type: string
-            conditions: {equal: [{variability_input: env}, STATIC]}
 
         gcp_region:
             type: string
-            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_service_account_file:
             type: string
-            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         gcp_project:
             type: string
-            conditions: {equal: [{variability_input: env}, ELASTIC]}
 
         k8s_host:
             type: string
-            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_ca_cert_file:
             type: string
-            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_cert_file:
             type: string
-            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
         k8s_client_key_file:
             type: string
-            conditions: {equal: [{variability_input: env}, KUBERNETES]}
 
     variability:
         inputs:
