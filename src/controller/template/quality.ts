@@ -61,21 +61,6 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
         .filter(it => it.technologies.count_groups === minCountGroups)
         .sort((a, b) => a.technologies.weight_average - b.technologies.weight_average)
 
-    // TODO: remove this
-    /*
-    console.log('---------------------------------------------------------------------------------------------------')
-    console.log('some counting')
-    console.log('---------------------------------------------------------------------------------------------------')
-    console.log(all.length)
-    console.log(
-        candidates.map(it => ({
-            technologies: it.technologies.count_each,
-            quality: it.technologies.weight_average,
-            presences: it.getPresences('technology'),
-        }))
-    )
-     */
-
     const min = utils.first(candidates)
     const max = utils.last(candidates)
 

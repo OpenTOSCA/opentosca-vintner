@@ -1,0 +1,1537 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        domain:
+            type: string
+
+        retailer_name:
+            type: string
+
+        database_password:
+            type: string
+
+        storage_password:
+            type: string
+
+        minio_user:
+            type: string
+
+        minio_secret:
+            type: string
+
+        global_service_gateway_endpoint:
+            type: string
+
+        global_service_gateway_token:
+            type: string
+
+        payment_provider_endpoint:
+            type: string
+
+        payment_provider_token:
+            type: string
+
+        email_provider_endpoint:
+            type: string
+
+        email_provider_token:
+            type: string
+
+        sms_provider_endpoint:
+            type: string
+
+        sms_provider_token:
+            type: string
+
+        coffee_provider_type:
+            type: string
+            conditions: {logic_expression: has_coffee}
+
+        coffee_provider_endpoint:
+            type: string
+            conditions: {logic_expression: has_coffee}
+
+        coffee_provider_token:
+            type: string
+            conditions: {logic_expression: has_coffee}
+
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+        gcp_region:
+            type: string
+
+        gcp_service_account_file:
+            type: string
+
+        gcp_project:
+            type: string
+
+        k8s_host:
+            type: string
+
+        k8s_ca_cert_file:
+            type: string
+
+        k8s_client_cert_file:
+            type: string
+
+        k8s_client_key_file:
+            type: string
+
+    variability:
+        expressions:
+            has_info_logging: {equal: [{variability_input: logging}, INFO]}
+            has_debug_logging: {equal: [{variability_input: logging}, DEBUG]}
+            has_error_masking: {equal: [{variability_input: errors}, true]}
+
+            has_coffee: {equal: [{variability_input: coffee}, true]}
+
+            has_introspection: {equal: [{variability_input: introspection}, true]}
+            has_playground: {equal: [{variability_input: playground}, true]}
+
+            has_import: {equal: [{variability_input: import}, true]}
+            has_import_schema_a: {and: [{logic_expression: has_import}, {equal: [{variability_input: import_schema}, A]}]}
+            has_import_schema_b: {and: [{logic_expression: has_import}, {equal: [{variability_input: import_schema}, B]}]}
+
+            has_payment_merchant_a: {equal: [{variability_input: payment_merchant_a}, true]}
+            has_payment_merchant_b: {equal: [{variability_input: payment_merchant_b}, true]}
+
+            is_hyperscaler: {equal: [{variability_input: env}, HYPERSCALER]}
+            is_local: {equal: [{variability_input: env}, LOCAL]}
+            is_customer: {equal: [{variability_input: env}, CUSTOMER]}
+            is_development: {equal: [{variability_input: env}, DEVELOPMENT]}
+            is_local_or_development: {or: [{logic_expression: is_local}, {logic_expression: is_development}]}
+            is_local_or_development_or_kubernetes: {or: [{logic_expression: is_local}, {logic_expression: is_development}, {node_presence: kubernetes_cluster}]}
+
+        inputs:
+            env:
+                type: string
+                default: DEVELOPMENT
+
+            errors:
+                type: boolean
+                default: true
+
+            logging:
+                type: string
+                default: INFO
+
+            coffee:
+                type: boolean
+                default: false
+
+            introspection:
+                type: boolean
+                default: false
+
+            playground:
+                type: boolean
+                default: false
+
+            import:
+                type: boolean
+                default: false
+
+            import_schema:
+                type: string
+                default: A
+
+            payment_merchant_a:
+                type: boolean
+                default: false
+
+            payment_merchant_b:
+                type: boolean
+                default: false
+
+    node_templates:
+        ###################################################
+        #
+        # Global Dashboard
+        #
+        ###################################################
+
+        global_frontend_dashboard:
+            type: global.frontend.dashboard
+            persistent: true
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-frontend-dashboard
+                - application_port: 3000
+                - application_protocol: http
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - global_service_gateway_endpoint: {eval: '.::.requirements::[.name=global_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - global_service_gateway: global_service_gateway
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: global.frontend.dashboard:vX.Y.Z
+
+        global_ingress_dashboard:
+            type: ingress
+            technology:
+                - ansible:
+                      conditions: {node_presence: virtual_machine}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            requirements:
+                - application: global_frontend_dashboard
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Global Gateway
+        #
+        ###################################################
+
+        global_service_gateway:
+            type: global.service.gateway
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-service-gateway
+                - application_port: 4000
+                - application_protocol: graphql
+
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - domain: {get_input: retailer_name}
+
+                - graphql_introspection:
+                      value: true
+                      conditions: {logic_expression: has_introspection}
+
+                - graphql_introspection:
+                      value: false
+                      conditions: {not: {logic_expression: has_introspection}}
+
+                - graphql_playground:
+                      value: true
+                      conditions: {logic_expression: has_playground}
+
+                - graphql_playground:
+                      value: false
+                      conditions: {not: {logic_expression: has_playground}}
+
+                - has_error_masking:
+                      value: true
+                      conditions: {logic_expression: has_error_masking}
+
+                - has_error_masking:
+                      value: false
+                      conditions: {not: {logic_expression: has_error_masking}}
+
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
+                - global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
+                - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
+                - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
+            requirements:
+                - cache: global_cache_redis
+                - global_service_retailers: global_service_retailers
+                - global_service_products: global_service_products
+                - global_service_calibrations: global_service_calibrations
+                - global_service_accounts: global_service_accounts
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.gateway:vX.Y.Z
+
+        global_ingress_gateway:
+            type: ingress
+            technology:
+                - ansible:
+                      conditions: {node_presence: virtual_machine}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            requirements:
+                - application: global_service_gateway
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Global Retailers
+        #
+        ###################################################
+
+        global_service_retailers:
+            type: global.service.retailers
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-service-retailers
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+            requirements:
+                - database: global_database_retailers
+                - cache: global_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: global.service.retailers:vX.Y.Z
+
+        global_database_retailers:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: retailers
+                - database_user: retailers
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        ###################################################
+        #
+        # Global Products
+        #
+        ###################################################
+
+        global_service_products:
+            type: global.service.products
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-service-products
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: global_database_products
+                - cache: global_cache_redis
+                - storage: global_storage_products
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: global.service.products:vX.Y.Z
+
+        global_database_products:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {logic_expression: is_hyperscaler}
+            properties:
+                - database_name: products
+                - database_user: products
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        global_storage_products:
+            type: object.storage
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudstorage}
+            properties:
+                - storage_name: products
+                - storage_token: {get_input: storage_password}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: global_minio
+                - host: gcp_cloudstorage
+
+        ###################################################
+        #
+        # Global Calibrations
+        #
+        ###################################################
+
+        global_service_calibrations:
+            type: global.service.calibrations
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-service-calibrations
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: global_database_calibrations
+                - cache: global_cache_redis
+                - storage: global_storage_calibrations
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: global.service.calibrations:vX.Y.Z
+
+        global_database_calibrations:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: calibrations
+                - database_user: calibrations
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        global_storage_calibrations:
+            type: object.storage
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudstorage}
+            properties:
+                - storage_name: calibrations
+                - storage_token: {get_input: storage_password}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: global_minio
+                - host: gcp_cloudstorage
+
+        ###################################################
+        #
+        # Global Accounts
+        #
+        ###################################################
+
+        global_service_accounts:
+            type: global.service.accounts
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-service-accounts
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - email_provider_endpoint: {get_input: email_provider_endpoint}
+                - email_provider_token: {get_input: email_provider_token}
+
+                - sms_provider_endpoint: {get_input: sms_provider_endpoint}
+                - sms_provider_token: {get_input: sms_provider_token}
+            requirements:
+                - database: global_database_accounts
+                - cache: global_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: global.service.accounts:vX.Y.Z
+
+        global_database_accounts:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: accounts
+                - database_user: accounts
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        ###################################################
+        #
+        # Global DBMS
+        #
+        ###################################################
+
+        global_dbms:
+            type: mysql.dbms
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - dbms_name: unfurl-technology-industry-global-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: gcp_cloudsql
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
+
+        ###################################################
+        #
+        # Global Cache
+        #
+        ###################################################
+
+        global_cache_redis:
+            type: redis.server
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+                - terraform:
+                      conditions: {node_presence: gcp_memorystore}
+            properties:
+                - cache_name: global-cache-redis
+                - cache_port: 6379
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: gcp_memorystore
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
+            artifacts:
+                - cache_image:
+                      type: cache.image
+                      file: 7.4.0
+
+        ###################################################
+        #
+        # Global MinIO
+        #
+        ###################################################
+
+        global_minio:
+            type: minio.server
+            conditions: {not: {logic_expression: is_hyperscaler}}
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: global-minio-server
+                - application_port: 9000
+                - application_protocol: http
+                - access_key: {get_input: minio_user}
+                - secret_key: {get_input: minio_secret}
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+
+        ###################################################
+        #
+        # Retailer Dashboard
+        #
+        ###################################################
+
+        retailer_frontend_dashboard:
+            type: retailer.frontend.dashboard
+            persistent: true
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-frontend-dashboard
+                - application_port: 3000
+                - application_protocol: http
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_ingress_dashboard:
+            type: ingress
+            technology:
+                - ansible:
+                      conditions: {node_presence: virtual_machine}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            requirements:
+                - application: retailer_frontend_dashboard
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Retailer Terminal
+        #
+        ###################################################
+
+        retailer_frontend_terminal:
+            type: retailer.frontend.terminal
+            persistent: true
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-frontend-terminal
+                - application_port: 3000
+                - application_protocol: http
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_ingress_terminal:
+            type: ingress
+            technology:
+                - ansible:
+                      conditions: {node_presence: virtual_machine}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            requirements:
+                - application: retailer_frontend_terminal
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Retailer Gateway
+        #
+        ###################################################
+
+        retailer_service_gateway:
+            type: retailer.service.gateway
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-gateway
+                - application_port: 4000
+                - application_protocol: graphql
+
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_name: {get_input: retailer_name}
+                - domain: {get_input: domain}
+
+                - graphql_introspection:
+                      value: true
+                      conditions: {logic_expression: has_introspection}
+
+                - graphql_introspection:
+                      value: false
+                      conditions: {not: {logic_expression: has_introspection}}
+
+                - graphql_playground:
+                      value: true
+                      conditions: {logic_expression: has_playground}
+
+                - graphql_playground:
+                      value: false
+                      conditions: {not: {logic_expression: has_playground}}
+
+                - has_error_masking:
+                      value: true
+                      conditions: {logic_expression: has_error_masking}
+
+                - has_error_masking:
+                      value: false
+                      conditions: {not: {logic_expression: has_error_masking}}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
+                - retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs]::.target::application_endpoint'}
+                - retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores]::.target::application_endpoint'}
+                - retailer_service_products_endpoint: {eval: '.::.requirements::[.name=retailer_service_products]::.target::application_endpoint'}
+                - retailer_service_stocks_endpoint: {eval: '.::.requirements::[.name=retailer_service_stocks]::.target::application_endpoint'}
+                - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
+                - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
+            requirements:
+                - cache: retailer_cache_redis
+                - retailer_service_core: retailer_service_core
+                - retailer_service_jobs: retailer_service_jobs
+                - retailer_service_stores: retailer_service_stores
+                - retailer_service_products: retailer_service_products
+                - retailer_service_stocks: retailer_service_stocks
+                - retailer_service_orders: retailer_service_orders
+                - retailer_service_global: retailer_service_global
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.gateway:vX.Y.Z
+
+        retailer_ingress_gateway:
+            type: ingress
+            technology:
+                - ansible:
+                      conditions: {node_presence: virtual_machine}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            requirements:
+                - application: retailer_service_gateway
+                - host: virtual_machine
+                - host: kubernetes_cluster
+
+        ###################################################
+        #
+        # Retailer Core
+        #
+        ###################################################
+
+        retailer_service_core:
+            type: retailer.service.core
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-core
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - coffee_enabled:
+                      value: true
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_coffee}}
+
+                - coffee_provider_type:
+                      value: {get_input: coffee_provider_type}
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_provider_endpoint:
+                      value: {get_input: coffee_provider_endpoint}
+                      conditions: {logic_expression: has_coffee}
+
+                - coffee_provider_token:
+                      value: {get_input: coffee_provider_token}
+                      conditions: {logic_expression: has_coffee}
+
+                - payment_provider_endpoint: {get_input: payment_provider_endpoint}
+                - payment_provider_token: {get_input: payment_provider_token}
+
+                - payment_merchant_a_enabled:
+                      value: true
+                      conditions: {logic_expression: has_payment_merchant_a}
+
+                - payment_merchant_a_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_payment_merchant_a}}
+
+                - payment_merchant_b_enabled:
+                      value: true
+                      conditions: {logic_expression: has_payment_merchant_b}
+
+                - payment_merchant_b_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_payment_merchant_b}}
+
+            requirements:
+                - cache: retailer_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.core:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer Jobs
+        #
+        ###################################################
+
+        retailer_service_jobs:
+            type: retailer.service.jobs
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-core
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+            requirements:
+                - cache: retailer_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.jobs:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer Stores
+        #
+        ###################################################
+
+        retailer_service_stores:
+            type: retailer.service.stores
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-stores
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: retailer_database_stores
+                - cache: retailer_cache_redis
+                - storage: retailer_storage_stores
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stores:vX.Y.Z
+
+        retailer_database_stores:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: stores
+                - database_user: stores
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        retailer_storage_stores:
+            type: object.storage
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudstorage}
+            properties:
+                - storage_name: stores
+                - storage_token: {get_input: storage_password}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: retailer_minio
+                - host: gcp_cloudstorage
+
+        ###################################################
+        #
+        # Retailer Products
+        #
+        ###################################################
+
+        retailer_service_products:
+            type: retailer.service.products
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-products
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - import_enabled:
+                      value: true
+                      conditions: {logic_expression: has_import}
+
+                - import_enabled:
+                      value: false
+                      conditions: {not: {logic_expression: has_import}}
+
+                - import_schema:
+                      value: a
+                      conditions: {logic_expression: has_import_schema_a}
+
+                - import_schema:
+                      value: b
+                      conditions: {logic_expression: has_import_schema_b}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+
+                - storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                - storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                - storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                - storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+
+            requirements:
+                - database: retailer_database_products
+                - cache: retailer_cache_redis
+                - storage: retailer_storage_products
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.products:vX.Y.Z
+
+        retailer_database_products:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: products
+                - database_user: products
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        retailer_storage_products:
+            type: object.storage
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudstorage}
+            properties:
+                - storage_name: products
+                - storage_token: {get_input: storage_password}
+                - storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: retailer_minio
+                - host: gcp_cloudstorage
+
+        ###################################################
+        #
+        # Retailer Stocks
+        #
+        ###################################################
+
+        retailer_service_stocks:
+            type: retailer.service.stocks
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-stocks
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_stocks
+                - cache: retailer_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        retailer_database_stocks:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: stocks
+                - database_user: stocks
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        ###################################################
+        #
+        # Retailer Orders
+        #
+        ###################################################
+
+        retailer_service_orders:
+            type: retailer.service.orders
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-orders
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                - mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                - mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                - mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                - mysql_table: 'stores'
+                - mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_orders
+                - cache: retailer_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        retailer_database_orders:
+            type: mysql.database
+            technology:
+                - ansible:
+                      conditions: {logic_expression: is_local_or_development_or_kubernetes}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - database_name: orders
+                - database_user: orders
+                - database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        ###################################################
+        #
+        # Retailer Global
+        #
+        ###################################################
+
+        retailer_service_global:
+            type: retailer.service.global
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-service-global
+                - application_port: 4000
+                - application_protocol: graphql
+                - logging_level:
+                      value: info
+                      conditions: {logic_expression: has_info_logging}
+
+                - logging_level:
+                      value: debug
+                      conditions: {logic_expression: has_debug_logging}
+
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+
+                - global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
+                - global_service_gateway_token: {get_input: global_service_gateway_token}
+            requirements:
+                - cache: retailer_cache_redis
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: retailer.service.stocks:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer DBMS
+        #
+        ###################################################
+
+        retailer_dbms:
+            type: mysql.dbms
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+                - terraform:
+                      conditions: {node_presence: gcp_cloudsql}
+            properties:
+                - dbms_name: unfurl-technology-industry-retailer-dbms
+                - dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: gcp_cloudsql
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
+            artifacts:
+                - dbms_image:
+                      type: dbms.image
+                      file: 5.7
+
+        ###################################################
+        #
+        # Retailer Cache
+        #
+        ###################################################
+
+        retailer_cache_redis:
+            type: redis.server
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+                - terraform:
+                      conditions: {node_presence: gcp_memorystore}
+            properties:
+                - cache_name: retailer-cache-redis
+                - cache_port: 6379
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: gcp_memorystore
+                - host:
+                      node: kubernetes_cluster
+                      conditions: {logic_expression: is_customer}
+            artifacts:
+                - cache_image:
+                      type: cache.image
+                      file: 7.4.0
+
+        ###################################################
+        #
+        # Retailer MinIO
+        #
+        ###################################################
+
+        retailer_minio:
+            type: minio.server
+            conditions: {not: {logic_expression: is_hyperscaler}}
+            technology:
+                - compose:
+                      conditions: {logic_expression: is_local_or_development}
+                - kubernetes:
+                      conditions: {node_presence: kubernetes_cluster}
+            properties:
+                - application_name: retailer-minio-server
+                - application_port: 9000
+                - application_protocol: http
+                - access_key: {get_input: minio_user}
+                - secret_key: {get_input: minio_secret}
+            requirements:
+                - host: local_docker_engine
+                - host: remote_docker_engine
+                - host: kubernetes_cluster
+            artifacts:
+                - docker_image:
+                      type: docker.image
+                      file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+
+        ###################################################
+        #
+        # Local Machine
+        #
+        ###################################################
+
+        local_docker_engine:
+            type: docker.engine
+            technology: ansible
+            requirements:
+                - host: local_machine
+
+        local_machine:
+            type: local.machine
+            conditions: {logic_expression: is_local}
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        remote_docker_engine:
+            type: docker.engine
+            technology: ansible
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: virtual.machine
+            technology: terraform
+            properties:
+                - machine_name: unfurl-technology-boutique
+                - ports: ['80', '2375', '9100']
+                - flavor: m1.medium
+                - network: {get_input: os_network}
+                - ssh_user: {get_input: os_ssh_user}
+                - ssh_key_name: {get_input: os_ssh_key_name}
+                - ssh_key_file: {get_input: os_ssh_key_file}
+            requirements:
+                - host: openstack_provider
+            artifacts:
+                - machine_image:
+                      type: machine.image
+                      file: Ubuntu 22.04
+
+        openstack_provider:
+            type: openstack.provider
+            conditions: {logic_expression: is_development}
+            properties:
+                - os_region_name: {get_input: os_region_name}
+                - os_auth_type: {get_input: os_auth_type}
+                - os_auth_url: {get_input: os_auth_url}
+                - os_identity_api_version: {get_input: os_identity_api_version}
+                - os_interface: {get_input: os_interface}
+                - os_application_credential_id: {get_input: os_application_credential_id}
+                - os_application_credential_secret: {get_input: os_application_credential_secret}
+
+        ###################################################
+        #
+        # GCP
+        #
+        ###################################################
+
+        gcp_memorystore:
+            type: gcp.memorystore
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_kubernetesengine:
+            type: gcp.kubernetesengine
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudstorage:
+            type: gcp.cloudstorage
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudrun:
+            type: gcp.cloudrun
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_cloudsql:
+            type: gcp.cloudsql
+            technology: terraform
+            requirements:
+                - host: gcp_provider
+
+        gcp_provider:
+            type: gcp.provider
+            conditions: {logic_expression: is_hyperscaler}
+            properties:
+                - gcp_region: {get_input: gcp_region}
+                - gcp_service_account_file: {get_input: gcp_service_account_file}
+                - gcp_project: {get_input: gcp_project}
+
+        ###################################################
+        #
+        # Kubernetes
+        #
+        ###################################################
+
+        kubernetes_cluster:
+            type: kubernetes.cluster
+            properties:
+                - k8s_host: {get_input: k8s_host}
+                - k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
+                - k8s_client_cert_file: {get_input: k8s_client_cert_file}
+                - k8s_client_key_file: {get_input: k8s_client_key_file}
+            requirements:
+                - host: kubernetes_provider
+                - host: gcp_kubernetesengine
+
+        kubernetes_provider:
+            type: cloud.provider
+            conditions: {logic_expression: is_customer}
