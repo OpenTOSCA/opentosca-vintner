@@ -375,6 +375,12 @@ const nodes: NodeTypeMap = {
                 default: 'storage.googleapis.com',
             },
         },
+        attributes: {
+            storage_dialect: {
+                type: 'string',
+                default: 'gcp',
+            },
+        },
     },
     'gcp.memorystore': {
         derived_from: 'gcp.service',
@@ -598,6 +604,12 @@ const nodes: NodeTypeMap = {
                 metadata: {
                     [METADATA.VINTNER_NAME]: 'MINIO_ROOT_PASSWORD',
                 },
+            },
+        },
+        attributes: {
+            storage_dialect: {
+                type: 'string',
+                default: 'minio',
             },
         },
     },
