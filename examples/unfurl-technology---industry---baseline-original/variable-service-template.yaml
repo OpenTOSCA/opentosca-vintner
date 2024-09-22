@@ -125,6 +125,7 @@ topology_template:
             is_local: {equal: [{variability_input: env}, LOCAL]}
             is_customer: {equal: [{variability_input: env}, CUSTOMER]}
             is_development: {equal: [{variability_input: env}, DEVELOPMENT]}
+            is_local_or_development: {or: [{logic_expression: is_local}, {logic_expression: is_development}]}
 
         inputs:
             env:
@@ -177,10 +178,7 @@ topology_template:
         global_frontend_dashboard_compose:
             type: global.frontend.dashboard
             persistent: true
-            conditions:
-                - or:
-                      - {logic_expression: is_local}
-                      - {logic_expression: is_development}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-frontend-dashboard
@@ -252,10 +250,7 @@ topology_template:
 
         global_service_gateway_compose:
             type: global.service.gateway
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-service-gateway
@@ -395,10 +390,7 @@ topology_template:
 
         global_service_retailers_compose:
             type: global.service.retailers
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-service-retailers
@@ -485,10 +477,7 @@ topology_template:
 
         global_service_products_compose:
             type: global.service.products
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-service-products
@@ -598,10 +587,8 @@ topology_template:
 
         global_service_calibrations_compose:
             type: global.service.calibrations
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
+            technology: compose
             properties:
                 - application_name: global-service-calibrations
                 - application_port: 4000
@@ -710,10 +697,7 @@ topology_template:
 
         global_service_accounts_compose:
             type: global.service.accounts
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-service-accounts
@@ -811,10 +795,7 @@ topology_template:
 
         global_dbms_compose:
             type: mysql.dbms
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - dbms_name: unfurl-technology-industry-global-dbms
@@ -848,10 +829,7 @@ topology_template:
 
         global_cache_redis_compose:
             type: redis.server
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - cache_name: global-cache-redis
@@ -885,10 +863,7 @@ topology_template:
 
         global_minio_compose:
             type: minio.server
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: global-minio-server
@@ -929,10 +904,7 @@ topology_template:
         retailer_frontend_dashboard_compose:
             type: retailer.frontend.dashboard
             persistent: true
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-frontend-dashboard
@@ -1005,10 +977,7 @@ topology_template:
         retailer_frontend_terminal_compose:
             type: retailer.frontend.terminal
             persistent: true
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-frontend-terminal
@@ -1080,10 +1049,7 @@ topology_template:
 
         retailer_service_gateway_compose:
             type: retailer.service.gateway
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-gateway
@@ -1237,10 +1203,7 @@ topology_template:
 
         retailer_service_core_compose:
             type: retailer.service.core
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-core
@@ -1376,10 +1339,7 @@ topology_template:
 
         retailer_service_jobs_compose:
             type: retailer.service.jobs
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-core
@@ -1437,10 +1397,7 @@ topology_template:
 
         retailer_service_stores_compose:
             type: retailer.service.stores
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-stores
@@ -1550,10 +1507,7 @@ topology_template:
 
         retailer_service_products_compose:
             type: retailer.service.products
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-products
@@ -1695,10 +1649,7 @@ topology_template:
 
         retailer_service_stocks_compose:
             type: retailer.service.stocks
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-stocks
@@ -1783,10 +1734,7 @@ topology_template:
 
         retailer_service_orders_compose:
             type: retailer.service.orders
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-orders
@@ -1871,10 +1819,7 @@ topology_template:
 
         retailer_service_global_compose:
             type: retailer.service.global
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-service-global
@@ -1936,10 +1881,7 @@ topology_template:
 
         retailer_dbms_compose:
             type: mysql.dbms
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - dbms_name: unfurl-technology-industry-retailer-dbms
@@ -1973,10 +1915,7 @@ topology_template:
 
         retailer_cache_redis_compose:
             type: redis.server
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - cache_name: retailer-cache-redis
@@ -2010,10 +1949,7 @@ topology_template:
 
         retailer_minio_compose:
             type: minio.server
-            conditions:
-                - or:
-                      - {node_presence: local_docker_engine}
-                      - {node_presence: remote_docker_engine}
+            conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
                 - application_name: retailer-minio-server

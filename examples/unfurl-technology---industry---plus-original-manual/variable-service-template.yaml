@@ -125,6 +125,7 @@ topology_template:
             is_local: {equal: [{variability_input: env}, LOCAL]}
             is_customer: {equal: [{variability_input: env}, CUSTOMER]}
             is_development: {equal: [{variability_input: env}, DEVELOPMENT]}
+            is_local_or_development: {or: [{logic_expression: is_local}, {logic_expression: is_development}]}
 
         inputs:
             env:
@@ -179,9 +180,7 @@ topology_template:
             persistent: true
             technology:
                 - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -229,9 +228,7 @@ topology_template:
             type: global.service.gateway
             technology:
                 - compose:
-                      conditions: {node_presence: local_docker_engine}
-                - compose:
-                      conditions: {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -314,10 +311,7 @@ topology_template:
             type: global.service.retailers
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -373,10 +367,7 @@ topology_template:
             type: global.service.products
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -448,10 +439,7 @@ topology_template:
             type: global.service.calibrations
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -523,10 +511,7 @@ topology_template:
             type: global.service.accounts
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -587,10 +572,7 @@ topology_template:
             type: mysql.dbms
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -615,10 +597,7 @@ topology_template:
             type: redis.server
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -643,10 +622,7 @@ topology_template:
             type: minio.server
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -675,10 +651,7 @@ topology_template:
             persistent: true
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -727,10 +700,7 @@ topology_template:
             persistent: true
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -778,10 +748,7 @@ topology_template:
             type: retailer.service.gateway
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -871,10 +838,7 @@ topology_template:
             type: retailer.service.core
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -950,10 +914,7 @@ topology_template:
             type: retailer.service.jobs
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -990,10 +951,7 @@ topology_template:
             type: retailer.service.stores
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1065,10 +1023,7 @@ topology_template:
             type: retailer.service.products
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1156,10 +1111,7 @@ topology_template:
             type: retailer.service.stocks
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1214,10 +1166,7 @@ topology_template:
             type: retailer.service.orders
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1272,10 +1221,7 @@ topology_template:
             type: retailer.service.global
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1314,10 +1260,7 @@ topology_template:
             type: mysql.dbms
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1342,10 +1285,7 @@ topology_template:
             type: redis.server
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
@@ -1370,10 +1310,7 @@ topology_template:
             type: minio.server
             technology:
                 - compose:
-                      conditions:
-                          or:
-                              - {node_presence: local_docker_engine}
-                              - {node_presence: remote_docker_engine}
+                      conditions: {logic_expression: is_local_or_development}
                 - kubernetes:
                       conditions: {node_presence: kubernetes_cluster}
             properties:
