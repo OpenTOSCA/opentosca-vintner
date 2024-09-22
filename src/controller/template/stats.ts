@@ -4,6 +4,7 @@ import * as files from '#files'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {ServiceTemplate} from '#spec/service-template'
 import {IMPLEMENTATION_NAME_REGEX, isImplementation} from '#technologies/utils'
 import * as utils from '#utils'
 
@@ -66,9 +67,11 @@ export default async function (options: TemplateStatsOptions) {
                         .filter(element => element.isEDMM())
                         .filter(element => !element.isTechnology()).length,
 
-                    edmm_elements_conditions_manual: graph.elements
-                        .filter(element => element.isEDMM())
-                        .reduce((sum, element) => sum + countManualConditions(element), 0),
+                    edmm_elements_conditions_manual:
+                        graph.elements
+                            .filter(element => element.isEDMM())
+                            .reduce((sum, element) => sum + countManualConditions(element), 0) +
+                        countConditionsInPreamble(template),
 
                     edmm_elements_conditions_generated: graph.elements
                         .filter(element => element.isEDMM())
@@ -97,6 +100,25 @@ export default async function (options: TemplateStatsOptions) {
             })
         )
     )
+}
+
+function countConditionsInPreamble(template: ServiceTemplate) {
+    let count = 0
+
+    const expressions = template.topology_template?.variability?.expressions ?? {}
+
+    Object.entries(expressions).forEach(([name, expression]) => {
+        if (check.isObject(expression)) {
+            const [key, value] = Object.entries(expression)[0]
+            if (['and', 'or'].includes(key) && check.isArray(value)) {
+                count += value.length
+            } else {
+                count++
+            }
+        }
+    })
+
+    return count
 }
 
 // TODO: does not work for VariabilityGroups
