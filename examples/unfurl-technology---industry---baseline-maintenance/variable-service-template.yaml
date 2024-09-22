@@ -664,6 +664,7 @@ topology_template:
         global_service_calibrations_compose:
             type: global.service.calibrations
             conditions: {logic_expression: is_local_or_development}
+            technology: compose
             properties:
                 - application_name: global-service-calibrations
                 - application_port: 4000
