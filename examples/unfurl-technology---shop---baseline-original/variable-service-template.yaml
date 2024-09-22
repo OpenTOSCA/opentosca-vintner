@@ -1,4 +1,4 @@
-tosca_definitions_version: tosca_variability_1_0_rc_2
+tosca_definitions_version: tosca_variability_1_0_rc_3
 
 imports:
     - lib/types.yaml
@@ -147,7 +147,6 @@ topology_template:
                 - database_password: {get_input: database_password}
             requirements:
                 - host: mysql_dbms_terraform
-            artifacts:
 
         mysql_dbms_ansible:
             type: mysql.dbms
