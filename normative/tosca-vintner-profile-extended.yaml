@@ -299,6 +299,10 @@ node_types:
             gcp_service:
                 type: string
                 default: storage.googleapis.com
+        attributes:
+            storage_dialect:
+                type: string
+                default: gcp
     gcp.memorystore:
         derived_from: gcp.service
         metadata:
@@ -444,6 +448,10 @@ node_types:
                 type: string
                 metadata:
                     vintner_name: MINIO_ROOT_PASSWORD
+        attributes:
+            storage_dialect:
+                type: string
+                default: minio
     redis.server:
         derived_from: cache
         metadata:
