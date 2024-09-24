@@ -131,7 +131,7 @@ jobs:
             ###################################################
 
             - name: (NPM) Uninstall Vintner
-              run: rm -f $(which vintner)
+              run: sudo rm -f $(which vintner)
 
             - name: (NPM) Install Vintner using NPM
               run: npm install --global opentosca-vintner
