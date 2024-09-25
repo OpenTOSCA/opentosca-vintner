@@ -215,7 +215,6 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -481,7 +480,6 @@ jobs:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
         concurrency: xopera-pruning-elastic
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -614,7 +612,6 @@ jobs:
     xopera-pruning-mode-elastic:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-elastic
         env:
             ORCHESTRATOR: xopera
@@ -680,7 +677,6 @@ jobs:
     unfurl-artifacts-community:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-artifacts
@@ -813,7 +809,6 @@ jobs:
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
