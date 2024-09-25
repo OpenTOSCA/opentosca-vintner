@@ -4,8 +4,6 @@
 # We dot not introduce one big "vintner-case-study" action due to better logging.defaults:
 # See https://github.com/orgs/community/discussions/21276
 
-# TODO: fix OpenStack problem when using xOpera
-
 name: Night
 on:
     workflow_dispatch:
