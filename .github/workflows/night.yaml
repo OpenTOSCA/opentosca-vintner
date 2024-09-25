@@ -148,7 +148,6 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -413,7 +412,6 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
@@ -483,8 +481,8 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-elastic
+        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -548,7 +546,6 @@ jobs:
     xopera-pruning-mode-static:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
@@ -680,9 +677,11 @@ jobs:
     #
     ###################################################
 
+    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-artifacts-community:
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-artifacts
@@ -811,9 +810,11 @@ jobs:
     #
     ###################################################
 
+    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-aware-local:
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-aware
