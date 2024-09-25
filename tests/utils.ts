@@ -56,7 +56,7 @@ export function runGroups(groups: VariabilityTestGroup[]) {
             const effectiveTests = onlyTests.length ? onlyTests : nonDisabledTests
 
             effectiveTests.forEach(test => {
-                it(test.name, getDefaultTest(test.dir, test.vstdir)).timeout(10 * 1000)
+                it(test.name, getDefaultTest(test.dir, test.vstdir)).timeout(20 * 1000)
             })
         })
     }

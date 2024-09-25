@@ -6,9 +6,6 @@ inputs:
     preset:
         required: false
 
-    orchestrator:
-        required: true
-
 runs:
     using: 'composite'
     steps:

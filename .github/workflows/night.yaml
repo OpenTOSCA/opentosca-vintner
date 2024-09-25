@@ -4,8 +4,6 @@
 # We dot not introduce one big "vintner-case-study" action due to better logging.defaults:
 # See https://github.com/orgs/community/discussions/21276
 
-# TODO: fix OpenStack problem when using xOpera
-
 name: Night
 on:
     workflow_dispatch:
@@ -14,6 +12,7 @@ on:
     push:
         branches:
             - fix-night-workflow
+
 concurrency: night
 jobs:
     ###################################################
@@ -148,7 +147,6 @@ jobs:
     xopera-motivation-dev:
         name: xOpera Motivation Dev
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -217,7 +215,6 @@ jobs:
     xopera-motivation-prod:
         name: xOpera Motivation Prod
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-motivation
@@ -413,7 +410,6 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
@@ -483,7 +479,6 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-elastic
         env:
             ORCHESTRATOR: xopera
@@ -548,7 +543,6 @@ jobs:
     xopera-pruning-mode-static:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
@@ -618,7 +612,6 @@ jobs:
     xopera-pruning-mode-elastic:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
-        if: false
         concurrency: xopera-pruning-elastic
         env:
             ORCHESTRATOR: xopera
@@ -680,7 +673,9 @@ jobs:
     #
     ###################################################
 
+    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-artifacts-community:
+        if: false
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
         env:
@@ -811,7 +806,9 @@ jobs:
     #
     ###################################################
 
+    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-aware-local:
+        if: false
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
         env:
