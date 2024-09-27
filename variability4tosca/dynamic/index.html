@@ -7809,12 +7809,10 @@ This management operation can be used in several stages.
 Artifacts can be build during modeling when packaging the application as CSAR, right before the deployment process or during deployment.
 The implementation of the <code>build</code> management operation can start, e.g., a build pipeline and set a reference, such as a Docker Tag as attribute of the respective node template.
 This reference can then be used by the <code>create</code> management operation of <code>tosca.interfaces.node.lifecycle.Standard</code>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>tosca.interfaces.node.lifecycle.Variability
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="hll">+    build:
-</span><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="hll">+        description: Builds a Deployment Artifact
-</span></code></pre></div></td></tr></table></div>
+<p><code>hl_lines="2 3" linenums="1"
+tosca.interfaces.node.lifecycle.Variability
++    build:
++        description: Builds a Deployment Artifact</code></p>
 <p>A rough idea has been also mentioned in
 <a href="https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969505" target="_blank">TOSCA Simple Profile in YAML Version 1.3</a>.</p>
 <h2 id="acknowledgments">Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permanent link">&para;</a></h2>
@@ -7834,7 +7832,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 25, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 27, 2024</span>
       
     
   </small>
