@@ -22,6 +22,13 @@ export type ScenariosOptions = {
 
 export default async function (options: ScenariosOptions) {
     /**
+     * Replace 'asterisk' with '*' due to parsing problems
+     */
+    options.hosting = check.isArray(options.hosting)
+        ? options.hosting.map(hosting => (hosting === 'asterisk' ? ASTERISK : hosting))
+        : options.hosting
+
+    /**
      * Graph
      */
     const normative = NormativeTypes()
@@ -113,8 +120,11 @@ function matches(graph: Graph, input: string[], hosting: string[]): boolean {
     // Accept that user provided hosting is shorter than rule
     if (check.isUndefined(is)) return true
 
+    if (asterisk) return matches(graph, utils.copy(input), utils.copy(hosting))
+
     if (graph.inheritance.isNodeType(is, question)) {
         const hostingCopy = utils.copy(hosting)
+
         if (asterisk) hostingCopy.shift()
         hostingCopy.shift()
 
@@ -122,8 +132,6 @@ function matches(graph: Graph, input: string[], hosting: string[]): boolean {
 
         return matches(graph, utils.copy(input), hostingCopy)
     }
-
-    if (asterisk) return matches(graph, utils.copy(input), utils.copy(hosting))
 
     return false
 }
