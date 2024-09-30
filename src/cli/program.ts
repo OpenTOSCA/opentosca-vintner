@@ -1138,7 +1138,9 @@ utils
 utils
     .command('rules')
     .description('returns technology rules')
-    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json', 'latex']))
+    .addOption(
+        new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json', 'latex', 'csv'])
+    )
     .action(
         hae.exit(async options => {
             std.out(await Controller.utils.rules(options))

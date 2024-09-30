@@ -14,6 +14,7 @@ import * as yaml from 'js-yaml'
 import lnk from 'lnk'
 import _ from 'lodash'
 import os from 'os'
+import papa from 'papaparse'
 import path from 'path'
 // TODO: fix import problem
 // @ts-ignore
@@ -163,19 +164,29 @@ export async function loadXML<T>(file: string) {
     return (await xml2js.parseStringPromise(loadFile(file) /*, options */)) as T
 }
 
-export function toFormat(obj: any, format: string, options: {latex?: LatexOptions} = {}) {
+export function toFormat(obj: any, format: string, options: {latex?: LatexOptions; csv?: CSVOptions} = {}) {
     if (format === 'yaml') return toYAML(obj)
     if (format === 'json') return toJSON(obj)
     if (format === 'ini') return toINI(obj)
     if (format === 'env') return toENV(obj)
     if (format === 'xml') return toXML(obj)
     if (format === 'latex') return toLatex(obj, options.latex)
+    if (format === 'csv') return toCSV(obj, options.csv)
 
     throw new Error(`Format "${format}" not supported`)
 }
 
 export type LatexOptions = {
     headers?: string[]
+}
+
+export type CSVOptions = {
+    headers?: string[]
+}
+
+export function toCSV(obj: any, options: CSVOptions = {}) {
+    assert.isArray(obj)
+    return papa.unparse(obj, {columns: options.headers})
 }
 
 export function toLatex(obj: any, options: LatexOptions = {}) {
