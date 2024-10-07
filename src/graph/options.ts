@@ -925,7 +925,7 @@ class ConstraintsOptions extends BaseOptions {
         }
 
         if (this.v3) {
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints ?? true
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
         } else {
             this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
         }
