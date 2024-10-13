@@ -218,15 +218,15 @@ export function BashDeleteApplicationDirectory() {
 }
 
 export function SourceArchiveFile(type: string) {
-    return `{{ "project" | get_dir }}/ensemble/{{  ".artifacts::${SourceArchiveName(type)}::file" | eval }}`
+    return `{{ "project" | get_dir }}/ensemble/{{ ${ArtifactFile(type)} }}`
 }
 
 export function SourceArchiveUrl(type: string) {
-    return `{{ ".artifacts::${SourceArchiveName(type)}::file" | eval }}`
+    return `{{ ${ArtifactFile(type)} }}`
 }
 
 export function SourceArchiveExtraOpts(type: string) {
-    return `{{ ".artifacts::${SourceArchiveName(type)}::extra_opts" | eval | map_value }}`
+    return `{{ ".artifacts::*::[.type=${type}]::extra_opts" | eval | map_value }}`
 }
 
 export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
@@ -244,15 +244,15 @@ export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
 }
 
 export function JinjaWhenSourceArchiveFile(type: string) {
-    return `not (".artifacts::${SourceArchiveName(type)}::file" | eval).startswith("http")`
+    return `not (${ArtifactFile(type)}).startswith("http")`
 }
 
 export function JinjaWhenSourceArchiveUrl(type: string) {
-    return `(".artifacts::${SourceArchiveName(type)}::file" | eval).startswith("http")`
+    return `(${ArtifactFile(type)}).startswith("http")`
 }
 
 export function BashWhenSourceArchiveUrl(type: string) {
-    return `"{{ ".artifacts::${SourceArchiveName(type)}::file" | eval }}" == http*`
+    return `"{{ ${ArtifactFile(type)} }}" == http*`
 }
 
 export function BashDownloadSourceArchive(name: string, type: string) {
@@ -263,9 +263,8 @@ fi
 `.trim()
 }
 
-// TODO: replace this with filter for type once https://github.com/onecommons/unfurl/issues/338 is resolved
-export function SourceArchiveName(type: string) {
-    return type.replaceAll('.', '_')
+export function ArtifactFile(type: string) {
+    return `".artifacts::*::[.type=${type}::file" | eval`
 }
 
 export function BashCreateVintnerDirectory() {

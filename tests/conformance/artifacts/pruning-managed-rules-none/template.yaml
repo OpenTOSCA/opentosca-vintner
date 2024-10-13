@@ -23,10 +23,10 @@ topology_template:
             type: application
             persistent: true
             artifacts:
-                - first_artifact_type:
+                - first_artifact:
                       type: first.artifact.type
                       file: first_artifact_file
 
-                - second_artifact_type:
+                - second_artifact:
                       type: second.artifact.type
                       file: second_artifact_file
