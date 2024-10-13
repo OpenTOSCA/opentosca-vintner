@@ -69,6 +69,5 @@ _The prototype currently does not support custom template attributes, i.e., writ
 1. A node template can have conditional deployment artifacts.
 1. A node type cannot have conditional deployment artifacts.
 1. A _custom node type_ cannot have deployment artifacts.
-2. A deployment artifact must be named by its artifact type but any `.` replaced with `_`.
    
 --8<-- "acd.md"
