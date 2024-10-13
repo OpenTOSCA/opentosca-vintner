@@ -92,13 +92,15 @@ variability:
 
 A variability input is an input parameter which additionally has the following keywords.
 
-| Keyname            | Mandatory | Type                       | Description                                                      |
-|--------------------|-----------|----------------------------|------------------------------------------------------------------|
-| default_expression | false     | ValueExpression            | A value expression as default.                                   |
-| implies            | false     | String &#124; List(String) | Implies/ requires another variability input.                     |
-| excludes           | false     | String &#124; List(String) | Excludes another variability input.                              |
-| alternatives       | false     | List(String)               | Requires exactly one of the referenced variability input.        |
-| choices            | false     | List(String)               | Requires none, one, or multiple of referenced variability input. |
+| Keyname            | Mandatory | Type                       | Description                                                                                |
+|--------------------|-----------|----------------------------|--------------------------------------------------------------------------------------------|
+| default_expression | false     | ValueExpression            | A value expression as default.                                                             |
+| mandatory          | false     | String &#124; List(String) | Mandatory variability inputs.                                                              |
+| optional           | false     | String &#124; List(String) | Any other variability input.                                                               |
+| choices            | false     | List(String)               | Requires none, one, or multiple of referenced variability input.                           |
+| alternatives       | false     | List(String)               | Requires exactly one of the referenced variability input.                                  |
+| requires           | false     | String &#124; List(String) | (Cross-tree) Implies/ requires another variability input.                                  |
+| excludes           | false     | String &#124; List(String) | (Cross-tree) Excludes another variability input.                                           |
 
 For example, the following variability input has a value expression as default value assigned. 
 
