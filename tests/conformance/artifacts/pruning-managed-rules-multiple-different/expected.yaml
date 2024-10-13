@@ -23,7 +23,7 @@ topology_template:
             requirements:
                 - host: host
             artifacts:
-                first_artifact_type:
+                first_artifact:
                     type: first.artifact.type
                     file: first_artifact_file
 

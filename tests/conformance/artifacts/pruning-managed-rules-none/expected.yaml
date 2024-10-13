@@ -16,6 +16,6 @@ topology_template:
         application:
             type: application~application#first.artifact.type::ansible
             artifacts:
-                first_artifact_type:
+                first_artifact:
                     type: first.artifact.type
                     file: first_artifact_file

@@ -113,7 +113,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     assert.isDefined(rule.artifact)
                     return it.getType().isA(rule.artifact)
                 })
-                // TODO: check naming convention?
                 const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
 
                 // Check for artifact in type
