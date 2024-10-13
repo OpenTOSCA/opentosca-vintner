@@ -143,7 +143,7 @@ export default class Validator {
             const value = this.inputs[name] ?? definition.default
 
             // Check if truthy or falsy
-            if (check.isUndefined(value) || check.isFalse(value)) {
+            if (check.isUndefined(value) || check.isFalse(value) || value === 0) {
                 // Case: Falsy
                 this.minisat.require(MiniSat.not(name))
             } else {
