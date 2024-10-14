@@ -39,23 +39,34 @@ topology_template:
             technology_constraint: true
             enrich_technologies: true
         technology_rules:
-            terraform:
-                - component: application
-                  hosting: terraform_host
-                - component: application
-                  hosting: ansible_terraform_host
-                - component: another
-                  hosting: another_terraform_host
-                - component: database
-                - component: dbms
-            ansible:
-                - component: application
-                  hosting: ansible_host
-                - component: application
-                  hosting: ansible_terraform_host
-            helm:
-                - component: application
-                  hosting: helm_host
+            - component: application
+              technology: terraform
+              hosting:
+                  - terraform_host
+            - component: application
+              technology: terraform
+              hosting:
+                  - ansible_terraform_host
+            - component: another
+              technology: terraform
+              hosting:
+                  - another_terraform_host
+            - component: database
+              technology: terraform
+            - component: dbms
+              technology: terraform
+            - component: application
+              technology: ansible
+              hosting:
+                  - ansible_host
+            - component: application
+              technology: ansible
+              hosting:
+                  - ansible_terraform_host
+            - component: application
+              technology: helm
+              hosting:
+                  - helm_host
     node_templates:
         application:
             type: application

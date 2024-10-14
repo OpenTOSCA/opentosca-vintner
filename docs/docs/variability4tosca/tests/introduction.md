@@ -74,19 +74,19 @@ processing.
 | 49 | [Operator "and" Evaluates to "false" (Nested)](./test-boolean-operators-and-nested-false.md) |
 | 50 | [Operator "and" Evaluates to "true"](./test-boolean-operators-and-nested-true.md) |
 | 51 | [Operator "and"  Evaluates to "true" (Nested)](./test-boolean-operators-and-true.md) |
-| 52 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
-| 53 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
-| 54 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
-| 55 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
-| 56 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
-| 57 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
-| 58 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
-| 59 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
-| 60 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
-| 61 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
-| 62 | [Operator "xor": all false -> false](./test-boolean-operators-xor-false-all.md) |
-| 63 | [Operator "xor": One ture -> true](./test-boolean-operators-xor-true.md) |
-| 64 | [Operator "xor": all true -> false](./test-boolean-operators-xor-true-all.md) |
+| 52 | [Operator "exo": all false -> false](./test-boolean-operators-exo-false-all.md) |
+| 53 | [Operator "exo": One ture -> true](./test-boolean-operators-exo-true.md) |
+| 54 | [Operator "exo": all true -> false](./test-boolean-operators-exo-true-all.md) |
+| 55 | [Operator "implies": false false -> true](./test-boolean-operators-implies-false-false-true.md) |
+| 56 | [Operator "implies": false true -> true](./test-boolean-operators-implies-false-true-true.md) |
+| 57 | [Operator "implies": true false -> false](./test-boolean-operators-implies-true-false-false.md) |
+| 58 | [Operator "implies": true true -> true](./test-boolean-operators-implies-true-true-true.md) |
+| 59 | [Operator "not" Evaluates to "false"](./test-boolean-operators-not-false.md) |
+| 60 | [Operator "not" Evaluates to "true"](./test-boolean-operators-not-true.md) |
+| 61 | [Operator "or" Evaluates to "False" (Empty)](./test-boolean-operators-or-empty.md) |
+| 62 | [Operator "or" Evaluates to "False"](./test-boolean-operators-or-false.md) |
+| 63 | [Operator "or" Evaluates to "true"](./test-boolean-operators-or-true.md) |
+| 64 | [Operator "or" Evaluates to "true" (All "true")](./test-boolean-operators-or-true-all.md) |
 | 65 | [circles-alpha](./test-circles-alpha.md) |
 | 66 | [circles-bravo](./test-circles-bravo.md) |
 | 67 | [circles-charlie](./test-circles-charlie.md) |

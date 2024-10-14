@@ -7,10 +7,10 @@ tags:
 
 --8<-- "enumerate.html"
 
-# DRAFT: Deployment Technology Rules Specification 1.0 Release Candidate
+# Deployment Technology Rules Specification 1.0 Release Candidate
 
 !!! info "Hidden Information"
-    The document does not specifies quality assignments at this stage.
+    The document does not specify quality assignments at this stage.
 
 !!! info "Quick Tip #1"
     Elements in graphs can be clicked to open their type definition!
