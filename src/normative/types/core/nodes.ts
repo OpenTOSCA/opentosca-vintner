@@ -46,7 +46,6 @@ const nodes: NodeTypeMap = {
             },
         ],
     },
-    // TODO: explain this in more detail?!
     'software.application': {
         derived_from: 'node',
         description:
@@ -75,11 +74,10 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    // TODO: explain this in more detail?!
     'service.application': {
         derived_from: 'software.application',
         description:
-            'The abstract "service.application" node type defines a generic software application, which provides a service.',
+            'The abstract "service.application" node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -356,11 +354,10 @@ const nodes: NodeTypeMap = {
             ...MetadataNormative(),
         },
     },
-    // TODO: explain this in more detail?!
     ingress: {
         derived_from: 'node',
         description:
-            'The abstract "ingress" node type defines a generic ingress service, which is a reverse proxy that exposes an upstream application.',
+            'The "ingress" node type manages a generic ingress service, which is a reverse proxy that exposes an upstream application. It is not normative how this component is implemented. This could be implemented by an Ingress resource on Kubernetes or by a reverse proxy, such as NGINX or Caddy, on a virtual machine.',
         metadata: {
             ...MetadataNormative(),
         },
