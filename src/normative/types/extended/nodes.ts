@@ -5,6 +5,8 @@ import {MetadataAbstract, MetadataNormative} from '../utils'
 const nodes: NodeTypeMap = {
     'nodejs.runtime': {
         derived_from: 'software.runtime',
+        description:
+            'The "nodejs.runtime" node type manages the Node.js runtime, which is a software runtime that runs on a machine. It is capable of hosting Node.js components',
         metadata: {
             ...MetadataNormative(),
         },
@@ -12,11 +14,13 @@ const nodes: NodeTypeMap = {
             application_name: {
                 type: 'string',
                 default: 'nodejs',
+                description: 'the name of the application',
             },
         },
         artifacts: {
             apt_package: {
                 type: 'apt.package',
+                description: 'the apt package to install Node.js',
                 file: 'nodejs',
                 properties: {
                     script: 'https://deb.nodesource.com/setup_18.x',
@@ -26,6 +30,7 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
+                description: 'the management address of the host',
             },
         },
         capabilities: {
@@ -36,6 +41,7 @@ const nodes: NodeTypeMap = {
     },
     'nodejs.service.application': {
         derived_from: 'service.application',
+        description: 'The "nodejs.service.application" node type manages a Node.js service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -58,6 +64,7 @@ const nodes: NodeTypeMap = {
     },
     'reactjs.service.application': {
         derived_from: 'service.application',
+        description: 'The "reactjs.service.application" node type manages a React.js service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -72,6 +79,8 @@ const nodes: NodeTypeMap = {
     },
     'python.runtime': {
         derived_from: 'software.runtime',
+        description:
+            'The "python.runtime" node type manages the Python runtime, which is a software runtime that runs on a machine. It is capable of hosting Python components.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -90,6 +99,7 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
+                description: 'the management address of the host',
             },
         },
         capabilities: {
@@ -100,6 +110,7 @@ const nodes: NodeTypeMap = {
     },
     'python.service.application': {
         derived_from: 'service.application',
+        description: 'The "python.service.application" node type manages a Python service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -124,6 +135,7 @@ const nodes: NodeTypeMap = {
     // TODO: management operations
     'go.service.application': {
         derived_from: 'service.application',
+        description: 'The "go.service.application" node type manages a Go service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -137,6 +149,8 @@ const nodes: NodeTypeMap = {
     },
     'java.runtime': {
         derived_from: 'software.runtime',
+        description:
+            'The "java.runtime" node type manages the Java runtime, which is a software runtime that runs on a machine. It is capable of hosting Java components.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -155,6 +169,7 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
+                description: 'the management address of the host',
             },
         },
         capabilities: {
@@ -166,6 +181,7 @@ const nodes: NodeTypeMap = {
     // TODO: management operations
     'java.service.application': {
         derived_from: 'service.application',
+        description: 'The "java.service.application" node type manages a Java service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -179,6 +195,8 @@ const nodes: NodeTypeMap = {
     },
     'dotnet.runtime': {
         derived_from: 'software.runtime',
+        description:
+            'The "dotnet.runtime" node type manages the .NET runtime, which is a software runtime that runs on a machine. It is capable of hosting .NET components.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -197,6 +215,7 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
+                description: 'the management address of the host',
             },
         },
         capabilities: {
@@ -208,6 +227,7 @@ const nodes: NodeTypeMap = {
     // TODO: management operations
     'csharp.service.application': {
         derived_from: 'service.application',
+        description: 'The "csharp.service.application" node type manages a C# service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -221,6 +241,7 @@ const nodes: NodeTypeMap = {
     },
     'binary.service.application': {
         derived_from: 'service.application',
+        description: 'The "binary.service.application" node type manages a binary service application.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -234,6 +255,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.provider': {
         derived_from: 'cloud.provider',
+        description: 'The abstract "gcp.provider" node type defines a Google Cloud Platform (GCP) project.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -245,9 +267,12 @@ const nodes: NodeTypeMap = {
             },
             gcp_region: {
                 type: 'string',
+                description: 'the region of the GCP project',
             },
             gcp_service_account_file: {
                 type: 'string',
+                description:
+                    'the service account file of the GCP project, i.e., the absolute path to the serivce account file on the filesystem of the orchestrator',
             },
             gcp_project: {
                 type: 'string',
@@ -264,6 +289,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.service': {
         derived_from: 'cloud.service',
+        description: 'The abstract "gcp.service" node type defines a Google Cloud Platform (GCP) service.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -275,11 +301,13 @@ const nodes: NodeTypeMap = {
             },
             gcp_service: {
                 type: 'string',
+                description: 'the API of the GCP service',
             },
         },
     },
     'gcp.cloudrun': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.cloudrun" node type manages a the GCP CloudRun service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -292,6 +320,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.cloudsql': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.cloudsql" node type manages a the GCP CloudSQL service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -304,6 +333,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.appengine': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.appengine" node type manages a the GCP AppEngine service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -330,6 +360,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.appenginereporting': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.appenginereporting" node type manages a the GCP AppEngine Reporting service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -342,6 +373,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.cloudbuild': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.cloudbuild" node type manages a the GCP CloudBuild service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -354,6 +386,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.kubernetesengine': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.kubernetesengine" node type manages a the GCP Kubernetes Engine service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -366,6 +399,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.cloudstorage': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.cloudstorage" node type manages a the GCP CloudStorage service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -384,6 +418,7 @@ const nodes: NodeTypeMap = {
     },
     'gcp.memorystore': {
         derived_from: 'gcp.service',
+        description: 'The "gcp.memorystore" node type manages a the GCP Memorystore service.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -396,7 +431,8 @@ const nodes: NodeTypeMap = {
     },
     'docker.engine': {
         derived_from: 'container.runtime',
-        description: 'Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375',
+        description:
+            'The "docker.engine" node type manages the Docker Engine, which is a software runtime that runs on a machine. It is capable of hosting Docker containers. It is configured to listen on the unix socket as well as on tcp://0.0.0.0:2375.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -413,6 +449,7 @@ const nodes: NodeTypeMap = {
         attributes: {
             management_address: {
                 type: 'string',
+                description: 'the management address of the host',
             },
         },
         capabilities: {
@@ -423,6 +460,8 @@ const nodes: NodeTypeMap = {
     },
     'kubernetes.cluster': {
         derived_from: 'cloud.service',
+        description:
+            'The abstract "kubernetes.cluster" node type describes a Kubernetes cluster. It is typically hosted on a cloud provider.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -434,15 +473,19 @@ const nodes: NodeTypeMap = {
             },
             k8s_host: {
                 type: 'string',
+                description: 'the host of the Kubernetes API',
             },
             k8s_ca_cert_file: {
                 type: 'string',
+                description: 'the CA certificate file of the Kubernetes API',
             },
             k8s_client_cert_file: {
                 type: 'string',
+                description: 'the client certificate file to connect to the Kubernetes API',
             },
             k8s_client_key_file: {
                 type: 'string',
+                description: 'the client key file to connect to the Kubernetes API',
             },
         },
         capabilities: {
@@ -461,6 +504,7 @@ const nodes: NodeTypeMap = {
     },
     'openstack.provider': {
         derived_from: 'cloud.provider',
+        description: 'The abstract "openstack.provider" node type defines an OpenStack project.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -472,24 +516,31 @@ const nodes: NodeTypeMap = {
             },
             os_region_name: {
                 type: 'string',
+                description: 'the region of the OpenStack project',
             },
             os_auth_type: {
                 type: 'string',
+                description: 'the authentication type of the OpenStack project',
             },
             os_auth_url: {
                 type: 'string',
+                description: 'the authentication URL of the OpenStack project',
             },
             os_identity_api_version: {
                 type: 'string',
+                description: 'the identity API version of the OpenStack project',
             },
             os_interface: {
                 type: 'string',
+                description: 'the interface of the OpenStack project',
             },
             os_application_credential_id: {
                 type: 'string',
+                description: 'the application credential ID to authenticate at the OpenStack project',
             },
             os_application_credential_secret: {
                 type: 'string',
+                description: 'the application credential secret to authenticate at the OpenStack project',
             },
         },
         interfaces: {
@@ -503,36 +554,45 @@ const nodes: NodeTypeMap = {
     },
     'mysql.dbms': {
         derived_from: 'relational.dbms',
+        description: 'The "mysql.dbms" node type manages a MySQL DBMS, which is capable of hosting MySQL databases.',
         metadata: {
             ...MetadataNormative(),
         },
         properties: {
             dbms_name: {
                 type: 'string',
+                description: 'the name of the DBMS',
             },
             application_name: {
                 type: 'string',
+                description: 'the name of the DBMS',
             },
             dbms_password: {
                 type: 'string',
+                description: 'the root password of the DBMS',
             },
             dbms_ssl_mode: {
                 type: 'string',
                 default: 'None',
+                description: 'the SSL mode of the DBMS',
             },
         },
         attributes: {
             application_address: {
                 type: 'string',
+                description: 'the application address of the DBMS',
             },
             application_port: {
                 type: 'string',
+                description: 'the application port of the DBMS',
             },
             management_address: {
                 type: 'string',
+                description: 'the management address of the DBMS',
             },
             management_port: {
                 type: 'string',
+                description: 'the management port of the DBMS',
             },
         },
         capabilities: {
@@ -551,26 +611,33 @@ const nodes: NodeTypeMap = {
     },
     'mysql.database': {
         derived_from: 'relational.database',
+        description:
+            'The "mysql.database" node type manages a MySQL database, which is hosted on a MySQL and which can be accessed by other components.',
         metadata: {
             ...MetadataNormative(),
         },
         properties: {
             database_name: {
                 type: 'string',
+                description: 'the name of the database',
             },
             database_user: {
                 type: 'string',
+                description: 'the user of the database',
             },
             database_password: {
                 type: 'string',
+                description: 'the password for the database user',
             },
         },
         attributes: {
             application_address: {
                 type: 'string',
+                description: 'the application address of the DBMS',
             },
             application_port: {
                 type: 'string',
+                description: 'the application port of the DBMS',
             },
         },
         capabilities: {
@@ -589,6 +656,7 @@ const nodes: NodeTypeMap = {
     },
     'minio.server': {
         derived_from: 'service.application',
+        description: 'The "minio.server" node type manages a MinIO server.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -598,12 +666,14 @@ const nodes: NodeTypeMap = {
                 metadata: {
                     [METADATA.VINTNER_NAME]: 'MINIO_ROOT_USER',
                 },
+                description: 'the access key of the MinIO server',
             },
             secret_key: {
                 type: 'string',
                 metadata: {
                     [METADATA.VINTNER_NAME]: 'MINIO_ROOT_PASSWORD',
                 },
+                description: 'the secret key of the MinIO server',
             },
         },
         attributes: {
@@ -615,6 +685,7 @@ const nodes: NodeTypeMap = {
     },
     'redis.server': {
         derived_from: 'cache',
+        description: 'The "redis.server" node type manages a Redis server.',
         metadata: {
             ...MetadataNormative(),
         },

@@ -42,7 +42,7 @@ We define the following metadata.
 ### Artifact Types
 
 We specify the following normative artifact types.
-An overview is given in Figure tosca-vintner-profile-core1.
+An overview is given in Figure C1.
 
 <figure markdown>
 ![Artifact Types](tosca-vintner-profile-core.artifact-types.svg)
@@ -51,7 +51,7 @@ An overview is given in Figure tosca-vintner-profile-core1.
 
 #### artifact
 
-
+The &#34;root&#34; artifact type manages the root artifact type all other artifact types inherit from.
 
 ```yaml linenums="1"
 artifact:
@@ -62,7 +62,7 @@ artifact:
 
 #### source.archive
 
-application packaged as archive
+The &#34;source.archive&#34; artifact type manages a generic archive that holds distribution files of a component.
 
 ```yaml linenums="1"
 source.archive:
@@ -72,6 +72,7 @@ source.archive:
     properties:
         extra_opts:
             type: list
+            description: extra options when extracting the archive
             entry_schema:
                 type: string
             required: false
@@ -79,7 +80,7 @@ source.archive:
 
 #### system.package
 
-
+The &#34;system.package&#34; artifact type manages a package that is installed via a system package manager. It expects the package name in the &#34;file&#34; key.
 
 ```yaml linenums="1"
 system.package:
@@ -115,7 +116,7 @@ system.package:
 
 #### container.image
 
-expects image reference in &#34;file&#34;
+The &#34;container.image&#34; artifact type manages a generic container image. It expects the image reference in the &#34;file&#34; key.
 
 ```yaml linenums="1"
 container.image:
@@ -126,7 +127,7 @@ container.image:
 
 #### machine.image
 
-expects image reference in &#34;file&#34;
+The &#34;machine.image&#34; artifact type manages a generic machine image. It expects the image reference in the &#34;file&#34; key.
 
 ```yaml linenums="1"
 machine.image:
@@ -137,7 +138,7 @@ machine.image:
 
 #### dbms.image
 
-expects image reference in &#34;file&#34;
+The &#34;dbms.image&#34; artifact type manages a generic DBMS image. It expects the image reference in the &#34;file&#34; key.
 
 ```yaml linenums="1"
 dbms.image:
@@ -146,10 +147,21 @@ dbms.image:
         vintner_normative: 'true'
 ```
 
+#### cache.image
+
+The &#34;cache.image&#34; artifact type manages a generic cache image. It expects the image reference in the &#34;file&#34; key.
+
+```yaml linenums="1"
+cache.image:
+    derived_from: artifact
+    metadata:
+        vintner_normative: 'true'
+```
+
 ### Interface Types
 
 We specify the following normative interface types.
-An overview is given in Figure tosca-vintner-profile-core2.
+An overview is given in Figure C2.
 
 <figure markdown>
 ![Interface Types](tosca-vintner-profile-core.interface-types.svg)
@@ -158,7 +170,7 @@ An overview is given in Figure tosca-vintner-profile-core2.
 
 #### interface
 
-
+The &#34;interface&#34; interface type manages the root interface type all other interface types inherit from.
 
 ```yaml linenums="1"
 interface:
@@ -169,7 +181,7 @@ interface:
 
 #### management
 
-
+The &#34;management&#34; interface type manages the standard lifecycle management of components.
 
 ```yaml linenums="1"
 management:
@@ -178,21 +190,21 @@ management:
         vintner_normative: 'true'
     operations:
         create:
-            description: management lifecycle create operation.
+            description: create lifecycle management operation, i.e., an inline-bash script
         configure:
-            description: management lifecycle configure operation.
+            description: configure lifecycle management operation, i.e., an inline-bash script
         start:
-            description: management lifecycle start operation.
+            description: start lifecycle management operation, i.e., an inline-bash script
         stop:
-            description: management lifecycle stop operation.
+            description: stop lifecycle management operation, i.e., an inline-bash script
         delete:
-            description: management lifecycle delete operation.
+            description: delete lifecycle management operation, i.e., an inline-bash script
 ```
 
 ### Node Types
 
 We specify the following normative node types.
-An overview is given in Figure tosca-vintner-profile-core3.
+An overview is given in Figure C3.
 
 <figure markdown>
 ![Node Types](tosca-vintner-profile-core.node-types.svg)
@@ -201,7 +213,7 @@ An overview is given in Figure tosca-vintner-profile-core3.
 
 #### node
 
-
+The abstract &#34;node&#34; node type defines the root node type all other node types inherit from.
 
 ```yaml linenums="1"
 node:
@@ -213,7 +225,7 @@ node:
 
 #### cloud.provider
 
-
+The abstract &#34;cloud.provider&#34; node type defines an abstract cloud provider, which is capable of hosting cloud services.
 
 ```yaml linenums="1"
 cloud.provider:
@@ -228,7 +240,7 @@ cloud.provider:
 
 #### cloud.service
 
-
+The abstract &#34;cloud.service&#34; node type defines an generic cloud service, which is hosted on a cloud provider and which is hosting an instance of a cloud service offering.
 
 ```yaml linenums="1"
 cloud.service:
@@ -247,7 +259,7 @@ cloud.service:
 
 #### software.application
 
-
+The abstract &#34;software.application&#34; node type defines a generic software application. It requires a hosting and its lifecycle is managed by the management interface.
 
 ```yaml linenums="1"
 software.application:
@@ -258,6 +270,7 @@ software.application:
     properties:
         application_name:
             type: string
+            description: name of the application
     requirements:
         - host:
               capability: tosca.capabilities.Compute
@@ -269,7 +282,7 @@ software.application:
 
 #### service.application
 
-
+The abstract &#34;service.application&#34; node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
 
 ```yaml linenums="1"
 service.application:
@@ -280,22 +293,27 @@ service.application:
     properties:
         application_language:
             type: string
+            description: the programming/ platform language of the application, e.g., node22
         application_port:
             type: string
+            description: the port the application listens on, e.g., 3000
             metadata:
                 vintner_name: PORT
         application_protocol:
             type: string
+            description: the protocol the application uses, e.g., http
     attributes:
         application_address:
             type: string
+            description: the address under which the application can be reached, i.e., the IP or a domain name
         application_endpoint:
             type: string
+            description: the endpoint under which the application can be reached, i.e., the protocol, IP and port concatenated
 ```
 
 #### software.runtime
 
-
+The abstract &#34;software.runtime&#34; node type defines a generic software runtime.
 
 ```yaml linenums="1"
 software.runtime:
@@ -310,7 +328,7 @@ software.runtime:
 
 #### container.runtime
 
-
+The abstract &#34;container.runtime&#34; node type defines a generic container runtime.
 
 ```yaml linenums="1"
 container.runtime:
@@ -322,7 +340,7 @@ container.runtime:
 
 #### machine
 
-
+The abstract &#34;machine&#34; node type defines a generic computing machine.
 
 ```yaml linenums="1"
 machine:
@@ -333,17 +351,26 @@ machine:
     properties:
         machine_name:
             type: string
+            description: name of the machine
+    attributes:
+        application_address:
+            type: string
+            description: the address under which the machine can be publicly reached, i.e., the IP or a domain name
+        management_address:
+            type: string
+            description: the address under which the machine can be privately reached, i.e., the IP or a domain name
 ```
 
 #### local.machine
 
-
+The &#34;local.machine&#34; node type manages a local machine, i.e., localhost. It is capable of hosting, e.g., software components.
 
 ```yaml linenums="1"
 local.machine:
     derived_from: machine
     metadata:
         vintner_normative: 'true'
+        vintner_abstract: 'true'
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -351,7 +378,7 @@ local.machine:
 
 #### remote.machine
 
-
+The &#34;remote.machine&#34; node type manages a remote machine, i.e., a machine that is not localhost. It is capable of hosting, e.g., software components.
 
 ```yaml linenums="1"
 remote.machine:
@@ -361,26 +388,28 @@ remote.machine:
     properties:
         machine_name:
             type: string
+            description: name of the machine
         ports:
             type: list
+            description: ports to open
             entry_schema:
                 type: string
         flavor:
             type: string
+            description: flavor of the machine, i.e., cpu, memory, disk size encoded as string
             default: m1.medium
         network:
             type: string
+            description: network to connect to
         ssh_user:
             type: string
+            description: ssh user to connect to the machine
         ssh_key_name:
             type: string
+            description: ssh key name to connect to the machine
         ssh_key_file:
             type: string
-    attributes:
-        management_address:
-            type: string
-        application_address:
-            type: string
+            description: ssh key file to connect to the machine, i.e., the absolute path to the ssh key file on the filesystem of the orchestrator
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -388,7 +417,7 @@ remote.machine:
 
 #### virtual.machine
 
-
+The &#34;virtual.machine&#34; node type manages a virtual machine.
 
 ```yaml linenums="1"
 virtual.machine:
@@ -397,7 +426,7 @@ virtual.machine:
 
 #### physical.machine
 
-
+The &#34;physical.machine&#34; node type manages a physical machine.
 
 ```yaml linenums="1"
 physical.machine:
@@ -406,7 +435,7 @@ physical.machine:
 
 #### database
 
-
+The abstract &#34;database&#34; node type defines a generic database. It requires a DBMS to run.
 
 ```yaml linenums="1"
 database:
@@ -414,11 +443,15 @@ database:
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
+    requirements:
+        - host:
+              capability: tosca.capabilities.Compute
+              relationship: tosca.relationships.HostedOn
 ```
 
 #### relational.database
 
-
+The abstract &#34;relational.database&#34; node type defines a generic relational database. It requires a relational DBMS to run.
 
 ```yaml linenums="1"
 relational.database:
@@ -430,7 +463,7 @@ relational.database:
 
 #### dbms
 
-
+The abstract &#34;dbms&#34; node type defines a generic DBMS.
 
 ```yaml linenums="1"
 dbms:
@@ -442,7 +475,7 @@ dbms:
 
 #### relational.dbms
 
-
+The abstract &#34;relational.dbms&#34; node type defines a generic relational DBMS.
 
 ```yaml linenums="1"
 relational.dbms:
@@ -452,9 +485,96 @@ relational.dbms:
         vintner_abstract: 'true'
 ```
 
+#### cache
+
+The abstract &#34;cache&#34; node type defines a generic caching service.
+
+```yaml linenums="1"
+cache:
+    derived_from: software.application
+    properties:
+        cache_name:
+            type: string
+            description: name of the cache
+        cache_port:
+            type: string
+            description: port the cache listens on
+    attributes:
+        application_address:
+            type: string
+            description: the address under which the cache can be reached, i.e., the IP or a domain name
+        application_endpoint:
+            type: string
+            description: the endpoint under which the cache can be reached, i.e., the protocol, IP and port concatenated
+```
+
+#### storage
+
+The abstract &#34;storage&#34; node type defines a generic storage service.
+
+```yaml linenums="1"
+storage:
+    derived_from: node
+    metadata:
+        vintner_normative: 'true'
+```
+
+#### block.storage
+
+The abstract &#34;block.storage&#34; node type defines a generic block storage.
+
+```yaml linenums="1"
+block.storage:
+    derived_from: storage
+    metadata:
+        vintner_normative: 'true'
+```
+
+#### object.storage
+
+The abstract &#34;object.storage&#34; node type defines a generic object storage.
+
+```yaml linenums="1"
+object.storage:
+    derived_from: storage
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        storage_name:
+            type: string
+            description: name of the storage
+        storage_dialect:
+            type: string
+            description: dialect of the storage, e.g., s3
+        storage_user:
+            type: string
+        storage_token:
+            type: string
+    attributes:
+        storage_endpoint:
+            type: string
+        storage_token:
+            type: string
+    requirements:
+        - host:
+              capability: tosca.capabilities.Compute
+              relationship: tosca.relationships.HostedOn
+```
+
+#### file.storage
+
+The abstract &#34;file.storage&#34; node type defines a generic file storage.
+
+```yaml linenums="1"
+file.storage:
+    derived_from: storage
+    metadata:
+        vintner_normative: 'true'
+```
+
 #### ingress
 
-
+The &#34;ingress&#34; node type manages a generic ingress service, which is a reverse proxy that exposes an upstream application. It is not normative how this component is implemented. This could be implemented by an Ingress resource on Kubernetes or by a reverse proxy, such as NGINX or Caddy, on a virtual machine.
 
 ```yaml linenums="1"
 ingress:
@@ -464,13 +584,17 @@ ingress:
     properties:
         application_name:
             type: string
+            description: name of the upstream application
         application_port:
             type: string
+            description: port the upstream application listens on
         application_protocol:
             type: string
+            description: protocol the upstream application uses
     attributes:
         application_address:
             type: string
+            description: the address under which the upstream application is exposed by the ingress, i.e., the IP or a domain name
     requirements:
         - application:
               capability: tosca.capabilities.Endpoint
@@ -491,7 +615,7 @@ The extended normative TOSCA type definitions contain additional provider-specif
 ### Artifact Types
 
 We specify the following normative artifact types.
-An overview is given in Figure tosca-vintner-profile-extended1.
+An overview is given in Figure E1.
 
 <figure markdown>
 ![Artifact Types](tosca-vintner-profile-extended.artifact-types.svg)
@@ -500,7 +624,7 @@ An overview is given in Figure tosca-vintner-profile-extended1.
 
 #### docker.image
 
-expects image reference in &#34;file&#34;
+The &#34;docker.image&#34; artifact type manages a concrete Docker Image. It expects the Docker Image reference in the &#34;file&#34; key.
 
 ```yaml linenums="1"
 docker.image:
@@ -511,7 +635,7 @@ docker.image:
 
 #### zip.archive
 
-
+The &#34;zip.archive&#34; artifact type manages a ZIP archive, which contains the distribution files of a component.
 
 ```yaml linenums="1"
 zip.archive:
@@ -522,7 +646,7 @@ zip.archive:
 
 #### tar.archive
 
-
+The &#34;tar.archive&#34; artifact type manages a TAR archive, which contains the distribution files of a component
 
 ```yaml linenums="1"
 tar.archive:
@@ -533,7 +657,7 @@ tar.archive:
 
 #### apt.package
 
-
+The &#34;apt.package&#34; artifact type manages a package that is installed via the apt package manager.
 
 ```yaml linenums="1"
 apt.package:
@@ -570,7 +694,7 @@ apt.package:
 ### Node Types
 
 We specify the following normative node types.
-An overview is given in Figure tosca-vintner-profile-extended2.
+An overview is given in Figure E2.
 
 <figure markdown>
 ![Node Types](tosca-vintner-profile-extended.node-types.svg)
@@ -579,7 +703,7 @@ An overview is given in Figure tosca-vintner-profile-extended2.
 
 #### nodejs.runtime
 
-
+The &#34;nodejs.runtime&#34; node type manages the Node.js runtime, which is a software runtime that runs on a machine. It is capable of hosting Node.js components
 
 ```yaml linenums="1"
 nodejs.runtime:
@@ -590,15 +714,18 @@ nodejs.runtime:
         application_name:
             type: string
             default: nodejs
+            description: the name of the application
     artifacts:
         apt_package:
             type: apt.package
+            description: the apt package to install Node.js
             file: nodejs
             properties:
                 script: https://deb.nodesource.com/setup_18.x
     attributes:
         management_address:
             type: string
+            description: the management address of the host
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -606,7 +733,7 @@ nodejs.runtime:
 
 #### nodejs.service.application
 
-
+The &#34;nodejs.service.application&#34; node type manages a Node.js service application.
 
 ```yaml linenums="1"
 nodejs.service.application:
@@ -626,9 +753,25 @@ nodejs.service.application:
                 start: npm start
 ```
 
+#### reactjs.service.application
+
+The &#34;reactjs.service.application&#34; node type manages a React.js service application.
+
+```yaml linenums="1"
+reactjs.service.application:
+    derived_from: service.application
+    metadata:
+        vintner_normative: 'true'
+        vintner_abstract: 'true'
+    properties:
+        application_language:
+            type: string
+            default: nodejs18
+```
+
 #### python.runtime
 
-
+The &#34;python.runtime&#34; node type manages the Python runtime, which is a software runtime that runs on a machine. It is capable of hosting Python components.
 
 ```yaml linenums="1"
 python.runtime:
@@ -646,6 +789,7 @@ python.runtime:
     attributes:
         management_address:
             type: string
+            description: the management address of the host
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -653,7 +797,7 @@ python.runtime:
 
 #### python.service.application
 
-
+The &#34;python.service.application&#34; node type manages a Python service application.
 
 ```yaml linenums="1"
 python.service.application:
@@ -675,7 +819,7 @@ python.service.application:
 
 #### go.service.application
 
-
+The &#34;go.service.application&#34; node type manages a Go service application.
 
 ```yaml linenums="1"
 go.service.application:
@@ -691,7 +835,7 @@ go.service.application:
 
 #### java.runtime
 
-
+The &#34;java.runtime&#34; node type manages the Java runtime, which is a software runtime that runs on a machine. It is capable of hosting Java components.
 
 ```yaml linenums="1"
 java.runtime:
@@ -709,6 +853,7 @@ java.runtime:
     attributes:
         management_address:
             type: string
+            description: the management address of the host
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -716,7 +861,7 @@ java.runtime:
 
 #### java.service.application
 
-
+The &#34;java.service.application&#34; node type manages a Java service application.
 
 ```yaml linenums="1"
 java.service.application:
@@ -732,7 +877,7 @@ java.service.application:
 
 #### dotnet.runtime
 
-
+The &#34;dotnet.runtime&#34; node type manages the .NET runtime, which is a software runtime that runs on a machine. It is capable of hosting .NET components.
 
 ```yaml linenums="1"
 dotnet.runtime:
@@ -750,6 +895,7 @@ dotnet.runtime:
     attributes:
         management_address:
             type: string
+            description: the management address of the host
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -757,7 +903,7 @@ dotnet.runtime:
 
 #### csharp.service.application
 
-
+The &#34;csharp.service.application&#34; node type manages a C# service application.
 
 ```yaml linenums="1"
 csharp.service.application:
@@ -773,7 +919,7 @@ csharp.service.application:
 
 #### binary.service.application
 
-
+The &#34;binary.service.application&#34; node type manages a binary service application.
 
 ```yaml linenums="1"
 binary.service.application:
@@ -789,7 +935,7 @@ binary.service.application:
 
 #### gcp.provider
 
-
+The abstract &#34;gcp.provider&#34; node type defines a Google Cloud Platform (GCP) project.
 
 ```yaml linenums="1"
 gcp.provider:
@@ -803,8 +949,10 @@ gcp.provider:
             default: gcp
         gcp_region:
             type: string
+            description: the region of the GCP project
         gcp_service_account_file:
             type: string
+            description: the service account file of the GCP project, i.e., the absolute path to the serivce account file on the filesystem of the orchestrator
         gcp_project:
             type: string
     interfaces:
@@ -816,7 +964,7 @@ gcp.provider:
 
 #### gcp.service
 
-
+The abstract &#34;gcp.service&#34; node type defines a Google Cloud Platform (GCP) service.
 
 ```yaml linenums="1"
 gcp.service:
@@ -830,11 +978,12 @@ gcp.service:
             default: gcp
         gcp_service:
             type: string
+            description: the API of the GCP service
 ```
 
 #### gcp.cloudrun
 
-
+The &#34;gcp.cloudrun&#34; node type manages a the GCP CloudRun service.
 
 ```yaml linenums="1"
 gcp.cloudrun:
@@ -849,7 +998,7 @@ gcp.cloudrun:
 
 #### gcp.cloudsql
 
-
+The &#34;gcp.cloudsql&#34; node type manages a the GCP CloudSQL service.
 
 ```yaml linenums="1"
 gcp.cloudsql:
@@ -864,7 +1013,7 @@ gcp.cloudsql:
 
 #### gcp.appengine
 
-
+The &#34;gcp.appengine&#34; node type manages a the GCP AppEngine service.
 
 ```yaml linenums="1"
 gcp.appengine:
@@ -886,7 +1035,7 @@ gcp.appengine:
 
 #### gcp.appenginereporting
 
-
+The &#34;gcp.appenginereporting&#34; node type manages a the GCP AppEngine Reporting service.
 
 ```yaml linenums="1"
 gcp.appenginereporting:
@@ -901,7 +1050,7 @@ gcp.appenginereporting:
 
 #### gcp.cloudbuild
 
-
+The &#34;gcp.cloudbuild&#34; node type manages a the GCP CloudBuild service.
 
 ```yaml linenums="1"
 gcp.cloudbuild:
@@ -914,9 +1063,58 @@ gcp.cloudbuild:
             default: cloudbuild.googleapis.com
 ```
 
+#### gcp.kubernetesengine
+
+The &#34;gcp.kubernetesengine&#34; node type manages a the GCP Kubernetes Engine service.
+
+```yaml linenums="1"
+gcp.kubernetesengine:
+    derived_from: gcp.service
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        gcp_service:
+            type: string
+            default: container.googleapis.com
+```
+
+#### gcp.cloudstorage
+
+The &#34;gcp.cloudstorage&#34; node type manages a the GCP CloudStorage service.
+
+```yaml linenums="1"
+gcp.cloudstorage:
+    derived_from: gcp.service
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        gcp_service:
+            type: string
+            default: storage.googleapis.com
+    attributes:
+        storage_dialect:
+            type: string
+            default: gcp
+```
+
+#### gcp.memorystore
+
+The &#34;gcp.memorystore&#34; node type manages a the GCP Memorystore service.
+
+```yaml linenums="1"
+gcp.memorystore:
+    derived_from: gcp.service
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        gcp_service:
+            type: string
+            default: redis.googleapis.com
+```
+
 #### docker.engine
 
-
+The &#34;docker.engine&#34; node type manages the Docker Engine, which is a software runtime that runs on a machine. It is capable of hosting Docker containers. It is configured to listen on the unix socket as well as on tcp://0.0.0.0:2375.
 
 ```yaml linenums="1"
 docker.engine:
@@ -933,6 +1131,7 @@ docker.engine:
     attributes:
         management_address:
             type: string
+            description: the management address of the host
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -940,7 +1139,7 @@ docker.engine:
 
 #### kubernetes.cluster
 
-
+The abstract &#34;kubernetes.cluster&#34; node type describes a Kubernetes cluster. It is typically hosted on a cloud provider.
 
 ```yaml linenums="1"
 kubernetes.cluster:
@@ -954,12 +1153,16 @@ kubernetes.cluster:
             default: kubernetes
         k8s_host:
             type: string
+            description: the host of the Kubernetes API
         k8s_ca_cert_file:
             type: string
+            description: the CA certificate file of the Kubernetes API
         k8s_client_cert_file:
             type: string
+            description: the client certificate file to connect to the Kubernetes API
         k8s_client_key_file:
             type: string
+            description: the client key file to connect to the Kubernetes API
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -972,7 +1175,7 @@ kubernetes.cluster:
 
 #### openstack.provider
 
-
+The abstract &#34;openstack.provider&#34; node type defines an OpenStack project.
 
 ```yaml linenums="1"
 openstack.provider:
@@ -986,18 +1189,25 @@ openstack.provider:
             default: openstack
         os_region_name:
             type: string
+            description: the region of the OpenStack project
         os_auth_type:
             type: string
+            description: the authentication type of the OpenStack project
         os_auth_url:
             type: string
+            description: the authentication URL of the OpenStack project
         os_identity_api_version:
             type: string
+            description: the identity API version of the OpenStack project
         os_interface:
             type: string
+            description: the interface of the OpenStack project
         os_application_credential_id:
             type: string
+            description: the application credential ID to authenticate at the OpenStack project
         os_application_credential_secret:
             type: string
+            description: the application credential secret to authenticate at the OpenStack project
     interfaces:
         Standard:
             operations:
@@ -1007,7 +1217,7 @@ openstack.provider:
 
 #### mysql.dbms
 
-
+The &#34;mysql.dbms&#34; node type manages a MySQL DBMS, which is capable of hosting MySQL databases.
 
 ```yaml linenums="1"
 mysql.dbms:
@@ -1017,22 +1227,30 @@ mysql.dbms:
     properties:
         dbms_name:
             type: string
+            description: the name of the DBMS
         application_name:
             type: string
+            description: the name of the DBMS
         dbms_password:
             type: string
+            description: the root password of the DBMS
         dbms_ssl_mode:
             type: string
             default: None
+            description: the SSL mode of the DBMS
     attributes:
         application_address:
             type: string
+            description: the application address of the DBMS
         application_port:
             type: string
+            description: the application port of the DBMS
         management_address:
             type: string
+            description: the management address of the DBMS
         management_port:
             type: string
+            description: the management port of the DBMS
     capabilities:
         host:
             type: tosca.capabilities.Compute
@@ -1044,7 +1262,7 @@ mysql.dbms:
 
 #### mysql.database
 
-
+The &#34;mysql.database&#34; node type manages a MySQL database, which is hosted on a MySQL and which can be accessed by other components.
 
 ```yaml linenums="1"
 mysql.database:
@@ -1054,15 +1272,20 @@ mysql.database:
     properties:
         database_name:
             type: string
+            description: the name of the database
         database_user:
             type: string
+            description: the user of the database
         database_password:
             type: string
+            description: the password for the database user
     attributes:
         application_address:
             type: string
+            description: the application address of the DBMS
         application_port:
             type: string
+            description: the application port of the DBMS
     capabilities:
         database:
             type: tosca.capabilities.Endpoint.Database
@@ -1070,6 +1293,47 @@ mysql.database:
         - host:
               capability: tosca.capabilities.Compute
               relationship: tosca.relationships.HostedOn
+```
+
+#### minio.server
+
+The &#34;minio.server&#34; node type manages a MinIO server.
+
+```yaml linenums="1"
+minio.server:
+    derived_from: service.application
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        access_key:
+            type: string
+            metadata:
+                vintner_name: MINIO_ROOT_USER
+            description: the access key of the MinIO server
+        secret_key:
+            type: string
+            metadata:
+                vintner_name: MINIO_ROOT_PASSWORD
+            description: the secret key of the MinIO server
+    attributes:
+        storage_dialect:
+            type: string
+            default: minio
+```
+
+#### redis.server
+
+The &#34;redis.server&#34; node type manages a Redis server.
+
+```yaml linenums="1"
+redis.server:
+    derived_from: cache
+    metadata:
+        vintner_normative: 'true'
+    properties:
+        application_protocol:
+            type: string
+            default: redis
 ```
 
 
