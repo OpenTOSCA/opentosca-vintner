@@ -7,7 +7,7 @@ tags:
 
 --8<-- "enumerate.html"
 
-# DRAFT: Deployment Technology Rules Specification 1.0 Release Candidate
+# Deployment Technology Rules Specification 1.0 Release Candidate
 
 !!! info "Hidden Information"
     The document does not specify quality assignments at this stage.

@@ -282,7 +282,7 @@ software.application:
 
 #### service.application
 
-The abstract &#34;service.application&#34; node type defines a generic software application, which provides a service.
+The abstract &#34;service.application&#34; node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
 
 ```yaml linenums="1"
 service.application:
@@ -574,7 +574,7 @@ file.storage:
 
 #### ingress
 
-The abstract &#34;ingress&#34; node type defines a generic ingress service, which is a reverse proxy that exposes an upstream application.
+The &#34;ingress&#34; node type manages a generic ingress service, which is a reverse proxy that exposes an upstream application. It is not normative how this component is implemented. This could be implemented by an Ingress resource on Kubernetes or by a reverse proxy, such as NGINX or Caddy, on a virtual machine.
 
 ```yaml linenums="1"
 ingress:
