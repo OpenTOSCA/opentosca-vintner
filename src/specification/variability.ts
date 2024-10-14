@@ -20,7 +20,9 @@ export type VariabilityInputDefinition = {
     description?: string
     default?: InputAssignmentValue
     default_expression?: ValueExpression
-    implies?: string | string[]
+    mandatory?: string | string[]
+    optional?: string | string[]
+    requires?: string | string[]
     excludes?: string | string[]
     alternatives?: string[]
     choices?: string[]

@@ -5,8 +5,8 @@ topology_template:
         inputs:
             first:
                 type: boolean
-                default: true
-                implies: second
+                default: yes
+                requires: second
 
             second:
                 type: boolean
