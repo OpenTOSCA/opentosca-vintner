@@ -895,13 +895,6 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
             assert.isBoolean(this.uniqueOutput)
 
-            if (this.v3) {
-                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
-            } else {
-                this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
-            }
-            assert.isBoolean(this.requiredArtifact)
-
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
             assert.isBoolean(this.requiredIncomingRelation)
         } else {
@@ -926,13 +919,17 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueOutput)
 
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.requiredArtifact)
-
             this.requiredIncomingRelation =
                 this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? false
             assert.isBoolean(this.requiredIncomingRelation)
         }
+
+        if (this.v3) {
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
+        } else {
+            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
+        }
+        assert.isBoolean(this.requiredArtifact)
     }
 }
 

@@ -148,6 +148,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 rule,
             })
 
+            // TODO: hosting conditions should be combined by AND
+
             // TODO: merge then and else block
             if (rule.hosting.length !== 0) {
                 const output: LogicExpression[][] = []
