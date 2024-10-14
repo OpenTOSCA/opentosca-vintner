@@ -24,18 +24,18 @@ node_types:
 topology_template:
     variability:
         technology_rules:
-            ansible:
-                - component: application
-                  artifact: first.artifact.type
+            - component: application
+              technology: ansible
+              artifact: first.artifact.type
     node_templates:
         application:
             type: application
             persistent: true
             artifacts:
-                - first_artifact_type:
+                - first_artifact:
                       type: first.artifact.type
                       file: first_artifact_file
-                - second_artifact_type:
+                - second_artifact:
                       type: second.artifact.type
                       file: second_artifact_file
 {% endraw %}
@@ -64,7 +64,7 @@ topology_template:
         application:
             type: application~application#first.artifact.type::ansible
             artifacts:
-                first_artifact_type:
+                first_artifact:
                     type: first.artifact.type
                     file: first_artifact_file
 {% endraw %}
