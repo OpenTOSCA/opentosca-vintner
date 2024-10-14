@@ -4,19 +4,22 @@ import {ArtifactTypeMap} from '#spec/artifact-type'
 const artifacts: ArtifactTypeMap = {
     artifact: {
         derived_from: 'tosca.artifacts.Root',
+        description: 'The "root" artifact type describes the root artifact type all other artifact types inherit from.',
         metadata: {
             ...MetadataNormative(),
         },
     },
     'source.archive': {
         derived_from: 'artifact',
-        description: 'application packaged as archive',
+        description:
+            'The "source.archive" artifact type defines a generic archive that holds distribution files of a component.',
         metadata: {
             ...MetadataNormative(),
         },
         properties: {
             extra_opts: {
                 type: 'list',
+                description: 'extra options when extracting the archive',
                 entry_schema: {
                     type: 'string',
                 },
@@ -26,6 +29,8 @@ const artifacts: ArtifactTypeMap = {
     },
     'system.package': {
         derived_from: 'artifact',
+        description:
+            'The "system.package" artifact type defines a package that is installed via a system package manager.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -64,28 +69,32 @@ const artifacts: ArtifactTypeMap = {
     },
     'container.image': {
         derived_from: 'artifact',
-        description: 'expects image reference in "file"',
+        description:
+            'The "container.image" artifact type defines a generic container image. It expects the image reference in the "file" key.',
         metadata: {
             ...MetadataNormative(),
         },
     },
     'machine.image': {
         derived_from: 'artifact',
-        description: 'expects image reference in "file"',
+        description:
+            'The "machine.image" artifact type defines a generic machine image. It expects the image reference in the "file" key.',
         metadata: {
             ...MetadataNormative(),
         },
     },
     'dbms.image': {
         derived_from: 'artifact',
-        description: 'expects image reference in "file"',
+        description:
+            'The "dbms.image" artifact type defines a generic DBMS image. It expects the image reference in the "file" key.',
         metadata: {
             ...MetadataNormative(),
         },
     },
     'cache.image': {
         derived_from: 'artifact',
-        description: 'expects image reference in "file"',
+        description:
+            'The "cache.image" artifact type defines a generic cache image. It expects the image reference in the "file" key.',
         metadata: {
             ...MetadataNormative(),
         },
