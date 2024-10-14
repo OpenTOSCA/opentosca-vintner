@@ -5,14 +5,14 @@ const interfaces: InterfaceTypeMap = {
     interface: {
         derived_from: 'tosca.interfaces.Root',
         description:
-            'The "interface" interface type defines the root interface type all other interface types inherit from.',
+            'The "interface" interface type manages the root interface type all other interface types inherit from.',
         metadata: {
             ...MetadataNormative(),
         },
     },
     management: {
         derived_from: 'interface',
-        description: 'The "management" interface type defines the standard lifecycle management of components.',
+        description: 'The "management" interface type manages the standard lifecycle management of components.',
         metadata: {
             ...MetadataNormative(),
         },

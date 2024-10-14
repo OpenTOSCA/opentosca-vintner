@@ -163,7 +163,7 @@ const nodes: NodeTypeMap = {
     'local.machine': {
         derived_from: 'machine',
         description:
-            'The "local.machine" node type defines a local machine, i.e., localhost. It is capable of hosting, e.g., software components.',
+            'The "local.machine" node type manages a local machine, i.e., localhost. It is capable of hosting, e.g., software components.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -177,7 +177,7 @@ const nodes: NodeTypeMap = {
     'remote.machine': {
         derived_from: 'machine',
         description:
-            'The "remote.machine" node type defines a remote machine, i.e., a machine that is not localhost. It is capable of hosting, e.g., software components.',
+            'The "remote.machine" node type manages a remote machine, i.e., a machine that is not localhost. It is capable of hosting, e.g., software components.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -224,11 +224,11 @@ const nodes: NodeTypeMap = {
     },
     'virtual.machine': {
         derived_from: 'remote.machine',
-        description: 'The "virtual.machine" node type defines a virtual machine.',
+        description: 'The "virtual.machine" node type manages a virtual machine.',
     },
     'physical.machine': {
         derived_from: 'remote.machine',
-        description: 'The "physical.machine" node type defines a physical machine.',
+        description: 'The "physical.machine" node type manages a physical machine.',
     },
     database: {
         derived_from: 'node',
