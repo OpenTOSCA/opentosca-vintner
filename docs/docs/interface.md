@@ -2506,14 +2506,14 @@ implement node types
 
 === "CLI"
     ```shell linenums="1"
-    vintner template implement --dir ${DIR} --experimental ${EXPERIMENTAL}
+    vintner template implement --dir ${DIR}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"dir": "${DIR}", "experimental": "${EXPERIMENTAL}"}' \
+            --data '{"dir": "${DIR}"}' \
             ${SERVER_ADDRESS}/template/implement
     ```
 
@@ -2521,8 +2521,7 @@ implement node types
     ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/implement", {
-		dir: DIR,
-		experimental: EXPERIMENTAL
+		dir: DIR
     })
     ```
 
@@ -2530,8 +2529,7 @@ implement node types
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/implement", json={
-		"dir": DIR,
-		"experimental": EXPERIMENTAL
+		"dir": DIR
     })
     ```
 
@@ -2539,15 +2537,13 @@ implement node types
     ```kotlin linenums="1"
     import khttp.post
     post(SERVER_ADDRESS + "/template/implement", json=mapOf(
-		"dir" to DIR,
-		"experimental" to EXPERIMENTAL
+		"dir" to DIR
     ))
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
 | dir |  true  | string | path to service template directory |
-| experimental |  true  |  | enable experimental feature |
 | orchestrator |  false  | string | the orchestrator for which node type should be implemented (default: "unfurl") |
 
 ## vintner template init
@@ -2903,19 +2899,19 @@ plot types as PlantUML (each entity types is plotted separately)
 
 ## vintner template quality
 
-get quality of template (experimental)
+get quality of template
 
 
 === "CLI"
     ```shell linenums="1"
-    vintner template quality --experimental ${EXPERIMENTAL} --template ${TEMPLATE}
+    vintner template quality --template ${TEMPLATE}
     ```
 
 === "cURL"
     ```shell linenums="1"
     curl --header "Content-Type: application/json" \
             --request POST \
-            --data '{"experimental": "${EXPERIMENTAL}", "template": "${TEMPLATE}"}' \
+            --data '{"template": "${TEMPLATE}"}' \
             ${SERVER_ADDRESS}/template/quality
     ```
 
@@ -2923,7 +2919,6 @@ get quality of template (experimental)
     ```javascript linenums="1"
     const axios = require("axios")
     await axios.post(SERVER_ADDRESS + "/template/quality", {
-		experimental: EXPERIMENTAL,
 		template: TEMPLATE
     })
     ```
@@ -2932,7 +2927,6 @@ get quality of template (experimental)
     ```python linenums="1"
     import requests
     requests.post(SERVER_ADDRESS + "/template/quality", json={
-		"experimental": EXPERIMENTAL,
 		"template": TEMPLATE
     })
     ```
@@ -2941,14 +2935,12 @@ get quality of template (experimental)
     ```kotlin linenums="1"
     import khttp.post
     post(SERVER_ADDRESS + "/template/quality", json=mapOf(
-		"experimental" to EXPERIMENTAL,
 		"template" to TEMPLATE
     ))
     ```
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
-| experimental |  true  |  | enable experimental feature |
 | template |  true  | string | path to service template |
 | presets |  false  | string... | names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS) (default: []) |
 | inputs |  false  | string | path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML], env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_${KEY}) |
@@ -3816,8 +3808,8 @@ returns normative types
 | no-profile |  false  | boolean |  |
 | base |  false  | boolean | include base types (default: true) |
 | no-base |  false  | boolean |  |
-| specific |  false  | boolean | include specific types (default: true) |
-| no-specific |  false  | boolean |  |
+| extended |  false  | boolean | include extended types (default: true) |
+| no-extended |  false  | boolean |  |
 | format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |
 
 ## vintner utils rules
@@ -3857,4 +3849,50 @@ returns technology rules
 
 | Option | Mandatory | Type | Description |
 | --- | --- | --- | --- |
+| format |  false  | string | output format (choices: ["yaml","json","latex","csv"], default: "yaml") |
+
+## vintner utils scenarios
+
+returns deployment scenarios
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils scenarios 
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            ${SERVER_ADDRESS}/utils/scenarios
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/scenarios")
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/scenarios")
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/scenarios")
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| component |  false  | string | component |
+| artifact |  false  | string | artifact |
+| no-artifact |  false  | boolean |  |
+| technology |  false  | string | technology |
+| hosting |  false  | string... | hosting |
+| no-hosting |  false  | boolean |  |
+| quality |  false  | number |  |
 | format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |

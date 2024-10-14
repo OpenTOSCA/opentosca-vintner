@@ -21,23 +21,23 @@ node_types:
 topology_template:
     variability:
         technology_rules:
-            ansible:
-                - component: application
-                  artifact: first.artifact.type
-                  weight: 1
-            terraform:
-                - component: application
-                  artifact: second.artifact.type
-                  weight: 0
+            - component: application
+              technology: ansible
+              artifact: first.artifact.type
+              weight: 1
+            - component: application
+              technology: terraform
+              artifact: second.artifact.type
+              weight: 0
     node_templates:
         application:
             type: application
             persistent: true
             artifacts:
-                - first_artifact_type:
+                - first_artifact:
                       type: first.artifact.type
                       file: first_artifact_file
-                - second_artifact_type:
+                - second_artifact:
                       type: second.artifact.type
                       file: second_artifact_file
 {% endraw %}
@@ -66,7 +66,7 @@ topology_template:
         application:
             type: application~application#first.artifact.type::ansible
             artifacts:
-                first_artifact_type:
+                first_artifact:
                     type: first.artifact.type
                     file: first_artifact_file
 {% endraw %}

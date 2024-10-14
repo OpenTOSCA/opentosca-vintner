@@ -32,12 +32,16 @@ topology_template:
             technology_pruning: true
             technology_constraint: true
         technology_rules:
-            terraform:
-                - component: ansible_host
-                - component: terraform_host
-                - component: ansible_terraform_host
-                - component: database
-                - component: dbms
+            - component: ansible_host
+              technology: terraform
+            - component: terraform_host
+              technology: terraform
+            - component: ansible_terraform_host
+              technology: terraform
+            - component: database
+              technology: terraform
+            - component: dbms
+              technology: terraform
     node_templates:
         application:
             type: application

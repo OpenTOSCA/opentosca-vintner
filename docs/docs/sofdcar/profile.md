@@ -43,7 +43,7 @@ Therefore, we provide type definitions to model such an automotive TOSCA network
 ### Artifact Types
 
 We specify the following normative artifact types.
-An overview is given in Figure tosca-sofdcar-profile-core1.
+An overview is given in Figure C1.
 
 <figure markdown>
 ![Artifact Types](tosca-sofdcar-profile-core.artifact-types.svg)
@@ -80,7 +80,7 @@ sofdcar.artifacts.Implementation:
 ### Capability Types
 
 We specify the following normative capability types.
-An overview is given in Figure tosca-sofdcar-profile-core2.
+An overview is given in Figure C2.
 
 <figure markdown>
 ![Capability Types](tosca-sofdcar-profile-core.capability-types.svg)
@@ -137,7 +137,7 @@ sofdcar.capabilities.Endpoint:
 ### Data Types
 
 We specify the following normative data types.
-An overview is given in Figure tosca-sofdcar-profile-core3.
+An overview is given in Figure C3.
 
 <figure markdown>
 ![Data Types](tosca-sofdcar-profile-core.data-types.svg)
@@ -156,7 +156,7 @@ sofdcar.data.Root:
 ### Group Types
 
 We specify the following normative group types.
-An overview is given in Figure tosca-sofdcar-profile-core4.
+An overview is given in Figure C4.
 
 <figure markdown>
 ![Group Types](tosca-sofdcar-profile-core.group-types.svg)
@@ -202,7 +202,7 @@ sofdcar.groups.Zone:
 ### Interface Types
 
 We specify the following normative interface types.
-An overview is given in Figure tosca-sofdcar-profile-core5.
+An overview is given in Figure C5.
 
 <figure markdown>
 ![Interface Types](tosca-sofdcar-profile-core.interface-types.svg)
@@ -242,7 +242,7 @@ sofdcar.interfaces.Relationship:
 ### Node Types
 
 We specify the following normative node types.
-An overview is given in Figure tosca-sofdcar-profile-core6.
+An overview is given in Figure C6.
 
 <figure markdown>
 ![Node Types](tosca-sofdcar-profile-core.node-types.svg)
@@ -497,7 +497,7 @@ sofdcar.nodes.Feature:
 ### Policy Types
 
 We specify the following normative policy types.
-An overview is given in Figure tosca-sofdcar-profile-core7.
+An overview is given in Figure C7.
 
 <figure markdown>
 ![Policy Types](tosca-sofdcar-profile-core.policy-types.svg)
@@ -534,7 +534,7 @@ sofdcar.policies.Safety:
 ### Relationship Types
 
 We specify the following normative relationship types.
-An overview is given in Figure tosca-sofdcar-profile-core8.
+An overview is given in Figure C8.
 
 <figure markdown>
 ![Relationship Types](tosca-sofdcar-profile-core.relationship-types.svg)
@@ -562,7 +562,7 @@ These types mainly concern specific communications, such as CAN or FlexRay, but 
 ### Capability Types
 
 We specify the following normative capability types.
-An overview is given in Figure tosca-sofdcar-profile-extended1.
+An overview is given in Figure E1.
 
 <figure markdown>
 ![Capability Types](tosca-sofdcar-profile-extended.capability-types.svg)
@@ -653,7 +653,7 @@ sofdcar.capabilities.Endpoint.SOME/IP:
 ### Data Types
 
 We specify the following normative data types.
-An overview is given in Figure tosca-sofdcar-profile-extended2.
+An overview is given in Figure E2.
 
 <figure markdown>
 ![Data Types](tosca-sofdcar-profile-extended.data-types.svg)
@@ -682,7 +682,7 @@ sofdcar.data.GPIO.Pin:
 ### Node Types
 
 We specify the following normative node types.
-An overview is given in Figure tosca-sofdcar-profile-extended3.
+An overview is given in Figure E3.
 
 <figure markdown>
 ![Node Types](tosca-sofdcar-profile-extended.node-types.svg)
@@ -898,7 +898,7 @@ sofdcar.nodes.Arduino.Hardware:
 ### Policy Types
 
 We specify the following normative policy types.
-An overview is given in Figure tosca-sofdcar-profile-extended4.
+An overview is given in Figure E4.
 
 <figure markdown>
 ![Policy Types](tosca-sofdcar-profile-extended.policy-types.svg)
@@ -953,7 +953,7 @@ sofdcar.policies.ASIL.D:
 ### Relationship Types
 
 We specify the following normative relationship types.
-An overview is given in Figure tosca-sofdcar-profile-extended5.
+An overview is given in Figure E5.
 
 <figure markdown>
 ![Relationship Types](tosca-sofdcar-profile-extended.relationship-types.svg)
