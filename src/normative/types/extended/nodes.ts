@@ -554,36 +554,45 @@ const nodes: NodeTypeMap = {
     },
     'mysql.dbms': {
         derived_from: 'relational.dbms',
+        description: 'The "mysql.dbms" node type manages a MySQL DBMS, which is capable of hosting MySQL databases.',
         metadata: {
             ...MetadataNormative(),
         },
         properties: {
             dbms_name: {
                 type: 'string',
+                description: 'the name of the DBMS',
             },
             application_name: {
                 type: 'string',
+                description: 'the name of the DBMS',
             },
             dbms_password: {
                 type: 'string',
+                description: 'the root password of the DBMS',
             },
             dbms_ssl_mode: {
                 type: 'string',
                 default: 'None',
+                description: 'the SSL mode of the DBMS',
             },
         },
         attributes: {
             application_address: {
                 type: 'string',
+                description: 'the application address of the DBMS',
             },
             application_port: {
                 type: 'string',
+                description: 'the application port of the DBMS',
             },
             management_address: {
                 type: 'string',
+                description: 'the management address of the DBMS',
             },
             management_port: {
                 type: 'string',
+                description: 'the management port of the DBMS',
             },
         },
         capabilities: {
@@ -602,26 +611,33 @@ const nodes: NodeTypeMap = {
     },
     'mysql.database': {
         derived_from: 'relational.database',
+        description:
+            'The "mysql.database" node type manages a MySQL database, which is hosted on a MySQL and which can be accessed by other components.',
         metadata: {
             ...MetadataNormative(),
         },
         properties: {
             database_name: {
                 type: 'string',
+                description: 'the name of the database',
             },
             database_user: {
                 type: 'string',
+                description: 'the user of the database',
             },
             database_password: {
                 type: 'string',
+                description: 'the password for the database user',
             },
         },
         attributes: {
             application_address: {
                 type: 'string',
+                description: 'the application address of the DBMS',
             },
             application_port: {
                 type: 'string',
+                description: 'the application port of the DBMS',
             },
         },
         capabilities: {
@@ -640,6 +656,7 @@ const nodes: NodeTypeMap = {
     },
     'minio.server': {
         derived_from: 'service.application',
+        description: 'The "minio.server" node type manages a MinIO server.',
         metadata: {
             ...MetadataNormative(),
         },
@@ -649,12 +666,14 @@ const nodes: NodeTypeMap = {
                 metadata: {
                     [METADATA.VINTNER_NAME]: 'MINIO_ROOT_USER',
                 },
+                description: 'the access key of the MinIO server',
             },
             secret_key: {
                 type: 'string',
                 metadata: {
                     [METADATA.VINTNER_NAME]: 'MINIO_ROOT_PASSWORD',
                 },
+                description: 'the secret key of the MinIO server',
             },
         },
         attributes: {
@@ -666,6 +685,7 @@ const nodes: NodeTypeMap = {
     },
     'redis.server': {
         derived_from: 'cache',
+        description: 'The "redis.server" node type manages a Redis server.',
         metadata: {
             ...MetadataNormative(),
         },
