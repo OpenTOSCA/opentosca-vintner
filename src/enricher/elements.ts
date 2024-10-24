@@ -32,6 +32,11 @@ export class ElementEnricher {
         return candidates
     }
 
+    /**
+     * This is not part of the VDMM method but of our prototype!
+     * This is just attaching the DTSMs to the components.
+     * However, we might add a check that manually modeled technology assignments actually support the scenario.
+     */
     private enrichImplementations() {
         // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
         if (utils.isEmpty(this.graph.plugins.technology)) return

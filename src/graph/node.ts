@@ -66,6 +66,7 @@ export default class Node extends Element {
         return this.name
     }
 
+    // TODO: NEXT: adapt this to external component
     /**
      * Technology is required if type is not abstract
      */
