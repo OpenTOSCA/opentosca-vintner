@@ -49,7 +49,7 @@ const generator: ImplementationGenerator = {
                             },
                             resource: {
                                 google_project_service: {
-                                    cloud_sql_admin: [
+                                    gcp_service: [
                                         {
                                             disable_on_destroy: false,
                                             project: '{{ SELF.gcp_project }}',
