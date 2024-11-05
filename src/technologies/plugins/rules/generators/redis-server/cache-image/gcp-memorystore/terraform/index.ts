@@ -2,7 +2,7 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: connectivity
+// TODO: connectivity, see https://cloud.google.com/memorystore/docs/redis/connect-redis-instance
 
 const generator: ImplementationGenerator = {
     component: 'redis.server',

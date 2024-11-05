@@ -6,6 +6,11 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/ansible'
 import {LOCALHOST, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
+/**
+ * Using https://github.com/geerlingguy/ansible-role-docker would further improve the Ansible playbook.
+ * However, we already have the highest quality relatively to Terraform.
+ */
+
 const generator: ImplementationGenerator = {
     component: 'docker.engine',
     technology: 'ansible',
