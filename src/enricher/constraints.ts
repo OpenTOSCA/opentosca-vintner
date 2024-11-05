@@ -40,12 +40,6 @@ export class ConstraintEnricher {
         }
         assert.isDefined(left, 'Left not defined')
 
-        // TODO: issue a manaul id
-
-        // Sanity check
-        if (!(element.isRelation() || element.isArtifact() || element.isProperty()))
-            throw new Error(`${element.Display} is not issued a manual id`)
-
         this.graph.addConstraint({
             implies: [{and: [element.container.id, element.manualId]}, element.id],
         })
