@@ -7075,8 +7075,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../tests/test-variability-inputs-implies/" class="md-nav__link">
-        variability-inputs-implies
+      <a href="../tests/test-variability-inputs-no-constraints/" class="md-nav__link">
+        variability-inputs-no-constraints
       </a>
     </li>
   
@@ -7089,8 +7089,50 @@
   
   
     <li class="md-nav__item">
-      <a href="../tests/test-variability-inputs-no-constraints/" class="md-nav__link">
-        variability-inputs-no-constraints
+      <a href="../tests/test-variability-inputs-requires-throw-falsy/" class="md-nav__link">
+        variability-inputs-requires-throw-falsy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-variability-inputs-requires-throw-truthy/" class="md-nav__link">
+        variability-inputs-requires-throw-truthy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-variability-inputs-requires-throw/" class="md-nav__link">
+        variability-inputs-requires-throw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-variability-inputs-requires/" class="md-nav__link">
+        variability-inputs-requires
       </a>
     </li>
   
@@ -8911,16 +8953,22 @@ Furthermore, two variability conditions <code>is_dev</code> and <code>is_prod</c
 <td>A value expression as default.</td>
 </tr>
 <tr>
-<td>implies</td>
+<td>mandatory</td>
 <td>false</td>
 <td>String &#124; List(String)</td>
-<td>Implies/ requires another variability input.</td>
+<td>Mandatory variability inputs.</td>
 </tr>
 <tr>
-<td>excludes</td>
+<td>optional</td>
 <td>false</td>
 <td>String &#124; List(String)</td>
-<td>Excludes another variability input.</td>
+<td>Any other variability input.</td>
+</tr>
+<tr>
+<td>choices</td>
+<td>false</td>
+<td>List(String)</td>
+<td>Requires none, one, or multiple of referenced variability input.</td>
 </tr>
 <tr>
 <td>alternatives</td>
@@ -8929,10 +8977,16 @@ Furthermore, two variability conditions <code>is_dev</code> and <code>is_prod</c
 <td>Requires exactly one of the referenced variability input.</td>
 </tr>
 <tr>
-<td>choices</td>
+<td>requires</td>
 <td>false</td>
-<td>List(String)</td>
-<td>Requires none, one, or multiple of referenced variability input.</td>
+<td>String &#124; List(String)</td>
+<td>(Cross-tree) Implies/ requires another variability input.</td>
+</tr>
+<tr>
+<td>excludes</td>
+<td>false</td>
+<td>String &#124; List(String)</td>
+<td>(Cross-tree) Excludes another variability input.</td>
 </tr>
 </tbody>
 </table>

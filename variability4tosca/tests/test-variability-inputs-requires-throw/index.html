@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-implies/">
+        <link rel="canonical" href="https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires-throw/">
       
       
-        <link rel="prev" href="../test-technologies-unique/">
+        <link rel="prev" href="../test-variability-inputs-requires-throw-truthy/">
       
       
-        <link rel="next" href="../test-variability-inputs-no-constraints/">
+        <link rel="next" href="../test-variability-inputs-requires/">
       
       <link rel="icon" href="../../../assets/images/vintner/icon/vintner-icon-bold.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.21">
     
     
       
-        <title>variability-inputs-implies - OpenTOSCA Vintner</title>
+        <title>variability-inputs-requires-throw - OpenTOSCA Vintner</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#variability-inputs-implies" class="md-skip">
+        <a href="#variability-inputs-requires-throw" class="md-skip">
           Skip to content
         </a>
       
@@ -351,7 +351,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              variability-inputs-implies
+              variability-inputs-requires-throw
             
           </span>
         </div>
@@ -6543,6 +6543,48 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../test-variability-inputs-no-constraints/" class="md-nav__link">
+        variability-inputs-no-constraints
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-variability-inputs-requires-throw-falsy/" class="md-nav__link">
+        variability-inputs-requires-throw-falsy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-variability-inputs-requires-throw-truthy/" class="md-nav__link">
+        variability-inputs-requires-throw-truthy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -6555,12 +6597,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          variability-inputs-implies
+          variability-inputs-requires-throw
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        variability-inputs-implies
+        variability-inputs-requires-throw
       </a>
       
         
@@ -6607,8 +6649,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../test-variability-inputs-no-constraints/" class="md-nav__link">
-        variability-inputs-no-constraints
+      <a href="../test-variability-inputs-requires/" class="md-nav__link">
+        variability-inputs-requires
       </a>
     </li>
   
@@ -7707,7 +7749,7 @@
 
 
 
-<h1 id="variability-inputs-implies">variability-inputs-implies<a class="headerlink" href="#variability-inputs-implies" title="Permanent link">&para;</a></h1>
+<h1 id="variability-inputs-requires-throw">variability-inputs-requires-throw<a class="headerlink" href="#variability-inputs-requires-throw" title="Permanent link">&para;</a></h1>
 <h2 id="variable-service-template">Variable Service Template<a class="headerlink" href="#variable-service-template" title="Permanent link">&para;</a></h2>
 <p>The variability of the following variable service template shall be resolved.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -7727,7 +7769,7 @@
 <a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">            </span><span class="nt">first</span><span class="p">:</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">                </span><span class="nt">implies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">                </span><span class="nt">requires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">second</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">            </span><span class="nt">second</span><span class="p">:</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">                </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
@@ -7768,7 +7810,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../test-technologies-unique/" class="md-footer__link md-footer__link--prev" aria-label="Previous: technologies-unique" rel="prev">
+          <a href="../test-variability-inputs-requires-throw-truthy/" class="md-footer__link md-footer__link--prev" aria-label="Previous: variability-inputs-requires-throw-truthy" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -7777,20 +7819,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                technologies-unique
+                variability-inputs-requires-throw-truthy
               </div>
             </div>
           </a>
         
         
           
-          <a href="../test-variability-inputs-no-constraints/" class="md-footer__link md-footer__link--next" aria-label="Next: variability-inputs-no-constraints" rel="next">
+          <a href="../test-variability-inputs-requires/" class="md-footer__link md-footer__link--next" aria-label="Next: variability-inputs-requires" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                variability-inputs-no-constraints
+                variability-inputs-requires
               </div>
             </div>
             <div class="md-footer__button md-icon">

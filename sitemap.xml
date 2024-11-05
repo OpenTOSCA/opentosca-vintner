@@ -1829,11 +1829,23 @@
          <lastmod>2024-11-05</lastmod>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-implies/</loc>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-no-constraints/</loc>
          <lastmod>2024-11-05</lastmod>
     </url>
     <url>
-         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-no-constraints/</loc>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires-throw-falsy/</loc>
+         <lastmod>2024-11-05</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires-throw-truthy/</loc>
+         <lastmod>2024-11-05</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires-throw/</loc>
+         <lastmod>2024-11-05</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires/</loc>
          <lastmod>2024-11-05</lastmod>
     </url>
     <url>
