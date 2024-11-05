@@ -254,28 +254,29 @@ export default class Solver {
 
         // Add manual conditions of a relation separately as own variable into the sat solver.
         // Manual conditions are referenced by has_incoming_relation and has_artifact as well as by implied relations.
-        if (element.isRelation() || element.isArtifact()) {
-            // Optimization if manual conditions are empty, thus, "true" is fallback
-            if (utils.isEmpty(conditions)) {
-                this.minisat.require(element.manualId)
-            } else {
-                this.minisat.require(
-                    MiniSat.equiv(
-                        element.manualId,
-                        this.transformLogicExpression(
-                            andify(
-                                conditions.filter(it => {
-                                    // This also includes _bratan
-                                    if (check.isObject(it)) return !it._generated
-                                    return true
-                                })
-                            ),
-                            {element}
-                        )
+        // Also, they are used to prevent pruning input-consuming properties
+        //if (element.isRelation() || element.isArtifact() || element.isProperty()) {
+        // Optimization if manual conditions are empty, thus, "true" is fallback
+        if (utils.isEmpty(conditions)) {
+            this.minisat.require(element.manualId)
+        } else {
+            this.minisat.require(
+                MiniSat.equiv(
+                    element.manualId,
+                    this.transformLogicExpression(
+                        andify(
+                            conditions.filter(it => {
+                                // This also includes _bratan
+                                if (check.isObject(it)) return !it._generated
+                                return true
+                            })
+                        ),
+                        {element}
                     )
                 )
-            }
+            )
         }
+        //}
 
         // If there are no conditions assigned, then the element is present
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)

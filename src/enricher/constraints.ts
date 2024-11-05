@@ -40,8 +40,10 @@ export class ConstraintEnricher {
         }
         assert.isDefined(left, 'Left not defined')
 
+        // TODO: issue a manaul id
+
         // Sanity check
-        if (!(element.isRelation() || element.isArtifact()))
+        if (!(element.isRelation() || element.isArtifact() || element.isProperty()))
             throw new Error(`${element.Display} is not issued a manual id`)
 
         this.graph.addConstraint({
@@ -107,7 +109,11 @@ export class ConstraintEnricher {
                 ...this.graph.artifacts,
             ]) {
                 for (const properties of element.propertiesMap.values()) {
-                    this.graph.addConstraint({amo: properties.map(it => it.id)})
+                    // TODO: CRITICAL: REVERT THIS
+                    if (properties.length === 0) continue
+                    this.graph.addConstraint({
+                        implies: [properties[0].container.id, {exo: properties.map(it => it.id)}],
+                    })
                 }
             }
         }

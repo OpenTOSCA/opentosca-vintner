@@ -1,5 +1,6 @@
 import * as check from '#check'
-import {bratify} from '#graph/utils'
+import Input from '#graph/input'
+import {andify, bratify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
@@ -32,6 +33,8 @@ export default class Property extends Element {
 
     value?: PropertyAssignmentValue
     readonly expression?: ValueExpression
+
+    consuming?: Property | Input | Node | Relation | Group | Policy | Artifact
 
     constructor(data: {
         name: string
@@ -91,7 +94,17 @@ export default class Property extends Element {
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
     getElementGenericCondition() {
-        return [{conditions: this.container.presenceCondition, consistency: true, semantic: false}]
+        const conditions: LogicExpression[] = []
+
+        // Container pruning
+        conditions.push(this.container.presenceCondition)
+
+        // Input value pruning
+        if (check.isDefined(this.consuming)) {
+            conditions.push(this.consuming.presenceCondition)
+        }
+
+        return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
 
     constructPresenceCondition() {
@@ -101,6 +114,14 @@ export default class Property extends Element {
     // Check if no other property having the same name is present
     constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+    }
+
+    /**
+     * A property is implied by default.
+     * This is also okay for default alternatives since bratan condition is a manual condition.
+     */
+    get implied() {
+        return this.raw.implied ?? true
     }
 
     isProperty() {

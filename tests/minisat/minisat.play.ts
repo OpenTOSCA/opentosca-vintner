@@ -23,7 +23,8 @@ async function play(data: string) {
 
     hotfixPersistentCheck(template)
 
-    const solver = new Solver(new Graph(template), {})
+    const solver = new Solver(new Graph(template, {nope: true}), {})
+
     const results = solver.runAll().map(it => utils.sort(it))
     std.log(`Results: ${results.length}`)
     std.log(results)

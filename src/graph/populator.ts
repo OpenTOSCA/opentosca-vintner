@@ -19,9 +19,11 @@ import * as utils from '#utils'
 
 export class Populator {
     graph: Graph
+    options: {nope: boolean}
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: {nope: boolean} = {nope: false}) {
         this.graph = graph
+        this.options = options
     }
 
     run() {
@@ -392,6 +394,38 @@ export class Populator {
             this.graph.properties.push(property)
         }
 
+        // TODO: move this into normalizer?
+        // TODO: dont extend after transpiling bratans
+        // TODO: NEXT: add undefined default alternative
+        if (!this.options.nope) {
+            // Ensure that there is only one default property per property name
+            element.propertiesMap.forEach(properties => {
+                const alternative = properties.find(it => it.defaultAlternative)
+                if (check.isDefined(alternative)) return
+
+                const some = properties[0]
+                assert.isDefined(some)
+
+                console.log(`not defined for ${some.display}`)
+
+                const property = new Property({
+                    name: some.name,
+                    container: some.container,
+                    index: properties.length,
+                    raw: {
+                        value: 'VINTNER_UNDEFINED',
+                        default_alternative: true,
+                        implied: true,
+                    },
+                })
+
+                property.graph = this.graph
+                properties.push(property)
+                element.properties.push(property)
+                this.graph.properties.push(property)
+            })
+        }
+
         // Ensure that there is only one default property per property name
         element.propertiesMap.forEach(properties => {
             const candidates = properties.filter(it => it.defaultAlternative)
@@ -481,27 +515,37 @@ export class Populator {
     /**
      * We only support simple consumers, i.e., directly accessed by properties
      */
+    // TODO: unfurl syntax support?
     private populateConsumers() {
-        for (const input of this.graph.inputs) {
-            for (const property of this.graph.properties) {
-                const value = property.value
-                if (check.isObject(value) && !check.isArray(value) && check.isDefined(value.get_input)) {
-                    // Referenced by name
-                    if (check.isString(value.get_input)) {
-                        if (value.get_input === input.name) input.consumers.push(property)
-                        continue
-                    }
+        for (const property of this.graph.properties) {
+            const value = property.value
+            if (!check.isObject(value) || check.isArray(value)) continue
 
-                    // Referenced by index
-                    if (check.isNumber(value.get_input)) {
-                        if (value.get_input === input.index) input.consumers.push(property)
-                        continue
-                    }
+            if (check.isDefined(value.get_input)) {
+                assert.isStringOrNumber(value.get_input)
+                const input = this.graph.getInput(value.get_input)
 
-                    throw new Error(
-                        `${property.Display} has neither number nor string in get_input but "${value.get_input}"`
-                    )
-                }
+                input.consumers.push(property)
+                property.consuming = input
+            }
+
+            if (check.isDefined(value.get_property)) {
+                assert.isArray(value.get_property)
+                assert.isString(value.get_property[0])
+                assert.isString(value.get_property[1])
+                // TODO: find all properties? only component?
+                // TODO: only for nodes?
+                property.consuming = this.graph.getNodeProperty([value.get_property[0], value.get_property[1]], {
+                    element: property.container,
+                })
+                console.log(`${property.Display} is consuming ${property.consuming.display}`)
+            }
+
+            if (check.isDefined(value.get_attribute)) {
+                assert.isArray(value.get_attribute)
+                assert.isString(value.get_attribute[0])
+                // TODO: this is only correct for get_attribute SELF
+                property.consuming = property.container
             }
         }
     }
