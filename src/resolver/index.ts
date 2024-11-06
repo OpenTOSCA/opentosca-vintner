@@ -108,7 +108,7 @@ export function hotfixPersistentCheck(template: ServiceTemplate) {
             template.topology_template.variability.options = {}
         }
 
-        template.topology_template.variability.options.hotfix_persistent_check = false
+        template.topology_template.variability.options.persistent_check = false
     }
 }
 
@@ -129,6 +129,6 @@ export function hotfixBratans(template: ServiceTemplate) {
             template.topology_template.variability.options = {}
         }
 
-        template.topology_template.variability.options.hotfix_bratans_unknown = true
+        template.topology_template.variability.options.bratans_unknown = true
     }
 }

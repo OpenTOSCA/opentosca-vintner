@@ -394,7 +394,7 @@ export class Populator {
 
         // TODO: move this into normalizer?
         // TODO: we now cant use node_property_presence: [string, string] anymore since property name is always ambiguous (however, this also never made sense in the first place if there is only a single property variant)
-        if (this.graph.serviceTemplate?.topology_template?.variability?.options?.hotfix_bratans_unknown !== true) {
+        if (this.graph.serviceTemplate?.topology_template?.variability?.options?.bratans_unknown !== true) {
             // Ensure that there is only one default property per property name
             element.propertiesMap.forEach(properties => {
                 const alternative = properties.find(it => it.defaultAlternative)
@@ -412,6 +412,7 @@ export class Populator {
                     value: VINTNER_UNDEFINED,
                     default_alternative: true,
                     implied: true,
+                    pruning: true,
                 }
 
                 const property = new Property({
@@ -425,6 +426,7 @@ export class Populator {
                 properties.push(property)
                 element.properties.push(property)
                 this.graph.properties.push(property)
+                // Do not add it to this.graph.elements since this will happen later
 
                 // TODO: also for other types
                 if (element.isNode()) {

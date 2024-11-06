@@ -216,8 +216,8 @@ export type ChecksOptions = {
     expected_incoming_relation_check?: boolean
     expected_artifact_check?: boolean
 
-    hotfix_persistent_check?: boolean
-    hotfix_bratans_unknown?: boolean
+    persistent_check?: boolean
+    bratans_unknown?: boolean
 
     expected_technology_check?: boolean
     missing_technology_container_check?: boolean
