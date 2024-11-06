@@ -95,7 +95,7 @@ export default class Graph {
 
     plugins: {technology: TechnologyPlugin[]} = {technology: []}
 
-    constructor(serviceTemplate: ServiceTemplate, options: {nope: boolean} = {nope: false}) {
+    constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
 
         /**
@@ -125,7 +125,7 @@ export default class Graph {
         /**
          * Populator
          */
-        new Populator(this, options).run()
+        new Populator(this).run()
     }
 
     getNode(name: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', context: Context = {}): Node {

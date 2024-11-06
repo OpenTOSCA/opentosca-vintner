@@ -632,7 +632,7 @@ class ChecksOptions extends BaseOptions {
         this.expectedArtifact = this.raw.expected_artifact_check ?? this.semantic
         assert.isBoolean(this.expectedArtifact)
 
-        this.persistent = this.raw.persistent_check ?? this.checks
+        this.persistent = this.raw.hotfix_persistent_check ?? this.checks
         assert.isBoolean(this.persistent)
 
         this.expectedTechnology = this.raw.expected_technology_check ?? this.semantic

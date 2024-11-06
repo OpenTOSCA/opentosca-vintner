@@ -8,7 +8,7 @@ topology_template:
     variability:
         options:
             enrich_implementations: false
-            required_technology: false
+            enrich_technologies: false
 
     inputs:
         some_input:
@@ -29,7 +29,7 @@ topology_template:
                       conditions: false
                       implied: true
 
-            #    - some_property:
-            #          value: NOT_DEFINED
-            #          default_alternative: true
-            #          implied: true
+                - some_property:
+                      value: NOT_DEFINED
+                      default_alternative: true
+                      implied: true

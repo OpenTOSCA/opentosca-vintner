@@ -1,7 +1,7 @@
 import Enricher from '#enricher'
 import * as files from '#files'
 import Graph from '#graph/graph'
-import {hotfixPersistentCheck} from '#resolver'
+import {hotfixBratans, hotfixPersistentCheck} from '#resolver'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
@@ -22,8 +22,9 @@ async function play(data: string) {
     await new Enricher(template).run()
 
     hotfixPersistentCheck(template)
+    hotfixBratans(template)
 
-    const solver = new Solver(new Graph(template, {nope: true}), {})
+    const solver = new Solver(new Graph(template), {})
 
     const results = solver.runAll().map(it => utils.sort(it))
     std.log(`Results: ${results.length}`)
