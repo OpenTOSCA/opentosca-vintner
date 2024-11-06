@@ -33,10 +33,12 @@ export default class Validator {
     private required() {
         return Object.values(this.graph.serviceTemplate.topology_template?.variability?.inputs || {}).some(
             it =>
-                check.isDefined(it.implies) ||
-                check.isDefined(it.excludes) ||
+                check.isDefined(it.mandatory) ||
+                check.isDefined(it.optional) ||
+                check.isDefined(it.choices) ||
                 check.isDefined(it.alternatives) ||
-                check.isDefined(it.choices)
+                check.isDefined(it.requires) ||
+                check.isDefined(it.excludes)
         )
     }
 
@@ -53,17 +55,71 @@ export default class Validator {
         for (const [name, input] of Object.entries(
             this.graph.serviceTemplate.topology_template?.variability?.inputs || {}
         )) {
-            if (check.isDefined(input.implies)) {
-                if (check.isString(input.implies)) input.implies = [input.implies]
-                assert.isArray(input.implies)
+            /**
+             * Mandatory: Input <=> Each of Mandatory
+             */
+            if (check.isDefined(input.mandatory)) {
+                if (check.isString(input.mandatory)) input.mandatory = [input.mandatory]
+                assert.isArray(input.mandatory)
+                input.mandatory.forEach(it => assert.isString(it))
 
-                for (const right of input.implies) {
+                input.mandatory.forEach(it => {
+                    const constraint = MiniSat.equiv(name, it)
+                    this.minisat.require(constraint)
+                })
+            }
+
+            /**
+             * Optional: Any of Optional => Input
+             */
+            if (check.isDefined(input.optional)) {
+                if (check.isString(input.optional)) input.mandatory = [input.optional]
+                assert.isArray(input.optional)
+                input.optional.forEach(it => assert.isString(it))
+
+                input.optional.forEach(it => {
+                    const constraint = MiniSat.implies(it, name)
+                    this.minisat.require(constraint)
+                })
+            }
+
+            /**
+             * Choices: Input => At least one of Choices
+             */
+            if (check.isDefined(input.choices)) {
+                assert.isArray(input.choices)
+                input.choices.forEach(it => assert.isString(it))
+                const constraint = MiniSat.implies(name, MiniSat.or(input.choices))
+                this.minisat.require(constraint)
+            }
+
+            /**
+             * Alternatives: Input => Exactly one of Alternatives
+             */
+            if (check.isDefined(input.alternatives)) {
+                assert.isArray(input.alternatives)
+                input.alternatives.forEach(it => assert.isString(it))
+                const constraint = MiniSat.implies(name, MiniSat.exactlyOne(input.alternatives))
+                this.minisat.require(constraint)
+            }
+
+            /**
+             * Requires: Input => Each of Requires
+             */
+            if (check.isDefined(input.requires)) {
+                if (check.isString(input.requires)) input.requires = [input.requires]
+                assert.isArray(input.requires)
+
+                for (const right of input.requires) {
                     assert.isString(right)
                     const constraint = MiniSat.implies(name, right)
                     this.minisat.require(constraint)
                 }
             }
 
+            /**
+             * Excludes: Input => Not any of Excludes
+             */
             if (check.isDefined(input.excludes)) {
                 if (check.isString(input.excludes)) input.excludes = [input.excludes]
                 assert.isArray(input.excludes)
@@ -74,20 +130,6 @@ export default class Validator {
                     this.minisat.require(constraint)
                 }
             }
-
-            if (check.isDefined(input.alternatives)) {
-                assert.isArray(input.alternatives)
-                input.alternatives.forEach(it => assert.isString(it))
-                const constraint = MiniSat.implies(name, MiniSat.exactlyOne(input.alternatives))
-                this.minisat.require(constraint)
-            }
-
-            if (check.isDefined(input.choices)) {
-                assert.isArray(input.choices)
-                input.choices.forEach(it => assert.isString(it))
-                const constraint = MiniSat.implies(name, MiniSat.or(input.choices))
-                this.minisat.require(constraint)
-            }
         }
 
         /**
@@ -97,13 +139,17 @@ export default class Validator {
             this.graph.serviceTemplate.topology_template?.variability?.inputs || {}
         )) {
             // TODO: support default expressions of variability inputs
-            // TODO: support non-boolean variability inputs
 
             const value = this.inputs[name] ?? definition.default
-            assert.isBoolean(value, `Variability input ${name} is not a Boolean`)
 
-            if (check.isTrue(value)) this.minisat.require(name)
-            if (check.isFalse(value)) this.minisat.require(MiniSat.not(name))
+            // Check if truthy or falsy
+            if (check.isUndefined(value) || check.isFalse(value) || value === 0) {
+                // Case: Falsy
+                this.minisat.require(MiniSat.not(name))
+            } else {
+                // Case: Truthy
+                this.minisat.require(name)
+            }
         }
     }
 

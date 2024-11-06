@@ -16,7 +16,7 @@ topology_template:
             first:
                 type: boolean
                 default: true
-                implies: second
+                requires: second
             second:
                 type: boolean
                 default: false
