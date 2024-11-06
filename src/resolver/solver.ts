@@ -255,7 +255,6 @@ export default class Solver {
         // Add manual conditions of a relation separately as own variable into the sat solver.
         // Manual conditions are referenced by has_incoming_relation and has_artifact as well as by implied relations.
         // Also, they are used to prevent pruning input-consuming properties
-        //if (element.isRelation() || element.isArtifact() || element.isProperty()) {
         // Optimization if manual conditions are empty, thus, "true" is fallback
         if (utils.isEmpty(conditions)) {
             this.minisat.require(element.manualId)
@@ -276,7 +275,6 @@ export default class Solver {
                 )
             )
         }
-        //}
 
         // If there are no conditions assigned, then the element is present
         if (utils.isEmpty(conditions)) return this.minisat.require(element.id)
