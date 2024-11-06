@@ -66,9 +66,6 @@ topology_template:
             type: string
 
     variability:
-        options:
-            property_constraint: false
-
         expressions:
             is_gcp: {equal: [{variability_input: env}, GCP]}
             is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}

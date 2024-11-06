@@ -428,8 +428,9 @@ export class Populator {
                 this.graph.properties.push(property)
                 // Do not add it to this.graph.elements since this will happen later
 
-                // TODO: also for other types
-                if (element.isNode()) {
+                if (element.isRelation()) {
+                    // TODO: do this for relations too
+                } else {
                     assert.isArray(element.raw.properties, `${element.Display} not normalized`)
                     element.raw.properties.push({[some.name]: raw})
                 }
