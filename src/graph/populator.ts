@@ -429,7 +429,8 @@ export class Populator {
                 // Do not add it to this.graph.elements since this will happen later
 
                 if (element.isRelation()) {
-                    // TODO: do this for relations too
+                    assert.isArray(element.relationship.raw.properties, `${element.Display} not normalized`)
+                    element.relationship.raw.properties.push({[some.name]: raw})
                 } else {
                     assert.isArray(element.raw.properties, `${element.Display} not normalized`)
                     element.raw.properties.push({[some.name]: raw})
