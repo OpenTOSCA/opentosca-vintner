@@ -406,7 +406,7 @@ export class Populator {
                 /**
                  * Could use default value as defined in property definition
                  * But we do not utilize default values in property definitions in VDMM.
-                 * They are still used once deployed.
+                 * They are still used once deployed since we remove VINTNER_UNDEFINED later.
                  */
                 const raw = {
                     value: VINTNER_UNDEFINED,
