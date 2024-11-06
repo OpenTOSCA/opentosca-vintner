@@ -216,31 +216,32 @@ The following options are used to configure the pruning of elements.
 
 The following options are used to configure checks.
 
-| Keyname                            | Mandatory | Type      | Default | Description                                                                     |
-|------------------------------------|-----------|-----------|---------|---------------------------------------------------------------------------------|
-| checks                             | false     | Boolean   | true    | Enable all checks.                                                              |
-| consistency_checks                 | false     | Boolean   | true    | Enable all consistency checks.                                                  |
-| semantic_checks                    | false     | Boolean   | true    | Enable all semantic checks.                                                     |
-| relation_source_check              | false     | Boolean   | true    | Enable the consistency check regarding present relation sources.                |
-| relation_target_check              | false     | Boolean   | true    | Enable the consistency check regarding present relation targets.                |
-| ambiguous_hosting_check            | false     | Boolean   | true    | Enable the consistency check regarding at maximum one present hosting relation. |
-| missing_artifact_container_check   | false     | Boolean   | true    | Enable the consistency check regarding present container of artifacts.          |
-| ambiguous_artifact_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present artifacts.             |
-| missing_property_container_check   | false     | Boolean   | true    | Enable the consistency check regarding present container of properties.         |
-| ambiguous_property_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present properties.            |
-| missing_type_container_check       | false     | Boolean   | true    | Enable the consistency check regarding present containers of types.             |
-| ambiguous_type_check               | false     | Boolean   | ture    | Enable the consistency check regarding exactly one present type per container.  |
-| expected_hosting_check             | false     | Boolean   | true    | Enable the semantic check regarding an expected present hosting relation.       |
-| expected_incoming_relation_check   | false     | Boolean   | true    | Enable the semantic check regarding an expected incoming relation.              |
-| expected_artifact_check            | false     | Boolean   | true    | Enable the semantic check regarding an expected artifact.                       |
-| expected_technology_check          | false     | Boolean   | true    | Enable the consistency check regarding present technologies.                    |
-| missing_technology_container_check | false     | Boolean   | true    | Enable the consistency check regarding present container of technologies.       |
-| ambiguous_technology_check         | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present technologies.          |
-| ambiguous_relation_check           | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present relations.             |
-| ambiguous_input_check              | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present inputs.                |
-| ambiguous_output_check             | false     | Boolean   | true    | Enable the consistency check regarding ambiguous present outputs.               |
-| unconsumed_input_check             | false     | Boolean   | true    | Enable the semantic check regarding not consumed inputs.                        |
-| unproduced_output_check            | false     | Boolean   | true    | Enable the consistency check regarding not produced outputs.                    |
+| Keyname                            | Mandatory | Type    | Default | Description                                                                     |
+|------------------------------------|-----------|---------|---------|---------------------------------------------------------------------------------|
+| checks                             | false     | Boolean | true    | Enable all checks.                                                              |
+| consistency_checks                 | false     | Boolean | true    | Enable all consistency checks.                                                  |
+| semantic_checks                    | false     | Boolean | true    | Enable all semantic checks.                                                     |
+| relation_source_check              | false     | Boolean | true    | Enable the consistency check regarding present relation sources.                |
+| relation_target_check              | false     | Boolean | true    | Enable the consistency check regarding present relation targets.                |
+| ambiguous_hosting_check            | false     | Boolean | true    | Enable the consistency check regarding at maximum one present hosting relation. |
+| missing_artifact_container_check   | false     | Boolean | true    | Enable the consistency check regarding present container of artifacts.          |
+| ambiguous_artifact_check           | false     | Boolean | true    | Enable the consistency check regarding ambiguous present artifacts.             |
+| missing_property_container_check   | false     | Boolean | true    | Enable the consistency check regarding present container of properties.         |
+| ambiguous_property_check           | false     | Boolean | true    | Enable the consistency check regarding ambiguous present properties.            |
+| missing_type_container_check       | false     | Boolean | true    | Enable the consistency check regarding present containers of types.             |
+| ambiguous_type_check               | false     | Boolean | ture    | Enable the consistency check regarding exactly one present type per container.  |
+| expected_hosting_check             | false     | Boolean | true    | Enable the semantic check regarding an expected present hosting relation.       |
+| expected_incoming_relation_check   | false     | Boolean | true    | Enable the semantic check regarding an expected incoming relation.              |
+| expected_artifact_check            | false     | Boolean | true    | Enable the semantic check regarding an expected artifact.                       |
+| expected_technology_check          | false     | Boolean | true    | Enable the consistency check regarding present technologies.                    |
+| missing_technology_container_check | false     | Boolean | true    | Enable the consistency check regarding present container of technologies.       |
+| ambiguous_technology_check         | false     | Boolean | true    | Enable the consistency check regarding ambiguous present technologies.          |
+| ambiguous_relation_check           | false     | Boolean | true    | Enable the consistency check regarding ambiguous present relations.             |
+| ambiguous_input_check              | false     | Boolean | true    | Enable the consistency check regarding ambiguous present inputs.                |
+| ambiguous_output_check             | false     | Boolean | true    | Enable the consistency check regarding ambiguous present outputs.               |
+| unconsumed_input_check             | false     | Boolean | true    | Enable the semantic check regarding not consumed inputs.                        |
+| unproduced_output_check            | false     | Boolean | true    | Enable the consistency check regarding not produced outputs.                    |
+| required_technology_check          | false     | Boolean | true    | Enable _in the enricher_ if technology is required when enriching technologies  |
 
 ### Solver Options
 
@@ -291,7 +292,7 @@ The following options are used to configure constraints.
 | type_container_constraint             | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
 | hosting_stack_constraint              | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
 | technology_constraint                 | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
-| unique_property_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
+| property_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
 | unique_artifact_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
 | unique_input_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
 | unique_output_constraint              | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
@@ -347,7 +348,7 @@ optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
 technology_constraint: true
 hosting_stack_constraint: true
-unique_property_constraint: true
+property_constraint: true
 unique_artifact_constraint: true
 unique_input_constraint: true
 unique_output_constraint: true

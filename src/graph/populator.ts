@@ -369,7 +369,6 @@ export class Populator {
         }
     }
 
-    // TODO: consider undefined properties with default values?
     // TODO: consider attributes?
     private populateProperties(element: PropertyContainer, template: PropertyContainerTemplate) {
         assert.isObject(template, `${element.Display} not normalized`)
@@ -395,8 +394,8 @@ export class Populator {
         }
 
         // TODO: move this into normalizer?
-        // TODO: dont extend after transpiling bratans
-        // TODO: NEXT: add undefined default alternative
+        // TODO: rework/ resolve this.options.nope: dont extend after transpiling bratans
+        // TODO: we now cant use node_property_presence: [string, string] anymore since property name is always ambiguous (however, this also never made sense in the first place if there is only a single property variant)
         if (!this.options.nope) {
             // Ensure that there is only one default property per property name
             element.propertiesMap.forEach(properties => {
@@ -406,8 +405,14 @@ export class Populator {
                 const some = properties[0]
                 assert.isDefined(some)
 
+                // TODO: remove this
                 console.log(`not defined for ${some.display}`)
 
+                /**
+                 * Could use default value as defined in property definition
+                 * But we do not utilize default values in property definitions in VDMM.
+                 * They are still used once deployed.
+                 */
                 const property = new Property({
                     name: some.name,
                     container: some.container,
@@ -533,11 +538,8 @@ export class Populator {
                 assert.isArray(value.get_property)
                 assert.isString(value.get_property[0])
                 assert.isString(value.get_property[1])
-                // TODO: find all properties? only component?
-                // TODO: only for nodes?
-                property.consuming = this.graph.getNodeProperty([value.get_property[0], value.get_property[1]], {
-                    element: property.container,
-                })
+                // TODO: this is only correct for get_attribute SELF
+                property.consuming = property.container
                 console.log(`${property.Display} is consuming ${property.consuming.display}`)
             }
 
@@ -546,6 +548,7 @@ export class Populator {
                 assert.isString(value.get_attribute[0])
                 // TODO: this is only correct for get_attribute SELF
                 property.consuming = property.container
+                console.log(`${property.Display} is consuming ${property.consuming.display}`)
             }
         }
     }

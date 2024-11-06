@@ -92,9 +92,9 @@ export class ConstraintEnricher {
         }
 
         /**
-         * Ensure that each property has maximum one value (also considering non-present nodes)
+         * Ensure that each property has exactly one value
          */
-        if (this.graph.options.constraints.uniqueProperty) {
+        if (this.graph.options.constraints.property) {
             for (const element of [
                 ...this.graph.nodes,
                 ...this.graph.relations,
@@ -103,7 +103,6 @@ export class ConstraintEnricher {
                 ...this.graph.artifacts,
             ]) {
                 for (const properties of element.propertiesMap.values()) {
-                    // TODO: CRITICAL: REVERT THIS
                     if (properties.length === 0) continue
                     this.graph.addConstraint({
                         implies: [properties[0].container.id, {exo: properties.map(it => it.id)}],

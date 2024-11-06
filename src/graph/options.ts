@@ -844,7 +844,7 @@ class ConstraintsOptions extends BaseOptions {
     readonly hostingStack: boolean
     readonly technology: boolean
 
-    readonly uniqueProperty: boolean
+    readonly property: boolean
     readonly uniqueArtifact: boolean
     readonly uniqueInput: boolean
     readonly uniqueOutput: boolean
@@ -883,8 +883,8 @@ class ConstraintsOptions extends BaseOptions {
             this.technology = this.raw.technology_constraint ?? this.constraints
             assert.isBoolean(this.technology)
 
-            this.uniqueProperty = this.raw.unique_property_constraint ?? this.constraints
-            assert.isBoolean(this.uniqueProperty)
+            this.property = this.raw.property_constraint ?? this.constraints
+            assert.isBoolean(this.property)
 
             this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.constraints
             assert.isBoolean(this.uniqueArtifact)
@@ -907,8 +907,8 @@ class ConstraintsOptions extends BaseOptions {
             this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.technology)
 
-            this.uniqueProperty = this.raw.unique_property_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.uniqueProperty)
+            this.property = this.raw.property_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.property)
 
             this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueArtifact)

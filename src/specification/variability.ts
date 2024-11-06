@@ -70,7 +70,7 @@ export type ConstraintsOptions = {
     hosting_stack_constraint?: boolean
     technology_constraint?: boolean
 
-    unique_property_constraint?: boolean
+    property_constraint?: boolean
     unique_artifact_constraint?: boolean
     unique_input_constraint?: boolean
     unique_output_constraint?: boolean
