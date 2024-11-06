@@ -264,7 +264,7 @@ fi
 }
 
 export function ArtifactFile(type: string) {
-    return `".artifacts::*::[.type=${type}::file" | eval`
+    return `".artifacts::*::[.type=${type}]::file" | eval`
 }
 
 export function BashCreateVintnerDirectory() {
