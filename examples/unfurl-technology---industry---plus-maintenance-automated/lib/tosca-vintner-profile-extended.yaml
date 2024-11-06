@@ -22,13 +22,16 @@ imports:
 artifact_types:
     docker.image:
         derived_from: container.image
-        description: expects image reference in "file"
+        description: The "docker.image" artifact type manages a concrete Docker Image. It expects the Docker Image reference in the "file" key.
     zip.archive:
         derived_from: source.archive
+        description: The "zip.archive" artifact type manages a ZIP archive, which contains the distribution files of a component.
     tar.archive:
         derived_from: source.archive
+        description: The "tar.archive" artifact type manages a TAR archive, which contains the distribution files of a component
     apt.package:
         derived_from: system.package
+        description: The "apt.package" artifact type manages a package that is installed via the apt package manager.
         properties:
             script:
                 type: string
@@ -58,21 +61,25 @@ artifact_types:
 node_types:
     nodejs.runtime:
         derived_from: software.runtime
+        description: The "nodejs.runtime" node type manages the Node.js runtime, which is a software runtime that runs on a machine. It is capable of hosting Node.js components
         metadata:
             vintner_normative: 'true'
         properties:
             application_name:
                 type: string
                 default: nodejs
+                description: the name of the application
         artifacts:
             apt_package:
                 type: apt.package
+                description: the apt package to install Node.js
                 file: nodejs
                 properties:
                     script: https://deb.nodesource.com/setup_18.x
         attributes:
             management_address:
                 type: string
+                description: the management address of the host
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
         capabilities:
@@ -86,6 +93,7 @@ node_types:
                         eval: .parent::management_address
     nodejs.service.application:
         derived_from: service.application
+        description: The "nodejs.service.application" node type manages a Node.js service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -101,6 +109,7 @@ node_types:
                     start: npm start
     reactjs.service.application:
         derived_from: service.application
+        description: The "reactjs.service.application" node type manages a React.js service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -110,6 +119,7 @@ node_types:
                 default: nodejs18
     python.runtime:
         derived_from: software.runtime
+        description: The "python.runtime" node type manages the Python runtime, which is a software runtime that runs on a machine. It is capable of hosting Python components.
         metadata:
             vintner_normative: 'true'
         artifacts:
@@ -123,6 +133,7 @@ node_types:
         attributes:
             management_address:
                 type: string
+                description: the management address of the host
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
         capabilities:
@@ -136,6 +147,7 @@ node_types:
                         eval: .parent::management_address
     python.service.application:
         derived_from: service.application
+        description: The "python.service.application" node type manages a Python service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -151,6 +163,7 @@ node_types:
                     start: python main.py
     go.service.application:
         derived_from: service.application
+        description: The "go.service.application" node type manages a Go service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -160,6 +173,7 @@ node_types:
                 default: go122
     java.runtime:
         derived_from: software.runtime
+        description: The "java.runtime" node type manages the Java runtime, which is a software runtime that runs on a machine. It is capable of hosting Java components.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -173,6 +187,7 @@ node_types:
         attributes:
             management_address:
                 type: string
+                description: the management address of the host
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
         capabilities:
@@ -186,6 +201,7 @@ node_types:
                         eval: .parent::management_address
     java.service.application:
         derived_from: service.application
+        description: The "java.service.application" node type manages a Java service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -195,6 +211,7 @@ node_types:
                 default: java21
     dotnet.runtime:
         derived_from: software.runtime
+        description: The "dotnet.runtime" node type manages the .NET runtime, which is a software runtime that runs on a machine. It is capable of hosting .NET components.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -208,6 +225,7 @@ node_types:
         attributes:
             management_address:
                 type: string
+                description: the management address of the host
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
         capabilities:
@@ -221,6 +239,7 @@ node_types:
                         eval: .parent::management_address
     csharp.service.application:
         derived_from: service.application
+        description: The "csharp.service.application" node type manages a C# service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -230,6 +249,7 @@ node_types:
                 default: dotnet8
     binary.service.application:
         derived_from: service.application
+        description: The "binary.service.application" node type manages a binary service application.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -244,6 +264,7 @@ node_types:
                     start: ./{{ SELF.application_name }}
     gcp.provider:
         derived_from: cloud.provider
+        description: The abstract "gcp.provider" node type defines a Google Cloud Platform (GCP) project.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -253,8 +274,10 @@ node_types:
                 default: gcp
             gcp_region:
                 type: string
+                description: the region of the GCP project
             gcp_service_account_file:
                 type: string
+                description: the service account file of the GCP project, i.e., the absolute path to the serivce account file on the filesystem of the orchestrator
             gcp_project:
                 type: string
         interfaces:
@@ -264,6 +287,7 @@ node_types:
                     delete: exit 0
     gcp.service:
         derived_from: cloud.service
+        description: The abstract "gcp.service" node type defines a Google Cloud Platform (GCP) service.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -273,9 +297,11 @@ node_types:
                 default: gcp
             gcp_service:
                 type: string
+                description: the API of the GCP service
                 default: must-be-overridden
     gcp.cloudrun:
         derived_from: gcp.service
+        description: The "gcp.cloudrun" node type manages a the GCP CloudRun service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -284,6 +310,7 @@ node_types:
                 default: run.googleapis.com
     gcp.cloudsql:
         derived_from: gcp.service
+        description: The "gcp.cloudsql" node type manages a the GCP CloudSQL service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -292,6 +319,7 @@ node_types:
                 default: sqladmin.googleapis.com
     gcp.appengine:
         derived_from: gcp.service
+        description: The "gcp.appengine" node type manages a the GCP AppEngine service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -307,6 +335,7 @@ node_types:
                   relationship: tosca.relationships.DependsOn
     gcp.appenginereporting:
         derived_from: gcp.service
+        description: The "gcp.appenginereporting" node type manages a the GCP AppEngine Reporting service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -315,6 +344,7 @@ node_types:
                 default: appenginereporting.googleapis.com
     gcp.cloudbuild:
         derived_from: gcp.service
+        description: The "gcp.cloudbuild" node type manages a the GCP CloudBuild service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -323,6 +353,7 @@ node_types:
                 default: cloudbuild.googleapis.com
     gcp.kubernetesengine:
         derived_from: gcp.service
+        description: The "gcp.kubernetesengine" node type manages a the GCP Kubernetes Engine service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -331,14 +362,20 @@ node_types:
                 default: container.googleapis.com
     gcp.cloudstorage:
         derived_from: gcp.service
+        description: The "gcp.cloudstorage" node type manages a the GCP CloudStorage service.
         metadata:
             vintner_normative: 'true'
         properties:
             gcp_service:
                 type: string
                 default: storage.googleapis.com
+        attributes:
+            storage_dialect:
+                type: string
+                default: gcp
     gcp.memorystore:
         derived_from: gcp.service
+        description: The "gcp.memorystore" node type manages a the GCP Memorystore service.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -347,7 +384,7 @@ node_types:
                 default: redis.googleapis.com
     docker.engine:
         derived_from: container.runtime
-        description: Installs Docker Engine listening on the unix socket as well as on tcp://0.0.0.0:2375
+        description: The "docker.engine" node type manages the Docker Engine, which is a software runtime that runs on a machine. It is capable of hosting Docker containers. It is configured to listen on the unix socket as well as on tcp://0.0.0.0:2375.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -360,6 +397,7 @@ node_types:
         attributes:
             management_address:
                 type: string
+                description: the management address of the host
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
         capabilities:
@@ -373,6 +411,7 @@ node_types:
                         eval: .parent::management_address
     kubernetes.cluster:
         derived_from: cloud.service
+        description: The abstract "kubernetes.cluster" node type describes a Kubernetes cluster. It is typically hosted on a cloud provider.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -382,12 +421,16 @@ node_types:
                 default: kubernetes
             k8s_host:
                 type: string
+                description: the host of the Kubernetes API
             k8s_ca_cert_file:
                 type: string
+                description: the CA certificate file of the Kubernetes API
             k8s_client_cert_file:
                 type: string
+                description: the client certificate file to connect to the Kubernetes API
             k8s_client_key_file:
                 type: string
+                description: the client key file to connect to the Kubernetes API
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -398,6 +441,7 @@ node_types:
                     delete: exit 0
     openstack.provider:
         derived_from: cloud.provider
+        description: The abstract "openstack.provider" node type defines an OpenStack project.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -407,18 +451,25 @@ node_types:
                 default: openstack
             os_region_name:
                 type: string
+                description: the region of the OpenStack project
             os_auth_type:
                 type: string
+                description: the authentication type of the OpenStack project
             os_auth_url:
                 type: string
+                description: the authentication URL of the OpenStack project
             os_identity_api_version:
                 type: string
+                description: the identity API version of the OpenStack project
             os_interface:
                 type: string
+                description: the interface of the OpenStack project
             os_application_credential_id:
                 type: string
+                description: the application credential ID to authenticate at the OpenStack project
             os_application_credential_secret:
                 type: string
+                description: the application credential secret to authenticate at the OpenStack project
         interfaces:
             Standard:
                 operations:
@@ -426,29 +477,38 @@ node_types:
                     delete: exit 0
     mysql.dbms:
         derived_from: relational.dbms
+        description: The "mysql.dbms" node type manages a MySQL DBMS, which is capable of hosting MySQL databases.
         metadata:
             vintner_normative: 'true'
         properties:
             dbms_name:
                 type: string
+                description: the name of the DBMS
             application_name:
                 type: string
+                description: the name of the DBMS
                 default:
                     eval: .::dbms_name
             dbms_password:
                 type: string
+                description: the root password of the DBMS
             dbms_ssl_mode:
                 type: string
                 default: None
+                description: the SSL mode of the DBMS
         attributes:
             application_address:
                 type: string
+                description: the application address of the DBMS
             application_port:
                 type: string
+                description: the application port of the DBMS
             management_address:
                 type: string
+                description: the management address of the DBMS
             management_port:
                 type: string
+                description: the management port of the DBMS
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -458,22 +518,28 @@ node_types:
                   relationship: tosca.relationships.HostedOn
     mysql.database:
         derived_from: relational.database
+        description: The "mysql.database" node type manages a MySQL database, which is hosted on a MySQL and which can be accessed by other components.
         metadata:
             vintner_normative: 'true'
         properties:
             database_name:
                 type: string
+                description: the name of the database
             database_user:
                 type: string
+                description: the user of the database
             database_password:
                 type: string
+                description: the password for the database user
         attributes:
             application_address:
                 type: string
+                description: the application address of the DBMS
                 default:
                     eval: .::.requirements::[.name=host]::.target::application_address
             application_port:
                 type: string
+                description: the application port of the DBMS
                 default:
                     eval: .::.requirements::[.name=host]::.target::application_port
         capabilities:
@@ -485,6 +551,7 @@ node_types:
                   relationship: tosca.relationships.HostedOn
     minio.server:
         derived_from: service.application
+        description: The "minio.server" node type manages a MinIO server.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -492,12 +559,19 @@ node_types:
                 type: string
                 metadata:
                     vintner_name: MINIO_ROOT_USER
+                description: the access key of the MinIO server
             secret_key:
                 type: string
                 metadata:
                     vintner_name: MINIO_ROOT_PASSWORD
+                description: the secret key of the MinIO server
+        attributes:
+            storage_dialect:
+                type: string
+                default: minio
     redis.server:
         derived_from: cache
+        description: The "redis.server" node type manages a Redis server.
         metadata:
             vintner_normative: 'true'
         properties:
@@ -1340,17 +1414,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -1515,9 +1589,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-nodejs.runtime
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -1532,12 +1606,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-nodejs.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-nodejs.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -1708,17 +1782,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -1930,9 +2004,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-nodejs.runtime
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -1946,12 +2020,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-nodejs.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-nodejs.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2100,17 +2174,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -2267,9 +2341,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-nodejs.runtime
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -2284,12 +2358,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-nodejs.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-nodejs.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2464,17 +2538,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -2686,9 +2760,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-nodejs.runtime
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -2702,12 +2776,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-nodejs.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-nodejs.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-nodejs.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -3643,17 +3717,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -3818,9 +3892,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-python.runtime
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -3835,12 +3909,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-python.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-python.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-python.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-python.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -4011,17 +4085,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -4233,9 +4307,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-python.runtime
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -4249,12 +4323,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-python.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-python.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-python.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-python.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -4403,17 +4477,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -4570,9 +4644,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-python.runtime
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -4587,12 +4661,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-python.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-python.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-python.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-python.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -4767,17 +4841,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -4989,9 +5063,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-python.runtime
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -5005,12 +5079,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-python.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-python.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-python.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-python.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -5946,17 +6020,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -6121,9 +6195,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-java.runtime
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -6138,12 +6212,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-java.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-java.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-java.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-java.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -6314,17 +6388,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -6536,9 +6610,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-java.runtime
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -6552,12 +6626,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-java.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-java.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-java.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-java.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -6706,17 +6780,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -6873,9 +6947,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-java.runtime
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -6890,12 +6964,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-java.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-java.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-java.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-java.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -7070,17 +7144,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -7292,9 +7366,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-java.runtime
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -7308,12 +7382,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-java.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-java.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-java.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-java.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -8249,17 +8323,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -8424,9 +8498,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-dotnet.runtime
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -8441,12 +8515,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-dotnet.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-dotnet.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -8617,17 +8691,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -8839,9 +8913,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-dotnet.runtime
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -8855,12 +8929,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-dotnet.runtime -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-dotnet.runtime -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -9009,17 +9083,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -9176,9 +9250,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-dotnet.runtime
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -9193,12 +9267,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-dotnet.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-dotnet.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -9373,17 +9447,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -9595,9 +9669,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-dotnet.runtime
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -9611,12 +9685,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-dotnet.runtime {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-dotnet.runtime -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-dotnet.runtime -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -9811,7 +9885,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -9895,7 +9969,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -9979,7 +10053,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -10063,7 +10137,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -10147,7 +10221,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -10231,7 +10305,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -10315,7 +10389,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -10399,7 +10473,7 @@ node_types:
                                   region: '{{ SELF.gcp_region }}'
                         resource:
                             google_project_service:
-                                cloud_sql_admin:
+                                gcp_service:
                                     - disable_on_destroy: false
                                       project: '{{ SELF.gcp_project }}'
                                       service: '{{ SELF.gcp_service }}'
@@ -11593,17 +11667,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -11770,9 +11844,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-docker.engine
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -11788,12 +11862,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-docker.engine {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-docker.engine {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-docker.engine -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-docker.engine -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -11964,17 +12038,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -12188,9 +12262,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-docker.engine
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -12205,12 +12279,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-docker.engine {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-docker.engine {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-docker.engine -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-docker.engine -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -12359,17 +12433,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -12528,9 +12602,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-docker.engine
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -12546,12 +12620,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-docker.engine {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-docker.engine {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-docker.engine -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-docker.engine -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -12726,17 +12800,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -12950,9 +13024,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-docker.engine
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -12967,12 +13041,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-docker.engine {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-docker.engine {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-docker.engine -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-docker.engine -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -15393,17 +15467,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -15572,9 +15646,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-mysql.dbms
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -15592,12 +15666,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-mysql.dbms -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-mysql.dbms -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -15768,17 +15842,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -15994,9 +16068,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-mysql.dbms
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -16013,12 +16087,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-mysql.dbms -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-mysql.dbms -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -16167,17 +16241,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -16338,9 +16412,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-mysql.dbms
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -16358,12 +16432,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-mysql.dbms -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-mysql.dbms -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -16538,17 +16612,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -16764,9 +16838,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-mysql.dbms
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -16783,12 +16857,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-mysql.dbms {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-mysql.dbms -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-mysql.dbms -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -19014,17 +19088,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -19221,9 +19295,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-minio.server
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_service:
                                     content: |
                                         [Unit]
@@ -19253,12 +19327,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -19420,17 +19494,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -19682,9 +19756,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-minio.server
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     [Unit]
                                                     After=network.target
@@ -19712,12 +19786,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -19856,17 +19930,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -20063,9 +20137,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-minio.server
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_service:
                                     content: |
                                         [Unit]
@@ -20095,12 +20169,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -20266,17 +20340,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -20528,9 +20602,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-minio.server
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     [Unit]
                                                     After=network.target
@@ -20558,12 +20632,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -20714,7 +20788,7 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in working directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ directory.path }}'
                                     - name: create specification
                                       ansible.builtin.copy:
@@ -20849,7 +20923,7 @@ node_types:
                                 object:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
-                                      source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                      source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
     minio.server~software.application#apt.package::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
@@ -21673,17 +21747,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -21850,9 +21924,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-minio.server
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -21868,12 +21942,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -22044,17 +22118,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -22268,9 +22342,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-minio.server
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -22285,12 +22359,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-minio.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -22439,17 +22513,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -22608,9 +22682,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-minio.server
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -22626,12 +22700,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -22806,17 +22880,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -23030,9 +23104,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-minio.server
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -23047,12 +23121,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-minio.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-minio.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -24870,17 +24944,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -25048,9 +25122,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-redis.server
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -25067,12 +25141,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-redis.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-redis.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-redis.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-redis.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -25243,17 +25317,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -25468,9 +25542,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-redis.server
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -25486,12 +25560,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-redis.server {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-redis.server {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-redis.server -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-redis.server -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -25640,17 +25714,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -25810,9 +25884,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-redis.server
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -25829,12 +25903,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-redis.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-redis.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-redis.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-redis.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -26009,17 +26083,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -26234,9 +26308,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-redis.server
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -26252,12 +26326,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-redis.server {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-redis.server {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-redis.server -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-redis.server -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner

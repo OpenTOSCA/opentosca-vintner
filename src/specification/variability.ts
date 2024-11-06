@@ -3,6 +3,8 @@ import {TechnologyRule} from '#spec/technology-template'
 import {TechnologyPluginBuilder} from '#technologies/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
+export const VINTNER_UNDEFINED = 'VINTNER_UNDEFINED'
+
 export type VariabilityDefinition = {
     inputs?: VariabilityInputDefinitionMap
     presets?: InputAssignmentPresetMap

@@ -14,6 +14,7 @@ import Relation, {Relationship} from '#graph/relation'
 import Technology from '#graph/technology'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {NodeTemplate} from '#spec/node-template'
+import {VINTNER_UNDEFINED} from '#spec/variability'
 import {TechnologyRulePluginBuilder} from '#technologies/plugins/rules'
 import * as utils from '#utils'
 
@@ -402,16 +403,13 @@ export class Populator {
                 const some = properties[0]
                 assert.isDefined(some)
 
-                // TODO: remove this
-                // console.log(`not defined for ${some.display}`)
-
                 /**
                  * Could use default value as defined in property definition
                  * But we do not utilize default values in property definitions in VDMM.
                  * They are still used once deployed.
                  */
                 const raw = {
-                    value: 'VINTNER_UNDEFINED',
+                    value: VINTNER_UNDEFINED,
                     default_alternative: true,
                     implied: true,
                 }
@@ -545,7 +543,7 @@ export class Populator {
                 assert.isString(value.get_property[1])
                 // TODO: this is only correct for get_attribute SELF
                 property.consuming = property.container
-                console.log(`${property.Display} is consuming ${property.consuming.display}`)
+                // console.log(`${property.Display} is consuming ${property.consuming.display}`)
             }
 
             if (check.isDefined(value.get_attribute)) {
@@ -553,7 +551,7 @@ export class Populator {
                 assert.isString(value.get_attribute[0])
                 // TODO: this is only correct for get_attribute SELF
                 property.consuming = property.container
-                console.log(`${property.Display} is consuming ${property.consuming.display}`)
+                // console.log(`${property.Display} is consuming ${property.consuming.display}`)
             }
         }
     }

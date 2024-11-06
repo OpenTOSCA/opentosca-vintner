@@ -13,6 +13,7 @@ import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assi
 import {EntityTypesKeys, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap, TopologyTemplate} from '#spec/topology-template'
 import {ElementType} from '#spec/type-assignment'
+import {VINTNER_UNDEFINED} from '#spec/variability'
 import * as utils from '#utils'
 
 export default class Transformer {
@@ -286,6 +287,7 @@ export default class Transformer {
 
         template.properties = element.properties
             .filter(it => it.present)
+            .filter(it => it.value !== VINTNER_UNDEFINED)
             .reduce<PropertyAssignmentMap>((map, property) => {
                 if (check.isDefined(property)) {
                     if (check.isUndefined(property.value)) throw new Error(`${property.Display} has no value`)

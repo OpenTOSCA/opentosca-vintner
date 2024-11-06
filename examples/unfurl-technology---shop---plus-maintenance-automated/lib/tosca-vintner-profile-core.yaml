@@ -20,18 +20,21 @@ metadata:
 artifact_types:
     artifact:
         derived_from: tosca.artifacts.Root
+        description: The "root" artifact type manages the root artifact type all other artifact types inherit from.
     source.archive:
         derived_from: artifact
-        description: application packaged as archive
+        description: The "source.archive" artifact type manages a generic archive that holds distribution files of a component.
         properties:
             extra_opts:
                 type: list
+                description: extra options when extracting the archive
                 entry_schema:
                     type: string
                 required: false
                 default: []
     system.package:
         derived_from: artifact
+        description: The "system.package" artifact type manages a package that is installed via a system package manager. It expects the package name in the "file" key.
         properties:
             script:
                 type: string
@@ -65,44 +68,48 @@ artifact_types:
                 default: ''
     container.image:
         derived_from: artifact
-        description: expects image reference in "file"
+        description: The "container.image" artifact type manages a generic container image. It expects the image reference in the "file" key.
     machine.image:
         derived_from: artifact
-        description: expects image reference in "file"
+        description: The "machine.image" artifact type manages a generic machine image. It expects the image reference in the "file" key.
     dbms.image:
         derived_from: artifact
-        description: expects image reference in "file"
+        description: The "dbms.image" artifact type manages a generic DBMS image. It expects the image reference in the "file" key.
     cache.image:
         derived_from: artifact
-        description: expects image reference in "file"
+        description: The "cache.image" artifact type manages a generic cache image. It expects the image reference in the "file" key.
 interface_types:
     interface:
         derived_from: tosca.interfaces.Root
+        description: The "interface" interface type manages the root interface type all other interface types inherit from.
         metadata:
             vintner_normative: 'true'
     management:
         derived_from: interface
+        description: The "management" interface type manages the standard lifecycle management of components.
         metadata:
             vintner_normative: 'true'
         operations:
             create:
-                description: management lifecycle create operation.
+                description: create lifecycle management operation, i.e., an inline-bash script
             configure:
-                description: management lifecycle configure operation.
+                description: configure lifecycle management operation, i.e., an inline-bash script
             start:
-                description: management lifecycle start operation.
+                description: start lifecycle management operation, i.e., an inline-bash script
             stop:
-                description: management lifecycle stop operation.
+                description: stop lifecycle management operation, i.e., an inline-bash script
             delete:
-                description: management lifecycle delete operation.
+                description: delete lifecycle management operation, i.e., an inline-bash script
 node_types:
     node:
         derived_from: tosca.nodes.Root
+        description: The abstract "node" node type defines the root node type all other node types inherit from.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     cloud.provider:
         derived_from: node
+        description: The abstract "cloud.provider" node type defines an abstract cloud provider, which is capable of hosting cloud services.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -111,6 +118,7 @@ node_types:
                 type: tosca.capabilities.Compute
     cloud.service:
         derived_from: node
+        description: The abstract "cloud.service" node type defines an generic cloud service, which is hosted on a cloud provider and which is hosting an instance of a cloud service offering.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -123,12 +131,14 @@ node_types:
                   relationship: tosca.relationships.HostedOn
     software.application:
         derived_from: node
+        description: The abstract "software.application" node type defines a generic software application. It requires a hosting and its lifecycle is managed by the management interface.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             application_name:
                 type: string
+                description: name of the application
             _management_create:
                 type: string
                 metadata:
@@ -188,23 +198,29 @@ node_types:
                 type: management
     service.application:
         derived_from: software.application
+        description: The abstract "service.application" node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             application_language:
                 type: string
+                description: the programming/ platform language of the application, e.g., node22
             application_port:
                 type: string
+                description: the port the application listens on, e.g., 3000
                 metadata:
                     vintner_name: PORT
             application_protocol:
                 type: string
+                description: the protocol the application uses, e.g., http
         attributes:
             application_address:
                 type: string
+                description: the address under which the application can be reached, i.e., the IP or a domain name
             application_endpoint:
                 type: string
+                description: the endpoint under which the application can be reached, i.e., the protocol, IP and port concatenated
                 default:
                     concat:
                         - eval: .::application_protocol
@@ -214,6 +230,7 @@ node_types:
                         - eval: .::application_port
     software.runtime:
         derived_from: software.application
+        description: The abstract "software.runtime" node type defines a generic software runtime.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -222,24 +239,30 @@ node_types:
                 type: tosca.capabilities.Compute
     container.runtime:
         derived_from: software.runtime
+        description: The abstract "container.runtime" node type defines a generic container runtime.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     machine:
         derived_from: node
+        description: The abstract "machine" node type defines a generic computing machine.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
         properties:
             machine_name:
                 type: string
+                description: name of the machine
         attributes:
             application_address:
                 type: string
+                description: the address under which the machine can be publicly reached, i.e., the IP or a domain name
             management_address:
                 type: string
+                description: the address under which the machine can be privately reached, i.e., the IP or a domain name
     local.machine:
         derived_from: machine
+        description: The "local.machine" node type manages a local machine, i.e., localhost. It is capable of hosting, e.g., software components.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -248,26 +271,34 @@ node_types:
                 type: tosca.capabilities.Compute
     remote.machine:
         derived_from: machine
+        description: The "remote.machine" node type manages a remote machine, i.e., a machine that is not localhost. It is capable of hosting, e.g., software components.
         metadata:
             vintner_normative: 'true'
         properties:
             machine_name:
                 type: string
+                description: name of the machine
             ports:
                 type: list
+                description: ports to open
                 entry_schema:
                     type: string
             flavor:
                 type: string
+                description: flavor of the machine, i.e., cpu, memory, disk size encoded as string
                 default: m1.medium
             network:
                 type: string
+                description: network to connect to
             ssh_user:
                 type: string
+                description: ssh user to connect to the machine
             ssh_key_name:
                 type: string
+                description: ssh key name to connect to the machine
             ssh_key_file:
                 type: string
+                description: ssh key file to connect to the machine, i.e., the absolute path to the ssh key file on the filesystem of the orchestrator
         capabilities:
             host:
                 type: tosca.capabilities.Compute
@@ -283,10 +314,13 @@ node_types:
                     eval: .::management_address
     virtual.machine:
         derived_from: remote.machine
+        description: The "virtual.machine" node type manages a virtual machine.
     physical.machine:
         derived_from: remote.machine
+        description: The "physical.machine" node type manages a physical machine.
     database:
         derived_from: node
+        description: The abstract "database" node type defines a generic database. It requires a DBMS to run.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -296,29 +330,39 @@ node_types:
                   relationship: tosca.relationships.HostedOn
     relational.database:
         derived_from: database
+        description: The abstract "relational.database" node type defines a generic relational database. It requires a relational DBMS to run.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     dbms:
         derived_from: software.application
+        description: The abstract "dbms" node type defines a generic DBMS.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     relational.dbms:
         derived_from: dbms
+        description: The abstract "relational.dbms" node type defines a generic relational DBMS.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     cache:
         derived_from: software.application
+        description: The abstract "cache" node type defines a generic caching service.
         properties:
             cache_name:
                 type: string
+                description: name of the cache
             cache_port:
                 type: string
+                description: port the cache listens on
         attributes:
+            application_address:
+                type: string
+                description: the address under which the cache can be reached, i.e., the IP or a domain name
             application_endpoint:
                 type: string
+                description: the endpoint under which the cache can be reached, i.e., the protocol, IP and port concatenated
                 default:
                     concat:
                         - eval: .::application_protocol
@@ -326,25 +370,28 @@ node_types:
                         - eval: .::application_address
                         - ':'
                         - eval: .::application_port
-            application_address:
-                type: string
     storage:
         derived_from: node
+        description: The abstract "storage" node type defines a generic storage service.
         metadata:
             vintner_normative: 'true'
     block.storage:
         derived_from: storage
+        description: The abstract "block.storage" node type defines a generic block storage.
         metadata:
             vintner_normative: 'true'
     object.storage:
         derived_from: storage
+        description: The abstract "object.storage" node type defines a generic object storage.
         metadata:
             vintner_normative: 'true'
         properties:
             storage_name:
                 type: string
+                description: name of the storage
             storage_dialect:
                 type: string
+                description: dialect of the storage, e.g., s3
             storage_user:
                 type: string
             storage_token:
@@ -360,28 +407,34 @@ node_types:
                   relationship: tosca.relationships.HostedOn
     file.storage:
         derived_from: storage
+        description: The abstract "file.storage" node type defines a generic file storage.
         metadata:
             vintner_normative: 'true'
     ingress:
         derived_from: node
+        description: The "ingress" node type manages a generic ingress service, which is a reverse proxy that exposes an upstream application. It is not normative how this component is implemented. This could be implemented by an Ingress resource on Kubernetes or by a reverse proxy, such as NGINX or Caddy, on a virtual machine.
         metadata:
             vintner_normative: 'true'
         properties:
             application_name:
                 type: string
+                description: name of the upstream application
                 default:
                     eval: .::.requirements::[.name=application]::.target::application_name
             application_port:
                 type: string
+                description: port the upstream application listens on
                 default:
                     eval: .::.requirements::[.name=application]::.target::application_port
             application_protocol:
                 type: string
+                description: protocol the upstream application uses
                 default:
                     eval: .::.requirements::[.name=application]::.target::application_protocol
         attributes:
             application_address:
                 type: string
+                description: the address under which the upstream application is exposed by the ingress, i.e., the IP or a domain name
         requirements:
             - application:
                   capability: tosca.capabilities.Endpoint
@@ -1435,17 +1488,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -1612,9 +1665,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                     filename: /tmp/artifact-cache
-                                    count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -1630,12 +1683,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-cache {{ ".artifacts::tar_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-cache {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        tar -xzf /tmp/artifact-cache -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        tar -xzf /tmp/artifact-cache -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -1806,17 +1859,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::tar_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::tar_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -2030,9 +2083,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::tar_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=tar.archive::file" | eval }}'
                                                 destination: /tmp/artifact-cache
-                                                count: '{{ (not (".artifacts::tar_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=tar.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -2047,12 +2100,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::tar_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-cache {{ ".artifacts::tar_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=tar.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-cache {{ ".artifacts::*::[.type=tar.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    tar -xzf /tmp/artifact-cache -C {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    tar -xzf /tmp/artifact-cache -C {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2201,17 +2254,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -2370,9 +2423,9 @@ node_types:
                         resource:
                             local_file:
                                 tmp_artifact:
-                                    source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                    source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                     filename: /tmp/artifact-cache
-                                    count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                    count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                 tmp_create:
                                     content: |
                                         #!/usr/bin/bash
@@ -2388,12 +2441,12 @@ node_types:
                                         EOF>>
 
                                         # Download deployment artifact if required
-                                        if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                            wget -O /tmp/artifact-cache {{ ".artifacts::zip_archive::file" | eval }} 
+                                        if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                            wget -O /tmp/artifact-cache {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-cache -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-cache -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2568,17 +2621,17 @@ node_types:
                                           state: directory
                                     - name: extract deployment artifact in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: not (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: extract deployment artifact from URL in application directory
                                       ansible.builtin.unarchive:
-                                          src: '{{ ".artifacts::zip_archive::file" | eval }}'
+                                          src: '{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                           dest: '{{ SELF.application_directory }}'
                                           remote_src: 'yes'
-                                          extra_opts: '{{ ".artifacts::zip_archive::extra_opts" | eval | map_value }}'
-                                      when: (".artifacts::zip_archive::file" | eval).startswith("http")
+                                          extra_opts: '{{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}'
+                                      when: (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")
                                     - name: create vintner directory
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}/.vintner'
@@ -2792,9 +2845,9 @@ node_types:
                                             user: '{{ SELF.os_ssh_user }}'
                                       provisioner:
                                           file:
-                                              - source: '{{ "project" | get_dir }}/ensemble/{{  ".artifacts::zip_archive::file" | eval }}'
+                                              - source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive::file" | eval }}'
                                                 destination: /tmp/artifact-cache
-                                                count: '{{ (not (".artifacts::zip_archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
+                                                count: '{{ (not (".artifacts::*::[.type=zip.archive::file" | eval).startswith("http")) | ternary(1, 0) }}'
                                               - content: |
                                                     #!/usr/bin/bash
                                                     set -e
@@ -2809,12 +2862,12 @@ node_types:
                                                     EOF>>
 
                                                     # Download deployment artifact if required
-                                                    if [[ "{{ ".artifacts::zip_archive::file" | eval }}" == http* ]]; then 
-                                                        wget -O /tmp/artifact-cache {{ ".artifacts::zip_archive::file" | eval }} 
+                                                    if [[ "{{ ".artifacts::*::[.type=zip.archive::file" | eval }}" == http* ]]; then 
+                                                        wget -O /tmp/artifact-cache {{ ".artifacts::*::[.type=zip.archive::file" | eval }} 
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-cache -d {{ SELF.application_directory }} {{ ".artifacts::tar_archive::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-cache -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
