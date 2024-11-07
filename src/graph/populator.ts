@@ -561,7 +561,7 @@ export class Populator {
 
                     // TODO: are there more element where this fits? artifact?
                     const node = this.graph.getNode(containerName, {element: property.container})
-                    property.consuming = node.outgoing.filter(it => it.name === elementName)
+                    property.consuming = node.outgoing.filter(it => it.name === elementName).map(it => it.target)
                     continue
                 }
 
