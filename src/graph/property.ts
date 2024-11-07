@@ -102,7 +102,9 @@ export default class Property extends Element {
         conditions.push(this.container.presenceCondition)
 
         // Consuming pruning
-        conditions.push({or: this.consuming.map(it => it.presenceCondition)})
+        if (!utils.isEmpty(this.consuming)) {
+            conditions.push({or: this.consuming.map(it => it.presenceCondition)})
+        }
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
