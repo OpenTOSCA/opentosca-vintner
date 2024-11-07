@@ -128,6 +128,18 @@ export default class Graph {
         new Populator(this).run()
     }
 
+    getElement(name: string, context: Context = {}): Element {
+        try {
+            return this.getNode(name, context)
+        } catch (e) {
+            // NIL
+        }
+
+        throw new Error(
+            `Could not get element "${name}" from context element "${context.element?.display}" and context cached "${context.cached?.display}"`
+        )
+    }
+
     getNode(name: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', context: Context = {}): Node {
         assert.isString(name)
 

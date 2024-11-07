@@ -542,19 +542,44 @@ export class Populator {
             }
 
             if (check.isDefined(value.get_property)) {
-                assert.isArray(value.get_property)
-                assert.isString(value.get_property[0])
-                assert.isString(value.get_property[1])
-                // TODO: this is only correct for get_attribute SELF
-                property.consuming = property.container
+                const reference = value.get_property
+                assert.isArray(reference)
+
+                if (reference.length === 2) {
+                    const [elementName, propertyName] = reference
+                    assert.isString(elementName)
+                    assert.isString(propertyName)
+
+                    // TODO: also implement this for non-nodes? #getElement
+                    property.consuming = this.graph.getNode(elementName, {element: property.container})
+                    continue
+                }
+
+                if (reference.length === 3) {
+                    const [containerName, elementName, propertyName] = reference
+                    assert.isString(containerName)
+                    assert.isString(elementName)
+                    assert.isString(propertyName)
+
+                    // TODO: are there more element where this fits? artifact?
+                    property.consuming = this.graph.getRelation([containerName, elementName], {
+                        element: property.container,
+                    })
+                    continue
+                }
                 // console.log(`${property.Display} is consuming ${property.consuming.display}`)
+
+                throw new Error(`GetProperty "${reference}" not supported`)
             }
 
             if (check.isDefined(value.get_attribute)) {
                 assert.isArray(value.get_attribute)
-                assert.isString(value.get_attribute[0])
+
+                const [elementName, _attributeName] = value.get_attribute
+                assert.isString(elementName)
+
                 // TODO: this is only correct for get_attribute SELF
-                property.consuming = property.container
+                property.consuming = this.graph.getNode(elementName, {element: property.container})
                 // console.log(`${property.Display} is consuming ${property.consuming.display}`)
             }
         }
