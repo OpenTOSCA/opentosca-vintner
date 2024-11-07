@@ -538,49 +538,34 @@ export class Populator {
                 const input = this.graph.getInput(value.get_input)
 
                 input.consumers.push(property)
-                property.consuming = input
+                property.consuming = [input]
             }
 
-            if (check.isDefined(value.get_property)) {
-                const reference = value.get_property
+            if (check.isDefined(value.get_property) || check.isDefined(value.get_attribute)) {
+                const reference = value.get_property ?? value.get_attribute
                 assert.isArray(reference)
 
                 if (reference.length === 2) {
-                    const [elementName, propertyName] = reference
+                    const [elementName] = reference
                     assert.isString(elementName)
-                    assert.isString(propertyName)
 
                     // TODO: also implement this for non-nodes? #getElement
-                    property.consuming = this.graph.getNode(elementName, {element: property.container})
+                    property.consuming = [this.graph.getNode(elementName, {element: property.container})]
                     continue
                 }
 
                 if (reference.length === 3) {
-                    const [containerName, elementName, propertyName] = reference
+                    const [containerName, elementName] = reference
                     assert.isString(containerName)
                     assert.isString(elementName)
-                    assert.isString(propertyName)
 
                     // TODO: are there more element where this fits? artifact?
-                    property.consuming = this.graph.getRelation([containerName, elementName], {
-                        element: property.container,
-                    })
+                    const node = this.graph.getNode(containerName, {element: property.container})
+                    property.consuming = node.outgoing.filter(it => it.name === elementName)
                     continue
                 }
-                // console.log(`${property.Display} is consuming ${property.consuming.display}`)
 
-                throw new Error(`GetProperty "${reference}" not supported`)
-            }
-
-            if (check.isDefined(value.get_attribute)) {
-                assert.isArray(value.get_attribute)
-
-                const [elementName, _attributeName] = value.get_attribute
-                assert.isString(elementName)
-
-                // TODO: this is only correct for get_attribute SELF
-                property.consuming = this.graph.getNode(elementName, {element: property.container})
-                // console.log(`${property.Display} is consuming ${property.consuming.display}`)
+                throw new Error(`Reference "${value}" not supported`)
             }
         }
     }

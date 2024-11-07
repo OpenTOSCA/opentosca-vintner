@@ -34,7 +34,8 @@ export default class Property extends Element {
     value?: PropertyAssignmentValue
     readonly expression?: ValueExpression
 
-    consuming?: Property | Input | Node | Relation | Group | Policy | Artifact
+    // TODO: NEXT: this is now an array!
+    consuming: (Property | Input | Node | Relation | Group | Policy | Artifact)[] = []
 
     constructor(data: {
         name: string
@@ -93,16 +94,15 @@ export default class Property extends Element {
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
+    // TODO: add some configuration options
     getElementGenericCondition() {
         const conditions: LogicExpression[] = []
 
         // Container pruning
         conditions.push(this.container.presenceCondition)
 
-        // Input value pruning
-        if (check.isDefined(this.consuming)) {
-            conditions.push(this.consuming.presenceCondition)
-        }
+        // Consuming pruning
+        conditions.push({or: this.consuming.map(it => it.presenceCondition)})
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
