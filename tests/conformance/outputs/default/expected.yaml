@@ -4,3 +4,4 @@ topology_template:
     outputs:
         one:
             type: a
+            value: one-value

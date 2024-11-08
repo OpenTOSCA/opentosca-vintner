@@ -14,9 +14,11 @@ import Relation, {Relationship} from '#graph/relation'
 import Technology from '#graph/technology'
 import Type, {TypeContainer, TypeContainerTemplate} from '#graph/type'
 import {NodeTemplate} from '#spec/node-template'
+import {PropertyAssignmentValue} from '#spec/property-assignments'
 import {VINTNER_UNDEFINED} from '#spec/variability'
 import {TechnologyRulePluginBuilder} from '#technologies/plugins/rules'
 import * as utils from '#utils'
+import {NotImplementedError, UnexpectedError} from '#utils/error'
 
 export class Populator {
     graph: Graph
@@ -392,8 +394,11 @@ export class Populator {
             this.graph.properties.push(property)
         }
 
-        // TODO: move this into normalizer?
-        // TODO: we now cant use node_property_presence: [string, string] anymore since property name is always ambiguous (however, this also never made sense in the first place if there is only a single property variant)
+        // TODO: move this into the normalizer?
+        /**
+         * NOTE: we cant use node_property_presence: [string, string] anymore since property name is always ambiguous
+         * however, this also never made sense in the first place if there is only a single property variant
+         */
         if (this.graph.serviceTemplate?.topology_template?.variability?.options?.bratans_unknown !== true) {
             // Ensure that there is only one default property per property name
             element.propertiesMap.forEach(properties => {
@@ -527,100 +532,169 @@ export class Populator {
     /**
      * We only support simple consumers, i.e., directly accessed by properties
      */
-    // TODO: unfurl syntax support?
     private populateConsumers() {
         for (const property of this.graph.properties) {
             const value = property.value
             if (!check.isObject(value) || check.isArray(value)) continue
 
+            /**
+             * CASE: get_input
+             */
             if (check.isDefined(value.get_input)) {
                 assert.isStringOrNumber(value.get_input)
                 const input = this.graph.getInput(value.get_input)
 
                 input.consumers.push(property)
                 property.consuming.push(input)
+                continue
             }
 
-            if (check.isDefined(value.get_property) || check.isDefined(value.get_attribute)) {
-                const reference = value.get_property ?? value.get_attribute
-                assert.isArray(reference)
+            const parsed = parseReference(value)
+            if (utils.isEmpty(parsed)) continue
+            assert.isDefined(parsed.propertyContainer)
 
-                if (reference.length === 2) {
-                    const [elementName] = reference
-                    assert.isString(elementName)
+            /**
+             * CASE: get_{property,arttribute} and container is node, group, or policy
+             */
+            if (check.isUndefined(parsed.propertyContainerContainer)) {
+                const element = this.graph.guessElement(parsed.propertyContainer, {element: property.container})
+                if (!element.isNode() && !element.isGroup() && !element.isPolicy()) {
+                    throw new Error(`${element.Display} is not a property container`)
+                }
 
-                    // TODO: also implement this for non-nodes? #getElement
-                    property.consuming.push(this.graph.getNode(elementName, {element: property.container}))
+                property.consuming.push(element)
+                continue
+            }
+
+            /**
+             * CASE: get_{property,arttribute} and container is relation or artifact
+             */
+            if (check.isDefined(parsed.propertyContainerContainer)) {
+                const node = this.graph.getNode(parsed.propertyContainerContainer, {element: property.container})
+
+                // GUESS: relation is referenced
+                const relations = node.outgoing.filter(it => it.name === parsed.propertyContainer).map(it => it.target)
+                if (!utils.isEmpty(relations)) {
+                    property.consuming.push(...relations)
                     continue
                 }
 
-                if (reference.length === 3) {
-                    const [containerName, elementName] = reference
-                    assert.isString(containerName)
-                    assert.isString(elementName)
-
-                    // TODO: are there more element where this fits? artifact?
-                    const node = this.graph.getNode(containerName, {element: property.container})
-                    property.consuming.push(...node.outgoing.filter(it => it.name === elementName).map(it => it.target))
+                // GUESS: artifact is referenced
+                const artifacts = node.artifactsMap.get(parsed.propertyContainer) ?? []
+                if (!utils.isEmpty(artifacts)) {
+                    property.consuming.push(...artifacts)
                     continue
                 }
 
-                throw new Error(`Reference "${value}" not supported`)
+                throw new Error(
+                    `Reference "${value}" at property ${property.display} did not find any relation or artifact.`
+                )
             }
+
+            throw new UnexpectedError()
         }
     }
 
     /**
-     * We only support simple producers, i.e., directly accessing the property of a node
+     * CAUTION: We only support simple producers, i.e., directly accessing the property of a node
      */
     private populateProducers() {
         for (const output of this.graph.outputs) {
-            const value: string | {eval?: string; get_property?: [string, string]} | undefined = output.raw.value
+            const value = output.raw.value
+            assert.isDefined(value)
 
-            let nodeName: string | undefined
-            let propertyName: string | undefined
+            const parsed = parseReference(value)
+            if (utils.isEmpty(parsed)) continue
+            assert.isDefined(parsed.propertyContainer)
 
-            /**
-             * Unfurl eval Jinja filter
-             */
-            if (check.isString(value)) {
-                const regex = new RegExp(/\{\{ ['"]::(?<node>.*)::(?<property>.*)['"] \| eval \}\}/)
-                const found = value.match(regex)
-                if (check.isDefined(found)) {
-                    nodeName = found.groups!.node
-                    propertyName = found.groups!.property
-                }
-            }
-
-            /**
-             * Unfurl eval intrinsic function
-             */
-            if (check.isObject(value) && check.isDefined(value.eval)) {
-                const split = value.eval.split('::')
-                nodeName = split[1]
-                propertyName = split[2]
-            }
-
-            /**
-             * TOSCA get_property intrinsic function
-             */
-            if (check.isObject(value) && check.isDefined(value.get_property)) {
-                nodeName = value.get_property[0]
-                propertyName = value.get_property[1]
-            }
+            // TODO: support this
+            if (check.isDefined(parsed.propertyContainerContainer)) throw new NotImplementedError()
 
             /**
              * Find producers
              */
-            if (check.isDefined(nodeName) && check && check.isDefined(propertyName)) {
-                const node = this.graph.getNode(nodeName)
-                node.properties.filter(it => it.name === propertyName).forEach(it => output.producers.push(it))
-
-                /**
-                 * Hotfix: Simply assume that output is produced by an attribute or an undefined property with default values and, hence, just add the node itself as producer
-                 */
-                if (utils.isEmpty(output.producers)) output.producers.push(node)
-            }
+            const node = this.graph.getNode(parsed.propertyContainer)
+            output.producers.push(node)
         }
     }
+}
+
+/**
+ * CAUTION: We only support simple scenarios
+ */
+function parseReference(reference: string[] | string | PropertyAssignmentValue): {
+    propertyContainerContainer?: string
+    propertyContainer?: string
+    property?: string
+} {
+    const isHash = check.isObject(reference) && !check.isArray(reference)
+
+    /**
+     * TOSCA syntax
+     *
+     * CAUTION: The parsing is limited to directly accessing element properties only
+     */
+    if (isHash && (check.isDefined(reference.get_property) || check.isDefined(reference.get_attribute))) {
+        const value = reference.get_property ?? reference.get_attribute
+        assert.isDefined(value)
+        assert.isArray(value)
+        value.forEach(it => assert.isString(it))
+
+        if (value.length === 2) {
+            const [propertyContainer, property] = value
+            assert.isString(propertyContainer)
+            assert.isString(property)
+
+            return {propertyContainer, property}
+        }
+
+        if (value.length === 3) {
+            const [propertyContainerContainer, propertyContainer, property] = value
+            assert.isString(propertyContainerContainer)
+            assert.isString(propertyContainer)
+            assert.isString(property)
+
+            return {propertyContainerContainer, propertyContainer, property}
+        }
+    }
+
+    /**
+     * Unfurl eval intrinsic function
+     *
+     * CAUTION: The parsing is limited to directly accessing node properties only
+     */
+    if (isHash && check.isDefined(reference.eval)) {
+        assert.isString(reference.eval)
+
+        const split = reference.eval.split('::')
+
+        if (split.length === 2) {
+            const [propertyContainer, property] = split
+            return {propertyContainer, property}
+        }
+    }
+
+    /**
+     * Unfurl eval jinja filter
+     *
+     * CAUTION: The parsing is limited to directly accessing node properties only
+     */
+    if (check.isString(reference)) {
+        const regex = new RegExp(/\{\{ ['"]::(?<node>.*)::(?<property>.*)['"] \| eval \}\}/)
+        const found = reference.match(regex)
+
+        // Might be hardcoded value
+        if (check.isUndefined(found)) return {}
+
+        const propertyContainer = found.groups!.node
+
+        const property = found.groups!.property
+
+        return {propertyContainer, property}
+    }
+
+    /**
+     * Assume that there is not a reference. E.g., when using "concat"
+     */
+    return {}
 }

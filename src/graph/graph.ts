@@ -128,15 +128,36 @@ export default class Graph {
         new Populator(this).run()
     }
 
-    getElement(name: string, context: Context = {}): Element {
+    guessElement(data: string, context: Context = {}): Element {
+        assert.isString(data)
         try {
-            return this.getNode(name, context)
+            return this.getNode(data, context)
         } catch (e) {
             // NIL
         }
 
+        try {
+            return this.getGroup(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        try {
+            return this.getPolicy(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        try {
+            return this.getGroup(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        // TODO: guess property? relation? artifact?
+
         throw new Error(
-            `Could not get element "${name}" from context element "${context.element?.display}" and context cached "${context.cached?.display}"`
+            `Could not get element "${data}" from context element "${context.element?.display}" and context cached "${context.cached?.display}"`
         )
     }
 

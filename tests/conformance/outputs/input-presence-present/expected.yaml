@@ -4,6 +4,7 @@ topology_template:
     outputs:
         input:
             type: string
+            value: some-value
     node_templates:
         container:
             type: container

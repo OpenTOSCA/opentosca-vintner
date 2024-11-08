@@ -14,7 +14,7 @@ export type PropertyAssignmentValue =
     | boolean
     | PropertyAssignmentValue[]
     | {[key: string]: PropertyAssignmentValue}
-    | {get_property: string[]; get_input: string; get_attribute: string[]}
+    | {get_property?: string[]; get_input?: string; get_attribute?: string[]; eval?: string}
 
 export type PropertyAssignmentList = PropertyAssignmentListEntry[]
 export type PropertyAssignmentListEntry = {
