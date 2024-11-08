@@ -74,7 +74,7 @@ export type ConstraintsOptions = {
     hosting_stack_constraint?: boolean
     technology_constraint?: boolean
 
-    property_constraint?: boolean
+    unique_property_constraint?: boolean
     unique_artifact_constraint?: boolean
     unique_input_constraint?: boolean
     unique_output_constraint?: boolean
@@ -100,6 +100,9 @@ export type NodeDefaultConditionMode =
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
 export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
+
+export type PropertyDefaultConditionModes = 'container' | 'consuming'
+export type PropertyDefaultConditionMode = `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
 
 export type DefaultOptions = {
     default_condition?: boolean
@@ -137,6 +140,7 @@ export type DefaultOptions = {
     artifact_default_semantic_condition?: boolean
 
     property_default_condition?: boolean
+    property_default_condition_mode?: PropertyDefaultConditionMode
     property_default_consistency_condition?: boolean
     property_default_semantic_condition?: boolean
 

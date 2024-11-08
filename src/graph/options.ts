@@ -4,6 +4,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {
     ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
+    PropertyDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
     VariabilityOptions,
@@ -91,6 +92,7 @@ class DefaultOptions extends BaseOptions {
     readonly artifactDefaultSemanticCondition: boolean
 
     readonly propertyDefaultCondition: boolean
+    readonly propertyDefaultConditionMode: PropertyDefaultConditionMode
     readonly propertyDefaultConsistencyCondition: boolean
     readonly propertyDefaultSemanticCondition: boolean
 
@@ -287,6 +289,10 @@ class DefaultOptions extends BaseOptions {
         this.propertyDefaultCondition =
             this.raw.property_default_condition ?? mode.property_default_condition ?? this.defaultCondition
         assert.isBoolean(this.propertyDefaultCondition)
+
+        this.propertyDefaultConditionMode =
+            this.raw.property_default_condition_mode ?? mode.property_default_condition_mode ?? 'container-consuming'
+        assert.isString(this.propertyDefaultConditionMode)
 
         this.propertyDefaultConsistencyCondition =
             this.raw.property_default_consistency_condition ??
@@ -844,7 +850,7 @@ class ConstraintsOptions extends BaseOptions {
     readonly hostingStack: boolean
     readonly technology: boolean
 
-    readonly property: boolean
+    readonly uniqueProperty: boolean
     readonly uniqueArtifact: boolean
     readonly uniqueInput: boolean
     readonly uniqueOutput: boolean
@@ -883,8 +889,8 @@ class ConstraintsOptions extends BaseOptions {
             this.technology = this.raw.technology_constraint ?? this.constraints
             assert.isBoolean(this.technology)
 
-            this.property = this.raw.property_constraint ?? this.constraints
-            assert.isBoolean(this.property)
+            this.uniqueProperty = this.raw.unique_property_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueProperty)
 
             this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.constraints
             assert.isBoolean(this.uniqueArtifact)
@@ -907,8 +913,8 @@ class ConstraintsOptions extends BaseOptions {
             this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.technology)
 
-            this.property = this.raw.property_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.property)
+            this.uniqueProperty = this.raw.unique_property_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueProperty)
 
             this.uniqueArtifact = this.raw.unique_artifact_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueArtifact)

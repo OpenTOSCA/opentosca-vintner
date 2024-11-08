@@ -94,7 +94,7 @@ export class ConstraintEnricher {
         /**
          * Ensure that each property has exactly one value
          */
-        if (this.graph.options.constraints.property) {
+        if (this.graph.options.constraints.uniqueProperty) {
             for (const element of [
                 ...this.graph.nodes,
                 ...this.graph.relations,

@@ -3,7 +3,7 @@
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ELEMENT_PROPERTY_VALUE_ASSIGNMENT}
  */
 
-import {ValueExpression, VariabilityAlternative} from '#spec/variability'
+import {PropertyDefaultConditionMode, ValueExpression, VariabilityAlternative} from '#spec/variability'
 
 export type PropertyAssignmentMap = {
     [key: string]: PropertyAssignmentValue
@@ -24,4 +24,6 @@ export type PropertyAssignmentListEntry = {
 export type ConditionalPropertyAssignmentValue = {
     value?: PropertyAssignmentValue
     expression?: ValueExpression
-} & VariabilityAlternative
+} & VariabilityAlternative & {
+        default_condition_mode?: PropertyDefaultConditionMode
+    }

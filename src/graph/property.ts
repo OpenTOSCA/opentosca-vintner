@@ -7,7 +7,7 @@ import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
-import {LogicExpression, ValueExpression} from '#spec/variability'
+import {LogicExpression, PropertyDefaultConditionMode, ValueExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -94,17 +94,27 @@ export default class Property extends Element {
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
-    // TODO: add some configuration options
+    get getDefaultMode(): PropertyDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.propertyDefaultConditionMode
+    }
+
     getElementGenericCondition() {
         const conditions: LogicExpression[] = []
 
-        // Container pruning
-        conditions.push(this.container.presenceCondition)
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['container', 'consuming'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
-        // Consuming pruning
-        if (!utils.isEmpty(this.consuming)) {
-            conditions.push({or: this.consuming.map(it => it.presenceCondition)})
-        }
+            if (it === 'container') {
+                return conditions.push(this.container.presenceCondition)
+            }
+
+            if (it === 'consuming') {
+                if (utils.isEmpty(this.consuming)) return
+                return conditions.push({or: this.consuming.map(consumed => consumed.presenceCondition)})
+            }
+        })
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
