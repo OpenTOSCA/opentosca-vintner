@@ -538,7 +538,7 @@ export class Populator {
                 const input = this.graph.getInput(value.get_input)
 
                 input.consumers.push(property)
-                property.consuming = [input]
+                property.consuming.push(input)
             }
 
             if (check.isDefined(value.get_property) || check.isDefined(value.get_attribute)) {
@@ -550,7 +550,7 @@ export class Populator {
                     assert.isString(elementName)
 
                     // TODO: also implement this for non-nodes? #getElement
-                    property.consuming = [this.graph.getNode(elementName, {element: property.container})]
+                    property.consuming.push(this.graph.getNode(elementName, {element: property.container}))
                     continue
                 }
 
@@ -561,7 +561,7 @@ export class Populator {
 
                     // TODO: are there more element where this fits? artifact?
                     const node = this.graph.getNode(containerName, {element: property.container})
-                    property.consuming = node.outgoing.filter(it => it.name === elementName).map(it => it.target)
+                    property.consuming.push(...node.outgoing.filter(it => it.name === elementName).map(it => it.target))
                     continue
                 }
 

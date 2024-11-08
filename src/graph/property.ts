@@ -34,8 +34,7 @@ export default class Property extends Element {
     value?: PropertyAssignmentValue
     readonly expression?: ValueExpression
 
-    // TODO: NEXT: this is now an array!
-    consuming: (Property | Input | Node | Relation | Group | Policy | Artifact)[] = []
+    readonly consuming: (Property | Input | Node | Relation | Group | Policy | Artifact)[] = []
 
     constructor(data: {
         name: string
