@@ -32,7 +32,7 @@ export default class Enricher {
         /**
          * Regenerate graph
          */
-        graph = graph.regenerate()
+        graph = new Graph(this.serviceTemplate)
 
         /**
          * Condition Enricher

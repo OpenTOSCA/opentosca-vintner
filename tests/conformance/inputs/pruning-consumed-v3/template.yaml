@@ -9,7 +9,6 @@ topology_template:
         options:
             enrich_implementations: false
             enrich_technologies: false
-            required_artifact_constraint: false
 
     inputs:
         some_input:
@@ -20,10 +19,4 @@ topology_template:
             type: container
             conditions: true
             properties:
-                hallo: fvasadfasdfsdalco
-            artifacts:
-                - apt_package:
-                      type: tosca.artifacts.Root
-                      file: falco
-                      properties:
-                          repository: falco
+                some_property: {get_input: some_input}

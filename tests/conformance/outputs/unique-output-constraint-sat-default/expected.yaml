@@ -4,5 +4,7 @@ topology_template:
     outputs:
         one:
             type: string_b
+            value: one-other-value
         three:
             type: string
+            value: three-value

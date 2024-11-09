@@ -81,6 +81,7 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
      * Hotfix
      */
     hotfixPersistentCheck(options.template)
+    hotfixBratans(options.template)
 
     /**
      * Graph
@@ -108,5 +109,26 @@ export function hotfixPersistentCheck(template: ServiceTemplate) {
         }
 
         template.topology_template.variability.options.persistent_check = false
+    }
+}
+
+/**
+ * TODO: Hotfix Bratans Unknown
+ *  the populator will add new undefined default alternatives
+ *  but the solver does not know this concept
+ *  default alternatives are handeled by the enricher
+ *  hence multiple properties with no conditions assigned are possible which results in UNSAT
+ */
+export function hotfixBratans(template: ServiceTemplate) {
+    if (check.isDefined(template.topology_template)) {
+        if (check.isUndefined(template.topology_template.variability)) {
+            template.topology_template.variability = {}
+        }
+
+        if (check.isUndefined(template.topology_template.variability.options)) {
+            template.topology_template.variability.options = {}
+        }
+
+        template.topology_template.variability.options.bratans_unknown = true
     }
 }

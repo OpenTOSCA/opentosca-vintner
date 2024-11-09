@@ -1,12 +1,13 @@
 import * as check from '#check'
-import {bratify} from '#graph/utils'
+import Input from '#graph/input'
+import {andify, bratify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
-import {LogicExpression, ValueExpression} from '#spec/variability'
+import {LogicExpression, PropertyDefaultConditionMode, ValueExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -32,6 +33,8 @@ export default class Property extends Element {
 
     value?: PropertyAssignmentValue
     readonly expression?: ValueExpression
+
+    readonly consuming: (Property | Input | Node | Relation | Group | Policy | Artifact)[] = []
 
     constructor(data: {
         name: string
@@ -90,8 +93,29 @@ export default class Property extends Element {
 
     // TODO: getTypeSpecificCondition, however, get type from type definition being part of the container type ...
 
+    get getDefaultMode(): PropertyDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.propertyDefaultConditionMode
+    }
+
     getElementGenericCondition() {
-        return [{conditions: this.container.presenceCondition, consistency: true, semantic: false}]
+        const conditions: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['container', 'consuming'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'container') {
+                return conditions.push(this.container.presenceCondition)
+            }
+
+            if (it === 'consuming') {
+                if (utils.isEmpty(this.consuming)) return
+                return conditions.push({or: this.consuming.map(consumed => consumed.presenceCondition)})
+            }
+        })
+
+        return [{conditions: andify(conditions), consistency: true, semantic: false}]
     }
 
     constructPresenceCondition() {
@@ -101,6 +125,14 @@ export default class Property extends Element {
     // Check if no other property having the same name is present
     constructDefaultAlternativeCondition(): LogicExpression {
         return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+    }
+
+    /**
+     * A property is implied by default.
+     * This is also okay for default alternatives since bratan condition is a manual condition.
+     */
+    get implied() {
+        return this.raw.implied ?? true
     }
 
     isProperty() {

@@ -1,5 +1,6 @@
 import Controller from '#controller'
 import * as files from '#files'
+import std from '#std'
 import {expect} from 'chai'
 import path from 'path'
 
@@ -8,6 +9,7 @@ export function EnricherTest(dir: string) {
         const output = files.temporaryDirent()
         await Controller.template.enrich({template: path.join(__dirname, dir, 'template.yaml'), output})
         const result = await files.loadYAML(path.join(output))
+        std.log(output)
         expect(result).to.deep.equal(await files.loadYAML(path.join(__dirname, dir, 'expected.yaml')))
         await files.removeFile(output)
     })

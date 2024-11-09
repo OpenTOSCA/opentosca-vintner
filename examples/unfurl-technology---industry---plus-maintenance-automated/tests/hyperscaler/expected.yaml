@@ -8,6 +8,9 @@ topology_template:
         domain:
             type: string
 
+        dbms_password:
+            type: string
+
         retailer_name:
             type: string
 

@@ -128,6 +128,39 @@ export default class Graph {
         new Populator(this).run()
     }
 
+    guessElement(data: string, context: Context = {}): Element {
+        assert.isString(data)
+        try {
+            return this.getNode(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        try {
+            return this.getGroup(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        try {
+            return this.getPolicy(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        try {
+            return this.getGroup(data, context)
+        } catch (e) {
+            // NIL
+        }
+
+        // TODO: guess property? relation? artifact?
+
+        throw new Error(
+            `Could not get element "${data}" from context element "${context.element?.display}" and context cached "${context.cached?.display}"`
+        )
+    }
+
     getNode(name: string | 'SELF' | 'CONTAINER' | 'SOURCE' | 'TARGET', context: Context = {}): Node {
         assert.isString(name)
 
@@ -647,9 +680,5 @@ export default class Graph {
 
     replaceTechnologies(node: Node, maps: TechnologyTemplateMap[]) {
         node.raw.technology = maps
-    }
-
-    regenerate() {
-        return new Graph(this.serviceTemplate)
     }
 }

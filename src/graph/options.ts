@@ -4,6 +4,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {
     ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
+    PropertyDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
     VariabilityOptions,
@@ -91,6 +92,7 @@ class DefaultOptions extends BaseOptions {
     readonly artifactDefaultSemanticCondition: boolean
 
     readonly propertyDefaultCondition: boolean
+    readonly propertyDefaultConditionMode: PropertyDefaultConditionMode
     readonly propertyDefaultConsistencyCondition: boolean
     readonly propertyDefaultSemanticCondition: boolean
 
@@ -287,6 +289,10 @@ class DefaultOptions extends BaseOptions {
         this.propertyDefaultCondition =
             this.raw.property_default_condition ?? mode.property_default_condition ?? this.defaultCondition
         assert.isBoolean(this.propertyDefaultCondition)
+
+        this.propertyDefaultConditionMode =
+            this.raw.property_default_condition_mode ?? mode.property_default_condition_mode ?? 'container-consuming'
+        assert.isString(this.propertyDefaultConditionMode)
 
         this.propertyDefaultConsistencyCondition =
             this.raw.property_default_consistency_condition ??

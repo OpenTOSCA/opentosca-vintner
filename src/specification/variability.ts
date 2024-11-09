@@ -3,6 +3,8 @@ import {TechnologyRule} from '#spec/technology-template'
 import {TechnologyPluginBuilder} from '#technologies/types'
 import {InputAssignmentMap, InputAssignmentValue} from './topology-template'
 
+export const VINTNER_UNDEFINED = 'VINTNER_UNDEFINED'
+
 export type VariabilityDefinition = {
     inputs?: VariabilityInputDefinitionMap
     presets?: InputAssignmentPresetMap
@@ -99,6 +101,9 @@ export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
 export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
 export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
 
+export type PropertyDefaultConditionModes = 'container' | 'consuming'
+export type PropertyDefaultConditionMode = `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+
 export type DefaultOptions = {
     default_condition?: boolean
 
@@ -135,6 +140,7 @@ export type DefaultOptions = {
     artifact_default_semantic_condition?: boolean
 
     property_default_condition?: boolean
+    property_default_condition_mode?: PropertyDefaultConditionMode
     property_default_consistency_condition?: boolean
     property_default_semantic_condition?: boolean
 
@@ -215,6 +221,7 @@ export type ChecksOptions = {
     expected_artifact_check?: boolean
 
     persistent_check?: boolean
+    bratans_unknown?: boolean
 
     expected_technology_check?: boolean
     missing_technology_container_check?: boolean

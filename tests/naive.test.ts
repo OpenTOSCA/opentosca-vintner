@@ -36,6 +36,10 @@ topology_template:
         `,
             [
                 {
+                    'manual.node.source': true,
+                    'manual.node.target': true,
+                    'manual.type.source@0.node.source': true,
+                    'manual.type.target@0.node.target': true,
                     'type.source@0.node.source': true,
                     'node.source': true,
                     'type.target@0.node.target': false,
@@ -44,6 +48,10 @@ topology_template:
                     'manual.relation.relation@0.node.source': true,
                 },
                 {
+                    'manual.node.source': true,
+                    'manual.node.target': true,
+                    'manual.type.source@0.node.source': true,
+                    'manual.type.target@0.node.target': true,
                     'type.source@0.node.source': true,
                     'node.source': true,
                     'type.target@0.node.target': true,
@@ -84,6 +92,10 @@ topology_template:
         `,
             [
                 {
+                    'manual.node.source': true,
+                    'manual.node.target': true,
+                    'manual.type.source@0.node.source': true,
+                    'manual.type.target@0.node.target': true,
                     'type.source@0.node.source': true,
                     'node.source': true,
                     'type.target@0.node.target': true,
