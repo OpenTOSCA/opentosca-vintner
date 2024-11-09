@@ -1,41 +1,80 @@
 tosca_definitions_version: tosca_variability_1_0
-
 topology_template:
+    variability:
+        constraints:
+            - implies:
+                  - and:
+                        - node.target
+                        - manual.property.key@0.node.target
+                  - property.key@0.node.target
+            - implies:
+                  - and:
+                        - node.target
+                        - manual.property.key@1.node.target
+                  - property.key@1.node.target
     node_templates:
         - source:
               type:
                   - source:
                         conditions:
-                            - {node_presence: source, _generated: true}
-              technology: []
+                            - node_presence: source
+                              _generated: true
               conditions:
-                  - {and: [], _generated: true}
-                  - {equal: [value, value]}
+                  - and: []
+                    _generated: true
+                  - equal:
+                        - value
+                        - value
               requirements:
                   - relation:
                         node: target
                         conditions:
-                            - {and: [{node_presence: source, _generated: true}, {node_presence: target, _generated: true}], _generated: true}
-
+                            - and:
+                                  - node_presence: source
+                                    _generated: true
+                                  - node_presence: target
+                                    _generated: true
+                              _generated: true
+              technology: []
         - target:
               type:
                   - target:
                         conditions:
-                            - {node_presence: target, _generated: true}
-              technology: []
-              conditions:
-                  - {and: [{has_incoming_relation: target}, {has_artifact: target}], _generated: true}
+                            - node_presence: target
+                              _generated: true
               properties:
                   - key:
                         value: value
                         conditions:
-                            - {node_presence: target, _generated: true}
+                            - node_presence: target
+                              _generated: true
+                  - key:
+                        value: VINTNER_UNDEFINED
+                        conditions:
+                            - node_presence: target
+                              _generated: true
+                            - not:
+                                  or:
+                                      - node_property_presence:
+                                            - target
+                                            - 0
+                              _bratan: true
               artifacts:
                   - artifact:
+                        file: /some/artifact
                         type:
                             - tosca.artifacts.File:
                                   conditions:
-                                      - {artifact_presence: [target, 0], _generated: true}
-                        file: /some/artifact
+                                      - artifact_presence:
+                                            - target
+                                            - 0
+                                        _generated: true
                         conditions:
-                            - {node_presence: target, _generated: true}
+                            - node_presence: target
+                              _generated: true
+              technology: []
+              conditions:
+                  - and:
+                        - has_incoming_relation: target
+                        - has_artifact: target
+                    _generated: true

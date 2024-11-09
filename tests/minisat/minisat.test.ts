@@ -5,7 +5,7 @@ import {expect} from 'chai'
 import * as yaml from 'js-yaml'
 
 describe('minisat', () => {
-    it('alpha', () => {
+    it('minisat', () => {
         run(
             `
 tosca_definitions_version: tosca_variability_1_0
@@ -22,10 +22,16 @@ topology_template:
             [
                 'not(false)',
                 'true',
+                'manual.type.type_one@0.node.node_one',
                 'type.type_one@0.node.node_one',
+                'manual.type.type_two@0.node.node_two',
                 'type.type_two@0.node.node_two',
+                'manual.node.node_one or not(node.node_two)',
+                'not(manual.node.node_one) or node.node_two',
                 'node.node_one or not(node.node_two)',
                 'not(node.node_one) or node.node_two',
+                'manual.node.node_two or not(true)',
+                'not(manual.node.node_two) or true',
                 'node.node_two',
             ].join(`\n`)
         )

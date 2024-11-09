@@ -1,57 +1,124 @@
 tosca_definitions_version: tosca_variability_1_0
-
 topology_template:
+    variability:
+        constraints:
+            - implies:
+                  - and:
+                        - node.virtual_machine
+                        - manual.property.tier@0.node.virtual_machine
+                  - property.tier@0.node.virtual_machine
+            - implies:
+                  - and:
+                        - node.virtual_machine
+                        - manual.property.tier@1.node.virtual_machine
+                  - property.tier@1.node.virtual_machine
+            - implies:
+                  - and:
+                        - node.virtual_machine
+                        - manual.property.image@2.node.virtual_machine
+                  - property.image@2.node.virtual_machine
+            - implies:
+                  - and:
+                        - node.virtual_machine
+                        - manual.property.tier@3.node.virtual_machine
+                  - property.tier@3.node.virtual_machine
+            - implies:
+                  - and:
+                        - node.virtual_machine
+                        - manual.property.image@4.node.virtual_machine
+                  - property.image@4.node.virtual_machine
     node_templates:
         - application:
               type:
                   - application:
                         conditions:
-                            - {node_presence: application, _generated: true}
-              technology: []
-              conditions:
-                  - {and: [], _generated: true}
+                            - node_presence: application
+                              _generated: true
               requirements:
                   - host:
                         node: virtual_machine
                         conditions:
-                            - {and: [{node_presence: application, _generated: true}, {node_presence: virtual_machine, _generated: true}], _generated: true}
-
+                            - and:
+                                  - node_presence: application
+                                    _generated: true
+                                  - node_presence: virtual_machine
+                                    _generated: true
+                              _generated: true
+              technology: []
+              conditions:
+                  - and: []
+                    _generated: true
         - virtual_machine:
               type:
                   - virtual_machine:
                         conditions:
-                            - {node_presence: virtual_machine, _generated: true}
-              technology: []
+                            - node_presence: virtual_machine
+                              _generated: true
               conditions:
-                  - {has_incoming_relation: virtual_machine, _generated: true}
-                  - {logic_expression: is_gdpr}
+                  - has_incoming_relation: virtual_machine
+                    _generated: true
+                  - logic_expression: is_gdpr
               properties:
                   - tier:
                         value: large
                         conditions:
-                            - {node_presence: virtual_machine, _generated: true}
-                            - {logic_expression: is_large}
-
+                            - node_presence: virtual_machine
+                              _generated: true
+                            - logic_expression: is_large
                   - tier:
                         value: medium
                         conditions:
-                            - {node_presence: virtual_machine, _generated: true}
-                            - {logic_expression: is_medium}
+                            - node_presence: virtual_machine
+                              _generated: true
+                            - logic_expression: is_medium
                   - image:
                         value: ubuntu
                         conditions:
-                            - {node_presence: virtual_machine, _generated: true}
+                            - node_presence: virtual_machine
+                              _generated: true
+                  - tier:
+                        value: VINTNER_UNDEFINED
+                        conditions:
+                            - node_presence: virtual_machine
+                              _generated: true
+                            - not:
+                                  or:
+                                      - node_property_presence:
+                                            - virtual_machine
+                                            - 0
+                                      - node_property_presence:
+                                            - virtual_machine
+                                            - 1
+                              _bratan: true
+                  - image:
+                        value: VINTNER_UNDEFINED
+                        conditions:
+                            - node_presence: virtual_machine
+                              _generated: true
+                            - not:
+                                  or:
+                                      - node_property_presence:
+                                            - virtual_machine
+                                            - 2
+                              _bratan: true
               requirements:
                   - host:
                         node: private_cloud
                         conditions:
-                            - {and: [{node_presence: virtual_machine, _generated: true}, {node_presence: private_cloud, _generated: true}], _generated: true}
-
+                            - and:
+                                  - node_presence: virtual_machine
+                                    _generated: true
+                                  - node_presence: private_cloud
+                                    _generated: true
+                              _generated: true
+              technology: []
         - private_cloud:
               type:
                   - private_cloud:
                         conditions:
-                            - {node_presence: private_cloud, _generated: true}
+                            - node_presence: private_cloud
+                              _generated: true
               technology: []
               conditions:
-                  - {has_incoming_relation: private_cloud, _generated: true}
+                  - has_incoming_relation: private_cloud
+                    _generated: true
