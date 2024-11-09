@@ -1126,13 +1126,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#normalization-options" class="md-nav__link">
-    Normalization Options
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#enricher-options" class="md-nav__link">
     Enricher Options
   </a>
@@ -8264,13 +8257,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#normalization-options" class="md-nav__link">
-    Normalization Options
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#enricher-options" class="md-nav__link">
     Enricher Options
   </a>
@@ -9765,28 +9751,6 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tr>
 </tbody>
 </table>
-<h3 id="normalization-options">Normalization Options<a class="headerlink" href="#normalization-options" title="Permanent link">&para;</a></h3>
-<p>The following options are used to configure the normalizer.</p>
-<table>
-<thead>
-<tr>
-<th>Keyname</th>
-<th>Mandatory</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>technology_required</td>
-<td>false</td>
-<td>Boolean</td>
-<td>false</td>
-<td>Enable if a technology is required by default for a node.</td>
-</tr>
-</tbody>
-</table>
 <h3 id="enricher-options">Enricher Options<a class="headerlink" href="#enricher-options" title="Permanent link">&para;</a></h3>
 <p>The following options are used to configure the enricher.</p>
 <table>
@@ -9962,8 +9926,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <span class="normal"><a href="#__codelineno-3-10">10</a></span>
 <span class="normal"><a href="#__codelineno-3-11">11</a></span>
 <span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -9972,11 +9935,10 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nt">technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nt">hosting_stack_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nt">technology_required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nt">unconsumed_input_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nt">unproduced_output_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nt">unconsumed_input_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nt">unproduced_output_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="rc-v3">RC v3<a class="headerlink" href="#rc-v3" title="Permanent link">&para;</a></h3>
 <p><code>tosca_variability_1_0_rc_3</code> has the following default values.
@@ -9999,8 +9961,7 @@ Also, pruning modes consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-16">16</a></span>
 <span class="normal"><a href="#__codelineno-4-17">17</a></span>
 <span class="normal"><a href="#__codelineno-4-18">18</a></span>
-<span class="normal"><a href="#__codelineno-4-19">19</a></span>
-<span class="normal"><a href="#__codelineno-4-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -10015,11 +9976,10 @@ Also, pruning modes consider input and output pruning.</p>
 <a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="nt">unique_output_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="nt">required_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">technology_required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">&para;</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -10519,6 +10479,12 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>false</td>
 <td>String &#124; List(Map(String, TechnologyTemplate){single})</td>
 <td>An optional conditional assignment of deployment technologies.</td>
+</tr>
+<tr>
+<td>managed</td>
+<td>false</td>
+<td>Boolean</td>
+<td>Enable if node is managed (default is true).</td>
 </tr>
 </tbody>
 </table>
