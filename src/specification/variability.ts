@@ -78,6 +78,7 @@ export type ConstraintsOptions = {
     unique_artifact_constraint?: boolean
     unique_input_constraint?: boolean
     unique_output_constraint?: boolean
+    unique_relation_constraint?: boolean
 
     required_artifact_constraint?: boolean
     required_incoming_relation_constraint?: boolean

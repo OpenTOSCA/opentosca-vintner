@@ -1,0 +1,23 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+topology_template:
+    variability:
+        options:
+            unique_relation_constraint: false
+
+    node_templates:
+        one:
+            type: one
+            persistent: true
+            managed: false
+            requirements:
+                - ambiguous_relation: two
+                - ambiguous_relation: three
+
+        two:
+            type: two
+            managed: false
+
+        three:
+            type: three
+            managed: false

@@ -291,6 +291,7 @@ The following options are used to configure constraints.
 | unique_artifact_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
 | unique_input_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
 | unique_output_constraint              | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
+| unique_relation_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique relation names.           |
 | required_artifact_constraint          | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
 | required_incoming_relation_constraint | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
 
@@ -346,6 +347,7 @@ unique_property_constraint: true
 unique_artifact_constraint: true
 unique_input_constraint: true
 unique_output_constraint: true
+unique_relation_constraint: true
 required_artifact_constraint: true
 relation_default_implied: true
 checks: false

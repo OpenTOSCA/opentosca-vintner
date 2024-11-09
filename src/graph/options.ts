@@ -843,6 +843,7 @@ class ConstraintsOptions extends BaseOptions {
     readonly uniqueArtifact: boolean
     readonly uniqueInput: boolean
     readonly uniqueOutput: boolean
+    readonly uniqueRelation: boolean
 
     readonly requiredArtifact: boolean
     readonly requiredIncomingRelation: boolean
@@ -890,6 +891,9 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.constraints
             assert.isBoolean(this.uniqueOutput)
 
+            this.uniqueRelation = this.raw.unique_relation_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueRelation)
+
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
             assert.isBoolean(this.requiredIncomingRelation)
         } else {
@@ -913,6 +917,9 @@ class ConstraintsOptions extends BaseOptions {
 
             this.uniqueOutput = this.raw.unique_output_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueOutput)
+
+            this.uniqueRelation = this.raw.unique_relation_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueRelation)
 
             this.requiredIncomingRelation =
                 this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? false
