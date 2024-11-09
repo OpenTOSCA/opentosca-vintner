@@ -650,19 +650,8 @@ class ChecksOptions extends BaseOptions {
         this.ambiguousTechnology = this.raw.ambiguous_technology_check ?? this.consistency
         assert.isBoolean(this.ambiguousTechnology)
 
-        if (this.v1 || this.v2) {
-            /**
-             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
-             */
-            this.requiredTechnology = this.raw.required_technology_check ?? this.semantic
-            assert.isBoolean(this.expectedTechnology)
-        } else {
-            /**
-             * Case: tosca_variability_1_0_rc_3
-             */
-            this.requiredTechnology = this.raw.required_technology_check ?? true
-            assert.isBoolean(this.expectedTechnology)
-        }
+        this.requiredTechnology = this.raw.required_technology_check ?? this.semantic
+        assert.isBoolean(this.expectedTechnology)
 
         this.ambiguousRelation = this.raw.ambiguous_relation_check ?? this.consistency
         assert.isBoolean(this.ambiguousRelation)
@@ -940,24 +929,8 @@ class ConstraintsOptions extends BaseOptions {
 }
 
 export class NormalizationOptions extends BaseOptions {
-    readonly technologyRequired: boolean
-
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
-
-        if (this.v1 || this.v2) {
-            /**
-             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1, tosca_variability_1_0_rc_2
-             */
-            this.technologyRequired = this.raw.technology_required ?? false
-            assert.isBoolean(this.technologyRequired)
-        } else {
-            /**
-             * Case: tosca_variability_1_0_rc_3
-             */
-            this.technologyRequired = this.raw.technology_required ?? true
-            assert.isBoolean(this.technologyRequired)
-        }
     }
 }
 

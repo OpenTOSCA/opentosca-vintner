@@ -12,6 +12,7 @@ topology_template:
 
         options:
             enrich_technologies: false
+            technology_constraint: false
 
     node_templates:
         application:

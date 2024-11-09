@@ -66,14 +66,27 @@ export default class Node extends Element {
         return this.name
     }
 
-    // TODO: NEXT: adapt this to external component
     /**
-     * Technology is required if type is not abstract
+     * Checks if component is managed, i.e., requires a technology.
      */
-    get technologyRequired() {
+    // TODO: write input validations in populator that ensures that raw.manged does not conflict eg with modeled technologies?
+    get managed() {
+        // Component is (un)managed if manually specified
+        if (check.isDefined(this.raw.managed)) {
+            assert.isBoolean(this.raw.managed)
+            return this.raw.managed
+        }
+
+        // Component is managed, if technologies are assigned (e.g., manually)
+        if (utils.isPopulated(this.technologies)) return true
+
+        // Component is unmanaged if type is abstract
         const type = this.graph.inheritance.getNodeType(this.getType().name)
         assert.isDefined(type, `Node type "${this.getType().name}" does not exist`)
-        return !isAbstract(type)
+        if (isAbstract(type)) return false
+
+        // Component is managed by default
+        return true
     }
 
     get persistent() {
@@ -105,19 +118,19 @@ export default class Node extends Element {
     }
 
     get hasHost() {
-        return !utils.isEmpty(this.hosts)
+        return utils.isPopulated(this.hosts)
     }
 
     get isTarget() {
-        return !utils.isEmpty(this.ingoing)
+        return utils.isPopulated(this.ingoing)
     }
 
     get isSource() {
-        return !utils.isEmpty(this.outgoing)
+        return utils.isPopulated(this.outgoing)
     }
 
     get hasArtifact() {
-        return !utils.isEmpty(this.artifacts)
+        return utils.isPopulated(this.artifacts)
     }
 
     getTypeSilent() {

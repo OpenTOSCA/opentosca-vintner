@@ -57,6 +57,10 @@ export function isEmpty(obj: any) {
     throw new Error(`Cannot check if object ${pretty(obj)} is empty`)
 }
 
+export function isPopulated(obj: any) {
+    return !isEmpty(obj)
+}
+
 export function first<T>(array: T[]) {
     return array[0]
 }

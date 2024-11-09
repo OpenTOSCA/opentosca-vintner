@@ -113,7 +113,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     assert.isDefined(rule.artifact)
                     return it.getType().isA(rule.artifact)
                 })
-                const hasArtifactInTemplate = !utils.isEmpty(artifactsByTemplate)
+                const hasArtifactInTemplate = utils.isPopulated(artifactsByTemplate)
 
                 // Check for artifact in type
                 const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(

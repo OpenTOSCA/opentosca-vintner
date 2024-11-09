@@ -22,6 +22,7 @@ topology_template:
             optimization_technologies_unique: true
             technology_pruning: true
             technology_constraint: true
+            required_technology_check: true
 
         technology_rules:
             - component: ansible_host

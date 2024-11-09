@@ -307,7 +307,6 @@ export default class Normalizer {
             assert.isString(rule.component)
 
             if (check.isUndefined(rule.hosting)) rule.hosting = []
-            // TODO: dont allow short form
             assert.isArray(rule.hosting)
             rule.hosting.forEach(it => assert.isString(it))
 

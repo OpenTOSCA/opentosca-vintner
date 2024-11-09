@@ -259,14 +259,6 @@ The following options are used to configure the solver.
 | optimization_technologies_unique | false     | Boolean                                 | false   | Enable check for unique results considering technologies. | 
 | optimization_technologies_mode   | false     | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.     | 
 
-### Normalization Options
-
-The following options are used to configure the normalizer.
-
-| Keyname              | Mandatory | Type                          | Default | Description                                               |
-|----------------------|-----------|-------------------------------|---------|-----------------------------------------------------------|
-| technology_required  | false     | Boolean                       | false   | Enable if a technology is required by default for a node. |
-
 
 ### Enricher Options
 
@@ -329,7 +321,6 @@ optimization_technologies_mode: weight-count
 technology_constraint: true
 hosting_stack_constraint: true
 relation_default_implied: true
-technology_required: false
 unconsumed_input_check: false
 unproduced_output_check: false
 enrich_technologies: true
@@ -357,7 +348,6 @@ unique_input_constraint: true
 unique_output_constraint: true
 required_artifact_constraint: true
 relation_default_implied: true
-technology_required: true
 checks: false
 enrich_technologies: true
 enrich_implementations: true
@@ -561,6 +551,7 @@ A node template can also hold conditional types, artifact, and properties.
 | weight                        | false     | Boolean &#124; Non-Negative Number                                                   | Configure the weight of this element used during optimization (default is 1).                                                                                                            |
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
 | technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single})                          | An optional conditional assignment of deployment technologies.                                                                                                                           |
+| managed                       | false     | Boolean                                                                              | Enable if node is managed (default is true).                                                                                                                                             |
 
 For example, the following node template has a variability condition assigned.
 

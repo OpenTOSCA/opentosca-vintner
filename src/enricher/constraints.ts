@@ -162,8 +162,9 @@ export class ConstraintEnricher {
         /**
          * Ensure that technology exists (required and single)
          */
+        // .filter(it => utils.isPopulated(it.technologies)
         if (this.graph.options.constraints.technology) {
-            for (const node of this.graph.nodes.filter(it => !utils.isEmpty(it.technologies))) {
+            for (const node of this.graph.nodes.filter(it => it.managed)) {
                 const consequence =
                     node.technologies.length === 1 ? node.technologies[0].id : {exo: node.technologies.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})

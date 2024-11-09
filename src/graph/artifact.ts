@@ -107,11 +107,11 @@ export default class Artifact extends Element {
 
         const wrappers: ConditionsWrapper[] = []
 
-        if (!utils.isEmpty(consistencies)) {
+        if (utils.isPopulated(consistencies)) {
             wrappers.push({conditions: andify(consistencies), consistency: true, semantic: false})
         }
 
-        if (!utils.isEmpty(semantics)) {
+        if (utils.isPopulated(semantics)) {
             wrappers.push({conditions: andify(semantics), consistency: false, semantic: true})
         }
 
