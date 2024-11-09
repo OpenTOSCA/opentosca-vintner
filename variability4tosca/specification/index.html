@@ -4177,6 +4177,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../tests/test-inputs-pruning-consumed-v3/" class="md-nav__link">
+        inputs-pruning-consumed-v3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tests/test-inputs-pruning-consumed/" class="md-nav__link">
         inputs-pruning-consumed
       </a>
@@ -5537,34 +5551,6 @@
     <li class="md-nav__item">
       <a href="../tests/test-properties-node-property-presence-number-present/" class="md-nav__link">
         properties-node-property-presence-number-present
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-properties-node-property-presence-string-absent/" class="md-nav__link">
-        properties-node-property-presence-string-absent
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-properties-node-property-presence-string-present/" class="md-nav__link">
-        properties-node-property-presence-string-present
       </a>
     </li>
   
@@ -9236,6 +9222,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable default condition for properties (consistency and semantic).</td>
 </tr>
 <tr>
+<td>property_default_condition_mode</td>
+<td>false</td>
+<td>List(container &#124; consuming, -)</td>
+<td>container-consuming</td>
+<td>Configure the default condition for properties.</td>
+</tr>
+<tr>
 <td>property_default_consistency_condition</td>
 <td>false</td>
 <td>Boolean</td>
@@ -9706,6 +9699,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>true</td>
 <td>Enable the consistency check regarding not produced outputs.</td>
 </tr>
+<tr>
+<td>required_technology_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable <em>in the enricher</em> if technology is required when enriching technologies</td>
+</tr>
 </tbody>
 </table>
 <h3 id="solver-options">Solver Options<a class="headerlink" href="#solver-options" title="Permanent link">&para;</a></h3>
@@ -10050,7 +10050,7 @@ However, type-specific default conditions are defined per type, e.g., node type,
 <td>Check if any artifact is present.</td>
 </tr>
 <tr>
-<td>Property</td>
+<td>Property (container)</td>
 <td>true</td>
 <td>false</td>
 <td>Check if the container, e.g., node template or policy, of the property is present.</td>
@@ -10178,6 +10178,12 @@ The following default conditions can be chosen instead of the ones introduced ab
 <td>false</td>
 <td>true</td>
 <td>Check if the artifact is managed by any technology.</td>
+</tr>
+<tr>
+<td>Property (consuming)</td>
+<td>true</td>
+<td>false</td>
+<td>Check if the consumed property or input is present.</td>
 </tr>
 </tbody>
 </table>
@@ -10868,6 +10874,12 @@ However, this only applies if the property assignment is wrapped as the followin
 <td>false</td>
 <td>Boolean</td>
 <td>Enable the default condition for this element. This overrides the variability options of the variable topology template.</td>
+</tr>
+<tr>
+<td>default_condition_mode</td>
+<td>false</td>
+<td>container &#124; consuming &#124; container-consuming</td>
+<td>Configure the default condition for this element.</td>
 </tr>
 <tr>
 <td>default_consistency_condition</td>
@@ -12469,7 +12481,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 6, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 9, 2024</span>
       
     
   </small>
