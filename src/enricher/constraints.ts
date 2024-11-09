@@ -20,10 +20,10 @@ export class ConstraintEnricher {
     }
 
     /**
-     * If requests, then the manual condition of an element implies this element
+     * If modeled, then the manual condition of an element implies this element
      * This ensures, e.g., that a relation is present under a given condition while using incoming-host
      *
-     * This is most likely only relevant for relations.
+     * This is most likely only relevant for relations and properties.
      * However, the method is still written in a generic way.
      */
     private enrichImplications(element: Element) {
@@ -180,7 +180,7 @@ export class ConstraintEnricher {
             }
         }
 
-        // TODO: Ensure that inputs are consumed
+        // TODO: Ensure that inputs are consumed (not required due to pruning?)
 
         /**
          * Ensure that outputs are unique per name
@@ -191,8 +191,18 @@ export class ConstraintEnricher {
             }
         }
 
-        // TODO: Ensure that outputs are produced
+        // TODO: Ensure that outputs are produced (not required due to pruning?)
 
-        // TODO: Ensure that relations are unique per name
+        /**
+         * Ensure that relations are unique per name
+         */
+        if (this.graph.options.constraints.uniqueRelation) {
+            for (const node of this.graph.nodes) {
+                for (const [_name, relations] of node.outgoingMap) {
+                    const consequence = {amo: relations.map(it => it.id)}
+                    this.graph.addConstraint({implies: [node.id, consequence]})
+                }
+            }
+        }
     }
 }
