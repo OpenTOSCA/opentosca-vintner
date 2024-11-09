@@ -574,14 +574,14 @@ export class Populator {
 
                 // GUESS: relation is referenced
                 const relations = node.outgoing.filter(it => it.name === parsed.propertyContainer).map(it => it.target)
-                if (!utils.isEmpty(relations)) {
+                if (utils.isPopulated(relations)) {
                     property.consuming.push(...relations)
                     continue
                 }
 
                 // GUESS: artifact is referenced
                 const artifacts = node.artifactsMap.get(parsed.propertyContainer) ?? []
-                if (!utils.isEmpty(artifacts)) {
+                if (utils.isPopulated(artifacts)) {
                     property.consuming.push(...artifacts)
                     continue
                 }

@@ -41,55 +41,51 @@ export class ElementEnricher {
         // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
         if (utils.isEmpty(this.graph.plugins.technology)) return
 
-        for (const node of this.graph.nodes) {
-            if (!utils.isEmpty(node.technologies)) {
-                // Do not override manual assigned technologies but enrich them with an implementation
-                const enriched: TechnologyTemplateMap[] = []
+        for (const node of this.graph.nodes.filter(it => it.managed).filter(it => utils.isPopulated(it.technologies))) {
+            // Do not override manual assigned technologies but enrich them with an implementation
+            const enriched: TechnologyTemplateMap[] = []
 
-                node.technologies.forEach(technology => {
-                    // TODO: super inefficient but we need copies for each since the same technology might be defined multiple times
-                    const candidates = this.getTechnologyCandidates(node)
-                    const selected = candidates.filter(map => utils.firstKey(map) === technology.name)
+            node.technologies.forEach(technology => {
+                // TODO: super inefficient but we need copies for each since the same technology might be defined multiple times
+                const candidates = this.getTechnologyCandidates(node)
+                const selected = candidates.filter(map => utils.firstKey(map) === technology.name)
 
-                    for (const map of selected) {
-                        const template = utils.firstValue(map)
-                        if (!utils.isEmpty(technology.conditions)) {
-                            // TODO: improve plugin typing!
-                            // assert.isArray(template.conditions)
-                            assert.isDefined(template.conditions)
-                            template.conditions = [
-                                ...technology.conditions,
-                                ...(check.isArray(template.conditions) ? template.conditions : [template.conditions]),
-                            ]
-                        }
+                for (const map of selected) {
+                    const template = utils.firstValue(map)
+                    if (utils.isPopulated(technology.conditions)) {
+                        // TODO: improve plugin typing!
+                        // assert.isArray(template.conditions)
+                        assert.isDefined(template.conditions)
+                        template.conditions = [
+                            ...technology.conditions,
+                            ...(check.isArray(template.conditions) ? template.conditions : [template.conditions]),
+                        ]
                     }
+                }
 
-                    if (utils.isEmpty(selected))
-                        throw new Error(`${node.Display} has no implementation for ${technology.display}`)
+                if (utils.isEmpty(selected))
+                    throw new Error(`${node.Display} has no implementation for ${technology.display}`)
 
-                    enriched.push(...selected)
-                })
-                this.graph.replaceTechnologies(node, enriched)
-            }
+                enriched.push(...selected)
+            })
+            this.graph.replaceTechnologies(node, enriched)
         }
     }
 
     private enrichTechnologies() {
-        for (const node of this.graph.nodes) {
+        for (const node of this.graph.nodes.filter(it => it.managed).filter(it => utils.isEmpty(it.technologies))) {
             // Get all possible technology assignments
             const candidates = this.getTechnologyCandidates(node)
 
-            if (utils.isEmpty(node.technologies)) {
-                // Throw if technology is required but no candidate has been found
-                if (this.graph.options.checks.requiredTechnology) {
-                    if (node.technologyRequired && utils.isEmpty(candidates)) {
-                        throw new Error(`${node.Display} has no technology candidates`)
-                    }
+            // Throw if technology is required but no candidate has been found
+            if (this.graph.options.checks.requiredTechnology) {
+                if (utils.isEmpty(candidates)) {
+                    throw new Error(`${node.Display} has no technology candidates`)
                 }
-
-                // Assign each possible technology assignment
-                candidates.forEach(it => this.graph.addTechnology(node, it))
             }
+
+            // Assign each possible technology assignment
+            candidates.forEach(it => this.graph.addTechnology(node, it))
         }
     }
 }

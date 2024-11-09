@@ -1,15 +1,6 @@
 tosca_definitions_version: tosca_variability_1_0_rc_3
 
-node_types:
-    container:
-        derived_from: tosca.nodes.Root
-
 topology_template:
-    variability:
-        options:
-            enrich_implementations: false
-            enrich_technologies: false
-
     inputs:
         some_input:
             type: string
@@ -18,5 +9,6 @@ topology_template:
         container:
             type: container
             conditions: true
+            managed: false
             properties:
                 some_property: {get_input: some_input}

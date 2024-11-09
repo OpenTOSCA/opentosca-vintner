@@ -83,7 +83,7 @@ export default async function (options: ScenariosOptions) {
         rules = rules.filter(rule => {
             assert.isDefined(rule.hosting)
 
-            if (check.isTrue(options.hosting)) return !utils.isEmpty(rule.hosting)
+            if (check.isTrue(options.hosting)) return utils.isPopulated(rule.hosting)
             if (check.isFalse(options.hosting)) return utils.isEmpty(rule.hosting)
 
             assert.isArray(options.hosting)

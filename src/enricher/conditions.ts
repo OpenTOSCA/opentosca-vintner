@@ -85,7 +85,7 @@ export class ConditionEnricher {
             return false
         })
 
-        if (!utils.isEmpty(selected)) {
+        if (utils.isPopulated(selected)) {
             conditions.unshift(
                 generatify(
                     simplify(

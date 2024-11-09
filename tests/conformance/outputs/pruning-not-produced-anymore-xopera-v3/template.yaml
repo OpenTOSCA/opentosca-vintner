@@ -5,6 +5,7 @@ topology_template:
         options:
             technology_required: false
             enrich_technologies: false
+            technology_constraint: false
 
     outputs:
         input:

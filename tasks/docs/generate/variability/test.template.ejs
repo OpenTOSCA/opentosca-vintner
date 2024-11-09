@@ -17,7 +17,7 @@ The variability of the following variable service template shall be resolved.
 {% endraw %}
 ```
 
-<% if (!utils.isEmpty(test.inputs)) { -%>
+<% if (utils.isPopulated(test.inputs)) { -%>
 ## Variability Inputs
 
 When resolving variability, the following variability inputs shall be used.

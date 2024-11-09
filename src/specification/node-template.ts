@@ -25,6 +25,7 @@ export type NodeTemplate = {
     weight?: number | boolean
     persistent?: boolean
     technology?: TechnologyAssignment
+    managed?: boolean
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }

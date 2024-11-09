@@ -73,7 +73,7 @@ export function constructRuleName(data: TechnologyRule, options: {technology?: b
         output += '::' + data.technology
     }
 
-    if (check.isDefined(data.hosting) && !utils.isEmpty(data.hosting)) {
+    if (check.isDefined(data.hosting) && utils.isPopulated(data.hosting)) {
         output += '@' + data.hosting.join('->')
     }
 
