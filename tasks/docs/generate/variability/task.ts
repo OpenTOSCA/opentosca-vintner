@@ -69,7 +69,7 @@ async function main() {
     for (const test of tests) {
         await files.renderFile(
             path.join(__dirname, 'test.template.ejs'),
-            {test, utils: {toYAML: files.toYAML, isEmpty: utils.isEmpty}},
+            {test, utils: {toYAML: files.toYAML, isEmpty: utils.isEmpty, isPopulated: utils.isPopulated}},
             path.join(documentationDirectory, test.file)
         )
     }
