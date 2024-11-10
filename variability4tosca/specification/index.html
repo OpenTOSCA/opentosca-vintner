@@ -6382,6 +6382,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../tests/test-relationships-ambigous-disabled/" class="md-nav__link">
+        relationships-ambigous-disabled
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-relationships-ambigous-throw/" class="md-nav__link">
+        relationships-ambigous-throw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tests/test-relationships-conditional/" class="md-nav__link">
         relationships-conditional
       </a>
@@ -9886,6 +9914,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable the constraint regarding unique deployment output names.</td>
 </tr>
 <tr>
+<td>unique_relation_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding unique relation names.</td>
+</tr>
+<tr>
 <td>required_artifact_constraint</td>
 <td>false</td>
 <td>Boolean</td>
@@ -9961,7 +9996,8 @@ Also, pruning modes consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-16">16</a></span>
 <span class="normal"><a href="#__codelineno-4-17">17</a></span>
 <span class="normal"><a href="#__codelineno-4-18">18</a></span>
-<span class="normal"><a href="#__codelineno-4-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span>
+<span class="normal"><a href="#__codelineno-4-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -9974,12 +10010,13 @@ Also, pruning modes consider input and output pruning.</p>
 <a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="nt">unique_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="nt">unique_input_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="nt">unique_output_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="nt">required_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="nt">unique_relation_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="nt">required_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">&para;</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -12447,7 +12484,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 9, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 10, 2024</span>
       
     
   </small>
