@@ -926,11 +926,7 @@ class ConstraintsOptions extends BaseOptions {
             assert.isBoolean(this.requiredIncomingRelation)
         }
 
-        if (this.v3) {
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.raw.constraints ?? true
-        } else {
-            this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
-        }
+        this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
         assert.isBoolean(this.requiredArtifact)
     }
 }
