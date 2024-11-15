@@ -6,7 +6,7 @@ const generator: ImplementationGenerator = {
     component: 'object.storage',
     technology: 'ansible',
     hosting: ['gcp.cloudstorage'],
-    weight: 1,
+    weight: 0,
     reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
