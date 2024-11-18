@@ -1,6 +1,4 @@
-# TODO: migrate this
-
-name: Case Study "Unfurl Technology"
+name: Case Study "Unfurl Technology Shop"
 on:
     workflow_dispatch:
 
@@ -12,6 +10,7 @@ jobs:
     #
     ###################################################
 
+    # TODO: test this
     kubernetes:
         name: Kubernetes
         runs-on: ubuntu-22.04
@@ -54,7 +53,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: KUBERNETES
-                  medium: false
+                  tier: LARGE
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -68,6 +67,8 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
+                  dbms_password: ${DB_PASSWORD}
+
                   k8s_api_address: $(minikube ip)
                   k8s_api_port: '8843'
                   k8s_ca_cert_file: /home/runner/.minikube/ca.crt
@@ -96,17 +97,18 @@ jobs:
 
     ###################################################
     #
-    # GCP
+    # Elastic
     #
     ###################################################
 
-    gcp:
-        name: GCP
+    # TODO: test this
+    elastic:
+        name: Elastic
         runs-on: ubuntu-22.04
         if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
             EXAMPLE_OVERRIDE: unfurl-technology
             ENV: GCP
             PORT: 80
@@ -139,7 +141,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: ELASTIC
-                  medium: false
+                  tier:  LARGE
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -153,6 +155,8 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
+                  dbms_password: ${DB_PASSWORD}
+
                   gcp_region: ${GCP_REGION}
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   gcp_project: ${GCP_PROJECT}

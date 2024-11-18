@@ -10,7 +10,7 @@ if [[ "${OSTYPE}" == "linux-gnu" ]]; then
 fi
 
 # Delete lib in instance
-rm -rf ${FS}/stoetzms/.opentosca_vintner/instances/technology-gcp/data/ensemble/lib
+rm -rf ${FS}/stoetzms/.opentosca_vintner/instances/technology-boutique/data/ensemble/lib
 
 # Copy local lib into instance
-cp -R ../lib ${FS}/stoetzms/.opentosca_vintner/instances/technology-gcp/data/ensemble
+cp -R ../lib ${FS}/stoetzms/.opentosca_vintner/instances/technology-boutique/data/ensemble
