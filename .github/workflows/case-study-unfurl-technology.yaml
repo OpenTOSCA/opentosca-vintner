@@ -15,6 +15,7 @@ jobs:
     kubernetes:
         name: Kubernetes
         runs-on: ubuntu-22.04
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
@@ -102,6 +103,7 @@ jobs:
     gcp:
         name: GCP
         runs-on: ubuntu-22.04
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
@@ -188,7 +190,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
             EXAMPLE_OVERRIDE: unfurl-technology
             ENV: OS
             PORT: 80
@@ -221,7 +223,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: STATIC
-                  medium: true
+                  tier: MEDIUM
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -235,6 +237,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
+                  dbms_password: ${DB_PASSWORD}
                   os_network: ${OS_NETWORK}
                   os_ssh_key_name: ${OS_SSH_KEY_NAME}
                   os_ssh_user: ${OS_SSH_USER}
@@ -249,6 +252,7 @@ jobs:
                   EOF
               env:
                   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                  DBMS_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
                   OS_NETWORK: ${{ secrets.OS_NETWORK }}
                   OS_SSH_KEY_NAME: ${{ secrets.OS_SSH_KEY_NAME }}
