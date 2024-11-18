@@ -486,7 +486,7 @@ topology_template:
             type: virtual.machine
             properties:
                 - machine_name: unfurl-technology-boutique
-                - ports: ['80', '2375', '9100']
+                - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}
