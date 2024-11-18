@@ -769,10 +769,6 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          msg: Management operation "start" missing
-                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -796,10 +792,6 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          msg: Management operation "stop" missing
-                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1164,10 +1156,6 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          msg: Management operation "start" missing
-                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -1199,10 +1187,6 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          msg: Management operation "stop" missing
-                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'

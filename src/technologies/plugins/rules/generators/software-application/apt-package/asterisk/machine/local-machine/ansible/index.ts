@@ -60,7 +60,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: AnsibleSoftwareApplicationStartTasks(),
+                                    q: AnsibleSoftwareApplicationStartTasks({assert: false}),
                                 },
                             },
                         },
@@ -70,7 +70,7 @@ class Generator extends GeneratorAbstract {
                             },
                             inputs: {
                                 playbook: {
-                                    q: AnsibleSoftwareApplicationStopTasks(),
+                                    q: AnsibleSoftwareApplicationStopTasks({assert: false}),
                                 },
                             },
                         },
