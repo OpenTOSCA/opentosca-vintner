@@ -29,7 +29,7 @@
 - technology: ansible
   component: gcp.service
   hosting: []
-  weight: 1
+  weight: 0
   reason: Ansible provides a declarative module
   details: '"google.cloud.gcp_serviceusage_service" task'
 - technology: terraform
@@ -133,14 +133,14 @@
       - mysql.dbms
       - docker.engine
       - remote.machine
-  weight: 0.5
+  weight: 0.75
   reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: mysql.database
   hosting:
       - mysql.dbms
       - gcp.cloudsql
-  weight: 0.5
+  weight: 0
   reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
 - technology: terraform
   component: mysql.database
@@ -168,7 +168,7 @@
   hosting:
       - mysql.dbms
       - kubernetes.cluster
-  weight: 0
+  weight: 0.25
   reason: Ansible is more specialized.
 - technology: ansible
   component: mysql.database
@@ -257,7 +257,7 @@
   artifact: dbms.image
   hosting:
       - gcp.cloudsql
-  weight: 1
+  weight: 0
   reason: Primary use case due to the specialization of Ansible.
   details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks'
 - technology: terraform
@@ -328,7 +328,7 @@
   component: object.storage
   hosting:
       - gcp.cloudstorage
-  weight: 1
+  weight: 0
   reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: object.storage
@@ -382,7 +382,7 @@
       - minio.server
       - docker.engine
       - remote.machine
-  weight: 0.5
+  weight: 0.75
   reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: object.storage
@@ -403,7 +403,7 @@
   hosting:
       - minio.server
       - kubernetes.cluster
-  weight: 0
+  weight: 0.25
   reason: Ansible is more specialized.
 - technology: ansible
   component: redis.server
@@ -464,7 +464,7 @@
   artifact: cache.image
   hosting:
       - gcp.memorystore
-  weight: 1
+  weight: 0
   reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: redis.server
