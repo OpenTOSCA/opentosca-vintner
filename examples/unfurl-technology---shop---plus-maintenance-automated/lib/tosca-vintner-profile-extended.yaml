@@ -699,7 +699,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -726,7 +726,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1093,7 +1093,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1128,7 +1128,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1485,7 +1485,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1514,7 +1514,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1865,7 +1865,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1900,7 +1900,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2241,7 +2241,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2268,7 +2268,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2621,7 +2621,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2656,7 +2656,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3002,7 +3002,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3029,7 +3029,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3396,7 +3396,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3431,7 +3431,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3788,7 +3788,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3817,7 +3817,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4168,7 +4168,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4203,7 +4203,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4544,7 +4544,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4571,7 +4571,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4924,7 +4924,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -4959,7 +4959,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -5305,7 +5305,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -5332,7 +5332,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -5699,7 +5699,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -5734,7 +5734,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6091,7 +6091,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6120,7 +6120,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6471,7 +6471,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6506,7 +6506,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6847,7 +6847,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -6874,7 +6874,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -7227,7 +7227,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -7262,7 +7262,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -7608,7 +7608,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -7635,7 +7635,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8002,7 +8002,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8037,7 +8037,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8394,7 +8394,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8423,7 +8423,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8774,7 +8774,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -8809,7 +8809,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -9150,7 +9150,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -9177,7 +9177,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -9530,7 +9530,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -9565,7 +9565,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -10950,7 +10950,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -10977,7 +10977,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -11345,7 +11345,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -11380,7 +11380,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -11740,7 +11740,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -11769,7 +11769,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12123,7 +12123,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12158,7 +12158,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12502,7 +12502,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12529,7 +12529,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12885,7 +12885,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -12920,7 +12920,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -14769,7 +14769,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -14796,7 +14796,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15166,7 +15166,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15201,7 +15201,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15565,7 +15565,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15594,7 +15594,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15952,7 +15952,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -15987,7 +15987,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -16335,7 +16335,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -16362,7 +16362,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -16722,7 +16722,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -16757,7 +16757,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -19262,7 +19262,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -19295,7 +19295,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -19684,7 +19684,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -19725,7 +19725,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -20104,7 +20104,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -20137,7 +20137,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -20530,7 +20530,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -20571,7 +20571,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21114,7 +21114,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21141,7 +21141,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21509,7 +21509,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21544,7 +21544,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21904,7 +21904,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -21933,7 +21933,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -22287,7 +22287,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -22322,7 +22322,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -22666,7 +22666,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -22693,7 +22693,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -23049,7 +23049,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -23084,7 +23084,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -24332,7 +24332,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -24359,7 +24359,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -24728,7 +24728,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -24763,7 +24763,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25125,7 +25125,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25154,7 +25154,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25510,7 +25510,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25545,7 +25545,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25891,7 +25891,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -25918,7 +25918,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -26276,7 +26276,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -26311,7 +26311,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
