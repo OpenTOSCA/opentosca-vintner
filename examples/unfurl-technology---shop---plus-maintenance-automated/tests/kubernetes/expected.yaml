@@ -48,7 +48,7 @@ topology_template:
             artifacts:
                 docker_image:
                     type: docker.image
-                    file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
+                    file: ghcr.io/opentosca/opentosca-vintner-shop-demo@sha256:944488f130969bd97efa4fbbfb4377489f0cef72d97b58ec324622354540d3b3
 
         shop_ingress:
             type: ingress~ingress::kubernetes@kubernetes.cluster
