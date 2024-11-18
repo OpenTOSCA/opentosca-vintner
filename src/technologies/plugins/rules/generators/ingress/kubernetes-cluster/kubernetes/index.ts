@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     hosting: ['kubernetes.cluster'],
     weight: 1,
     reason: 'Kubernetes is the underlying technology.',
-    details: 'Kubernetes manifest generated and applied',
 
     generate: (name, type) => {
         return {

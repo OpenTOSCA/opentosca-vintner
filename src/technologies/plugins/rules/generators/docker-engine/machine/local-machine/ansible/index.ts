@@ -17,7 +17,6 @@ const generator: ImplementationGenerator = {
     hosting: ['local.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
-    details: '"ansible.builtin.shell", "ansible.builtin.group", and "ansible.builtin.user" tasks',
 
     generate: (name, type) => {
         return {

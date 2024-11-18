@@ -14,7 +14,6 @@ class Generator extends GeneratorAbstract {
     hosting = ['mysql.dbms', 'remote.machine']
     weight = 1
     reason = 'Primary use case due to the specialization of Ansible.'
-    details = undefined
 
     generate(name: string, type: NodeType) {
         const user = {

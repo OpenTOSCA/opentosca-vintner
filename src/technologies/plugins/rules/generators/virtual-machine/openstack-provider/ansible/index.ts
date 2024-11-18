@@ -15,8 +15,6 @@ const generator: ImplementationGenerator = {
     hosting: ['openstack.provider'],
     weight: 0.5,
     reason: 'Terraform is more specialized.',
-    details:
-        '"openstack.cloud.security_group", "openstack.cloud.security_group_rule" and "openstack.cloud.server" tasks',
 
     generate: (name, type) => {
         return {

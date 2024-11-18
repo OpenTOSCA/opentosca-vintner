@@ -8,7 +8,6 @@ const generator: ImplementationGenerator = {
     hosting: [],
     weight: 0,
     reason: 'Ansible provides a declarative module',
-    details: '"google.cloud.gcp_serviceusage_service" task',
 
     generate: (name, type) => {
         return {

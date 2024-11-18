@@ -14,7 +14,6 @@ const generator: ImplementationGenerator = {
     hosting: ['docker.engine', 'local.machine'],
     weight: 0.5,
     reason: 'Docker Compose is more specialized.',
-    details: '"docker_container" and "docker_image" resources',
 
     generate: (name, type) => {
         return {

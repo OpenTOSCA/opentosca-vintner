@@ -21,7 +21,6 @@ const generator: ImplementationGenerator = {
     hosting: ['docker.engine', 'local.machine'],
     weight: 1,
     reason: 'Docker is the underlying technology.',
-    details: 'docker compose manifest generated and applied',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.cache_name }}'

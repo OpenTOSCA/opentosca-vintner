@@ -39,7 +39,6 @@ class Registry {
                         hosting: generator.hosting,
                         weight: generator.weight,
                         reason: generator.reason,
-                        details: generator.details,
                     })
                 )
             }

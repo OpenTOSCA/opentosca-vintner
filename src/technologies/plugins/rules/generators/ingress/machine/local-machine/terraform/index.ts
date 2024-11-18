@@ -9,8 +9,6 @@ const generator: ImplementationGenerator = {
     hosting: ['local.machine'],
     weight: 0,
     reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
-    details:
-        '"local_file" resource to create the installation script and "terraform_data" to execute the script using the "local-exec" provisioner',
 
     generate: (name, type) => {
         return {

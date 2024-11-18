@@ -25,8 +25,6 @@ class Generator extends GeneratorAbstract {
     hosting = ['*', 'local.machine']
     weight = 1
     reason = 'Primary use case due to the specialization of Ansible. Special integration for systemd.'
-    details =
-        '"ansible.builtin.file", "ansible.builtin.unarchive", "ansible.builtin.copy", "ansible.builtin.fail", "ansible.builtin.shell", and "ansible.builtin.systemd" tasks with "when" statements'
 
     generate(name: string, type: NodeType) {
         return {

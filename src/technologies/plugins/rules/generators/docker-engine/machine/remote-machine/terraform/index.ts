@@ -22,7 +22,6 @@ const generator: ImplementationGenerator = {
     hosting: ['remote.machine'],
     weight: 0,
     reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
-    details: '"remote-exec" provider',
 
     generate: (name, type) => {
         return {

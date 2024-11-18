@@ -24,5 +24,4 @@ export type TechnologyRule = {
     weight?: number
     assign?: string
     reason?: string
-    details?: string
 }

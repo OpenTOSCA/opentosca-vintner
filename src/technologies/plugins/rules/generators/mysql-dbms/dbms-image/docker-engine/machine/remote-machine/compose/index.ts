@@ -18,7 +18,6 @@ const generator: ImplementationGenerator = {
     hosting: ['docker.engine', 'remote.machine'],
     weight: 1,
     reason: 'Docker is the underlying technology.',
-    details: 'docker-compose manifest generated and applied',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.dbms_name }}'

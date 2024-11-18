@@ -10,7 +10,6 @@ class Generator extends GeneratorAbstract {
     hosting = ['mysql.dbms', 'local.machine']
     weight = 1
     reason = 'Terraform provides a declarative module.'
-    details = undefined
 
     generate(name: string, type: NodeType) {
         return {
