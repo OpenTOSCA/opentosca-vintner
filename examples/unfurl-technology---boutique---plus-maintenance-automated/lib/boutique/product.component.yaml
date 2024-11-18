@@ -42,7 +42,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/boutique-product:v8
+                default: ghcr.io/opentosca/opentosca-vintner-boutique-demo:product-v10
                 metadata:
                     vintner_ignore: true
 
