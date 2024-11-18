@@ -114,7 +114,7 @@ nav:
           - Variability4TOSCA:
                 - variability4tosca/motivation
                 - variability4tosca/specification
-                - variability4tosca/rules
+                - variability4tosca/quality
                 - variability4tosca/testing.md
                 - Conformance Tests: variability4tosca/tests
                 - variability4tosca/dynamic.md

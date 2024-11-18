@@ -19,7 +19,7 @@ async function main() {
     /**
      * Directory
      */
-    const dir = path.join('docs', 'docs', 'variability4tosca', 'rules')
+    const dir = path.join('docs', 'docs', 'variability4tosca', 'quality')
     files.removeDirectory(dir)
     files.createDirectory(dir)
 
