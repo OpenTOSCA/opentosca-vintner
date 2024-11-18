@@ -80,12 +80,6 @@ export function AnsibleGCPCredentialsEnvironment() {
     }
 }
 
-export function AnsibleDockerHostEnvironment() {
-    return {
-        DOCKER_HOST: '{{ SELF.os_ssh_host }}',
-    }
-}
-
 export function AnsibleHostOperationPlaybookArgs() {
     return ['--become', '--key-file={{ SELF.os_ssh_key_file }}', '--user={{ SELF.os_ssh_user }}']
 }
@@ -273,24 +267,64 @@ export function AnsibleCreateComposeTask(options: {manifest: DockerCompose}) {
     }
 }
 
-export function AnsibleApplyComposeTask() {
-    return {
+export function AnsibleApplyComposeTasks(options: {remote?: boolean} = {}) {
+    const tasks = []
+
+    if (options.remote) {
+        tasks.push({
+            name: 'add ssh credentials',
+            'community.general.ssh_config': {
+                user: "{{ lookup('env', 'USER') }}",
+                host: '{{ SELF.os_ssh_host }}',
+                remote_user: '{{ SELF.os_ssh_user }}',
+                identity_file: '{{ SELF.os_ssh_key_file }}',
+                strict_host_key_checking: 'no',
+                //identities_only: 'yes',
+                user_known_hosts_file: '/dev/null',
+            },
+        })
+    }
+
+    tasks.push({
         name: 'apply compose',
-        'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
+        'ansible.builtin.shell': `docker compose -f {{ compose.path }} up -d`,
         args: {
             executable: '/usr/bin/bash',
         },
-    }
+        environment: {
+            DOCKER_HOST: options.remote ? 'ssh://{{ SELF.os_ssh_host }}' : undefined,
+        },
+    })
+
+    return tasks
 }
 
-export function AnsibleUnapplyComposeTask() {
-    return {
+export function AnsibleUnapplyComposeTasks(options: {remote?: boolean} = {}) {
+    const tasks = []
+
+    tasks.push({
         name: 'unapply compose',
         'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
         args: {
             executable: '/usr/bin/bash',
         },
+        environment: {
+            DOCKER_HOST: options.remote ? 'ssh://{{ SELF.os_ssh_host }}' : undefined,
+        },
+    })
+
+    if (options.remote) {
+        tasks.push({
+            name: 'remove ssh credentials',
+            'community.general.ssh_config': {
+                user: "{{ lookup('env', 'USER') }}",
+                host: '{{ SELF.os_ssh_host }}',
+                state: 'absent',
+            },
+        })
     }
+
+    return tasks
 }
 
 export function AnsibleTask(options: {task: AnsibleTaskOptions; module: string; options: any}) {

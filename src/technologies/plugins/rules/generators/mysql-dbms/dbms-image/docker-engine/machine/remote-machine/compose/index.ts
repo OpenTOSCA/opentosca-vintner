@@ -1,15 +1,19 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
+    AnsibleApplyComposeTasks,
     AnsibleCreateComposeTask,
-    AnsibleDockerHostEnvironment,
     AnsibleHostEndpointCapability,
     AnsibleOrchestratorOperation,
     AnsibleTouchComposeTask,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
-import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.dbms',
@@ -22,6 +26,8 @@ const generator: ImplementationGenerator = {
 
     generate: (name, type) => {
         const suffix = '{{ SELF.dbms_name }}'
+        const remote = true
+
         const manifest: DockerCompose = {
             name: '{{ SELF.dbms_name }}',
             services: {
@@ -44,6 +50,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...OpenstackMachineHost(),
+                ...OpenstackMachineCredentials(),
             },
             attributes: {
                 application_address: {
@@ -80,12 +87,7 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         AnsibleTouchComposeTask({suffix}),
                                         AnsibleCreateComposeTask({manifest}),
-                                        {
-                                            ...AnsibleApplyComposeTask(),
-                                            environment: {
-                                                ...AnsibleDockerHostEnvironment(),
-                                            },
-                                        },
+                                        ...AnsibleApplyComposeTasks({remote}),
                                         {
                                             name: 'let it cook',
                                             'ansible.builtin.pause': {
@@ -105,12 +107,7 @@ const generator: ImplementationGenerator = {
                                     q: [
                                         AnsibleTouchComposeTask({suffix}),
                                         AnsibleCreateComposeTask({manifest}),
-                                        {
-                                            ...AnsibleUnapplyComposeTask(),
-                                            environment: {
-                                                ...AnsibleDockerHostEnvironment(),
-                                            },
-                                        },
+                                        ...AnsibleUnapplyComposeTasks({remote}),
                                     ],
                                 },
                             },

@@ -1,11 +1,11 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
+    AnsibleApplyComposeTasks,
     AnsibleCreateComposeTask,
     AnsibleHostEndpointCapability,
     AnsibleOrchestratorOperation,
     AnsibleTouchComposeTask,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
 import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
@@ -80,9 +80,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleApplyComposeTask(),
-                                        },
+                                        ...AnsibleApplyComposeTasks(),
                                         {
                                             name: 'let it cook',
                                             'ansible.builtin.pause': {
@@ -106,9 +104,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleUnapplyComposeTask(),
-                                        },
+                                        ...AnsibleUnapplyComposeTasks(),
                                     ],
                                 },
                             },

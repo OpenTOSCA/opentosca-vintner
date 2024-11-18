@@ -1,11 +1,11 @@
 import {BashCreateBucket, BashDeleteBucket} from '#technologies/plugins/rules/generators/object-storage/minio/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
+    AnsibleApplyComposeTasks,
     AnsibleCreateComposeTask,
     AnsibleOrchestratorOperation,
     AnsibleTouchComposeTask,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
@@ -48,18 +48,14 @@ const generator: ImplementationGenerator = {
                                     },
                                 }),
                             },
-                            {
-                                ...AnsibleApplyComposeTask(),
-                            },
+                            ...AnsibleApplyComposeTasks(),
                             {
                                 name: 'let it cook',
                                 'ansible.builtin.pause': {
                                     seconds: 10,
                                 },
                             },
-                            {
-                                ...AnsibleUnapplyComposeTask(),
-                            },
+                            ...AnsibleUnapplyComposeTasks(),
                         ],
                     },
                 },
