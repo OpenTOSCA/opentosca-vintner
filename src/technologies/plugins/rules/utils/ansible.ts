@@ -421,7 +421,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'assert management operation',
         'ansible.builtin.fail': {
-            dest: `Management operation "${operation}" missing`,
+            msg: `Management operation "${operation}" missing`,
         },
         when: JinjaWhenManagementOperationUndefined(operation),
     }

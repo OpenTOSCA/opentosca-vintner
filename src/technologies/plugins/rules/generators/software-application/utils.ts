@@ -62,32 +62,48 @@ export function AnsibleSoftwareApplicationConfigureTasks() {
     ]
 }
 
-export function AnsibleSoftwareApplicationStartTasks() {
-    return [
-        {
+export function AnsibleSoftwareApplicationStartTasks(options: {assert?: boolean} = {}) {
+    options.assert = options.assert ?? true
+
+    const tasks = []
+
+    if (options.assert) {
+        tasks.push({
             ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.START),
-        },
-        {
-            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.START),
-        },
-        {
-            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.START),
-        },
-    ]
+        })
+    }
+
+    tasks.push({
+        ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.START),
+    })
+
+    tasks.push({
+        ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.START),
+    })
+
+    return tasks
 }
 
-export function AnsibleSoftwareApplicationStopTasks() {
-    return [
-        {
+export function AnsibleSoftwareApplicationStopTasks(options: {assert?: boolean} = {}) {
+    options.assert = options.assert ?? true
+
+    const tasks = []
+
+    if (options.assert) {
+        tasks.push({
             ...AnsibleAssertOperationTask(MANAGEMENT_OPERATIONS.STOP),
-        },
-        {
-            ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
-        },
-        {
-            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
-        },
-    ]
+        })
+    }
+
+    tasks.push({
+        ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
+    })
+
+    tasks.push({
+        ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
+    })
+
+    return tasks
 }
 
 export function AnsibleSoftwareApplicationDeleteTasks() {
