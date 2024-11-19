@@ -19,5 +19,5 @@ for EXAMPLE in examples/*/; do
 
   # Implement example
   echo "Implementing ${EXAMPLE}"
-  bash ${EXAMPLE}/scripts/implement.sh
+  bash $(realpath ${EXAMPLE}/scripts/implement.sh)
 done
