@@ -42,7 +42,7 @@ node_types:
 
             application_image:
                 type: string
-                default: ghcr.io/opentosca/opentosca-vintner-boutique-demo:advertisement-v10
+                default: milesstoetzner/opentosca-vintner-boutique-demo:advertisement-v10
                 metadata:
                     vintner_ignore: true
 
@@ -649,7 +649,7 @@ node_types:
                                       members:
                                           - allUsers
                                       role: roles/run.invoker
-                                      service: '{{ SELF.application_name }}'
+                                      service: ${google_cloud_run_v2_service.application.name}
     advertisement.component~service.application#docker.image::ansible@kubernetes.cluster:
         derived_from: advertisement.component
         metadata:
@@ -775,6 +775,23 @@ node_types:
         metadata:
             vintner_generated: 'true'
             vintner_orchestrator: unfurl
+        properties:
+            k8s_host:
+                type: string
+                default:
+                    get_input: k8s_host
+            k8s_ca_cert_file:
+                type: string
+                default:
+                    get_input: k8s_ca_cert_file
+            k8s_client_cert_file:
+                type: string
+                default:
+                    get_input: k8s_client_cert_file
+            k8s_client_key_file:
+                type: string
+                default:
+                    get_input: k8s_client_key_file
         attributes:
             application_address:
                 type: string
