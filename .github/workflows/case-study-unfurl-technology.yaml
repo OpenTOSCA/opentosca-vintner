@@ -15,10 +15,10 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-shop-external
             ENV: K8S
-            PORT: 30080
+            PORT: 80
         steps:
             ###################################################
             #
@@ -85,8 +85,8 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   env: ${{ env.ENV }}
+                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   port: ${{ env.PORT }}
 
             - name: (VINTNER) Undeploy application
@@ -105,7 +105,7 @@ jobs:
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE_OVERRIDE: unfurl-technology-shop
             ENV: GCP
             PORT: 80
         steps:
@@ -191,7 +191,7 @@ jobs:
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE_OVERRIDE: unfurl-technology-shop-vm
             ENV: OS
             PORT: 80
         steps:
