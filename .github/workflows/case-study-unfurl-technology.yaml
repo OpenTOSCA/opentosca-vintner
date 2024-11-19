@@ -10,11 +10,10 @@ jobs:
     #
     ###################################################
 
-    # TODO: test this
+    # TODO: test this (runs locally)
     kubernetes:
         name: Kubernetes
         runs-on: ubuntu-22.04
-        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance

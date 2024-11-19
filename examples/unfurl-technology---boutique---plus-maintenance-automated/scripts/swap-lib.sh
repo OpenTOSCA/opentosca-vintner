@@ -7,13 +7,17 @@ cd "$(dirname "$0")"
 # Load configuration
 source configuration.sh
 
+# WSL vs Windows vs Linux
 FS="/c/Users"
 if [[ "${OSTYPE}" == "linux-gnu" ]]; then
-  FS="/home"
+    FS="/home"
 fi
 
+# Instance dir
+INSTANCE_DIR=${FS}/${USER}/.opentosca_vintner/instances/${TEMPLATE_NAME}
+
 # Delete lib in instance
-rm -rf ${FS}/stoetzms/.opentosca_vintner/instances/${TEMPLATE_NAME}/data/ensemble/lib
+rm -rf ${INSTANCE_DIR}/data/ensemble/lib
 
 # Copy local lib into instance
-cp -R ../lib ${FS}/stoetzms/.opentosca_vintner/instances/${TEMPLATE_NAME}/data/ensemble
+cp -R ../lib ${INSTANCE_DIR}/data/ensemble
