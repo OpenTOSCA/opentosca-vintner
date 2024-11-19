@@ -14219,7 +14219,7 @@ node_types:
                                       community.mysql.mysql_user:
                                           name: root
                                           password: '{{ SELF.dbms_password }}'
-                                          priv: '*.*:ALL'
+                                          priv: '*.*:ALL,GRANT'
                                           host: '%'
                                           state: present
                                           login_host: localhost
@@ -14441,7 +14441,7 @@ node_types:
                                       community.mysql.mysql_user:
                                           name: root
                                           password: '{{ SELF.dbms_password }}'
-                                          priv: '*.*:ALL'
+                                          priv: '*.*:ALL,GRANT'
                                           host: '%'
                                           state: present
                                           login_host: localhost
