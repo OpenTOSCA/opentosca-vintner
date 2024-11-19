@@ -107,7 +107,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationStartTasks(),
+                                        ...AnsibleSoftwareApplicationStartTasks({call: false}),
                                         {
                                             ...AnsibleStartApplicationSystemdUnit(),
                                         },
@@ -126,7 +126,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationStopTasks(),
+                                        ...AnsibleSoftwareApplicationStopTasks({assert: false}),
                                         {
                                             ...AnsibleStopApplicationSystemdUnit(),
                                         },

@@ -62,8 +62,9 @@ export function AnsibleSoftwareApplicationConfigureTasks() {
     ]
 }
 
-export function AnsibleSoftwareApplicationStartTasks(options: {assert?: boolean} = {}) {
+export function AnsibleSoftwareApplicationStartTasks(options: {assert?: boolean; call?: boolean} = {}) {
     options.assert = options.assert ?? true
+    options.call = options.call ?? true
 
     const tasks = []
 
@@ -77,15 +78,18 @@ export function AnsibleSoftwareApplicationStartTasks(options: {assert?: boolean}
         ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.START),
     })
 
-    tasks.push({
-        ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.START),
-    })
+    if (options.call) {
+        tasks.push({
+            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.START),
+        })
+    }
 
     return tasks
 }
 
-export function AnsibleSoftwareApplicationStopTasks(options: {assert?: boolean} = {}) {
+export function AnsibleSoftwareApplicationStopTasks(options: {assert?: boolean; call?: boolean} = {}) {
     options.assert = options.assert ?? true
+    options.call = options.call ?? true
 
     const tasks = []
 
@@ -99,9 +103,11 @@ export function AnsibleSoftwareApplicationStopTasks(options: {assert?: boolean} 
         ...AnsibleCopyManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
     })
 
-    tasks.push({
-        ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
-    })
+    if (options.call) {
+        tasks.push({
+            ...AnsibleCallManagementOperationTask(MANAGEMENT_OPERATIONS.STOP),
+        })
+    }
 
     return tasks
 }

@@ -769,10 +769,6 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "start" missing
-                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -796,10 +792,6 @@ node_types:
                         inputs:
                             playbook:
                                 q:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
-                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1164,10 +1156,6 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "start" missing
-                                      when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/start.sh'
@@ -1199,10 +1187,6 @@ node_types:
                                 q:
                                     - name: wait for ssh
                                       wait_for_connection:
-                                    - name: assert management operation
-                                      ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
-                                      when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
                                           dest: '{{ SELF.application_directory }}/.vintner/stop.sh'
@@ -1561,7 +1545,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1590,7 +1574,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1944,7 +1928,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -1979,7 +1963,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2323,7 +2307,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2350,7 +2334,7 @@ node_types:
                                 q:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2706,7 +2690,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "start" missing
+                                          msg: Management operation "start" missing
                                       when: SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -2741,7 +2725,7 @@ node_types:
                                       wait_for_connection:
                                     - name: assert management operation
                                       ansible.builtin.fail:
-                                          dest: Management operation "stop" missing
+                                          msg: Management operation "stop" missing
                                       when: SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED"
                                     - name: copy management operation
                                       ansible.builtin.copy:
@@ -3475,9 +3459,22 @@ node_types:
                                           executable: /usr/bin/bash
                                       environment:
                                           DOCKER_HOST: ssh://{{ SELF.os_ssh_host }}
+                                    - name: remove ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          state: absent
                                     - name: let it cook
                                       ansible.builtin.pause:
                                           seconds: 10
+                                    - name: add ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          remote_user: '{{ SELF.os_ssh_user }}'
+                                          identity_file: '{{ SELF.os_ssh_key_file }}'
+                                          strict_host_key_checking: 'no'
+                                          user_known_hosts_file: /dev/null
                                     - name: unapply compose
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} down
                                       args:
@@ -3530,9 +3527,22 @@ node_types:
                                           executable: /usr/bin/bash
                                       environment:
                                           DOCKER_HOST: ssh://{{ SELF.os_ssh_host }}
+                                    - name: remove ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          state: absent
                                     - name: let it cook
                                       ansible.builtin.pause:
                                           seconds: 10
+                                    - name: add ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          remote_user: '{{ SELF.os_ssh_user }}'
+                                          identity_file: '{{ SELF.os_ssh_key_file }}'
+                                          strict_host_key_checking: 'no'
+                                          user_known_hosts_file: /dev/null
                                     - name: unapply compose
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} down
                                       args:

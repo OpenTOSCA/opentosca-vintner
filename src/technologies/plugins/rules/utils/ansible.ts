@@ -267,22 +267,37 @@ export function AnsibleCreateComposeTask(options: {manifest: DockerCompose}) {
     }
 }
 
+export function AnsibleCreateSSHConfig() {
+    return {
+        name: 'add ssh credentials',
+        'community.general.ssh_config': {
+            user: "{{ lookup('env', 'USER') }}",
+            host: '{{ SELF.os_ssh_host }}',
+            remote_user: '{{ SELF.os_ssh_user }}',
+            identity_file: '{{ SELF.os_ssh_key_file }}',
+            strict_host_key_checking: 'no',
+            //identities_only: 'yes',
+            user_known_hosts_file: '/dev/null',
+        },
+    }
+}
+
+export function AnsibleDeleteSSHConfig() {
+    return {
+        name: 'remove ssh credentials',
+        'community.general.ssh_config': {
+            user: "{{ lookup('env', 'USER') }}",
+            host: '{{ SELF.os_ssh_host }}',
+            state: 'absent',
+        },
+    }
+}
+
 export function AnsibleApplyComposeTasks(options: {remote?: boolean} = {}) {
     const tasks = []
 
     if (options.remote) {
-        tasks.push({
-            name: 'add ssh credentials',
-            'community.general.ssh_config': {
-                user: "{{ lookup('env', 'USER') }}",
-                host: '{{ SELF.os_ssh_host }}',
-                remote_user: '{{ SELF.os_ssh_user }}',
-                identity_file: '{{ SELF.os_ssh_key_file }}',
-                strict_host_key_checking: 'no',
-                //identities_only: 'yes',
-                user_known_hosts_file: '/dev/null',
-            },
-        })
+        tasks.push(AnsibleCreateSSHConfig())
     }
 
     tasks.push({
@@ -296,11 +311,19 @@ export function AnsibleApplyComposeTasks(options: {remote?: boolean} = {}) {
         },
     })
 
+    if (options.remote) {
+        tasks.push(AnsibleDeleteSSHConfig())
+    }
+
     return tasks
 }
 
 export function AnsibleUnapplyComposeTasks(options: {remote?: boolean} = {}) {
     const tasks = []
+
+    if (options.remote) {
+        tasks.push(AnsibleCreateSSHConfig())
+    }
 
     tasks.push({
         name: 'unapply compose',
@@ -314,14 +337,7 @@ export function AnsibleUnapplyComposeTasks(options: {remote?: boolean} = {}) {
     })
 
     if (options.remote) {
-        tasks.push({
-            name: 'remove ssh credentials',
-            'community.general.ssh_config': {
-                user: "{{ lookup('env', 'USER') }}",
-                host: '{{ SELF.os_ssh_host }}',
-                state: 'absent',
-            },
-        })
+        tasks.push(AnsibleDeleteSSHConfig())
     }
 
     return tasks
