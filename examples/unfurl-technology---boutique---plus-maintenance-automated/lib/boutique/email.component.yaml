@@ -140,6 +140,7 @@ node_types:
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
+                                      environment: {}
                     delete:
                         implementation:
                             primary: Ansible
@@ -170,6 +171,7 @@ node_types:
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} down
                                       args:
                                           executable: /usr/bin/bash
+                                      environment: {}
     email.component~service.application#docker.image::terraform@docker.engine->local.machine:
         derived_from: email.component
         metadata:
@@ -285,6 +287,14 @@ node_types:
                 type: string
                 default:
                     eval: .::.requirements::[.name=host]::.target::management_address
+            os_ssh_user:
+                type: string
+                default:
+                    get_input: os_ssh_user
+            os_ssh_key_file:
+                type: string
+                default:
+                    get_input: os_ssh_key_file
         attributes:
             application_address:
                 type: string
@@ -318,12 +328,20 @@ node_types:
                                                       environment:
                                                           PORT: '"{{ SELF.application_port }}"'
                                                           DISABLE_PROFILER: '"{{ SELF.disable_profiler }}"'
+                                    - name: add ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          remote_user: '{{ SELF.os_ssh_user }}'
+                                          identity_file: '{{ SELF.os_ssh_key_file }}'
+                                          strict_host_key_checking: 'no'
+                                          user_known_hosts_file: /dev/null
                                     - name: apply compose
                                       ansible.builtin.shell: docker compose -f {{ compose.path }} up -d
                                       args:
                                           executable: /usr/bin/bash
                                       environment:
-                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                                          DOCKER_HOST: ssh://{{ SELF.os_ssh_host }}
                     delete:
                         implementation:
                             primary: Ansible
@@ -355,7 +373,12 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment:
-                                          DOCKER_HOST: '{{ SELF.os_ssh_host }}'
+                                          DOCKER_HOST: ssh://{{ SELF.os_ssh_host }}
+                                    - name: remove ssh credentials
+                                      community.general.ssh_config:
+                                          user: "{{ lookup('env', 'USER') }}"
+                                          host: '{{ SELF.os_ssh_host }}'
+                                          state: absent
     email.component~service.application#docker.image::terraform@docker.engine->remote.machine:
         derived_from: email.component
         metadata:
