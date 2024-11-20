@@ -120,7 +120,7 @@ export class Result {
         }, {})
 
         /**
-         * Weight Average (average weight per technology
+         * Weight Average (average weight per technology)
          */
         const weight_average = weight_total / count_total
 
