@@ -198,7 +198,7 @@ jobs:
             - name: (DOCS) Generate TOSCA Vintner Profile Page
               run: ./task docs:generate:normative
 
-            - name: (DOCS) Generate Technology Rules
+            - name: (DOCS) Generate Deployment Quality
               run: ./task docs:generate:quality
 
             - name: (DOCS) Build and Deploy Docs
@@ -207,8 +207,8 @@ jobs:
             - name: (RELEASE) Archive docs
               run: tar -czvf docs.tar.gz -C docs/site/ .
 
-            - name: (RELEASE) Upload docs, profiles, and rules to release
-              run: gh release upload latest docs.tar.gz docs/docs/sofdcar/tosca-sofdcar-*.yaml docs/docs/normative/tosca-vintner-*.yaml docs/docs/variability4tosca/rules/technology-rules.yaml
+            - name: (RELEASE) Upload docs, profiles, and qualities to release
+              run: gh release upload latest docs.tar.gz docs/docs/sofdcar/tosca-sofdcar-*.yaml docs/docs/normative/tosca-vintner-*.yaml docs/docs/variability4tosca/quality/technology-rules.yaml
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
