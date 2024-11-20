@@ -100,7 +100,7 @@ export function isIgnore(type: NodeType) {
 export enum QUALITY_LABEL {
     GOOD = 'good',
     MODERATE = 'moderate',
-    CAUTION = 'caution',
+    CAUTIOUS = 'cautious',
     POOR = 'poor',
     BAD = 'bad',
 }
@@ -110,7 +110,7 @@ export function toLabel(weight: number): QUALITY_LABEL {
 
     if (weight <= 0.125) return QUALITY_LABEL.BAD
     if (weight <= 0.375) return QUALITY_LABEL.POOR
-    if (weight <= 0.625) return QUALITY_LABEL.CAUTION
+    if (weight <= 0.625) return QUALITY_LABEL.CAUTIOUS
     if (weight <= 0.875) return QUALITY_LABEL.MODERATE
     if (weight <= 1) return QUALITY_LABEL.GOOD
 
@@ -124,7 +124,7 @@ export function toString(weight: number): string {
 export function toWeight(label: QUALITY_LABEL) {
     if (label === QUALITY_LABEL.GOOD) return 1
     if (label === QUALITY_LABEL.MODERATE) return 0.75
-    if (label === QUALITY_LABEL.CAUTION) return 0.5
+    if (label === QUALITY_LABEL.CAUTIOUS) return 0.5
     if (label === QUALITY_LABEL.POOR) return 0.25
     if (label === QUALITY_LABEL.BAD) return 0
 

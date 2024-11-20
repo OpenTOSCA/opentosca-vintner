@@ -9,7 +9,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {QUALITIES_FILENAME, constructRuleName} from '#technologies/utils'
+import {QUALITIES_FILENAME, constructRuleName, toLabel} from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
 import process from 'process'
@@ -97,6 +97,7 @@ async function main() {
             svgs,
             groups,
             utils,
+            toLabel: toLabel,
             link: (type: string) => {
                 if (type === '*') return type
                 return `[${type}](${generateLink(type)}){target=_blank}`
