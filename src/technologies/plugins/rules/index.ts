@@ -26,7 +26,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     getRules() {
-        const rules = this.graph.serviceTemplate.topology_template?.variability?.technology_rules
+        const rules = this.graph.serviceTemplate.topology_template?.variability?.qualities
         if (check.isUndefined(rules)) return []
         assert.isObject(rules, 'Rules not loaded')
         return rules

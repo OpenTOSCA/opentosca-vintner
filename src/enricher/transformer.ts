@@ -101,7 +101,7 @@ export default class Transformer {
         if (check.isUndefined(this.topology.variability)) return
 
         // Delete technology assignment rules
-        delete this.topology.variability.technology_rules
+        delete this.topology.variability.qualities
 
         // Delete type-specific conditions variability definition
         delete this.topology.variability.type_specific_conditions

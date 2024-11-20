@@ -10,7 +10,7 @@ node_types:
 
 topology_template:
     variability:
-        technology_rules:
+        qualities:
             - component: parent
               technology: ansible
               weight: 0

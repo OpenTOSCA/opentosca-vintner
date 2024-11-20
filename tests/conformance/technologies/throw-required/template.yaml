@@ -24,7 +24,7 @@ topology_template:
             technology_constraint: true
             required_technology_check: true
 
-        technology_rules:
+        qualities:
             - component: ansible_host
               technology: terraform
 

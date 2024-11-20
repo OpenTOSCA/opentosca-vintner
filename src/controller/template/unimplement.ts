@@ -3,7 +3,7 @@ import * as files from '#files'
 import {YAML_EXTENSIONS} from '#files'
 import {NormativeTypes} from '#normative'
 import std from '#std'
-import {GENERATION_MARK_REGEX, TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
+import {GENERATION_MARK_REGEX, QUALITIES_FILENAME} from '#technologies/utils'
 import path from 'path'
 
 export type TemplateUnimplementOptions = {
@@ -22,7 +22,7 @@ export default async function (options: TemplateUnimplementOptions) {
     await files.removeFile(path.join(lib, normative.profile.yaml))
     await files.removeFile(path.join(lib, normative.core.yaml))
     await files.removeFile(path.join(lib, normative.extended.yaml))
-    await files.removeFile(path.join(lib, TECHNOLOGY_RULES_FILENAME))
+    await files.removeFile(path.join(lib, QUALITIES_FILENAME))
 
     for (const file of files.walkDirectory(lib, {extensions: YAML_EXTENSIONS})) {
         const templateString = files.loadFile(file)

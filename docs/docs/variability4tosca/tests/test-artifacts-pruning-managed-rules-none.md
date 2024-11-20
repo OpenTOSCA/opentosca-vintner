@@ -23,7 +23,7 @@ node_types:
         derived_from: tosca.nodes.Root
 topology_template:
     variability:
-        technology_rules:
+        qualities:
             - component: application
               technology: ansible
               artifact: first.artifact.type
