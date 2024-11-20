@@ -84,7 +84,7 @@ class Generator extends GeneratorAbstract {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        ...AnsibleSoftwareApplicationStartTasks(),
+                                        ...AnsibleSoftwareApplicationStartTasks({call: false}),
                                         {
                                             ...AnsibleStartApplicationSystemdUnit(),
                                         },
@@ -99,7 +99,7 @@ class Generator extends GeneratorAbstract {
                             inputs: {
                                 playbook: {
                                     q: [
-                                        ...AnsibleSoftwareApplicationStopTasks(),
+                                        ...AnsibleSoftwareApplicationStopTasks({assert: false}),
                                         {
                                             ...AnsibleStopApplicationSystemdUnit(),
                                         },

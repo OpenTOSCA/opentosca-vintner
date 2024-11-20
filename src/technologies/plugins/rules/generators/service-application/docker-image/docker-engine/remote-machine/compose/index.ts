@@ -1,11 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
+    AnsibleApplyComposeTasks,
     AnsibleCreateComposeTask,
-    AnsibleDockerHostEnvironment,
     AnsibleOrchestratorOperation,
     AnsibleTouchComposeTask,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
 import {
@@ -13,6 +12,7 @@ import {
     LOCALHOST,
     MetadataGenerated,
     MetadataUnfurl,
+    OpenstackMachineCredentials,
     OpenstackMachineHost,
 } from '#technologies/plugins/rules/utils/utils'
 
@@ -26,6 +26,7 @@ const generator: ImplementationGenerator = {
 
     generate: (name, type) => {
         const suffix = '{{ SELF.application_name }}'
+        const remote = true
 
         const manifest: DockerCompose = {
             name: '{{ SELF.application_name }}',
@@ -47,6 +48,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...OpenstackMachineHost(),
+                ...OpenstackMachineCredentials(),
             },
             attributes: {
                 application_address: {
@@ -70,12 +72,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleApplyComposeTask(),
-                                            environment: {
-                                                ...AnsibleDockerHostEnvironment(),
-                                            },
-                                        },
+                                        ...AnsibleApplyComposeTasks({remote}),
                                     ],
                                 },
                             },
@@ -93,12 +90,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleUnapplyComposeTask(),
-                                            environment: {
-                                                ...AnsibleDockerHostEnvironment(),
-                                            },
-                                        },
+                                        ...AnsibleUnapplyComposeTasks({remote}),
                                     ],
                                 },
                             },

@@ -2344,7 +2344,7 @@ topology_template:
             technology: terraform
             properties:
                 - machine_name: unfurl-technology-boutique
-                - ports: ['80', '2375', '9100']
+                - ports: ['80', '9100']
                 - flavor: m1.medium
                 - network: {get_input: os_network}
                 - ssh_user: {get_input: os_ssh_user}

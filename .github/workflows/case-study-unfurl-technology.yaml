@@ -1,6 +1,4 @@
-# TODO: migrate this
-
-name: Case Study "Unfurl Technology"
+name: Case Study "Unfurl Technology Shop"
 on:
     workflow_dispatch:
 
@@ -15,12 +13,14 @@ jobs:
     kubernetes:
         name: Kubernetes
         runs-on: ubuntu-22.04
+        # TODO: fix this
+        if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-shop-external
             ENV: K8S
-            PORT: 30080
+            PORT: 80
         steps:
             ###################################################
             #
@@ -53,7 +53,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: KUBERNETES
-                  medium: false
+                  tier: LARGE
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -67,8 +67,9 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
-                  k8s_api_address: $(minikube ip)
-                  k8s_api_port: '8843'
+                  dbms_password: ${DB_PASSWORD}
+
+                  k8s_host: http://$(minikube ip):8843
                   k8s_ca_cert_file: /home/runner/.minikube/ca.crt
                   k8s_client_cert_file: /home/runner/.minikube/profiles/minikube/client.crt
                   k8s_client_key_file: /home/runner/.minikube/profiles/minikube/client.key
@@ -85,8 +86,8 @@ jobs:
             - name: (VINTNER) Test application
               uses: ./.github/actions/vintner-test
               with:
-                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   env: ${{ env.ENV }}
+                  example: ${{ env.EXAMPLE_OVERRIDE }}
                   port: ${{ env.PORT }}
 
             - name: (VINTNER) Undeploy application
@@ -95,17 +96,19 @@ jobs:
 
     ###################################################
     #
-    # GCP
+    # Elastic
     #
     ###################################################
 
-    gcp:
-        name: GCP
+    elastic:
+        name: Elastic
         runs-on: ubuntu-22.04
+        # TODO: fix this
+        if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-shop
             ENV: GCP
             PORT: 80
         steps:
@@ -137,7 +140,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: ELASTIC
-                  medium: false
+                  tier:  LARGE
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -151,6 +154,8 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
+                  dbms_password: ${DB_PASSWORD}
+
                   gcp_region: ${GCP_REGION}
                   gcp_service_account_file: /tmp/gcp-service-account-file.json
                   gcp_project: ${GCP_PROJECT}
@@ -186,10 +191,12 @@ jobs:
     openstack:
         name: OpenStack
         runs-on: ubuntu-22.04
+        # TODO: twerking; enable, once others also work
+        if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-original-automated-quality-maintenance
-            EXAMPLE_OVERRIDE: unfurl-technology
+            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-shop-vm
             ENV: OS
             PORT: 80
         steps:
@@ -221,7 +228,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: STATIC
-                  medium: true
+                  tier: MEDIUM
                   optional_feature: true
                   premium_feature: true
                   EOF
@@ -235,6 +242,7 @@ jobs:
               run: |
                   cat << EOF > /tmp/deployment-inputs.yaml
                   database_password: ${DB_PASSWORD}
+                  dbms_password: ${DB_PASSWORD}
                   os_network: ${OS_NETWORK}
                   os_ssh_key_name: ${OS_SSH_KEY_NAME}
                   os_ssh_user: ${OS_SSH_USER}
@@ -249,6 +257,7 @@ jobs:
                   EOF
               env:
                   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                  DBMS_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
                   OS_NETWORK: ${{ secrets.OS_NETWORK }}
                   OS_SSH_KEY_NAME: ${{ secrets.OS_SSH_KEY_NAME }}

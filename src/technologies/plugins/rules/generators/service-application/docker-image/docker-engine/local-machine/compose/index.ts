@@ -1,10 +1,10 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
+    AnsibleApplyComposeTasks,
     AnsibleCreateComposeTask,
     AnsibleOrchestratorOperation,
     AnsibleTouchComposeTask,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
 import {DockerCompose} from '#technologies/plugins/rules/utils/compose'
 import {ApplicationProperties, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
@@ -59,9 +59,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleApplyComposeTask(),
-                                        },
+                                        ...AnsibleApplyComposeTasks(),
                                     ],
                                 },
                             },
@@ -79,9 +77,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleCreateComposeTask({manifest}),
                                         },
-                                        {
-                                            ...AnsibleUnapplyComposeTask(),
-                                        },
+                                        ...AnsibleUnapplyComposeTasks(),
                                     ],
                                 },
                             },

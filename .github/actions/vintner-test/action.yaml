@@ -50,10 +50,8 @@ runs:
           if: ${{ inputs.env == 'K8S' }}
           shell: bash
           run: |
-              MINIKUBE_IP=$(minikube ip)
-
-              echo "minikube ip: ${MINIKUBE_IP}"
-
-              curl --fail-with-body http://${MINIKUBE_IP}:${PORT}
+              ENDPOINT=$(minikube service ${EXAMPLE} --url)
+              echo "endpoint: ${ENDPOINT}"
+              curl --fail-with-body ${ENDPOINT}
           env:
-              PORT: ${{ inputs.port }}
+              EXAMPLE: ${{ inputs.EXAMPLE }}

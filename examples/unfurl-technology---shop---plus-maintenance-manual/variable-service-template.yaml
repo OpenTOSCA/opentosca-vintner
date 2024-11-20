@@ -125,7 +125,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-shop-demo@sha256:25ce63b1d399b7d311edc13195abc12d98be859fd32f36f3e96056b32c622b8d
+                      file: ghcr.io/opentosca/opentosca-vintner-shop-demo@sha256:c6848d02b58bc8a70aa0f7ea4aa3f719951e0216468d9898b0eb47381098ef88
                       conditions: {node_presence: kubernetes_cluster}
                 - zip_archive:
                       type: zip.archive

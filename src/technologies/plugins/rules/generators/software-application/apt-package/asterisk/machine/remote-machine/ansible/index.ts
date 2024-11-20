@@ -84,7 +84,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationStartTasks(),
+                                        ...AnsibleSoftwareApplicationStartTasks({assert: false}),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
@@ -100,7 +100,7 @@ class Generator extends GeneratorAbstract {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleSoftwareApplicationStopTasks(),
+                                        ...AnsibleSoftwareApplicationStopTasks({assert: false}),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
