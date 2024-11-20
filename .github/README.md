@@ -34,6 +34,12 @@ This repository holds the following specifications and profiles.
 - [TOSCA Vintner Profile](https://vintner.opentosca.org/normative)
 - [TOSCA SofDCar Profile](https://vintner.opentosca.org/sofdcar/profile)
 
+The following repositories hold our demo applications.
+
+- [Shop Demo](https://github.com/OpenTOSCA/opentosca-vintner-shop-demo)
+- [Boutique Demo](https://github.com/OpenTOSCA/opentosca-vintner-boutique-demo)
+- [SofDCar Demo](https://github.com/OpenTOSCA/opentosca-vintner-sofdcar-demo)
+
 
 ## Haftungsausschluss
 

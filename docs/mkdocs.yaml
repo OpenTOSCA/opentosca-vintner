@@ -147,6 +147,11 @@ nav:
           - contributing/code-of-conduct.md
           - contributing/notes.md
 
+    - Demo Applications:
+          - Shop Demo: https://github.com/OpenTOSCA/opentosca-vintner-shop-demo
+          - Boutique Demo: https://github.com/OpenTOSCA/opentosca-vintner-boutique-demo
+          - SofDCar Demo: https://github.com/OpenTOSCA/opentosca-vintner-sofdcar-demo
+
     - More Information:
           - OpenTOSCA: https://www.opentosca.org
           - branding.md
