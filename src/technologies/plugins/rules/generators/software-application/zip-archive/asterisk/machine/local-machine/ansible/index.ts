@@ -15,7 +15,7 @@ class Generator extends GeneratorAbstract {
     technology = 'ansible'
     artifact = 'zip.archive'
     hosting = ['*', 'local.machine']
-    weight = 0.5
+    weight = 1
     reason =
         'While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.'
 

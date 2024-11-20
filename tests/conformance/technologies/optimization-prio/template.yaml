@@ -1,0 +1,25 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+node_types:
+    grandparent:
+        derived_from: tosca.nodes.Root
+    parent:
+        derived_from: grandparent
+    container:
+        derived_from: parent
+
+topology_template:
+    variability:
+        technology_rules:
+            - component: parent
+              technology: ansible
+              weight: 0
+
+            - component: grandparent
+              technology: terraform
+              weight: 1
+
+    node_templates:
+        container:
+            type: container
+            persistent: true
