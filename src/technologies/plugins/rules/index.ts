@@ -27,18 +27,18 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
     getRules() {
         const rules = this.graph.serviceTemplate.topology_template?.variability?.qualities
-        if (check.isUndefined(rules)) return rules
+        if (check.isUndefined(rules)) return []
         assert.isObject(rules, 'Rules not loaded')
         return rules
     }
 
     hasRules() {
-        return check.isDefined(this.getRules())
+        return utils.isPopulated(this.getRules())
     }
 
     implement(name: string, type: NodeType): NodeTypeMap {
         const rules = this.getRules()
-        if (check.isUndefined(rules)) return {}
+        if (utils.isEmpty(rules)) return {}
 
         const types: NodeTypeMap = {}
 
@@ -94,17 +94,29 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return types
     }
 
+    // TODO: rework this function
     assign(node: Node): TechnologyTemplateMap[] {
         const maps: TechnologyTemplateMap[] = []
 
-        const rules = this.getRules()
-        if (check.isUndefined(rules)) return maps
+        let rules = this.getRules()
+        if (utils.isEmpty(rules)) return maps
+
+        // Check if rule matches component
+        rules = rules.filter(rule => node.getType().isA(rule.component))
+
+        // Check if another rule is more specific, i.e., if rule.component is within the inheritance (but not the root) of another rule
+        rules = rules.filter(rule =>
+            check.isUndefined(
+                rules.find(other => {
+                    const parents = this.graph.inheritance.collectNodeTypes(other.component).slice(1)
+                    return check.isDefined(parents.find(type => type.name === rule.component))
+                })
+            )
+        )
 
         for (const entry of rules) {
             const rule = utils.copy(entry)
             assert.isDefined(rule.hosting)
-
-            if (!node.getType().isA(rule.component)) continue
 
             let artifactCondition: LogicExpression | undefined
             if (check.isDefined(rule.artifact)) {
