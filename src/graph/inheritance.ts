@@ -108,6 +108,17 @@ export default class Inheritance {
         return this.getTypes<RelationshipType>('relationship_types')[name]
     }
 
+    collectNodeTypes(name: string): {name: string; type: NodeType}[] {
+        const found: {name: string; type: NodeType}[] = []
+
+        const walker = this.Walker(name, 'node_types', NODE_TYPE_ROOT)
+        while (walker.has()) {
+            found.push(walker.walk())
+        }
+
+        return found
+    }
+
     private getTypes<T extends EntityType>(key: keyof EntityTypes) {
         return (this.graph.serviceTemplate[key] ?? {}) as {[key: string]: T}
     }

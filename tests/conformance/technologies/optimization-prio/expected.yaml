@@ -1,0 +1,14 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+    grandparent:
+        derived_from: tosca.nodes.Root
+    parent:
+        derived_from: grandparent
+    container:
+        derived_from: parent
+
+topology_template:
+    node_templates:
+        container:
+            type: container~parent::ansible

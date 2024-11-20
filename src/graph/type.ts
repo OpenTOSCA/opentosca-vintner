@@ -124,6 +124,10 @@ export default class Type extends Element {
         throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
+    getInheritance() {
+        // TODO: return inheritance
+    }
+
     getDefinition() {
         if (this.container.isArtifact()) {
             return this.graph.inheritance.getArtifactType(this.name)
