@@ -6,7 +6,7 @@ import {EntityTypesKeys, ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec
 import {TechnologyRule} from '#spec/technology-template'
 import {TypeSpecificLogicExpressions} from '#spec/variability'
 import {TechnologyPluginBuilder} from '#technologies/types'
-import {TECHNOLOGY_RULES_FILENAME} from '#technologies/utils'
+import {QUALITIES_FILENAME} from '#technologies/utils'
 import {UnexpectedError} from '#utils/error'
 import _ from 'lodash'
 import path from 'path'
@@ -44,9 +44,9 @@ export default class Loader {
         await this.loadTypeSpecificConditions()
 
         /**
-         * Load technology rules
+         * Load qualities
          */
-        await this.loadTechnologyRules()
+        await this.loadQualities()
 
         /**
          * Load technology plugins
@@ -90,11 +90,11 @@ export default class Loader {
         this.serviceTemplate.topology_template.variability.type_specific_conditions = conditions
     }
 
-    private async loadTechnologyRules() {
+    private async loadQualities() {
         assert.isDefined(this.serviceTemplate, 'Template not loaded')
         if (check.isUndefined(this.serviceTemplate.topology_template)) return
 
-        let rules = this.serviceTemplate.topology_template.variability?.technology_rules
+        let rules = this.serviceTemplate.topology_template.variability?.qualities
 
         /**
          * Load rules from specified file
@@ -107,8 +107,8 @@ export default class Loader {
          * Load rules from default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))) {
-                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, TECHNOLOGY_RULES_FILENAME))
+            if (files.exists(path.join(this.dir, QUALITIES_FILENAME))) {
+                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, QUALITIES_FILENAME))
             }
         }
 
@@ -116,14 +116,14 @@ export default class Loader {
          * Load rules from other default file
          */
         if (check.isUndefined(rules)) {
-            if (files.exists(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME))) {
-                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, 'lib', TECHNOLOGY_RULES_FILENAME))
+            if (files.exists(path.join(this.dir, 'lib', QUALITIES_FILENAME))) {
+                rules = files.loadYAML<TechnologyRule[]>(path.join(this.dir, 'lib', QUALITIES_FILENAME))
             }
         }
 
         if (check.isUndefined(this.serviceTemplate.topology_template.variability))
             this.serviceTemplate.topology_template.variability = {}
-        this.serviceTemplate.topology_template.variability.technology_rules = rules
+        this.serviceTemplate.topology_template.variability.qualities = rules
     }
 
     private async loadTechnologyPluginBuilders() {

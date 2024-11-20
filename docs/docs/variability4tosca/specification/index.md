@@ -57,7 +57,7 @@ A variability definition defines variability inputs, variability presets, variab
 | constraints              | false     | List(LogicExpression)                            | An optional list of constraints respected when resolving variability.                                                                                       |
 | options                  | false     | Map(String, Boolean)                             | An optional map of variability options.                                                                                                                     |
 | type_specific_conditions | false     | String &#124; List(TypeSpecificDefaultCondition) | An optional definition of type-specific default conditions. If string, then treated as relative file to import (default: "./type-specific-conditions.yaml") |
-| technology_rules         | false     | String &#124; List(TechnologyRule)               | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).  |
+| qualities         | false     | String &#124; List(TechnologyRule)               | An optional definition of technology assignment rules. If string, then treated as relative file to import (default: ["./rules.yaml", "./lib/rules.yaml"]).  |
 | plugins                  | false     | PluginDefinition                                 | An optional definition of plugins.                                                                                                                          |
 
 The following non-normative and incomplete example contains a variability definition which declares the variability
@@ -443,7 +443,7 @@ A technology rule is defined as follows.
 For example, the node type `application` can be deployed using the deployment technology `terraform` if the host is of type `terraform_host`.
 
 ```yaml linenums="1"
-technology_rules:
+qualities:
     terraform:
         - component: application
           hosting: terraform_host

@@ -208,7 +208,7 @@ jobs:
               run: tar -czvf docs.tar.gz -C docs/site/ .
 
             - name: (RELEASE) Upload docs, profiles, and qualities to release
-              run: gh release upload latest docs.tar.gz docs/docs/sofdcar/tosca-sofdcar-*.yaml docs/docs/normative/tosca-vintner-*.yaml docs/docs/variability4tosca/quality/technology-rules.yaml
+              run: gh release upload latest docs.tar.gz docs/docs/sofdcar/tosca-sofdcar-*.yaml docs/docs/normative/tosca-vintner-*.yaml docs/docs/variability4tosca/quality/qualities.yaml
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

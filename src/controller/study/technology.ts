@@ -102,7 +102,7 @@ export default async function (options: StudyTechnologyOptions) {
      */
     const template = await new Loader(templateFile).load()
     const graph = new Graph(template)
-    const rules = graph.serviceTemplate.topology_template?.variability?.technology_rules ?? []
+    const rules = graph.serviceTemplate.topology_template?.variability?.qualities ?? []
     assert.isArray(rules)
 
     /**

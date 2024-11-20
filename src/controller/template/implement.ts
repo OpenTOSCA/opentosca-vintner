@@ -14,7 +14,7 @@ import {
     GENERATION_MARK_REGEX,
     GENERATION_MARK_TEXT,
     GENERATION_NOTICE,
-    TECHNOLOGY_RULES_FILENAME,
+    QUALITIES_FILENAME,
     isAbstract,
     isGenerated,
     isIgnore,
@@ -72,7 +72,7 @@ export default async function (options: TemplateImplementOptions) {
     /**
      * Technology Rules
      */
-    files.storeYAML<TechnologyRule[]>(path.join(lib, TECHNOLOGY_RULES_FILENAME), Registry.rules, {
+    files.storeYAML<TechnologyRule[]>(path.join(lib, QUALITIES_FILENAME), Registry.rules, {
         generated: true,
     })
 

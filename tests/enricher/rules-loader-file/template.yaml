@@ -6,7 +6,7 @@ node_types:
 
 topology_template:
     variability:
-        technology_rules: some-technology-rules.yaml
+        qualities: some-qualities.yaml
 
         options:
             enrich_technologies: true

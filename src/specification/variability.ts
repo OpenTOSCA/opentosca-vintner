@@ -12,7 +12,7 @@ export type VariabilityDefinition = {
     constraints?: LogicExpression[]
     options?: VariabilityOptions
     type_specific_conditions?: string | TypeSpecificLogicExpressions
-    technology_rules?: string | TechnologyRule[]
+    qualities?: string | TechnologyRule[]
     plugins?: PluginDefinitionMap
 }
 

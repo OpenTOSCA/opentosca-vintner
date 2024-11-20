@@ -299,7 +299,7 @@ export default class Normalizer {
     }
 
     private normalizeTechnologyRules() {
-        const rules = this.serviceTemplate.topology_template?.variability?.technology_rules
+        const rules = this.serviceTemplate.topology_template?.variability?.qualities
         if (check.isUndefined(rules)) return
         assert.isObject(rules, 'Rules not loaded')
 

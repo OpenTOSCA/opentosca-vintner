@@ -9,7 +9,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {TECHNOLOGY_RULES_FILENAME, constructRuleName} from '#technologies/utils'
+import {QUALITIES_FILENAME, constructRuleName} from '#technologies/utils'
 import * as utils from '#utils'
 import path from 'path'
 import process from 'process'
@@ -27,7 +27,7 @@ async function main() {
      * Rules
      */
     const rules = Registry.rules
-    files.storeYAML<TechnologyRule[]>(path.join(dir, TECHNOLOGY_RULES_FILENAME), rules)
+    files.storeYAML<TechnologyRule[]>(path.join(dir, QUALITIES_FILENAME), rules)
 
     /**
      * SVGs

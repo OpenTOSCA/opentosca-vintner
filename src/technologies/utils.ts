@@ -5,7 +5,7 @@ import {TechnologyRule} from '#spec/technology-template'
 import {METADATA} from '#technologies/plugins/rules/types'
 import * as utils from '#utils'
 
-export const TECHNOLOGY_RULES_FILENAME = 'technology-rules.yaml'
+export const QUALITIES_FILENAME = 'qualities.yaml'
 
 export const GENERATION_MARK_TEXT = '# [OPENTOSCA_VINTNER_GENERATION_MARK]'
 

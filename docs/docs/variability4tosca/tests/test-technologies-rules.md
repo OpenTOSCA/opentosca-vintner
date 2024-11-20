@@ -38,7 +38,7 @@ topology_template:
             technology_pruning: true
             technology_constraint: true
             enrich_technologies: true
-        technology_rules:
+        qualities:
             - component: application
               technology: terraform
               hosting:
