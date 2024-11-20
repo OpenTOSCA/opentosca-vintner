@@ -22,8 +22,6 @@ const generator: ImplementationGenerator = {
     hosting: ['gcp.appengine'],
     weight: 0,
     reason: 'Custom module with imperative parts, while Terraform provides a declarative module.',
-    details:
-        '"ansible.builtin.shell", "ansible.builtin.tempfile", "ansible.builtin.unarchive", and "ansible.builtin.copy" tasks',
 
     generate: (name, type) => {
         return {

@@ -27,8 +27,6 @@ class Generator extends GeneratorAbstract {
     hosting = ['*', 'remote.machine']
     weight = 1
     reason = 'Primary use case due to the specialization of Ansible.'
-    details =
-        '"ansible.builtin.shell", "ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", and "ansible.builtin.copy", tasks with "when" statements'
 
     generate(name: string, type: NodeType) {
         return {

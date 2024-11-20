@@ -23,8 +23,6 @@ const generator: ImplementationGenerator = {
     hosting: ['gcp.appengine'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
-    details:
-        '"google_app_engine_standard_app_version", "google_project_iam_member", "google_service_account", "google_storage_bucket", and "google_storage_bucket_object" resources',
 
     generate: (name, type) => {
         return {

@@ -26,7 +26,7 @@ const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'terraform',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
-    weight: 0,
+    weight: 0.25,
     reason: 'Ansible is more specialized.',
 
     generate: (name, type) => {

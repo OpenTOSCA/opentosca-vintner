@@ -16,7 +16,6 @@ class Generator extends GeneratorAbstract {
     weight = 0.5
     reason =
         'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.'
-    details = undefined
 
     generate(name: string, type: NodeType) {
         return {

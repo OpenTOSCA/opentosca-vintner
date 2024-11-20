@@ -9,8 +9,6 @@ const generator: ImplementationGenerator = {
     hosting: ['local.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
-    details:
-        '"ansible.builtin.apt_key", "ansible.builtin.apt_repository", "ansible.builtin.apt", "ansible.builtin.copy", and "ansible.builtin.systemd" tasks',
 
     generate: (name, type) => {
         return {

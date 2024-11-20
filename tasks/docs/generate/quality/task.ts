@@ -19,7 +19,7 @@ async function main() {
     /**
      * Directory
      */
-    const dir = path.join('docs', 'docs', 'variability4tosca', 'rules')
+    const dir = path.join('docs', 'docs', 'variability4tosca', 'quality')
     files.removeDirectory(dir)
     files.createDirectory(dir)
 
@@ -64,7 +64,6 @@ async function main() {
             name: description.name,
             quality: rule.weight,
             reason: rule.reason,
-            details: rule.details!,
         }
 
         const found = scenarios.find(it => it.key === key)
@@ -122,7 +121,6 @@ type TechnologyRuleScenario = {
         name: string
         quality: number
         reason: string
-        details: string
     }[]
 }
 

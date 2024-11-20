@@ -19,7 +19,6 @@ const generator: ImplementationGenerator = {
     hosting: ['docker.engine', 'remote.machine'],
     weight: 0.5,
     reason: 'Docker Compose is more specialized',
-    details: '"community.docker.docker_container" task',
 
     generate: (name, type) => {
         return {

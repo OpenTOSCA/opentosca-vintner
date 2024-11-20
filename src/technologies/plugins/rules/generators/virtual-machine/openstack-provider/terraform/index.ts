@@ -14,8 +14,6 @@ const generator: ImplementationGenerator = {
     hosting: ['openstack.provider'],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
-    details:
-        '"openstack_compute_instance_v2", "openstack_networking_secgroup_rule_v2" and "openstack_networking_secgroup_v2" resources',
 
     generate: (name, type) => {
         return {

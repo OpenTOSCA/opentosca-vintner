@@ -115,7 +115,6 @@ export default async function (options: StudyTechnologyOptions) {
         Hosting: it.hosting,
         Quality: it.weight,
         Reason: it.reason,
-        // Details: it.details,
     }))
 
     printTable<RuleData>('The technology rules of our case study. Qualities range from bad (0) to good (1).', ruleData)
@@ -369,7 +368,6 @@ type RuleData = {
     Hosting?: string | string[]
     Quality?: number
     Reason?: string
-    Details?: string
 }
 
 type QualityData = {

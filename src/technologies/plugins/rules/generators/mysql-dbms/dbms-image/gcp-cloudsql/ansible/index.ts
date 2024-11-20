@@ -8,9 +8,8 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     artifact: 'dbms.image',
     hosting: ['gcp.cloudsql'],
-    weight: 1,
+    weight: 0,
     reason: 'Primary use case due to the specialization of Ansible.',
-    details: '"google.cloud.gcp_sql_instance" and "google.cloud.gcp_sql_user" tasks',
 
     generate: (name, type) => {
         return {

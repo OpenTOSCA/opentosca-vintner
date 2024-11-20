@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     hosting: [],
     weight: 1,
     reason: 'Terraform provides a declarative module.',
-    details: '"google_project_service" resource',
 
     generate: (name, type) => {
         return {

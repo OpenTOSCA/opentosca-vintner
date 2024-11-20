@@ -18,8 +18,6 @@ const generator: ImplementationGenerator = {
     hosting: ['remote.machine'],
     weight: 1,
     reason: 'Primary use case due to the specialization of Ansible.',
-    details:
-        '"ansible.builtin.apt", "ansible.builtin.systemd", "ansible.builtin.copy", "ansible.builtin.lineinfile", and "community.mysql.mysql_user" tasks',
 
     generate: (name, type) => {
         return {
