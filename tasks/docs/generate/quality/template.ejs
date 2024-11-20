@@ -58,7 +58,7 @@ The scenario does not require a specific hosting.
 <figure markdown><%- scenario.svg %></figure>
 
 <% scenario.technologies.forEach(technology => { %>
-!!! <% if (technology.quality > 0.75) { -%>success<% } else if (technology.quality > 0.5) { -%>question<% } else if (technology.quality > 0.25) { -%>warning<% } else { -%>failure<% } -%> "<%= technology.name %> (Quality: <%= technology.quality %>)"
+!!! <% if (technology.quality > 0.875) { -%>success<% } else if (technology.quality > 625) { -%>question<% } else if (technology.quality > 0.375) { -%>warning<% } else if (technology.quality > 0.125) { -%>failure<% }else { -%>danger<% } -%> "<%= technology.name %> has <%= toLabel(technology.quality) %> quality for this scenario!"
     <%= technology.reason %>
 <% }) %>
 
@@ -85,7 +85,7 @@ This appendix contains the deployment quality cards.
 | Hosting | <%= rule.hosting.map(link).join(" -> ") %> |
 <% } -%>
 | Quality | <%= rule.weight %> |
-| Label | <% if (rule.weight > 0.75) { -%>good<% } else if (rule.weight > 0.5) { -%>caution<% } else if (rule.weight > 0.25) { -%>poor<% } else { -%>bad<% } -%> |
+| Label | <%= toLabel(rule.weight) -%> |
 | Reason | <%= rule.reason %> |
 | Graph |<figure markdown><%- svgs["rule." + rule.technology + "." + (index + 1)]%></figure>|
 

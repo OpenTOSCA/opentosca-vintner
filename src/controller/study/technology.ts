@@ -3,6 +3,7 @@ import Controller from '#controller'
 import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {toString} from '#technologies/utils'
 import * as utils from '#utils'
 import * as console from 'node:console'
 import path from 'path'
@@ -230,6 +231,7 @@ export default async function (options: StudyTechnologyOptions) {
      ******************************************************************************************************************/
 
     const qualityData: QualityData[] = []
+
     for (const original of config.originals) {
         const inputs = path.join(testsDir, original, 'inputs.yaml')
 
@@ -240,21 +242,21 @@ export default async function (options: StudyTechnologyOptions) {
 
         qualityData.push({
             scenario: original,
-            expert: utils.roundNumber(quality.max_weight.weight_average),
+            expert: toString(utils.roundNumber(quality.max_weight.weight_average)),
             non_expert: [
-                utils.roundNumber(quality.min_weight.weight_average),
-                utils.roundNumber(quality.max_weight.weight_average),
+                toString(utils.roundNumber(quality.min_weight.weight_average)),
+                toString(utils.roundNumber(quality.max_weight.weight_average)),
             ],
             random: [
-                utils.roundNumber(quality.min_weight.weight_average),
-                utils.roundNumber(quality.max_weight.weight_average),
+                toString(utils.roundNumber(quality.min_weight.weight_average)),
+                toString(utils.roundNumber(quality.max_weight.weight_average)),
             ],
             counting: [
-                utils.roundNumber(quality.min_count.min_quality.weight_average),
-                utils.roundNumber(quality.min_count.max_quality.weight_average),
+                toString(utils.roundNumber(quality.min_count.min_quality.weight_average)),
+                toString(utils.roundNumber(quality.min_count.max_quality.weight_average)),
             ],
-            quality: utils.roundNumber(quality.max_weight.weight_average),
-            quality_counting: utils.roundNumber(quality.max_weight_min_count.weight_average),
+            quality: toString(utils.roundNumber(quality.max_weight.weight_average)),
+            quality_counting: toString(utils.roundNumber(quality.max_weight_min_count.weight_average)),
         })
     }
 
@@ -372,12 +374,12 @@ type RuleData = {
 
 type QualityData = {
     scenario: string
-    expert: number
+    expert: string
     non_expert: any
-    random: number[]
-    counting: number[]
-    quality: number
-    quality_counting: number
+    random: string[]
+    counting: string[]
+    quality: string
+    quality_counting: string
 }
 
 type MetricsData = {
