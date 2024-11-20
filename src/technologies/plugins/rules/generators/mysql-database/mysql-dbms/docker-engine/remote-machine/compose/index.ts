@@ -1,11 +1,15 @@
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {
-    AnsibleApplyComposeTask,
-    AnsibleDockerHostEnvironment,
+    AnsibleApplyComposeTasks,
     AnsibleOrchestratorOperation,
-    AnsibleUnapplyComposeTask,
+    AnsibleUnapplyComposeTasks,
 } from '#technologies/plugins/rules/utils/ansible'
-import {MetadataGenerated, MetadataUnfurl, OpenstackMachineHost} from '#technologies/plugins/rules/utils/utils'
+import {
+    MetadataGenerated,
+    MetadataUnfurl,
+    OpenstackMachineCredentials,
+    OpenstackMachineHost,
+} from '#technologies/plugins/rules/utils/utils'
 
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
@@ -15,6 +19,8 @@ const generator: ImplementationGenerator = {
     reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
+        const remote = true
+
         const AnsibleTouchJobTask = {
             name: 'touch compose',
             register: 'compose',
@@ -55,24 +61,14 @@ const generator: ImplementationGenerator = {
         }
 
         const AnsibleApplyJobTasks = [
-            {
-                ...AnsibleApplyComposeTask(),
-                environment: {
-                    ...AnsibleDockerHostEnvironment(),
-                },
-            },
+            ...AnsibleApplyComposeTasks({remote}),
             {
                 name: 'let it cook',
                 'ansible.builtin.pause': {
                     seconds: 10,
                 },
             },
-            {
-                ...AnsibleUnapplyComposeTask(),
-                environment: {
-                    ...AnsibleDockerHostEnvironment(),
-                },
-            },
+            ...AnsibleUnapplyComposeTasks({remote}),
         ]
 
         return {
@@ -83,6 +79,7 @@ const generator: ImplementationGenerator = {
             },
             properties: {
                 ...OpenstackMachineHost(),
+                ...OpenstackMachineCredentials(),
             },
             interfaces: {
                 Standard: {

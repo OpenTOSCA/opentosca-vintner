@@ -107,7 +107,7 @@ const generator: ImplementationGenerator = {
                                             location: '{{ SELF.gcp_region }}',
                                             members: ['allUsers'],
                                             role: 'roles/run.invoker',
-                                            service: '{{ SELF.application_name }}',
+                                            service: '${google_cloud_run_v2_service.application.name}',
                                         },
                                     ],
                                 },

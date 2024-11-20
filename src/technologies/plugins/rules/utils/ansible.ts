@@ -80,12 +80,6 @@ export function AnsibleGCPCredentialsEnvironment() {
     }
 }
 
-export function AnsibleDockerHostEnvironment() {
-    return {
-        DOCKER_HOST: '{{ SELF.os_ssh_host }}',
-    }
-}
-
 export function AnsibleHostOperationPlaybookArgs() {
     return ['--become', '--key-file={{ SELF.os_ssh_key_file }}', '--user={{ SELF.os_ssh_user }}']
 }
@@ -273,24 +267,80 @@ export function AnsibleCreateComposeTask(options: {manifest: DockerCompose}) {
     }
 }
 
-export function AnsibleApplyComposeTask() {
+export function AnsibleCreateSSHConfig() {
     return {
-        name: 'apply compose',
-        'ansible.builtin.shell': 'docker compose -f {{ compose.path }} up -d',
-        args: {
-            executable: '/usr/bin/bash',
+        name: 'add ssh credentials',
+        'community.general.ssh_config': {
+            user: "{{ lookup('env', 'USER') }}",
+            host: '{{ SELF.os_ssh_host }}',
+            remote_user: '{{ SELF.os_ssh_user }}',
+            identity_file: '{{ SELF.os_ssh_key_file }}',
+            strict_host_key_checking: 'no',
+            //identities_only: 'yes',
+            user_known_hosts_file: '/dev/null',
         },
     }
 }
 
-export function AnsibleUnapplyComposeTask() {
+export function AnsibleDeleteSSHConfig() {
     return {
+        name: 'remove ssh credentials',
+        'community.general.ssh_config': {
+            user: "{{ lookup('env', 'USER') }}",
+            host: '{{ SELF.os_ssh_host }}',
+            state: 'absent',
+        },
+    }
+}
+
+export function AnsibleApplyComposeTasks(options: {remote?: boolean} = {}) {
+    const tasks = []
+
+    if (options.remote) {
+        tasks.push(AnsibleCreateSSHConfig())
+    }
+
+    tasks.push({
+        name: 'apply compose',
+        'ansible.builtin.shell': `docker compose -f {{ compose.path }} up -d`,
+        args: {
+            executable: '/usr/bin/bash',
+        },
+        environment: {
+            DOCKER_HOST: options.remote ? 'ssh://{{ SELF.os_ssh_host }}' : undefined,
+        },
+    })
+
+    if (options.remote) {
+        tasks.push(AnsibleDeleteSSHConfig())
+    }
+
+    return tasks
+}
+
+export function AnsibleUnapplyComposeTasks(options: {remote?: boolean} = {}) {
+    const tasks = []
+
+    if (options.remote) {
+        tasks.push(AnsibleCreateSSHConfig())
+    }
+
+    tasks.push({
         name: 'unapply compose',
         'ansible.builtin.shell': 'docker compose -f {{ compose.path }} down',
         args: {
             executable: '/usr/bin/bash',
         },
+        environment: {
+            DOCKER_HOST: options.remote ? 'ssh://{{ SELF.os_ssh_host }}' : undefined,
+        },
+    })
+
+    if (options.remote) {
+        tasks.push(AnsibleDeleteSSHConfig())
     }
+
+    return tasks
 }
 
 export function AnsibleTask(options: {task: AnsibleTaskOptions; module: string; options: any}) {
@@ -387,7 +437,7 @@ export function AnsibleAssertOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'assert management operation',
         'ansible.builtin.fail': {
-            dest: `Management operation "${operation}" missing`,
+            msg: `Management operation "${operation}" missing`,
         },
         when: JinjaWhenManagementOperationUndefined(operation),
     }

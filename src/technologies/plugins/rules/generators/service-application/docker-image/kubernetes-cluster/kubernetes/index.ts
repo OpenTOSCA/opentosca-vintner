@@ -3,6 +3,7 @@ import {AnsibleOrchestratorOperation} from '#technologies/plugins/rules/utils/an
 import {
     ApplicationProperties,
     BASH_KUBECTL,
+    KubernetesCredentials,
     MetadataGenerated,
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils/utils'
@@ -98,6 +99,7 @@ const generator: ImplementationGenerator = {
                 ...MetadataGenerated(),
                 ...MetadataUnfurl(),
             },
+            properties: {...KubernetesCredentials()},
             attributes: {
                 application_address: {
                     type: 'string',

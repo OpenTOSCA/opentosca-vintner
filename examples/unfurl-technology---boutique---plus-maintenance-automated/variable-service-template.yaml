@@ -148,7 +148,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:frontend-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:frontend-v10
 
         frontend_ingress:
             type: ingress
@@ -201,7 +201,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:checkout-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:checkout-v10
 
         ###################################################
         #
@@ -223,7 +223,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:email-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:email-v10
 
         ###################################################
         #
@@ -257,7 +257,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:payment-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:payment-v10
 
         ###################################################
         #
@@ -279,7 +279,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:currency-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:currency-v10
 
         ###################################################
         #
@@ -301,7 +301,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:shipping-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:shipping-v10
 
         ###################################################
         #
@@ -331,7 +331,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:cart-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:cart-v10
 
         cart_database:
             type: mysql.database
@@ -376,7 +376,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:product-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:product-v10
 
         ###################################################
         #
@@ -400,7 +400,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:recommendation-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:recommendation-v10
 
         ###################################################
         #
@@ -422,7 +422,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:advertisement-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:advertisement-v10
 
         ###################################################
         #
@@ -459,7 +459,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:analytics-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:analytics-v10
 
         ###################################################
         #
@@ -523,7 +523,7 @@ topology_template:
             type: virtual.machine
             properties:
                 - machine_name: unfurl-technology-boutique
-                - ports: ['80', '2375', '9100']
+                - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}

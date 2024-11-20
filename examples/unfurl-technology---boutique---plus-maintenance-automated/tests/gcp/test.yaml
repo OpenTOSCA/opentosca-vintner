@@ -18,4 +18,4 @@ merge:
                 artifacts:
                     docker_image:
                         type: docker.image
-                        file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:analytics-v10
+                        file: milesstoetzner/opentosca-vintner-boutique-demo:analytics-v10

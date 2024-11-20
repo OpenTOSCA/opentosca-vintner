@@ -124,7 +124,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:frontend-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:frontend-v10
 
         frontend_component_terraform:
             type: frontend.component
@@ -168,7 +168,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:frontend-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:frontend-v10
 
         frontend_ingress:
             type: ingress
@@ -220,7 +220,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:checkout-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:checkout-v10
 
         checkout_component_terraform:
             type: checkout.component
@@ -259,7 +259,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:checkout-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:checkout-v10
 
         ###################################################
         #
@@ -280,7 +280,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:email-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:email-v10
 
         email_component_terraform:
             type: email.component
@@ -295,7 +295,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:email-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:email-v10
 
         ###################################################
         #
@@ -328,7 +328,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:payment-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:payment-v10
 
         payment_component_terraform:
             type: payment.component
@@ -355,7 +355,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:payment-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:payment-v10
 
         ###################################################
         #
@@ -376,7 +376,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:currency-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:currency-v10
 
         currency_component_terraform:
             type: currency.component
@@ -391,7 +391,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:currency-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:currency-v10
 
         ###################################################
         #
@@ -412,7 +412,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:shipping-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:shipping-v10
 
         shipping_component_terraform:
             type: shipping.component
@@ -427,7 +427,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:shipping-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:shipping-v10
 
         ###################################################
         #
@@ -457,7 +457,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:cart-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:cart-v10
 
         cart_component_terraform:
             type: cart.component
@@ -480,7 +480,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:cart-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:cart-v10
 
         cart_database_ansible:
             type: mysql.database
@@ -547,7 +547,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:product-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:product-v10
 
         product_component_terraform:
             type: product.component
@@ -562,7 +562,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:product-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:product-v10
 
         ###################################################
         #
@@ -586,7 +586,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:recommendation-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:recommendation-v10
 
         recommendation_component_terraform:
             type: recommendation.component
@@ -604,7 +604,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:recommendation-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:recommendation-v10
 
         ###################################################
         #
@@ -625,7 +625,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:advertisement-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:advertisement-v10
 
         advertisement_component_terraform:
             type: advertisement.component
@@ -640,7 +640,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-boutique-demo:advertisement-v10
+                      file: milesstoetzner/opentosca-vintner-boutique-demo:advertisement-v10
 
         ###################################################
         #
@@ -709,7 +709,7 @@ topology_template:
             technology: terraform
             properties:
                 - machine_name: unfurl-technology-boutique
-                - ports: ['80', '2375', '9100']
+                - ports: ['80', '9100']
                 - flavor:
                       value: m1.medium
                       conditions: {equal: [{variability_input: tier}, MEDIUM]}

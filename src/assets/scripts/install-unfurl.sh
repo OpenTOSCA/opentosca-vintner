@@ -42,5 +42,5 @@ fi
 # Install Unfurl
 # See also https://github.com/onecommons/unfurl/blob/main/full-requirements.txt
 # requests==2.31.0 is required, see https://github.com/ansible-collections/community.docker/issues/868
-pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2 docker[tls] requests==2.31.0 ansible==8.7.0 ansible-core==2.15.9
+pip install unfurl==1.0.0 openstacksdk==0.61 python-openstackclient==6.0.0 pymysql==1.1.0 kubernetes==24.2.0 openshift==0.13.2 docker[tls] requests==2.31.0 ansible==8.7.0 ansible-core==2.15.9 paramiko==3.5.0 stormssh==0.7.0
 ansible-galaxy collection install community.docker:3.9.0 kubernetes.core:3.2.0 google.cloud:1.2.0 dubzland.minio:1.2.0 --force

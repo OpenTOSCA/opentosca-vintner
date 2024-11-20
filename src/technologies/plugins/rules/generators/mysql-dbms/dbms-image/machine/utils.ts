@@ -45,7 +45,7 @@ systemctl restart mysql
 export const BashMySQLDBMSInstallation =
     'sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} {{ SELF.application_port }}'
 
-export function AnsibleMySQLDBMSInstallation() {
+export function AnsibleMySQLDBMSInstallationTasks() {
     return [
         {
             name: 'installing mysql',
@@ -106,7 +106,7 @@ export function AnsibleMySQLDBMSInstallation() {
             'community.mysql.mysql_user': {
                 name: 'root',
                 password: '{{ SELF.dbms_password }}',
-                priv: '*.*:ALL',
+                priv: '*.*:ALL,GRANT',
                 host: '%',
                 state: 'present',
                 login_host: 'localhost',

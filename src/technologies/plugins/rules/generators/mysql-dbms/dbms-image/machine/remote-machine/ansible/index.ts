@@ -1,5 +1,5 @@
 import {
-    AnsibleMySQLDBMSInstallation,
+    AnsibleMySQLDBMSInstallationTasks,
     AnsibleMySQLDBMSUninstallation,
 } from '#technologies/plugins/rules/generators/mysql-dbms/dbms-image/machine/utils'
 import {ImplementationGenerator} from '#technologies/plugins/rules/types'
@@ -67,7 +67,7 @@ const generator: ImplementationGenerator = {
                                         {
                                             ...AnsibleWaitForSSHTask(),
                                         },
-                                        ...AnsibleMySQLDBMSInstallation(),
+                                        ...AnsibleMySQLDBMSInstallationTasks(),
                                     ],
                                 },
                                 playbookArgs: [...AnsibleHostOperationPlaybookArgs()],
