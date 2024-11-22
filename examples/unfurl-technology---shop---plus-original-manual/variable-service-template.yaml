@@ -59,9 +59,6 @@ topology_template:
                 type: string
             tier:
                 type: string
-        options:
-            checks: false
-            enrich_technologies: false
 
     node_templates:
         ###################################################

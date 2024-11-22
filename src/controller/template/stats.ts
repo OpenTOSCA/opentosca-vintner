@@ -4,6 +4,7 @@ import * as files from '#files'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {hotfixBratans} from '#resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {IMPLEMENTATION_NAME_REGEX, isImplementation} from '#technologies/utils'
 import * as utils from '#utils'
@@ -45,6 +46,8 @@ export default async function (options: TemplateStatsOptions) {
         await Promise.all(
             options.template.map(async file => {
                 const template = await new Loader(file).load()
+                hotfixBratans(template)
+
                 const graph = new Graph(template)
 
                 const stats: TemplateStats = {
