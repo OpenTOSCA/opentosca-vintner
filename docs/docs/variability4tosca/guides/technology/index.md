@@ -53,50 +53,33 @@ vintner orchestrators attest --orchestrator unfurl
 
 ## Import the Template
 
-<figure>
-  <img src="variable-service-template.png" width="700"/>
-  <figcaption>Figure 1: The Variability4TOSCA model.</figcaption>
-</figure>
-<br/>
-<br/>
-
 Next, we import the Variability4TOSCA template.
 
-```
+```shell linenums="1"
 vintner templates import --template aware --path examples/unfurl-technology---shop---plus-maintenance-automated
 ```
 
 Then, we initialize an application instance.
 
-```
+```shell linenums="1"
 vintner instances init --instance unfurl-technology --template unfurl-technology
 ```
 
 We can optionally inspect the Variability4TOSCA model.
 This model contains all possible elements having conditions assigned.
 However, due to the automatic selection of technologies, no technologies must be modeled.
-This is shown in Figure 1.
 
-```
+```shell linenums="1"
 vintner templates inspect --template unfurl-technology
 ```
 
 
 ## Resolve Variability
 
-<figure>
-  <img src="variant.png" width="700"/>
-  <figcaption>Figure 2: The derived TOSCA model.</figcaption>
-</figure>
-<br/>
-<br/>
-
-We want to deploy the Kubernetes variant of the web shop application with the optional and the premiun feature enabled.
+We want to deploy the Kubernetes variant of the web shop application with the optional and the premium feature enabled.
 Therefore, we first create the following file.
 
-```
-# /tmp/variability-inputs.yaml
-
+```shell linenums="1" title="/tmp/variability-inputs.yaml"
 env: KUBERNETES
 tier: LARGE
 optional_feature: true
@@ -105,16 +88,15 @@ premium_feature: true
 
 Next, we resolve the variability.
 
-```
+```shell linenums="1"
 vintner instances resolve --instance unfurl-technology --inputs /tmp/variability-inputs.yaml
 ```
 
 You can optionally inspect the generated TOSCA-compliant model.
 This template contains only the elements required for the Kubernetes variant.
 Moreover, deployment technologies have been assigned.
-This is shown in Figure 2.
 
-```
+```shell linenums="1"
 vintner instances inspect --instance unfurl-technology
 ```
 
@@ -126,9 +108,7 @@ Therefore, we need to provide deployment inputs, e.g., credentials to OpenStack.
 These inputs are specified in `topology_template.inputs` of the TOSCA-compliant model.
 The following inputs must be defined.
 
-```
-# /tmp/deployment-inputs.yaml
-
+```shell linenums="1" title="/tmp/deployment-inputs.yaml"
 database_password: YOUR_DB_PASSWORD
 database_password: YOUR_DBMS_PASSWORD
 k8s_host: YOUR_K8S_HOST
@@ -140,7 +120,7 @@ k8s_client_key_file: YOUR_K8S_CLIENT_KEY_FILE
 Next, we start the deployment. 
 The deployment will take around 1-5 minutes.
 
-```
+```shell linenums="1"
 vintner instances deploy --instance unfurl-technology --inputs /tmp/deployment-inputs.yaml
 ```
 
@@ -150,13 +130,13 @@ vintner instances deploy --instance unfurl-technology --inputs /tmp/deployment-i
 Next, we can test that the application is correctly working. 
 Therefore, find out the endpoint assigned by the ingress.
 
-```
+```shell linenums="1"
 curl --fail-with-body ${ENDPOINT}
 ```
 
 This should return the following.
 
-```
+```shell linenums="1"
 {
    "MESSAGE": "Successfully executed query",
    "QUERY": "SELECT 1 + 1;",
@@ -180,14 +160,14 @@ Thus, we conclude that the application has been deployed as desired.
 
 Afterward, we can undeploy the application.
 
-```
+```shell linenums="1"
 vintner instances undeploy --instance unfurl-technology
 ```
 
 We can also optionally remove the instance or cleanup the filesystem.
 Note, cleaning up the filesystem removes any vintner data including, e.g., all imported templates and created instances.
 
-```
+```shell linenums="1"
 vintner instances delete --instance unfurl-technology
 vintner setup clean --force
 ```
