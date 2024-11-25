@@ -174,3 +174,5 @@ Relative diff from the absolute diff from original to maintained
 CAUTION: Is this case study running with the latest implementation?
 
 COMMENT: drop some not required variability options
+
+COMMENT: used in SPE publication

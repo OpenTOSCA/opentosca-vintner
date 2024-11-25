@@ -174,3 +174,5 @@ Relative diff from the absolute diff from original to maintained
 CAUTION: Is this case study running with the latest implementation?
 
 COMMENT: fixed that UNDEFINED DEFAULT ALTERNATIVE is counted and also k8s should not be counted
+
+COMMENT: used in SPE publication

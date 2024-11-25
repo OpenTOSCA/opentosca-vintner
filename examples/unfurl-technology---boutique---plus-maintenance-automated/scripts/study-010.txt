@@ -174,5 +174,3 @@ Relative diff from the absolute diff from original to maintained
 └─────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────┴───────────────────┴─────────────────────┴─────────────────────────────────┴────────────────────────┘
 
 CAUTION: Is this case study running with the latest implementation?
-
-COMMENT: used in SPE publication
