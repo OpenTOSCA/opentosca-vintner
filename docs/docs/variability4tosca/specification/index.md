@@ -1112,6 +1112,7 @@ export type TechnologyPluginBuilder = {
 export type TechnologyPlugin = {
     assign: (node: Node) => {[technology: string]: TechnologyTemplate}[]
     implement: (name: string, type: NodeType) => NodeTypeMap
+    uses: (artifact: Artifact) => Technology[]
 }
 ```
 
