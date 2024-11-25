@@ -31,7 +31,7 @@ export type StudyTechnologyOptions = {
  * Available applications
  *
  * - boutique
- * - industry (coming soon)
+ * - industry
  * - shop
  */
 

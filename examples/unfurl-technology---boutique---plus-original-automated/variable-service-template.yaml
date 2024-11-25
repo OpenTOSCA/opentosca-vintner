@@ -53,22 +53,9 @@ topology_template:
         gcp_project:
             type: string
 
-        k8s_host:
-            type: string
-
-        k8s_ca_cert_file:
-            type: string
-
-        k8s_client_cert_file:
-            type: string
-
-        k8s_client_key_file:
-            type: string
-
     variability:
         expressions:
             is_gcp: {equal: [{variability_input: env}, GCP]}
-            is_kubernetes: {equal: [{variability_input: env}, KUBERNETES]}
             is_openstack: {equal: [{variability_input: env}, OPENSTACK]}
             has_optional_payment_feature: {equal: [{variability_input: optional_payment_feature}, true]}
             has_premium_payment_feature: {equal: [{variability_input: premium_payment_feature}, true]}
@@ -143,7 +130,6 @@ topology_template:
                 - recommendation: recommendation_component
                 - advertisement: advertisement_component
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -154,7 +140,6 @@ topology_template:
             type: ingress
             requirements:
                 - application: frontend_component
-                - host: kubernetes_cluster
                 - host: virtual_machine
 
         ###################################################
@@ -196,7 +181,6 @@ topology_template:
                 - cart: cart_component
                 - product: product_component
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -218,7 +202,6 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -252,7 +235,6 @@ topology_template:
                       conditions: {not: {logic_expression: has_premium_payment_feature}}
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -274,7 +256,6 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -296,7 +277,6 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -326,7 +306,6 @@ topology_template:
             requirements:
                 - database: cart_database
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -349,7 +328,6 @@ topology_template:
                 - dbms_password: {get_input: dbms_password}
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudsql
             artifacts:
                 - dbms_image:
@@ -371,7 +349,6 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -395,7 +372,6 @@ topology_template:
             requirements:
                 - product: product_component
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -417,7 +393,6 @@ topology_template:
                 - disable_profiler: '1'
             requirements:
                 - host: docker_engine
-                - host: kubernetes_cluster
                 - host: gcp_cloudrun
             artifacts:
                 - docker_image:
@@ -539,23 +514,3 @@ topology_template:
                 - gcp_region: {get_input: gcp_region}
                 - gcp_service_account_file: {get_input: gcp_service_account_file}
                 - gcp_project: {get_input: gcp_project}
-
-        ###################################################
-        #
-        # Kubernetes
-        #
-        ###################################################
-
-        kubernetes_cluster:
-            type: kubernetes.cluster
-            conditions: {logic_expression: is_kubernetes}
-            properties:
-                - k8s_host: {get_input: k8s_host}
-                - k8s_ca_cert_file: {get_input: k8s_ca_cert_file}
-                - k8s_client_cert_file: {get_input: k8s_client_cert_file}
-                - k8s_client_key_file: {get_input: k8s_client_key_file}
-            requirements:
-                - host: kubernetes_provider
-
-        kubernetes_provider:
-            type: cloud.provider

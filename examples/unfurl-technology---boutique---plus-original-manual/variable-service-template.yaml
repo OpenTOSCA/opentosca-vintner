@@ -86,9 +86,6 @@ topology_template:
                 type: boolean
                 default: false
 
-        options:
-            enrich_technologies: false
-
     node_templates:
         ###################################################
         #
