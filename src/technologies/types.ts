@@ -10,7 +10,8 @@ export type TechnologyPluginBuilder = {
 }
 
 export type TechnologyPlugin = {
-    enabled: () => Boolean
+    // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
+    backwards: () => Boolean
 
     // TODO: must assign technology.assign!
     assign: (node: Node) => TechnologyTemplateMap[]

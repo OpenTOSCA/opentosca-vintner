@@ -39,7 +39,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return rules
     }
 
-    enabled() {
+    backwards() {
         return this.hasRules()
     }
 

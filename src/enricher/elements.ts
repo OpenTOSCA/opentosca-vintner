@@ -26,7 +26,7 @@ export class ElementEnricher {
 
     private getTechnologyCandidates(node: Node) {
         const candidates: TechnologyTemplateMap[] = []
-        for (const plugin of this.graph.plugins.technology.filter(it => it.enabled())) {
+        for (const plugin of this.graph.plugins.technology.filter(it => it.backwards())) {
             candidates.push(...plugin.assign(node))
         }
         return candidates
@@ -39,7 +39,7 @@ export class ElementEnricher {
      */
     private enrichImplementations() {
         // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
-        if (utils.isEmpty(this.graph.plugins.technology.filter(it => it.enabled()))) return
+        if (utils.isEmpty(this.graph.plugins.technology.filter(it => it.backwards()))) return
 
         for (const node of this.graph.nodes.filter(it => it.managed).filter(it => utils.isPopulated(it.technologies))) {
             // Do not override manual assigned technologies but enrich them with an implementation
