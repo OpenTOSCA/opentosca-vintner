@@ -47,7 +47,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return utils.isPopulated(this.getRules())
     }
 
-    // TODO: rework this so that it does not depend on the name
     uses(artifact: Artifact): Technology[] {
         return artifact.container.technologies.filter(it => {
             const deconstructed = destructImplementationName(it.assign)
