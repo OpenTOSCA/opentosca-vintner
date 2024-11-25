@@ -1,7 +1,9 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import Artifact from '#graph/artifact'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
+import Technology from '#graph/technology'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import {LogicExpression} from '#spec/variability'
@@ -9,7 +11,12 @@ import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
 import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
-import {constructImplementationName, constructRuleName, isGenerated} from '#technologies/utils'
+import {
+    constructImplementationName,
+    constructRuleName,
+    destructImplementationName,
+    isGenerated,
+} from '#technologies/utils'
 import * as utils from '#utils'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
@@ -32,8 +39,21 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return rules
     }
 
+    enabled() {
+        return this.hasRules()
+    }
+
     hasRules() {
         return utils.isPopulated(this.getRules())
+    }
+
+    // TODO: rework this so that it does not depend on the name
+    uses(artifact: Artifact): Technology[] {
+        return artifact.container.technologies.filter(it => {
+            const deconstructed = destructImplementationName(it.assign)
+            if (check.isUndefined(deconstructed.artifact)) return false
+            return artifact.getType().isA(deconstructed.artifact)
+        })
     }
 
     implement(name: string, type: NodeType): NodeTypeMap {

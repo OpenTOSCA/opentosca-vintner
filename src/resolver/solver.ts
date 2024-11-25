@@ -3,12 +3,12 @@ import * as check from '#check'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
+import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
 import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpression} from '#spec/variability'
-import {destructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 import day from '#utils/day'
 import {UnexpectedError} from '#utils/error'
@@ -629,11 +629,12 @@ export default class Solver {
          */
         if (check.isDefined(expression.is_managed)) {
             const artifact = this.graph.getArtifact(expression.is_managed, {element, cached})
-            const technologies = artifact.container.technologies.filter(it => {
-                const deconstructed = destructImplementationName(it.assign)
-                if (check.isUndefined(deconstructed.artifact)) return false
-                return artifact.getType().isA(deconstructed.artifact)
-            })
+
+            const technologies: Technology[] = []
+            for (const plugin of this.graph.plugins.technology) {
+                technologies.push(...plugin.uses(artifact))
+            }
+
             return MiniSat.or(technologies.map(it => it.id))
         }
 

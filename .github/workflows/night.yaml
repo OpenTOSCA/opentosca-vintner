@@ -108,7 +108,7 @@ jobs:
             - name: (DOCKER) Ensure Vintner can be executed
               run: docker exec vintner vintner --version
 
-            - name: (DOCKER) Ensure Vintner can be executed
+            - name: (DOCKER) Ensure Vintner version in Docker container and binary match
               run: |
                   DOCKER_VERSION=$(docker exec vintner vintner --version)
                   echo "Docker version: $DOCKER_VERSION}"
