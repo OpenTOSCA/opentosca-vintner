@@ -3,77 +3,64 @@
   hosting:
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: docker.engine
   hosting:
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: docker.engine
   hosting:
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: docker.engine
   hosting:
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: gcp.service
   hosting: []
   weight: 0
-  reason: Ansible provides a declarative module
 - technology: terraform
   component: gcp.service
   hosting: []
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: ingress
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: kubernetes
   component: ingress
   hosting:
       - kubernetes.cluster
   weight: 1
-  reason: Kubernetes is the underlying technology.
 - technology: terraform
   component: ingress
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: ansible
   component: ingress
   hosting:
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: ingress
   hosting:
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: ingress
   hosting:
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: ingress
   hosting:
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: mysql.database
   hosting:
@@ -81,7 +68,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: compose
   component: mysql.database
   hosting:
@@ -89,7 +75,6 @@
       - docker.engine
       - local.machine
   weight: 0
-  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: mysql.database
   hosting:
@@ -97,7 +82,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
@@ -105,7 +89,6 @@
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: compose
   component: mysql.database
   hosting:
@@ -113,7 +96,6 @@
       - docker.engine
       - remote.machine
   weight: 0
-  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: mysql.database
   hosting:
@@ -121,70 +103,60 @@
       - docker.engine
       - remote.machine
   weight: 0.75
-  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: mysql.database
   hosting:
       - mysql.dbms
       - gcp.cloudsql
   weight: 0
-  reason: Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.
 - technology: terraform
   component: mysql.database
   hosting:
       - mysql.dbms
       - gcp.cloudsql
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
       - mysql.dbms
       - kubernetes.cluster
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: kubernetes
   component: mysql.database
   hosting:
       - mysql.dbms
       - kubernetes.cluster
   weight: 0
-  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 - technology: terraform
   component: mysql.database
   hosting:
       - mysql.dbms
       - kubernetes.cluster
   weight: 0.25
-  reason: Ansible is more specialized.
 - technology: ansible
   component: mysql.database
   hosting:
       - mysql.dbms
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: mysql.database
   hosting:
       - mysql.dbms
       - local.machine
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.database
   hosting:
       - mysql.dbms
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: mysql.database
   hosting:
       - mysql.dbms
       - remote.machine
   weight: 0.5
-  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
@@ -192,7 +164,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized
 - technology: compose
   component: mysql.dbms
   artifact: dbms.image
@@ -200,7 +171,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
@@ -208,7 +178,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
@@ -216,7 +185,6 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized
 - technology: compose
   component: mysql.dbms
   artifact: dbms.image
@@ -224,7 +192,6 @@
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
@@ -232,82 +199,70 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - gcp.cloudsql
   weight: 0
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - gcp.cloudsql
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: kubernetes
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - kubernetes.cluster
   weight: 1
-  reason: Kubernetes is the underlying technology.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: mysql.dbms
   artifact: dbms.image
   hosting:
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: object.storage
   hosting:
       - gcp.cloudstorage
   weight: 0
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: object.storage
   hosting:
       - gcp.cloudstorage
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: object.storage
   hosting:
@@ -315,7 +270,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: compose
   component: object.storage
   hosting:
@@ -323,7 +277,6 @@
       - docker.engine
       - local.machine
   weight: 0
-  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
@@ -331,7 +284,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: object.storage
   hosting:
@@ -339,7 +291,6 @@
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: compose
   component: object.storage
   hosting:
@@ -347,7 +298,6 @@
       - docker.engine
       - remote.machine
   weight: 0
-  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
@@ -355,28 +305,24 @@
       - docker.engine
       - remote.machine
   weight: 0.75
-  reason: Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.
 - technology: ansible
   component: object.storage
   hosting:
       - minio.server
       - kubernetes.cluster
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: kubernetes
   component: object.storage
   hosting:
       - minio.server
       - kubernetes.cluster
   weight: 0
-  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
       - minio.server
       - kubernetes.cluster
   weight: 0.25
-  reason: Ansible is more specialized.
 - technology: ansible
   component: redis.server
   artifact: cache.image
@@ -384,7 +330,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: compose
   component: redis.server
   artifact: cache.image
@@ -392,7 +337,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: redis.server
   artifact: cache.image
@@ -400,7 +344,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: redis.server
   artifact: cache.image
@@ -408,7 +351,6 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: compose
   component: redis.server
   artifact: cache.image
@@ -416,7 +358,6 @@
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: redis.server
   artifact: cache.image
@@ -424,42 +365,36 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: redis.server
   artifact: cache.image
   hosting:
       - gcp.memorystore
   weight: 0
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: redis.server
   artifact: cache.image
   hosting:
       - gcp.memorystore
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: redis.server
   artifact: cache.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: kubernetes
   component: redis.server
   artifact: cache.image
   hosting:
       - kubernetes.cluster
   weight: 1
-  reason: Kubernetes is the underlying technology.
 - technology: terraform
   component: redis.server
   artifact: cache.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: ansible
   component: service.application
   artifact: docker.image
@@ -467,7 +402,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: compose
   component: service.application
   artifact: docker.image
@@ -475,7 +409,6 @@
       - docker.engine
       - local.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: service.application
   artifact: docker.image
@@ -483,7 +416,6 @@
       - docker.engine
       - local.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: service.application
   artifact: docker.image
@@ -491,7 +423,6 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: compose
   component: service.application
   artifact: docker.image
@@ -499,7 +430,6 @@
       - docker.engine
       - remote.machine
   weight: 1
-  reason: Docker is the underlying technology.
 - technology: terraform
   component: service.application
   artifact: docker.image
@@ -507,42 +437,36 @@
       - docker.engine
       - remote.machine
   weight: 0.5
-  reason: Docker Compose is more specialized.
 - technology: ansible
   component: service.application
   artifact: docker.image
   hosting:
       - gcp.cloudrun
   weight: 0
-  reason: Custom module with imperative parts, while Terraform provides a declarative module.
 - technology: terraform
   component: service.application
   artifact: docker.image
   hosting:
       - gcp.cloudrun
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: service.application
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: kubernetes
   component: service.application
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 1
-  reason: Kubernetes is the underlying technology.
 - technology: terraform
   component: service.application
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
-  reason: Kubernetes is more specialized.
 - technology: ansible
   component: service.application
   artifact: tar.archive
@@ -550,7 +474,6 @@
       - '*'
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
 - technology: terraform
   component: service.application
   artifact: tar.archive
@@ -558,7 +481,6 @@
       - '*'
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: service.application
   artifact: tar.archive
@@ -566,7 +488,6 @@
       - '*'
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
 - technology: terraform
   component: service.application
   artifact: tar.archive
@@ -574,7 +495,6 @@
       - '*'
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: service.application
   artifact: zip.archive
@@ -582,7 +502,6 @@
       - '*'
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
 - technology: terraform
   component: service.application
   artifact: zip.archive
@@ -590,7 +509,6 @@
       - '*'
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: service.application
   artifact: zip.archive
@@ -598,7 +516,6 @@
       - '*'
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible. Special integration for systemd.
 - technology: terraform
   component: service.application
   artifact: zip.archive
@@ -606,21 +523,18 @@
       - '*'
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: service.application
   artifact: zip.archive
   hosting:
       - gcp.appengine
   weight: 0
-  reason: Custom module with imperative parts, while Terraform provides a declarative module.
 - technology: terraform
   component: service.application
   artifact: zip.archive
   hosting:
       - gcp.appengine
   weight: 1
-  reason: Terraform provides a declarative module.
 - technology: ansible
   component: software.application
   artifact: apt.package
@@ -628,7 +542,6 @@
       - '*'
       - local.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: software.application
   artifact: apt.package
@@ -636,7 +549,6 @@
       - '*'
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: software.application
   artifact: apt.package
@@ -644,7 +556,6 @@
       - '*'
       - remote.machine
   weight: 1
-  reason: Primary use case due to the specialization of Ansible.
 - technology: terraform
   component: software.application
   artifact: apt.package
@@ -652,7 +563,6 @@
       - '*'
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: software.application
   artifact: tar.archive
@@ -660,7 +570,6 @@
       - '*'
       - local.machine
   weight: 1
-  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 - technology: terraform
   component: software.application
   artifact: tar.archive
@@ -668,7 +577,6 @@
       - '*'
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: software.application
   artifact: tar.archive
@@ -676,7 +584,6 @@
       - '*'
       - remote.machine
   weight: 1
-  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., "service.application".
 - technology: terraform
   component: software.application
   artifact: tar.archive
@@ -684,7 +591,6 @@
       - '*'
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: software.application
   artifact: zip.archive
@@ -692,7 +598,6 @@
       - '*'
       - local.machine
   weight: 1
-  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 - technology: terraform
   component: software.application
   artifact: zip.archive
@@ -700,7 +605,6 @@
       - '*'
       - local.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: software.application
   artifact: zip.archive
@@ -708,7 +612,6 @@
       - '*'
       - remote.machine
   weight: 1
-  reason: While this is a primary use case due to the specialization of Ansible, we must rely on scripts. More specialized types should be used, e.g., service.application.
 - technology: terraform
   component: software.application
   artifact: zip.archive
@@ -716,18 +619,15 @@
       - '*'
       - remote.machine
   weight: 0
-  reason: Ansible is more specialized. Also using provisioners is a "last resort".
 - technology: ansible
   component: virtual.machine
   artifact: machine.image
   hosting:
       - openstack.provider
   weight: 0.5
-  reason: Terraform is more specialized.
 - technology: terraform
   component: virtual.machine
   artifact: machine.image
   hosting:
       - openstack.provider
   weight: 1
-  reason: Terraform provides a declarative module.
