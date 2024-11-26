@@ -14,4 +14,4 @@ topology_template:
               technology:
                   - terraform:
                         assign: application~application::terraform
-                        conditions: []
+                        conditions: [{and: [], _generated: true}]

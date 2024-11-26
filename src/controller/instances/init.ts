@@ -1,7 +1,9 @@
 import * as assert from '#assert'
+import Controller from '#controller'
 import {ACTIONS, STATES} from '#machines/instance'
 import {Instance} from '#repositories/instances'
 import {Template} from '#repositories/templates'
+import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import * as utils from '#utils'
 
 export type InstancesCreateOptions = {
@@ -40,6 +42,15 @@ export default async function (options: InstancesCreateOptions) {
         if (instance.exists()) throw new Error(`Instance ${options.instance} already exists`)
         if (!template.exists()) throw new Error(`Template ${options.instance} does not exist`)
         instance.create(template, utils.now())
+
+        const loaded = template.loadVariableServiceTemplate()
+        if (loaded.tosca_definitions_version === TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3) {
+            await Controller.instances.resolve({
+                instance: instance.getName(),
+                enrich: false,
+                lock: false,
+            })
+        }
     }
 
     /**

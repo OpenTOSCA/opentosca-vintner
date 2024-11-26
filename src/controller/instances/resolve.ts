@@ -11,6 +11,7 @@ export type InstanceResolveOptions = {
     force?: boolean
     lock?: boolean
     machine?: boolean
+    enrich?: boolean
 }
 
 export default async function (options: InstanceResolveOptions) {
@@ -43,6 +44,7 @@ export default async function (options: InstanceResolveOptions) {
             template: instance.getVariableServiceTemplate(),
             inputs: options.inputs,
             presets: options.presets,
+            enrich: options.enrich ?? true,
         })
 
         // Store used variability inputs

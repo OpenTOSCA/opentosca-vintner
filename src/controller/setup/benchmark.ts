@@ -54,6 +54,7 @@ export default async function (options: BenchmarkOptions) {
                 const result = await Resolver.run({
                     template: io ? input : serviceTemplate,
                     inputs: {mode: 'present'},
+                    enrich: true,
                 })
 
                 if (io) files.storeYAML(output, result.template)

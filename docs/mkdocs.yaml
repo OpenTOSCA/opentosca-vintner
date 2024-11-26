@@ -125,6 +125,7 @@ nav:
                       - variability4tosca/guides/pruning
                       - variability4tosca/guides/modes
                       - variability4tosca/guides/aware
+                      - variability4tosca/guides/technology
           - Queries4TOSCA:
                 - queries4tosca/getting-started.md
                 - queries4tosca/specification.md

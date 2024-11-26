@@ -78,6 +78,7 @@ async function runTest(dir: string, vstdir: string) {
             inputs: getInputs(dir, config.inputs),
             output,
             presets: utils.toList(config.presets),
+            enrich: true,
         })
     }
 

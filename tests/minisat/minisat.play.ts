@@ -1,7 +1,7 @@
 import Enricher from '#enricher'
 import * as files from '#files'
 import Graph from '#graph/graph'
-import {hotfixBratans, hotfixPersistentCheck} from '#resolver'
+import {hotfixBratans} from '#resolver'
 import Solver from '#resolver/solver'
 import {ServiceTemplate} from '#spec/service-template'
 import std from '#std'
@@ -21,7 +21,6 @@ async function play(data: string) {
     const template = yaml.load(data) as ServiceTemplate
     await new Enricher(template).run()
 
-    hotfixPersistentCheck(template)
     hotfixBratans(template)
 
     const solver = new Solver(new Graph(template), {})

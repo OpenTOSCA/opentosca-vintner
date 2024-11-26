@@ -81,7 +81,7 @@ export default class Transformer {
         this._cleanCondition(next as any)
     }
 
-    private clean(raw: VariabilityAlternative & {default_condition_mode?: string; persistent?: boolean}) {
+    private clean(raw: VariabilityAlternative & {default_condition_mode?: string}) {
         delete raw.default_condition
         delete raw.default_consistency_condition
         delete raw.default_semantic_condition
@@ -92,8 +92,6 @@ export default class Transformer {
         delete raw.semantic_pruning
 
         delete raw.default_alternative
-
-        delete raw.persistent
         delete raw.implied
     }
 

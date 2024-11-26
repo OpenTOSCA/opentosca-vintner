@@ -59,6 +59,7 @@ topology_template:
                             - node_presence: worker
                               _generated: true
               technology: []
+              persistent: true
               requirements:
                   - left:
                         node: left

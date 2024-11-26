@@ -79,6 +79,7 @@ emitter.on(events.start_adaptation, async (instance: Instance) => {
             const result = await Resolver.run({
                 template: instance.getVariableServiceTemplate(),
                 inputs: cache[instance.getName()],
+                enrich: true,
             })
 
             /**
