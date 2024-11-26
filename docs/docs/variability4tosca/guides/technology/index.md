@@ -162,7 +162,7 @@ In case of minikube, this can be done as follows.
 ENDPOINT=$(minikube service frontend-external --url)
 ```
 
-Next, we can manually test the application.
+Next, we can manually test the application in the browser.
 
 <figure>
   <img src="screenshot.png" style="border: var(--md-typeset-table-color) solid 0.05rem" />
