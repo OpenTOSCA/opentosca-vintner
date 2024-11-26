@@ -92,9 +92,7 @@ export class Populator {
          * Technology Rule Plugin
          */
         const technologyRulePlugin = new TechnologyRulePluginBuilder().build(this.graph)
-        if (technologyRulePlugin.hasRules()) {
-            this.graph.plugins.technology.push(technologyRulePlugin)
-        }
+        this.graph.plugins.technology.push(technologyRulePlugin)
 
         /**
          * Imported plugins

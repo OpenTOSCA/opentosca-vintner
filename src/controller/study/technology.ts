@@ -54,14 +54,9 @@ export type StudyTechnologyOptions = {
  *     - study.yaml
  *     - variable-service-template.yaml
  *
- * - unfurl-technology---${options.application}---plus-maintenance-manual/
- *    - variable-service-template.yaml
- *
  * - unfurl-technology---${options.application}---plus-original-automated/
  *     - variable-service-template.yaml
  *
- * - unfurl-technology---${options.application}---plus-original-manual/
- *     - variable-service-template.yaml
  */
 
 /**
@@ -147,18 +142,6 @@ export default async function (options: StudyTechnologyOptions) {
     )
 
     /**
-     * VDMM+ Original Manual
-     */
-    const vdmm_plus_original_manual = await stats(
-        'VDMM+ Original Manual',
-        path.join(
-            examplesDir,
-            `unfurl-technology---${options.application}---plus-original-manual`,
-            'variable-service-template.yaml'
-        )
-    )
-
-    /**
      * VDMM+ Original Automated
      */
     const vdmm_plus_original_automated = await stats(
@@ -174,7 +157,6 @@ export default async function (options: StudyTechnologyOptions) {
         ...edmm_variants_original,
         edmm_total_original,
         vdmm_baseline_original,
-        vdmm_plus_original_manual,
         vdmm_plus_original_automated,
     ])
 
@@ -189,11 +171,6 @@ export default async function (options: StudyTechnologyOptions) {
          * Absolute diff of VDMM Baseline Original to EDMM Total
          */
         absoluteOriginalDiff(vdmm_baseline_original, edmm_total_original),
-
-        /**
-         * Absolute diff of VDMM+ Original Manual to VDMM Baseline Original
-         */
-        absoluteOriginalDiff(vdmm_plus_original_manual, vdmm_baseline_original),
 
         /**
          * Absolute diff of VDMM+ Original Automated to VDMM Baseline Original
@@ -212,11 +189,6 @@ export default async function (options: StudyTechnologyOptions) {
          * Relative diff of VDMM Baseline Original to EDMM Total
          */
         relativeOriginalDiff(vdmm_baseline_original, edmm_total_original),
-
-        /**
-         * Relative diff of VDMM+ Original Manual to VDMM Baseline Original
-         */
-        relativeOriginalDiff(vdmm_plus_original_manual, vdmm_baseline_original),
 
         /**
          * Relative diff of VDMM+ Original Automated to VDMM Baseline Original
@@ -284,25 +256,12 @@ export default async function (options: StudyTechnologyOptions) {
     )
 
     /**
-     * VDMM+ Maintenance Manual
-     */
-    const vdmm_plus_maintenance_manual = await stats(
-        'VDMM+ Maintenance Manual',
-        path.join(
-            examplesDir,
-            `unfurl-technology---${options.application}---plus-maintenance-manual`,
-            'variable-service-template.yaml'
-        )
-    )
-
-    /**
      * VDMM+ Maintenance Automated
      */
     const vdmm_plus_maintenance_automated = await stats('VDMM+ Maintenance Automated', templateFile)
 
     printTable<MetricsData>('Metrics relevant when modeling the maintenance scenario of our case study', [
         vdmm_baseline_maintenance,
-        vdmm_plus_maintenance_manual,
         vdmm_plus_maintenance_automated,
     ])
 
@@ -318,11 +277,6 @@ export default async function (options: StudyTechnologyOptions) {
     const vdmm_baseline_diff = absoluteMaintenanceDiff(vdmm_baseline_maintenance, vdmm_baseline_original)
 
     /**
-     * VDMM+ Manual Diff
-     */
-    const vdmm_plus_manual_diff = absoluteMaintenanceDiff(vdmm_plus_maintenance_manual, vdmm_plus_original_manual)
-
-    /**
      * VDMM+ Automated Diff
      */
     const vdmm_plus_automated_diff = absoluteMaintenanceDiff(
@@ -332,7 +286,6 @@ export default async function (options: StudyTechnologyOptions) {
 
     printTable<MetricsDataAbsoluteDiff>('Absolute diff from original to maintained', [
         vdmm_baseline_diff,
-        vdmm_plus_manual_diff,
         vdmm_plus_automated_diff,
     ])
 
@@ -342,11 +295,6 @@ export default async function (options: StudyTechnologyOptions) {
      *
      ******************************************************************************************************************/
     printTable<MetricsDataRelativeDiff>('Relative diff from the absolute diff from original to maintained', [
-        /**
-         * Relative Diff of "VDMM+ Maintenance Manual - VDMM+ Original Manual" in contrast to "VDMM Baseline Maintenance - VDMM Baseline Original"
-         */
-        relativeMaintenanceDiff(vdmm_plus_manual_diff, vdmm_baseline_diff),
-
         /**
          * Relative Diff of "VDMM+ Maintenance Automated - VDMM+ Original Automated" in contrast to "VDMM Baseline Maintenance - VDMM Baseline Original"
          */
