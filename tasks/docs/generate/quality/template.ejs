@@ -59,7 +59,6 @@ The scenario does not require a specific hosting.
 
 <% scenario.technologies.forEach(technology => { %>
 !!! <% if (technology.quality > 0.875) { -%>success<% } else if (technology.quality > 0.625) { -%>info<% } else if (technology.quality > 0.375) { -%>question<% } else if (technology.quality > 0.125) { -%>warning<% }else { -%>failure<% } -%> "<%= technology.name %> has <%= toLabel(technology.quality) %> quality for this scenario"
-    <%= technology.reason %>
 <% }) %>
 
 <% }) -%>
@@ -84,9 +83,8 @@ This appendix contains the deployment quality cards.
 <% if (rule.hosting.length !== 0) {-%>
 | Hosting | <%= rule.hosting.map(link).join(" -> ") %> |
 <% } -%>
-| Quality | <%= rule.weight %> |
-| Label | <%= toLabel(rule.weight) -%> |
-| Reason | <%= rule.reason %> |
+| Quality | <%= toLabel(rule.weight) -%> |
+| Weight | <%= rule.weight %> |
 | Graph |<figure markdown><%- svgs["rule." + rule.technology + "." + (index + 1)]%></figure>|
 
 <% }) %>

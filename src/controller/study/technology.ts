@@ -110,7 +110,6 @@ export default async function (options: StudyTechnologyOptions) {
         Artifact: it.artifact,
         Hosting: it.hosting,
         Quality: it.weight,
-        Reason: it.reason,
     }))
 
     printTable<RuleData>('The technology rules of our case study. Qualities range from bad (0) to good (1).', ruleData)
