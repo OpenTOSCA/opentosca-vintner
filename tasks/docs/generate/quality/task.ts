@@ -51,7 +51,6 @@ async function main() {
     const scenarios: TechnologyRuleScenario[] = []
     for (const [index, rule] of rules.entries()) {
         assert.isDefined(rule.weight)
-        assert.isDefined(rule.reason)
         //assert.isDefined(rule.details)
         assert.isDefined(rule.hosting)
 
@@ -63,7 +62,6 @@ async function main() {
         const entry = {
             name: description.name,
             quality: rule.weight,
-            reason: rule.reason,
         }
 
         const found = scenarios.find(it => it.key === key)
@@ -121,7 +119,6 @@ type TechnologyRuleScenario = {
     technologies: {
         name: string
         quality: number
-        reason: string
     }[]
 }
 
