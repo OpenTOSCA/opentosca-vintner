@@ -199,7 +199,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             } else {
                 maps.push({
                     [rule.technology]: {
-                        conditions: artifactCondition,
+                        conditions: artifactCondition ?? [],
                         weight: rule.weight,
                         assign: rule.assign ?? implementationName,
                     },

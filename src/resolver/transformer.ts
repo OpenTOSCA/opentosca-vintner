@@ -69,6 +69,7 @@ export default class Transformer {
         delete raw.implies
         delete raw.technology
         delete raw.managed
+        delete raw.persistent
     }
 
     private transformNodes() {

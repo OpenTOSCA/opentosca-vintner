@@ -13,6 +13,7 @@ export type ResolveOptions = {
     template: ServiceTemplate | string
     presets?: string[]
     inputs?: InputAssignmentMap | string
+    enrich: boolean
 }
 
 export type ResolveResult = {
@@ -50,7 +51,8 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
     /**
      * Enricher
      */
-    await new Enricher(options.template, {cleanTypes: false}).run()
+    // TODO: maybe enriching should not happen here ...
+    if (options.enrich) await new Enricher(options.template, {cleanTypes: false}).run()
 
     /**
      * Inputs
@@ -80,7 +82,6 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
     /**
      * Hotfix
      */
-    hotfixPersistentCheck(options.template)
     hotfixBratans(options.template)
 
     /**
@@ -89,27 +90,6 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
     const graph = new Graph(options.template)
 
     return {graph, inputs: inputs.inputs}
-}
-
-/**
- * TODO: Hotfix Persistent Check
- *  rc2 sets "incomingnaive-artifact-host"
- *  this triggers the persistent component check
- *  however, this check is only relevant during enriching
- *  also cannot set version to rc1 since we require, e.g., the rc2 optimization defaults
- */
-export function hotfixPersistentCheck(template: ServiceTemplate) {
-    if (check.isDefined(template.topology_template)) {
-        if (check.isUndefined(template.topology_template.variability)) {
-            template.topology_template.variability = {}
-        }
-
-        if (check.isUndefined(template.topology_template.variability.options)) {
-            template.topology_template.variability.options = {}
-        }
-
-        template.topology_template.variability.options.persistent_check = false
-    }
 }
 
 /**

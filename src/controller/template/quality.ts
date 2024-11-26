@@ -26,7 +26,7 @@ export default async function (options: TemplateQualityOptions) {
 }
 
 async function weight(options: TemplateQualityOptions, direction: 'min' | 'max') {
-    const loaded = await load(utils.copy(options), {
+    const loaded = await load(utils.copy({enrich: true, ...options}), {
         topology_template: {
             variability: {
                 options: {
@@ -45,7 +45,7 @@ async function weight(options: TemplateQualityOptions, direction: 'min' | 'max')
 }
 
 async function count(options: TemplateQualityOptions, direction: 'min' | 'max') {
-    const loaded = await load(utils.copy(options), {
+    const loaded = await load(utils.copy({enrich: true, ...options}), {
         topology_template: {
             variability: {
                 options: {
@@ -71,7 +71,7 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
 }
 
 async function weightCount(options: TemplateQualityOptions) {
-    const loaded = await load(utils.copy(options), {
+    const loaded = await load(utils.copy({enrich: true, ...options}), {
         topology_template: {
             variability: {
                 options: {
