@@ -43,7 +43,7 @@ node_types:
 
             application_image:
                 type: string
-                default: milesstoetzner/opentosca-vintner-boutique-demo:recommendation-v10
+                default: milesstoetzner/opentosca-vintner-boutique-demo:recommendation-v11
                 metadata:
                     vintner_ignore: true
 

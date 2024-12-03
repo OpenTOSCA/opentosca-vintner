@@ -67,6 +67,10 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: KUBERNETES
+                  optional_payment_feature: true
+                  premium_payment_feature: true
+                  optional_analytical_feature: true
+                  premium_analytical_feature: true
                   EOF
 
             - name: (VINTNER) Resolve variability
