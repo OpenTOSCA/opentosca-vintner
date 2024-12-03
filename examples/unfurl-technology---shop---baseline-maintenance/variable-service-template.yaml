@@ -188,7 +188,7 @@ topology_template:
             artifacts:
                 - docker_image:
                       type: docker.image
-                      file: ghcr.io/opentosca/opentosca-vintner-shop-demo@sha256:c6848d02b58bc8a70aa0f7ea4aa3f719951e0216468d9898b0eb47381098ef88
+                      file: ghcr.io/opentosca/opentosca-vintner-shop-demo@sha256:a084405c9b494c7fb52012f7f8890bcbf960818c3df3cbcc030e96c9e8c52bf9
 
         shop_ingress_ansible:
             type: ingress
