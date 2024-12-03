@@ -16,8 +16,16 @@ fi
 # Instance dir
 INSTANCE_DIR=${FS}/${USER}/.opentosca_vintner/instances/${TEMPLATE_NAME}
 
-# Delete lib in instance
-rm -rf ${INSTANCE_DIR}/data/ensemble/lib
+# Swap lib
+if [[ -d ../lib ]]; then
+  echo "Swapping lib ..."
+  rm -rf ${INSTANCE_DIR}/data/ensemble/lib
+  cp -R ../lib ${INSTANCE_DIR}/data/ensemble
+fi;
 
-# Copy local lib into instance
-cp -R ../lib ${INSTANCE_DIR}/data/ensemble
+# Swap files
+if [[ -d ../files ]]; then
+  echo "Swapping files ..."
+  rm -rf ${INSTANCE_DIR}/data/ensemble/files
+  cp -R ../files ${INSTANCE_DIR}/data/ensemble
+fi;

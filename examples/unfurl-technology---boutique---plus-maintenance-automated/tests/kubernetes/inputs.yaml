@@ -1,1 +1,5 @@
 env: KUBERNETES
+optional_payment_feature: true
+premium_payment_feature: true
+optional_analytical_feature: true
+premium_analytical_feature: true
