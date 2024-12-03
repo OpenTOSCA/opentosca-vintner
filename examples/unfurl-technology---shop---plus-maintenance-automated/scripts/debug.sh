@@ -1,14 +1,16 @@
 #! /usr/bin/bash
 set -e
 
+echo "$(dirname "$(readlink -f "$0")")"
+
 # Set working directory
 cd "$(dirname "$0")"
 
 # Load configuration
-source configuration.sh
+# source configuration.sh
 
 # Activate Unfurl
-. ~/unfurl/.venv/bin/activate
+# . ~/unfurl/.venv/bin/activate
 
 # Cd into instance direcoty
-echo $($VINTNER instances path --instance ${TEMPLATE_NAME})
+# echo $($VINTNER instances path --instance ${TEMPLATE_NAME})

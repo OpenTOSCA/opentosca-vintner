@@ -16,8 +16,8 @@ jobs:
     kubernetes:
         name: Kubernetes
         runs-on: ubuntu-22.04
-        # TODO: fix this
-        if: true
+        # TODO: enable this
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
@@ -120,7 +120,7 @@ jobs:
         name: Elastic
         runs-on: ubuntu-22.04
         # TODO: fix this
-        if: false
+        if: true
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated

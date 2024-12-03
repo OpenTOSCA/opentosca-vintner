@@ -60,10 +60,3 @@ runs:
               curl --fail-with-body --retry 3 --retry-delay 0 --retry-all-errors --connect-timeout 30 ${ENDPOINT}
           env:
               EXAMPLE: ${{ inputs.EXAMPLE }}
-
-        - name: Setup upterm session
-          uses: lhotari/action-upterm@v1
-          if: always()
-          with:
-              limit-access-to-actor: true
-              limit-access-to-users: milesstoetzner
