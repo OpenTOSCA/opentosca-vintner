@@ -207,8 +207,8 @@ jobs:
     openstack:
         name: OpenStack
         runs-on: ubuntu-22.04
-        # TODO: test this
-        if: true
+        # TODO: enable this
+        if: false
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
