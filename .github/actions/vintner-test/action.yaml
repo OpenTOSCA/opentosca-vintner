@@ -53,6 +53,6 @@ runs:
               ENDPOINT=$(minikube service ${EXAMPLE} --url)
               echo "endpoint: ${ENDPOINT}"
               sleep 5
-              curl --fail-with-body --retry 3 --retry-delay 0 --connect-timeout 30 ${ENDPOINT}
+              curl --fail-with-body --retry 3 --retry-delay 0 --retry-all-errors --connect-timeout 30 ${ENDPOINT}
           env:
               EXAMPLE: ${{ inputs.EXAMPLE }}
