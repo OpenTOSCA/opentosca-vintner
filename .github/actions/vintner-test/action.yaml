@@ -64,3 +64,6 @@ runs:
         - name: Setup upterm session
           uses: lhotari/action-upterm@v1
           if: always()
+          with:
+              limit-access-to-actor: true
+              limit-access-to-users: milesstoetzner
