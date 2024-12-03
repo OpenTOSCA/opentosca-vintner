@@ -39,11 +39,11 @@ jobs:
             - name: (PREPARE) Start minikube
               uses: medyagh/setup-minikube@v0.0.15
 
-            - name: (DEBUG) Test kubectl
+            - name: (PREPARE) Test kubectl
               run: kubectl get pods
 
-            - name: (DEBUG) Cat config
-              run: cat ~/.kube/config || true
+            - name: (PREPARE) Cat kubeconfig
+              run: cat ~/.kube/config
 
             - name: (PREPARE) Install Vintner
               uses: ./.github/actions/vintner-install
