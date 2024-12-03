@@ -1,4 +1,4 @@
-name: Case Study "Unfurl Technology Shop"
+name: Case Study "Unfurl Technology Boutique"
 on:
     workflow_dispatch:
     push:
@@ -18,8 +18,8 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
-            EXAMPLE_OVERRIDE: unfurl-technology-shop-external
+            EXAMPLE: unfurl-technology---boutique---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: frontend-external
             STUDY: technology
             ENV: K8S
             PORT: 80
@@ -67,9 +67,6 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: KUBERNETES
-                  tier: LARGE
-                  optional_feature: true
-                  premium_feature: true
                   EOF
 
             - name: (VINTNER) Resolve variability
@@ -104,6 +101,14 @@ jobs:
                   example: ${{ env.EXAMPLE_OVERRIDE }}
                   port: ${{ env.PORT }}
 
+            # TODO: remove this
+            - name: Setup upterm session
+              uses: lhotari/action-upterm@v1
+              if: failure()
+              with:
+                  limit-access-to-actor: true
+                  limit-access-to-users: milesstoetzner
+
             - name: (VINTNER) Undeploy application
               uses: ./.github/actions/vintner-undeploy
               if: always()
@@ -117,10 +122,12 @@ jobs:
     elastic:
         name: Elastic
         runs-on: ubuntu-22.04
+        # TODO: this
+        if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
-            EXAMPLE_OVERRIDE: unfurl-technology-shop
+            EXAMPLE: unfurl-technology---boutique---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-boutique
             ENV: GCP
             PORT: 80
         steps:
@@ -152,9 +159,6 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: ELASTIC
-                  tier:  LARGE
-                  optional_feature: true
-                  premium_feature: true
                   EOF
 
             - name: (VINTNER) Resolve variability
@@ -203,10 +207,12 @@ jobs:
     openstack:
         name: OpenStack
         runs-on: ubuntu-22.04
+        # TODO: this
+        if: false
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
-            EXAMPLE_OVERRIDE: unfurl-technology-shop-vm
+            EXAMPLE: unfurl-technology---boutique---plus-maintenance-automated
+            EXAMPLE_OVERRIDE: unfurl-technology-boutique-vm
             STUDY: technology
             ENV: OS
             PORT: 80
@@ -245,9 +251,6 @@ jobs:
               run: |
                   cat << EOF > /tmp/variability-inputs.yaml
                   env: STATIC
-                  tier: MEDIUM
-                  optional_feature: true
-                  premium_feature: true
                   EOF
 
             - name: (VINTNER) Resolve variability
