@@ -54,6 +54,7 @@ export default async function (options: InstancesDeployOptions) {
                 } else {
                     await orchestrator.continue(instance, {verbose: options.verbose})
                 }
+                break
             } catch (e) {
                 // Throw in final run
                 if (remaining === 1) throw e
