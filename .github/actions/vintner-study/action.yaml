@@ -1,0 +1,24 @@
+name: 'Conduct Case Study'
+
+inputs:
+    study:
+        required: true
+
+    example:
+        required: true
+
+runs:
+    using: 'composite'
+    steps:
+        - name: (VINTNER) Conduct case study
+          shell: bash
+          run: |
+              APPLICATION=$(echo $EXAMPLE | cut -d '-' -f 5)
+
+              echo "application: ${APPLICATION}"
+              echo "study: ${STUDY}"
+
+              vintner study ${STUDY} --application ${APPLICATION} --experimental
+          env:
+              EXAMPLE: ${{ inputs.example }}
+              STUDY: ${{ inputs.study }}
