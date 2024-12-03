@@ -50,7 +50,7 @@ runs:
           if: ${{ inputs.env == 'K8S' }}
           shell: bash
           run: |
-              ENDPOINT=$(minikube service ${EXAMPLE} --url)
+              ENDPOINT=$(minikube service ${EXAMPLE} --url | xargs)
               echo "endpoint: ${ENDPOINT}"
               sleep 5
               curl --fail-with-body --retry 3 --retry-delay 0 --retry-all-errors --connect-timeout 30 ${ENDPOINT}
