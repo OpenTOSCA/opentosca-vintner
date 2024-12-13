@@ -1,8 +1,6 @@
 import * as files from '#files'
 import {BASH_HEADER} from '#technologies/plugins/rules/utils/utils'
 
-ensure dbms_version is installed
-
 export const BashMySQLDBMSInstallationScript = `
 ${BASH_HEADER}
 export DEBIAN_FRONTEND="noninteractive"

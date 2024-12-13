@@ -9,8 +9,6 @@ import {
     SecureApplicationProtocolPropertyDefinition,
 } from '#technologies/plugins/rules/utils/utils'
 
-application port is now 443 (also applies to other GCP deployments)
-
 const generator: ImplementationGenerator = {
     component: 'service.application',
     technology: 'terraform',

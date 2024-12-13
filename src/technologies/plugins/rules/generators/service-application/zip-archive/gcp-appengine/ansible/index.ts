@@ -11,8 +11,6 @@ import {
     SourceArchiveFile,
 } from '#technologies/plugins/rules/utils/utils'
 
-port is now 443
-
 const artifact = 'zip.archive'
 
 const generator: ImplementationGenerator = {
