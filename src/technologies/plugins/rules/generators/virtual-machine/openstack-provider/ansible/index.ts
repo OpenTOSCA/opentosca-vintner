@@ -14,7 +14,6 @@ const generator: ImplementationGenerator = {
     artifact: 'machine.image',
     hosting: ['openstack.provider'],
     weight: 0.5,
-    reason: 'Terraform is more specialized.',
 
     generate: (name, type) => {
         return {

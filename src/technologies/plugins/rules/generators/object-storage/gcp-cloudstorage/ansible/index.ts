@@ -7,7 +7,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['gcp.cloudstorage'],
     weight: 0,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {
@@ -20,12 +19,10 @@ const generator: ImplementationGenerator = {
                 ...GCPProviderCredentials(),
             },
             attributes: {
-                // TODO: connectivity
                 storage_endpoint: {
                     type: 'string',
                     default: '{{ SELF.storage_name }}',
                 },
-                // TODO: auth
                 storage_token: {
                     type: 'string',
                     default: '',

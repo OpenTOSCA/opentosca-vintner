@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
-    reason: 'Kubernetes is the underlying technology.',
 
     generate: (name, type) => {
         const AnsibleTouchManifestTask = {

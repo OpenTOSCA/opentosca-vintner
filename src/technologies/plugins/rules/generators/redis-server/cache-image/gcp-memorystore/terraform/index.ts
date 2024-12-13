@@ -2,15 +2,12 @@ import {ImplementationGenerator} from '#technologies/plugins/rules/types'
 import {TerraformStandardOperations} from '#technologies/plugins/rules/utils/terraform'
 import {GCPProviderCredentials, MetadataGenerated, MetadataUnfurl} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: connectivity, see https://cloud.google.com/memorystore/docs/redis/connect-redis-instance
-
 const generator: ImplementationGenerator = {
     component: 'redis.server',
     technology: 'terraform',
     artifact: 'cache.image',
     hosting: ['gcp.memorystore'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

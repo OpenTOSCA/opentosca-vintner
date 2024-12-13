@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     technology: 'kubernetes',
     hosting: ['minio.server', 'kubernetes.cluster'],
     weight: 0,
-    reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const job = '{{ SELF.storage_name }}-{{ HOST.cache_name }}'
@@ -47,7 +46,6 @@ const generator: ImplementationGenerator = {
                                     containers: [
                                         {
                                             name: job,
-                                            // TODO: the image tags do not match
                                             image: 'minio/mc:{{ ".artifacts::cache_image::file" | eval }}',
                                             command: ['/bin/bash', '-c', command],
                                         },

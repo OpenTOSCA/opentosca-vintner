@@ -11,7 +11,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    reason: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {

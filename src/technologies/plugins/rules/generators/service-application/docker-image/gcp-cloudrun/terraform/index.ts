@@ -9,7 +9,7 @@ import {
     SecureApplicationProtocolPropertyDefinition,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: application port is now 443 (also applies to other GCP deployments)
+application port is now 443 (also applies to other GCP deployments)
 
 const generator: ImplementationGenerator = {
     component: 'service.application',
@@ -17,7 +17,6 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['gcp.cloudrun'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

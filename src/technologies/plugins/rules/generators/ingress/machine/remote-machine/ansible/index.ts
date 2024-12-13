@@ -12,7 +12,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['remote.machine'],
     weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {
@@ -23,7 +22,6 @@ const generator: ImplementationGenerator = {
             },
             properties: {...OpenstackMachineCredentials()},
             attributes: {
-                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: {

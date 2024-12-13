@@ -16,7 +16,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['docker.engine', 'local.machine'],
     weight: 1,
-    reason: 'Docker is the underlying technology.',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.dbms_name }}'

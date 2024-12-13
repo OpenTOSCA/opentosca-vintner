@@ -79,7 +79,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             const generatorName = constructRuleName(rule)
             const generator = Registry.get(generatorName)
 
-            // TODO: these checks should happen after all technology plugins ran since another one might be capable of implementing this?
             if (check.isUndefined(generator)) {
                 std.log(`Generator "${generatorName}" does not exist`)
 

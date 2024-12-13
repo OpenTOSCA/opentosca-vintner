@@ -14,7 +14,6 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['minio.server', 'docker.engine', 'local.machine'],
     weight: 0,
-    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const Operation = (command: string) => {
@@ -39,7 +38,6 @@ const generator: ImplementationGenerator = {
                                         services: {
                                             job: {
                                                 container_name: job,
-                                                // TODO: the image tags do not match
                                                 image: 'minio/mc:{{ ".artifacts::cache_image::file" | eval }}',
                                                 network_mode: 'host',
                                                 command: ['/bin/bash', '-c', command],

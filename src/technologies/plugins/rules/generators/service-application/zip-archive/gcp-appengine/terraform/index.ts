@@ -12,7 +12,7 @@ import {
     SourceArchiveFile,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: application port is now 443
+application port is now 443
 
 const artifact = 'zip.archive'
 
@@ -22,7 +22,6 @@ const generator: ImplementationGenerator = {
     artifact,
     hosting: ['gcp.appengine'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

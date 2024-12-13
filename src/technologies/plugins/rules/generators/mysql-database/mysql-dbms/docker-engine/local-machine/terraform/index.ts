@@ -7,7 +7,6 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['mysql.dbms', 'docker.engine', 'local.machine'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

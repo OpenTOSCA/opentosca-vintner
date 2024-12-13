@@ -8,7 +8,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['gcp.cloudsql'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

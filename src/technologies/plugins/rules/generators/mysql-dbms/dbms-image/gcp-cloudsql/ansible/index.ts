@@ -9,7 +9,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['gcp.cloudsql'],
     weight: 0,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

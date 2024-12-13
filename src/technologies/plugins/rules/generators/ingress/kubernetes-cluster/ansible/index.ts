@@ -10,7 +10,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    reason: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {
@@ -21,7 +20,6 @@ const generator: ImplementationGenerator = {
             },
             properties: {...KubernetesCredentials()},
             attributes: {
-                // TODO: application address
                 application_address: {
                     type: 'string',
                     default: 'not implemented',

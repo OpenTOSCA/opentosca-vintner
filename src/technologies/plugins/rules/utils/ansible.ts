@@ -219,7 +219,6 @@ export function AnsibleCreateApplicationEnvironment(type: NodeType) {
     }
 }
 
-// TODO: support that operation is a path to a file, e.g., via artifact types ... (or even inline Ansible or Terraform)
 export function AnsibleCopyManagementOperationTask(operation: MANAGEMENT_OPERATIONS) {
     return {
         name: 'copy management operation',
