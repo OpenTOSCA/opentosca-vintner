@@ -98,21 +98,21 @@ export function isIgnore(type: NodeType) {
 }
 
 export enum QUALITY_LABEL {
-    GOOD = 'good',
-    FAIR = 'fair',
-    MODERATE = 'moderate',
-    POOR = 'poor',
-    BAD = 'bad',
+    VERY_HIGH = 'very high',
+    HIGH = 'high',
+    MEDIUM = 'medium',
+    LOW = 'low',
+    VERY_LOW = 'very low',
 }
 
 export function toLabel(weight: number): QUALITY_LABEL {
     if (weight < 0) throw new Error(`Unknown quality weight "${weight}"`)
 
-    if (weight <= 0.125) return QUALITY_LABEL.BAD
-    if (weight <= 0.375) return QUALITY_LABEL.POOR
-    if (weight <= 0.625) return QUALITY_LABEL.MODERATE
-    if (weight <= 0.875) return QUALITY_LABEL.FAIR
-    if (weight <= 1) return QUALITY_LABEL.GOOD
+    if (weight <= 0.125) return QUALITY_LABEL.VERY_LOW
+    if (weight <= 0.375) return QUALITY_LABEL.LOW
+    if (weight <= 0.625) return QUALITY_LABEL.MEDIUM
+    if (weight <= 0.875) return QUALITY_LABEL.HIGH
+    if (weight <= 1) return QUALITY_LABEL.VERY_HIGH
 
     throw new Error(`Unknown quality weight "${weight}"`)
 }
@@ -122,11 +122,11 @@ export function toString(weight: number): string {
 }
 
 export function toWeight(label: QUALITY_LABEL) {
-    if (label === QUALITY_LABEL.GOOD) return 1
-    if (label === QUALITY_LABEL.FAIR) return 0.75
-    if (label === QUALITY_LABEL.MODERATE) return 0.5
-    if (label === QUALITY_LABEL.POOR) return 0.25
-    if (label === QUALITY_LABEL.BAD) return 0
+    if (label === QUALITY_LABEL.VERY_HIGH) return 1
+    if (label === QUALITY_LABEL.HIGH) return 0.75
+    if (label === QUALITY_LABEL.MEDIUM) return 0.5
+    if (label === QUALITY_LABEL.LOW) return 0.25
+    if (label === QUALITY_LABEL.VERY_LOW) return 0
 
     throw new Error(`Unknown quality label "${label}"`)
 }
