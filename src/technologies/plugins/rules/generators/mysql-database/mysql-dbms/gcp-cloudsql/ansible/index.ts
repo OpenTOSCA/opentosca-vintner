@@ -7,7 +7,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'gcp.cloudsql'],
     weight: 0,
-    reason: 'Primary use case due to the specialization of Ansible. However, need to install and handle GCP CloudSQL Proxy, while the corresponding Terraform module already provides this.',
 
     generate: (name, type) => {
         return {

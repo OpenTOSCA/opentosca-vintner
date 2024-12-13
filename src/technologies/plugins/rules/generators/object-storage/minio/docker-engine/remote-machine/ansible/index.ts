@@ -15,7 +15,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['minio.server', 'docker.engine', 'remote.machine'],
     weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

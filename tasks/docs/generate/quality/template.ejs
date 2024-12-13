@@ -58,7 +58,7 @@ The scenario does not require a specific hosting.
 <figure markdown><%- scenario.svg %></figure>
 
 <% scenario.technologies.forEach(technology => { %>
-!!! <% if (technology.quality > 0.875) { -%>success<% } else if (technology.quality > 0.625) { -%>info<% } else if (technology.quality > 0.375) { -%>question<% } else if (technology.quality > 0.125) { -%>warning<% }else { -%>failure<% } -%> "<%= technology.name %> has <%= toLabel(technology.quality) %> quality for this scenario"
+!!! <%= toColor(technology.quality) %> "<%= technology.name %> has <%= toLabel(technology.quality) %> quality for this scenario"
 <% }) %>
 
 <% }) -%>

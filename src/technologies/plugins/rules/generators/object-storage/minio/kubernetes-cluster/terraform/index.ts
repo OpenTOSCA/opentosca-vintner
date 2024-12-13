@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['minio.server', 'kubernetes.cluster'],
     weight: 0.25,
-    reason: 'Ansible is more specialized.',
 
     generate: (name, type) => {
         return {

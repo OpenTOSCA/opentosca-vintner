@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     artifact: 'machine.image',
     hosting: ['openstack.provider'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

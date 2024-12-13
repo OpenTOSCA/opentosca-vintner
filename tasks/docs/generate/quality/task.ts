@@ -9,8 +9,9 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {QUALITIES_FILENAME, constructRuleName, toLabel} from '#technologies/utils'
+import {QUALITIES_FILENAME, QUALITY_LABEL, constructRuleName, toLabel} from '#technologies/utils'
 import * as utils from '#utils'
+import {UnexpectedError} from '#utils/error'
 import path from 'path'
 import process from 'process'
 import descriptions from './technologies'
@@ -95,7 +96,8 @@ async function main() {
             svgs,
             groups,
             utils,
-            toLabel: toLabel,
+            toColor,
+            toLabel,
             link: (type: string) => {
                 if (type === '*') return type
                 return `[${type}](${generateLink(type)}){target=_blank}`
@@ -120,6 +122,18 @@ type TechnologyRuleScenario = {
         name: string
         quality: number
     }[]
+}
+
+function toColor(weight: number) {
+    const label = toLabel(weight)
+
+    if (label === QUALITY_LABEL.VERY_HIGH) return 'success'
+    if (label === QUALITY_LABEL.HIGH) return 'info'
+    if (label === QUALITY_LABEL.MEDIUM) return 'question'
+    if (label === QUALITY_LABEL.LOW) return 'warning'
+    if (label === QUALITY_LABEL.VERY_LOW) return 'failure'
+
+    throw new UnexpectedError()
 }
 
 function generateLink(type: string) {

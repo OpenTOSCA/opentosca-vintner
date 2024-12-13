@@ -7,7 +7,6 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['gcp.cloudstorage'],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {
@@ -20,12 +19,10 @@ const generator: ImplementationGenerator = {
                 ...GCPProviderCredentials(),
             },
             attributes: {
-                // TODO: connectivity
                 storage_endpoint: {
                     type: 'string',
                     default: '{{ SELF.storage_name }}',
                 },
-                // TODO: auth
                 storage_token: {
                     type: 'string',
                     default: '',

@@ -13,7 +13,6 @@ const generator: ImplementationGenerator = {
     artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
     weight: 0.5,
-    reason: 'Kubernetes is more specialized.',
 
     generate: (name, type) => {
         return {

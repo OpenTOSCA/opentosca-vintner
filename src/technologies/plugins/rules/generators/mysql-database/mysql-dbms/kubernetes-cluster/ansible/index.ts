@@ -7,14 +7,11 @@ import {
     MetadataUnfurl,
 } from '#technologies/plugins/rules/utils/utils'
 
-// TODO: delete operation
-
 const generator: ImplementationGenerator = {
     component: 'mysql.database',
     technology: 'ansible',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
     weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

@@ -10,8 +10,6 @@ import {
 } from '#technologies/plugins/rules/utils/ansible'
 import {MetadataGenerated, MetadataUnfurl, OpenstackMachineCredentials} from '#technologies/plugins/rules/utils/utils'
 
-// TODO: still need to test port forwarding, i.e., if dbms not in host
-
 /**
  * Inspiration
  *
@@ -23,7 +21,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
     weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         const user = {

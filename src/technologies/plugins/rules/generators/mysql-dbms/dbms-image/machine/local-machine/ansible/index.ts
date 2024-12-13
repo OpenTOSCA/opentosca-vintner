@@ -12,7 +12,6 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['local.machine'],
     weight: 1,
-    reason: 'Primary use case due to the specialization of Ansible.',
 
     generate: (name, type) => {
         return {

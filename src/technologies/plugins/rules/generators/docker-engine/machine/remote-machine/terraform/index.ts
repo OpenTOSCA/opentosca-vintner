@@ -21,7 +21,6 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['remote.machine'],
     weight: 0,
-    reason: 'Ansible is more specialized. Also using provisioners is a "last resort".',
 
     generate: (name, type) => {
         return {

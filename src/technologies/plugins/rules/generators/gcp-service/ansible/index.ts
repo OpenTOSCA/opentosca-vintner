@@ -7,7 +7,6 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: [],
     weight: 0,
-    reason: 'Ansible provides a declarative module',
 
     generate: (name, type) => {
         return {

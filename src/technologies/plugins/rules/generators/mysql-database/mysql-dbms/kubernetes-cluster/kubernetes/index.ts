@@ -12,7 +12,6 @@ const generator: ImplementationGenerator = {
     technology: 'kubernetes',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
     weight: 0,
-    reason: 'Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const AnsibleTouchJobTask = {

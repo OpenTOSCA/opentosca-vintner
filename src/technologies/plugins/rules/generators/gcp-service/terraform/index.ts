@@ -12,7 +12,6 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: [],
     weight: 1,
-    reason: 'Terraform provides a declarative module.',
 
     generate: (name, type) => {
         return {

@@ -26,7 +26,6 @@ export type ImplementationGenerator = {
     hosting: string[]
     generate: (name: string, type: NodeType) => NodeType
     weight: number
-    reason: string
 }
 
 // TODO: migrate to this
@@ -44,7 +43,6 @@ export abstract class GeneratorAbstract implements ImplementationGenerator {
     abstract artifact?: string
     abstract hosting: string[]
     abstract weight: number
-    abstract reason: string
 
     abstract generate(name: string, type: NodeType): NodeType
 }

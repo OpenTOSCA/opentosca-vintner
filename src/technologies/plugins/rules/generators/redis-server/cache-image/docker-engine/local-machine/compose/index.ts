@@ -20,7 +20,6 @@ const generator: ImplementationGenerator = {
     artifact: 'cache.image',
     hosting: ['docker.engine', 'local.machine'],
     weight: 1,
-    reason: 'Docker is the underlying technology.',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.cache_name }}'
