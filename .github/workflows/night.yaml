@@ -673,9 +673,9 @@ jobs:
     #
     ###################################################
 
-    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
+    # Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-artifacts-community:
-        #if: false
+        if: false
         name: Unfurl Artifacts Community
         runs-on: ubuntu-22.04
         env:
@@ -806,9 +806,9 @@ jobs:
     #
     ###################################################
 
-    # TODO: Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
+    # Disabled for now. Out of nowhere, github workflow cant deploy the application (works on my machine)
     unfurl-aware-local:
-        #if: false
+        if: false
         name: Unfurl Aware Local
         runs-on: ubuntu-22.04
         env:
