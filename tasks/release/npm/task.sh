@@ -1,5 +1,7 @@
 # Version notice
-echo "Dont forget to update the current version in package.json"
+
+# Attest that version has been updated
+read -p "Did you update the version in package.json#version?"
 
 # Prepack
 echo

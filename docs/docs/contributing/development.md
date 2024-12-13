@@ -139,6 +139,6 @@ yarn patch-package --exclude 'nothing' ${package-name}
 
 ## Night
 
-The Night workflow is scheduled for every tuesday at 420.
+The [Night workflow](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/night.yaml){target=_blank} is scheduled for every tuesday at 420.
 This workflow ensures that the latest release is correctly signed and can be executed.
 Moreover, integration tests are executed, which use xOpera, Unfurl, and GCP.

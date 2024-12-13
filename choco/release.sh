@@ -10,6 +10,12 @@ if ! which choco &>/dev/null; then
     exit 1
 fi
 
+# Attest that version has been updated
+read -p "Did you update the version in choco/opentosca-vintner.nuspec#package.metadata.version?"
+
+# Attest that release is up to date
+read -p "Download the binary from https://github.com/OpenTOSCA/opentosca-vintner/releases/tag/latest?"
+
 # Download binary
 curl -L https://github.com/OpenTOSCA/opentosca-vintner/releases/download/latest/vintner-win-x64.exe -o tools/vintner.exe
 

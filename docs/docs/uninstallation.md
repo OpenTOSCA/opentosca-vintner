@@ -31,6 +31,12 @@ Depending on the installation method, uninstall Vintner as follows.
     yarn global remove opentosca-vintner
     ```
 
+=== "Choco"
+    ```shell linenums="1"
+    vintner setup clean --force
+    choco uninstall opentosca-vintner
+    ```
+
 === "Docker"
     ```shell linenums="1"
     docker stop vintner

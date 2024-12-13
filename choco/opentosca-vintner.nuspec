@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>opentosca-vintner</id>
-    <version>0.1.4</version>
+    <version>0.1.8</version>
     <title>OpenTOSCA Vintner</title>
     <authors>Miles Stötzner</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>

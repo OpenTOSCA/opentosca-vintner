@@ -40,7 +40,7 @@ Vintner can be installed on Linux x64/ arm64 and Windows x64 using our installat
 
 ## NPM 
 
-Vintner can be installed using `npm`.
+Vintner can be installed using `npm`, see [opentosca-vintner](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
 Ensure, that `npm bin -g` is in your `$PATH`.
 
 ```shell linenums="1"
@@ -49,7 +49,7 @@ npm install --global opentosca-vintner
 
 ## Yarn (Classic)
 
-Vintner can be installed using `yarn` (classic).
+Vintner can be installed using `yarn` (classic), see [opentosca-vintner](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
 Ensure, that `yarn global bin` is in your `$PATH`.
 
 ```shell linenums="1"
@@ -58,7 +58,7 @@ yarn global add opentosca-vintner
 
 ## Yarn (Modern)
 
-Vintner can be installed using `yarn` (modern).
+Vintner can be installed using `yarn` (modern), see [opentosca-vintner](https://www.npmjs.com/package/opentosca-vintner){target=_blank}.
 However, this will not install Vintner permanently but only [temporary](https://yarnpkg.com/migration/guide#use-yarn-dlx-instead-of-yarn-global){target=_blank}.
 
 ```shell linenums="1"
@@ -67,15 +67,22 @@ yarn dlx opentosca-vintner
 
 ## Choco
 
-Vintner can be installed using `choco`.
+Vintner can be installed using `choco`, see [opentosca-vintner](https://community.chocolatey.org/packages/opentosca-vintner){target=_blank}
 
 ```shell linenums="1"
 choco install opentosca-vintner -y
 ```
 
+You might specify the latest version explicitly if this version is still under moderation. 
+
+```shell linenums="1"
+choco install opentosca-vintner --version=X.Y.Z -y
+```
+
+
 ## Docker 
 
-Vintner can be installed using Docker. 
+Vintner can be installed using Docker, see [ghcr.io/opentosca/opentosca-vintner](https://github.com/OpenTOSCA/opentosca-vintner/pkgs/container/opentosca-vintner){target=_blank}.
 The Image is about 3GB large and contains tools, such as xOpera, Unfurl, Ansible, Terraform, and all of our examples.
 
 ### GitHub Container Registry 

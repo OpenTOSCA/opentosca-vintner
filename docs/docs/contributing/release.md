@@ -89,6 +89,6 @@ This will use the latest release.
 Vintner is available on Zenodo with unique DOI [https://doi.org/10.5281/zenodo.10155277](https://doi.org/10.5281/zenodo.10155277){target=_blank}.
 New versions are published manually.
 
-To publish a new version, run the Zenodo workflow on GitHub.
+To publish a new version, run the [Zenodo workflow](https://github.com/OpenTOSCA/opentosca-vintner/actions/workflows/zenodo.yaml){target=_blank} on GitHub.
 This workflow will create a draft of a new version based on the latest GitHub release.
 The version must be manually published on Zenodo.
