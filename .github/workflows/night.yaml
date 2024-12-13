@@ -410,7 +410,6 @@ jobs:
     xopera-pruning-static:
         name: xOpera Pruning Static
         runs-on: ubuntu-22.04
-        concurrency: xopera-pruning-static
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -479,7 +478,6 @@ jobs:
     xopera-pruning-elastic:
         name: xOpera Pruning Elastic
         runs-on: ubuntu-22.04
-        concurrency: xopera-pruning-elastic
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning
@@ -543,7 +541,8 @@ jobs:
     xopera-pruning-mode-static:
         name: xOpera Pruning Mode "Consistent Loose" Static
         runs-on: ubuntu-22.04
-        concurrency: xopera-pruning-static
+        needs: xopera-pruning-static
+        if: ${{ needs.*.result == 'success' || needs.*.result == 'failure' }}
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning-consistent-loose
@@ -612,7 +611,8 @@ jobs:
     xopera-pruning-mode-elastic:
         name: xOpera Pruning Mode "Consistent Loose" Elastic
         runs-on: ubuntu-22.04
-        concurrency: xopera-pruning-elastic
+        needs: xopera-pruning-elastic
+        if: ${{ needs.*.result == 'success' || needs.*.result == 'failure' }}
         env:
             ORCHESTRATOR: xopera
             EXAMPLE: xopera-pruning-consistent-loose
@@ -1131,7 +1131,8 @@ jobs:
     unfurl-technology-static:
         name: Unfurl Technology Static
         runs-on: ubuntu-22.04
-        concurrency: xopera-pruning-static
+        needs: unfurl-motivation-dev
+        if: ${{ needs.*.result == 'success' || needs.*.result == 'failure' }}
         env:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
