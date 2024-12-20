@@ -64,7 +64,7 @@
         "regression": "^2.0.1",
         "stats-lite": "^2.2.0",
         "sync-directory": "^6.0.5",
-        "systeminformation": "^5.22.11",
+        "systeminformation": "^5.23.8",
         "uuid": "^10.0.0",
         "xml2js": "^0.6.2"
     },
