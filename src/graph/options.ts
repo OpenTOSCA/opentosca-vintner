@@ -833,6 +833,7 @@ class ConstraintsOptions extends BaseOptions {
 
     readonly relationSource: boolean
     readonly relationTarget: boolean
+    readonly relationEnhancedImplication: boolean
     readonly artifactContainer: boolean
     readonly propertyContainer: boolean
     readonly typeContainer: boolean
@@ -859,6 +860,9 @@ class ConstraintsOptions extends BaseOptions {
 
         this.relationTarget = this.raw.relation_target_constraint ?? this.constraints
         assert.isBoolean(this.relationTarget)
+
+        this.relationEnhancedImplication = this.raw.relation_enhanced_implication_mode ?? true
+        assert.isBoolean(this.relationEnhancedImplication)
 
         this.artifactContainer = this.raw.artifact_container_constraint ?? this.constraints
         assert.isBoolean(this.artifactContainer)

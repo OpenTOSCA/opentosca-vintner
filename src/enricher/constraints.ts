@@ -40,16 +40,21 @@ export class ConstraintEnricher {
         }
         assert.isDefined(left, 'Left not defined')
 
-        // TODO: migrate this
-        if (element.isRelation()) {
-            this.graph.addConstraint({
-                implies: [{and: [element.container.id, element.manualId, element.target.manualId]}, element.id],
-            })
-        } else {
-            this.graph.addConstraint({
-                implies: [{and: [element.container.id, element.manualId]}, element.id],
-            })
+        /**
+         * Implied by container presence and manual conditions
+         */
+        const antecedent: {and: [string, string]} = {and: [element.container.id, element.manualId]}
+
+        /**
+         * Enhanced implied relations also include manual conditions of target
+         */
+        if (element.isRelation() && this.graph.options.constraints.relationEnhancedImplication) {
+            antecedent.and.push(element.target.manualId)
         }
+
+        this.graph.addConstraint({
+            implies: [antecedent, element.id],
+        })
     }
 
     private enrichConstraints() {
