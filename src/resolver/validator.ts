@@ -2,6 +2,8 @@ import Graph from '#/graph/graph'
 import * as assert from '#assert'
 import * as check from '#check'
 import {InputAssignmentMap} from '#spec/topology-template'
+import {VariabilityInputDefinitionMap} from '#spec/variability'
+import * as utils from '#utils'
 import MiniSat from 'logic-solver'
 
 export default class Validator {
@@ -42,6 +44,25 @@ export default class Validator {
         )
     }
 
+    /**
+     * Check if input is targeted by another input dependency
+     */
+    private isTargeted(name: string, inputs: VariabilityInputDefinitionMap) {
+        for (const [_, input] of Object.entries(inputs)) {
+            const targets = utils.toList(
+                input.mandatory ??
+                    input.optional ??
+                    input.choices ??
+                    input.alternatives ??
+                    input.requires ??
+                    input.excludes ??
+                    []
+            )
+            if (targets.includes(name)) return true
+        }
+        return false
+    }
+
     private transform() {
         if (this.transformed) return
         this.transformed = true
@@ -52,9 +73,15 @@ export default class Validator {
          * Add constraints
          * Note, inputs not part of any constraints are not required to be part of the SAT problem.
          */
-        for (const [name, input] of Object.entries(
-            this.graph.serviceTemplate.topology_template?.variability?.inputs || {}
-        )) {
+        const inputs = this.graph.serviceTemplate.topology_template?.variability?.inputs ?? {}
+        for (const [name, input] of Object.entries(inputs)) {
+            /**
+             * Required Constraint: input is required if not targeted by any dependency
+             */
+            if (!this.isTargeted(name, inputs)) {
+                this.minisat.require(name)
+            }
+
             /**
              * Mandatory: Input <=> Each of Mandatory
              */
