@@ -11,7 +11,7 @@ import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
-import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
+import {DeploymentScenarioMatch, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {
     constructImplementationName,
     constructRuleName,
@@ -25,15 +25,6 @@ export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
     build(graph: Graph) {
         return new TechnologyRulePlugin(graph)
     }
-}
-
-export type DeploymentScenarioMatch = {
-    elements: Element[]
-    root: Node
-    artifact?: Artifact
-    hosting?: Element[]
-    rule: TechnologyRule
-    prio: number
 }
 
 export class TechnologyRulePlugin implements TechnologyPlugin {
@@ -123,8 +114,55 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return types
     }
 
+    assign(node: Node): TechnologyTemplateMap[] {
+        // All rules
+        const rules = this.getRules()
+
+        // Early return if no rules
+        if (utils.isEmpty(rules)) return []
+
+        // Match all deployment scenarios
+        const matches = rules.map(it => this.match(node, it)).flat(Infinity) as DeploymentScenarioMatch[]
+
+        // Minimal inheritance depth
+        const min = Math.min(...matches.map(it => it.prio))
+
+        // Prioritize matched scenarios based on inheritance depth
+        const prioritized = matches.filter(it => it.prio === min)
+
+        // Generate topology templates
+        const maps: TechnologyTemplateMap[] = []
+        for (const match of prioritized) {
+            // Implementation name
+            const implementationName = constructImplementationName({
+                type: node.getType().name,
+                rule: match.rule,
+            })
+
+            // Element conditions
+            const conditions = match.elements.map(it => it.presenceCondition)
+            conditions.forEach((it: any) => delete it._cached_element)
+
+            // Add rule conditions
+            if (check.isDefined(match.rule.conditions)) {
+                conditions.push(...utils.toList(match.rule.conditions))
+            }
+
+            // Construct technology template
+            maps.push({
+                [match.rule.technology]: {
+                    conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
+                    weight: match.rule.weight,
+                    assign: match.rule.assign ?? implementationName,
+                },
+            })
+        }
+
+        return maps
+    }
+
     /**
-     * Check if a rule matches
+     * Return all matches
      */
     private match(node: Node, rule: TechnologyRule): DeploymentScenarioMatch[] {
         // Must match component
@@ -156,7 +194,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         }
 
         // Prio
-        const prio = this.depth(node, rule.component)
+        const prio = this.prio(node, rule)
 
         // Does not require artifact and not hosting
         if (utils.isEmpty(artifacts) && utils.isEmpty(hostings))
@@ -211,12 +249,12 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
         throw new UnexpectedError()
     }
-
     /**
-     * Inheritance depth
+     * Scenario prio is defined by the inheritance depth between the node type and the rule.component
      */
-    private depth(node: Node, target: string): number {
+    private prio(node: Node, rule: TechnologyRule): number {
         const source = node.getType().name
+        const target = rule.component
         const types = this.graph.inheritance.collectNodeTypes(source)
         const index = types.findIndex(it => it.name === target)
         if (index === -1)
@@ -227,53 +265,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             )
 
         return index
-    }
-
-    assign(node: Node): TechnologyTemplateMap[] {
-        // All rules
-        const rules = this.getRules()
-
-        // Early return if no rules
-        if (utils.isEmpty(rules)) return []
-
-        // Match all deployment scenarios
-        const matches = rules.map(it => this.match(node, it)).flat(Infinity) as DeploymentScenarioMatch[]
-
-        // Minimal inheritance depth
-        const min = Math.min(...matches.map(it => it.prio))
-
-        // Prioritize matched scenarios based on inheritance depth
-        const prioritized = matches.filter(it => it.prio === min)
-
-        // Generate topology templates
-        const maps: TechnologyTemplateMap[] = []
-        for (const match of prioritized) {
-            // Implementation name
-            const implementationName = constructImplementationName({
-                type: node.getType().name,
-                rule: match.rule,
-            })
-
-            // Element conditions
-            const conditions = match.elements.map(it => it.presenceCondition)
-            conditions.forEach((it: any) => delete it._cached_element)
-
-            // Add rule conditions
-            if (check.isDefined(match.rule.conditions)) {
-                conditions.push(...utils.toList(match.rule.conditions))
-            }
-
-            // Construct technology template
-            maps.push({
-                [match.rule.technology]: {
-                    conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
-                    weight: match.rule.weight,
-                    assign: match.rule.assign ?? implementationName,
-                },
-            })
-        }
-
-        return maps
     }
 
     private search(node: Node, hosting: string[], history: Element[], output: Element[][]) {
