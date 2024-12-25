@@ -36,4 +36,4 @@ topology_template:
             type: container
             managed: false
             requirements:
-                - hallo: emachine
+                - host: emachine
