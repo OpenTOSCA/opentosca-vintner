@@ -16,7 +16,9 @@ topology_template:
             persistent: true
             managed: false
             requirements:
-                - middleware: dmiddleware
+                - middleware:
+                      node: dmiddleware
+                      conditions: false
 
         dmiddleware:
             type: container
@@ -28,3 +30,10 @@ topology_template:
         emachine:
             type: container
             managed: false
+            conditions: false
+
+        other:
+            type: container
+            managed: false
+            requirements:
+                - hallo: emachine
