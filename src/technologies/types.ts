@@ -1,9 +1,10 @@
 import Artifact from '#graph/artifact'
+import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Technology from '#graph/technology'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
-import {TechnologyTemplateMap} from '#spec/technology-template'
+import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
 
 export type TechnologyPluginBuilder = {
     build(graph: Graph): TechnologyPlugin
@@ -17,4 +18,13 @@ export type TechnologyPlugin = {
     assign: (node: Node) => TechnologyTemplateMap[]
     implement: (name: string, type: NodeType) => NodeTypeMap
     uses: (artifact: Artifact) => Technology[]
+}
+
+export type DeploymentScenarioMatch = {
+    elements: Element[]
+    root: Node
+    artifact?: Artifact
+    hosting?: Element[]
+    rule: TechnologyRule
+    prio: number
 }

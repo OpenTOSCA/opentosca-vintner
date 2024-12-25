@@ -1,16 +1,17 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Artifact from '#graph/artifact'
+import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Technology from '#graph/technology'
+import {andify} from '#graph/utils'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
-import {TechnologyTemplateMap} from '#spec/technology-template'
-import {LogicExpression} from '#spec/variability'
+import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
-import {TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
+import {DeploymentScenarioMatch, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {
     constructImplementationName,
     constructRuleName,
@@ -18,6 +19,7 @@ import {
     isGenerated,
 } from '#technologies/utils'
 import * as utils from '#utils'
+import {UnexpectedError} from '#utils/error'
 
 export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
     build(graph: Graph) {
@@ -112,104 +114,161 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return types
     }
 
-    // TODO: rework this function
     assign(node: Node): TechnologyTemplateMap[] {
+        // All rules
+        const rules = this.getRules()
+
+        // Early return if no rules
+        if (utils.isEmpty(rules)) return []
+
+        // Match all deployment scenarios
+        const matches = rules.map(it => this.match(node, it)).flat(Infinity) as DeploymentScenarioMatch[]
+
+        // Minimal inheritance depth
+        const min = Math.min(...matches.map(it => it.prio))
+
+        // Prioritize matched scenarios based on inheritance depth
+        const prioritized = matches.filter(it => it.prio === min)
+
+        // Generate topology templates
         const maps: TechnologyTemplateMap[] = []
-
-        let rules = this.getRules()
-        if (utils.isEmpty(rules)) return maps
-
-        // Check if rule matches component
-        rules = rules.filter(rule => node.getType().isA(rule.component))
-
-        // Check if another rule is more specific, i.e., if rule.component is within the inheritance (but not the root) of another rule
-        rules = rules.filter(rule =>
-            check.isUndefined(
-                rules.find(other => {
-                    const parents = this.graph.inheritance.collectNodeTypes(other.component).slice(1)
-                    return check.isDefined(parents.find(type => type.name === rule.component))
-                })
-            )
-        )
-
-        for (const entry of rules) {
-            const rule = utils.copy(entry)
-            assert.isDefined(rule.hosting)
-
-            let artifactCondition: LogicExpression | undefined
-            if (check.isDefined(rule.artifact)) {
-                // Check for artifact in template
-                const artifactsByTemplate = node.artifacts.filter(it => {
-                    assert.isDefined(rule.artifact)
-                    return it.getType().isA(rule.artifact)
-                })
-                const hasArtifactInTemplate = utils.isPopulated(artifactsByTemplate)
-
-                // Check for artifact in type
-                const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
-                    node.getType().name,
-                    rule.artifact
-                )
-
-                // Ignore if artifact not found
-                if (!hasArtifactInTemplate && !hasArtifactInType) continue
-
-                if (hasArtifactInTemplate) {
-                    /**
-                     * Case: hasArtifactInTemplate
-                     *
-                     * Add condition checking if any artifact is present (note, at max one can be present)
-                     */
-                    artifactCondition = {or: artifactsByTemplate.map(it => it.presenceCondition)}
-                } else {
-                    /**
-                     * Case: hasArtifactInType
-                     *
-                     * Artifacts in types are always present.
-                     * Hence, nothing to do.
-                     */
-                }
-            }
-
-            // TODO: rule.conditions
-
-            const implementationName = constructImplementationName({
+        for (const match of prioritized) {
+            // Implementation name
+            const implementation = constructImplementationName({
                 type: node.getType().name,
-                rule,
+                rule: match.rule,
             })
 
-            // TODO: hosting conditions should be combined by AND
+            // Element conditions
+            const conditions = match.elements.map(it => it.presenceCondition)
+            conditions.forEach((it: any) => delete it._cached_element)
 
-            // TODO: merge then and else block
-            if (rule.hosting.length !== 0) {
-                const output: LogicExpression[][] = []
-                this.search(node, utils.copy(rule.hosting), [], output)
-                output.forEach(it => {
-                    if (check.isDefined(artifactCondition)) it.push(artifactCondition)
-
-                    maps.push({
-                        [rule.technology]: {
-                            conditions: it,
-                            weight: rule.weight,
-                            assign: rule.assign ?? implementationName,
-                        },
-                    })
-                })
-            } else {
-                maps.push({
-                    [rule.technology]: {
-                        conditions: artifactCondition ?? [],
-                        weight: rule.weight,
-                        assign: rule.assign ?? implementationName,
-                    },
-                })
+            // Add rule conditions
+            if (check.isDefined(match.rule.conditions)) {
+                conditions.push(...utils.toList(match.rule.conditions))
             }
+
+            // Construct technology template
+            maps.push({
+                [match.rule.technology]: {
+                    conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
+                    weight: match.rule.weight,
+                    assign: match.rule.assign ?? implementation,
+                },
+            })
         }
 
         return maps
     }
 
-    private search(node: Node, hosting: string[], history: LogicExpression[], output: LogicExpression[][]) {
+    /**
+     * Return all matches
+     */
+    private match(node: Node, rule: TechnologyRule): DeploymentScenarioMatch[] {
+        // Must match component
+        if (!node.getType().isA(rule.component)) return []
+
+        // Must match artifact
+        let artifacts: Artifact[] = []
+        if (check.isDefined(rule.artifact)) {
+            // Check for artifact in template
+            artifacts = node.artifacts.filter(it => {
+                assert.isDefined(rule.artifact)
+                return it.getType().isA(rule.artifact)
+            })
+            const hasArtifactInTemplate = utils.isPopulated(artifacts)
+
+            // Check for artifact in type (which are always present)
+            const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(node.getType().name, rule.artifact)
+
+            // Ignore if artifact not matched
+            if (!hasArtifactInTemplate && !hasArtifactInType) return []
+        }
+
+        // Must match hosting
+        const hostings: Element[][] = []
+        assert.isDefined(rule.hosting)
+        if (!utils.isEmpty(rule.hosting)) {
+            this.search(node, utils.copy(rule.hosting), [], hostings)
+            // Ignore if hosting not matched
+            if (utils.isEmpty(hostings)) return []
+        }
+
+        // Prio
+        const prio = this.prio(node, rule)
+
+        // Does not require artifact and not hosting
+        if (utils.isEmpty(artifacts) && utils.isEmpty(hostings))
+            return [
+                {
+                    elements: [],
+                    root: node,
+                    rule,
+                    prio,
+                },
+            ]
+
+        // Does not require artifact but hosting
+        if (utils.isEmpty(artifacts) && !utils.isEmpty(hostings)) {
+            return hostings.map(it => ({
+                elements: it,
+                root: node,
+                hosting: it,
+                rule,
+                prio,
+            }))
+        }
+
+        // Does require artifact but not hosting
+        if (!utils.isEmpty(artifacts) && utils.isEmpty(hostings)) {
+            return artifacts.map(it => ({
+                elements: [it],
+                root: node,
+                artifact: it,
+                rule,
+                prio,
+            }))
+        }
+
+        // Does require artifact and hosting
+        if (!utils.isEmpty(artifacts) && !utils.isEmpty(hostings)) {
+            const matches: DeploymentScenarioMatch[] = []
+            for (const artifact of artifacts) {
+                for (const hosting of hostings) {
+                    matches.push({
+                        elements: hosting.concat(artifact),
+                        root: node,
+                        artifact,
+                        hosting,
+                        rule,
+                        prio,
+                    })
+                }
+            }
+            return matches
+        }
+
+        throw new UnexpectedError()
+    }
+    /**
+     * Scenario prio is defined by the inheritance depth between the node type and the rule.component
+     */
+    private prio(node: Node, rule: TechnologyRule): number {
+        const source = node.getType().name
+        const target = rule.component
+
+        const types = this.graph.inheritance.collectNodeTypes(source)
+        const index = types.findIndex(it => it.name === target)
+        if (index === -1)
+            throw new Error(
+                `Expected to find target type "${target}" in inheritance of source type "${source}" which is "${JSON.stringify(
+                    types.map(it => it.name)
+                )}"`
+            )
+        return index
+    }
+
+    private search(node: Node, hosting: string[], history: Element[], output: Element[][]) {
         const asterisk = hosting[0] === ASTERISK
         const search = asterisk ? hosting[1] : hosting[0]
         // Must be defined. To model "on any hosting" simply do not model hosting.
@@ -222,12 +281,12 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             if (host.getType().isA(search)) {
                 // Deep copy since every child call changes the state of history
-                const historyCopy = utils.copy(history)
-                historyCopy.push({relation_presence: relation.toscaId})
-                historyCopy.push({node_presence: host.name})
+                const historyCopy = Array.from(history)
+                historyCopy.push(relation)
+                historyCopy.push(host)
 
                 // Deep copy since every child call changes the state of hosting
-                const hostingCopy = utils.copy(hosting)
+                const hostingCopy = Array.from(hosting)
 
                 // Remove * since we found next host
                 if (asterisk) hostingCopy.shift()
@@ -247,12 +306,12 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             if (asterisk) {
                 // Deep copy since every child call changes the state of history
-                const historyCopy = utils.copy(history)
-                historyCopy.push({relation_presence: relation.toscaId})
-                historyCopy.push({node_presence: host.name})
+                const historyCopy = Array.from(history)
+                historyCopy.push(relation)
+                historyCopy.push(host)
 
                 // Deep copy since every child call changes the state of hosting
-                const hostingCopy = utils.copy(hosting)
+                const hostingCopy = Array.from(hosting)
 
                 // Recursive search
                 this.search(host, hostingCopy, historyCopy, output)
