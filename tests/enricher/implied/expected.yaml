@@ -45,11 +45,13 @@ topology_template:
                   - and:
                         - node.worker
                         - manual.relation.left@0.node.worker
+                        - manual.node.left
                   - relation.left@0.node.worker
             - implies:
                   - and:
                         - node.worker
                         - manual.relation.right@1.node.worker
+                        - manual.node.right
                   - relation.right@1.node.worker
     node_templates:
         - worker:
