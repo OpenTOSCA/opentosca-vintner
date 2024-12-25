@@ -134,7 +134,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         const maps: TechnologyTemplateMap[] = []
         for (const match of prioritized) {
             // Implementation name
-            const implementationName = constructImplementationName({
+            const implementation = constructImplementationName({
                 type: node.getType().name,
                 rule: match.rule,
             })
@@ -153,7 +153,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 [match.rule.technology]: {
                     conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
                     weight: match.rule.weight,
-                    assign: match.rule.assign ?? implementationName,
+                    assign: match.rule.assign ?? implementation,
                 },
             })
         }
@@ -181,7 +181,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             // Check for artifact in type (which are always present)
             const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(node.getType().name, rule.artifact)
 
-            // Ignore if artifact not found
+            // Ignore if artifact not matched
             if (!hasArtifactInTemplate && !hasArtifactInType) return []
         }
 
@@ -190,6 +190,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         assert.isDefined(rule.hosting)
         if (!utils.isEmpty(rule.hosting)) {
             this.search(node, utils.copy(rule.hosting), [], hostings)
+            // Ignore if hosting not matched
             if (utils.isEmpty(hostings)) return []
         }
 
@@ -255,6 +256,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     private prio(node: Node, rule: TechnologyRule): number {
         const source = node.getType().name
         const target = rule.component
+
         const types = this.graph.inheritance.collectNodeTypes(source)
         const index = types.findIndex(it => it.name === target)
         if (index === -1)
@@ -263,7 +265,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     types.map(it => it.name)
                 )}"`
             )
-
         return index
     }
 
