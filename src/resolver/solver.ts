@@ -770,9 +770,19 @@ export default class Solver {
          * Assume that expression is a value expression that returns a boolean
          * Thus, {@param expression} can be in reality also of type {@link ValueExpression}
          */
-        const result = this.evaluateValueExpression(expression, context)
+        const result = this.evaluateValueExpressionAsLogic(expression, context)
         assert.isBoolean(result)
         return this.transformLogicExpression(result, context)
+    }
+
+    evaluateValueExpressionAsLogic(expression: ValueExpression, context: ExpressionContext): boolean {
+        const result = this.evaluateValueExpression(expression, context)
+
+        if (check.isBoolean(result)) return result
+        if (check.isString(result)) return true
+        if (check.isNumber(result)) return result > 0
+
+        throw new Error(`Unexpected value expression treated as logic "${utils.pretty(expression)}"`)
     }
 
     evaluateValueExpression(expression: ValueExpression, context: ExpressionContext): InputAssignmentValue {

@@ -282,6 +282,7 @@ The following options are used to configure constraints.
 | constraints                           | false     | Boolean  | false   | Enable all constraints.                                          |
 | relation_source_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
 | relation_target_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
+| relation_enhanced_implication_mode    | false     | Boolean  | true    | Enable enhanced implied relations.                               |
 | artifact_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
 | property_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
 | type_container_constraint             | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
