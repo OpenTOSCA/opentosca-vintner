@@ -8,20 +8,20 @@
       
       
       
-        <link rel="canonical" href="https://vintner.opentosca.org/variability4tosca/tests/test-implied-host-broken/">
+        <link rel="canonical" href="https://vintner.opentosca.org/variability4tosca/tests/test-implied-enhanced-new/">
       
       
         <link rel="prev" href="../test-implied-default-manual-right/">
       
       
-        <link rel="next" href="../test-implied-host-fixed-left/">
+        <link rel="next" href="../test-implied-enhanced-old/">
       
       <link rel="icon" href="../../../assets/images/vintner/icon/vintner-icon-bold.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.21">
     
     
       
-        <title>implied-host-broken - OpenTOSCA Vintner</title>
+        <title>implied-enhanced-new - OpenTOSCA Vintner</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#implied-host-broken" class="md-skip">
+        <a href="#implied-enhanced-new" class="md-skip">
           Skip to content
         </a>
       
@@ -351,7 +351,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              implied-host-broken
+              implied-enhanced-new
             
           </span>
         </div>
@@ -3325,8 +3325,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../test-implications-naive-requires/" class="md-nav__link">
-        implications-naive-requires
+      <a href="../test-implications-naive-requires---disabled/" class="md-nav__link">
+        implications-naive-requires---disabled
       </a>
     </li>
   
@@ -3353,8 +3353,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../test-implications-requires/" class="md-nav__link">
-        implications-requires
+      <a href="../test-implications-requires---disabled/" class="md-nav__link">
+        implications-requires---disabled
       </a>
     </li>
   
@@ -3447,12 +3447,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          implied-host-broken
+          implied-enhanced-new
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        implied-host-broken
+        implied-enhanced-new
       </a>
       
         
@@ -3471,13 +3471,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    Description
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#variable-service-template" class="md-nav__link">
     Variable Service Template
   </a>
@@ -3485,15 +3478,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#variability-inputs" class="md-nav__link">
-    Variability Inputs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#expected-error" class="md-nav__link">
-    Expected Error
+  <a href="#variability-resolved-service-template" class="md-nav__link">
+    Variability-Resolved Service Template
   </a>
   
 </li>
@@ -3502,6 +3488,34 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-implied-enhanced-old/" class="md-nav__link">
+        implied-enhanced-old
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test-implied-host-broken---disabled/" class="md-nav__link">
+        implied-host-broken---disabled
+      </a>
     </li>
   
 
@@ -7853,13 +7867,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    Description
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#variable-service-template" class="md-nav__link">
     Variable Service Template
   </a>
@@ -7867,15 +7874,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#variability-inputs" class="md-nav__link">
-    Variability Inputs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#expected-error" class="md-nav__link">
-    Expected Error
+  <a href="#variability-resolved-service-template" class="md-nav__link">
+    Variability-Resolved Service Template
   </a>
   
 </li>
@@ -7898,9 +7898,7 @@
 
 
 
-<h1 id="implied-host-broken">implied-host-broken<a class="headerlink" href="#implied-host-broken" title="Permanent link">&para;</a></h1>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Only one hosting relation must be present. Hence, there is a conflict between implied relations and hosting constraints.</p>
+<h1 id="implied-enhanced-new">implied-enhanced-new<a class="headerlink" href="#implied-enhanced-new" title="Permanent link">&para;</a></h1>
 <h2 id="variable-service-template">Variable Service Template<a class="headerlink" href="#variable-service-template" title="Permanent link">&para;</a></h2>
 <p>The variability of the following variable service template shall be resolved.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -7933,57 +7931,55 @@
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
 <span class="normal"><a href="#__codelineno-0-29">29</a></span>
 <span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0_rc_2</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">topology_template</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">variability</span><span class="p">:</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">        </span><span class="nt">inputs</span><span class="p">:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">            </span><span class="nt">l</span><span class="p">:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">        </span><span class="nt">expressions</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">            </span><span class="nt">is_l</span><span class="p">:</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">                </span><span class="nt">equal</span><span class="p">:</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">variability_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">l</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">            </span><span class="nt">is_r</span><span class="p">:</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">                </span><span class="nt">equal</span><span class="p">:</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">variability_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">l</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="nt">options</span><span class="p">:</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">            </span><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">            </span><span class="nt">technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">        </span><span class="nt">application</span><span class="p">:</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">            </span><span class="nt">persistent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">left</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">                      </span><span class="nt">implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">                      </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">right</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">                      </span><span class="nt">implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">        </span><span class="nt">right</span><span class="p">:</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Right</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">                </span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">is_r</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">        </span><span class="nt">left</span><span class="p">:</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Left</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">                </span><span class="nt">logic_expression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">is_l</span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_variability_1_0_rc_3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">node_types</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nt">container</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.nodes.Root</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nt">topology_template</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="nt">variability</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">        </span><span class="nt">options</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">            </span><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">            </span><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">            </span><span class="nt">relation_enhanced_implication_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">        </span><span class="nt">container</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">            </span><span class="nt">persistent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">            </span><span class="nt">managed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">middleware</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dmiddleware</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">        </span><span class="nt">dmiddleware</span><span class="p">:</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">            </span><span class="nt">managed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">            </span><span class="nt">conditions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">emachine</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">        </span><span class="nt">emachine</span><span class="p">:</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">            </span><span class="nt">managed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">        </span><span class="nt">other</span><span class="p">:</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">            </span><span class="nt">managed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">            </span><span class="nt">requirements</span><span class="p">:</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">emachine</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="variability-inputs">Variability Inputs<a class="headerlink" href="#variability-inputs" title="Permanent link">&para;</a></h2>
-<p>When resolving variability, the following variability inputs shall be used.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">l</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</code></pre></div></td></tr></table></div>
-<h2 id="expected-error">Expected Error<a class="headerlink" href="#expected-error" title="Permanent link">&para;</a></h2>
-<p>The following error is expected to be thrown, when resolving variability.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>Could not solve
+<h2 id="variability-resolved-service-template">Variability-Resolved Service Template<a class="headerlink" href="#variability-resolved-service-template" title="Permanent link">&para;</a></h2>
+<p>The following variability-resolved service template is expected.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="nt">tosca_definitions_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca_simple_yaml_1_3</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nt">node_types</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nt">container</span><span class="p">:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">        </span><span class="nt">derived_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tosca.nodes.Root</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nt">topology_template</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">    </span><span class="nt">node_templates</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">        </span><span class="nt">container</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container</span>
 </code></pre></div></td></tr></table></div>
 
   <hr>
@@ -7991,7 +7987,7 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 13, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 25, 2024</span>
       
     
   </small>
@@ -8033,13 +8029,13 @@
         
         
           
-          <a href="../test-implied-host-fixed-left/" class="md-footer__link md-footer__link--next" aria-label="Next: implied-host-fixed-left" rel="next">
+          <a href="../test-implied-enhanced-old/" class="md-footer__link md-footer__link--next" aria-label="Next: implied-enhanced-old" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                implied-host-fixed-left
+                implied-enhanced-old
               </div>
             </div>
             <div class="md-footer__button md-icon">
