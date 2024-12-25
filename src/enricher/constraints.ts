@@ -40,8 +40,21 @@ export class ConstraintEnricher {
         }
         assert.isDefined(left, 'Left not defined')
 
+        /**
+         * Element presence is implied by container presence and manual conditions
+         */
+        const antecedent: {and: [string, string]} = {and: [element.container.id, element.manualId]}
+        const consequent = element.id
+
+        /**
+         * Enhanced implied relations also include manual conditions of target
+         */
+        if (element.isRelation() && this.graph.options.constraints.relationEnhancedImplication) {
+            antecedent.and.push(element.target.manualId)
+        }
+
         this.graph.addConstraint({
-            implies: [{and: [element.container.id, element.manualId]}, element.id],
+            implies: [antecedent, consequent],
         })
     }
 

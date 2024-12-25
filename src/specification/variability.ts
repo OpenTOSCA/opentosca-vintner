@@ -68,6 +68,7 @@ export type ConstraintsOptions = {
     constraints?: boolean
     relation_source_constraint?: boolean
     relation_target_constraint?: boolean
+    relation_enhanced_implication_mode?: boolean
     artifact_container_constraint?: boolean
     property_container_constraint?: boolean
     type_container_constraint?: boolean

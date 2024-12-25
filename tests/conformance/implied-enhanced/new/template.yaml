@@ -9,6 +9,7 @@ topology_template:
         options:
             enrich_implementations: false
             enrich_technologies: false
+            relation_enhanced_implication_mode: true
 
     node_templates:
         container:
@@ -16,8 +17,7 @@ topology_template:
             persistent: true
             managed: false
             requirements:
-                - middleware:
-                      node: dmiddleware
+                - middleware: dmiddleware
 
         dmiddleware:
             type: container
