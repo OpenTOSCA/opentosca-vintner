@@ -81,8 +81,7 @@ export default class Validator {
             if (!this.isTargeted(name, inputs)) {
                 const value =
                     this.inputs[name] ??
-                    this.graph.serviceTemplate.topology_template?.variability?.inputs?.[name]?.default ??
-                    undefined
+                    this.graph.serviceTemplate.topology_template?.variability?.inputs?.[name]?.default
                 assert.isDefined(value, `Variability input "${name}" is not targeted and not assigned`)
             }
 
