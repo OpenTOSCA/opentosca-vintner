@@ -554,6 +554,8 @@ A node template can also hold conditional types, artifact, and properties.
 | implies                       | false     | List(Tuple(Target: VariabilityCondition, Condition?: VariabilityCondition))          | An optional list of implications following the pattern `element implies target` or `(element and condition) implies target`.                                                             |
 | technology                    | false     | String &#124; List(Map(String, TechnologyTemplate){single})                          | An optional conditional assignment of deployment technologies.                                                                                                                           |
 | managed                       | false     | Boolean                                                                              | Enable if node is managed (default is true).                                                                                                                                             |
+| implied                       | false     | Boolean                                                                              | Enables that the manual conditions are used to imply the element.                                                                                                                        |
+
 
 For example, the following node template has a variability condition assigned.
 

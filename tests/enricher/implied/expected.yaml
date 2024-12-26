@@ -65,6 +65,7 @@ topology_template:
               requirements:
                   - left:
                         node: left
+                        implied: true
                         conditions:
                             - and:
                                   - node_presence: worker
@@ -77,6 +78,7 @@ topology_template:
 
                   - right:
                         node: right
+                        implied: true
                         conditions:
                             - and:
                                   - node_presence: worker

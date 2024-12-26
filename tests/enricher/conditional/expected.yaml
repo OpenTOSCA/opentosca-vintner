@@ -50,6 +50,7 @@ topology_template:
                               _generated: true
                   - key:
                         value: VINTNER_UNDEFINED
+                        implied: true
                         conditions:
                             - node_presence: target
                               _generated: true

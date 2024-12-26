@@ -44,5 +44,5 @@ topology_template:
 The following error is expected to be thrown, when resolving variability.
 
 ```text linenums="1"
-Node default condition mode "incoming(naive)-host" requires at least one persistent node template
+Node default condition mode "incoming(naive)-host" requires at least one persistent or implied node template
 ```

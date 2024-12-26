@@ -16,6 +16,7 @@ topology_template:
                         conditions: []
                   - key_one:
                         value: VINTNER_UNDEFINED
+                        implied: true
                         conditions:
                             - node_presence: node_one
                               _generated: true
