@@ -27,8 +27,16 @@ export class ConstraintEnricher {
      * However, the method is still written in a generic way.
      */
     private enrichImplications(element: Element) {
-        if (check.isUndefined(element.container)) return
         if (!element.implied) return
+
+        // Imply node
+        if (element.isNode()) {
+            return this.graph.addConstraint({
+                implies: [element.manualId, element.id],
+            })
+        }
+
+        if (check.isUndefined(element.container)) return
 
         let left
         if (element.implied === 'TARGET') {

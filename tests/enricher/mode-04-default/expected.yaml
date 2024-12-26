@@ -71,6 +71,7 @@ topology_template:
                             - node_presence: virtual_machine
                   - tier:
                         value: VINTNER_UNDEFINED
+                        implied: true
                         conditions:
                             - node_presence: virtual_machine
                               _generated: true
@@ -85,6 +86,7 @@ topology_template:
                               _bratan: true
                   - image:
                         value: VINTNER_UNDEFINED
+                        implied: true
                         conditions:
                             - node_presence: virtual_machine
                               _generated: true

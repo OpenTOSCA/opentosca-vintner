@@ -92,7 +92,6 @@ export default class Transformer {
         delete raw.semantic_pruning
 
         delete raw.default_alternative
-        delete raw.implied
     }
 
     private cleanVariabilityDefinition() {
