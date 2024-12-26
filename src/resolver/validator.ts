@@ -79,7 +79,11 @@ export default class Validator {
              * Required Constraint: input is required if not targeted by any dependency
              */
             if (!this.isTargeted(name, inputs)) {
-                this.minisat.require(name)
+                const value =
+                    this.inputs[name] ??
+                    this.graph.serviceTemplate.topology_template?.variability?.inputs?.[name]?.default ??
+                    undefined
+                assert.isDefined(value, `Variability input "${name}" is not targeted and not assigned`)
             }
 
             /**
