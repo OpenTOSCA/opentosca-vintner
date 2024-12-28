@@ -1,32 +1,5 @@
 tosca_definitions_version: tosca_variability_1_0
 topology_template:
-    variability:
-        constraints:
-            - implies:
-                  - and:
-                        - node.virtual_machine
-                        - manual.property.tier@0.node.virtual_machine
-                  - property.tier@0.node.virtual_machine
-            - implies:
-                  - and:
-                        - node.virtual_machine
-                        - manual.property.tier@1.node.virtual_machine
-                  - property.tier@1.node.virtual_machine
-            - implies:
-                  - and:
-                        - node.virtual_machine
-                        - manual.property.image@2.node.virtual_machine
-                  - property.image@2.node.virtual_machine
-            - implies:
-                  - and:
-                        - node.virtual_machine
-                        - manual.property.tier@3.node.virtual_machine
-                  - property.tier@3.node.virtual_machine
-            - implies:
-                  - and:
-                        - node.virtual_machine
-                        - manual.property.image@4.node.virtual_machine
-                  - property.image@4.node.virtual_machine
     node_templates:
         - application:
               type:

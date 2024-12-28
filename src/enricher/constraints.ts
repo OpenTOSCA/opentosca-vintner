@@ -44,17 +44,11 @@ export class ConstraintEnricher {
          */
         // TODO: add "relation_enhanced_implication_mode"
         if (element.isProperty()) {
+            if (utils.isEmpty(element.consuming)) return
+
             return this.graph.addConstraint({
                 implies: [
-                    {
-                        and: utils.filterNotNull([
-                            element.container.id,
-                            element.manualId,
-                            utils.isPopulated(element.consuming)
-                                ? {or: element.consuming.map(it => it.manualId)}
-                                : undefined,
-                        ]),
-                    },
+                    {and: [element.container.id, element.manualId, {or: element.consuming.map(it => it.manualId)}]},
                     element.id,
                 ],
             })

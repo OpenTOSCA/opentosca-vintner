@@ -31,20 +31,3 @@ topology_template:
                               _bratan: true
               technology: []
               conditions: []
-    variability:
-        constraints:
-            - implies:
-                  - and:
-                        - node.node_one
-                        - manual.property.key_one@0.node.node_one
-                  - property.key_one@0.node.node_one
-            - implies:
-                  - and:
-                        - node.node_one
-                        - manual.property.key_one@1.node.node_one
-                  - property.key_one@1.node.node_one
-            - implies:
-                  - and:
-                        - node.node_one
-                        - manual.property.key_one@2.node.node_one
-                  - property.key_one@2.node.node_one
