@@ -1,10 +1,10 @@
 tosca_definitions_version: tosca_variability_1_0_rc_3
 
 topology_template:
-    inputs:
+    outputs:
         some_input:
             type: string
-            conditions: false
+            value: "{{ '::container::some_property' | eval }}"
 
     node_templates:
         container:
@@ -12,4 +12,4 @@ topology_template:
             persistent: true
             managed: false
             properties:
-                some_property: {get_input: some_input}
+                some_property: hallo
