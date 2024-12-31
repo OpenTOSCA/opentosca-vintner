@@ -13,6 +13,8 @@ This document holds a list of selected publications.
 
 ## Hosting-Aware Pruning of Components in Deployment Models
 
+> Stötzner M, Speth S, Becker S. Hosting-Aware Pruning of Components in Deployment Models. In: Proceedings of the 14th International Conference on Cloud Computing and Services Science (CLOSER 2024). SciTePress; 2024:149-158. doi:10.5220/0012671900003711
+
 - CLOSER 2024
 - [https://doi.org/10.5220/0012671900003711](https://doi.org/10.5220/0012671900003711){target=_blank}
 - [Step-by-Step Guide](variability4tosca/guides/aware/index.md){target=_blank}
@@ -40,6 +42,8 @@ This document holds a list of selected publications.
 {% endraw %}
 
 ## Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications
+
+> Stötzner M, Speth S, Becker S. Pruning Modes for Deployment Models: From Manual Modeling to Automated Removal of Elements and Their Implications. In: Proceedings of the 14th International Conference on Cloud Computing and Services Science (CLOSER 2024). SciTePress; 2024:65-76. doi:10.5220/0012568300003711
 
 - CLOSER 2024
 - [https://doi.org/10.5220/0012568300003711](https://doi.org/10.5220/0012568300003711){target=_blank}
