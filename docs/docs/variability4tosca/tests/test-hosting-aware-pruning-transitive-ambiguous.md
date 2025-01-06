@@ -19,7 +19,7 @@ topology_template:
         options:
             mode: semantic-loose
             node_default_condition_mode: incoming-host
-            hosting_stack_constraint: false
+            required_hosting_constraint: false
             optimization_topology: false
             optimization_topology_unique: true
     node_templates:

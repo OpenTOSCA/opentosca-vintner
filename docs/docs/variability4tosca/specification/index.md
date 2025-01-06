@@ -286,7 +286,7 @@ The following options are used to configure constraints.
 | artifact_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.        |
 | property_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of properties.       |
 | type_container_constraint              | false     | Boolean  | false   | Enable the constraint regarding present containers of types.           |
-| hosting_stack_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.                 |
+| required_hosting_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.                 |
 | single_hosting_constraint | false     | Boolean  | false   | Enable the constraint regarding present single hosting. |
 | required_technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                          |
 | unique_property_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique property names.                 |
@@ -323,7 +323,7 @@ optimization_topology_unique: true
 optimization_technologies: max
 optimization_technologies_mode: weight-count
 required_technology_constraint: true
-hosting_stack_constraint: true
+required_hosting_constraint: true
 single_hosting_constraint: true
 relation_default_implied: true
 unconsumed_input_check: false
@@ -346,7 +346,7 @@ optimization_technologies: max
 optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
 required_technology_constraint: true
-hosting_stack_constraint: true
+required_hosting_constraint: true
 single_hosting_constraint: true
 unique_property_constraint: true
 unique_artifact_constraint: true

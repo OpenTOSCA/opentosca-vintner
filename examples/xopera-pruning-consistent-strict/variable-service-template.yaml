@@ -108,7 +108,7 @@ topology_template:
         options:
             mode: consistent-strict
             node_default_condition_mode: incoming
-            hosting_stack_constraint: false
+            required_hosting_constraint: false
             optimization_topology: false
             optimization_topology_unique: true
 

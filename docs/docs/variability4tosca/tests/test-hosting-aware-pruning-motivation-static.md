@@ -17,7 +17,7 @@
 
 - 5 conditions in total
 
-- hosting_stack_constraint has no effect
+- required_hosting_constraint has no effect
 - optimization has no effect
 
 
@@ -53,7 +53,7 @@ topology_template:
         options:
             mode: semantic-loose
             node_default_condition_mode: incoming
-            hosting_stack_constraint: false
+            required_hosting_constraint: false
             optimization_topology: false
     node_templates:
         shop:

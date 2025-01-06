@@ -72,7 +72,7 @@ export type ConstraintsOptions = {
     artifact_container_constraint?: boolean
     property_container_constraint?: boolean
     type_container_constraint?: boolean
-    hosting_stack_constraint?: boolean
+    required_hosting_constraint?: boolean
     single_hosting_constraint?: boolean
     required_technology_constraint?: boolean
 

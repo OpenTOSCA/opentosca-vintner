@@ -15,7 +15,7 @@ topology_template:
         options:
             relation_pruning: true
             type_default_condition: true
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
     node_templates:
         container:
             type: container

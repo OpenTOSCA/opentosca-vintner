@@ -838,7 +838,7 @@ class ConstraintsOptions extends BaseOptions {
     readonly propertyContainer: boolean
     readonly typeContainer: boolean
 
-    readonly hostingStack: boolean
+    readonly requiredStack: boolean
     readonly singleHosting: boolean
 
     readonly requiredTechnology: boolean
@@ -881,8 +881,8 @@ class ConstraintsOptions extends BaseOptions {
             /**
              * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
-            this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
-            assert.isBoolean(this.hostingStack)
+            this.requiredStack = this.raw.required_hosting_constraint ?? this.constraints
+            assert.isBoolean(this.requiredStack)
 
             this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints
             assert.isBoolean(this.singleHosting)
@@ -914,8 +914,8 @@ class ConstraintsOptions extends BaseOptions {
             /**
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
-            this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.hostingStack)
+            this.requiredStack = this.raw.required_hosting_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredStack)
 
             this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints ?? true
             assert.isBoolean(this.singleHosting)

@@ -6,7 +6,7 @@ topology_template:
             mode: semantic-loose
             constraints: false
             optimization_topology: false
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
     node_templates:
         one:
             type: one

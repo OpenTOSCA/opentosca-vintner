@@ -109,7 +109,7 @@ topology_template:
                 not:
                     logic_expression: is_large
         options:
-            hosting_stack_constraint: false
+            required_hosting_constraint: false
             optimization_topology: false
             optimization_topology_unique: true
     node_templates:

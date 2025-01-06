@@ -20,7 +20,7 @@ topology_template:
             type_default_condition: true
             persistent_check: false
             optimization_topology: true
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
     node_templates:
         worker:
             type: worker

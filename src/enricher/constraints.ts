@@ -141,11 +141,17 @@ export class ConstraintEnricher {
                 ...this.graph.groups,
                 ...this.graph.artifacts,
             ]) {
+                // TODO: migrate to at most one?
+
                 for (const properties of element.propertiesMap.values()) {
+                    this.graph.addConstraint({amo: properties.map(it => it.id)})
+
+                    /**
                     if (properties.length === 0) continue
                     this.graph.addConstraint({
                         implies: [properties[0].container.id, {exo: properties.map(it => it.id)}],
                     })
+                     **/
                 }
             }
         }
@@ -162,7 +168,7 @@ export class ConstraintEnricher {
         /**
          * Ensure that hosting stack exists
          */
-        if (this.graph.options.constraints.hostingStack) {
+        if (this.graph.options.constraints.requiredStack) {
             for (const node of this.graph.nodes.filter(it => it.hasHost)) {
                 const hostings = node.outgoing.filter(it => it.isHostedOn())
                 const consequence = hostings.length === 1 ? hostings[0].id : {exo: hostings.map(it => it.id)}
