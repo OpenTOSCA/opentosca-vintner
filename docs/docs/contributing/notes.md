@@ -260,7 +260,7 @@ The following links are used in publications.
 
 ## Typical Reasons for UNSAT 
 
-1. Technology constraint; can be disabled by `technology_constraint: false`
+1. Technology constraint; can be disabled by `required_technology_constraint: false`
 1. Artifact constraint; can be disabled by `required_artifact_constraint: false`
 1. Required incoming relation constraint; can be disabled by `required_incoming_relation_constraint: false`
 1. Due to some bug a node type or artifact type is not defined but a corresponding error is not thrown.

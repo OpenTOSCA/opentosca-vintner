@@ -7,7 +7,7 @@ topology_template:
             optimization_technologies_mode: weight
             optimization_technologies_unique: true
             technology_pruning: true
-            technology_constraint: true
+            required_technology_constraint: true
     node_templates:
         container:
             type: container

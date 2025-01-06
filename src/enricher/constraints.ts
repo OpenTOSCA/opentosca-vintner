@@ -172,7 +172,14 @@ export class ConstraintEnricher {
 
         // TODO: Ensure that each node has exactly one type
 
-        // TODO: Ensure that every component has at maximum one hosting relation
+        /**
+         * Ensure that every component has at maximum one hosting relation
+         */
+        if (this.graph.options.constraints.singleHosting) {
+            for (const node of this.graph.nodes) {
+                this.graph.addConstraint({amo: node.outgoing.filter(it => it.isHostedOn()).map(it => it.id)})
+            }
+        }
 
         // TODO: Ensure that every component that had a hosting relation previously still has one
 
@@ -199,14 +206,23 @@ export class ConstraintEnricher {
         }
 
         /**
-         * Ensure that technology exists (required and single)
+         * Ensure that required technology exists (required and single)
          */
         // .filter(it => utils.isPopulated(it.technologies)
-        if (this.graph.options.constraints.technology) {
+        if (this.graph.options.constraints.requiredTechnology) {
             for (const node of this.graph.nodes.filter(it => it.managed)) {
                 const consequence =
                     node.technologies.length === 1 ? node.technologies[0].id : {exo: node.technologies.map(it => it.id)}
                 this.graph.addConstraint({implies: [node.id, consequence]})
+            }
+        }
+
+        /**
+         * Ensure that technology is unique
+         */
+        if (this.graph.options.constraints.requiredTechnology) {
+            for (const node of this.graph.nodes.filter(it => it.managed)) {
+                this.graph.addConstraint({amo: node.technologies.map(it => it.id)})
             }
         }
 

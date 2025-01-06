@@ -73,13 +73,15 @@ export type ConstraintsOptions = {
     property_container_constraint?: boolean
     type_container_constraint?: boolean
     hosting_stack_constraint?: boolean
-    technology_constraint?: boolean
+    single_hosting_constraint?: boolean
+    required_technology_constraint?: boolean
 
     unique_property_constraint?: boolean
     unique_artifact_constraint?: boolean
     unique_input_constraint?: boolean
     unique_output_constraint?: boolean
     unique_relation_constraint?: boolean
+    unique_technology_constraint?: boolean
 
     required_artifact_constraint?: boolean
     required_incoming_relation_constraint?: boolean
