@@ -10014,14 +10014,21 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable the constraint regarding present containers of types.</td>
 </tr>
 <tr>
-<td>hosting_stack_constraint</td>
+<td>required_hosting_constraint</td>
 <td>false</td>
 <td>Boolean</td>
 <td>false</td>
 <td>Enable the constraint regarding present hosting stack.</td>
 </tr>
 <tr>
-<td>technology_constraint</td>
+<td>single_hosting_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding present single hosting.</td>
+</tr>
+<tr>
+<td>required_technology_constraint</td>
 <td>false</td>
 <td>Boolean</td>
 <td>false</td>
@@ -10061,6 +10068,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>false</td>
 <td>Enable the constraint regarding unique relation names.</td>
+</tr>
+<tr>
+<td>unique_technology_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding unique technology names.</td>
 </tr>
 <tr>
 <td>required_artifact_constraint</td>
@@ -10103,19 +10117,21 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <span class="normal"><a href="#__codelineno-3-10">10</a></span>
 <span class="normal"><a href="#__codelineno-3-11">11</a></span>
 <span class="normal"><a href="#__codelineno-3-12">12</a></span>
-<span class="normal"><a href="#__codelineno-3-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="nt">optimization_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="nt">optimization_technologies_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">weight-count</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nt">technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nt">hosting_stack_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nt">unconsumed_input_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nt">unproduced_output_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nt">required_technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nt">required_hosting_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nt">single_hosting_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nt">unconsumed_input_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nt">unproduced_output_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="rc-v3">RC v3<a class="headerlink" href="#rc-v3" title="Permanent link">&para;</a></h3>
 <p><code>tosca_variability_1_0_rc_3</code> has the following default values.
@@ -10138,25 +10154,29 @@ Also, pruning modes consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-16">16</a></span>
 <span class="normal"><a href="#__codelineno-4-17">17</a></span>
 <span class="normal"><a href="#__codelineno-4-18">18</a></span>
-<span class="normal"><a href="#__codelineno-4-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span>
+<span class="normal"><a href="#__codelineno-4-20">20</a></span>
+<span class="normal"><a href="#__codelineno-4-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="nt">optimization_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="nt">optimization_technologies_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">weight-count</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="nt">optimization_technologies_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="nt">technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="nt">hosting_stack_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nt">unique_property_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="nt">unique_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="nt">unique_input_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="nt">unique_output_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="nt">unique_relation_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="nt">required_technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="nt">required_hosting_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="nt">single_hosting_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="nt">unique_property_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="nt">unique_artifact_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="nt">unique_input_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="nt">unique_output_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="nt">unique_relation_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="nt">unique_technology_constraint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">&para;</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -12632,7 +12652,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 31, 2024</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 6, 2025</span>
       
     
   </small>
