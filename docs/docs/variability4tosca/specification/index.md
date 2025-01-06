@@ -277,24 +277,26 @@ _This is an experimental feature._
 
 The following options are used to configure constraints.
 
-| Keyname                               | Mandatory | Type     | Default | Description                                                      |
-|---------------------------------------|-----------|----------|---------|------------------------------------------------------------------|
-| constraints                           | false     | Boolean  | false   | Enable all constraints.                                          |
-| relation_source_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
-| relation_target_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
-| relation_enhanced_implication_mode    | false     | Boolean  | true    | Enable enhanced implied relations.                               |
-| artifact_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
-| property_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
-| type_container_constraint             | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
-| hosting_stack_constraint              | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
-| technology_constraint                 | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
-| unique_property_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
-| unique_artifact_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
-| unique_input_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
-| unique_output_constraint              | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
-| unique_relation_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique relation names.           |
-| required_artifact_constraint          | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
-| required_incoming_relation_constraint | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
+| Keyname                                | Mandatory | Type     | Default | Description                                                            |
+|----------------------------------------|-----------|----------|---------|------------------------------------------------------------------------|
+| constraints                            | false     | Boolean  | false   | Enable all constraints.                                                |
+| relation_source_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation sources.              |
+| relation_target_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation targets.              |
+| relation_enhanced_implication_mode     | false     | Boolean  | true    | Enable enhanced implied relations.                                     |
+| artifact_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.        |
+| property_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of properties.       |
+| type_container_constraint              | false     | Boolean  | false   | Enable the constraint regarding present containers of types.           |
+| required_hosting_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.                 |
+| single_hosting_constraint | false     | Boolean  | false   | Enable the constraint regarding present single hosting. |
+| required_technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                          |
+| unique_property_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique property names.                 |
+| unique_artifact_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.                 |
+| unique_input_constraint                | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.         |
+| unique_output_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.        |
+| unique_relation_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique relation names.                 |
+| unique_technology_constraint           | false     | Boolean  | false   | Enable the constraint regarding unique technology names.               |
+| required_artifact_constraint           | false     | Boolean  | false   | Enable the constraint regarding required artifact.                     |
+| required_incoming_relation_constraint  | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.            |
 
 ### Pruning Modes
 
@@ -320,8 +322,9 @@ optimization_topology: min
 optimization_topology_unique: true
 optimization_technologies: max
 optimization_technologies_mode: weight-count
-technology_constraint: true
-hosting_stack_constraint: true
+required_technology_constraint: true
+required_hosting_constraint: true
+single_hosting_constraint: true
 relation_default_implied: true
 unconsumed_input_check: false
 unproduced_output_check: false
@@ -342,13 +345,15 @@ optimization_topology_unique: true
 optimization_technologies: max
 optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
-technology_constraint: true
-hosting_stack_constraint: true
+required_technology_constraint: true
+required_hosting_constraint: true
+single_hosting_constraint: true
 unique_property_constraint: true
 unique_artifact_constraint: true
 unique_input_constraint: true
 unique_output_constraint: true
 unique_relation_constraint: true
+unique_technology_constraint: true
 relation_default_implied: true
 checks: false
 enrich_technologies: true

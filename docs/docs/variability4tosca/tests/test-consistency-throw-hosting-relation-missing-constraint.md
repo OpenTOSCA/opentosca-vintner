@@ -13,7 +13,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     variability:
         options:
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
     node_templates:
         one:
             type: one

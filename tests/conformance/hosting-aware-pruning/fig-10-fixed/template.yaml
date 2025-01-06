@@ -7,7 +7,7 @@ topology_template:
             node_default_condition_mode: incomingnaive-artifact-host
             optimization_topology: min
             optimization_topology_unique: false
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
 
     node_templates:
         app:

@@ -5,7 +5,7 @@ topology_template:
         options:
             optimization_technologies: false
             technology_pruning: false
-            technology_constraint: false
+            required_technology_constraint: false
 
             expected_technology_check: true
 

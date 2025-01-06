@@ -15,7 +15,7 @@ topology_template:
         options:
             mode: semantic-loose
             node_default_condition_mode: incomingnaive-host
-            hosting_stack_constraint: true
+            required_hosting_constraint: true
             optimization_topology: true
             optimization_technologies: true
             technology_pruning: true

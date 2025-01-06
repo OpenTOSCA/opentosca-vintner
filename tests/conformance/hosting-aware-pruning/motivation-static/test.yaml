@@ -15,5 +15,5 @@ description: |
 
     - 5 conditions in total
 
-    - hosting_stack_constraint has no effect
+    - required_hosting_constraint has no effect
     - optimization has no effect

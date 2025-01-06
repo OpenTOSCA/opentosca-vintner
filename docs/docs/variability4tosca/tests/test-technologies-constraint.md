@@ -13,7 +13,7 @@ tosca_definitions_version: tosca_variability_1_0
 topology_template:
     variability:
         options:
-            technology_constraint: true
+            required_technology_constraint: true
     node_templates:
         container:
             type: container

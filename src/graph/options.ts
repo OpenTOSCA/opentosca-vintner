@@ -837,14 +837,18 @@ class ConstraintsOptions extends BaseOptions {
     readonly artifactContainer: boolean
     readonly propertyContainer: boolean
     readonly typeContainer: boolean
-    readonly hostingStack: boolean
-    readonly technology: boolean
+
+    readonly requiredHosting: boolean
+    readonly singleHosting: boolean
+
+    readonly requiredTechnology: boolean
 
     readonly uniqueProperty: boolean
     readonly uniqueArtifact: boolean
     readonly uniqueInput: boolean
     readonly uniqueOutput: boolean
     readonly uniqueRelation: boolean
+    readonly uniqueTechnology: boolean
 
     readonly requiredArtifact: boolean
     readonly requiredIncomingRelation: boolean
@@ -877,11 +881,14 @@ class ConstraintsOptions extends BaseOptions {
             /**
              * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
-            this.hostingStack = this.raw.hosting_stack_constraint ?? this.constraints
-            assert.isBoolean(this.hostingStack)
+            this.requiredHosting = this.raw.required_hosting_constraint ?? this.constraints
+            assert.isBoolean(this.requiredHosting)
 
-            this.technology = this.raw.technology_constraint ?? this.constraints
-            assert.isBoolean(this.technology)
+            this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints
+            assert.isBoolean(this.singleHosting)
+
+            this.requiredTechnology = this.raw.required_technology_constraint ?? this.constraints
+            assert.isBoolean(this.requiredTechnology)
 
             this.uniqueProperty = this.raw.unique_property_constraint ?? this.constraints
             assert.isBoolean(this.uniqueProperty)
@@ -898,17 +905,23 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueRelation = this.raw.unique_relation_constraint ?? this.constraints
             assert.isBoolean(this.uniqueRelation)
 
+            this.uniqueTechnology = this.raw.unique_technology_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueTechnology)
+
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
             assert.isBoolean(this.requiredIncomingRelation)
         } else {
             /**
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
-            this.hostingStack = this.raw.hosting_stack_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.hostingStack)
+            this.requiredHosting = this.raw.required_hosting_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredHosting)
 
-            this.technology = this.raw.technology_constraint ?? this.raw.constraints ?? true
-            assert.isBoolean(this.technology)
+            this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints ?? true
+            assert.isBoolean(this.singleHosting)
+
+            this.requiredTechnology = this.raw.required_technology_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.requiredTechnology)
 
             this.uniqueProperty = this.raw.unique_property_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueProperty)
@@ -924,6 +937,9 @@ class ConstraintsOptions extends BaseOptions {
 
             this.uniqueRelation = this.raw.unique_relation_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueRelation)
+
+            this.uniqueTechnology = this.raw.unique_technology_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueTechnology)
 
             this.requiredIncomingRelation =
                 this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? false
