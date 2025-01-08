@@ -701,6 +701,7 @@ class SolverTopologyOptions extends BaseOptions {
     readonly max: boolean
     readonly optimize: boolean
     readonly unique: boolean
+    readonly uniqueBackward: boolean
     readonly mode: 'weight' | 'count'
 
     constructor(serviceTemplate: ServiceTemplate) {
@@ -727,6 +728,9 @@ class SolverTopologyOptions extends BaseOptions {
             this.unique = this.raw.optimization_topology_unique ?? true
             assert.isBoolean(this.unique)
 
+            this.uniqueBackward = this.raw.optimization_topology_unique_backward ?? false
+            assert.isBoolean(this.uniqueBackward)
+
             const mode = this.raw.optimization_topology_mode ?? 'weight'
             if (!['weight', 'count'].includes(mode)) {
                 throw new Error(`Option optimization_topology_mode must be "weight" or "count"`)
@@ -752,6 +756,9 @@ class SolverTopologyOptions extends BaseOptions {
 
             this.unique = this.raw.optimization_topology_unique ?? true
             assert.isBoolean(this.unique)
+
+            this.uniqueBackward = this.raw.optimization_topology_unique_backward ?? false
+            assert.isBoolean(this.uniqueBackward)
 
             const mode = this.raw.optimization_topology_mode ?? 'weight'
             if (!['weight', 'count'].includes(mode)) {
