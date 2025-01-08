@@ -84,7 +84,12 @@ export default class Optimizer {
         const present = result.getPresences('node')
         const absent = result.getAbsences('node')
 
-        const topology = MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
+        /**
+         * Backwards: also check that absent components are absent. If optimization did not start before, there might be other solutions that have additional present components.
+         */
+        const topology = this.graph.options.solver.topology.uniqueBackward
+            ? MiniSat.and(MiniSat.and(present), MiniSat.not(MiniSat.or(absent)))
+            : MiniSat.and(present)
         const another = this.minisat.solveAssuming(MiniSat.not(topology))
 
         if (check.isDefined(another)) {

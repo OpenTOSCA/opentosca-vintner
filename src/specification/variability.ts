@@ -46,6 +46,7 @@ export type SolverOptions = {
     // Topology
     optimization_topology?: boolean | 'min' | 'max'
     optimization_topology_unique?: boolean
+    optimization_topology_unique_backward?: boolean
     optimization_topology_mode?: 'weight' | 'count'
 
     // Technologies
