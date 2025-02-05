@@ -46,6 +46,16 @@ export class ConstraintEnricher {
         if (element.isProperty()) {
             if (utils.isEmpty(element.consuming)) return
 
+            // TODO: make this an option
+            if (check.isUndefined(element.consuming.find(it => it.isInput()))) return
+
+            // TODO: remove this log
+            console.log(
+                element.display,
+                'implying',
+                element.consuming.map(it => it.display)
+            )
+
             return this.graph.addConstraint({
                 implies: [
                     {and: [element.container.id, element.manualId, {or: element.consuming.map(it => it.manualId)}]},
