@@ -217,7 +217,7 @@ export class ConstraintEnricher {
         /**
          * Ensure that technology is unique
          */
-        if (this.graph.options.constraints.requiredTechnology) {
+        if (this.graph.options.constraints.uniqueTechnology) {
             for (const node of this.graph.nodes.filter(it => it.managed)) {
                 this.graph.addConstraint({amo: node.technologies.map(it => it.id)})
             }
