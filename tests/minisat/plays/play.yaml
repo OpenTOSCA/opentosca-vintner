@@ -7,21 +7,19 @@ node_types:
 topology_template:
     variability:
         options:
-            enrich_technologies: false
-            enrich_implementations: false
-            required_technology_constraint: false
+            technology_default_condition_mode: container-other
+            required_technology_constraint: true
+            unique_technology_constraint: false
+        qualities:
+            - component: application
+              technology: ansible
+              weight: 1
+
+            - component: application
+              technology: terraform
+              weight: 1
 
     node_templates:
         application:
             type: application
             persistent: true
-            properties:
-                - some_prob:
-                      value: {get_property: [other, other]}
-                      implied: true
-
-        other:
-            type: application
-            conditions: false
-            properties:
-                - other: yeet
