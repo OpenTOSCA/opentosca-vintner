@@ -59,7 +59,7 @@ jobs:
                   cache: pip
 
             - name: (PREPARE) Cache xOpera
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: /home/runner/opera
                   key: xopera
@@ -107,7 +107,7 @@ jobs:
             ###################################################
 
             - name: (PACKAGE) Setup Packaging Cache
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.pkg-cache
                   key: pkg
