@@ -24,10 +24,10 @@ jobs:
                   sudo rm -rf /opt/hostedtoolcache
 
             - name: (PREPARE) Set up QEMU
-              uses: docker/setup-qemu-action@v2
+              uses: docker/setup-qemu-action@v3
 
             - name: (PREPARE) Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 

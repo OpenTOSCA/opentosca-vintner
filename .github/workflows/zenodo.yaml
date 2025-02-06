@@ -18,7 +18,7 @@ jobs:
             ###################################################
 
             - name: (PREPARE) Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
                   fetch-depth: 0

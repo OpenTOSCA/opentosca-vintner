@@ -32,7 +32,7 @@ jobs:
             ###################################################
 
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -155,7 +155,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -223,7 +223,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -286,7 +286,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -354,7 +354,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -418,7 +418,7 @@ jobs:
             PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -486,7 +486,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -551,7 +551,7 @@ jobs:
             PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -621,7 +621,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -686,7 +686,7 @@ jobs:
             PORT: 3000
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -754,7 +754,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -819,7 +819,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -887,7 +887,7 @@ jobs:
             PORT: 80
         steps:
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -959,7 +959,7 @@ jobs:
             ###################################################
 
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -1059,7 +1059,7 @@ jobs:
             ###################################################
 
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
@@ -1148,7 +1148,7 @@ jobs:
             ###################################################
 
             - name: (PREPARE) Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   lfs: true
 
