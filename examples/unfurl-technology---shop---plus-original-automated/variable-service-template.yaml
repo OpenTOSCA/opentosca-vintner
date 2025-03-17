@@ -84,12 +84,8 @@ topology_template:
                 - DB_PORT: {eval: '.::.requirements[.name=database]::.target::application_port'}
             requirements:
                 - database: database
-                - host:
-                      node: nodejs_runtime
-                      conditions: {equal: [{variability_input: env}, STATIC]}
-                - host:
-                      node: gcp_appengine
-                      conditions: {equal: [{variability_input: env}, ELASTIC]}
+                - host: nodejs_runtime
+                - host: gcp_appengine
             artifacts:
                 - zip_archive:
                       type: zip.archive
