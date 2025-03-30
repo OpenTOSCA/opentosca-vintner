@@ -244,7 +244,7 @@ jobs:
                   context: .
                   file: docker/Dockerfile
                   push: true
-                  tags: ghcr.io/opentosca/opentosca-vintner:latest
+                  tags: ghcr.io/opentosca/opentosca-vintner:latest,ghcr.io/opentosca/opentosca-vintner:${{ github.sha }}
                   cache-from: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache
                   cache-to: type=registry,ref=ghcr.io/opentosca/opentosca-vintner:buildcache,mode=max
 
