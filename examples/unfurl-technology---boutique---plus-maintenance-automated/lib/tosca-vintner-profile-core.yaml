@@ -129,9 +129,9 @@ node_types:
             - host:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
-    software.application:
+    software.component:
         derived_from: node
-        description: The abstract "software.application" node type defines a generic software application. It requires a hosting and its lifecycle is managed by the management interface.
+        description: The abstract "software.component" node type defines a generic software component. It requires a hosting and its lifecycle is managed by the management interface.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -196,9 +196,9 @@ node_types:
         interfaces:
             management:
                 type: management
-    service.application:
-        derived_from: software.application
-        description: The abstract "service.application" node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
+    service.component:
+        derived_from: software.component
+        description: The abstract "service.component" node type defines a generic software component, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -229,7 +229,7 @@ node_types:
                         - ':'
                         - eval: .::application_port
     software.runtime:
-        derived_from: software.application
+        derived_from: software.component
         description: The abstract "software.runtime" node type defines a generic software runtime.
         metadata:
             vintner_normative: 'true'
@@ -335,7 +335,7 @@ node_types:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     dbms:
-        derived_from: software.application
+        derived_from: software.component
         description: The abstract "dbms" node type defines a generic DBMS.
         metadata:
             vintner_normative: 'true'
@@ -347,7 +347,7 @@ node_types:
             vintner_normative: 'true'
             vintner_abstract: 'true'
     cache:
-        derived_from: software.application
+        derived_from: software.component
         description: The abstract "cache" node type defines a generic caching service.
         properties:
             cache_name:
@@ -665,7 +665,7 @@ node_types:
                             openstack_networking_secgroup_v2:
                                 ports:
                                     - name: '{{ SELF.machine_name }}'
-    cache~software.application#apt.package::ansible@*->local.machine:
+    cache~software.component#apt.package::ansible@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -839,7 +839,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    cache~software.application#apt.package::terraform@*->local.machine:
+    cache~software.component#apt.package::terraform@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -1024,7 +1024,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    cache~software.application#apt.package::ansible@*->remote.machine:
+    cache~software.component#apt.package::ansible@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -1246,7 +1246,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cache~software.application#apt.package::terraform@*->remote.machine:
+    cache~software.component#apt.package::terraform@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -1436,7 +1436,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    cache~software.application#tar.archive::ansible@*->local.machine:
+    cache~software.component#tar.archive::ansible@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -1621,7 +1621,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    cache~software.application#tar.archive::terraform@*->local.machine:
+    cache~software.component#tar.archive::terraform@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -1801,7 +1801,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    cache~software.application#tar.archive::ansible@*->remote.machine:
+    cache~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -2020,7 +2020,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cache~software.application#tar.archive::terraform@*->remote.machine:
+    cache~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -2204,7 +2204,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    cache~software.application#zip.archive::ansible@*->local.machine:
+    cache~software.component#zip.archive::ansible@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -2379,7 +2379,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    cache~software.application#zip.archive::terraform@*->local.machine:
+    cache~software.component#zip.archive::terraform@*->local.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -2559,7 +2559,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cache.sh
                                                     - sudo bash /tmp/delete-cache.sh
                                                 when: destroy
-    cache~software.application#zip.archive::ansible@*->remote.machine:
+    cache~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'
@@ -2782,7 +2782,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cache~software.application#zip.archive::terraform@*->remote.machine:
+    cache~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: cache
         metadata:
             vintner_generated: 'true'

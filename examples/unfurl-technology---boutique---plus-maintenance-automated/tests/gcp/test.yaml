@@ -2,7 +2,7 @@ merge:
     topology_template:
         node_templates:
             analytics_component:
-                type: analytics.component~service.application#docker.image::terraform@gcp.cloudrun
+                type: analytics.component~service.component#docker.image::terraform@gcp.cloudrun
                 properties:
                     application_name: analytics
                     application_port: 7001

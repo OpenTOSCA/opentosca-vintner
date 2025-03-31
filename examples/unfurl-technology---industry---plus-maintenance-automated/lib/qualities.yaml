@@ -402,224 +402,224 @@
       - kubernetes.cluster
   weight: 0.5
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - local.machine
   weight: 0.5
 - technology: compose
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - local.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - local.machine
   weight: 0.5
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - remote.machine
   weight: 0.5
 - technology: compose
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - remote.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - docker.engine
       - remote.machine
   weight: 0.5
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - gcp.cloudrun
   weight: 0
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - gcp.cloudrun
   weight: 1
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
 - technology: kubernetes
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: docker.image
   hosting:
       - kubernetes.cluster
   weight: 0.5
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: tar.archive
   hosting:
       - '*'
       - local.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: tar.archive
   hosting:
       - '*'
       - local.machine
   weight: 0
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: tar.archive
   hosting:
       - '*'
       - remote.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: tar.archive
   hosting:
       - '*'
       - remote.machine
   weight: 0
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - '*'
       - local.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - '*'
       - local.machine
   weight: 0
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - '*'
       - remote.machine
   weight: 1
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - '*'
       - remote.machine
   weight: 0
 - technology: ansible
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - gcp.appengine
   weight: 0
 - technology: terraform
-  component: service.application
+  component: service.component
   artifact: zip.archive
   hosting:
       - gcp.appengine
   weight: 1
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: apt.package
   hosting:
       - '*'
       - local.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: apt.package
   hosting:
       - '*'
       - local.machine
   weight: 0
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: apt.package
   hosting:
       - '*'
       - remote.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: apt.package
   hosting:
       - '*'
       - remote.machine
   weight: 0
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: tar.archive
   hosting:
       - '*'
       - local.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: tar.archive
   hosting:
       - '*'
       - local.machine
   weight: 0
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: tar.archive
   hosting:
       - '*'
       - remote.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: tar.archive
   hosting:
       - '*'
       - remote.machine
   weight: 0
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: zip.archive
   hosting:
       - '*'
       - local.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: zip.archive
   hosting:
       - '*'
       - local.machine
   weight: 0
 - technology: ansible
-  component: software.application
+  component: software.component
   artifact: zip.archive
   hosting:
       - '*'
       - remote.machine
   weight: 1
 - technology: terraform
-  component: software.application
+  component: software.component
   artifact: zip.archive
   hosting:
       - '*'

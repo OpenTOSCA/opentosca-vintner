@@ -28,7 +28,7 @@ topology_template:
         ###################################################
 
         frontend_component:
-            type: frontend.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: frontend.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: frontend
                 application_port: 8080
@@ -65,7 +65,7 @@ topology_template:
         ###################################################
 
         checkout_component:
-            type: checkout.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: checkout.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: checkout
                 application_port: 7003
@@ -99,7 +99,7 @@ topology_template:
         ###################################################
 
         email_component:
-            type: email.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: email.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: email
                 application_port: 7005
@@ -119,7 +119,7 @@ topology_template:
         ###################################################
 
         payment_component:
-            type: payment.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: payment.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: payment
                 application_port: 7006
@@ -141,7 +141,7 @@ topology_template:
         ###################################################
 
         currency_component:
-            type: currency.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: currency.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: currency
                 application_port: 7004
@@ -161,7 +161,7 @@ topology_template:
         ###################################################
 
         shipping_component:
-            type: shipping.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: shipping.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: shipping
                 application_port: 7009
@@ -181,7 +181,7 @@ topology_template:
         ###################################################
 
         cart_component:
-            type: cart.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: cart.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: cart
                 application_port: 7070
@@ -231,7 +231,7 @@ topology_template:
         ###################################################
 
         product_component:
-            type: product.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: product.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: product
                 application_port: 7007
@@ -251,7 +251,7 @@ topology_template:
         ###################################################
 
         recommendation_component:
-            type: recommendation.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: recommendation.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: recommendation
                 application_port: 7008
@@ -273,7 +273,7 @@ topology_template:
         ###################################################
 
         advertisement_component:
-            type: advertisement.component~service.application#docker.image::terraform@gcp.cloudrun
+            type: advertisement.component~service.component#docker.image::terraform@gcp.cloudrun
             properties:
                 application_name: advertisement
                 application_port: 7000

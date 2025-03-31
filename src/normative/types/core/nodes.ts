@@ -46,10 +46,10 @@ const nodes: NodeTypeMap = {
             },
         ],
     },
-    'software.application': {
+    'software.component': {
         derived_from: 'node',
         description:
-            'The abstract "software.application" node type defines a generic software application. It requires a hosting and its lifecycle is managed by the management interface.',
+            'The abstract "software.component" node type defines a generic software component. It requires a hosting and its lifecycle is managed by the management interface.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -74,10 +74,10 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'service.application': {
-        derived_from: 'software.application',
+    'service.component': {
+        derived_from: 'software.component',
         description:
-            'The abstract "service.application" node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.',
+            'The abstract "service.component" node type defines a generic software component, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -112,7 +112,7 @@ const nodes: NodeTypeMap = {
         },
     },
     'software.runtime': {
-        derived_from: 'software.application',
+        derived_from: 'software.component',
         description: 'The abstract "software.runtime" node type defines a generic software runtime.',
         metadata: {
             ...MetadataNormative(),
@@ -254,7 +254,7 @@ const nodes: NodeTypeMap = {
         },
     },
     dbms: {
-        derived_from: 'software.application',
+        derived_from: 'software.component',
         description: 'The abstract "dbms" node type defines a generic DBMS.',
         metadata: {
             ...MetadataNormative(),
@@ -270,7 +270,7 @@ const nodes: NodeTypeMap = {
         },
     },
     cache: {
-        derived_from: 'software.application',
+        derived_from: 'software.component',
         description: 'The abstract "cache" node type defines a generic caching service.',
         properties: {
             cache_name: {

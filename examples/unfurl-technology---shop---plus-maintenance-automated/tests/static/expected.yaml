@@ -52,7 +52,7 @@ topology_template:
         ###################################################
 
         shop:
-            type: shop.component~service.application#zip.archive::ansible@*->remote.machine
+            type: shop.component~service.component#zip.archive::ansible@*->remote.machine
             properties:
                 application_name: unfurl-technology-shop
                 application_port: 3000
@@ -111,7 +111,7 @@ topology_template:
         ###################################################
 
         nodejs_runtime:
-            type: nodejs.runtime~software.application#apt.package::ansible@*->remote.machine
+            type: nodejs.runtime~software.component#apt.package::ansible@*->remote.machine
             requirements:
                 - host: virtual_machine
 

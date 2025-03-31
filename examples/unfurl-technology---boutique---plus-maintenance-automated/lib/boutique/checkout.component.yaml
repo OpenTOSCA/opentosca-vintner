@@ -25,7 +25,7 @@ node_types:
     ###################################################
 
     checkout.component:
-        derived_from: go.service.application
+        derived_from: go.service.component
 
         properties:
             application_name:
@@ -123,7 +123,7 @@ node_types:
     #
     ################################################################
 
-    checkout.component~service.application#docker.image::ansible@docker.engine->local.machine:
+    checkout.component~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -169,7 +169,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    checkout.component~service.application#docker.image::compose@docker.engine->local.machine:
+    checkout.component~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -259,7 +259,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    checkout.component~service.application#docker.image::terraform@docker.engine->local.machine:
+    checkout.component~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -309,7 +309,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    checkout.component~service.application#docker.image::ansible@docker.engine->remote.machine:
+    checkout.component~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -380,7 +380,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~service.application#docker.image::compose@docker.engine->remote.machine:
+    checkout.component~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -511,7 +511,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    checkout.component~service.application#docker.image::terraform@docker.engine->remote.machine:
+    checkout.component~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -584,7 +584,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    checkout.component~service.application#docker.image::ansible@gcp.cloudrun:
+    checkout.component~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -718,7 +718,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    checkout.component~service.application#docker.image::terraform@gcp.cloudrun:
+    checkout.component~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -807,7 +807,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    checkout.component~service.application#docker.image::ansible@kubernetes.cluster:
+    checkout.component~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -943,7 +943,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    checkout.component~service.application#docker.image::kubernetes@kubernetes.cluster:
+    checkout.component~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -1133,7 +1133,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    checkout.component~service.application#docker.image::terraform@kubernetes.cluster:
+    checkout.component~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -1236,7 +1236,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    checkout.component~service.application#tar.archive::ansible@*->local.machine:
+    checkout.component~service.component#tar.archive::ansible@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -1443,7 +1443,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    checkout.component~service.application#tar.archive::terraform@*->local.machine:
+    checkout.component~service.component#tar.archive::terraform@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -1636,7 +1636,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~service.application#tar.archive::ansible@*->remote.machine:
+    checkout.component~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -1891,7 +1891,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~service.application#tar.archive::terraform@*->remote.machine:
+    checkout.component~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -2086,7 +2086,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~service.application#zip.archive::ansible@*->local.machine:
+    checkout.component~service.component#zip.archive::ansible@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -2297,7 +2297,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    checkout.component~service.application#zip.archive::terraform@*->local.machine:
+    checkout.component~service.component#zip.archive::terraform@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -2490,7 +2490,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~service.application#zip.archive::ansible@*->remote.machine:
+    checkout.component~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -2749,7 +2749,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~service.application#zip.archive::terraform@*->remote.machine:
+    checkout.component~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -2944,7 +2944,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~service.application#zip.archive::ansible@gcp.appengine:
+    checkout.component~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3050,7 +3050,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    checkout.component~service.application#zip.archive::terraform@gcp.appengine:
+    checkout.component~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3146,7 +3146,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    checkout.component~software.application#apt.package::ansible@*->local.machine:
+    checkout.component~software.component#apt.package::ansible@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3320,7 +3320,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    checkout.component~software.application#apt.package::terraform@*->local.machine:
+    checkout.component~software.component#apt.package::terraform@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3513,7 +3513,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~software.application#apt.package::ansible@*->remote.machine:
+    checkout.component~software.component#apt.package::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3735,7 +3735,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~software.application#apt.package::terraform@*->remote.machine:
+    checkout.component~software.component#apt.package::terraform@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -3933,7 +3933,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~software.application#tar.archive::ansible@*->local.machine:
+    checkout.component~software.component#tar.archive::ansible@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -4126,7 +4126,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    checkout.component~software.application#tar.archive::terraform@*->local.machine:
+    checkout.component~software.component#tar.archive::terraform@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -4314,7 +4314,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~software.application#tar.archive::ansible@*->remote.machine:
+    checkout.component~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -4541,7 +4541,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~software.application#tar.archive::terraform@*->remote.machine:
+    checkout.component~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -4733,7 +4733,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~software.application#zip.archive::ansible@*->local.machine:
+    checkout.component~software.component#zip.archive::ansible@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -4916,7 +4916,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    checkout.component~software.application#zip.archive::terraform@*->local.machine:
+    checkout.component~software.component#zip.archive::terraform@*->local.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -5104,7 +5104,7 @@ node_types:
                                                     - sudo bash /tmp/stop-checkout.component.sh
                                                     - sudo bash /tmp/delete-checkout.component.sh
                                                 when: destroy
-    checkout.component~software.application#zip.archive::ansible@*->remote.machine:
+    checkout.component~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'
@@ -5335,7 +5335,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    checkout.component~software.application#zip.archive::terraform@*->remote.machine:
+    checkout.component~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: checkout.component
         metadata:
             vintner_generated: 'true'

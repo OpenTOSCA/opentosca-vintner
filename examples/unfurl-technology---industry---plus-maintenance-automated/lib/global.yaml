@@ -5,22 +5,22 @@ imports:
 
 node_types:
     global.frontend.dashboard:
-        derived_from: reactjs.service.application
+        derived_from: reactjs.service.component
 
     global.service.gateway:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     global.service.retailers:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     global.service.products:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     global.service.calibrations:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     global.service.accounts:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     # [OPENTOSCA_VINTNER_GENERATION_MARK]
 
@@ -30,7 +30,7 @@ node_types:
     #
     ################################################################
 
-    global.frontend.dashboard~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.frontend.dashboard~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -66,7 +66,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.frontend.dashboard~service.application#docker.image::compose@docker.engine->local.machine:
+    global.frontend.dashboard~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -136,7 +136,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.frontend.dashboard~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.frontend.dashboard~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -176,7 +176,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.frontend.dashboard~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.frontend.dashboard~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -237,7 +237,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -348,7 +348,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.frontend.dashboard~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.frontend.dashboard~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -411,7 +411,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.frontend.dashboard~service.application#docker.image::ansible@gcp.cloudrun:
+    global.frontend.dashboard~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -524,7 +524,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.frontend.dashboard~service.application#docker.image::terraform@gcp.cloudrun:
+    global.frontend.dashboard~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -592,7 +592,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.frontend.dashboard~service.application#docker.image::ansible@kubernetes.cluster:
+    global.frontend.dashboard~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -708,7 +708,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.frontend.dashboard~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.frontend.dashboard~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -858,7 +858,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.frontend.dashboard~service.application#docker.image::terraform@kubernetes.cluster:
+    global.frontend.dashboard~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -941,7 +941,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.frontend.dashboard~service.application#tar.archive::ansible@*->local.machine:
+    global.frontend.dashboard~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1138,7 +1138,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.frontend.dashboard~service.application#tar.archive::terraform@*->local.machine:
+    global.frontend.dashboard~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1322,7 +1322,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~service.application#tar.archive::ansible@*->remote.machine:
+    global.frontend.dashboard~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1567,7 +1567,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~service.application#tar.archive::terraform@*->remote.machine:
+    global.frontend.dashboard~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1753,7 +1753,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~service.application#zip.archive::ansible@*->local.machine:
+    global.frontend.dashboard~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1954,7 +1954,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.frontend.dashboard~service.application#zip.archive::terraform@*->local.machine:
+    global.frontend.dashboard~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2138,7 +2138,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~service.application#zip.archive::ansible@*->remote.machine:
+    global.frontend.dashboard~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2387,7 +2387,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~service.application#zip.archive::terraform@*->remote.machine:
+    global.frontend.dashboard~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2573,7 +2573,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~service.application#zip.archive::ansible@gcp.appengine:
+    global.frontend.dashboard~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2667,7 +2667,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.frontend.dashboard~service.application#zip.archive::terraform@gcp.appengine:
+    global.frontend.dashboard~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2751,7 +2751,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.frontend.dashboard~software.application#apt.package::ansible@*->local.machine:
+    global.frontend.dashboard~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2925,7 +2925,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.frontend.dashboard~software.application#apt.package::terraform@*->local.machine:
+    global.frontend.dashboard~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3109,7 +3109,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~software.application#apt.package::ansible@*->remote.machine:
+    global.frontend.dashboard~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3331,7 +3331,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~software.application#apt.package::terraform@*->remote.machine:
+    global.frontend.dashboard~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3520,7 +3520,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~software.application#tar.archive::ansible@*->local.machine:
+    global.frontend.dashboard~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3703,7 +3703,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.frontend.dashboard~software.application#tar.archive::terraform@*->local.machine:
+    global.frontend.dashboard~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3882,7 +3882,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~software.application#tar.archive::ansible@*->remote.machine:
+    global.frontend.dashboard~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4099,7 +4099,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~software.application#tar.archive::terraform@*->remote.machine:
+    global.frontend.dashboard~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4282,7 +4282,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~software.application#zip.archive::ansible@*->local.machine:
+    global.frontend.dashboard~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4455,7 +4455,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.frontend.dashboard~software.application#zip.archive::terraform@*->local.machine:
+    global.frontend.dashboard~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4634,7 +4634,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.frontend.dashboard~software.application#zip.archive::ansible@*->remote.machine:
+    global.frontend.dashboard~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4855,7 +4855,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.frontend.dashboard~software.application#zip.archive::terraform@*->remote.machine:
+    global.frontend.dashboard~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -5038,7 +5038,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-global.frontend.dashboard.sh
                                                 when: destroy
-    global.service.gateway~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.service.gateway~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5074,7 +5074,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.service.gateway~service.application#docker.image::compose@docker.engine->local.machine:
+    global.service.gateway~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5144,7 +5144,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.service.gateway~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.service.gateway~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5184,7 +5184,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.gateway~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.service.gateway~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5245,7 +5245,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5356,7 +5356,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.service.gateway~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.service.gateway~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5419,7 +5419,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.gateway~service.application#docker.image::ansible@gcp.cloudrun:
+    global.service.gateway~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5532,7 +5532,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.gateway~service.application#docker.image::terraform@gcp.cloudrun:
+    global.service.gateway~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5600,7 +5600,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.service.gateway~service.application#docker.image::ansible@kubernetes.cluster:
+    global.service.gateway~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5716,7 +5716,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.service.gateway~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.service.gateway~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5866,7 +5866,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.service.gateway~service.application#docker.image::terraform@kubernetes.cluster:
+    global.service.gateway~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -5949,7 +5949,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.service.gateway~service.application#tar.archive::ansible@*->local.machine:
+    global.service.gateway~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -6146,7 +6146,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.gateway~service.application#tar.archive::terraform@*->local.machine:
+    global.service.gateway~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -6330,7 +6330,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~service.application#tar.archive::ansible@*->remote.machine:
+    global.service.gateway~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -6575,7 +6575,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~service.application#tar.archive::terraform@*->remote.machine:
+    global.service.gateway~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -6761,7 +6761,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~service.application#zip.archive::ansible@*->local.machine:
+    global.service.gateway~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -6962,7 +6962,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.gateway~service.application#zip.archive::terraform@*->local.machine:
+    global.service.gateway~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7146,7 +7146,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~service.application#zip.archive::ansible@*->remote.machine:
+    global.service.gateway~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7395,7 +7395,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~service.application#zip.archive::terraform@*->remote.machine:
+    global.service.gateway~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7581,7 +7581,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~service.application#zip.archive::ansible@gcp.appengine:
+    global.service.gateway~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7675,7 +7675,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.gateway~service.application#zip.archive::terraform@gcp.appengine:
+    global.service.gateway~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7759,7 +7759,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.service.gateway~software.application#apt.package::ansible@*->local.machine:
+    global.service.gateway~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -7933,7 +7933,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.service.gateway~software.application#apt.package::terraform@*->local.machine:
+    global.service.gateway~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -8117,7 +8117,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~software.application#apt.package::ansible@*->remote.machine:
+    global.service.gateway~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -8339,7 +8339,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~software.application#apt.package::terraform@*->remote.machine:
+    global.service.gateway~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -8528,7 +8528,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~software.application#tar.archive::ansible@*->local.machine:
+    global.service.gateway~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -8711,7 +8711,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.gateway~software.application#tar.archive::terraform@*->local.machine:
+    global.service.gateway~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -8890,7 +8890,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~software.application#tar.archive::ansible@*->remote.machine:
+    global.service.gateway~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -9107,7 +9107,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~software.application#tar.archive::terraform@*->remote.machine:
+    global.service.gateway~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -9290,7 +9290,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~software.application#zip.archive::ansible@*->local.machine:
+    global.service.gateway~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -9463,7 +9463,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.gateway~software.application#zip.archive::terraform@*->local.machine:
+    global.service.gateway~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -9642,7 +9642,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.gateway~software.application#zip.archive::ansible@*->remote.machine:
+    global.service.gateway~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -9863,7 +9863,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.gateway~software.application#zip.archive::terraform@*->remote.machine:
+    global.service.gateway~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10046,7 +10046,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.gateway.sh
                                                     - sudo bash /tmp/delete-global.service.gateway.sh
                                                 when: destroy
-    global.service.retailers~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.service.retailers~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10082,7 +10082,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.service.retailers~service.application#docker.image::compose@docker.engine->local.machine:
+    global.service.retailers~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10152,7 +10152,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.service.retailers~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.service.retailers~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10192,7 +10192,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.retailers~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.service.retailers~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10253,7 +10253,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.service.retailers~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10364,7 +10364,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.service.retailers~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.service.retailers~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10427,7 +10427,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.retailers~service.application#docker.image::ansible@gcp.cloudrun:
+    global.service.retailers~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10540,7 +10540,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.retailers~service.application#docker.image::terraform@gcp.cloudrun:
+    global.service.retailers~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10608,7 +10608,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.service.retailers~service.application#docker.image::ansible@kubernetes.cluster:
+    global.service.retailers~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10724,7 +10724,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.service.retailers~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.service.retailers~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10874,7 +10874,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.service.retailers~service.application#docker.image::terraform@kubernetes.cluster:
+    global.service.retailers~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -10957,7 +10957,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.service.retailers~service.application#tar.archive::ansible@*->local.machine:
+    global.service.retailers~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -11154,7 +11154,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.retailers~service.application#tar.archive::terraform@*->local.machine:
+    global.service.retailers~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -11338,7 +11338,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~service.application#tar.archive::ansible@*->remote.machine:
+    global.service.retailers~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -11583,7 +11583,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~service.application#tar.archive::terraform@*->remote.machine:
+    global.service.retailers~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -11769,7 +11769,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~service.application#zip.archive::ansible@*->local.machine:
+    global.service.retailers~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -11970,7 +11970,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.retailers~service.application#zip.archive::terraform@*->local.machine:
+    global.service.retailers~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12154,7 +12154,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~service.application#zip.archive::ansible@*->remote.machine:
+    global.service.retailers~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12403,7 +12403,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~service.application#zip.archive::terraform@*->remote.machine:
+    global.service.retailers~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12589,7 +12589,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~service.application#zip.archive::ansible@gcp.appengine:
+    global.service.retailers~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12683,7 +12683,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.retailers~service.application#zip.archive::terraform@gcp.appengine:
+    global.service.retailers~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12767,7 +12767,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.service.retailers~software.application#apt.package::ansible@*->local.machine:
+    global.service.retailers~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -12941,7 +12941,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.service.retailers~software.application#apt.package::terraform@*->local.machine:
+    global.service.retailers~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -13125,7 +13125,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~software.application#apt.package::ansible@*->remote.machine:
+    global.service.retailers~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -13347,7 +13347,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~software.application#apt.package::terraform@*->remote.machine:
+    global.service.retailers~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -13536,7 +13536,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~software.application#tar.archive::ansible@*->local.machine:
+    global.service.retailers~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -13719,7 +13719,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.retailers~software.application#tar.archive::terraform@*->local.machine:
+    global.service.retailers~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -13898,7 +13898,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~software.application#tar.archive::ansible@*->remote.machine:
+    global.service.retailers~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -14115,7 +14115,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~software.application#tar.archive::terraform@*->remote.machine:
+    global.service.retailers~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -14298,7 +14298,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~software.application#zip.archive::ansible@*->local.machine:
+    global.service.retailers~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -14471,7 +14471,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.retailers~software.application#zip.archive::terraform@*->local.machine:
+    global.service.retailers~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -14650,7 +14650,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.retailers~software.application#zip.archive::ansible@*->remote.machine:
+    global.service.retailers~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -14871,7 +14871,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.retailers~software.application#zip.archive::terraform@*->remote.machine:
+    global.service.retailers~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.retailers
         metadata:
             vintner_generated: 'true'
@@ -15054,7 +15054,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.retailers.sh
                                                     - sudo bash /tmp/delete-global.service.retailers.sh
                                                 when: destroy
-    global.service.products~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.service.products~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15090,7 +15090,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.service.products~service.application#docker.image::compose@docker.engine->local.machine:
+    global.service.products~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15160,7 +15160,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.service.products~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.service.products~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15200,7 +15200,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.products~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.service.products~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15261,7 +15261,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.service.products~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15372,7 +15372,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.service.products~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.service.products~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15435,7 +15435,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.products~service.application#docker.image::ansible@gcp.cloudrun:
+    global.service.products~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15548,7 +15548,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.products~service.application#docker.image::terraform@gcp.cloudrun:
+    global.service.products~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15616,7 +15616,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.service.products~service.application#docker.image::ansible@kubernetes.cluster:
+    global.service.products~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15732,7 +15732,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.service.products~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.service.products~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15882,7 +15882,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.service.products~service.application#docker.image::terraform@kubernetes.cluster:
+    global.service.products~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -15965,7 +15965,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.service.products~service.application#tar.archive::ansible@*->local.machine:
+    global.service.products~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -16162,7 +16162,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.products~service.application#tar.archive::terraform@*->local.machine:
+    global.service.products~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -16346,7 +16346,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~service.application#tar.archive::ansible@*->remote.machine:
+    global.service.products~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -16591,7 +16591,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~service.application#tar.archive::terraform@*->remote.machine:
+    global.service.products~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -16777,7 +16777,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~service.application#zip.archive::ansible@*->local.machine:
+    global.service.products~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -16978,7 +16978,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.products~service.application#zip.archive::terraform@*->local.machine:
+    global.service.products~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17162,7 +17162,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~service.application#zip.archive::ansible@*->remote.machine:
+    global.service.products~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17411,7 +17411,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~service.application#zip.archive::terraform@*->remote.machine:
+    global.service.products~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17597,7 +17597,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~service.application#zip.archive::ansible@gcp.appengine:
+    global.service.products~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17691,7 +17691,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.products~service.application#zip.archive::terraform@gcp.appengine:
+    global.service.products~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17775,7 +17775,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.service.products~software.application#apt.package::ansible@*->local.machine:
+    global.service.products~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -17949,7 +17949,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.service.products~software.application#apt.package::terraform@*->local.machine:
+    global.service.products~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -18133,7 +18133,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~software.application#apt.package::ansible@*->remote.machine:
+    global.service.products~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -18355,7 +18355,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~software.application#apt.package::terraform@*->remote.machine:
+    global.service.products~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -18544,7 +18544,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~software.application#tar.archive::ansible@*->local.machine:
+    global.service.products~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -18727,7 +18727,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.products~software.application#tar.archive::terraform@*->local.machine:
+    global.service.products~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -18906,7 +18906,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~software.application#tar.archive::ansible@*->remote.machine:
+    global.service.products~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -19123,7 +19123,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~software.application#tar.archive::terraform@*->remote.machine:
+    global.service.products~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -19306,7 +19306,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~software.application#zip.archive::ansible@*->local.machine:
+    global.service.products~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -19479,7 +19479,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.products~software.application#zip.archive::terraform@*->local.machine:
+    global.service.products~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -19658,7 +19658,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.products~software.application#zip.archive::ansible@*->remote.machine:
+    global.service.products~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -19879,7 +19879,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.products~software.application#zip.archive::terraform@*->remote.machine:
+    global.service.products~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.products
         metadata:
             vintner_generated: 'true'
@@ -20062,7 +20062,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.products.sh
                                                     - sudo bash /tmp/delete-global.service.products.sh
                                                 when: destroy
-    global.service.calibrations~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.service.calibrations~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20098,7 +20098,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.service.calibrations~service.application#docker.image::compose@docker.engine->local.machine:
+    global.service.calibrations~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20168,7 +20168,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.service.calibrations~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.service.calibrations~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20208,7 +20208,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.calibrations~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.service.calibrations~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20269,7 +20269,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.service.calibrations~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20380,7 +20380,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.service.calibrations~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.service.calibrations~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20443,7 +20443,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.calibrations~service.application#docker.image::ansible@gcp.cloudrun:
+    global.service.calibrations~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20556,7 +20556,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.calibrations~service.application#docker.image::terraform@gcp.cloudrun:
+    global.service.calibrations~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20624,7 +20624,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.service.calibrations~service.application#docker.image::ansible@kubernetes.cluster:
+    global.service.calibrations~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20740,7 +20740,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.service.calibrations~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.service.calibrations~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20890,7 +20890,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.service.calibrations~service.application#docker.image::terraform@kubernetes.cluster:
+    global.service.calibrations~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -20973,7 +20973,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.service.calibrations~service.application#tar.archive::ansible@*->local.machine:
+    global.service.calibrations~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -21170,7 +21170,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.calibrations~service.application#tar.archive::terraform@*->local.machine:
+    global.service.calibrations~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -21354,7 +21354,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~service.application#tar.archive::ansible@*->remote.machine:
+    global.service.calibrations~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -21599,7 +21599,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~service.application#tar.archive::terraform@*->remote.machine:
+    global.service.calibrations~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -21785,7 +21785,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~service.application#zip.archive::ansible@*->local.machine:
+    global.service.calibrations~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -21986,7 +21986,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.calibrations~service.application#zip.archive::terraform@*->local.machine:
+    global.service.calibrations~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22170,7 +22170,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~service.application#zip.archive::ansible@*->remote.machine:
+    global.service.calibrations~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22419,7 +22419,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~service.application#zip.archive::terraform@*->remote.machine:
+    global.service.calibrations~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22605,7 +22605,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~service.application#zip.archive::ansible@gcp.appengine:
+    global.service.calibrations~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22699,7 +22699,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.calibrations~service.application#zip.archive::terraform@gcp.appengine:
+    global.service.calibrations~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22783,7 +22783,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.service.calibrations~software.application#apt.package::ansible@*->local.machine:
+    global.service.calibrations~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -22957,7 +22957,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.service.calibrations~software.application#apt.package::terraform@*->local.machine:
+    global.service.calibrations~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -23141,7 +23141,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~software.application#apt.package::ansible@*->remote.machine:
+    global.service.calibrations~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -23363,7 +23363,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~software.application#apt.package::terraform@*->remote.machine:
+    global.service.calibrations~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -23552,7 +23552,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~software.application#tar.archive::ansible@*->local.machine:
+    global.service.calibrations~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -23735,7 +23735,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.calibrations~software.application#tar.archive::terraform@*->local.machine:
+    global.service.calibrations~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -23914,7 +23914,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~software.application#tar.archive::ansible@*->remote.machine:
+    global.service.calibrations~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -24131,7 +24131,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~software.application#tar.archive::terraform@*->remote.machine:
+    global.service.calibrations~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -24314,7 +24314,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~software.application#zip.archive::ansible@*->local.machine:
+    global.service.calibrations~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -24487,7 +24487,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.calibrations~software.application#zip.archive::terraform@*->local.machine:
+    global.service.calibrations~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -24666,7 +24666,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.calibrations~software.application#zip.archive::ansible@*->remote.machine:
+    global.service.calibrations~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -24887,7 +24887,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.calibrations~software.application#zip.archive::terraform@*->remote.machine:
+    global.service.calibrations~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.calibrations
         metadata:
             vintner_generated: 'true'
@@ -25070,7 +25070,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.calibrations.sh
                                                     - sudo bash /tmp/delete-global.service.calibrations.sh
                                                 when: destroy
-    global.service.accounts~service.application#docker.image::ansible@docker.engine->local.machine:
+    global.service.accounts~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25106,7 +25106,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    global.service.accounts~service.application#docker.image::compose@docker.engine->local.machine:
+    global.service.accounts~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25176,7 +25176,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    global.service.accounts~service.application#docker.image::terraform@docker.engine->local.machine:
+    global.service.accounts~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25216,7 +25216,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.accounts~service.application#docker.image::ansible@docker.engine->remote.machine:
+    global.service.accounts~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25277,7 +25277,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~service.application#docker.image::compose@docker.engine->remote.machine:
+    global.service.accounts~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25388,7 +25388,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    global.service.accounts~service.application#docker.image::terraform@docker.engine->remote.machine:
+    global.service.accounts~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25451,7 +25451,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    global.service.accounts~service.application#docker.image::ansible@gcp.cloudrun:
+    global.service.accounts~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25564,7 +25564,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.accounts~service.application#docker.image::terraform@gcp.cloudrun:
+    global.service.accounts~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25632,7 +25632,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    global.service.accounts~service.application#docker.image::ansible@kubernetes.cluster:
+    global.service.accounts~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25748,7 +25748,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    global.service.accounts~service.application#docker.image::kubernetes@kubernetes.cluster:
+    global.service.accounts~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25898,7 +25898,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    global.service.accounts~service.application#docker.image::terraform@kubernetes.cluster:
+    global.service.accounts~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -25981,7 +25981,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    global.service.accounts~service.application#tar.archive::ansible@*->local.machine:
+    global.service.accounts~service.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -26178,7 +26178,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.accounts~service.application#tar.archive::terraform@*->local.machine:
+    global.service.accounts~service.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -26362,7 +26362,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~service.application#tar.archive::ansible@*->remote.machine:
+    global.service.accounts~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -26607,7 +26607,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~service.application#tar.archive::terraform@*->remote.machine:
+    global.service.accounts~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -26793,7 +26793,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~service.application#zip.archive::ansible@*->local.machine:
+    global.service.accounts~service.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -26994,7 +26994,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    global.service.accounts~service.application#zip.archive::terraform@*->local.machine:
+    global.service.accounts~service.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27178,7 +27178,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~service.application#zip.archive::ansible@*->remote.machine:
+    global.service.accounts~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27427,7 +27427,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~service.application#zip.archive::terraform@*->remote.machine:
+    global.service.accounts~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27613,7 +27613,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~service.application#zip.archive::ansible@gcp.appengine:
+    global.service.accounts~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27707,7 +27707,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    global.service.accounts~service.application#zip.archive::terraform@gcp.appengine:
+    global.service.accounts~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27791,7 +27791,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    global.service.accounts~software.application#apt.package::ansible@*->local.machine:
+    global.service.accounts~software.component#apt.package::ansible@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -27965,7 +27965,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    global.service.accounts~software.application#apt.package::terraform@*->local.machine:
+    global.service.accounts~software.component#apt.package::terraform@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -28149,7 +28149,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~software.application#apt.package::ansible@*->remote.machine:
+    global.service.accounts~software.component#apt.package::ansible@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -28371,7 +28371,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~software.application#apt.package::terraform@*->remote.machine:
+    global.service.accounts~software.component#apt.package::terraform@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -28560,7 +28560,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~software.application#tar.archive::ansible@*->local.machine:
+    global.service.accounts~software.component#tar.archive::ansible@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -28743,7 +28743,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.accounts~software.application#tar.archive::terraform@*->local.machine:
+    global.service.accounts~software.component#tar.archive::terraform@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -28922,7 +28922,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~software.application#tar.archive::ansible@*->remote.machine:
+    global.service.accounts~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -29139,7 +29139,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~software.application#tar.archive::terraform@*->remote.machine:
+    global.service.accounts~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -29322,7 +29322,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~software.application#zip.archive::ansible@*->local.machine:
+    global.service.accounts~software.component#zip.archive::ansible@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -29495,7 +29495,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    global.service.accounts~software.application#zip.archive::terraform@*->local.machine:
+    global.service.accounts~software.component#zip.archive::terraform@*->local.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -29674,7 +29674,7 @@ node_types:
                                                     - sudo bash /tmp/stop-global.service.accounts.sh
                                                     - sudo bash /tmp/delete-global.service.accounts.sh
                                                 when: destroy
-    global.service.accounts~software.application#zip.archive::ansible@*->remote.machine:
+    global.service.accounts~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'
@@ -29895,7 +29895,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    global.service.accounts~software.application#zip.archive::terraform@*->remote.machine:
+    global.service.accounts~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: global.service.accounts
         metadata:
             vintner_generated: 'true'

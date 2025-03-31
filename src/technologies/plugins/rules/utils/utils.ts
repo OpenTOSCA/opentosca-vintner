@@ -39,7 +39,7 @@ export function ApplicationProperties(type: NodeType, options: {quote?: boolean;
 }
 
 export function SecureApplicationProtocolPropertyDefinition(type: NodeType): {[key: string]: PropertyDefinition} {
-    // TODO: enable assert but currently this breaks software application implementation generation
+    // TODO: enable assert but currently this breaks software component implementation generation
     // assert.isDefined(type.properties)
 
     if (!type.properties) return {}

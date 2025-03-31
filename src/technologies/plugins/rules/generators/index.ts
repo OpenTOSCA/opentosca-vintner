@@ -5,8 +5,8 @@ import mysqlDatabase from './mysql-database'
 import mysqlDBMS from './mysql-dbms'
 import objectStorage from './object-storage'
 import redisServer from './redis-server'
-import serviceApplication from './service-application'
-import softwareApplication from './software-application'
+import serviceComponent from './service-component'
+import softwareComponent from './software-component'
 import virtualMachine from './virtual-machine'
 
 export default [
@@ -17,7 +17,7 @@ export default [
     mysqlDatabase,
     mysqlDBMS,
     redisServer,
-    serviceApplication,
-    softwareApplication,
+    serviceComponent,
+    softwareComponent,
     virtualMachine,
 ]
