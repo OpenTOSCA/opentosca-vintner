@@ -39,9 +39,9 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'nodejs.service.application': {
-        derived_from: 'service.application',
-        description: 'The "nodejs.service.application" node type manages a Node.js service application.',
+    'nodejs.service.component': {
+        derived_from: 'service.component',
+        description: 'The "nodejs.service.component" node type manages a Node.js service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -62,9 +62,9 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'reactjs.service.application': {
-        derived_from: 'service.application',
-        description: 'The "reactjs.service.application" node type manages a React.js service application.',
+    'reactjs.service.component': {
+        derived_from: 'service.component',
+        description: 'The "reactjs.service.component" node type manages a React.js service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -108,9 +108,9 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'python.service.application': {
-        derived_from: 'service.application',
-        description: 'The "python.service.application" node type manages a Python service application.',
+    'python.service.component': {
+        derived_from: 'service.component',
+        description: 'The "python.service.component" node type manages a Python service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -133,9 +133,9 @@ const nodes: NodeTypeMap = {
     },
     // TODO: go runtime?
     // TODO: management operations
-    'go.service.application': {
-        derived_from: 'service.application',
-        description: 'The "go.service.application" node type manages a Go service application.',
+    'go.service.component': {
+        derived_from: 'service.component',
+        description: 'The "go.service.component" node type manages a Go service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -179,9 +179,9 @@ const nodes: NodeTypeMap = {
         },
     },
     // TODO: management operations
-    'java.service.application': {
-        derived_from: 'service.application',
-        description: 'The "java.service.application" node type manages a Java service application.',
+    'java.service.component': {
+        derived_from: 'service.component',
+        description: 'The "java.service.component" node type manages a Java service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -225,9 +225,9 @@ const nodes: NodeTypeMap = {
         },
     },
     // TODO: management operations
-    'csharp.service.application': {
-        derived_from: 'service.application',
-        description: 'The "csharp.service.application" node type manages a C# service application.',
+    'csharp.service.component': {
+        derived_from: 'service.component',
+        description: 'The "csharp.service.component" node type manages a C# service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -239,9 +239,9 @@ const nodes: NodeTypeMap = {
             },
         },
     },
-    'binary.service.application': {
-        derived_from: 'service.application',
-        description: 'The "binary.service.application" node type manages a binary service application.',
+    'binary.service.component': {
+        derived_from: 'service.component',
+        description: 'The "binary.service.component" node type manages a binary service component.',
         metadata: {
             ...MetadataNormative(),
             ...MetadataAbstract(),
@@ -655,7 +655,7 @@ const nodes: NodeTypeMap = {
         ],
     },
     'minio.server': {
-        derived_from: 'service.application',
+        derived_from: 'service.component',
         description: 'The "minio.server" node type manages a MinIO server.',
         metadata: {
             ...MetadataNormative(),

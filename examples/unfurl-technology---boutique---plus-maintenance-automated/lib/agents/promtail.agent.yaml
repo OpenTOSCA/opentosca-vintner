@@ -11,7 +11,7 @@ node_types:
     ###################################################
 
     promtail.agent:
-        derived_from: software.application
+        derived_from: software.component
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -25,7 +25,7 @@ node_types:
     #
     ################################################################
 
-    promtail.agent~software.application#apt.package::ansible@*->local.machine:
+    promtail.agent~software.component#apt.package::ansible@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -199,7 +199,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    promtail.agent~software.application#apt.package::terraform@*->local.machine:
+    promtail.agent~software.component#apt.package::terraform@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -383,7 +383,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#apt.package::ansible@*->remote.machine:
+    promtail.agent~software.component#apt.package::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -605,7 +605,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#apt.package::terraform@*->remote.machine:
+    promtail.agent~software.component#apt.package::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -794,7 +794,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#tar.archive::ansible@*->local.machine:
+    promtail.agent~software.component#tar.archive::ansible@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -977,7 +977,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    promtail.agent~software.application#tar.archive::terraform@*->local.machine:
+    promtail.agent~software.component#tar.archive::terraform@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1156,7 +1156,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#tar.archive::ansible@*->remote.machine:
+    promtail.agent~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1373,7 +1373,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#tar.archive::terraform@*->remote.machine:
+    promtail.agent~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1556,7 +1556,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#zip.archive::ansible@*->local.machine:
+    promtail.agent~software.component#zip.archive::ansible@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1729,7 +1729,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    promtail.agent~software.application#zip.archive::terraform@*->local.machine:
+    promtail.agent~software.component#zip.archive::terraform@*->local.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -1908,7 +1908,7 @@ node_types:
                                                     - sudo bash /tmp/stop-promtail.agent.sh
                                                     - sudo bash /tmp/delete-promtail.agent.sh
                                                 when: destroy
-    promtail.agent~software.application#zip.archive::ansible@*->remote.machine:
+    promtail.agent~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'
@@ -2129,7 +2129,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    promtail.agent~software.application#zip.archive::terraform@*->remote.machine:
+    promtail.agent~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: promtail.agent
         metadata:
             vintner_generated: 'true'

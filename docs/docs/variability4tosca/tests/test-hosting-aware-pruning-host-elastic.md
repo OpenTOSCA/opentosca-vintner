@@ -37,6 +37,7 @@ topology_template:
             node_default_condition_mode: incoming-host
             required_hosting_constraint: true
             optimization_topology: false
+            optimization_topology_unique_backward: true
     node_templates:
         shop:
             type: shop.component

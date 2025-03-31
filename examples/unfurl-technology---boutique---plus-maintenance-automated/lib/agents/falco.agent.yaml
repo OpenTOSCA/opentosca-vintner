@@ -13,7 +13,7 @@ node_types:
     # https://falco.org/docs/install-operate/installation
     # https://falco.org/docs/getting-started/falco-linux-quickstart
     falco.agent:
-        derived_from: software.application
+        derived_from: software.component
         requirements:
             - host:
                   capability: tosca.capabilities.Compute
@@ -27,7 +27,7 @@ node_types:
     #
     ################################################################
 
-    falco.agent~software.application#apt.package::ansible@*->local.machine:
+    falco.agent~software.component#apt.package::ansible@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -201,7 +201,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    falco.agent~software.application#apt.package::terraform@*->local.machine:
+    falco.agent~software.component#apt.package::terraform@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -385,7 +385,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#apt.package::ansible@*->remote.machine:
+    falco.agent~software.component#apt.package::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -607,7 +607,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#apt.package::terraform@*->remote.machine:
+    falco.agent~software.component#apt.package::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -796,7 +796,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#tar.archive::ansible@*->local.machine:
+    falco.agent~software.component#tar.archive::ansible@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -979,7 +979,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    falco.agent~software.application#tar.archive::terraform@*->local.machine:
+    falco.agent~software.component#tar.archive::terraform@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1158,7 +1158,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#tar.archive::ansible@*->remote.machine:
+    falco.agent~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1375,7 +1375,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#tar.archive::terraform@*->remote.machine:
+    falco.agent~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1558,7 +1558,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#zip.archive::ansible@*->local.machine:
+    falco.agent~software.component#zip.archive::ansible@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1731,7 +1731,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    falco.agent~software.application#zip.archive::terraform@*->local.machine:
+    falco.agent~software.component#zip.archive::terraform@*->local.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -1910,7 +1910,7 @@ node_types:
                                                     - sudo bash /tmp/stop-falco.agent.sh
                                                     - sudo bash /tmp/delete-falco.agent.sh
                                                 when: destroy
-    falco.agent~software.application#zip.archive::ansible@*->remote.machine:
+    falco.agent~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'
@@ -2131,7 +2131,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    falco.agent~software.application#zip.archive::terraform@*->remote.machine:
+    falco.agent~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: falco.agent
         metadata:
             vintner_generated: 'true'

@@ -31,6 +31,7 @@ topology_template:
             optimization_technologies_unique: true
             technology_pruning: true
             required_technology_constraint: true
+            required_technology_check: true
         qualities:
             - component: ansible_host
               technology: terraform

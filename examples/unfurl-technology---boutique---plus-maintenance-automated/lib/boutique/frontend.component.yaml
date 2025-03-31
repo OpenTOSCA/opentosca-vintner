@@ -27,7 +27,7 @@ node_types:
     ###################################################
 
     frontend.component:
-        derived_from: go.service.application
+        derived_from: go.service.component
 
         properties:
             application_name:
@@ -139,7 +139,7 @@ node_types:
     #
     ################################################################
 
-    frontend.component~service.application#docker.image::ansible@docker.engine->local.machine:
+    frontend.component~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -188,7 +188,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    frontend.component~service.application#docker.image::compose@docker.engine->local.machine:
+    frontend.component~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -284,7 +284,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    frontend.component~service.application#docker.image::terraform@docker.engine->local.machine:
+    frontend.component~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -337,7 +337,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    frontend.component~service.application#docker.image::ansible@docker.engine->remote.machine:
+    frontend.component~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -411,7 +411,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~service.application#docker.image::compose@docker.engine->remote.machine:
+    frontend.component~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -548,7 +548,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    frontend.component~service.application#docker.image::terraform@docker.engine->remote.machine:
+    frontend.component~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -624,7 +624,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    frontend.component~service.application#docker.image::ansible@gcp.cloudrun:
+    frontend.component~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -764,7 +764,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    frontend.component~service.application#docker.image::terraform@gcp.cloudrun:
+    frontend.component~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -859,7 +859,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    frontend.component~service.application#docker.image::ansible@kubernetes.cluster:
+    frontend.component~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1001,7 +1001,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    frontend.component~service.application#docker.image::kubernetes@kubernetes.cluster:
+    frontend.component~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1203,7 +1203,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    frontend.component~service.application#docker.image::terraform@kubernetes.cluster:
+    frontend.component~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1312,7 +1312,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    frontend.component~service.application#tar.archive::ansible@*->local.machine:
+    frontend.component~service.component#tar.archive::ansible@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1522,7 +1522,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    frontend.component~service.application#tar.archive::terraform@*->local.machine:
+    frontend.component~service.component#tar.archive::terraform@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1718,7 +1718,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~service.application#tar.archive::ansible@*->remote.machine:
+    frontend.component~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -1976,7 +1976,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~service.application#tar.archive::terraform@*->remote.machine:
+    frontend.component~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -2174,7 +2174,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~service.application#zip.archive::ansible@*->local.machine:
+    frontend.component~service.component#zip.archive::ansible@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -2388,7 +2388,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    frontend.component~service.application#zip.archive::terraform@*->local.machine:
+    frontend.component~service.component#zip.archive::terraform@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -2584,7 +2584,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~service.application#zip.archive::ansible@*->remote.machine:
+    frontend.component~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -2846,7 +2846,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~service.application#zip.archive::terraform@*->remote.machine:
+    frontend.component~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3044,7 +3044,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~service.application#zip.archive::ansible@gcp.appengine:
+    frontend.component~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3153,7 +3153,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    frontend.component~service.application#zip.archive::terraform@gcp.appengine:
+    frontend.component~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3252,7 +3252,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    frontend.component~software.application#apt.package::ansible@*->local.machine:
+    frontend.component~software.component#apt.package::ansible@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3426,7 +3426,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    frontend.component~software.application#apt.package::terraform@*->local.machine:
+    frontend.component~software.component#apt.package::terraform@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3622,7 +3622,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~software.application#apt.package::ansible@*->remote.machine:
+    frontend.component~software.component#apt.package::ansible@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -3844,7 +3844,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~software.application#apt.package::terraform@*->remote.machine:
+    frontend.component~software.component#apt.package::terraform@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -4045,7 +4045,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~software.application#tar.archive::ansible@*->local.machine:
+    frontend.component~software.component#tar.archive::ansible@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -4241,7 +4241,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    frontend.component~software.application#tar.archive::terraform@*->local.machine:
+    frontend.component~software.component#tar.archive::terraform@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -4432,7 +4432,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~software.application#tar.archive::ansible@*->remote.machine:
+    frontend.component~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -4662,7 +4662,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~software.application#tar.archive::terraform@*->remote.machine:
+    frontend.component~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -4857,7 +4857,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~software.application#zip.archive::ansible@*->local.machine:
+    frontend.component~software.component#zip.archive::ansible@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -5043,7 +5043,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    frontend.component~software.application#zip.archive::terraform@*->local.machine:
+    frontend.component~software.component#zip.archive::terraform@*->local.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -5234,7 +5234,7 @@ node_types:
                                                     - sudo bash /tmp/stop-frontend.component.sh
                                                     - sudo bash /tmp/delete-frontend.component.sh
                                                 when: destroy
-    frontend.component~software.application#zip.archive::ansible@*->remote.machine:
+    frontend.component~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'
@@ -5468,7 +5468,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    frontend.component~software.application#zip.archive::terraform@*->remote.machine:
+    frontend.component~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: frontend.component
         metadata:
             vintner_generated: 'true'

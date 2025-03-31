@@ -15,6 +15,9 @@ topology_template:
         options:
             technology_required: false
             enrich_technologies: false
+            enrich_implementations: false
+            unique_technology_constraint: false
+            required_technology_constraint: false
     outputs:
         input:
             type: string

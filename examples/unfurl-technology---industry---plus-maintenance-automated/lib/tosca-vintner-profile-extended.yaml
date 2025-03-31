@@ -91,9 +91,9 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
-    nodejs.service.application:
-        derived_from: service.application
-        description: The "nodejs.service.application" node type manages a Node.js service application.
+    nodejs.service.component:
+        derived_from: service.component
+        description: The "nodejs.service.component" node type manages a Node.js service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -107,9 +107,9 @@ node_types:
                 operations:
                     configure: npm ci
                     start: npm start
-    reactjs.service.application:
-        derived_from: service.application
-        description: The "reactjs.service.application" node type manages a React.js service application.
+    reactjs.service.component:
+        derived_from: service.component
+        description: The "reactjs.service.component" node type manages a React.js service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -145,9 +145,9 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
-    python.service.application:
-        derived_from: service.application
-        description: The "python.service.application" node type manages a Python service application.
+    python.service.component:
+        derived_from: service.component
+        description: The "python.service.component" node type manages a Python service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -161,9 +161,9 @@ node_types:
                 operations:
                     configure: pip install -r requirements.txt
                     start: python main.py
-    go.service.application:
-        derived_from: service.application
-        description: The "go.service.application" node type manages a Go service application.
+    go.service.component:
+        derived_from: service.component
+        description: The "go.service.component" node type manages a Go service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -199,9 +199,9 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
-    java.service.application:
-        derived_from: service.application
-        description: The "java.service.application" node type manages a Java service application.
+    java.service.component:
+        derived_from: service.component
+        description: The "java.service.component" node type manages a Java service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -237,9 +237,9 @@ node_types:
                     connection: ssh
                     host:
                         eval: .parent::management_address
-    csharp.service.application:
-        derived_from: service.application
-        description: The "csharp.service.application" node type manages a C# service application.
+    csharp.service.component:
+        derived_from: service.component
+        description: The "csharp.service.component" node type manages a C# service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -247,9 +247,9 @@ node_types:
             application_language:
                 type: string
                 default: dotnet8
-    binary.service.application:
-        derived_from: service.application
-        description: The "binary.service.application" node type manages a binary service application.
+    binary.service.component:
+        derived_from: service.component
+        description: The "binary.service.component" node type manages a binary service component.
         metadata:
             vintner_normative: 'true'
             vintner_abstract: 'true'
@@ -550,7 +550,7 @@ node_types:
                   capability: tosca.capabilities.Compute
                   relationship: tosca.relationships.HostedOn
     minio.server:
-        derived_from: service.application
+        derived_from: service.component
         description: The "minio.server" node type manages a MinIO server.
         metadata:
             vintner_normative: 'true'
@@ -593,7 +593,7 @@ node_types:
     #
     ################################################################
 
-    nodejs.runtime~software.application#apt.package::ansible@*->local.machine:
+    nodejs.runtime~software.component#apt.package::ansible@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -767,7 +767,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    nodejs.runtime~software.application#apt.package::terraform@*->local.machine:
+    nodejs.runtime~software.component#apt.package::terraform@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -951,7 +951,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#apt.package::ansible@*->remote.machine:
+    nodejs.runtime~software.component#apt.package::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1173,7 +1173,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#apt.package::terraform@*->remote.machine:
+    nodejs.runtime~software.component#apt.package::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1362,7 +1362,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#tar.archive::ansible@*->local.machine:
+    nodejs.runtime~software.component#tar.archive::ansible@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1545,7 +1545,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    nodejs.runtime~software.application#tar.archive::terraform@*->local.machine:
+    nodejs.runtime~software.component#tar.archive::terraform@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1724,7 +1724,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#tar.archive::ansible@*->remote.machine:
+    nodejs.runtime~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -1941,7 +1941,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#tar.archive::terraform@*->remote.machine:
+    nodejs.runtime~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -2124,7 +2124,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#zip.archive::ansible@*->local.machine:
+    nodejs.runtime~software.component#zip.archive::ansible@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -2297,7 +2297,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    nodejs.runtime~software.application#zip.archive::terraform@*->local.machine:
+    nodejs.runtime~software.component#zip.archive::terraform@*->local.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -2476,7 +2476,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    nodejs.runtime~software.application#zip.archive::ansible@*->remote.machine:
+    nodejs.runtime~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -2697,7 +2697,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    nodejs.runtime~software.application#zip.archive::terraform@*->remote.machine:
+    nodejs.runtime~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: nodejs.runtime
         metadata:
             vintner_generated: 'true'
@@ -2880,7 +2880,7 @@ node_types:
                                                     - sudo bash /tmp/stop-nodejs.runtime.sh
                                                     - sudo bash /tmp/delete-nodejs.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#apt.package::ansible@*->local.machine:
+    python.runtime~software.component#apt.package::ansible@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -3054,7 +3054,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    python.runtime~software.application#apt.package::terraform@*->local.machine:
+    python.runtime~software.component#apt.package::terraform@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -3238,7 +3238,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#apt.package::ansible@*->remote.machine:
+    python.runtime~software.component#apt.package::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -3460,7 +3460,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#apt.package::terraform@*->remote.machine:
+    python.runtime~software.component#apt.package::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -3649,7 +3649,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#tar.archive::ansible@*->local.machine:
+    python.runtime~software.component#tar.archive::ansible@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -3832,7 +3832,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    python.runtime~software.application#tar.archive::terraform@*->local.machine:
+    python.runtime~software.component#tar.archive::terraform@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4011,7 +4011,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#tar.archive::ansible@*->remote.machine:
+    python.runtime~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4228,7 +4228,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#tar.archive::terraform@*->remote.machine:
+    python.runtime~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4411,7 +4411,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#zip.archive::ansible@*->local.machine:
+    python.runtime~software.component#zip.archive::ansible@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4584,7 +4584,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    python.runtime~software.application#zip.archive::terraform@*->local.machine:
+    python.runtime~software.component#zip.archive::terraform@*->local.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4763,7 +4763,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    python.runtime~software.application#zip.archive::ansible@*->remote.machine:
+    python.runtime~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -4984,7 +4984,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    python.runtime~software.application#zip.archive::terraform@*->remote.machine:
+    python.runtime~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: python.runtime
         metadata:
             vintner_generated: 'true'
@@ -5167,7 +5167,7 @@ node_types:
                                                     - sudo bash /tmp/stop-python.runtime.sh
                                                     - sudo bash /tmp/delete-python.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#apt.package::ansible@*->local.machine:
+    java.runtime~software.component#apt.package::ansible@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -5341,7 +5341,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    java.runtime~software.application#apt.package::terraform@*->local.machine:
+    java.runtime~software.component#apt.package::terraform@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -5525,7 +5525,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#apt.package::ansible@*->remote.machine:
+    java.runtime~software.component#apt.package::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -5747,7 +5747,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#apt.package::terraform@*->remote.machine:
+    java.runtime~software.component#apt.package::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -5936,7 +5936,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#tar.archive::ansible@*->local.machine:
+    java.runtime~software.component#tar.archive::ansible@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -6119,7 +6119,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    java.runtime~software.application#tar.archive::terraform@*->local.machine:
+    java.runtime~software.component#tar.archive::terraform@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -6298,7 +6298,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#tar.archive::ansible@*->remote.machine:
+    java.runtime~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -6515,7 +6515,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#tar.archive::terraform@*->remote.machine:
+    java.runtime~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -6698,7 +6698,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#zip.archive::ansible@*->local.machine:
+    java.runtime~software.component#zip.archive::ansible@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -6871,7 +6871,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    java.runtime~software.application#zip.archive::terraform@*->local.machine:
+    java.runtime~software.component#zip.archive::terraform@*->local.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -7050,7 +7050,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    java.runtime~software.application#zip.archive::ansible@*->remote.machine:
+    java.runtime~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -7271,7 +7271,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    java.runtime~software.application#zip.archive::terraform@*->remote.machine:
+    java.runtime~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: java.runtime
         metadata:
             vintner_generated: 'true'
@@ -7454,7 +7454,7 @@ node_types:
                                                     - sudo bash /tmp/stop-java.runtime.sh
                                                     - sudo bash /tmp/delete-java.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#apt.package::ansible@*->local.machine:
+    dotnet.runtime~software.component#apt.package::ansible@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -7628,7 +7628,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    dotnet.runtime~software.application#apt.package::terraform@*->local.machine:
+    dotnet.runtime~software.component#apt.package::terraform@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -7812,7 +7812,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#apt.package::ansible@*->remote.machine:
+    dotnet.runtime~software.component#apt.package::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8034,7 +8034,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#apt.package::terraform@*->remote.machine:
+    dotnet.runtime~software.component#apt.package::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8223,7 +8223,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#tar.archive::ansible@*->local.machine:
+    dotnet.runtime~software.component#tar.archive::ansible@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8406,7 +8406,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    dotnet.runtime~software.application#tar.archive::terraform@*->local.machine:
+    dotnet.runtime~software.component#tar.archive::terraform@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8585,7 +8585,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#tar.archive::ansible@*->remote.machine:
+    dotnet.runtime~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8802,7 +8802,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#tar.archive::terraform@*->remote.machine:
+    dotnet.runtime~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -8985,7 +8985,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#zip.archive::ansible@*->local.machine:
+    dotnet.runtime~software.component#zip.archive::ansible@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -9158,7 +9158,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    dotnet.runtime~software.application#zip.archive::terraform@*->local.machine:
+    dotnet.runtime~software.component#zip.archive::terraform@*->local.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -9337,7 +9337,7 @@ node_types:
                                                     - sudo bash /tmp/stop-dotnet.runtime.sh
                                                     - sudo bash /tmp/delete-dotnet.runtime.sh
                                                 when: destroy
-    dotnet.runtime~software.application#zip.archive::ansible@*->remote.machine:
+    dotnet.runtime~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -9558,7 +9558,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    dotnet.runtime~software.application#zip.archive::terraform@*->remote.machine:
+    dotnet.runtime~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: dotnet.runtime
         metadata:
             vintner_generated: 'true'
@@ -10780,7 +10780,7 @@ node_types:
                                                     - sudo rm -rf /var/lib/docker
                                                     - sudo rm -rf /var/lib/containerd
                                                 when: destroy
-    docker.engine~software.application#apt.package::ansible@*->local.machine:
+    docker.engine~software.component#apt.package::ansible@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -10954,7 +10954,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    docker.engine~software.application#apt.package::terraform@*->local.machine:
+    docker.engine~software.component#apt.package::terraform@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -11139,7 +11139,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#apt.package::ansible@*->remote.machine:
+    docker.engine~software.component#apt.package::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -11361,7 +11361,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~software.application#apt.package::terraform@*->remote.machine:
+    docker.engine~software.component#apt.package::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -11551,7 +11551,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#tar.archive::ansible@*->local.machine:
+    docker.engine~software.component#tar.archive::ansible@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -11736,7 +11736,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    docker.engine~software.application#tar.archive::terraform@*->local.machine:
+    docker.engine~software.component#tar.archive::terraform@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -11916,7 +11916,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#tar.archive::ansible@*->remote.machine:
+    docker.engine~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -12135,7 +12135,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~software.application#tar.archive::terraform@*->remote.machine:
+    docker.engine~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -12319,7 +12319,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#zip.archive::ansible@*->local.machine:
+    docker.engine~software.component#zip.archive::ansible@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -12494,7 +12494,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    docker.engine~software.application#zip.archive::terraform@*->local.machine:
+    docker.engine~software.component#zip.archive::terraform@*->local.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -12674,7 +12674,7 @@ node_types:
                                                     - sudo bash /tmp/stop-docker.engine.sh
                                                     - sudo bash /tmp/delete-docker.engine.sh
                                                 when: destroy
-    docker.engine~software.application#zip.archive::ansible@*->remote.machine:
+    docker.engine~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -12897,7 +12897,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    docker.engine~software.application#zip.archive::terraform@*->remote.machine:
+    docker.engine~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: docker.engine
         metadata:
             vintner_generated: 'true'
@@ -14596,7 +14596,7 @@ node_types:
                                           remote-exec:
                                               - inline:
                                                     - sudo bash /tmp/install-mysql-dbms.sh {{ SELF.dbms_password }} {{ SELF.application_port }}
-    mysql.dbms~software.application#apt.package::ansible@*->local.machine:
+    mysql.dbms~software.component#apt.package::ansible@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -14770,7 +14770,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    mysql.dbms~software.application#apt.package::terraform@*->local.machine:
+    mysql.dbms~software.component#apt.package::terraform@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -14957,7 +14957,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#apt.package::ansible@*->remote.machine:
+    mysql.dbms~software.component#apt.package::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -15179,7 +15179,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~software.application#apt.package::terraform@*->remote.machine:
+    mysql.dbms~software.component#apt.package::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -15371,7 +15371,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#tar.archive::ansible@*->local.machine:
+    mysql.dbms~software.component#tar.archive::ansible@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -15558,7 +15558,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    mysql.dbms~software.application#tar.archive::terraform@*->local.machine:
+    mysql.dbms~software.component#tar.archive::terraform@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -15740,7 +15740,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#tar.archive::ansible@*->remote.machine:
+    mysql.dbms~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -15961,7 +15961,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~software.application#tar.archive::terraform@*->remote.machine:
+    mysql.dbms~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -16147,7 +16147,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#zip.archive::ansible@*->local.machine:
+    mysql.dbms~software.component#zip.archive::ansible@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -16324,7 +16324,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    mysql.dbms~software.application#zip.archive::terraform@*->local.machine:
+    mysql.dbms~software.component#zip.archive::terraform@*->local.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -16506,7 +16506,7 @@ node_types:
                                                     - sudo bash /tmp/stop-mysql.dbms.sh
                                                     - sudo bash /tmp/delete-mysql.dbms.sh
                                                 when: destroy
-    mysql.dbms~software.application#zip.archive::ansible@*->remote.machine:
+    mysql.dbms~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -16731,7 +16731,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    mysql.dbms~software.application#zip.archive::terraform@*->remote.machine:
+    mysql.dbms~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: mysql.dbms
         metadata:
             vintner_generated: 'true'
@@ -18164,7 +18164,7 @@ node_types:
                                       privileges:
                                           - ALL
                                       user: ${mysql_user.user.user}
-    minio.server~service.application#docker.image::ansible@docker.engine->local.machine:
+    minio.server~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18202,7 +18202,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    minio.server~service.application#docker.image::compose@docker.engine->local.machine:
+    minio.server~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18276,7 +18276,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    minio.server~service.application#docker.image::terraform@docker.engine->local.machine:
+    minio.server~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18318,7 +18318,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    minio.server~service.application#docker.image::ansible@docker.engine->remote.machine:
+    minio.server~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18381,7 +18381,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~service.application#docker.image::compose@docker.engine->remote.machine:
+    minio.server~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18496,7 +18496,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    minio.server~service.application#docker.image::terraform@docker.engine->remote.machine:
+    minio.server~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18561,7 +18561,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    minio.server~service.application#docker.image::ansible@gcp.cloudrun:
+    minio.server~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18678,7 +18678,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    minio.server~service.application#docker.image::terraform@gcp.cloudrun:
+    minio.server~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18750,7 +18750,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    minio.server~service.application#docker.image::ansible@kubernetes.cluster:
+    minio.server~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -18870,7 +18870,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    minio.server~service.application#docker.image::kubernetes@kubernetes.cluster:
+    minio.server~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19028,7 +19028,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    minio.server~service.application#docker.image::terraform@kubernetes.cluster:
+    minio.server~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19115,7 +19115,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    minio.server~service.application#tar.archive::ansible@*->local.machine:
+    minio.server~service.component#tar.archive::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19314,7 +19314,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    minio.server~service.application#tar.archive::terraform@*->local.machine:
+    minio.server~service.component#tar.archive::terraform@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19499,7 +19499,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~service.application#tar.archive::ansible@*->remote.machine:
+    minio.server~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19746,7 +19746,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~service.application#tar.archive::terraform@*->remote.machine:
+    minio.server~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -19933,7 +19933,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~service.application#zip.archive::ansible@*->local.machine:
+    minio.server~service.component#zip.archive::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20136,7 +20136,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    minio.server~service.application#zip.archive::terraform@*->local.machine:
+    minio.server~service.component#zip.archive::terraform@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20321,7 +20321,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~service.application#zip.archive::ansible@*->remote.machine:
+    minio.server~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20572,7 +20572,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~service.application#zip.archive::terraform@*->remote.machine:
+    minio.server~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20759,7 +20759,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~service.application#zip.archive::ansible@gcp.appengine:
+    minio.server~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20855,7 +20855,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    minio.server~service.application#zip.archive::terraform@gcp.appengine:
+    minio.server~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -20941,7 +20941,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    minio.server~software.application#apt.package::ansible@*->local.machine:
+    minio.server~software.component#apt.package::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -21115,7 +21115,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    minio.server~software.application#apt.package::terraform@*->local.machine:
+    minio.server~software.component#apt.package::terraform@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -21300,7 +21300,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~software.application#apt.package::ansible@*->remote.machine:
+    minio.server~software.component#apt.package::ansible@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -21522,7 +21522,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~software.application#apt.package::terraform@*->remote.machine:
+    minio.server~software.component#apt.package::terraform@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -21712,7 +21712,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~software.application#tar.archive::ansible@*->local.machine:
+    minio.server~software.component#tar.archive::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -21897,7 +21897,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    minio.server~software.application#tar.archive::terraform@*->local.machine:
+    minio.server~software.component#tar.archive::terraform@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -22077,7 +22077,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~software.application#tar.archive::ansible@*->remote.machine:
+    minio.server~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -22296,7 +22296,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~software.application#tar.archive::terraform@*->remote.machine:
+    minio.server~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -22480,7 +22480,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~software.application#zip.archive::ansible@*->local.machine:
+    minio.server~software.component#zip.archive::ansible@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -22655,7 +22655,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    minio.server~software.application#zip.archive::terraform@*->local.machine:
+    minio.server~software.component#zip.archive::terraform@*->local.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -22835,7 +22835,7 @@ node_types:
                                                     - sudo bash /tmp/stop-minio.server.sh
                                                     - sudo bash /tmp/delete-minio.server.sh
                                                 when: destroy
-    minio.server~software.application#zip.archive::ansible@*->remote.machine:
+    minio.server~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -23058,7 +23058,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    minio.server~software.application#zip.archive::terraform@*->remote.machine:
+    minio.server~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: minio.server
         metadata:
             vintner_generated: 'true'
@@ -24156,7 +24156,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    redis.server~software.application#apt.package::ansible@*->local.machine:
+    redis.server~software.component#apt.package::ansible@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -24330,7 +24330,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    redis.server~software.application#apt.package::terraform@*->local.machine:
+    redis.server~software.component#apt.package::terraform@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -24516,7 +24516,7 @@ node_types:
                                                     - sudo bash /tmp/stop-redis.server.sh
                                                     - sudo bash /tmp/delete-redis.server.sh
                                                 when: destroy
-    redis.server~software.application#apt.package::ansible@*->remote.machine:
+    redis.server~software.component#apt.package::ansible@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -24738,7 +24738,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    redis.server~software.application#apt.package::terraform@*->remote.machine:
+    redis.server~software.component#apt.package::terraform@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -24929,7 +24929,7 @@ node_types:
                                                     - sudo bash /tmp/stop-redis.server.sh
                                                     - sudo bash /tmp/delete-redis.server.sh
                                                 when: destroy
-    redis.server~software.application#tar.archive::ansible@*->local.machine:
+    redis.server~software.component#tar.archive::ansible@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -25115,7 +25115,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    redis.server~software.application#tar.archive::terraform@*->local.machine:
+    redis.server~software.component#tar.archive::terraform@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -25296,7 +25296,7 @@ node_types:
                                                     - sudo bash /tmp/stop-redis.server.sh
                                                     - sudo bash /tmp/delete-redis.server.sh
                                                 when: destroy
-    redis.server~software.application#tar.archive::ansible@*->remote.machine:
+    redis.server~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -25516,7 +25516,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    redis.server~software.application#tar.archive::terraform@*->remote.machine:
+    redis.server~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -25701,7 +25701,7 @@ node_types:
                                                     - sudo bash /tmp/stop-redis.server.sh
                                                     - sudo bash /tmp/delete-redis.server.sh
                                                 when: destroy
-    redis.server~software.application#zip.archive::ansible@*->local.machine:
+    redis.server~software.component#zip.archive::ansible@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -25877,7 +25877,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    redis.server~software.application#zip.archive::terraform@*->local.machine:
+    redis.server~software.component#zip.archive::terraform@*->local.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -26058,7 +26058,7 @@ node_types:
                                                     - sudo bash /tmp/stop-redis.server.sh
                                                     - sudo bash /tmp/delete-redis.server.sh
                                                 when: destroy
-    redis.server~software.application#zip.archive::ansible@*->remote.machine:
+    redis.server~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'
@@ -26282,7 +26282,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    redis.server~software.application#zip.archive::terraform@*->remote.machine:
+    redis.server~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: redis.server
         metadata:
             vintner_generated: 'true'

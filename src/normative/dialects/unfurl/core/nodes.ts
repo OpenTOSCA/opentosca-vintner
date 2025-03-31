@@ -4,7 +4,7 @@ import {NodeTypeMap} from '#spec/node-type'
 import {RecursivePartial} from '#utils/types'
 
 const nodes: RecursivePartial<NodeTypeMap> = {
-    'software.application': {
+    'software.component': {
         properties: {
             _management_create: {
                 type: 'string',
@@ -68,7 +68,7 @@ const nodes: RecursivePartial<NodeTypeMap> = {
             },
         },
     },
-    'service.application': {
+    'service.component': {
         attributes: {
             application_endpoint: {
                 default: {

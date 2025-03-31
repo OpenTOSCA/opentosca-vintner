@@ -5,34 +5,34 @@ imports:
 
 node_types:
     retailer.frontend.dashboard:
-        derived_from: reactjs.service.application
+        derived_from: reactjs.service.component
 
     retailer.frontend.terminal:
-        derived_from: reactjs.service.application
+        derived_from: reactjs.service.component
 
     retailer.service.gateway:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.core:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.jobs:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.stores:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.products:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.stocks:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.orders:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     retailer.service.global:
-        derived_from: nodejs.service.application
+        derived_from: nodejs.service.component
 
     # [OPENTOSCA_VINTNER_GENERATION_MARK]
 
@@ -42,7 +42,7 @@ node_types:
     #
     ################################################################
 
-    retailer.frontend.dashboard~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.frontend.dashboard~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -78,7 +78,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.frontend.dashboard~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.frontend.dashboard~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -148,7 +148,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.frontend.dashboard~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.frontend.dashboard~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -188,7 +188,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.frontend.dashboard~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.frontend.dashboard~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -249,7 +249,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -360,7 +360,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.frontend.dashboard~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.frontend.dashboard~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -423,7 +423,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.frontend.dashboard~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.frontend.dashboard~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -536,7 +536,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.frontend.dashboard~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.frontend.dashboard~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -604,7 +604,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.frontend.dashboard~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.frontend.dashboard~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -720,7 +720,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.frontend.dashboard~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.frontend.dashboard~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -870,7 +870,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.frontend.dashboard~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.frontend.dashboard~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -953,7 +953,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.frontend.dashboard~service.application#tar.archive::ansible@*->local.machine:
+    retailer.frontend.dashboard~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1150,7 +1150,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.frontend.dashboard~service.application#tar.archive::terraform@*->local.machine:
+    retailer.frontend.dashboard~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1334,7 +1334,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.frontend.dashboard~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1579,7 +1579,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.frontend.dashboard~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1765,7 +1765,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~service.application#zip.archive::ansible@*->local.machine:
+    retailer.frontend.dashboard~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -1966,7 +1966,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.frontend.dashboard~service.application#zip.archive::terraform@*->local.machine:
+    retailer.frontend.dashboard~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2150,7 +2150,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.frontend.dashboard~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2399,7 +2399,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.frontend.dashboard~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2585,7 +2585,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.frontend.dashboard~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2679,7 +2679,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.frontend.dashboard~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.frontend.dashboard~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2763,7 +2763,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.frontend.dashboard~software.application#apt.package::ansible@*->local.machine:
+    retailer.frontend.dashboard~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -2937,7 +2937,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.frontend.dashboard~software.application#apt.package::terraform@*->local.machine:
+    retailer.frontend.dashboard~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3121,7 +3121,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~software.application#apt.package::ansible@*->remote.machine:
+    retailer.frontend.dashboard~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3343,7 +3343,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~software.application#apt.package::terraform@*->remote.machine:
+    retailer.frontend.dashboard~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3532,7 +3532,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~software.application#tar.archive::ansible@*->local.machine:
+    retailer.frontend.dashboard~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3715,7 +3715,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.frontend.dashboard~software.application#tar.archive::terraform@*->local.machine:
+    retailer.frontend.dashboard~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -3894,7 +3894,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.frontend.dashboard~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4111,7 +4111,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.frontend.dashboard~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4294,7 +4294,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~software.application#zip.archive::ansible@*->local.machine:
+    retailer.frontend.dashboard~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4467,7 +4467,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.frontend.dashboard~software.application#zip.archive::terraform@*->local.machine:
+    retailer.frontend.dashboard~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4646,7 +4646,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.dashboard~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.frontend.dashboard~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -4867,7 +4867,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.dashboard~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.frontend.dashboard~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.dashboard
         metadata:
             vintner_generated: 'true'
@@ -5050,7 +5050,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.dashboard.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.dashboard.sh
                                                 when: destroy
-    retailer.frontend.terminal~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.frontend.terminal~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5086,7 +5086,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.frontend.terminal~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.frontend.terminal~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5156,7 +5156,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.frontend.terminal~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.frontend.terminal~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5196,7 +5196,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.frontend.terminal~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.frontend.terminal~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5257,7 +5257,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.frontend.terminal~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5368,7 +5368,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.frontend.terminal~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.frontend.terminal~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5431,7 +5431,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.frontend.terminal~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.frontend.terminal~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5544,7 +5544,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.frontend.terminal~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.frontend.terminal~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5612,7 +5612,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.frontend.terminal~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.frontend.terminal~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5728,7 +5728,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.frontend.terminal~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.frontend.terminal~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5878,7 +5878,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.frontend.terminal~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.frontend.terminal~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -5961,7 +5961,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.frontend.terminal~service.application#tar.archive::ansible@*->local.machine:
+    retailer.frontend.terminal~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -6158,7 +6158,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.frontend.terminal~service.application#tar.archive::terraform@*->local.machine:
+    retailer.frontend.terminal~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -6342,7 +6342,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.frontend.terminal~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -6587,7 +6587,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.frontend.terminal~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -6773,7 +6773,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~service.application#zip.archive::ansible@*->local.machine:
+    retailer.frontend.terminal~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -6974,7 +6974,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.frontend.terminal~service.application#zip.archive::terraform@*->local.machine:
+    retailer.frontend.terminal~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7158,7 +7158,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.frontend.terminal~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7407,7 +7407,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.frontend.terminal~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7593,7 +7593,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.frontend.terminal~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7687,7 +7687,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.frontend.terminal~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.frontend.terminal~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7771,7 +7771,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.frontend.terminal~software.application#apt.package::ansible@*->local.machine:
+    retailer.frontend.terminal~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -7945,7 +7945,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.frontend.terminal~software.application#apt.package::terraform@*->local.machine:
+    retailer.frontend.terminal~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -8129,7 +8129,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~software.application#apt.package::ansible@*->remote.machine:
+    retailer.frontend.terminal~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -8351,7 +8351,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~software.application#apt.package::terraform@*->remote.machine:
+    retailer.frontend.terminal~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -8540,7 +8540,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~software.application#tar.archive::ansible@*->local.machine:
+    retailer.frontend.terminal~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -8723,7 +8723,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.frontend.terminal~software.application#tar.archive::terraform@*->local.machine:
+    retailer.frontend.terminal~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -8902,7 +8902,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.frontend.terminal~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -9119,7 +9119,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.frontend.terminal~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -9302,7 +9302,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~software.application#zip.archive::ansible@*->local.machine:
+    retailer.frontend.terminal~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -9475,7 +9475,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.frontend.terminal~software.application#zip.archive::terraform@*->local.machine:
+    retailer.frontend.terminal~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -9654,7 +9654,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.frontend.terminal~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.frontend.terminal~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -9875,7 +9875,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.frontend.terminal~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.frontend.terminal~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.frontend.terminal
         metadata:
             vintner_generated: 'true'
@@ -10058,7 +10058,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.frontend.terminal.sh
                                                     - sudo bash /tmp/delete-retailer.frontend.terminal.sh
                                                 when: destroy
-    retailer.service.gateway~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.gateway~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10094,7 +10094,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.gateway~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.gateway~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10164,7 +10164,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.gateway~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.gateway~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10204,7 +10204,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.gateway~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.gateway~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10265,7 +10265,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10376,7 +10376,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.gateway~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.gateway~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10439,7 +10439,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.gateway~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.gateway~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10552,7 +10552,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.gateway~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.gateway~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10620,7 +10620,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.gateway~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.gateway~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10736,7 +10736,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.gateway~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.gateway~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10886,7 +10886,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.gateway~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.gateway~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -10969,7 +10969,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.gateway~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.gateway~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -11166,7 +11166,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.gateway~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.gateway~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -11350,7 +11350,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.gateway~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -11595,7 +11595,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.gateway~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -11781,7 +11781,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.gateway~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -11982,7 +11982,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.gateway~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.gateway~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12166,7 +12166,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.gateway~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12415,7 +12415,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.gateway~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12601,7 +12601,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.gateway~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12695,7 +12695,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.gateway~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.gateway~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12779,7 +12779,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.gateway~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.gateway~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -12953,7 +12953,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.gateway~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.gateway~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -13137,7 +13137,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.gateway~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -13359,7 +13359,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.gateway~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -13548,7 +13548,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.gateway~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -13731,7 +13731,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.gateway~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.gateway~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -13910,7 +13910,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.gateway~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -14127,7 +14127,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.gateway~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -14310,7 +14310,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.gateway~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -14483,7 +14483,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.gateway~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.gateway~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -14662,7 +14662,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.gateway~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.gateway~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -14883,7 +14883,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.gateway~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.gateway~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.gateway
         metadata:
             vintner_generated: 'true'
@@ -15066,7 +15066,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.gateway.sh
                                                     - sudo bash /tmp/delete-retailer.service.gateway.sh
                                                 when: destroy
-    retailer.service.core~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.core~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15102,7 +15102,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.core~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.core~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15172,7 +15172,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.core~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.core~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15212,7 +15212,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.core~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.core~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15273,7 +15273,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.core~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15384,7 +15384,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.core~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.core~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15447,7 +15447,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.core~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.core~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15560,7 +15560,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.core~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.core~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15628,7 +15628,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.core~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.core~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15744,7 +15744,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.core~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.core~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15894,7 +15894,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.core~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.core~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -15977,7 +15977,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.core~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.core~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -16174,7 +16174,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.core~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.core~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -16358,7 +16358,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.core~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -16603,7 +16603,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.core~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -16789,7 +16789,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.core~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -16990,7 +16990,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.core~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.core~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17174,7 +17174,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.core~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17423,7 +17423,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.core~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17609,7 +17609,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.core~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17703,7 +17703,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.core~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.core~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17787,7 +17787,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.core~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.core~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -17961,7 +17961,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.core~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.core~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -18145,7 +18145,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.core~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -18367,7 +18367,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.core~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -18556,7 +18556,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.core~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -18739,7 +18739,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.core~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.core~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -18918,7 +18918,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.core~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -19135,7 +19135,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.core~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -19318,7 +19318,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.core~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -19491,7 +19491,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.core~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.core~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -19670,7 +19670,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.core~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.core~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -19891,7 +19891,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.core~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.core~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.core
         metadata:
             vintner_generated: 'true'
@@ -20074,7 +20074,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.core.sh
                                                     - sudo bash /tmp/delete-retailer.service.core.sh
                                                 when: destroy
-    retailer.service.jobs~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.jobs~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20110,7 +20110,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.jobs~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.jobs~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20180,7 +20180,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.jobs~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.jobs~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20220,7 +20220,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.jobs~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.jobs~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20281,7 +20281,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.jobs~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20392,7 +20392,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.jobs~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.jobs~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20455,7 +20455,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.jobs~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.jobs~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20568,7 +20568,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.jobs~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.jobs~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20636,7 +20636,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.jobs~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.jobs~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20752,7 +20752,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.jobs~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.jobs~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20902,7 +20902,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.jobs~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.jobs~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -20985,7 +20985,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.jobs~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.jobs~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -21182,7 +21182,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.jobs~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.jobs~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -21366,7 +21366,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.jobs~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -21611,7 +21611,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.jobs~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -21797,7 +21797,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.jobs~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -21998,7 +21998,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.jobs~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.jobs~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22182,7 +22182,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.jobs~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22431,7 +22431,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.jobs~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22617,7 +22617,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.jobs~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22711,7 +22711,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.jobs~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.jobs~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22795,7 +22795,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.jobs~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.jobs~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -22969,7 +22969,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.jobs~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.jobs~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -23153,7 +23153,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.jobs~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -23375,7 +23375,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.jobs~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -23564,7 +23564,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.jobs~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -23747,7 +23747,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.jobs~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.jobs~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -23926,7 +23926,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.jobs~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -24143,7 +24143,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.jobs~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -24326,7 +24326,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.jobs~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -24499,7 +24499,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.jobs~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.jobs~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -24678,7 +24678,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.jobs~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.jobs~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -24899,7 +24899,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.jobs~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.jobs~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.jobs
         metadata:
             vintner_generated: 'true'
@@ -25082,7 +25082,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.jobs.sh
                                                     - sudo bash /tmp/delete-retailer.service.jobs.sh
                                                 when: destroy
-    retailer.service.stores~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.stores~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25118,7 +25118,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.stores~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.stores~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25188,7 +25188,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.stores~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.stores~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25228,7 +25228,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.stores~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.stores~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25289,7 +25289,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.stores~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25400,7 +25400,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.stores~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.stores~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25463,7 +25463,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.stores~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.stores~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25576,7 +25576,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.stores~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.stores~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25644,7 +25644,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.stores~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.stores~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25760,7 +25760,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.stores~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.stores~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25910,7 +25910,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.stores~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.stores~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -25993,7 +25993,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.stores~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.stores~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -26190,7 +26190,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.stores~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.stores~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -26374,7 +26374,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.stores~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -26619,7 +26619,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.stores~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -26805,7 +26805,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.stores~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27006,7 +27006,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.stores~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.stores~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27190,7 +27190,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.stores~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27439,7 +27439,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.stores~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27625,7 +27625,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.stores~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27719,7 +27719,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.stores~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.stores~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27803,7 +27803,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.stores~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.stores~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -27977,7 +27977,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.stores~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.stores~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -28161,7 +28161,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.stores~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -28383,7 +28383,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.stores~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -28572,7 +28572,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.stores~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -28755,7 +28755,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.stores~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.stores~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -28934,7 +28934,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.stores~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -29151,7 +29151,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.stores~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -29334,7 +29334,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.stores~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -29507,7 +29507,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.stores~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.stores~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -29686,7 +29686,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.stores~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.stores~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -29907,7 +29907,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stores~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.stores~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stores
         metadata:
             vintner_generated: 'true'
@@ -30090,7 +30090,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stores.sh
                                                     - sudo bash /tmp/delete-retailer.service.stores.sh
                                                 when: destroy
-    retailer.service.products~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.products~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30126,7 +30126,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.products~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.products~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30196,7 +30196,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.products~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.products~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30236,7 +30236,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.products~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.products~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30297,7 +30297,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.products~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30408,7 +30408,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.products~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.products~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30471,7 +30471,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.products~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.products~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30584,7 +30584,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.products~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.products~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30652,7 +30652,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.products~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.products~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30768,7 +30768,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.products~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.products~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -30918,7 +30918,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.products~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.products~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -31001,7 +31001,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.products~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.products~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -31198,7 +31198,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.products~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.products~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -31382,7 +31382,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.products~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -31627,7 +31627,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.products~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -31813,7 +31813,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.products~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32014,7 +32014,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.products~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.products~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32198,7 +32198,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.products~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32447,7 +32447,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.products~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32633,7 +32633,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.products~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32727,7 +32727,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.products~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.products~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32811,7 +32811,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.products~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.products~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -32985,7 +32985,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.products~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.products~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -33169,7 +33169,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.products~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -33391,7 +33391,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.products~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -33580,7 +33580,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.products~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -33763,7 +33763,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.products~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.products~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -33942,7 +33942,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.products~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -34159,7 +34159,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.products~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -34342,7 +34342,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.products~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -34515,7 +34515,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.products~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.products~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -34694,7 +34694,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.products~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.products~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -34915,7 +34915,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.products~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.products~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.products
         metadata:
             vintner_generated: 'true'
@@ -35098,7 +35098,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.products.sh
                                                     - sudo bash /tmp/delete-retailer.service.products.sh
                                                 when: destroy
-    retailer.service.stocks~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.stocks~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35134,7 +35134,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.stocks~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.stocks~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35204,7 +35204,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.stocks~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.stocks~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35244,7 +35244,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.stocks~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.stocks~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35305,7 +35305,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.stocks~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35416,7 +35416,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.stocks~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.stocks~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35479,7 +35479,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.stocks~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.stocks~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35592,7 +35592,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.stocks~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.stocks~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35660,7 +35660,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.stocks~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.stocks~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35776,7 +35776,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.stocks~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.stocks~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -35926,7 +35926,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.stocks~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.stocks~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -36009,7 +36009,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.stocks~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.stocks~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -36206,7 +36206,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.stocks~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.stocks~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -36390,7 +36390,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.stocks~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -36635,7 +36635,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.stocks~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -36821,7 +36821,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.stocks~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37022,7 +37022,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.stocks~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.stocks~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37206,7 +37206,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.stocks~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37455,7 +37455,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.stocks~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37641,7 +37641,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.stocks~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37735,7 +37735,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.stocks~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.stocks~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37819,7 +37819,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.stocks~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.stocks~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -37993,7 +37993,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.stocks~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.stocks~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -38177,7 +38177,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.stocks~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -38399,7 +38399,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.stocks~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -38588,7 +38588,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.stocks~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -38771,7 +38771,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.stocks~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.stocks~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -38950,7 +38950,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.stocks~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -39167,7 +39167,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.stocks~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -39350,7 +39350,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.stocks~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -39523,7 +39523,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.stocks~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.stocks~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -39702,7 +39702,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.stocks~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.stocks~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -39923,7 +39923,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.stocks~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.stocks~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.stocks
         metadata:
             vintner_generated: 'true'
@@ -40106,7 +40106,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.stocks.sh
                                                     - sudo bash /tmp/delete-retailer.service.stocks.sh
                                                 when: destroy
-    retailer.service.orders~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.orders~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40142,7 +40142,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.orders~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.orders~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40212,7 +40212,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.orders~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.orders~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40252,7 +40252,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.orders~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.orders~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40313,7 +40313,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.orders~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40424,7 +40424,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.orders~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.orders~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40487,7 +40487,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.orders~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.orders~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40600,7 +40600,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.orders~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.orders~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40668,7 +40668,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.orders~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.orders~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40784,7 +40784,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.orders~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.orders~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -40934,7 +40934,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.orders~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.orders~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -41017,7 +41017,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.orders~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.orders~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -41214,7 +41214,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.orders~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.orders~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -41398,7 +41398,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.orders~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -41643,7 +41643,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.orders~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -41829,7 +41829,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.orders~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42030,7 +42030,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.orders~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.orders~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42214,7 +42214,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.orders~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42463,7 +42463,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.orders~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42649,7 +42649,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.orders~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42743,7 +42743,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.orders~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.orders~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -42827,7 +42827,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.orders~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.orders~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43001,7 +43001,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.orders~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.orders~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43185,7 +43185,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.orders~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43407,7 +43407,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.orders~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43596,7 +43596,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.orders~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43779,7 +43779,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.orders~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.orders~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -43958,7 +43958,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.orders~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -44175,7 +44175,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.orders~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -44358,7 +44358,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.orders~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -44531,7 +44531,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.orders~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.orders~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -44710,7 +44710,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.orders~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.orders~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -44931,7 +44931,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.orders~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.orders~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.orders
         metadata:
             vintner_generated: 'true'
@@ -45114,7 +45114,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.orders.sh
                                                     - sudo bash /tmp/delete-retailer.service.orders.sh
                                                 when: destroy
-    retailer.service.global~service.application#docker.image::ansible@docker.engine->local.machine:
+    retailer.service.global~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45150,7 +45150,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    retailer.service.global~service.application#docker.image::compose@docker.engine->local.machine:
+    retailer.service.global~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45220,7 +45220,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    retailer.service.global~service.application#docker.image::terraform@docker.engine->local.machine:
+    retailer.service.global~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45260,7 +45260,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.global~service.application#docker.image::ansible@docker.engine->remote.machine:
+    retailer.service.global~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45321,7 +45321,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~service.application#docker.image::compose@docker.engine->remote.machine:
+    retailer.service.global~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45432,7 +45432,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    retailer.service.global~service.application#docker.image::terraform@docker.engine->remote.machine:
+    retailer.service.global~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45495,7 +45495,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    retailer.service.global~service.application#docker.image::ansible@gcp.cloudrun:
+    retailer.service.global~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45608,7 +45608,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.global~service.application#docker.image::terraform@gcp.cloudrun:
+    retailer.service.global~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45676,7 +45676,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    retailer.service.global~service.application#docker.image::ansible@kubernetes.cluster:
+    retailer.service.global~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45792,7 +45792,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    retailer.service.global~service.application#docker.image::kubernetes@kubernetes.cluster:
+    retailer.service.global~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -45942,7 +45942,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    retailer.service.global~service.application#docker.image::terraform@kubernetes.cluster:
+    retailer.service.global~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -46025,7 +46025,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    retailer.service.global~service.application#tar.archive::ansible@*->local.machine:
+    retailer.service.global~service.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -46222,7 +46222,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.global~service.application#tar.archive::terraform@*->local.machine:
+    retailer.service.global~service.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -46406,7 +46406,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~service.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.global~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -46651,7 +46651,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~service.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.global~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -46837,7 +46837,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~service.application#zip.archive::ansible@*->local.machine:
+    retailer.service.global~service.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47038,7 +47038,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    retailer.service.global~service.application#zip.archive::terraform@*->local.machine:
+    retailer.service.global~service.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47222,7 +47222,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~service.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.global~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47471,7 +47471,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~service.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.global~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47657,7 +47657,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~service.application#zip.archive::ansible@gcp.appengine:
+    retailer.service.global~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47751,7 +47751,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    retailer.service.global~service.application#zip.archive::terraform@gcp.appengine:
+    retailer.service.global~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -47835,7 +47835,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    retailer.service.global~software.application#apt.package::ansible@*->local.machine:
+    retailer.service.global~software.component#apt.package::ansible@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48009,7 +48009,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    retailer.service.global~software.application#apt.package::terraform@*->local.machine:
+    retailer.service.global~software.component#apt.package::terraform@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48193,7 +48193,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~software.application#apt.package::ansible@*->remote.machine:
+    retailer.service.global~software.component#apt.package::ansible@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48415,7 +48415,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~software.application#apt.package::terraform@*->remote.machine:
+    retailer.service.global~software.component#apt.package::terraform@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48604,7 +48604,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~software.application#tar.archive::ansible@*->local.machine:
+    retailer.service.global~software.component#tar.archive::ansible@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48787,7 +48787,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.global~software.application#tar.archive::terraform@*->local.machine:
+    retailer.service.global~software.component#tar.archive::terraform@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -48966,7 +48966,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~software.application#tar.archive::ansible@*->remote.machine:
+    retailer.service.global~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -49183,7 +49183,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~software.application#tar.archive::terraform@*->remote.machine:
+    retailer.service.global~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -49366,7 +49366,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~software.application#zip.archive::ansible@*->local.machine:
+    retailer.service.global~software.component#zip.archive::ansible@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -49539,7 +49539,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    retailer.service.global~software.application#zip.archive::terraform@*->local.machine:
+    retailer.service.global~software.component#zip.archive::terraform@*->local.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -49718,7 +49718,7 @@ node_types:
                                                     - sudo bash /tmp/stop-retailer.service.global.sh
                                                     - sudo bash /tmp/delete-retailer.service.global.sh
                                                 when: destroy
-    retailer.service.global~software.application#zip.archive::ansible@*->remote.machine:
+    retailer.service.global~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'
@@ -49939,7 +49939,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    retailer.service.global~software.application#zip.archive::terraform@*->remote.machine:
+    retailer.service.global~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: retailer.service.global
         metadata:
             vintner_generated: 'true'

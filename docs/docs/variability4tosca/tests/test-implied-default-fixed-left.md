@@ -28,6 +28,9 @@ topology_template:
             expected_incoming_relation_check: false
             required_incoming_relation_constraint: false
             enrich_technologies: false
+            enrich_implementations: false
+            unique_technology_constraint: false
+            required_technology_constraint: false
     node_templates:
         application:
             type: Application

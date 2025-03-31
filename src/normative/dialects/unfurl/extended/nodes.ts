@@ -51,7 +51,7 @@ const nodes: RecursivePartial<NodeTypeMap> = {
             ...UnfurlSSHEndpointCapability(),
         },
     },
-    'binary.service.application': {
+    'binary.service.component': {
         interfaces: {
             management: {
                 type: 'management',

@@ -73,7 +73,7 @@ topology_template:
         ###################################################
 
         global_frontend_dashboard:
-            type: global.frontend.dashboard~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.frontend.dashboard~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-frontend-dashboard
                 application_port: 3000
@@ -101,7 +101,7 @@ topology_template:
         ###################################################
 
         global_service_gateway:
-            type: global.service.gateway~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.service.gateway~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-service-gateway
                 application_port: 4000
@@ -141,7 +141,7 @@ topology_template:
         ###################################################
 
         global_service_retailers:
-            type: global.service.retailers~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.service.retailers~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-service-retailers
                 application_port: 4000
@@ -180,7 +180,7 @@ topology_template:
         ###################################################
 
         global_service_products:
-            type: global.service.products~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.service.products~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-service-products
                 application_port: 4000
@@ -233,7 +233,7 @@ topology_template:
         ###################################################
 
         global_service_calibrations:
-            type: global.service.calibrations~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.service.calibrations~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-service-calibrations
                 application_port: 4000
@@ -286,7 +286,7 @@ topology_template:
         ###################################################
 
         global_service_accounts:
-            type: global.service.accounts~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: global.service.accounts~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: global-service-accounts
                 application_port: 4000
@@ -365,7 +365,7 @@ topology_template:
         ###################################################
 
         retailer_frontend_dashboard:
-            type: retailer.frontend.dashboard~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.frontend.dashboard~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-frontend-dashboard
                 application_port: 3000
@@ -393,7 +393,7 @@ topology_template:
         ###################################################
 
         retailer_frontend_terminal:
-            type: retailer.frontend.terminal~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.frontend.terminal~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-frontend-terminal
                 application_port: 3000
@@ -421,7 +421,7 @@ topology_template:
         ###################################################
 
         retailer_service_gateway:
-            type: retailer.service.gateway~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.gateway~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-gateway
                 application_port: 4000
@@ -468,7 +468,7 @@ topology_template:
         ###################################################
 
         retailer_service_core:
-            type: retailer.service.core~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.core~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-core
                 application_port: 4000
@@ -495,7 +495,7 @@ topology_template:
         ###################################################
 
         retailer_service_jobs:
-            type: retailer.service.jobs~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.jobs~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-core
                 application_port: 4000
@@ -517,7 +517,7 @@ topology_template:
         ###################################################
 
         retailer_service_stores:
-            type: retailer.service.stores~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.stores~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-stores
                 application_port: 4000
@@ -570,7 +570,7 @@ topology_template:
         ###################################################
 
         retailer_service_products:
-            type: retailer.service.products~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.products~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-products
                 application_port: 4000
@@ -624,7 +624,7 @@ topology_template:
         ###################################################
 
         retailer_service_stocks:
-            type: retailer.service.stocks~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.stocks~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-stocks
                 application_port: 4000
@@ -663,7 +663,7 @@ topology_template:
         ###################################################
 
         retailer_service_orders:
-            type: retailer.service.orders~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.orders~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-orders
                 application_port: 4000
@@ -702,7 +702,7 @@ topology_template:
         ###################################################
 
         retailer_service_global:
-            type: retailer.service.global~service.application#docker.image::kubernetes@kubernetes.cluster
+            type: retailer.service.global~service.component#docker.image::kubernetes@kubernetes.cluster
             properties:
                 application_name: retailer-service-global
                 application_port: 4000

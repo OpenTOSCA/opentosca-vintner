@@ -19,7 +19,7 @@ node_types:
     ###################################################
 
     cart.component:
-        derived_from: csharp.service.application
+        derived_from: csharp.service.component
 
         properties:
             application_name:
@@ -90,7 +90,7 @@ node_types:
     #
     ################################################################
 
-    cart.component~service.application#docker.image::ansible@docker.engine->local.machine:
+    cart.component~service.component#docker.image::ansible@docker.engine->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -135,7 +135,7 @@ node_types:
                                       community.docker.docker_container:
                                           name: '{{ SELF.application_name }}'
                                           state: absent
-    cart.component~service.application#docker.image::compose@docker.engine->local.machine:
+    cart.component~service.component#docker.image::compose@docker.engine->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -223,7 +223,7 @@ node_types:
                                       args:
                                           executable: /usr/bin/bash
                                       environment: {}
-    cart.component~service.application#docker.image::terraform@docker.engine->local.machine:
+    cart.component~service.component#docker.image::terraform@docker.engine->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -272,7 +272,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    cart.component~service.application#docker.image::ansible@docker.engine->remote.machine:
+    cart.component~service.component#docker.image::ansible@docker.engine->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -342,7 +342,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~service.application#docker.image::compose@docker.engine->remote.machine:
+    cart.component~service.component#docker.image::compose@docker.engine->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -471,7 +471,7 @@ node_types:
                                           user: "{{ lookup('env', 'USER') }}"
                                           host: '{{ SELF.os_ssh_host }}'
                                           state: absent
-    cart.component~service.application#docker.image::terraform@docker.engine->remote.machine:
+    cart.component~service.component#docker.image::terraform@docker.engine->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -543,7 +543,7 @@ node_types:
                             docker_image:
                                 image:
                                     - name: '{{ ".artifacts::docker_image::file" | eval }}'
-    cart.component~service.application#docker.image::ansible@gcp.cloudrun:
+    cart.component~service.component#docker.image::ansible@gcp.cloudrun:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -675,7 +675,7 @@ node_types:
                                       ansible.builtin.shell: gcloud run services delete {{ SELF.application_name }} --region {{ SELF.gcp_region }} --quiet
                                       args:
                                           executable: /bin/bash
-    cart.component~service.application#docker.image::terraform@gcp.cloudrun:
+    cart.component~service.component#docker.image::terraform@gcp.cloudrun:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -762,7 +762,7 @@ node_types:
                                           - allUsers
                                       role: roles/run.invoker
                                       service: ${google_cloud_run_v2_service.application.name}
-    cart.component~service.application#docker.image::ansible@kubernetes.cluster:
+    cart.component~service.component#docker.image::ansible@kubernetes.cluster:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -896,7 +896,7 @@ node_types:
                                           kind: Deployment
                                           namespace: default
                                           name: '{{ SELF.application_name }}'
-    cart.component~service.application#docker.image::kubernetes@kubernetes.cluster:
+    cart.component~service.component#docker.image::kubernetes@kubernetes.cluster:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -1082,7 +1082,7 @@ node_types:
                                       ansible.builtin.shell: kubectl --server {{ SELF.k8s_host }} --certificate-authority {{ SELF.k8s_ca_cert_file }} --client-certificate {{ SELF.k8s_client_cert_file }} --client-key {{ SELF.k8s_client_key_file }} delete -f {{ manifest.path }}
                                       args:
                                           executable: /usr/bin/bash
-    cart.component~service.application#docker.image::terraform@kubernetes.cluster:
+    cart.component~service.component#docker.image::terraform@kubernetes.cluster:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -1183,7 +1183,7 @@ node_types:
                                             selector:
                                                 app: '{{ SELF.application_name }}'
                                             type: ClusterIP
-    cart.component~service.application#tar.archive::ansible@*->local.machine:
+    cart.component~service.component#tar.archive::ansible@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -1389,7 +1389,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    cart.component~service.application#tar.archive::terraform@*->local.machine:
+    cart.component~service.component#tar.archive::terraform@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -1581,7 +1581,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~service.application#tar.archive::ansible@*->remote.machine:
+    cart.component~service.component#tar.archive::ansible@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -1835,7 +1835,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~service.application#tar.archive::terraform@*->remote.machine:
+    cart.component~service.component#tar.archive::terraform@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2029,7 +2029,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~service.application#zip.archive::ansible@*->local.machine:
+    cart.component~service.component#zip.archive::ansible@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2239,7 +2239,7 @@ node_types:
                                     - name: reload daemon
                                       ansible.builtin.systemd:
                                           daemon_reload: true
-    cart.component~service.application#zip.archive::terraform@*->local.machine:
+    cart.component~service.component#zip.archive::terraform@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2431,7 +2431,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~service.application#zip.archive::ansible@*->remote.machine:
+    cart.component~service.component#zip.archive::ansible@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2689,7 +2689,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~service.application#zip.archive::terraform@*->remote.machine:
+    cart.component~service.component#zip.archive::terraform@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2883,7 +2883,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~service.application#zip.archive::ansible@gcp.appengine:
+    cart.component~service.component#zip.archive::ansible@gcp.appengine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -2988,7 +2988,7 @@ node_types:
                                       ansible.builtin.shell: gcloud app services delete {{ SELF.application_name }} --quiet
                                       args:
                                           executable: /bin/bash
-    cart.component~service.application#zip.archive::terraform@gcp.appengine:
+    cart.component~service.component#zip.archive::terraform@gcp.appengine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -3083,7 +3083,7 @@ node_types:
                                     - bucket: ${google_storage_bucket.bucket.name}
                                       name: object.zip
                                       source: '{{ "project" | get_dir }}/ensemble/{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}'
-    cart.component~software.application#apt.package::ansible@*->local.machine:
+    cart.component~software.component#apt.package::ansible@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -3257,7 +3257,7 @@ node_types:
                                       ansible.builtin.apt:
                                           name: '{{ ".artifacts::apt_package::file" | eval }}'
                                           state: absent
-    cart.component~software.application#apt.package::terraform@*->local.machine:
+    cart.component~software.component#apt.package::terraform@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -3449,7 +3449,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~software.application#apt.package::ansible@*->remote.machine:
+    cart.component~software.component#apt.package::ansible@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -3671,7 +3671,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~software.application#apt.package::terraform@*->remote.machine:
+    cart.component~software.component#apt.package::terraform@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -3868,7 +3868,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~software.application#tar.archive::ansible@*->local.machine:
+    cart.component~software.component#tar.archive::ansible@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -4060,7 +4060,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    cart.component~software.application#tar.archive::terraform@*->local.machine:
+    cart.component~software.component#tar.archive::terraform@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -4247,7 +4247,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~software.application#tar.archive::ansible@*->remote.machine:
+    cart.component~software.component#tar.archive::ansible@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -4473,7 +4473,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~software.application#tar.archive::terraform@*->remote.machine:
+    cart.component~software.component#tar.archive::terraform@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -4664,7 +4664,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~software.application#zip.archive::ansible@*->local.machine:
+    cart.component~software.component#zip.archive::ansible@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -4846,7 +4846,7 @@ node_types:
                                       ansible.builtin.file:
                                           path: '{{ SELF.application_directory }}'
                                           state: absent
-    cart.component~software.application#zip.archive::terraform@*->local.machine:
+    cart.component~software.component#zip.archive::terraform@*->local.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -5033,7 +5033,7 @@ node_types:
                                                     - sudo bash /tmp/stop-cart.component.sh
                                                     - sudo bash /tmp/delete-cart.component.sh
                                                 when: destroy
-    cart.component~software.application#zip.archive::ansible@*->remote.machine:
+    cart.component~software.component#zip.archive::ansible@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'
@@ -5263,7 +5263,7 @@ node_types:
                                 - '--become'
                                 - '--key-file={{ SELF.os_ssh_key_file }}'
                                 - '--user={{ SELF.os_ssh_user }}'
-    cart.component~software.application#zip.archive::terraform@*->remote.machine:
+    cart.component~software.component#zip.archive::terraform@*->remote.machine:
         derived_from: cart.component
         metadata:
             vintner_generated: 'true'

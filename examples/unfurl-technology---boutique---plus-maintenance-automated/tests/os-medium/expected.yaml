@@ -52,7 +52,7 @@ topology_template:
         ###################################################
 
         frontend_component:
-            type: frontend.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: frontend.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: frontend
                 application_port: 8080
@@ -95,7 +95,7 @@ topology_template:
         ###################################################
 
         checkout_component:
-            type: checkout.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: checkout.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: checkout
                 application_port: 7003
@@ -129,7 +129,7 @@ topology_template:
         ###################################################
 
         email_component:
-            type: email.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: email.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: email
                 application_port: 7005
@@ -149,7 +149,7 @@ topology_template:
         ###################################################
 
         payment_component:
-            type: payment.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: payment.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: payment
                 application_port: 7006
@@ -171,7 +171,7 @@ topology_template:
         ###################################################
 
         currency_component:
-            type: currency.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: currency.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: currency
                 application_port: 7004
@@ -191,7 +191,7 @@ topology_template:
         ###################################################
 
         shipping_component:
-            type: shipping.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: shipping.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: shipping
                 application_port: 7009
@@ -211,7 +211,7 @@ topology_template:
         ###################################################
 
         cart_component:
-            type: cart.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: cart.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: cart
                 application_port: 7070
@@ -260,7 +260,7 @@ topology_template:
         ###################################################
 
         product_component:
-            type: product.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: product.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: product
                 application_port: 7007
@@ -280,7 +280,7 @@ topology_template:
         ###################################################
 
         recommendation_component:
-            type: recommendation.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: recommendation.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: recommendation
                 application_port: 7008
@@ -302,7 +302,7 @@ topology_template:
         ###################################################
 
         advertisement_component:
-            type: advertisement.component~service.application#docker.image::compose@docker.engine->remote.machine
+            type: advertisement.component~service.component#docker.image::compose@docker.engine->remote.machine
             properties:
                 application_name: advertisement
                 application_port: 7000
@@ -327,7 +327,7 @@ topology_template:
                 - host: virtual_machine
 
         node_agent:
-            type: node.agent~service.application#tar.archive::ansible@*->remote.machine
+            type: node.agent~service.component#tar.archive::ansible@*->remote.machine
             properties:
                 application_name: node_exporter
                 application_port: 9100
@@ -343,7 +343,7 @@ topology_template:
                             - '--strip-components=1'
 
         promtail_agent:
-            type: promtail.agent~software.application#apt.package::ansible@*->remote.machine
+            type: promtail.agent~software.component#apt.package::ansible@*->remote.machine
             properties:
                 application_name: promtail
             requirements:
@@ -358,7 +358,7 @@ topology_template:
                         source: https://apt.grafana.com stable main
 
         falco_agent:
-            type: falco.agent~software.application#apt.package::ansible@*->remote.machine
+            type: falco.agent~software.component#apt.package::ansible@*->remote.machine
             properties:
                 application_name: falco
             requirements:
