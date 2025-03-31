@@ -17,12 +17,15 @@ topology_template:
     outputs:
         one:
             type: string
+            value: one-value
         two:
             type: string
             conditions: false
+            value: two-value
         three:
             type: string
             conditions: true
+            value: three-value
 {% endraw %}
 ```
 
@@ -40,8 +43,10 @@ topology_template:
     outputs:
         one:
             type: string
+            value: one-value
         three:
             type: string
+            value: three-value
 {% endraw %}
 ```
 

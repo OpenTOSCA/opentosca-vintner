@@ -22,6 +22,7 @@ topology_template:
             required_hosting_constraint: false
             optimization_topology: false
             optimization_topology_unique: true
+            optimization_topology_unique_backward: true
     node_templates:
         agent:
             type: agent

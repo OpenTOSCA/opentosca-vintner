@@ -257,12 +257,12 @@ cloud.service:
               relationship: tosca.relationships.HostedOn
 ```
 
-#### software.application
+#### software.component
 
-The abstract &#34;software.application&#34; node type defines a generic software application. It requires a hosting and its lifecycle is managed by the management interface.
+The abstract &#34;software.component&#34; node type defines a generic software component. It requires a hosting and its lifecycle is managed by the management interface.
 
 ```yaml linenums="1"
-software.application:
+software.component:
     derived_from: node
     metadata:
         vintner_normative: 'true'
@@ -280,13 +280,13 @@ software.application:
             type: management
 ```
 
-#### service.application
+#### service.component
 
-The abstract &#34;service.application&#34; node type defines a generic software application, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
+The abstract &#34;service.component&#34; node type defines a generic software component, which provides a service. It is not normative how this component is implemented. This could be implemented by a Kubernetes Deployment Resource along with a Kubernetes Service Resource on Kubernetes or by a Systemd Service Unit on a virtual machine.
 
 ```yaml linenums="1"
-service.application:
-    derived_from: software.application
+service.component:
+    derived_from: software.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -317,7 +317,7 @@ The abstract &#34;software.runtime&#34; node type defines a generic software run
 
 ```yaml linenums="1"
 software.runtime:
-    derived_from: software.application
+    derived_from: software.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -467,7 +467,7 @@ The abstract &#34;dbms&#34; node type defines a generic DBMS.
 
 ```yaml linenums="1"
 dbms:
-    derived_from: software.application
+    derived_from: software.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -491,7 +491,7 @@ The abstract &#34;cache&#34; node type defines a generic caching service.
 
 ```yaml linenums="1"
 cache:
-    derived_from: software.application
+    derived_from: software.component
     properties:
         cache_name:
             type: string
@@ -731,13 +731,13 @@ nodejs.runtime:
             type: tosca.capabilities.Compute
 ```
 
-#### nodejs.service.application
+#### nodejs.service.component
 
-The &#34;nodejs.service.application&#34; node type manages a Node.js service application.
+The &#34;nodejs.service.component&#34; node type manages a Node.js service component.
 
 ```yaml linenums="1"
-nodejs.service.application:
-    derived_from: service.application
+nodejs.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -753,13 +753,13 @@ nodejs.service.application:
                 start: npm start
 ```
 
-#### reactjs.service.application
+#### reactjs.service.component
 
-The &#34;reactjs.service.application&#34; node type manages a React.js service application.
+The &#34;reactjs.service.component&#34; node type manages a React.js service component.
 
 ```yaml linenums="1"
-reactjs.service.application:
-    derived_from: service.application
+reactjs.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -795,13 +795,13 @@ python.runtime:
             type: tosca.capabilities.Compute
 ```
 
-#### python.service.application
+#### python.service.component
 
-The &#34;python.service.application&#34; node type manages a Python service application.
+The &#34;python.service.component&#34; node type manages a Python service component.
 
 ```yaml linenums="1"
-python.service.application:
-    derived_from: service.application
+python.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -817,13 +817,13 @@ python.service.application:
                 start: python main.py
 ```
 
-#### go.service.application
+#### go.service.component
 
-The &#34;go.service.application&#34; node type manages a Go service application.
+The &#34;go.service.component&#34; node type manages a Go service component.
 
 ```yaml linenums="1"
-go.service.application:
-    derived_from: service.application
+go.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -859,13 +859,13 @@ java.runtime:
             type: tosca.capabilities.Compute
 ```
 
-#### java.service.application
+#### java.service.component
 
-The &#34;java.service.application&#34; node type manages a Java service application.
+The &#34;java.service.component&#34; node type manages a Java service component.
 
 ```yaml linenums="1"
-java.service.application:
-    derived_from: service.application
+java.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -901,13 +901,13 @@ dotnet.runtime:
             type: tosca.capabilities.Compute
 ```
 
-#### csharp.service.application
+#### csharp.service.component
 
-The &#34;csharp.service.application&#34; node type manages a C# service application.
+The &#34;csharp.service.component&#34; node type manages a C# service component.
 
 ```yaml linenums="1"
-csharp.service.application:
-    derived_from: service.application
+csharp.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -917,13 +917,13 @@ csharp.service.application:
             default: dotnet8
 ```
 
-#### binary.service.application
+#### binary.service.component
 
-The &#34;binary.service.application&#34; node type manages a binary service application.
+The &#34;binary.service.component&#34; node type manages a binary service component.
 
 ```yaml linenums="1"
-binary.service.application:
-    derived_from: service.application
+binary.service.component:
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
         vintner_abstract: 'true'
@@ -1301,7 +1301,7 @@ The &#34;minio.server&#34; node type manages a MinIO server.
 
 ```yaml linenums="1"
 minio.server:
-    derived_from: service.application
+    derived_from: service.component
     metadata:
         vintner_normative: 'true'
     properties:

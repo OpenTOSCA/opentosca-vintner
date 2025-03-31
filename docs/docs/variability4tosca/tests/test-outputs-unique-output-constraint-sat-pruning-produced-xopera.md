@@ -26,20 +26,11 @@ topology_template:
                   get_property:
                       - container
                       - some_property
-        - input:
-              type: string_b
-              value:
-                  get_property:
-                      - container
-                      - another_property
     node_templates:
         container:
             type: container
             properties:
                 - some_property: some_value
-                - another_property:
-                      conditions: false
-                      value: another_value
 {% endraw %}
 ```
 

@@ -26,6 +26,9 @@ topology_template:
                     - false
         options:
             enrich_technologies: false
+            enrich_implementations: false
+            unique_technology_constraint: false
+            required_technology_constraint: false
     node_templates:
         application:
             type: Application

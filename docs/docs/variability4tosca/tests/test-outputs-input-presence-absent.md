@@ -18,6 +18,7 @@ topology_template:
         input:
             conditions: false
             type: string
+            value: some-value
     node_templates:
         container:
             type: container

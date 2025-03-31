@@ -19,12 +19,15 @@ topology_template:
         - one:
               type: string_a
               conditions: false
+              value: one-value
         - one:
               type: string_b
               default_alternative: true
+              value: one-other-value
         - three:
               type: string
               conditions: true
+              value: three-value
 {% endraw %}
 ```
 
@@ -42,8 +45,10 @@ topology_template:
     outputs:
         one:
             type: string_b
+            value: one-other-value
         three:
             type: string
+            value: three-value
 {% endraw %}
 ```
 

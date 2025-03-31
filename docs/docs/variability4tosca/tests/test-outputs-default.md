@@ -18,9 +18,11 @@ topology_template:
         - one:
               type: a
               default_alternative: true
+              value: one-value
         - one:
               type: b
               conditions: false
+              value: one-other-value
 {% endraw %}
 ```
 
@@ -38,6 +40,7 @@ topology_template:
     outputs:
         one:
             type: a
+            value: one-value
 {% endraw %}
 ```
 
