@@ -1,5 +1,6 @@
 import Controller from '#controller'
 import {benchmark2latex, benchmark2markdown} from '#controller/setup/benchmark'
+import * as files from '#files'
 import hae from '#utils/hae'
 import * as express from 'express'
 
@@ -711,6 +712,23 @@ resolvers.post(
     hae.express(async (req, res, next) => {
         const study = await Controller.study.technology(req.body)
         res.json({study})
+    })
+)
+
+/**
+ * SPE
+ */
+resolvers.post(
+    '/spe/select-technologies',
+    hae.express(async (req, res, next) => {
+        const output = files.temporaryDirent()
+        await Controller.utils.selectTechnologies({
+            template: req.body.template,
+            output,
+        })
+
+        const template = await files.loadYAML(output)
+        res.json({template})
     })
 )
 

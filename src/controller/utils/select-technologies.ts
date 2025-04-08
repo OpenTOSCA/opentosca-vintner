@@ -13,8 +13,6 @@ export type UtilsSelectTechnologiesOptions = {
     output: string
 }
 
-// TODO: rest api
-
 export default async function (options: UtilsSelectTechnologiesOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isDefined(options.output, 'Output not defined')
