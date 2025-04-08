@@ -3,6 +3,7 @@ import _nonce from './nonce'
 import _normative from './normative'
 import _rules from './rules'
 import _scenarios from './scenarios'
+import _selectTechnology from './select-technologies'
 
 export default {
     nonce: _nonce,
@@ -10,4 +11,5 @@ export default {
     normative: _normative,
     rules: _rules,
     scenarios: _scenarios,
+    selectTechnology: _selectTechnology,
 }
