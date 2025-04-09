@@ -721,14 +721,22 @@ resolvers.post(
 resolvers.post(
     '/spe/select-technologies',
     hae.express(async (req, res, next) => {
-        const output = files.temporaryDirent()
-        await Controller.utils.selectTechnologies({
+        const result = await Controller.utils.selectTechnologies({
             template: req.body.template,
-            output,
+            output: files.temporaryDirent(),
         })
 
-        const template = await files.loadYAML(output)
-        res.json({template})
+        res.json(result)
+    })
+)
+
+/**
+ * Health
+ */
+resolvers.get(
+    '/health',
+    hae.express(async (req, res, next) => {
+        res.json({})
     })
 )
 

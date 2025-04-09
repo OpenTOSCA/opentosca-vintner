@@ -25,16 +25,24 @@ export default async function (options: UtilsSelectTechnologiesOptions) {
     // Enrich technologies
     new DeploymentTechnologyEnricher(graph).run()
 
+    const selection: {[name: string]: string} = {}
+
     // Copy technology assignments to unchanged template
     for (const [name, map] of Object.entries(template.topology_template?.node_templates || {})) {
         const technology = graph.getNode(name).raw.technology
 
         if (check.isString(technology)) {
             map.technology = technology
+            selection[name] = technology
         }
     }
 
     files.storeYAML(options.output, template)
+
+    return {
+        template,
+        selection,
+    }
 }
 
 class DeploymentTechnologyEnricher {
