@@ -1171,7 +1171,7 @@ utils
     .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.selectTechnologies(options))
+            await Controller.utils.selectTechnologies(options)
         })
     )
 
