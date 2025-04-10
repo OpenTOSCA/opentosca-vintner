@@ -1527,6 +1527,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vintner-utils-select-technologies" class="md-nav__link">
+    vintner utils select-technologies
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -9164,6 +9171,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vintner-utils-select-technologies" class="md-nav__link">
+    vintner utils select-technologies
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -15487,13 +15501,93 @@
 </tr>
 </tbody>
 </table>
+<h2 id="vintner-utils-select-technologies">vintner utils select-technologies<a class="headerlink" href="#vintner-utils-select-technologies" title="Permanent link">&para;</a></h2>
+<p>select deployment technologies</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="95:5"><input checked="checked" id="__tabbed_95_1" name="__tabbed_95" type="radio" /><input id="__tabbed_95_2" name="__tabbed_95" type="radio" /><input id="__tabbed_95_3" name="__tabbed_95" type="radio" /><input id="__tabbed_95_4" name="__tabbed_95" type="radio" /><input id="__tabbed_95_5" name="__tabbed_95" type="radio" /><div class="tabbed-labels"><label for="__tabbed_95_1">CLI</label><label for="__tabbed_95_2">cURL</label><label for="__tabbed_95_3">JavaScript</label><label for="__tabbed_95_4">Python</label><label for="__tabbed_95_5">Kotlin</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-424-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-424-1" name="__codelineno-424-1"></a>vintner<span class="w"> </span>utils<span class="w"> </span><span class="k">select</span>-technologies<span class="w"> </span>--template<span class="w"> </span><span class="si">${</span><span class="nv">TEMPLATE</span><span class="si">}</span><span class="w"> </span>--output<span class="w"> </span><span class="si">${</span><span class="nv">OUTPUT</span><span class="si">}</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-425-1">1</a></span>
+<span class="normal"><a href="#__codelineno-425-2">2</a></span>
+<span class="normal"><a href="#__codelineno-425-3">3</a></span>
+<span class="normal"><a href="#__codelineno-425-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-425-1" name="__codelineno-425-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-425-2" name="__codelineno-425-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-425-3" name="__codelineno-425-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">&#39;{&quot;template&quot;: &quot;${TEMPLATE}&quot;, &quot;output&quot;: &quot;${OUTPUT}&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-425-4" name="__codelineno-425-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/utils/select-technologies
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-426-1">1</a></span>
+<span class="normal"><a href="#__codelineno-426-2">2</a></span>
+<span class="normal"><a href="#__codelineno-426-3">3</a></span>
+<span class="normal"><a href="#__codelineno-426-4">4</a></span>
+<span class="normal"><a href="#__codelineno-426-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-426-1" name="__codelineno-426-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;axios&quot;</span><span class="p">)</span>
+<a id="__codelineno-426-2" name="__codelineno-426-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;/utils/select-technologies&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-426-3" name="__codelineno-426-3"></a><span class="w">    </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="nx">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-426-4" name="__codelineno-426-4"></a><span class="w">    </span><span class="nx">output</span><span class="o">:</span><span class="w"> </span><span class="nx">OUTPUT</span>
+<a id="__codelineno-426-5" name="__codelineno-426-5"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-427-1">1</a></span>
+<span class="normal"><a href="#__codelineno-427-2">2</a></span>
+<span class="normal"><a href="#__codelineno-427-3">3</a></span>
+<span class="normal"><a href="#__codelineno-427-4">4</a></span>
+<span class="normal"><a href="#__codelineno-427-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-427-1" name="__codelineno-427-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<a id="__codelineno-427-2" name="__codelineno-427-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">&quot;/utils/select-technologies&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-427-3" name="__codelineno-427-3"></a>    <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="n">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-427-4" name="__codelineno-427-4"></a>    <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="n">OUTPUT</span>
+<a id="__codelineno-427-5" name="__codelineno-427-5"></a><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-428-1">1</a></span>
+<span class="normal"><a href="#__codelineno-428-2">2</a></span>
+<span class="normal"><a href="#__codelineno-428-3">3</a></span>
+<span class="normal"><a href="#__codelineno-428-4">4</a></span>
+<span class="normal"><a href="#__codelineno-428-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-428-1" name="__codelineno-428-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
+<a id="__codelineno-428-2" name="__codelineno-428-2"></a><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;/utils/select-technologies&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="o">=</span><span class="n">mapOf</span><span class="p">(</span>
+<a id="__codelineno-428-3" name="__codelineno-428-3"></a><span class="w">    </span><span class="s">&quot;template&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">TEMPLATE</span><span class="p">,</span>
+<a id="__codelineno-428-4" name="__codelineno-428-4"></a><span class="w">    </span><span class="s">&quot;output&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">OUTPUT</span>
+<a id="__codelineno-428-5" name="__codelineno-428-5"></a><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template</td>
+<td>true</td>
+<td>string</td>
+<td>path to service template</td>
+</tr>
+<tr>
+<td>output</td>
+<td>true</td>
+<td>string</td>
+<td>path of the output</td>
+</tr>
+</tbody>
+</table>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 31, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 10, 2025</span>
       
     
   </small>
