@@ -1164,6 +1164,17 @@ utils
         })
     )
 
+utils
+    .command('select-technologies')
+    .description('select deployment technologies')
+    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.utils.selectTechnologies(options)
+        })
+    )
+
 /**
  * Query
  */

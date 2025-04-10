@@ -164,7 +164,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     /**
      * Return all matches
      */
-    private match(node: Node, rule: TechnologyRule): DeploymentScenarioMatch[] {
+    match(node: Node, rule: TechnologyRule): DeploymentScenarioMatch[] {
         // Must match component
         if (!node.getType().isA(rule.component)) return []
 
