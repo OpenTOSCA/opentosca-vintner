@@ -7,6 +7,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['gcp.cloudstorage'],
     weight: 1,
+    reason: 'The object storage is hosted on GCP CloudStorage. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {

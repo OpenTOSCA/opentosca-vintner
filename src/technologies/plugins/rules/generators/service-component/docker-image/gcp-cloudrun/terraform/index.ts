@@ -15,6 +15,7 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['gcp.cloudrun'],
     weight: 1,
+    reason: 'The service component is hosted on GCP CloudRun. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {

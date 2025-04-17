@@ -15,6 +15,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['minio.server', 'docker.engine', 'remote.machine'],
     weight: 1,
+    reason: 'The object storage is hosted on a MinIO server on a Docker engine on a local machine. Ansible and Terraform offer declarative modules for this scenario. However, in contrast to Terraform, Ansible provides native features to access the MySQL DBMS using SSH.',
 
     generate: (name, type) => {
         return {

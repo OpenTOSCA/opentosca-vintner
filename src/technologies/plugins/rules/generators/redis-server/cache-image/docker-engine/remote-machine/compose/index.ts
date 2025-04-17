@@ -22,6 +22,7 @@ const generator: ImplementationGenerator = {
     artifact: 'cache.image',
     hosting: ['docker.engine', 'remote.machine'],
     weight: 1,
+    reason: 'The redis server is hosted on a Docker engine on a remote machine. Docker Compose is natively integrated into the Docker engine.',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.cache_name }}'

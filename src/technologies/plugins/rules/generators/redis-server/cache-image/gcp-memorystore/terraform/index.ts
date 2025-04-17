@@ -8,6 +8,7 @@ const generator: ImplementationGenerator = {
     artifact: 'cache.image',
     hosting: ['gcp.memorystore'],
     weight: 1,
+    reason: 'The redis server is hosted on GCP Memorystore. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {
