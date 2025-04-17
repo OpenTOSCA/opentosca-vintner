@@ -19,7 +19,6 @@ export type Report = {
     node: string
     technology: string
     quality: string
-    // TODO: make this required
     reason?: string
 }[]
 
