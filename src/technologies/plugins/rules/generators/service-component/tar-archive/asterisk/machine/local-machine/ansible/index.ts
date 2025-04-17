@@ -24,7 +24,8 @@ class Generator extends GeneratorAbstract {
     artifact = 'tar.archive'
     hosting = ['*', 'local.machine']
     weight = 1
-    reason = 'Primary use case due to the specialization of Ansible. Special integration for systemd.'
+    reason =
+        'The service component is hosted on a local machine. Ansible is specialized for installing software components on local targets, while Terraform discourages from being used to manage such scenarios.'
 
     generate(name: string, type: NodeType) {
         return {

@@ -13,6 +13,7 @@ const generator: ImplementationGenerator = {
     artifact: 'machine.image',
     hosting: ['openstack.provider'],
     weight: 1,
+    reason: 'Terraform is specialized in provisioning infrastructure, while Ansible is specialized for managing software on such infrastructure.',
 
     generate: (name, type) => {
         return {

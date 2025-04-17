@@ -12,7 +12,7 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['local.machine'],
     weight: 1,
-    reason: 'The MySQL DBMS is hosted on a local machine. Ansible is specialized for installing software components, while Terraform discourages from being used to manage such scenarios.',
+    reason: 'The MySQL DBMS is hosted on a local machine. Ansible is specialized for installing software components on local targets, while Terraform discourages from being used to manage such scenarios.',
 
     generate: (name, type) => {
         return {

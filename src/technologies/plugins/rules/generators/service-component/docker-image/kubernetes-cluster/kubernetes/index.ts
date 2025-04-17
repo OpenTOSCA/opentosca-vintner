@@ -14,6 +14,7 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
+    reason: 'The service component is hosted on a Kubernetes cluster. Kubernetes provides its own natively integrated deployment technology.',
 
     generate: (name, type) => {
         const AnsibleTouchManifestTask = {
