@@ -105,7 +105,9 @@ export enum QUALITY_LABEL {
     VERY_LOW = 'very low',
 }
 
-export function toLabel(weight: number): QUALITY_LABEL {
+export const QUALITY_DEFAULT_WEIGHT = 1
+
+export function toLabel(weight = QUALITY_DEFAULT_WEIGHT): QUALITY_LABEL {
     if (weight < 0) throw new Error(`Unknown quality weight "${weight}"`)
 
     if (weight <= 0.125) return QUALITY_LABEL.VERY_LOW

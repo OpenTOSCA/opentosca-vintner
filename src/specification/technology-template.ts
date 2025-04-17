@@ -23,4 +23,5 @@ export type TechnologyRule = {
     conditions?: LogicExpression | LogicExpression[]
     weight?: number
     assign?: string
+    reason?: string
 }

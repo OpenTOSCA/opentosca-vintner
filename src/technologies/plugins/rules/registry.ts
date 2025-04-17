@@ -38,6 +38,7 @@ class Registry {
                         artifact: generator.artifact,
                         hosting: generator.hosting,
                         weight: generator.weight,
+                        reason: generator.reason,
                     })
                 )
             }

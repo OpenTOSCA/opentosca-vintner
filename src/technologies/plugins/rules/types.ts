@@ -26,6 +26,8 @@ export type ImplementationGenerator = {
     hosting: string[]
     generate: (name: string, type: NodeType) => NodeType
     weight: number
+    // TODO: make this required
+    reason?: string
 }
 
 // TODO: migrate to this
