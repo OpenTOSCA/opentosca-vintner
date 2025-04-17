@@ -33,16 +33,16 @@ export default async function (options: UtilsSelectTechnologiesOptions) {
     assert.isDefined(options.output, 'Output not defined')
 
     const template = new Loader(options.template).raw()
+    assert.isDefined(template.topology_template?.node_templates)
+    if (check.isArray(template.topology_template.node_templates)) {
+        throw new Error('Lists for node templates are not expected since this enriches a TOSCA Light model')
+    }
+
     const report: Report = []
 
     const copy = await new Loader(options.template).load()
     const graph = new Graph(copy)
     const plugin = new TechnologyRulePlugin(graph)
-
-    assert.isDefined(template.topology_template?.node_templates)
-
-    if (check.isArray(template.topology_template?.node_templates)) return
-
     for (const node of graph.nodes.filter(it => utils.isEmpty(it.technologies))) {
         /**
          * Step A: Find matches
