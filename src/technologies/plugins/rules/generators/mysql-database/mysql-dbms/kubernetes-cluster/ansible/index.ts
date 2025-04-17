@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'kubernetes.cluster'],
     weight: 1,
+    reason: 'The MySQL database is hosted on a MySQL DBMS on a Kubernetes cluster. Ansible and Terraform offer declarative modules for managing a MySQL database. However, in contrast to Terraform, Ansible provides better features to access the MySQL DBMS within the Kubernetes cluster.',
 
     generate: (name, type) => {
         return {

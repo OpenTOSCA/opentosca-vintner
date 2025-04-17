@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: [],
     weight: 1,
+    reason: 'The GCP service is hosted on GCP. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {

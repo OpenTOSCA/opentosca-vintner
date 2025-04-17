@@ -7,6 +7,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'docker.engine', 'local.machine'],
     weight: 1,
+    reason: 'The MySQL database is hosted on a MySQL DBMS on a Docker engine on a local machine. Ansible and Terraform offer declarative modules for managing a MySQL database.',
 
     generate: (name, type) => {
         const user = {

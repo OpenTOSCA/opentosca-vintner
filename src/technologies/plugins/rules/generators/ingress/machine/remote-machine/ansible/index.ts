@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['remote.machine'],
     weight: 1,
+    reason: 'The ingress is hosted on a remote machine. Ansible is specialized for installing software components, while Terraform discourages from being used to manage such scenarios.',
 
     generate: (name, type) => {
         return {

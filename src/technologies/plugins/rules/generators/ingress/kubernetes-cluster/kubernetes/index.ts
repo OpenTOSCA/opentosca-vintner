@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     technology: 'kubernetes',
     hosting: ['kubernetes.cluster'],
     weight: 1,
+    reason: 'The ingress is hosted on a Kubernetes cluster. Kubernetes provides its own natively integrated deployment technology.',
 
     generate: (name, type) => {
         return {

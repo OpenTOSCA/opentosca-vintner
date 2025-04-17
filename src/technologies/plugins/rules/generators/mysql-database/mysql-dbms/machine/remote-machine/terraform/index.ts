@@ -14,8 +14,6 @@ class Generator extends GeneratorAbstract {
     artifact = undefined
     hosting = ['mysql.dbms', 'remote.machine']
     weight = 0.5
-    reason =
-        'Terraform provides a declarative module. However, Terraform requires an SSH workaround. Ansible is more specialized.'
 
     generate(name: string, type: NodeType) {
         return {

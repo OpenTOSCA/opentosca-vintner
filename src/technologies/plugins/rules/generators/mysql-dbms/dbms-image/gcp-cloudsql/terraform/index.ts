@@ -8,6 +8,7 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['gcp.cloudsql'],
     weight: 1,
+    reason: 'The MySQL DBMS is hosted on GCP CloudSQL. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {
