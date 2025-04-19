@@ -21,6 +21,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
     weight: 1,
+    reason: 'The MySQL database is hosted on a MySQL DBMS on a Docker engine on a remote machine. Ansible and Terraform offer declarative modules for managing a MySQL database. However, in contrast to Terraform, Ansible provides native features to access the MySQL DBMS using SSH.',
 
     generate: (name, type) => {
         const user = {

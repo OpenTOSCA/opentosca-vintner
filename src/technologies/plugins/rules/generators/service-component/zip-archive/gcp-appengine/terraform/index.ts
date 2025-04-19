@@ -20,6 +20,7 @@ const generator: ImplementationGenerator = {
     artifact,
     hosting: ['gcp.appengine'],
     weight: 1,
+    reason: 'The service component is hosted on GCP AppEngine. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.',
 
     generate: (name, type) => {
         return {

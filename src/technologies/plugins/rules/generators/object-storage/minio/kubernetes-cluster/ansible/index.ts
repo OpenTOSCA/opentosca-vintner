@@ -16,6 +16,7 @@ const generator: ImplementationGenerator = {
     technology: 'ansible',
     hosting: ['minio.server', 'kubernetes.cluster'],
     weight: 1,
+    reason: 'The object storage is hosted on a MinIO server on a Kubernetes cluster. Ansible and Terraform offer declarative modules for this scenario. However, in contrast to Terraform, Ansible provides better features to access the MinIO server within the Kubernetes cluster.',
 
     generate: (name, type) => {
         return {

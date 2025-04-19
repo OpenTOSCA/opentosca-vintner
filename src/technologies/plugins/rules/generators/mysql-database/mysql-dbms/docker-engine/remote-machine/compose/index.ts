@@ -16,6 +16,7 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['mysql.dbms', 'docker.engine', 'remote.machine'],
     weight: 0,
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const remote = true

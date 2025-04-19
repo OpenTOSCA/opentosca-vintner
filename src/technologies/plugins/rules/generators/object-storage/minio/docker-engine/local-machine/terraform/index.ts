@@ -12,6 +12,7 @@ const generator: ImplementationGenerator = {
     technology: 'terraform',
     hosting: ['minio.server', 'docker.engine', 'local.machine'],
     weight: 1,
+    reason: 'The object storage is hosted on a MinIO server on a Docker engine on a local machine. Ansible and Terraform offer declarative modules for this scenario.',
 
     generate: (name, type) => {
         return {

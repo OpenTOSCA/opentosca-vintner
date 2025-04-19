@@ -1,0 +1,18 @@
+- component: shop
+  technology: ansible
+  quality: very high
+- component: shop_ingress
+  technology: ansible
+  quality: very high
+- component: database
+  technology: ansible
+  quality: very high
+- component: mysql_dbms
+  technology: ansible
+  quality: very high
+- component: nodejs_runtime
+  technology: ansible
+  quality: very high
+- component: virtual_machine
+  technology: terraform
+  quality: very high

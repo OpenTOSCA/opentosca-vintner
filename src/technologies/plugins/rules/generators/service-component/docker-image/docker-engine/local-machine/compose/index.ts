@@ -15,6 +15,7 @@ const generator: ImplementationGenerator = {
     artifact: 'docker.image',
     hosting: ['docker.engine', 'local.machine'],
     weight: 1,
+    reason: 'The service component is hosted on a Docker engine on a local machine. Docker Compose is natively integrated into the Docker engine.',
 
     generate: (name, type) => {
         const suffix = '{{ SELF.application_name }}'

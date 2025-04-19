@@ -13,6 +13,7 @@ const generator: ImplementationGenerator = {
     artifact: 'cache.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
+    reason: 'The redis server is hosted on a Kubernetes cluster. Kubernetes provides its own natively integrated deployment technology.',
 
     generate: (name, type) => {
         const AnsibleTouchManifestTask = {

@@ -13,6 +13,7 @@ const generator: ImplementationGenerator = {
     artifact: 'dbms.image',
     hosting: ['kubernetes.cluster'],
     weight: 1,
+    reason: 'The MySQL DBMS is hosted on a Kubernetes cluster. Kubernetes provides its own natively integrated deployment technology.',
 
     generate: (name, type) => {
         const AnsibleTouchManifestTask = {

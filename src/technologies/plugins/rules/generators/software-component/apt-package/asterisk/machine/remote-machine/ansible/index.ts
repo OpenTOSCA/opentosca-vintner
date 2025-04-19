@@ -26,7 +26,8 @@ class Generator extends GeneratorAbstract {
     artifact = 'apt.package'
     hosting = ['*', 'remote.machine']
     weight = 1
-    reason = 'Primary use case due to the specialization of Ansible.'
+    reason =
+        'The software component is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.'
 
     generate(name: string, type: NodeType) {
         return {

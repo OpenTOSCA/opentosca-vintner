@@ -14,6 +14,7 @@ const generator: ImplementationGenerator = {
     technology: 'compose',
     hosting: ['minio.server', 'docker.engine', 'local.machine'],
     weight: 0,
+    reason: 'One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.',
 
     generate: (name, type) => {
         const Operation = (command: string) => {

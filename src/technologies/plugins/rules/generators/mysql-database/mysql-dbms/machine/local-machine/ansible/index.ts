@@ -9,7 +9,8 @@ class Generator extends GeneratorAbstract {
     artifact = undefined
     hosting = ['mysql.dbms', 'local.machine']
     weight = 1
-    reason = 'Primary use case due to the specialization of Ansible.'
+    reason =
+        'The MySQL database is hosted on a MySQL DBMS on a local machine. Ansible and Terraform offer declarative modules for managing a MySQL database.'
 
     generate(name: string, type: NodeType) {
         const user = {
