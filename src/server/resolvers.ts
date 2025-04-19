@@ -718,7 +718,6 @@ resolvers.post(
 /**
  * SPE
  */
-// TODO: adapt frontend
 resolvers.post(
     '/spe/select-technologies',
     hae.express(async (req, res, next) => {
