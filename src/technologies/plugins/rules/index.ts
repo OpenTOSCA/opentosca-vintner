@@ -11,7 +11,7 @@ import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
-import {DeploymentScenarioMatch, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
+import {DeploymentScenarioMatch, Scenario, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {
     constructImplementationName,
     constructRuleName,
@@ -39,6 +39,36 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         if (check.isUndefined(rules)) return []
         assert.isObject(rules, 'Rules not loaded')
         return rules
+    }
+
+    getScenarios() {
+        const scenarios: Scenario[] = []
+        for (const rule of this.getRules()) {
+            assert.isDefined(rule.weight)
+            assert.isDefined(rule.hosting)
+
+            const key = constructRuleName(rule, {technology: false})
+
+            const assessment = {
+                technology: rule.technology,
+                quality: rule.weight,
+                reason: rule.reason,
+            }
+
+            const found = scenarios.find(it => it.key === key)
+            if (found) {
+                found.assessments.push(assessment)
+            } else {
+                scenarios.push({
+                    key,
+                    component: rule.component,
+                    artifact: rule.artifact,
+                    hosting: rule.hosting,
+                    assessments: [assessment],
+                })
+            }
+        }
+        return scenarios
     }
 
     backwards() {
@@ -161,6 +191,42 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return maps
     }
 
+    test(node: Node, scenario: Scenario) {
+        // Must match component
+        if (!node.getType().isA(scenario.component)) return false
+
+        // Must match artifact
+        let artifacts: Artifact[] = []
+        if (check.isDefined(scenario.artifact)) {
+            // Check for artifact in template
+            artifacts = node.artifacts.filter(it => {
+                assert.isDefined(scenario.artifact)
+                return it.getType().isA(scenario.artifact)
+            })
+            const hasArtifactInTemplate = utils.isPopulated(artifacts)
+
+            // Check for artifact in type (which are always present)
+            const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
+                node.getType().name,
+                scenario.artifact
+            )
+
+            // Ignore if artifact not matched
+            if (!hasArtifactInTemplate && !hasArtifactInType) return false
+        }
+
+        // Must match hosting
+        const hostings: Element[][] = []
+        assert.isDefined(scenario.hosting)
+        if (!utils.isEmpty(scenario.hosting)) {
+            this.search(node, utils.copy(scenario.hosting), [], hostings)
+            // Ignore if hosting not matched
+            if (utils.isEmpty(hostings)) return false
+        }
+
+        return true
+    }
+
     /**
      * Return all matches
      */
@@ -195,7 +261,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         }
 
         // Prio
-        const prio = this.prio(node, rule)
+        const prio = this.prio(node, rule.component)
 
         // Does not require artifact and not hosting
         if (utils.isEmpty(artifacts) && utils.isEmpty(hostings))
@@ -250,22 +316,30 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
         throw new UnexpectedError()
     }
+
     /**
      * Scenario prio is defined by the inheritance depth between the node type and the rule.component
      */
-    private prio(node: Node, rule: TechnologyRule): number {
+    private prioCache: {[key: string]: number | undefined} = {}
+    prio(node: Node, target: string): number {
         const source = node.getType().name
-        const target = rule.component
+        const key = `${source}::prio::${target}`
 
-        const types = this.graph.inheritance.collectNodeTypes(source)
-        const index = types.findIndex(it => it.name === target)
-        if (index === -1)
-            throw new Error(
-                `Expected to find target type "${target}" in inheritance of source type "${source}" which is "${JSON.stringify(
-                    types.map(it => it.name)
-                )}"`
-            )
-        return index
+        if (check.isUndefined(this.prioCache[key])) {
+            const types = this.graph.inheritance.collectNodeTypes(source)
+            const index = types.findIndex(it => it.name === target)
+            if (index === -1)
+                throw new Error(
+                    `Expected to find target type "${target}" in inheritance of source type "${source}" which is "${JSON.stringify(
+                        types.map(it => it.name)
+                    )}"`
+                )
+            this.prioCache[key] = index
+        }
+
+        const result = this.prioCache[key]
+        assert.isDefined(result)
+        return result
     }
 
     private search(node: Node, hosting: string[], history: Element[], output: Element[][]) {

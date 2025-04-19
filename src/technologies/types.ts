@@ -5,6 +5,7 @@ import Node from '#graph/node'
 import Technology from '#graph/technology'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
+import {QUALITY_LABEL} from '#technologies/utils'
 
 export type TechnologyPluginBuilder = {
     build(graph: Graph): TechnologyPlugin
@@ -28,3 +29,22 @@ export type DeploymentScenarioMatch = {
     rule: TechnologyRule
     prio: number
 }
+
+export type Scenario = {
+    key: string
+    component: string
+    artifact?: string
+    hosting: string[]
+    assessments: {
+        technology: string
+        quality: number
+        reason?: string
+    }[]
+}
+
+export type Report = {
+    component: string
+    technology: string
+    quality: QUALITY_LABEL
+    reason?: string
+}[]

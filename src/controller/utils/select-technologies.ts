@@ -4,23 +4,17 @@ import * as files from '#files'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 import {NodeTemplate} from '#spec/node-template'
+import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import std from '#std'
 import {TechnologyRulePlugin} from '#technologies/plugins/rules'
-import {DeploymentScenarioMatch} from '#technologies/types'
-import {QUALITY_DEFAULT_WEIGHT, toLabel} from '#technologies/utils'
+import {Report} from '#technologies/types'
+import {toLabel} from '#technologies/utils'
 import * as utils from '#utils'
 
 export type UtilsSelectTechnologiesOptions = {
     template: string
     output: string
 }
-
-export type Report = {
-    node: string
-    technology: string
-    quality: string
-    reason?: string
-}[]
 
 export function toReportPath(template: string) {
     if (template.endsWith('.yaml')) return template.replace('.yaml', '.report.yaml')
@@ -34,6 +28,10 @@ export default async function (options: UtilsSelectTechnologiesOptions) {
     assert.isDefined(options.output, 'Output not defined')
 
     const template = new Loader(options.template).raw()
+    if (template.tosca_definitions_version !== TOSCA_DEFINITIONS_VERSION.TOSCA_SIMPLE_YAML_1_3) {
+        throw new Error(`TOSCA Simple Yaml 1.3 expected`)
+    }
+
     assert.isDefined(template.topology_template?.node_templates)
     if (check.isArray(template.topology_template.node_templates)) {
         throw new Error('Lists for node templates are not expected since this enriches a TOSCA Light model')
@@ -44,44 +42,54 @@ export default async function (options: UtilsSelectTechnologiesOptions) {
     const copy = await new Loader(options.template).load()
     const graph = new Graph(copy)
     const plugin = new TechnologyRulePlugin(graph)
+
+    const scenarios = plugin.getScenarios()
+
     for (const node of graph.nodes.filter(it => utils.isEmpty(it.technologies))) {
         /**
-         * Step A: Find matches
+         * Find matches
          */
-        const assessments = plugin.getRules()
-        const matches = assessments.map(it => plugin.match(node, it)).flat(Infinity) as DeploymentScenarioMatch[]
+        const matches = scenarios.filter(it => plugin.test(node, it))
         if (utils.isEmpty(matches)) {
             std.log(`${node.Display} has no deployment scenario matches`)
             continue
         }
 
         /**
-         * Step B: Prioritize matches
+         * Prioritize matches
          */
-        const min = Math.min(...matches.map(it => it.prio))
-        const prioritized = matches.filter(it => it.prio === min)
+        const min = Math.min(...matches.map(it => plugin.prio(node, it.component)))
+        const prioritized = matches.filter(it => plugin.prio(node, it.component) === min)
+        if (prioritized.length > 1) {
+            throw new Error(`${node.Display} has more than one deployment scenario match with the same priority`)
+        }
+        const scenario = utils.first(prioritized)
 
         /**
-         * Step C: Assign technology
+         * Select technology
          */
-        const max = Math.max(...prioritized.map(it => it.rule.weight ?? QUALITY_DEFAULT_WEIGHT))
-        const match = prioritized.find(it => it.rule.weight === max)
-        assert.isDefined(match)
+        const max = Math.max(...scenario.assessments.map(it => it.quality))
+        const assessment = scenario.assessments.find(it => it.quality === max)
+        assert.isDefined(assessment)
+
+        /**
+         * Assign technology
+         */
         const raw = template.topology_template.node_templates[node.name] as NodeTemplate
         assert.isDefined(raw)
-        raw.technology = match.rule.technology
+        raw.technology = assessment.technology
 
         /**
-         * Step D: Document assignment
+         * Document assignment
          */
         report.push({
-            node: node.name,
-            technology: match.rule.technology,
-            quality: toLabel(match.rule.weight),
-            reason: match.rule.reason,
+            component: node.name,
+            technology: assessment.technology,
+            quality: toLabel(assessment.quality),
+            reason: assessment.reason,
         })
 
-        std.log(`Technology "${match.rule.technology}" is assigned to ${node.display}`)
+        std.log(`Technology "${assessment.technology}" is assigned to ${node.display}`)
     }
 
     files.storeYAML(options.output, template)
