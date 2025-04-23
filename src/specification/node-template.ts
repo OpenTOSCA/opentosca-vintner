@@ -23,7 +23,7 @@ export type NodeTemplate = {
     capabilities?: CapabilityAssignmentMap
     artifacts?: VariabilityPointObject<ArtifactDefinition>
     weight?: number | boolean
-    persistent?: boolean
+    anchor?: boolean
     technology?: TechnologyAssignment
     managed?: boolean
 } & VariabilityAlternative & {

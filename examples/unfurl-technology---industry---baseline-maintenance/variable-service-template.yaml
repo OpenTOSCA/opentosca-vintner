@@ -192,7 +192,7 @@ topology_template:
 
         global_frontend_dashboard_compose:
             type: global.frontend.dashboard
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
@@ -219,7 +219,7 @@ topology_template:
 
         global_frontend_dashboard_kubernetes:
             type: global.frontend.dashboard
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_customer_or_hyperscaler}
             technology: kubernetes
             properties:
@@ -1068,7 +1068,7 @@ topology_template:
 
         retailer_frontend_dashboard_compose:
             type: retailer.frontend.dashboard
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
@@ -1095,7 +1095,7 @@ topology_template:
 
         retailer_frontend_dashboard_kubernetes:
             type: retailer.frontend.dashboard
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_customer_or_hyperscaler}
             technology: kubernetes
             properties:
@@ -1141,7 +1141,7 @@ topology_template:
 
         retailer_frontend_terminal_compose:
             type: retailer.frontend.terminal
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_local_or_development}
             technology: compose
             properties:
@@ -1168,7 +1168,7 @@ topology_template:
 
         retailer_frontend_terminal_kubernetes:
             type: retailer.frontend.terminal
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_customer_or_hyperscaler}
             technology: kubernetes
             properties:

@@ -11,11 +11,13 @@ topology_template:
 
             type_default_condition: true
 
+            anchor_check: false
+            optimization_topology: true
             required_hosting_constraint: true
     node_templates:
         worker:
             type: worker
-            persistent: true
+            anchor: false
             requirements:
                 - host:
                       node: vm

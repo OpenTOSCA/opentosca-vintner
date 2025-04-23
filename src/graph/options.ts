@@ -566,7 +566,7 @@ class ChecksOptions extends BaseOptions {
     readonly expectedIncomingRelation: boolean
     readonly expectedArtifact: boolean
 
-    readonly persistent: boolean
+    readonly anchor: boolean
 
     readonly expectedTechnology: boolean
     readonly missingTechnologyContainer: boolean
@@ -638,8 +638,8 @@ class ChecksOptions extends BaseOptions {
         this.expectedArtifact = this.raw.expected_artifact_check ?? this.semantic
         assert.isBoolean(this.expectedArtifact)
 
-        this.persistent = this.raw.persistent_check ?? this.checks
-        assert.isBoolean(this.persistent)
+        this.anchor = this.raw.anchor_check ?? this.checks
+        assert.isBoolean(this.anchor)
 
         this.expectedTechnology = this.raw.expected_technology_check ?? this.semantic
         assert.isBoolean(this.expectedTechnology)

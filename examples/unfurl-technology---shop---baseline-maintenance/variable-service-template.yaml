@@ -88,7 +88,7 @@ topology_template:
         shop_ansible:
             type: shop.component
             conditions: {equal: [{variability_input: env}, STATIC]}
-            persistent: true
+            anchor: true
             technology: ansible
             properties:
                 - application_name: unfurl-technology-shop
@@ -122,7 +122,7 @@ topology_template:
 
         shop_terraform:
             type: shop.component
-            persistent: true
+            anchor: true
             conditions: {equal: [{variability_input: env}, ELASTIC]}
             technology: terraform
             properties:
@@ -157,7 +157,7 @@ topology_template:
 
         shop_kubernetes:
             type: shop.component
-            persistent: true
+            anchor: true
             conditions: {equal: [{variability_input: env}, KUBERNETES]}
             technology: kubernetes
             properties:

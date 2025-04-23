@@ -8,7 +8,7 @@ topology_template:
     node_templates:
         one:
             type: one
-            persistent: true
+            anchor: true
             managed: false
             requirements:
                 - ambiguous_relation: two

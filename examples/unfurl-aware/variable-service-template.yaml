@@ -107,7 +107,7 @@ topology_template:
     node_templates:
         shop:
             type: shop.component
-            persistent: true
+            anchor: true
             properties:
                 - application_name: unfurl-aware
                 - DB_NAME: shop
