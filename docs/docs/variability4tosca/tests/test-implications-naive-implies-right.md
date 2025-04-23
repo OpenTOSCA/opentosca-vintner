@@ -41,7 +41,7 @@ topology_template:
     node_templates:
         worker:
             type: worker
-            persistent: true
+            anchor: true
             implies:
                 - - relation_presence:
                         - SELF

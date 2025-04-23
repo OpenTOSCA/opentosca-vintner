@@ -18,7 +18,7 @@ topology_template:
         container:
             type: container
             conditions: false
-            persistent: true
+            anchor: true
             managed: false
             properties:
                 some_property:

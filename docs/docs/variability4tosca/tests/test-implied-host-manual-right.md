@@ -32,7 +32,7 @@ topology_template:
     node_templates:
         application:
             type: Application
-            persistent: true
+            anchor: true
             requirements:
                 - host:
                       node: left

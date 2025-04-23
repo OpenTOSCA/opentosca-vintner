@@ -24,7 +24,7 @@ topology_template:
     node_templates:
         worker:
             type: worker
-            persistent: true
+            anchor: true
             requirements:
                 - host:
                       node: dev_host

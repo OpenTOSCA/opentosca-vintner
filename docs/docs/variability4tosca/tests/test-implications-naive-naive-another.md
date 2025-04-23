@@ -24,7 +24,7 @@ topology_template:
     node_templates:
         app:
             type: app
-            persistent: true
+            anchor: true
             requirements:
                 - database:
                       node: database

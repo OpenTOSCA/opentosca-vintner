@@ -25,7 +25,7 @@ topology_template:
                 - relation: target
         target:
             type: target
-            persistent: true
+            anchor: true
 {% endraw %}
 ```
 

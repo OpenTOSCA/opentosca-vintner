@@ -70,7 +70,7 @@ topology_template:
     node_templates:
         application:
             type: application
-            persistent: true
+            anchor: true
             requirements:
                 - host:
                       node: ansible_host

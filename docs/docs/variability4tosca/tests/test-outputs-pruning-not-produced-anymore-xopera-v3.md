@@ -29,7 +29,7 @@ topology_template:
         container:
             type: container
             conditions: false
-            persistent: true
+            anchor: true
             properties:
                 some_property: some_value
 {% endraw %}

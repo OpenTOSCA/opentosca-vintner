@@ -22,7 +22,7 @@ topology_template:
     node_templates:
         container:
             type: container
-            persistent: true
+            anchor: true
             technology:
                 - ansible:
                       conditions: true

@@ -33,7 +33,7 @@ topology_template:
                 - host: vm
         worker:
             type: worker
-            persistent: true
+            anchor: true
             requirements:
                 - host:
                       node: vm
