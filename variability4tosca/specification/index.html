@@ -1790,6 +1790,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../tests/test-anchor-anchor-false/" class="md-nav__link">
+        anchor-anchor-false
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-anchor-anchor-throw/" class="md-nav__link">
+        anchor-anchor-throw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-anchor-anchor-undefined/" class="md-nav__link">
+        anchor-anchor-undefined
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-anchor-anchor/" class="md-nav__link">
+        anchor-anchor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tests/test-arithmetic-operators-add/" class="md-nav__link">
         Operator "add"
       </a>
@@ -5110,62 +5166,6 @@
     <li class="md-nav__item">
       <a href="../tests/test-outputs-unique-output-constraint-unsat/" class="md-nav__link">
         outputs-unique-output-constraint-unsat
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-persistent-persistent-false/" class="md-nav__link">
-        persistent-persistent-false
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-persistent-persistent-throw/" class="md-nav__link">
-        persistent-persistent-throw
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-persistent-persistent-undefined/" class="md-nav__link">
-        persistent-persistent-undefined
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tests/test-persistent-persistent/" class="md-nav__link">
-        persistent-persistent
       </a>
     </li>
   
@@ -9855,6 +9855,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>true</td>
 <td>Enable <em>in the enricher</em> if technology is required when enriching technologies</td>
 </tr>
+<tr>
+<td>anchor_check</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable <em>in the populator</em> if an anchor exists</td>
+</tr>
 </tbody>
 </table>
 <h3 id="solver-options">Solver Options<a class="headerlink" href="#solver-options" title="Permanent link">&para;</a></h3>
@@ -10643,10 +10650,10 @@ A node template can also hold conditional types, artifact, and properties.</p>
 <td>Configure the default condition for this element.</td>
 </tr>
 <tr>
-<td>persistent</td>
+<td>anchor</td>
 <td>false</td>
 <td>Boolean</td>
-<td>Configure if node is persistent, e.g., always consumed by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.</td>
+<td>Configure if node is anchor, e.g., always consumed by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.</td>
 </tr>
 <tr>
 <td>pruning</td>
@@ -12659,7 +12666,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 19, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 23, 2025</span>
       
     
   </small>
