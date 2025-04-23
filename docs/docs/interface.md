@@ -3896,3 +3896,53 @@ returns deployment scenarios
 | no-hosting |  false  | boolean |  |
 | quality |  false  | number |  |
 | format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |
+
+## vintner utils select-technologies
+
+select deployment technologies
+
+
+=== "CLI"
+    ```shell linenums="1"
+    vintner utils select-technologies --template ${TEMPLATE} --output ${OUTPUT}
+    ```
+
+=== "cURL"
+    ```shell linenums="1"
+    curl --header "Content-Type: application/json" \
+            --request POST \
+            --data '{"template": "${TEMPLATE}", "output": "${OUTPUT}"}' \
+            ${SERVER_ADDRESS}/utils/select-technologies
+    ```
+
+=== "JavaScript"
+    ```javascript linenums="1"
+    const axios = require("axios")
+    await axios.post(SERVER_ADDRESS + "/utils/select-technologies", {
+		template: TEMPLATE,
+		output: OUTPUT
+    })
+    ```
+
+=== "Python"
+    ```python linenums="1"
+    import requests
+    requests.post(SERVER_ADDRESS + "/utils/select-technologies", json={
+		"template": TEMPLATE,
+		"output": OUTPUT
+    })
+    ```
+
+=== "Kotlin"
+    ```kotlin linenums="1"
+    import khttp.post
+    post(SERVER_ADDRESS + "/utils/select-technologies", json=mapOf(
+		"template" to TEMPLATE,
+		"output" to OUTPUT
+    ))
+    ```
+
+| Option | Mandatory | Type | Description |
+| --- | --- | --- | --- |
+| template |  true  | string | path to service template |
+| output |  true  | string | path of the output |

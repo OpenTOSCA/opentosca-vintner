@@ -95,7 +95,7 @@ topology_template:
 
         frontend_component:
             type: frontend.component
-            persistent: true
+            anchor: true
             properties:
                 - application_name: frontend
                 - application_port: 8080

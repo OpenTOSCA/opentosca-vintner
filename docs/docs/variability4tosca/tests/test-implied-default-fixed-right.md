@@ -34,7 +34,7 @@ topology_template:
     node_templates:
         application:
             type: Application
-            persistent: true
+            anchor: true
             requirements:
                 - connection:
                       node: left
@@ -45,10 +45,10 @@ topology_template:
                       default_alternative: true
         right:
             type: Right
-            persistent: true
+            anchor: true
         left:
             type: Left
-            persistent: true
+            anchor: true
 {% endraw %}
 ```
 

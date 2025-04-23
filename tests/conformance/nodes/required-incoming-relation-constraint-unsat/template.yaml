@@ -20,4 +20,4 @@ topology_template:
 
         target:
             type: target
-            persistent: true
+            anchor: true

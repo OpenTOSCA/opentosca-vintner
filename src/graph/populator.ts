@@ -73,15 +73,15 @@ export class Populator {
             ...this.graph.outputs,
         ]
 
-        // Ensure that at least one node template is persistent if "incoming(naive)-host" is used
-        if (this.graph.options.checks.persistent) {
+        // Ensure that at least one node template is anchor if "incoming(naive)-host" is used
+        if (this.graph.options.checks.anchor) {
             if (
                 this.graph.options.default.nodeDefaultConditionMode.includes('incoming') &&
                 this.graph.options.default.nodeDefaultConditionMode.includes('host')
             ) {
-                if (check.isUndefined(this.graph.nodes.find(it => it.persistent || it.implied)))
+                if (check.isUndefined(this.graph.nodes.find(it => it.anchor || it.implied)))
                     throw new Error(
-                        `Node default condition mode "incoming(naive)-host" requires at least one persistent or implied node template`
+                        `Node default condition mode "incoming(naive)-host" requires at least one anchor or implied node template`
                     )
             }
         }

@@ -40,7 +40,7 @@ topology_template:
     node_templates:
         shop:
             type: shop.component
-            persistent: true
+            anchor: true
             requirements:
                 - host:
                       node: os_kubernetes

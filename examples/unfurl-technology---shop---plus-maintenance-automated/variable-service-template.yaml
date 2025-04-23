@@ -85,7 +85,7 @@ topology_template:
 
         shop:
             type: shop.component
-            persistent: true
+            anchor: true
             properties:
                 - application_name: unfurl-technology-shop
                 - application_port: 3000

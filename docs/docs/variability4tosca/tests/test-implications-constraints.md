@@ -55,7 +55,7 @@ topology_template:
     node_templates:
         worker:
             type: worker
-            persistent: true
+            anchor: true
             requirements:
                 - dev_database:
                       node: dev_database

@@ -4,6 +4,7 @@ import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
+import std from '#std'
 import {isAbstract} from '#technologies/utils'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -89,8 +90,14 @@ export default class Node extends Element {
         return true
     }
 
-    get persistent() {
+    get anchor() {
+        if (check.isDefined(this.raw.anchor)) {
+            assert.isBoolean(this.raw.anchor)
+            return this.raw.anchor
+        }
+
         if (check.isDefined(this.raw.persistent)) {
+            std.log(`${this.Display} uses deprecated "persistent" instead of "anchor"`)
             assert.isBoolean(this.raw.persistent)
             return this.raw.persistent
         }
@@ -101,13 +108,13 @@ export default class Node extends Element {
     }
 
     get defaultEnabled() {
-        return check.isTrue(this.persistent)
+        return check.isTrue(this.anchor)
             ? false
             : this.raw.default_condition ?? this.graph.options.default.nodeDefaultCondition
     }
 
     get pruningEnabled() {
-        return check.isTrue(this.persistent) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
+        return check.isTrue(this.anchor) ? false : this.raw.pruning ?? this.graph.options.pruning.nodePruning
     }
 
     private _hosts?: Node[]

@@ -179,7 +179,7 @@ topology_template:
 
         global_frontend_dashboard:
             type: global.frontend.dashboard
-            persistent: true
+            anchor: true
             properties:
                 - application_name: global-frontend-dashboard
                 - application_port: 3000
@@ -589,7 +589,7 @@ topology_template:
 
         retailer_frontend_dashboard:
             type: retailer.frontend.dashboard
-            persistent: true
+            anchor: true
             properties:
                 - application_name: retailer-frontend-dashboard
                 - application_port: 3000
@@ -628,7 +628,7 @@ topology_template:
 
         retailer_frontend_terminal:
             type: retailer.frontend.terminal
-            persistent: true
+            anchor: true
             properties:
                 - application_name: retailer-frontend-terminal
                 - application_port: 3000

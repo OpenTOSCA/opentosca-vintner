@@ -30,7 +30,7 @@ topology_template:
     node_templates:
         worker:
             type: worker
-            persistent: true
+            anchor: true
             requirements:
                 - left:
                       node: left

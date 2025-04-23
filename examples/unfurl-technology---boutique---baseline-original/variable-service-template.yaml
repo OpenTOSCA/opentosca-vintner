@@ -84,7 +84,7 @@ topology_template:
 
         frontend_component_compose:
             type: frontend.component
-            persistent: true
+            anchor: true
             conditions: {logic_expression: is_openstack}
             technology: compose
             properties:
@@ -129,7 +129,7 @@ topology_template:
         frontend_component_terraform:
             type: frontend.component
             conditions: {logic_expression: is_gcp}
-            persistent: true
+            anchor: true
             technology: terraform
             properties:
                 - application_name: frontend

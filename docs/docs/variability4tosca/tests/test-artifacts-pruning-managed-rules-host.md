@@ -4,7 +4,7 @@
 
 ## Description
 
-Pruning via rules also works if no host is present. In this case, the technology and the artifact form a circle, while the application provides the presence impulse since its persistent.
+Pruning via rules also works if no host is present. In this case, the technology and the artifact form a circle, while the application provides the presence impulse since its anchor.
 
 ## Variable Service Template
 
@@ -43,7 +43,7 @@ topology_template:
     node_templates:
         application:
             type: application
-            persistent: true
+            anchor: true
             artifacts:
                 - first_artifact:
                       type: first.artifact.type

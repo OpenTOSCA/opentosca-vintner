@@ -40,7 +40,7 @@ topology_template:
     node_templates:
         application:
             type: application
-            persistent: true
+            anchor: true
             artifacts:
                 - first_artifact:
                       type: first.artifact.type
