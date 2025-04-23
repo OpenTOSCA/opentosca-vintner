@@ -4,6 +4,7 @@ import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
+import std from '#std'
 import {isAbstract} from '#technologies/utils'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -93,6 +94,12 @@ export default class Node extends Element {
         if (check.isDefined(this.raw.anchor)) {
             assert.isBoolean(this.raw.anchor)
             return this.raw.anchor
+        }
+
+        if (check.isDefined(this.raw.persistent)) {
+            std.log(`${this.Display} uses deprecated "persistent" instead of "anchor"`)
+            assert.isBoolean(this.raw.persistent)
+            return this.raw.persistent
         }
     }
 

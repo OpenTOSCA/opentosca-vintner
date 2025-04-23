@@ -245,6 +245,7 @@ The following options are used to configure checks.
 | unconsumed_input_check             | false     | Boolean | true    | Enable the semantic check regarding not consumed inputs.                        |
 | unproduced_output_check            | false     | Boolean | true    | Enable the consistency check regarding not produced outputs.                    |
 | required_technology_check          | false     | Boolean | true    | Enable _in the enricher_ if technology is required when enriching technologies  |
+| anchor_check                       | false     | Boolean | true    | Enable _in the populator_ if an anchor exists                                   |
 
 ### Solver Options
 
@@ -552,7 +553,7 @@ A node template can also hold conditional types, artifact, and properties.
 | default_consistency_condition | false     | Boolean                                                                              | Enable the default consistency condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template. |
 | default_semantic_condition    | false     | Boolean                                                                              | Enable the default semantic condition for this element. Default condition must be enabled for this element. This overrides the variability options of the variable topology template.    |
 | default_condition_mode        | false     | source &#124; relation &#124; host &#124; source-host &#124; relation-host           | Configure the default condition for this element.                                                                                                                                        |
-| persistent                    | false     | Boolean                                                                              | Configure if node is persistent, e.g., always consumed by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.                     |
+| anchor                    | false     | Boolean                                                                              | Configure if node is anchor, e.g., always consumed by an end user from the browser. This will prevent unexpected pruning by setting the pruning option to false.                     |
 | pruning                       | false     | Boolean                                                                              | Enable the pruning for this element. This overrides the variability options of the variable topology template.                                                                           |
 | consistency_pruning           | false     | Boolean                                                                              | Enable the consistency pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                     |
 | semantic_pruning              | false     | Boolean                                                                              | Enable the semantic pruning for this element. Pruning must be enabled for this element. This overrides the variability options of the variable topology template.                        |
