@@ -112,6 +112,11 @@ export function prettyMilliseconds(ms?: number) {
     return ms > 1000 ? `${s.toFixed(3)} s` : `${ms.toFixed(3)} ms`
 }
 
+// TODO: remove this
+export function nanosecondsToMilliseconds(ns: bigint) {
+    return Number(ns / 1_000_000n)
+}
+
 export function prettyNumber(number?: number) {
     if (number === undefined) return
     if (Number.isInteger(number)) return number.toLocaleString('en')

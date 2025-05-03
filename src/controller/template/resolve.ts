@@ -20,5 +20,6 @@ export default async function (options: TemplateResolveOptions) {
         presets: options.presets,
         enrich: options.enrich ?? false,
     })
+
     files.storeYAML(options.output, result.template)
 }
