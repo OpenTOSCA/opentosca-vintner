@@ -3,12 +3,12 @@ import {expect} from 'chai'
 
 describe('utils', () => {
     it('median of array of even length', () => {
-        const median = utils.getMedianFromSorted([1, 2])
+        const median = utils.median([1, 2])
         expect(median).to.equal(1.5)
     })
 
     it('median of array of odd length', () => {
-        const median = utils.getMedianFromSorted([1, 2, 3])
+        const median = utils.median([1, 2, 3])
         expect(median).to.equal(2)
     })
 

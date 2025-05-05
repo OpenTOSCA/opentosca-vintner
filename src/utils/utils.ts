@@ -127,7 +127,9 @@ export function roundNumber(number: number, digits = 2) {
     return Number(number.toFixed(digits))
 }
 
-export function getMedianFromSorted(array: number[]) {
+export function median(array: number[]) {
+    array.sort((a, b) => a - b)
+
     const mid = Math.floor(array.length / 2)
     return array.length % 2 ? array[mid] : (array[mid] + array[mid - 1]) / 2
 }

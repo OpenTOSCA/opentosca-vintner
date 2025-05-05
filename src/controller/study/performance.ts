@@ -35,6 +35,8 @@ export type ResolvingMeasurement = {
 
 // TODO: performance marks should be unique per run ...
 
+// TODO: can we autogenerate an application for 1k, 2k, 4k, 8k, 16k, 32k elements? (should also check if its similar to our own applications)
+
 export default async function (options: StudyOptions) {
     assert.isDefined(options.directories)
     assert.isTrue(options.experimental)
@@ -92,6 +94,8 @@ export default async function (options: StudyOptions) {
             const resolvedTemplateFile = path.join(workingDirectory, `variable-service-template.${variant}.yaml`)
             const resolvingInputsFile = path.join(testsDirectory, variant, 'inputs.yaml')
             const expectedTemplateFile = path.join(testsDirectory, variant, 'expected.yaml')
+
+            console.log({application, variant})
 
             performance.start('resolver_total')
             await Controller.template.resolve({
