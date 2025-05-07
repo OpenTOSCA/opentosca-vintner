@@ -343,6 +343,14 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/qualities',
+    hae.express(async (req, res, next) => {
+        const qualities = await Controller.template.qualities(req.body)
+        res.json({qualities})
+    })
+)
+
+resolvers.post(
     '/template/quality',
     hae.express(async (req, res, next) => {
         const quality = await Controller.template.quality(req.body)

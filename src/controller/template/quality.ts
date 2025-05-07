@@ -1,89 +1,86 @@
-import {load} from '#resolver'
-import Resolver from '#resolver/resolver'
+import * as assert from '#assert'
+import Graph from '#graph/graph'
+import Loader from '#graph/loader'
+import std from '#std'
+import {TechnologyRulePlugin} from '#technologies/plugins/rules'
+import {toLabel} from '#technologies/utils'
 import * as utils from '#utils'
-import * as assert from '#utils/assert'
 
 export type TemplateQualityOptions = {
     template: string
-    presets?: string[]
-    inputs?: string
 }
 
 export default async function (options: TemplateQualityOptions) {
     assert.isDefined(options.template, 'Template not defined')
 
+    const template = await new Loader(options.template).load()
+    const graph = new Graph(template)
+    const plugin = new TechnologyRulePlugin(graph)
+
     /**
-     * Note, checker does not run on these results!
-     * However, this is fine as long as the correct resolving options are used, e.g., with constraints enabled
+     * Weights
      */
-    return {
-        min_weight: await weight(options, 'min'),
-        max_weight: await weight(options, 'max'),
-        min_count: await count(options, 'min'),
-        //max_count: await count(options, 'max'),
-        max_weight_min_count: await weightCount(options),
+    const weights: number[] = []
+    // TODO: detect and increment missing, e.g., check if scenario would exist
+    const missing = 0
+    let unsupported = 0
+    for (const node of graph.nodes) {
+        if (utils.isEmpty(node.technologies)) {
+            std.log(node.name)
+            continue
+        }
+
+        if (node.technologies.length !== 1) {
+            throw new Error(`${node.Display} must not have multiple technologies assigned`)
+        }
+
+        /**
+         * Find matches
+         */
+        const scenarios = plugin.getScenarios({technology: node.technologies[0].name})
+        const matches = scenarios.filter(it => plugin.test(node, it))
+        if (utils.isEmpty(matches)) {
+            // TODO: --disable-punish
+            // TODO: --punishment LOW
+            const punishment = 0
+            weights.push(punishment)
+            std.log(node.name, node.technologies[0].name, punishment, 'NOT_SUPPORTED_ERROR')
+            unsupported++
+            // throw new Error(`${node.Display} has no deployment scenario matches`)
+            continue
+        }
+
+        /**
+         * Prioritize matches
+         */
+        const min = Math.min(...matches.map(it => plugin.prio(node, it.component)))
+        const prioritized = matches.filter(it => plugin.prio(node, it.component) === min)
+        if (prioritized.length > 1) {
+            throw new Error(`${node.Display} has more than one deployment scenario match with the same priority`)
+        }
+        const scenario = utils.first(prioritized)
+
+        /**
+         * Select the only existing assessment
+         */
+        if (scenario.assessments.length !== 1) {
+            throw new Error(`${node.Display} has more than one deployment scenario assessment`)
+        }
+        const assessment = utils.first(scenario.assessments)
+
+        std.log(node.name, assessment.technology, assessment.quality, scenario.key)
+        weights.push(assessment.quality)
     }
-}
 
-async function weight(options: TemplateQualityOptions, direction: 'min' | 'max') {
-    const loaded = await load(utils.copy({enrich: true, ...options}), {
-        topology_template: {
-            variability: {
-                options: {
-                    optimization_technologies: direction,
-                    optimization_technologies_mode: 'weight',
-                },
-            },
-        },
-    })
-    const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
-    if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-
-    const result = utils.first(optimized)
-
-    return result.technologies
-}
-
-async function count(options: TemplateQualityOptions, direction: 'min' | 'max') {
-    const loaded = await load(utils.copy({enrich: true, ...options}), {
-        topology_template: {
-            variability: {
-                options: {
-                    optimization_technologies: direction,
-                    optimization_technologies_mode: 'count',
-                },
-            },
-        },
-    })
-    const all = new Resolver(loaded.graph, loaded.inputs).optimize({all: true})
-    const minCountGroups = Math.min(...all.map(it => it.technologies.count_groups))
-    const candidates = all
-        .filter(it => it.technologies.count_groups === minCountGroups)
-        .sort((a, b) => a.technologies.weight_average - b.technologies.weight_average)
-
-    const min = utils.first(candidates)
-    const max = utils.last(candidates)
+    /**
+     * Weight
+     */
+    const weight = utils.average(weights)
 
     return {
-        min_quality: min.technologies,
-        max_quality: max.technologies,
+        weight,
+        quality: toLabel(weight),
+        missing,
+        unsupported,
     }
-}
-
-async function weightCount(options: TemplateQualityOptions) {
-    const loaded = await load(utils.copy({enrich: true, ...options}), {
-        topology_template: {
-            variability: {
-                options: {
-                    optimization_technologies_mode: 'weight-count',
-                },
-            },
-        },
-    })
-    const optimized = new Resolver(loaded.graph, loaded.inputs).optimize()
-    if (optimized.length !== 1) throw new Error(`Did not return correct quality`)
-
-    const result = utils.first(optimized)
-
-    return result.technologies
 }

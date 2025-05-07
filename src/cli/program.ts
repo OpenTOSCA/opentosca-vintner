@@ -488,8 +488,8 @@ template
     )
 
 template
-    .command('quality')
-    .description('get quality of template')
+    .command('qualities')
+    .description('get quality ranges of template')
     .requiredOption('--template <string>', 'path to service template')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
     .option(
@@ -498,7 +498,17 @@ template
     )
     .action(
         hae.exit(async options => {
-            std.out(util.inspect(await Controller.template.quality(options), {depth: null}))
+            std.out(util.inspect(await Controller.template.qualities(options), {depth: null}))
+        })
+    )
+
+template
+    .command('quality')
+    .description('get quality of template')
+    .requiredOption('--template <string>', 'path to service template')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.template.quality(options))
         })
     )
 

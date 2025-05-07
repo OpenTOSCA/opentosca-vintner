@@ -41,11 +41,13 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return rules
     }
 
-    getScenarios() {
+    getScenarios(filter: {technology?: string} = {}) {
         const scenarios: Scenario[] = []
         for (const rule of this.getRules()) {
             assert.isDefined(rule.weight)
             assert.isDefined(rule.hosting)
+
+            if (check.isDefined(filter.technology) && rule.technology !== filter.technology) continue
 
             const key = constructRuleName(rule, {technology: false})
 
