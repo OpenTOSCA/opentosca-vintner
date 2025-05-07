@@ -24,6 +24,7 @@ export default async function (options: TemplateQualityOptions) {
     // TODO: detect and increment missing, e.g., check if scenario would exist
     const missing = 0
     let unsupported = 0
+    let assigned = 0
     for (const node of graph.nodes) {
         if (utils.isEmpty(node.technologies)) {
             std.log(node.name)
@@ -33,6 +34,8 @@ export default async function (options: TemplateQualityOptions) {
         if (node.technologies.length !== 1) {
             throw new Error(`${node.Display} must not have multiple technologies assigned`)
         }
+
+        assigned++
 
         /**
          * Find matches
@@ -82,5 +85,7 @@ export default async function (options: TemplateQualityOptions) {
         quality: toLabel(weight),
         missing,
         unsupported,
+        assigned,
+        total: assigned + unsupported + missing,
     }
 }
