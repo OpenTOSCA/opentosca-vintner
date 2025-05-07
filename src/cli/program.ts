@@ -506,6 +506,9 @@ template
     .command('quality')
     .description('get quality of template')
     .requiredOption('--template <string>', 'path to service template')
+    .option('--punishment [number]', 'punishment for a missing or unsupported technology assignment')
+    .option('--punish [boolean]', 'punish missing or unsupported technology assignment', true)
+    .option('--no-punish [boolean]', 'ignore missing or unsuppoted technology assignment')
     .action(
         hae.exit(async options => {
             std.out(await Controller.template.quality(options))

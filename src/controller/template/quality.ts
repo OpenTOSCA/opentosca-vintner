@@ -8,10 +8,14 @@ import * as utils from '#utils'
 
 export type TemplateQualityOptions = {
     template: string
+    punishment?: number
+    punish?: boolean
 }
 
 export default async function (options: TemplateQualityOptions) {
     assert.isDefined(options.template, 'Template not defined')
+    options.punishment = options.punishment ?? 0
+    options.punish = options.punish ?? true
 
     const template = await new Loader(options.template).load()
     const graph = new Graph(template)
@@ -21,13 +25,24 @@ export default async function (options: TemplateQualityOptions) {
      * Weights
      */
     const weights: number[] = []
-    // TODO: detect and increment missing, e.g., check if scenario would exist
-    const missing = 0
+    let missing = 0
     let unsupported = 0
     let assigned = 0
     for (const node of graph.nodes) {
         if (utils.isEmpty(node.technologies)) {
-            std.log(node.name)
+            /**
+             * Check if technology assignment is missing
+             */
+            const scenarios = plugin.getScenarios()
+            const matches = scenarios.filter(it => plugin.test(node, it))
+            if (utils.isPopulated(matches)) {
+                std.log(node.name, '\t\t', options.punishment, 'NOT_ASSIGNED_ERROR')
+                if (options.punish) weights.push(options.punishment)
+                missing++
+            } else {
+                std.log(node.name)
+            }
+
             continue
         }
 
@@ -43,13 +58,9 @@ export default async function (options: TemplateQualityOptions) {
         const scenarios = plugin.getScenarios({technology: node.technologies[0].name})
         const matches = scenarios.filter(it => plugin.test(node, it))
         if (utils.isEmpty(matches)) {
-            // TODO: --disable-punish
-            // TODO: --punishment LOW
-            const punishment = 0
-            weights.push(punishment)
-            std.log(node.name, node.technologies[0].name, punishment, 'NOT_SUPPORTED_ERROR')
+            std.log(node.name, node.technologies[0].name, options.punishment, 'NOT_SUPPORTED_ERROR')
+            if (options.punish) weights.push(options.punishment)
             unsupported++
-            // throw new Error(`${node.Display} has no deployment scenario matches`)
             continue
         }
 
