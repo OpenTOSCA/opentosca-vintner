@@ -488,8 +488,8 @@ template
     )
 
 template
-    .command('quality')
-    .description('get quality of template')
+    .command('qualities')
+    .description('get quality ranges of template')
     .requiredOption('--template <string>', 'path to service template')
     .option('--presets [string...]', 'names of variability presets(env: OPENTOSCA_VINTNER_VARIABILITY_PRESETS)', [])
     .option(
@@ -498,7 +498,20 @@ template
     )
     .action(
         hae.exit(async options => {
-            std.out(util.inspect(await Controller.template.quality(options), {depth: null}))
+            std.out(util.inspect(await Controller.template.qualities(options), {depth: null}))
+        })
+    )
+
+template
+    .command('quality')
+    .description('get quality of template')
+    .requiredOption('--template <string>', 'path to service template')
+    .option('--punishment [number]', 'punishment for a missing or unsupported technology assignment')
+    .option('--punish [boolean]', 'punish missing or unsupported technology assignment', true)
+    .option('--no-punish [boolean]', 'ignore missing or unsuppoted technology assignment')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.template.quality(options))
         })
     )
 
@@ -1206,5 +1219,16 @@ study
     .action(
         hae.exit(async options => {
             await Controller.study.technology(options)
+        })
+    )
+
+study
+    .command('quality')
+    .description('conduct quality study')
+    .option('--dir [string]')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.quality(options)
         })
     )

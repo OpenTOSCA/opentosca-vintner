@@ -6,6 +6,7 @@ import _normalize from './normalize'
 import _package from './package'
 import _pull from './pull'
 import PUMLController from './puml'
+import _qualities from './qualities'
 import _quality from './quality'
 import _query from './query'
 import _resolve from './resolve'
@@ -34,6 +35,7 @@ export default {
     sign: _sign,
     verify: _verify,
     pull: _pull,
+    qualities: _qualities,
     quality: _quality,
     unpull: _unpull,
 }
