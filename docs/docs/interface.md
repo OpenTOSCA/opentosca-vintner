@@ -3897,14 +3897,14 @@ returns deployment scenarios
 | quality |  false  | number |  |
 | format |  false  | string | output format (choices: ["yaml","json"], default: "yaml") |
 
-## vintner utils select-technologies
+## vintner template assign
 
 select deployment technologies
 
 
 === "CLI"
     ```shell linenums="1"
-    vintner utils select-technologies --template ${TEMPLATE} --output ${OUTPUT}
+    vintner template assign --template ${TEMPLATE} --output ${OUTPUT}
     ```
 
 === "cURL"

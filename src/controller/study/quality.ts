@@ -1,74 +1,109 @@
 import * as assert from '#assert'
+import * as check from '#check'
 import Controller from '#controller'
 import {TemplateQualityOutput} from '#controller/template/quality'
 import * as files from '#files'
+import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
 
 export type StudyQualityOptions = {
-    dir?: string
+    config?: string
     experimental: boolean
 }
 
+export type Config = {
+    dir: string
+    groups: {id: string; application: string; variants: string[]}[]
+}
+
+type Answer = {
+    group: string
+    intuitive_complexity_scale: string
+    intuitive_complexity_comment: string
+    intuitive_confidence_scale: string
+    intuitive_confidence_comment: string
+    supported_complexity_scale: string
+    supported_complexity_comment: string
+    supported_confidence_scale: string
+    supported_confidence_comment: string
+    demographics_variability: string
+    demographics_job: string
+    demographics_degree: string
+    demographics_experience_cs: string
+    demographics_experience_iac: string
+    demographics_experience_TOSCA: string
+    demographics_permission_studies: string
+    id: string
+    label: string
+}
+
+type ExtendedAnswer = {dir: string} & Answer
+
+type Store = {
+    [application: string]: {[variant: string]: {quality: TemplateQualityOutput; submission: ExtendedAnswer}[]}
+}
+
 export default async function (options: StudyQualityOptions) {
-    options.dir = options.dir ?? '/usefulness/edited'
+    options.config = options.config ?? 'study.quality.yaml'
     assert.isTrue(options.experimental)
 
-    // TODO: hardcoded
-    const qualities: {[key: string]: {[key: string]: {quality: TemplateQualityOutput; submission: Answer}[]}} = {
-        A: {
-            development: [],
-            hyperscaler: [],
-            customer: [],
-        },
-        B: {
-            vm: [],
-            gcp: [],
-            kubernetes: [],
-        },
-    }
+    /**
+     * Config
+     */
+    const config = files.loadYAML<Config>(options.config)
 
     /**
      * Collect all submissions
      */
     const submissions = files
-        .listDirectories(options.dir)
-        .map(dir => ({dir, ...files.loadYAML<Answer>(path.join(options.dir!, dir, 'questionnaire.yaml'))}))
+        .listDirectories(config.dir)
+        .map(dir => ({dir, ...files.loadYAML<Answer>(path.join(config.dir, dir, 'questionnaire.yaml'))}))
         .filter(it => it.label === 'INCLUDED')
 
     /**
      * Median experience
      */
     const median = utils.median(submissions.map(it => Number(it.demographics_experience_iac)))
-    console.log('median', median)
+    std.log('median', median)
 
     /**
      * Collect all qualities
      */
+    const store: Store = {}
     for (const submission of submissions) {
-        for (const variant of Object.keys(qualities[submission.group])) {
-            console.log(submission.dir, variant)
-            const template = path.join(options.dir, submission.dir, variant + '.yaml')
+        const group = config.groups.find(it => it.id === submission.group)
+        assert.isDefined(group)
+
+        for (const variant of group.variants) {
+            std.log(submission.dir, variant)
+            const template = path.join(config.dir, submission.dir, variant + '.yaml')
             const quality = await Controller.template.quality({template, punish: false})
-            console.log(submission.demographics_experience_iac, quality)
-            qualities[submission.group][variant].push({quality, submission})
+            std.log(submission.demographics_experience_iac, quality)
+
+            if (check.isUndefined(store[group.id])) store[group.id] = {}
+            if (check.isUndefined(store[group.id][variant])) store[group.id][variant] = []
+            store[group.id][variant].push({quality, submission})
         }
     }
 
     /**
      * Plot each variant
      */
-    for (const application of Object.keys(qualities)) {
-        for (const variant of Object.keys(qualities[application])) {
-            console.log(plot(application, variant, qualities[application][variant], median))
+    for (const group of config.groups) {
+        for (const variant of group.variants) {
+            std.log(plot(group.application, variant, store[group.id][variant], median))
         }
     }
 
-    console.log(
+    /**
+     * Plot all variants
+     */
+    std.log(
         plot(
             'all',
             'all',
-            Object.values(qualities).flatMap(group => Object.values(group).flat()),
+            Object.values(store).flatMap(group => Object.values(group).flat()),
             median
         )
     )
@@ -102,6 +137,10 @@ function plot(
 ${Object.entries(utils.groupBy(qualities, it => it.quality.quality))
     .map(([_, data]) => {
         return data
+            .sort(
+                (a, b) =>
+                    Number(b.submission.demographics_experience_iac) - Number(a.submission.demographics_experience_iac)
+            )
             .map((it, index) => {
                 const exp = Number(it.submission.demographics_experience_iac)
                 const fill = exp < median ? 'white' : exp === median ? 'black!10' : 'black!30'
@@ -131,25 +170,4 @@ function toDataLabel(str: string) {
     return str
         .replace(/_/g, ' ')
         .replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
-}
-
-type Answer = {
-    group: string
-    intuitive_complexity_scale: string
-    intuitive_complexity_comment: string
-    intuitive_confidence_scale: string
-    intuitive_confidence_comment: string
-    supported_complexity_scale: string
-    supported_complexity_comment: string
-    supported_confidence_scale: string
-    supported_confidence_comment: string
-    demographics_variability: string
-    demographics_job: string
-    demographics_degree: string
-    demographics_experience_cs: string
-    demographics_experience_iac: string
-    demographics_experience_TOSCA: string
-    demographics_permission_studies: string
-    id: string
-    label: string
 }

@@ -263,6 +263,18 @@ resolvers.post(
 )
 
 resolvers.post(
+    '/template/assign',
+    hae.express(async (req, res, next) => {
+        const result = await Controller.template.assign({
+            template: req.body.template,
+            output: files.temporaryDirent(),
+        })
+
+        res.json(result)
+    })
+)
+
+resolvers.post(
     '/template/enrich',
     hae.express(async (req, res, next) => {
         await Controller.template.enrich(req.body)
@@ -729,7 +741,7 @@ resolvers.post(
 resolvers.post(
     '/spe/select-technologies',
     hae.express(async (req, res, next) => {
-        const result = await Controller.utils.selectTechnologies({
+        const result = await Controller.template.assign({
             template: req.body.template,
             output: files.temporaryDirent(),
         })

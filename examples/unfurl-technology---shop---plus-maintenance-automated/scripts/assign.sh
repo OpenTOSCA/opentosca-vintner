@@ -11,11 +11,11 @@ do
   dir=$(basename $dir)
   echo "${dir}"
 
-  TMP_DIR="/tmp/vintner-select-technologies"
+  TMP_DIR="/tmp/vintner-assign"
   rm -rf "${TMP_DIR}"
   mkdir "${TMP_DIR}"
   cp -r ${TEMPLATE_DIR}/* ${TMP_DIR}
   cp ${TEMPLATE_DIR}/tests/${dir}/expected.yaml ${TMP_DIR}/template.yaml
 
-  $VINTNER utils select-technologies --template ${TMP_DIR}/template.yaml --output ${TMP_DIR}/template.enriched.yaml
+  $VINTNER template assign --template ${TMP_DIR}/template.yaml --output ${TMP_DIR}/template.enriched.yaml
 done

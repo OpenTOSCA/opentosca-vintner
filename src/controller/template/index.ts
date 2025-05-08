@@ -1,3 +1,4 @@
+import _assign from './assign'
 import _enrich from './enrich'
 import _implement from './implement'
 import _init from './init'
@@ -38,4 +39,5 @@ export default {
     qualities: _qualities,
     quality: _quality,
     unpull: _unpull,
+    assign: _assign,
 }
