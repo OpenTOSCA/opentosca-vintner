@@ -1221,3 +1221,12 @@ study
             await Controller.study.technology(options)
         })
     )
+
+study
+    .command('quality')
+    .description('conduct quality')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.quality(options)
+        })
+    )

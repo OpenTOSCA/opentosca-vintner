@@ -12,7 +12,16 @@ export type TemplateQualityOptions = {
     punish?: boolean
 }
 
-export default async function (options: TemplateQualityOptions) {
+export type TemplateQualityOutput = {
+    weight: number
+    quality: string
+    missing: number
+    unsupported: number
+    assigned: number
+    total: number
+}
+
+export default async function (options: TemplateQualityOptions): Promise<TemplateQualityOutput> {
     assert.isDefined(options.template, 'Template not defined')
     options.punishment = options.punishment ?? 0
     options.punish = options.punish ?? true
@@ -36,7 +45,7 @@ export default async function (options: TemplateQualityOptions) {
             const scenarios = plugin.getScenarios()
             const matches = scenarios.filter(it => plugin.test(node, it))
             if (utils.isPopulated(matches)) {
-                std.log(node.name, '\t\t', options.punishment, 'NOT_ASSIGNED_ERROR')
+                std.log(node.name, '\t\t', options.punish ? options.punishment : '\t', 'NOT_ASSIGNED_ERROR')
                 if (options.punish) weights.push(options.punishment)
                 missing++
             } else {
@@ -58,7 +67,12 @@ export default async function (options: TemplateQualityOptions) {
         const scenarios = plugin.getScenarios({technology: node.technologies[0].name})
         const matches = scenarios.filter(it => plugin.test(node, it))
         if (utils.isEmpty(matches)) {
-            std.log(node.name, node.technologies[0].name, options.punishment, 'NOT_SUPPORTED_ERROR')
+            std.log(
+                node.name,
+                node.technologies[0].name,
+                options.punish ? options.punishment : '\t',
+                'NOT_SUPPORTED_ERROR'
+            )
             if (options.punish) weights.push(options.punishment)
             unsupported++
             continue
