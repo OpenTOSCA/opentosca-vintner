@@ -1221,3 +1221,25 @@ study
             await Controller.study.technology(options)
         })
     )
+
+study
+    .command('quality')
+    .description('conduct quality study')
+    .option('--dir [string]')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.quality(options)
+        })
+    )
+
+study
+    .command('performance')
+    .description('conduct performance case study')
+    .requiredOption('--directories <string...>', '')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.performance(options)
+        })
+    )

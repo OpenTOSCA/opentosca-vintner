@@ -128,10 +128,9 @@ export function roundNumber(number: number, digits = 2) {
 }
 
 export function median(array: number[]) {
-    array.sort((a, b) => a - b)
-
-    const mid = Math.floor(array.length / 2)
-    return array.length % 2 ? array[mid] : (array[mid] + array[mid - 1]) / 2
+    const sorted = Array.from(array).sort((a, b) => a - b)
+    const mid = Math.floor(sorted.length / 2)
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid] + sorted[mid - 1]) / 2
 }
 
 export function toBoolean(data: string | boolean) {
@@ -246,8 +245,4 @@ export function concat(values: string[]) {
 
 export function average(values: number[]) {
     return sum(values) / values.length
-}
-
-export function median(values: number[]) {
-    return getMedianFromSorted([...values].sort())
 }
