@@ -102,6 +102,10 @@ function plot(
 ${Object.entries(utils.groupBy(qualities, it => it.quality.quality))
     .map(([_, data]) => {
         return data
+            .sort(
+                (a, b) =>
+                    Number(b.submission.demographics_experience_iac) - Number(a.submission.demographics_experience_iac)
+            )
             .map((it, index) => {
                 const exp = Number(it.submission.demographics_experience_iac)
                 const fill = exp < median ? 'white' : exp === median ? 'black!10' : 'black!30'
