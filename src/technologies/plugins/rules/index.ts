@@ -13,6 +13,7 @@ import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
 import {DeploymentScenarioMatch, Scenario, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {
+    QUALITY_DEFAULT_WEIGHT,
     constructImplementationName,
     constructRuleName,
     destructImplementationName,
@@ -162,9 +163,24 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         // Prioritize matched scenarios based on inheritance depth
         const prioritized = matches.filter(it => it.prio === min)
 
+        // TODO: parameter to configure this ... otherwise we cant get the worst quality etc ... the parameter should be set by the qualities command
+        // Filter for best quality per rule and matched subgraph
+        const best = prioritized.filter(it => {
+            const others = prioritized.filter(ot => {
+                if (constructRuleName(ot.rule, {technology: false}) !== constructRuleName(it.rule, {technology: false}))
+                    return false
+                if (ot.elements.length !== it.elements.length) return false
+                if (ot.elements.find(et => !it.elements.includes(et))) return false
+                return true
+            })
+
+            const max = Math.max(...others.map(ot => ot.rule.weight ?? QUALITY_DEFAULT_WEIGHT))
+            return (it.rule.weight ?? QUALITY_DEFAULT_WEIGHT) >= max
+        })
+
         // Generate topology templates
         const maps: TechnologyTemplateMap[] = []
-        for (const match of prioritized) {
+        for (const match of best) {
             // Implementation name
             const implementation = constructImplementationName({
                 type: node.getType().name,
@@ -323,6 +339,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
      * Scenario prio is defined by the inheritance depth between the node type and the rule.component
      */
     private prioCache: {[key: string]: number | undefined} = {}
+
     prio(node: Node, target: string): number {
         const source = node.getType().name
         const key = `${source}::prio::${target}`
