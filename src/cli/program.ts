@@ -1224,7 +1224,8 @@ study
 
 study
     .command('quality')
-    .description('conduct quality')
+    .description('conduct quality study')
+    .option('--dir [string]')
     .action(
         hae.exit(async options => {
             await Controller.study.quality(options)

@@ -4,22 +4,14 @@ import * as files from '#files'
 import * as utils from '#utils'
 import path from 'path'
 
-export type StudyQualityOptions = {}
-
-const baseDir = '/usefulness/edited'
-
-const applications = {
-    A: {
-        name: 'smark',
-        variants: ['development', 'hyperscaler', 'customer'],
-    },
-    B: {
-        name: 'boutique',
-        variants: ['vm', 'gcp', 'kubernetes'],
-    },
+export type StudyQualityOptions = {
+    dir?: string
 }
 
 export default async function (options: StudyQualityOptions) {
+    options.dir = options.dir ?? '/usefulness/edited'
+
+    // TODO: hardcoded
     const qualities: {[key: string]: {[key: string]: {quality: TemplateQualityOutput; submission: Answer}[]}} = {
         A: {
             development: [],
@@ -37,8 +29,8 @@ export default async function (options: StudyQualityOptions) {
      * Collect all submissions
      */
     const submissions = files
-        .listDirectories(baseDir)
-        .map(dir => ({dir, ...files.loadYAML<Answer>(path.join(baseDir, dir, 'questionnaire.yaml'))}))
+        .listDirectories(options.dir)
+        .map(dir => ({dir, ...files.loadYAML<Answer>(path.join(options.dir!, dir, 'questionnaire.yaml'))}))
         .filter(it => it.label === 'INCLUDED')
 
     /**
@@ -53,7 +45,7 @@ export default async function (options: StudyQualityOptions) {
     for (const submission of submissions) {
         for (const variant of Object.keys(qualities[submission.group])) {
             console.log(submission.dir, variant)
-            const template = path.join(baseDir, submission.dir, variant + '.yaml')
+            const template = path.join(options.dir, submission.dir, variant + '.yaml')
             const quality = await Controller.template.quality({template, punish: false})
             console.log(submission.demographics_experience_iac, quality)
             qualities[submission.group][variant].push({quality, submission})
