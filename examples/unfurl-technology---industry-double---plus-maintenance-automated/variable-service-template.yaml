@@ -1351,9 +1351,9 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_service_gateway_2_endpoint: {eval: '.::.requirements::[.name=global_service_gateway_2]::.target::application_endpoint'}
+                - global_service_gateway_endpoint: {eval: '.::.requirements::[.name=global_service_gateway_2]::.target::application_endpoint'}
             requirements:
-                - global_service_gateway_2: global_service_gateway_2
+                - global_service_gateway: global_service_gateway_2
                 - host: local_docker_engine_2
                 - host: remote_docker_engine_2
                 - host: kubernetes_cluster_2
@@ -1416,17 +1416,17 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - global_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
-                - global_service_retailers_2_endpoint: {eval: '.::.requirements::[.name=global_service_retailers_2]::.target::application_endpoint'}
-                - global_service_products_2_endpoint: {eval: '.::.requirements::[.name=global_service_products_2]::.target::application_endpoint'}
-                - global_service_calibrations_2_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations_2]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers_2]::.target::application_endpoint'}
+                - global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products_2]::.target::application_endpoint'}
+                - global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations_2]::.target::application_endpoint'}
                 - global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts_2]::.target::application_endpoint'}
             requirements:
                 - cache: global_cache_redis_2
-                - global_service_retailers_2: global_service_retailers_2
-                - global_service_products_2: global_service_products_2
-                - global_service_calibrations_2: global_service_calibrations_2
-                - global_service_accounts_2: global_service_accounts_2
+                - global_service_retailers: global_service_retailers_2
+                - global_service_products: global_service_products_2
+                - global_service_calibrations: global_service_calibrations_2
+                - global_service_accounts: global_service_accounts_2
                 - host: local_docker_engine_2
                 - host: remote_docker_engine_2
                 - host: kubernetes_cluster_2
@@ -1462,7 +1462,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1512,7 +1512,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1578,7 +1578,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1644,7 +1644,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - global_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -1769,9 +1769,9 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_service_gateway_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint'}
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint'}
             requirements:
-                - retailer_service_gateway_2: retailer_service_gateway_2
+                - retailer_service_gateway: retailer_service_gateway_2
                 - host: local_docker_engine_2
                 - host: remote_docker_engine_2
                 - host: kubernetes_cluster_2
@@ -1808,9 +1808,9 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_service_gateway_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint'}
+                - retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint'}
             requirements:
-                - retailer_service_gateway_2: retailer_service_gateway_2
+                - retailer_service_gateway: retailer_service_gateway_2
                 - host: local_docker_engine_2
                 - host: remote_docker_engine_2
                 - host: kubernetes_cluster_2
@@ -1874,23 +1874,23 @@ topology_template:
                       value: false
                       conditions: {not: {logic_expression: has_error_masking}}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
-                - retailer_service_core_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_core_2]::.target::application_endpoint'}
-                - retailer_service_jobs_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs_2]::.target::application_endpoint'}
-                - retailer_service_stores_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores_2]::.target::application_endpoint'}
-                - retailer_service_products_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_products_2]::.target::application_endpoint'}
-                - retailer_service_stocks_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_stocks_2]::.target::application_endpoint'}
-                - retailer_service_orders_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders_2]::.target::application_endpoint'}
-                - retailer_service_global_2_endpoint: {eval: '.::.requirements::[.name=retailer_service_global_2]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core_2]::.target::application_endpoint'}
+                - retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs_2]::.target::application_endpoint'}
+                - retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores_2]::.target::application_endpoint'}
+                - retailer_service_products_endpoint: {eval: '.::.requirements::[.name=retailer_service_products_2]::.target::application_endpoint'}
+                - retailer_service_stocks_endpoint: {eval: '.::.requirements::[.name=retailer_service_stocks_2]::.target::application_endpoint'}
+                - retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders_2]::.target::application_endpoint'}
+                - retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global_2]::.target::application_endpoint'}
             requirements:
                 - cache: retailer_cache_redis_2
-                - retailer_service_core_2: retailer_service_core_2
-                - retailer_service_jobs_2: retailer_service_jobs_2
-                - retailer_service_stores_2: retailer_service_stores_2
-                - retailer_service_products_2: retailer_service_products_2
-                - retailer_service_stocks_2: retailer_service_stocks_2
-                - retailer_service_orders_2: retailer_service_orders_2
-                - retailer_service_global_2: retailer_service_global_2
+                - retailer_service_core: retailer_service_core_2
+                - retailer_service_jobs: retailer_service_jobs_2
+                - retailer_service_stores: retailer_service_stores_2
+                - retailer_service_products: retailer_service_products_2
+                - retailer_service_stocks: retailer_service_stocks_2
+                - retailer_service_orders: retailer_service_orders_2
+                - retailer_service_global: retailer_service_global_2
                 - host: local_docker_engine_2
                 - host: remote_docker_engine_2
                 - host: kubernetes_cluster_2
@@ -1926,7 +1926,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - coffee_enabled:
                       value: true
@@ -1997,7 +1997,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
             requirements:
                 - cache: retailer_cache_redis_2
@@ -2029,7 +2029,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -2095,7 +2095,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - import_enabled:
                       value: true
@@ -2177,7 +2177,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -2226,7 +2226,7 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
                 - mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
                 - mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
@@ -2275,10 +2275,10 @@ topology_template:
                       value: debug
                       conditions: {logic_expression: has_debug_logging}
 
-                - retailer_cache_redis_2_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                - retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
 
-                - global_service_gateway_2_endpoint: {get_input: global_service_gateway_2_endpoint}
-                - global_service_gateway_2_token: {get_input: global_service_gateway_2_token}
+                - global_service_gateway_endpoint: {get_input: global_service_gateway_2_endpoint}
+                - global_service_gateway_token: {get_input: global_service_gateway_2_token}
             requirements:
                 - cache: retailer_cache_redis_2
                 - host: local_docker_engine_2

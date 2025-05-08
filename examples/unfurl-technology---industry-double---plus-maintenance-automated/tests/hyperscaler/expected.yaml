@@ -23,7 +23,13 @@ topology_template:
         global_service_gateway_endpoint:
             type: string
 
+        global_service_gateway_2_endpoint:
+            type: string
+
         global_service_gateway_token:
+            type: string
+
+        global_service_gateway_2_token:
             type: string
 
         payment_provider_endpoint:
@@ -808,3 +814,9 @@ topology_template:
                 k8s_client_key_file: {get_input: k8s_client_key_file}
             requirements:
                 - host: gcp_kubernetesengine
+
+        ###################################################
+        #
+        # TWO
+        #
+        ###################################################

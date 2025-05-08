@@ -29,7 +29,13 @@ topology_template:
         global_service_gateway_endpoint:
             type: string
 
+        global_service_gateway_2_endpoint:
+            type: string
+
         global_service_gateway_token:
+            type: string
+
+        global_service_gateway_2_token:
             type: string
 
         payment_provider_endpoint:
