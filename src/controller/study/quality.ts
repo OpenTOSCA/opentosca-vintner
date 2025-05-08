@@ -55,7 +55,7 @@ export default async function (options: StudyQualityOptions) {
             console.log(submission.dir, variant)
             const template = path.join(baseDir, submission.dir, variant + '.yaml')
             const quality = await Controller.template.quality({template, punish: false})
-            console.log(quality)
+            console.log(submission.demographics_experience_iac, quality)
             qualities[submission.group][variant].push({quality, submission})
         }
     }
