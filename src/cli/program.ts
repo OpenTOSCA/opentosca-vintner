@@ -1226,6 +1226,7 @@ study
     .command('quality')
     .description('conduct quality study')
     .option('--dir [string]')
+    .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
             await Controller.study.quality(options)

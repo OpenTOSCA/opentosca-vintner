@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import Controller from '#controller'
 import {TemplateQualityOutput} from '#controller/template/quality'
 import * as files from '#files'
@@ -6,10 +7,12 @@ import path from 'path'
 
 export type StudyQualityOptions = {
     dir?: string
+    experimental: boolean
 }
 
 export default async function (options: StudyQualityOptions) {
     options.dir = options.dir ?? '/usefulness/edited'
+    assert.isTrue(options.experimental)
 
     // TODO: hardcoded
     const qualities: {[key: string]: {[key: string]: {quality: TemplateQualityOutput; submission: Answer}[]}} = {
@@ -129,16 +132,6 @@ function toDataLabel(str: string) {
         .replace(/_/g, ' ')
         .replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
 }
-
-const COMPLEXITY_SCALE = ['VERY_SIMPLE', 'SIMPLE', 'NEUTRAL', 'COMPLEX', 'VERY_COMPLEX']
-
-const CONFIDENCE_SCALE = ['VERY_INSECURE', 'INSECURE', 'NEUTRAL', 'CONFIDENT', 'VERY_CONFIDENT']
-
-const HIGH_SCALE = ['VERY_LOW', 'LOW', 'NEUTRAL', 'HIGH', 'VERY_HIGH']
-
-const AGREEMENT_SCALE = ['STRONGLY_DISAGREE', 'DISAGREE', 'NEUTRAL', 'AGREE', 'STRONGLY_AGREE']
-
-const PERMISSION_SCALE = ['NO', 'YES']
 
 type Answer = {
     group: string
