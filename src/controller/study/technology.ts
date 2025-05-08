@@ -206,7 +206,7 @@ export default async function (options: StudyTechnologyOptions) {
     for (const original of config.originals) {
         const inputs = path.join(testsDir, original, 'inputs.yaml')
 
-        const quality = await Controller.template.quality({
+        const quality = await Controller.template.qualities({
             template: templateFile,
             inputs,
         })

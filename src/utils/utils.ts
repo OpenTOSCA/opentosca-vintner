@@ -243,3 +243,11 @@ export function trim(value: string): string {
 export function concat(values: string[]) {
     return values.join(`\n`)
 }
+
+export function average(values: number[]) {
+    return sum(values) / values.length
+}
+
+export function median(values: number[]) {
+    return getMedianFromSorted([...values].sort())
+}
