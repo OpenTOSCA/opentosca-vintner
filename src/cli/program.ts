@@ -1225,7 +1225,7 @@ study
 study
     .command('quality')
     .description('conduct quality study')
-    .option('--dir [string]')
+    .option('--config [string]')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {

@@ -1,0 +1,16 @@
+dir: /usefulness/edited
+
+groups:
+    - id: A
+      application: smark
+      variants:
+          - development
+          - hyperscaler
+          - customer
+
+    - id: B
+      application: boutique
+      variants:
+          - vm
+          - gcp
+          - kubernetes
