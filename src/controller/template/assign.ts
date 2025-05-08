@@ -11,7 +11,7 @@ import {Report} from '#technologies/types'
 import {toLabel} from '#technologies/utils'
 import * as utils from '#utils'
 
-export type UtilsSelectTechnologiesOptions = {
+export type TemplateAssignOptions = {
     template: string
     output: string
 }
@@ -21,9 +21,7 @@ export function toReportPath(template: string) {
     return template + '.report.yaml'
 }
 
-export default async function (options: UtilsSelectTechnologiesOptions) {
-    std.log(`-----------------------------------------------------------`)
-
+export default async function (options: TemplateAssignOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isDefined(options.output, 'Output not defined')
 

@@ -370,6 +370,17 @@ template
     )
 
 template
+    .command('assign')
+    .description('assign deployment technologies')
+    .requiredOption('--template <string>', 'path to service template')
+    .requiredOption('--output <string>', 'path of the output')
+    .action(
+        hae.exit(async options => {
+            await Controller.template.assign(options)
+        })
+    )
+
+template
     .command('enrich')
     .description('enrich conditions')
     .requiredOption('--template <string>', 'path to variable service template')
@@ -1174,17 +1185,6 @@ utils
     .action(
         hae.exit(async options => {
             std.out(await Controller.utils.scenarios(options))
-        })
-    )
-
-utils
-    .command('select-technologies')
-    .description('select deployment technologies')
-    .requiredOption('--template <string>', 'path to service template')
-    .requiredOption('--output <string>', 'path of the output')
-    .action(
-        hae.exit(async options => {
-            await Controller.utils.selectTechnologies(options)
         })
     )
 

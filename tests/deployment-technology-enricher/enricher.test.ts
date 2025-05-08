@@ -1,5 +1,5 @@
 import Controller from '#controller'
-import {toReportPath} from '#controller/utils/select-technologies'
+import {toReportPath} from '#controller/template/assign'
 import * as files from '#files'
 import {expect} from 'chai'
 import path from 'path'
