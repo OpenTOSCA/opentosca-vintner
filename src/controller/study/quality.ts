@@ -1,7 +1,7 @@
 import Controller from '#controller'
 import {TemplateQualityOutput} from '#controller/template/quality'
 import * as files from '#files'
-import {groupBy} from '#utils'
+import * as utils from '#utils'
 import path from 'path'
 
 export type StudyQualityOptions = {}
@@ -42,13 +42,20 @@ export default async function (options: StudyQualityOptions) {
         .filter(it => it.label === 'INCLUDED')
 
     /**
+     * Median experience
+     */
+    const median = utils.median(submissions.map(it => Number(it.demographics_experience_iac)))
+    console.log('median', median)
+
+    /**
      * Collect all qualities
      */
     for (const submission of submissions) {
         for (const variant of Object.keys(qualities[submission.group])) {
             console.log(submission.dir, variant)
             const template = path.join(baseDir, submission.dir, variant + '.yaml')
-            const quality = await Controller.template.quality({template})
+            const quality = await Controller.template.quality({template, punish: false})
+            console.log(quality)
             qualities[submission.group][variant].push({quality, submission})
         }
     }
@@ -58,7 +65,7 @@ export default async function (options: StudyQualityOptions) {
      */
     for (const application of Object.keys(qualities)) {
         for (const variant of Object.keys(qualities[application])) {
-            console.log(plot(application, variant, qualities[application][variant]))
+            console.log(plot(application, variant, qualities[application][variant], median))
         }
     }
 
@@ -66,17 +73,23 @@ export default async function (options: StudyQualityOptions) {
         plot(
             'all',
             'all',
-            Object.values(qualities).flatMap(group => Object.values(group).flat())
+            Object.values(qualities).flatMap(group => Object.values(group).flat()),
+            median
         )
     )
 }
 
-function plot(application: string, variant: string, qualities: {quality: TemplateQualityOutput; submission: Answer}[]) {
+function plot(
+    application: string,
+    variant: string,
+    qualities: {quality: TemplateQualityOutput; submission: Answer}[],
+    median: number
+) {
     return `
 \\begin{figure}[t]
   \\centering
   
-\\begin{tikzpicture}
+\\begin{tikzpicture}[entry/.style={text=black, rectangle, draw, inner sep=3pt, text width=15pt, align=center, minimum height=13pt}]
 \\begin{axis}[
     ybar stacked,
     bar width=30pt,
@@ -91,26 +104,25 @@ function plot(application: string, variant: string, qualities: {quality: Templat
     width=0.5\\textwidth,
 ]
 
-${Object.entries(groupBy(qualities, it => it.quality.quality))
-    .map(([quality, data]) => {
+${Object.entries(utils.groupBy(qualities, it => it.quality.quality))
+    .map(([_, data]) => {
         return data
             .map((it, index) => {
+                const exp = Number(it.submission.demographics_experience_iac)
+                const fill = exp < median ? 'white' : exp === median ? 'black!10' : 'black!30'
+
+                const broken = it.quality.assigned !== it.quality.total
+
                 return `
-\\node[text=black] at (axis cs:${toDataLabel(it.quality.quality)}, ${0.5 + index}) {\\scriptsize ${
-                    it.submission.demographics_experience_cs
-                }, ${it.submission.demographics_experience_iac}};
+\\node[entry, fill=${fill}] at (axis cs:${toDataLabel(it.quality.quality)}, ${0.5 + index}) {\\scriptsize ${
+                    broken ? '$\\times$' : ''
+                }};
 `
             })
             .join('')
     })
     .join('')}
-
-\\addplot+[fill=white,draw=black] coordinates { ${Object.entries(groupBy(qualities, it => it.quality.quality))
-        .map(([quality, data]) =>
-            data.map((it, index) => `(${toDataLabel(it.quality.quality)},${index + 1})`).join(' ')
-        )
-        .join(' ')} };
-
+    
 \\end{axis}
 \\end{tikzpicture}
 

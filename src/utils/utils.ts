@@ -240,3 +240,7 @@ export function concat(values: string[]) {
 export function average(values: number[]) {
     return sum(values) / values.length
 }
+
+export function median(values: number[]) {
+    return getMedianFromSorted([...values].sort())
+}
