@@ -54,7 +54,6 @@ export type SolverOptions = {
     optimization_technologies_unique?: boolean
     optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
 
-    // TODO: docs
     // Scenarios
     optimization_scenarios?: boolean
     optimization_scenarios_unique?: boolean
@@ -67,7 +66,6 @@ export type NormalizationOptions = {
 export type EnricherOptions = {
     enrich_input_condition?: boolean
     enrich_technologies?: boolean
-    // TODO: docs
     enrich_technologies_best_only?: boolean
     enrich_implementations?: boolean
 }
@@ -91,7 +89,6 @@ export type ConstraintsOptions = {
     unique_relation_constraint?: boolean
     unique_technology_constraint?: boolean
 
-    // TODO: docs
     unique_scenario_constraint?: boolean
 
     required_artifact_constraint?: boolean

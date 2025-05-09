@@ -251,26 +251,29 @@ The following options are used to configure checks.
 
 The following options are used to configure the solver.
 
-| Keyname                              | Mandatory | Type                                    | Default | Description                                                                                                               |
-|--------------------------------------|-------|-----------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------|
-| optimization_topology                | false | Boolean &#124; min &#124; max           | false   | Configure optimization considering topology.                                                                              | 
-| optimization_topology_unique         | false | Boolean                                 | true    | Enable check for unique results considering topology.                                                                     |
-| optimization_topology_unique_backward | false | Boolean                                 | false   | Enable check for unique results considering topology in backwards compatibility (does not expecte topology optimization). |
-| optimization_topology_mode           | false | count &#124; weight                     | weight  | Configure optimization mode considering topology.                                                                         |
-| optimization_technologies            | false | Boolean &#124; min &#124; max           | false   | Enable optimization considering technologies.                                                                             | 
-| optimization_technologies_unique     | false | Boolean                                 | false   | Enable check for unique results considering technologies.                                                                 | 
-| optimization_technologies_mode       | false | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.                                                                     | 
+| Keyname                               | Mandatory | Type                                    | Default | Description                                                                                                               |
+|---------------------------------------|-----------|-----------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------|
+| optimization_topology                 | false     | Boolean &#124; min &#124; max           | false   | Configure optimization considering topology.                                                                              | 
+| optimization_topology_unique          | false     | Boolean                                 | true    | Enable check for unique results considering topology.                                                                     |
+| optimization_topology_unique_backward | false     | Boolean                                 | false   | Enable check for unique results considering topology in backwards compatibility (does not expecte topology optimization). |
+| optimization_topology_mode            | false     | count &#124; weight                     | weight  | Configure optimization mode considering topology.                                                                         |
+| optimization_technologies             | false     | Boolean &#124; min &#124; max           | false   | Enable optimization considering technologies.                                                                             | 
+| optimization_technologies_unique      | false     | Boolean                                 | false   | Enable check for unique results considering technologies.                                                                 | 
+| optimization_technologies_mode        | false     | count &#124; weight &#124; weight-count | count   | Configure optimization mode considering technologies.                                                                     | 
+| optimization_scenarios                | false     | Boolean                                 | false   | Enable optimization considering scenarios.                                                                                | 
+| optimization_scenarios_unique         | false     | Boolean                                 | false   | Enable check for unique scenarios.                                                                                        | 
 
 
 ### Enricher Options
 
 The following options are used to configure the enricher.
 
-| Keyname                | Mandatory | Type                          | Default | Description                                                                                                           |
-|------------------------|-----------|-------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|
-| enrich_input_condition | false     | Boolean                       | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
-| enrich_technologies    | false     | Boolean                       | false   | Enable if technologies are enriched.                                                                                  |
-| enrich_implementations | false     | Boolean                       | false   | Enable if implementations are enriched.                                                                               |
+| Keyname                       | Mandatory | Type    | Default | Description                                                                                                           |
+|-------------------------------|-----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------|
+| enrich_input_condition        | false     | Boolean | true    | Enable if a condition should be enriched to an element considering a variability input having the element id as name. |
+| enrich_technologies           | false     | Boolean | false   | Enable if technologies are enriched.                                                                                  |
+| enrich_technologies_best_only | false     | Boolean | false   | Enable if only best technoloiges are enriched.                                                                        |
+| enrich_implementations        | false     | Boolean | false   | Enable if implementations are enriched.                                                                               |
 
 
 ### Constraints Options
@@ -279,26 +282,26 @@ _This is an experimental feature._
 
 The following options are used to configure constraints.
 
-| Keyname                                | Mandatory | Type     | Default | Description                                                            |
-|----------------------------------------|-----------|----------|---------|------------------------------------------------------------------------|
-| constraints                            | false     | Boolean  | false   | Enable all constraints.                                                |
-| relation_source_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation sources.              |
-| relation_target_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation targets.              |
-| relation_enhanced_implication_mode     | false     | Boolean  | true    | Enable enhanced implied relations.                                     |
-| artifact_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.        |
-| property_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of properties.       |
-| type_container_constraint              | false     | Boolean  | false   | Enable the constraint regarding present containers of types.           |
-| required_hosting_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.                 |
-| single_hosting_constraint | false     | Boolean  | false   | Enable the constraint regarding present single hosting. |
-| required_technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                          |
-| unique_property_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique property names.                 |
-| unique_artifact_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.                 |
-| unique_input_constraint                | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.         |
-| unique_output_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.        |
-| unique_relation_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique relation names.                 |
-| unique_technology_constraint           | false     | Boolean  | false   | Enable the constraint regarding unique technology names.               |
-| required_artifact_constraint           | false     | Boolean  | false   | Enable the constraint regarding required artifact.                     |
-| required_incoming_relation_constraint  | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.            |
+| Keyname                                | Mandatory | Type     | Default | Description                                                      |
+|----------------------------------------|-----------|----------|---------|------------------------------------------------------------------|
+| constraints                            | false     | Boolean  | false   | Enable all constraints.                                          |
+| relation_source_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
+| relation_target_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
+| relation_enhanced_implication_mode     | false     | Boolean  | true    | Enable enhanced implied relations.                               |
+| artifact_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
+| property_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
+| type_container_constraint              | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
+| required_hosting_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
+| single_hosting_constraint | false     | Boolean  | false   | Enable the constraint regarding present single hosting.          |
+| required_technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
+| unique_property_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
+| unique_artifact_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
+| unique_input_constraint                | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
+| unique_output_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
+| unique_relation_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique relation names.           |
+| unique_scenario_constraint           | false     | Boolean  | false   | Enable the constraint regarding unique scenarios.          |
+| required_artifact_constraint           | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
+| required_incoming_relation_constraint  | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
 
 ### Pruning Modes
 
@@ -333,7 +336,6 @@ unproduced_output_check: false
 enrich_technologies: true
 enrich_technologies_best_only: true
 enrich_implementations: true
-unique_scenario_constraint: true
 ```
 
 ### RC v3
@@ -364,7 +366,6 @@ enrich_technologies: true
 enrich_technologies_best_only: true
 enrich_implementations: true
 artifact_default_condition_mode: container-managed
-unique_scenario_constraint: true
 ```
 
 

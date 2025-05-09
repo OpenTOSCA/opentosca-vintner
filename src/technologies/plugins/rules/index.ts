@@ -126,9 +126,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         // All scenarios
         const scenarios = this.getScenarios()
 
-        // Early return if no scenarios
-        if (utils.isEmpty(scenarios)) return []
-
         // Match all deployment scenarios
         const matches = scenarios.map(it => this.match(node, it)).flat(Infinity) as Match[]
 
@@ -197,8 +194,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
         // Must match management operations
         if (check.isDefined(scenario.operations)) {
-            // TODO: implement this (also at assign.ts)
-
             // Check for operations in template
             const inTemplate = scenario.operations.every(
                 it => node.raw.interfaces?.[MANAGEMENT_INTERFACE].operations?.[it]
@@ -296,7 +291,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     /**
-     * Scenario prio is defined by the inheritance depth between the node type and the (rule | scenario).component
+     * Scenario prio is defined by the inheritance depth between the node type and the scenario target component
      */
     private prioCache: {[key: string]: number | undefined} = {}
 
