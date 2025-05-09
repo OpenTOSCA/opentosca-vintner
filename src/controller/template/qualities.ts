@@ -32,6 +32,7 @@ async function weight(options: TemplateQualityOptions, direction: 'min' | 'max')
                 options: {
                     optimization_technologies: direction,
                     optimization_technologies_mode: 'weight',
+                    enrich_technologies_best_only: false,
                 },
             },
         },
@@ -51,6 +52,7 @@ async function count(options: TemplateQualityOptions, direction: 'min' | 'max') 
                 options: {
                     optimization_technologies: direction,
                     optimization_technologies_mode: 'count',
+                    enrich_technologies_best_only: false,
                 },
             },
         },
@@ -76,6 +78,7 @@ async function weightCount(options: TemplateQualityOptions) {
             variability: {
                 options: {
                     optimization_technologies_mode: 'weight-count',
+                    enrich_technologies_best_only: false,
                 },
             },
         },

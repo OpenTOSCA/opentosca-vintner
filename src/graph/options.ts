@@ -967,6 +967,7 @@ export class NormalizationOptions extends BaseOptions {
 export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
     readonly technologies: boolean
+    readonly technologiesBestOnly: boolean
     readonly implementations: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
@@ -980,11 +981,13 @@ export class EnricherOptions extends BaseOptions {
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
             this.technologies = this.raw.enrich_technologies ?? true
+            this.technologiesBestOnly = this.raw.enrich_technologies_best_only ?? true
         } else {
             /**
              * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
             this.technologies = this.raw.enrich_technologies ?? false
+            this.technologiesBestOnly = this.raw.enrich_technologies_best_only ?? true
         }
         assert.isBoolean(this.technologies)
 

@@ -140,35 +140,43 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         // Generate technology templates
         const maps: TechnologyTemplateMap[] = []
         for (const match of prioritized) {
+            // Assessments
+            let assessments = match.scenario.assessments
+
             // Best assessment
-            // TODO: parameter to configure this ... otherwise we cant get the worst quality etc ... the parameter should be set by the qualities command
-            const max = Math.max(...match.scenario.assessments.map(it => it.quality))
-            const assessment = match.scenario.assessments.find(it => it.quality === max)
-            assert.isDefined(assessment)
-
-            // Implementation name
-            const implementation = constructImplementationName({
-                type: node.getType().name,
-                rule: assessment._rule,
-            })
-
-            // Element conditions
-            const conditions = match.elements.map(it => it.presenceCondition)
-            conditions.forEach((it: any) => delete it._cached_element)
-
-            // Add rule conditions
-            if (check.isDefined(assessment._rule.conditions)) {
-                conditions.push(...utils.toList(assessment._rule.conditions))
+            if (this.graph.options.enricher.technologiesBestOnly) {
+                const max = Math.max(...match.scenario.assessments.map(it => it.quality))
+                const assessment = match.scenario.assessments.find(it => it.quality === max)
+                assert.isDefined(assessment)
+                assessments = [assessment]
             }
 
-            // Construct technology template
-            maps.push({
-                [assessment.technology]: {
-                    conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
-                    weight: assessment.quality,
-                    assign: assessment._rule.assign ?? implementation,
-                },
-            })
+            // Generate technology template for each assessment
+            for (const assessment of assessments) {
+                // Implementation name
+                const implementation = constructImplementationName({
+                    type: node.getType().name,
+                    rule: assessment._rule,
+                })
+
+                // Element conditions
+                const conditions = match.elements.map(it => it.presenceCondition)
+                conditions.forEach((it: any) => delete it._cached_element)
+
+                // Add rule conditions
+                if (check.isDefined(assessment._rule.conditions)) {
+                    conditions.push(...utils.toList(assessment._rule.conditions))
+                }
+
+                // Construct technology template
+                maps.push({
+                    [assessment.technology]: {
+                        conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
+                        weight: assessment.quality,
+                        assign: assessment._rule.assign ?? implementation,
+                    },
+                })
+            }
         }
 
         return maps

@@ -22,7 +22,6 @@ export type TechnologyPlugin = {
 }
 
 export type Match = {
-    // TODO: should include all
     elements: Element[]
     root: Node
     artifact?: Artifact

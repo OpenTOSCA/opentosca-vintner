@@ -62,6 +62,8 @@ export type NormalizationOptions = {
 export type EnricherOptions = {
     enrich_input_condition?: boolean
     enrich_technologies?: boolean
+    // TODO: docs
+    enrich_technologies_best_only?: boolean
     enrich_implementations?: boolean
 }
 
