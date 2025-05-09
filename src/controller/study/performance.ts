@@ -9,9 +9,12 @@ import util from 'node:util'
 import path from 'path'
 
 export type Config = {
-    dir: string
-    name: string
-}[]
+    study: 'performance'
+    application: {
+        dir: string
+        name: string
+    }[]
+}
 
 export type StudyOptions = {
     config?: string
@@ -45,10 +48,11 @@ export default async function (options: StudyOptions) {
     assert.isTrue(options.experimental)
 
     const config = files.loadYAML<Config>(options.config)
+    if (config.study !== 'performance') throw new Error(`Study "${config.study}" must be "performance"`)
 
     const measurements: Measurement[] = []
 
-    for (const application of config) {
+    for (const application of config.application) {
         /**
          * Setup
          */

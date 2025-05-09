@@ -1,5 +1,6 @@
-dir: /usefulness/edited
+study: quality
 
+dir: /usefulness/edited
 groups:
     - id: A
       application: smark
