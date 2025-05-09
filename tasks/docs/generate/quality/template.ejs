@@ -49,6 +49,9 @@ In this scenario, the node template "component" of node type <%= link(scenario.c
 <% if (scenario.artifact) { -%>
 This node template is implemented by its deployment artifact "artifact" of artifact type <%= link(scenario.artifact) -%>.
 <% } -%>
+<% if (scenario.operations && scenario.operations.length !== 0) { -%>
+This node template has the management operations: <%- scenario.operations.map((operation, index) => `"${operation}"` ).join(", ") -%>.
+<% } -%>
 <% if (scenario.hosting.length !== 0) { -%>
 The node template <%- scenario.hosting.map((type, index) => type === "*" ? "is hosted on an arbitrary hosting stack of arbitrary length" : `is hosted on the node template "host ${index + 1}" of node type ${link(type)}`).join(", which ") -%>.
 <% } else { -%>

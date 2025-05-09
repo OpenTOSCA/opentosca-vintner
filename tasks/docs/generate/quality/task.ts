@@ -4,6 +4,7 @@ import * as files from '#files'
 import Graph from '#graph/graph'
 import * as puml from '#puml'
 import {ArtifactTypeMap} from '#spec/artifact-type'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TechnologyRule} from '#spec/technology-template'
@@ -153,6 +154,17 @@ function generateTopology(rule: TechnologyRule) {
      */
     const component: NodeTemplate = {
         type: rule.component,
+    }
+
+    if (check.isDefined(rule.operations) && utils.isPopulated(rule.operations)) {
+        component.interfaces = {
+            [MANAGEMENT_INTERFACE]: {
+                operations: rule.operations.reduce<{[operation: string]: string}>((acc, cur) => {
+                    acc[cur] = 'implementation'
+                    return acc
+                }, {}),
+            },
+        }
     }
 
     node_templates['component'] = component

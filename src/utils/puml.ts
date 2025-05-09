@@ -4,6 +4,7 @@ import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {EntityTypes} from '#spec/service-template'
 import * as utils from '#utils'
 import plantuml from 'node-plantuml'
@@ -36,6 +37,9 @@ export async function renderTopology(graph: Graph, options: RenderOptions = {}):
             },
             isAsterisk: (element: Node | Artifact) => {
                 return element.types[0].name === '*'
+            },
+            getOperations: (element: Node) => {
+                return Object.keys(element.raw.interfaces?.[MANAGEMENT_INTERFACE]?.operations ?? {})
             },
         },
     })
