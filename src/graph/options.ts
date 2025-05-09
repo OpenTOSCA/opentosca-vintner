@@ -846,25 +846,11 @@ class SolverScenariosOptions extends BaseOptions {
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
-        if (this.v1) {
-            /**
-             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
-             */
-            this.optimize = this.raw.optimization_scenarios ?? false
-            assert.isBoolean(this.optimize)
+        this.optimize = this.raw.optimization_scenarios ?? false
+        assert.isBoolean(this.optimize)
 
-            this.unique = this.raw.optimization_scenarios_unique ?? false
-            assert.isBoolean(this.unique)
-        } else {
-            /**
-             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
-             */
-            this.optimize = this.raw.optimization_scenarios ?? true
-            assert.isBoolean(this.optimize)
-
-            this.unique = this.raw.optimization_scenarios_unique ?? true
-            assert.isBoolean(this.unique)
-        }
+        this.unique = this.raw.optimization_scenarios_unique ?? false
+        assert.isBoolean(this.unique)
     }
 }
 

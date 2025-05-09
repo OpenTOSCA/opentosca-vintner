@@ -32,6 +32,7 @@ export type Match = {
 export type Scenario = {
     key: string
     component: string
+    operations?: string[]
     artifact?: string
     hosting: string[]
     assessments: {

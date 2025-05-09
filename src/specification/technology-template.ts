@@ -14,12 +14,12 @@ export type TechnologyTemplate = VariabilityAlternative & {
     weight?: number
     assign?: string
     prio?: number
-    scenario?: string
 }
 
 export type TechnologyRule = {
     technology: string
     component: string
+    operations?: string[]
     artifact?: string
     hosting?: string[]
     conditions?: LogicExpression | LogicExpression[]

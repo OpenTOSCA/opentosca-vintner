@@ -679,7 +679,6 @@ export default class Graph {
                 weight: template.weight,
                 assign: template.assign,
                 prio: template.prio,
-                scenario: template.scenario,
             },
         })
     }

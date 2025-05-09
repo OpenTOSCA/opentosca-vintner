@@ -1,3 +1,4 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
 import {
     BashSoftwareApplicationConfigure,
@@ -18,6 +19,7 @@ import {
 class Generator extends GeneratorAbstract {
     component = 'software.component'
     technology = 'terraform'
+    operations = [MANAGEMENT_OPERATIONS.CREATE, MANAGEMENT_OPERATIONS.DELETE]
     artifact = 'zip.archive'
     hosting = ['*', 'local.machine']
     weight = 0

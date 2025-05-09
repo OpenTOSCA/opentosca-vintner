@@ -15,3 +15,5 @@ topology_template:
                   - terraform:
                         assign: application~application::terraform
                         conditions: [{and: [], _generated: true}]
+                        prio: 0
+                        weight: 1

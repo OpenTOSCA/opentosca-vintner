@@ -10,6 +10,9 @@ node_types:
 
 topology_template:
     variability:
+        options:
+            optimization_scenarios: true
+
         qualities:
             - component: parent
               technology: ansible

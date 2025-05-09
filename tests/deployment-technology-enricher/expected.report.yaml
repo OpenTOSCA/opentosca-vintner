@@ -1,18 +1,35 @@
 - component: shop
   technology: ansible
   quality: very high
+  scenario: service.component#zip.archive@*->remote.machine
+  reason: The service component is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+
 - component: shop_ingress
   technology: ansible
   quality: very high
+  scenario: ingress@remote.machine
+  reason: The ingress is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+
 - component: database
   technology: ansible
   quality: very high
+  scenario: mysql.database@mysql.dbms->remote.machine
+  reason: The MySQL database is hosted on a MySQL DBMS on a remote machine. Ansible is Terraform offer declarative modules for managing a MySQL database. However, in contrast to Terraform, Ansible provides native features to access the MySQL DBMS using SSH.
+
 - component: mysql_dbms
   technology: ansible
   quality: very high
+  scenario: mysql.dbms#dbms.image@remote.machine
+  reason: The MySQL DBMS is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+
 - component: nodejs_runtime
   technology: ansible
   quality: very high
+  scenario: software.component#apt.package@*->remote.machine
+  reason: The software component is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+
 - component: virtual_machine
   technology: terraform
   quality: very high
+  scenario: virtual.machine#machine.image@openstack.provider
+  reason: The virtual machine is hosted on OpenStack. Terraform is specialized in provisioning infrastructure, while Ansible is specialized for managing software on such infrastructure.

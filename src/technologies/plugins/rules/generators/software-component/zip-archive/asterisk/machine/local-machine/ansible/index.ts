@@ -1,3 +1,4 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
 import {
     AnsibleSoftwareApplicationConfigureTasks,
@@ -13,6 +14,7 @@ import {ApplicationDirectory, MetadataGenerated, MetadataUnfurl} from '#technolo
 class Generator extends GeneratorAbstract {
     component = 'software.component'
     technology = 'ansible'
+    operations = [MANAGEMENT_OPERATIONS.CREATE, MANAGEMENT_OPERATIONS.DELETE]
     artifact = 'zip.archive'
     hosting = ['*', 'local.machine']
     weight = 1

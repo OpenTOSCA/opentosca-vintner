@@ -103,6 +103,10 @@ export function isIgnore(type: NodeType) {
     return type.metadata[METADATA.VINTNER_IGNORE] === 'true'
 }
 
+export function isNormative(type: NodeType) {
+    return check.isDefined(type.metadata) && type.metadata[METADATA.VINTNER_NORMATIVE] === 'true'
+}
+
 export enum QUALITY_LABEL {
     VERY_HIGH = 'very high',
     HIGH = 'high',
@@ -187,6 +191,7 @@ export function toScenarios(rules: TechnologyRule[], filter: {technology?: strin
             scenarios.push({
                 key,
                 component: rule.component,
+                operations: rule.operations,
                 artifact: rule.artifact,
                 hosting: rule.hosting,
                 assessments: [assessment],

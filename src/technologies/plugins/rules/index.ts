@@ -6,6 +6,7 @@ import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
@@ -17,6 +18,7 @@ import {
     constructRuleName,
     destructImplementationName,
     isGenerated,
+    isNormative,
     sortRules,
     toScenarios,
 } from '#technologies/utils'
@@ -143,9 +145,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             // Best assessment
             if (this.graph.options.enricher.technologiesBestOnly) {
                 const max = Math.max(...match.scenario.assessments.map(it => it.quality))
-                const assessment = match.scenario.assessments.find(it => it.quality === max)
-                assert.isDefined(assessment)
-                assessments = [assessment]
+                const best = match.scenario.assessments.filter(it => it.quality === max)
+                assessments = best
             }
 
             // Generate technology template for each assessment
@@ -172,7 +173,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         weight: assessment.quality,
                         prio,
                         assign: assessment._rule.assign ?? implementation,
-                        scenario: match.scenario.key,
                     },
                 })
             }
@@ -194,6 +194,27 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     match(node: Node, scenario: Scenario): Match[] {
         // Must match component
         if (!node.getType().isA(scenario.component)) return []
+
+        // Must match management operations
+        if (check.isDefined(scenario.operations)) {
+            // TODO: implement this (also at assign.ts)
+
+            // Check for operations in template
+            const inTemplate = scenario.operations.every(
+                it => node.raw.interfaces?.[MANAGEMENT_INTERFACE].operations?.[it]
+            )
+
+            // Check for operations in type
+            const inType = scenario.operations.every(it =>
+                this.graph.inheritance.hasManagementOperation(node.getType().name, it)
+            )
+
+            // Normative types are always supported
+            const type = this.graph.inheritance.getNodeType(node.getType().name)
+            assert.isDefined(type)
+
+            if (!isNormative(type) && !inTemplate && !inType) return []
+        }
 
         // Must match artifact
         let artifacts: Artifact[] = []

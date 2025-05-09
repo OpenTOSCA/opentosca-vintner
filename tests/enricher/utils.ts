@@ -2,6 +2,7 @@ import Controller from '#controller'
 import * as files from '#files'
 import std from '#std'
 import {expect} from 'chai'
+import jsonDiff from 'json-diff'
 import path from 'path'
 
 export function EnricherTest(dir: string) {
@@ -10,7 +11,12 @@ export function EnricherTest(dir: string) {
         await Controller.template.enrich({template: path.join(__dirname, dir, 'template.yaml'), output})
         const result = await files.loadYAML(path.join(output))
         std.log(output)
-        expect(result).to.deep.equal(await files.loadYAML(path.join(__dirname, dir, 'expected.yaml')))
+
+        const expected = await files.loadYAML(path.join(__dirname, dir, 'expected.yaml'))
+        const diff = jsonDiff.diffString(expected, result)
+        if (diff) std.log(diff)
+        expect(result).to.deep.equal(expected)
+
         await files.removeFile(output)
     })
 }
