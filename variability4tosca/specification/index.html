@@ -6942,6 +6942,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../tests/test-technologies-operations/" class="md-nav__link">
+        technologies-operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tests/test-technologies-optimization-double/" class="md-nav__link">
         technologies-optimization-double
       </a>
@@ -9926,6 +9940,20 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>count</td>
 <td>Configure optimization mode considering technologies.</td>
 </tr>
+<tr>
+<td>optimization_scenarios</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable optimization considering scenarios.</td>
+</tr>
+<tr>
+<td>optimization_scenarios_unique</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable check for unique scenarios.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="enricher-options">Enricher Options<a class="headerlink" href="#enricher-options" title="Permanent link">&para;</a></h3>
@@ -9954,6 +9982,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>false</td>
 <td>Enable if technologies are enriched.</td>
+</tr>
+<tr>
+<td>enrich_technologies_best_only</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable if only best technoloiges are enriched.</td>
 </tr>
 <tr>
 <td>enrich_implementations</td>
@@ -10084,11 +10119,11 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable the constraint regarding unique relation names.</td>
 </tr>
 <tr>
-<td>unique_technology_constraint</td>
+<td>unique_scenario_constraint</td>
 <td>false</td>
 <td>Boolean</td>
 <td>false</td>
-<td>Enable the constraint regarding unique technology names.</td>
+<td>Enable the constraint regarding unique scenarios.</td>
 </tr>
 <tr>
 <td>required_artifact_constraint</td>
@@ -10132,7 +10167,8 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <span class="normal"><a href="#__codelineno-3-11">11</a></span>
 <span class="normal"><a href="#__codelineno-3-12">12</a></span>
 <span class="normal"><a href="#__codelineno-3-13">13</a></span>
-<span class="normal"><a href="#__codelineno-3-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -10145,7 +10181,8 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="nt">unconsumed_input_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="nt">unproduced_output_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="nt">enrich_technologies_best_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="rc-v3">RC v3<a class="headerlink" href="#rc-v3" title="Permanent link">&para;</a></h3>
 <p><code>tosca_variability_1_0_rc_3</code> has the following default values.
@@ -10170,7 +10207,8 @@ Also, pruning modes consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-18">18</a></span>
 <span class="normal"><a href="#__codelineno-4-19">19</a></span>
 <span class="normal"><a href="#__codelineno-4-20">20</a></span>
-<span class="normal"><a href="#__codelineno-4-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-21">21</a></span>
+<span class="normal"><a href="#__codelineno-4-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -10189,8 +10227,9 @@ Also, pruning modes consider input and output pruning.</p>
 <a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="nt">relation_default_implied</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">enrich_technologies_best_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">&para;</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -12666,7 +12705,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">May 8, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">May 9, 2025</span>
       
     
   </small>
