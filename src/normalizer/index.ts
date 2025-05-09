@@ -23,7 +23,7 @@ import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
-import {constructImplementationName} from '#technologies/utils'
+import {QUALITY_DEFAULT_WEIGHT, constructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
 export default class Normalizer {
@@ -305,6 +305,8 @@ export default class Normalizer {
 
         for (const rule of rules) {
             assert.isString(rule.component)
+
+            rule.weight = rule.weight ?? QUALITY_DEFAULT_WEIGHT
 
             if (check.isUndefined(rule.hosting)) rule.hosting = []
             assert.isArray(rule.hosting)
