@@ -74,6 +74,7 @@ async function main() {
             scenarios.push({
                 key,
                 component: rule.component,
+                operations: rule.operations,
                 artifact: rule.artifact,
                 hosting: rule.hosting,
                 svg: svgs['rule.' + rule.technology + '.' + (index + 1)],
@@ -117,6 +118,7 @@ async function main() {
 type TechnologyRuleScenario = {
     key: string
     component: string
+    operations?: string[]
     artifact?: string
     hosting: string[]
     svg: string
