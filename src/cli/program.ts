@@ -1236,7 +1236,7 @@ study
 study
     .command('performance')
     .description('conduct performance case study')
-    .requiredOption('--directories <string...>', '')
+    .option('--config [string]')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {

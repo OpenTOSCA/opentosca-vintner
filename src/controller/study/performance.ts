@@ -8,8 +8,13 @@ import jsonDiff from 'json-diff'
 import util from 'node:util'
 import path from 'path'
 
+export type Config = {
+    dir: string
+    name: string
+}[]
+
 export type StudyOptions = {
-    directories: string
+    config?: string
     experimental: Boolean
 }
 
@@ -31,25 +36,24 @@ export type ResolvingMeasurement = {
     variant: string
 } & TimeMeasurement
 
-// TODO: multiple runs?
+// TODO: multiple runs? median
 
-// TODO: performance marks should be unique per run ...
-
-// TODO: can we autogenerate an application for 1k, 2k, 4k, 8k, 16k, 32k elements? (should also check if its similar to our own applications)
+// TODO: performance marks should be unique per run? for server mode ...
 
 export default async function (options: StudyOptions) {
-    assert.isDefined(options.directories)
+    options.config = options.config ?? 'study.performance.yaml'
     assert.isTrue(options.experimental)
+
+    const config = files.loadYAML<Config>(options.config)
 
     const measurements: Measurement[] = []
 
-    for (const directory of options.directories) {
+    for (const application of config) {
         /**
          * Setup
          */
-        const application = files.getName(directory)
         const workingDirectory = files.temporaryDirent()
-        files.copy(directory, workingDirectory)
+        files.copy(application.dir, workingDirectory)
         const originalTemplateFile = path.join(workingDirectory, 'variable-service-template.yaml')
 
         /**
@@ -91,11 +95,11 @@ export default async function (options: StudyOptions) {
         const testsDirectory = path.join(workingDirectory, 'tests')
         const variants = files.listDirectories(testsDirectory)
         for (const variant of variants) {
+            std.log(application.name, variant)
+
             const resolvedTemplateFile = path.join(workingDirectory, `variable-service-template.${variant}.yaml`)
             const resolvingInputsFile = path.join(testsDirectory, variant, 'inputs.yaml')
             const expectedTemplateFile = path.join(testsDirectory, variant, 'expected.yaml')
-
-            console.log({application, variant})
 
             performance.start('resolver_total')
             await Controller.template.resolve({
@@ -134,7 +138,7 @@ export default async function (options: StudyOptions) {
          * Store measurement
          */
         measurements.push({
-            application,
+            application: application.name,
             elements,
             enrichment: enrichmentMeasurement,
             resolving: resolvingMeasurements,
