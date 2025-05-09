@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {TechnologyRule} from '#spec/technology-template'
+
 import {METADATA} from '#technologies/plugins/rules/types'
 import {Scenario} from '#technologies/types'
 import * as utils from '#utils'

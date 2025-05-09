@@ -687,12 +687,14 @@ class ChecksOptions extends BaseOptions {
 class SolverOptions extends BaseOptions {
     readonly topology: SolverTopologyOptions
     readonly technologies: SolverTechnologiesOptions
+    readonly scenarios: SolverScenariosOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         this.topology = new SolverTopologyOptions(serviceTemplate)
         this.technologies = new SolverTechnologiesOptions(serviceTemplate)
+        this.scenarios = new SolverScenariosOptions(serviceTemplate)
     }
 }
 
@@ -828,9 +830,40 @@ class SolverTechnologiesOptions extends BaseOptions {
 
             const mode = this.raw.optimization_technologies_mode ?? 'weight-count'
             if (!['weight', 'count', 'weight-count'].includes(mode)) {
-                throw new Error(`Option optimization_technology_mode must be "weight", "count", or "weight-count"`)
+                throw new Error(
+                    `Option optimization_technology_mode must be "weight", "count", "weight-count", or "weight-count"`
+                )
             }
             this.mode = mode
+        }
+    }
+}
+
+class SolverScenariosOptions extends BaseOptions {
+    readonly optimize: boolean
+    readonly unique: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
+
+        if (this.v1) {
+            /**
+             * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
+             */
+            this.optimize = this.raw.optimization_scenarios ?? false
+            assert.isBoolean(this.optimize)
+
+            this.unique = this.raw.optimization_scenarios_unique ?? false
+            assert.isBoolean(this.unique)
+        } else {
+            /**
+             * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
+             */
+            this.optimize = this.raw.optimization_scenarios ?? true
+            assert.isBoolean(this.optimize)
+
+            this.unique = this.raw.optimization_scenarios_unique ?? true
+            assert.isBoolean(this.unique)
         }
     }
 }
@@ -856,6 +889,8 @@ class ConstraintsOptions extends BaseOptions {
     readonly uniqueOutput: boolean
     readonly uniqueRelation: boolean
     readonly uniqueTechnology: boolean
+
+    readonly uniqueScenario: boolean
 
     readonly requiredArtifact: boolean
     readonly requiredIncomingRelation: boolean
@@ -915,6 +950,9 @@ class ConstraintsOptions extends BaseOptions {
             this.uniqueTechnology = this.raw.unique_technology_constraint ?? this.constraints
             assert.isBoolean(this.uniqueTechnology)
 
+            this.uniqueScenario = this.raw.unique_scenario_constraint ?? this.constraints
+            assert.isBoolean(this.uniqueScenario)
+
             this.requiredIncomingRelation = this.raw.required_incoming_relation_constraint ?? this.constraints
             assert.isBoolean(this.requiredIncomingRelation)
         } else {
@@ -947,6 +985,9 @@ class ConstraintsOptions extends BaseOptions {
 
             this.uniqueTechnology = this.raw.unique_technology_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.uniqueTechnology)
+
+            this.uniqueScenario = this.raw.unique_scenario_constraint ?? this.raw.constraints ?? true
+            assert.isBoolean(this.uniqueScenario)
 
             this.requiredIncomingRelation =
                 this.raw.required_incoming_relation_constraint ?? this.raw.constraints ?? false

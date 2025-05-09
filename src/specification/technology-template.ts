@@ -13,6 +13,8 @@ export type TechnologyTemplate = VariabilityAlternative & {
     default_condition_mode?: TechnologyDefaultConditionMode
     weight?: number
     assign?: string
+    prio?: number
+    scenario?: string
 }
 
 export type TechnologyRule = {

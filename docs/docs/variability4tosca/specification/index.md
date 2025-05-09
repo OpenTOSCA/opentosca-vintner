@@ -331,7 +331,9 @@ relation_default_implied: true
 unconsumed_input_check: false
 unproduced_output_check: false
 enrich_technologies: true
+enrich_technologies_best_only: true
 enrich_implementations: true
+unique_scenario_constraint: true
 ```
 
 ### RC v3
@@ -359,8 +361,10 @@ unique_technology_constraint: true
 relation_default_implied: true
 checks: false
 enrich_technologies: true
+enrich_technologies_best_only: true
 enrich_implementations: true
 artifact_default_condition_mode: container-managed
+unique_scenario_constraint: true
 ```
 
 

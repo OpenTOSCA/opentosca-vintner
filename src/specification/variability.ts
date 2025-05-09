@@ -53,6 +53,11 @@ export type SolverOptions = {
     optimization_technologies?: boolean | 'min' | 'max'
     optimization_technologies_unique?: boolean
     optimization_technologies_mode?: 'weight' | 'count' | 'weight-count'
+
+    // TODO: docs
+    // Scenarios
+    optimization_scenarios?: boolean
+    optimization_scenarios_unique?: boolean
 }
 
 export type NormalizationOptions = {
@@ -85,6 +90,9 @@ export type ConstraintsOptions = {
     unique_output_constraint?: boolean
     unique_relation_constraint?: boolean
     unique_technology_constraint?: boolean
+
+    // TODO: docs
+    unique_scenario_constraint?: boolean
 
     required_artifact_constraint?: boolean
     required_incoming_relation_constraint?: boolean

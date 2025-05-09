@@ -674,7 +674,13 @@ export default class Graph {
         template.conditions = check.isDefined(template.conditions) ? generatify(template.conditions) : undefined
 
         node.raw.technology.push({
-            [technology]: {conditions: template.conditions, weight: template.weight, assign: template.assign},
+            [technology]: {
+                conditions: template.conditions,
+                weight: template.weight,
+                assign: template.assign,
+                prio: template.prio,
+                scenario: template.scenario,
+            },
         })
     }
 

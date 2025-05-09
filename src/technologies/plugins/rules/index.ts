@@ -130,16 +130,13 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         // Match all deployment scenarios
         const matches = scenarios.map(it => this.match(node, it)).flat(Infinity) as Match[]
 
-        // TODO: this must be per scenario + subgraph match?
-        // Minimal inheritance depth
-        const min = Math.min(...matches.map(it => this.prio(node, it.scenario.component)))
-
-        // Prioritize matched scenarios based on inheritance depth
-        const prioritized = matches.filter(it => this.prio(node, it.scenario.component) === min)
-
         // Generate technology templates
         const maps: TechnologyTemplateMap[] = []
-        for (const match of prioritized) {
+        for (let index = 0; index < matches.length; index++) {
+            // Match
+            const match = matches[index]
+            const prio = this.prio(node, match.scenario.component)
+
             // Assessments
             let assessments = match.scenario.assessments
 
@@ -173,7 +170,9 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     [assessment.technology]: {
                         conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
                         weight: assessment.quality,
+                        prio,
                         assign: assessment._rule.assign ?? implementation,
+                        scenario: match.scenario.key,
                     },
                 })
             }
