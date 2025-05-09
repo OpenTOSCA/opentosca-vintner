@@ -3,6 +3,7 @@ import * as check from '#check'
 import {NodeType} from '#spec/node-type'
 import {TechnologyRule} from '#spec/technology-template'
 import {METADATA} from '#technologies/plugins/rules/types'
+import {Scenario} from '#technologies/types'
 import * as utils from '#utils'
 
 export const QUALITIES_FILENAME = 'qualities.yaml'
@@ -58,6 +59,10 @@ export function destructImplementationName(name: string) {
         technology,
         hosting,
     }
+}
+
+export function constructScenarioName(data: TechnologyRule) {
+    return constructRuleName(data, {technology: false})
 }
 
 export function constructRuleName(data: TechnologyRule, options: {technology?: boolean} = {}) {
@@ -131,4 +136,62 @@ export function toWeight(label: QUALITY_LABEL) {
     if (label === QUALITY_LABEL.VERY_LOW) return 0
 
     throw new Error(`Unknown quality label "${label}"`)
+}
+
+export function sortRules(x: TechnologyRule, y: TechnologyRule): number {
+    assert.isDefined(x.hosting)
+    assert.isDefined(y.hosting)
+
+    // Sort by component
+    const c = x.component.localeCompare(y.component)
+    if (c !== 0) return c
+
+    // Sort by artifact
+    let a = 0
+    if (check.isDefined(x.artifact) && check.isDefined(y.artifact)) {
+        a = x.artifact.localeCompare(y.artifact)
+    }
+    if (a !== 0) return a
+
+    // Sort by hosting stack
+    const h = x.hosting.join().localeCompare(y.hosting.join())
+    if (h !== 0) return h
+
+    // Sort by technology
+    return x.component.localeCompare(y.component)
+}
+
+export function toScenarios(rules: TechnologyRule[], filter: {technology?: string} = {}): Scenario[] {
+    const scenarios: Scenario[] = []
+
+    for (const rule of rules) {
+        assert.isDefined(rule.weight)
+        assert.isDefined(rule.hosting)
+
+        if (check.isDefined(filter.technology) && rule.technology !== filter.technology) continue
+
+        const key = constructScenarioName(rule)
+
+        const assessment = {
+            technology: rule.technology,
+            quality: rule.weight,
+            reason: rule.reason,
+            _rule: rule,
+        }
+
+        const found = scenarios.find(it => it.key === key)
+        if (found) {
+            found.assessments.push(assessment)
+        } else {
+            scenarios.push({
+                key,
+                component: rule.component,
+                artifact: rule.artifact,
+                hosting: rule.hosting,
+                assessments: [assessment],
+            })
+        }
+    }
+
+    return scenarios
 }

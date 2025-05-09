@@ -21,13 +21,13 @@ export type TechnologyPlugin = {
     uses: (artifact: Artifact) => Technology[]
 }
 
-export type DeploymentScenarioMatch = {
+export type Match = {
+    // TODO: should include all
     elements: Element[]
     root: Node
     artifact?: Artifact
     hosting?: Element[]
-    rule: TechnologyRule
-    prio: number
+    scenario: Scenario
 }
 
 export type Scenario = {
@@ -39,6 +39,7 @@ export type Scenario = {
         technology: string
         quality: number
         reason?: string
+        _rule: TechnologyRule
     }[]
 }
 
@@ -47,4 +48,5 @@ export type Report = {
     technology: string
     quality: QUALITY_LABEL
     reason?: string
+    scenario: string
 }[]

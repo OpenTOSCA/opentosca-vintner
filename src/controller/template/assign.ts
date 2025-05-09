@@ -85,6 +85,7 @@ export default async function (options: TemplateAssignOptions) {
             technology: assessment.technology,
             quality: toLabel(assessment.quality),
             reason: assessment.reason,
+            scenario: scenario.key,
         })
 
         std.log(`Technology "${assessment.technology}" is assigned to ${node.display}`)

@@ -9,7 +9,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {QUALITIES_FILENAME, QUALITY_LABEL, constructRuleName, toLabel} from '#technologies/utils'
+import {QUALITIES_FILENAME, QUALITY_LABEL, constructRuleName, constructScenarioName, toLabel} from '#technologies/utils'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import path from 'path'
@@ -58,7 +58,7 @@ async function main() {
         const description = descriptions.find(it => it.id === rule.technology)
         assert.isDefined(description)
 
-        const key = constructRuleName(rule, {technology: false})
+        const key = constructScenarioName(rule)
 
         const entry = {
             name: description.name,
@@ -112,6 +112,7 @@ async function main() {
     process.exit(0)
 }
 
+// TODO: get rid of this
 type TechnologyRuleScenario = {
     key: string
     component: string
