@@ -1,0 +1,2335 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        domain:
+            type: string
+
+        dbms_password:
+            type: string
+
+        retailer_name:
+            type: string
+
+        database_password:
+            type: string
+
+        storage_password:
+            type: string
+
+        minio_user:
+            type: string
+
+        minio_secret:
+            type: string
+
+        global_service_gateway_endpoint:
+            type: string
+
+        global_service_gateway_2_endpoint:
+            type: string
+
+        global_service_gateway_3_endpoint:
+            type: string
+
+        global_service_gateway_token:
+            type: string
+
+        global_service_gateway_2_token:
+            type: string
+
+        global_service_gateway_3_token:
+            type: string
+
+        payment_provider_endpoint:
+            type: string
+
+        payment_provider_token:
+            type: string
+
+        email_provider_endpoint:
+            type: string
+
+        email_provider_token:
+            type: string
+
+        sms_provider_endpoint:
+            type: string
+
+        sms_provider_token:
+            type: string
+
+        os_network:
+            type: string
+
+        os_ssh_key_name:
+            type: string
+
+        os_ssh_user:
+            type: string
+
+        os_ssh_key_file:
+            type: string
+
+        os_region_name:
+            type: string
+
+        os_auth_type:
+            type: string
+
+        os_auth_url:
+            type: string
+
+        os_identity_api_version:
+            type: string
+
+        os_interface:
+            type: string
+
+        os_application_credential_id:
+            type: string
+
+        os_application_credential_secret:
+            type: string
+
+    node_templates:
+        ###################################################
+        #
+        # Global Dashboard
+        #
+        ###################################################
+
+        global_frontend_dashboard:
+            type: global.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                global_service_gateway_endpoint: {eval: '.::.requirements::[.name=global_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - global_service_gateway: global_service_gateway
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.frontend.dashboard:vX.Y.Z
+
+        global_ingress_dashboard:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_frontend_dashboard
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Global Gateway
+        #
+        ###################################################
+
+        global_service_gateway:
+            type: global.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                domain: {get_input: retailer_name}
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                global_service_retailers_endpoint: {eval: '.::.requirements::[.name=global_service_retailers]::.target::application_endpoint'}
+                global_service_products_endpoint: {eval: '.::.requirements::[.name=global_service_products]::.target::application_endpoint'}
+                global_service_calibrations_endpoint: {eval: '.::.requirements::[.name=global_service_calibrations]::.target::application_endpoint'}
+                global_service_account_endpoint: {eval: '.::.requirements::[.name=global_service_accounts]::.target::application_endpoint'}
+            requirements:
+                - cache: global_cache_redis
+                - global_service_retailers: global_service_retailers
+                - global_service_products: global_service_products
+                - global_service_calibrations: global_service_calibrations
+                - global_service_accounts: global_service_accounts
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+
+        global_ingress_gateway:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_service_gateway
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Global Retailers
+        #
+        ###################################################
+
+        global_service_retailers:
+            type: global.service.retailers~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-retailers
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: global_database_retailers
+                - cache: global_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.retailers:vX.Y.Z
+
+        global_database_retailers:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: retailers
+                database_user: retailers
+                database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        ###################################################
+        #
+        # Global Products
+        #
+        ###################################################
+
+        global_service_products:
+            type: global.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+                storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+            requirements:
+                - database: global_database_products
+                - cache: global_cache_redis
+                - storage: global_storage_products
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.products:vX.Y.Z
+
+        global_database_products:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        global_storage_products:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token: {get_input: storage_password}
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: global_minio
+
+        ###################################################
+        #
+        # Global Calibrations
+        #
+        ###################################################
+
+        global_service_calibrations:
+            type: global.service.calibrations~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-calibrations
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+                storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+            requirements:
+                - database: global_database_calibrations
+                - cache: global_cache_redis
+                - storage: global_storage_calibrations
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.calibrations:vX.Y.Z
+
+        global_database_calibrations:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: calibrations
+                database_user: calibrations
+                database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        global_storage_calibrations:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: calibrations
+                storage_token: {get_input: storage_password}
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: global_minio
+
+        ###################################################
+        #
+        # Global Accounts
+        #
+        ###################################################
+
+        global_service_accounts:
+            type: global.service.accounts~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-accounts
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+                email_provider_endpoint: {get_input: email_provider_endpoint}
+                email_provider_token: {get_input: email_provider_token}
+                sms_provider_endpoint: {get_input: sms_provider_endpoint}
+                sms_provider_token: {get_input: sms_provider_token}
+            requirements:
+                - database: global_database_accounts
+                - cache: global_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.accounts:vX.Y.Z
+
+        global_database_accounts:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: accounts
+                database_user: accounts
+                database_password: {get_input: database_password}
+            requirements:
+                - host: global_dbms
+
+        ###################################################
+        #
+        # Global DBMS
+        #
+        ###################################################
+
+        global_dbms:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-global-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+
+        ###################################################
+        #
+        # Global Cache
+        #
+        ###################################################
+
+        global_cache_redis:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: global-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+
+        ###################################################
+        #
+        # Global MinIO
+        #
+        ###################################################
+
+        global_minio:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key: {get_input: minio_user}
+                secret_key: {get_input: minio_secret}
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+
+        ###################################################
+        #
+        # Retailer Dashboard
+        #
+        ###################################################
+
+        retailer_frontend_dashboard:
+            type: retailer.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_ingress_dashboard:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_dashboard
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Retailer Terminal
+        #
+        ###################################################
+
+        retailer_frontend_terminal:
+            type: retailer.frontend.terminal~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-terminal
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint: {eval: '.::.requirements::[.name=retailer_service_gateway]::.target::application_endpoint'}
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+
+        retailer_ingress_terminal:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_terminal
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Retailer Gateway
+        #
+        ###################################################
+
+        retailer_service_gateway:
+            type: retailer.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_name: {get_input: retailer_name}
+                domain: {get_input: domain}
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                retailer_service_core_endpoint: {eval: '.::.requirements::[.name=retailer_service_core]::.target::application_endpoint'}
+                retailer_service_jobs_endpoint: {eval: '.::.requirements::[.name=retailer_service_jobs]::.target::application_endpoint'}
+                retailer_service_stores_endpoint: {eval: '.::.requirements::[.name=retailer_service_stores]::.target::application_endpoint'}
+                retailer_service_products_endpoint: {eval: '.::.requirements::[.name=retailer_service_products]::.target::application_endpoint'}
+                retailer_service_stocks_endpoint: {eval: '.::.requirements::[.name=retailer_service_stocks]::.target::application_endpoint'}
+                retailer_service_orders_endpoint: {eval: '.::.requirements::[.name=retailer_service_orders]::.target::application_endpoint'}
+                retailer_service_global_endpoint: {eval: '.::.requirements::[.name=retailer_service_global]::.target::application_endpoint'}
+            requirements:
+                - cache: retailer_cache_redis
+                - retailer_service_core: retailer_service_core
+                - retailer_service_jobs: retailer_service_jobs
+                - retailer_service_stores: retailer_service_stores
+                - retailer_service_products: retailer_service_products
+                - retailer_service_stocks: retailer_service_stocks
+                - retailer_service_orders: retailer_service_orders
+                - retailer_service_global: retailer_service_global
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+
+        retailer_ingress_gateway:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_service_gateway
+                - host: virtual_machine
+
+        ###################################################
+        #
+        # Retailer Core
+        #
+        ###################################################
+
+        retailer_service_core:
+            type: retailer.service.core~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                coffee_enabled: false
+                payment_provider_endpoint: {get_input: payment_provider_endpoint}
+                payment_provider_token: {get_input: payment_provider_token}
+                payment_merchant_a_enabled: false
+                payment_merchant_b_enabled: false
+            requirements:
+                - cache: retailer_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.core:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer Jobs
+        #
+        ###################################################
+
+        retailer_service_jobs:
+            type: retailer.service.jobs~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+            requirements:
+                - cache: retailer_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.jobs:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer Stores
+        #
+        ###################################################
+
+        retailer_service_stores:
+            type: retailer.service.stores~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stores
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+                storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+            requirements:
+                - database: retailer_database_stores
+                - cache: retailer_cache_redis
+                - storage: retailer_storage_stores
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stores:vX.Y.Z
+
+        retailer_database_stores:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stores
+                database_user: stores
+                database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        retailer_storage_stores:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: stores
+                storage_token: {get_input: storage_password}
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: retailer_minio
+
+        ###################################################
+        #
+        # Retailer Products
+        #
+        ###################################################
+
+        retailer_service_products:
+            type: retailer.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                import_enabled: false
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+                storage_name: {eval: '.::.requirements::[.name=storage]::.target::storage_name'}
+                storage_endpoint: {eval: '.::.requirements::[.name=storage]::.target::storage_endpoint'}
+                storage_token: {eval: '.::.requirements::[.name=storage]::.target::storage_token'}
+                storage_dialect: {eval: '.::.requirements::[.name=storage]::.target::storage_dialect'}
+            requirements:
+                - database: retailer_database_products
+                - cache: retailer_cache_redis
+                - storage: retailer_storage_products
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.products:vX.Y.Z
+
+        retailer_database_products:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        retailer_storage_products:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token: {get_input: storage_password}
+                storage_dialect: {eval: '.::.requirements::[.name=host]::.target::storage_dialect'}
+            requirements:
+                - host: retailer_minio
+
+        ###################################################
+        #
+        # Retailer Stocks
+        #
+        ###################################################
+
+        retailer_service_stocks:
+            type: retailer.service.stocks~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stocks
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_stocks
+                - cache: retailer_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+
+        retailer_database_stocks:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stocks
+                database_user: stocks
+                database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        ###################################################
+        #
+        # Retailer Orders
+        #
+        ###################################################
+
+        retailer_service_orders:
+            type: retailer.service.orders~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-orders
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                mysql_host: {eval: '.::.requirements::[.name=database]::.target::application_address'}
+                mysql_port: {eval: '.::.requirements::[.name=database]::.target::application_port'}
+                mysql_database: {eval: '.::.requirements::[.name=database]::.target::database_name'}
+                mysql_user: {eval: '.::.requirements::[.name=database]::.target::database_user'}
+                mysql_password: {eval: '.::.requirements::[.name=database]::.target::database_password'}
+                mysql_table: 'stores'
+                mysql_ssl_mode: {eval: '.::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode'}
+            requirements:
+                - database: retailer_database_orders
+                - cache: retailer_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+
+        retailer_database_orders:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: orders
+                database_user: orders
+                database_password: {get_input: database_password}
+            requirements:
+                - host: retailer_dbms
+
+        ###################################################
+        #
+        # Retailer Global
+        #
+        ###################################################
+
+        retailer_service_global:
+            type: retailer.service.global~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-global
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint: {eval: '.::.requirements::[.name=cache]::.target::application_endpoint'}
+                global_service_gateway_endpoint: {get_input: global_service_gateway_endpoint}
+                global_service_gateway_token: {get_input: global_service_gateway_token}
+            requirements:
+                - cache: retailer_cache_redis
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+
+        ###################################################
+        #
+        # Retailer DBMS
+        #
+        ###################################################
+
+        retailer_dbms:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-retailer-dbms
+                dbms_password: {get_input: dbms_password}
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+
+        ###################################################
+        #
+        # Retailer Cache
+        #
+        ###################################################
+
+        retailer_cache_redis:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: retailer-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+
+        ###################################################
+        #
+        # Retailer MinIO
+        #
+        ###################################################
+
+        retailer_minio:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key: {get_input: minio_user}
+                secret_key: {get_input: minio_secret}
+            requirements:
+                - host: remote_docker_engine
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+
+        ###################################################
+        #
+        # Virtual Machine
+        #
+        ###################################################
+
+        remote_docker_engine:
+            type: docker.engine~docker.engine::ansible@remote.machine
+            requirements:
+                - host: virtual_machine
+
+        virtual_machine:
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
+            properties:
+                machine_name: unfurl-technology-boutique
+                ports: ['80', '9100']
+                flavor: m1.medium
+                network: {get_input: os_network}
+                ssh_user: {get_input: os_ssh_user}
+                ssh_key_name: {get_input: os_ssh_key_name}
+                ssh_key_file: {get_input: os_ssh_key_file}
+            requirements:
+                - host: openstack_provider
+            artifacts:
+                machine_image:
+                    type: machine.image
+                    file: Ubuntu 22.04
+
+        openstack_provider:
+            type: openstack.provider
+            properties:
+                os_region_name: {get_input: os_region_name}
+                os_auth_type: {get_input: os_auth_type}
+                os_auth_url: {get_input: os_auth_url}
+                os_identity_api_version: {get_input: os_identity_api_version}
+                os_interface: {get_input: os_interface}
+                os_application_credential_id: {get_input: os_application_credential_id}
+                os_application_credential_secret: {get_input: os_application_credential_secret}
+
+        ###################################################
+        #
+        # TWO
+        #
+        ###################################################
+
+        global_frontend_dashboard_2:
+            type: global.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                global_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=global_service_gateway_2]::.target::application_endpoint
+            requirements:
+                - global_service_gateway: global_service_gateway_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.frontend.dashboard:vX.Y.Z
+        global_ingress_dashboard_2:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_frontend_dashboard_2
+                - host: virtual_machine_2
+        global_service_gateway_2:
+            type: global.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                domain:
+                    get_input: retailer_name
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                global_service_retailers_endpoint:
+                    eval: .::.requirements::[.name=global_service_retailers_2]::.target::application_endpoint
+                global_service_products_endpoint:
+                    eval: .::.requirements::[.name=global_service_products_2]::.target::application_endpoint
+                global_service_calibrations_endpoint:
+                    eval: .::.requirements::[.name=global_service_calibrations_2]::.target::application_endpoint
+                global_service_account_endpoint:
+                    eval: .::.requirements::[.name=global_service_accounts_2]::.target::application_endpoint
+            requirements:
+                - cache: global_cache_redis_2
+                - global_service_retailers: global_service_retailers_2
+                - global_service_products: global_service_products_2
+                - global_service_calibrations: global_service_calibrations_2
+                - global_service_accounts: global_service_accounts_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+        global_ingress_gateway_2:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_service_gateway_2
+                - host: virtual_machine_2
+        global_service_retailers_2:
+            type: global.service.retailers~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-retailers
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: global_database_retailers_2
+                - cache: global_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.retailers:vX.Y.Z
+        global_database_retailers_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: retailers
+                database_user: retailers
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_2
+        global_service_products_2:
+            type: global.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: global_database_products_2
+                - cache: global_cache_redis_2
+                - storage: global_storage_products_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.products:vX.Y.Z
+        global_database_products_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_2
+        global_storage_products_2:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: global_minio_2
+        global_service_calibrations_2:
+            type: global.service.calibrations~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-calibrations
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: global_database_calibrations_2
+                - cache: global_cache_redis_2
+                - storage: global_storage_calibrations_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.calibrations:vX.Y.Z
+        global_database_calibrations_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: calibrations
+                database_user: calibrations
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_2
+        global_storage_calibrations_2:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: calibrations
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: global_minio_2
+        global_service_accounts_2:
+            type: global.service.accounts~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-accounts
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                email_provider_endpoint:
+                    get_input: email_provider_endpoint
+                email_provider_token:
+                    get_input: email_provider_token
+                sms_provider_endpoint:
+                    get_input: sms_provider_endpoint
+                sms_provider_token:
+                    get_input: sms_provider_token
+            requirements:
+                - database: global_database_accounts_2
+                - cache: global_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.accounts:vX.Y.Z
+        global_database_accounts_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: accounts
+                database_user: accounts
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_2
+        global_dbms_2:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-global-dbms
+                dbms_password:
+                    get_input: dbms_password
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+        global_cache_redis_2:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: global-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+        global_minio_2:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key:
+                    get_input: minio_user
+                secret_key:
+                    get_input: minio_secret
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+        retailer_frontend_dashboard_2:
+            type: retailer.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+        retailer_ingress_dashboard_2:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_dashboard_2
+                - host: virtual_machine_2
+        retailer_frontend_terminal_2:
+            type: retailer.frontend.terminal~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-terminal
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_gateway_2]::.target::application_endpoint
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+        retailer_ingress_terminal_2:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_terminal_2
+                - host: virtual_machine_2
+        retailer_service_gateway_2:
+            type: retailer.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_name:
+                    get_input: retailer_name
+                domain:
+                    get_input: domain
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                retailer_service_core_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_core_2]::.target::application_endpoint
+                retailer_service_jobs_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_jobs_2]::.target::application_endpoint
+                retailer_service_stores_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_stores_2]::.target::application_endpoint
+                retailer_service_products_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_products_2]::.target::application_endpoint
+                retailer_service_stocks_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_stocks_2]::.target::application_endpoint
+                retailer_service_orders_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_orders_2]::.target::application_endpoint
+                retailer_service_global_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_global_2]::.target::application_endpoint
+            requirements:
+                - cache: retailer_cache_redis_2
+                - retailer_service_core: retailer_service_core_2
+                - retailer_service_jobs: retailer_service_jobs_2
+                - retailer_service_stores: retailer_service_stores_2
+                - retailer_service_products: retailer_service_products_2
+                - retailer_service_stocks: retailer_service_stocks_2
+                - retailer_service_orders: retailer_service_orders_2
+                - retailer_service_global: retailer_service_global_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+        retailer_ingress_gateway_2:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_service_gateway_2
+                - host: virtual_machine_2
+        retailer_service_core_2:
+            type: retailer.service.core~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                coffee_enabled: false
+                payment_provider_endpoint:
+                    get_input: payment_provider_endpoint
+                payment_provider_token:
+                    get_input: payment_provider_token
+                payment_merchant_a_enabled: false
+                payment_merchant_b_enabled: false
+            requirements:
+                - cache: retailer_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.core:vX.Y.Z
+        retailer_service_jobs_2:
+            type: retailer.service.jobs~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+            requirements:
+                - cache: retailer_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.jobs:vX.Y.Z
+        retailer_service_stores_2:
+            type: retailer.service.stores~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stores
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: retailer_database_stores_2
+                - cache: retailer_cache_redis_2
+                - storage: retailer_storage_stores_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stores:vX.Y.Z
+        retailer_database_stores_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stores
+                database_user: stores
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_2
+        retailer_storage_stores_2:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: stores
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: retailer_minio_2
+        retailer_service_products_2:
+            type: retailer.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                import_enabled: false
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: retailer_database_products_2
+                - cache: retailer_cache_redis_2
+                - storage: retailer_storage_products_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.products:vX.Y.Z
+        retailer_database_products_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_2
+        retailer_storage_products_2:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: retailer_minio_2
+        retailer_service_stocks_2:
+            type: retailer.service.stocks~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stocks
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: retailer_database_stocks_2
+                - cache: retailer_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_database_stocks_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stocks
+                database_user: stocks
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_2
+        retailer_service_orders_2:
+            type: retailer.service.orders~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-orders
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: retailer_database_orders_2
+                - cache: retailer_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_database_orders_2:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: orders
+                database_user: orders
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_2
+        retailer_service_global_2:
+            type: retailer.service.global~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-global
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                global_service_gateway_endpoint:
+                    get_input: global_service_gateway_2_endpoint
+                global_service_gateway_token:
+                    get_input: global_service_gateway_2_token
+            requirements:
+                - cache: retailer_cache_redis_2
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_dbms_2:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-retailer-dbms
+                dbms_password:
+                    get_input: dbms_password
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+        retailer_cache_redis_2:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: retailer-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+        retailer_minio_2:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key:
+                    get_input: minio_user
+                secret_key:
+                    get_input: minio_secret
+            requirements:
+                - host: remote_docker_engine_2
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+        remote_docker_engine_2:
+            type: docker.engine~docker.engine::ansible@remote.machine
+            requirements:
+                - host: virtual_machine_2
+        virtual_machine_2:
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
+            properties:
+                machine_name: unfurl-technology-boutique
+                ports:
+                    - '80'
+                    - '9100'
+                flavor: m1.medium
+                network:
+                    get_input: os_network
+                ssh_user:
+                    get_input: os_ssh_user
+                ssh_key_name:
+                    get_input: os_ssh_key_name
+                ssh_key_file:
+                    get_input: os_ssh_key_file
+            requirements:
+                - host: openstack_provider_2
+            artifacts:
+                machine_image:
+                    type: machine.image
+                    file: Ubuntu 22.04
+        openstack_provider_2:
+            type: openstack.provider
+            properties:
+                os_region_name:
+                    get_input: os_region_name
+                os_auth_type:
+                    get_input: os_auth_type
+                os_auth_url:
+                    get_input: os_auth_url
+                os_identity_api_version:
+                    get_input: os_identity_api_version
+                os_interface:
+                    get_input: os_interface
+                os_application_credential_id:
+                    get_input: os_application_credential_id
+                os_application_credential_secret:
+                    get_input: os_application_credential_secret
+
+        ###################################################
+        #
+        # THREE
+        #
+        ###################################################
+
+        global_frontend_dashboard_3:
+            type: global.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                global_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=global_service_gateway_3]::.target::application_endpoint
+            requirements:
+                - global_service_gateway: global_service_gateway_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.frontend.dashboard:vX.Y.Z
+        global_ingress_dashboard_3:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_frontend_dashboard_3
+                - host: virtual_machine_3
+        global_service_gateway_3:
+            type: global.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                domain:
+                    get_input: retailer_name
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                global_service_retailers_endpoint:
+                    eval: .::.requirements::[.name=global_service_retailers_3]::.target::application_endpoint
+                global_service_products_endpoint:
+                    eval: .::.requirements::[.name=global_service_products_3]::.target::application_endpoint
+                global_service_calibrations_endpoint:
+                    eval: .::.requirements::[.name=global_service_calibrations_3]::.target::application_endpoint
+                global_service_account_endpoint:
+                    eval: .::.requirements::[.name=global_service_accounts_3]::.target::application_endpoint
+            requirements:
+                - cache: global_cache_redis_3
+                - global_service_retailers: global_service_retailers_3
+                - global_service_products: global_service_products_3
+                - global_service_calibrations: global_service_calibrations_3
+                - global_service_accounts: global_service_accounts_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+        global_ingress_gateway_3:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: global_service_gateway_3
+                - host: virtual_machine_3
+        global_service_retailers_3:
+            type: global.service.retailers~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-retailers
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: global_database_retailers_3
+                - cache: global_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.retailers:vX.Y.Z
+        global_database_retailers_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: retailers
+                database_user: retailers
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_3
+        global_service_products_3:
+            type: global.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: global_database_products_3
+                - cache: global_cache_redis_3
+                - storage: global_storage_products_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.products:vX.Y.Z
+        global_database_products_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_3
+        global_storage_products_3:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: global_minio_3
+        global_service_calibrations_3:
+            type: global.service.calibrations~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-calibrations
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: global_database_calibrations_3
+                - cache: global_cache_redis_3
+                - storage: global_storage_calibrations_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.calibrations:vX.Y.Z
+        global_database_calibrations_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: calibrations
+                database_user: calibrations
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_3
+        global_storage_calibrations_3:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: calibrations
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: global_minio_3
+        global_service_accounts_3:
+            type: global.service.accounts~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-service-accounts
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                global_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                email_provider_endpoint:
+                    get_input: email_provider_endpoint
+                email_provider_token:
+                    get_input: email_provider_token
+                sms_provider_endpoint:
+                    get_input: sms_provider_endpoint
+                sms_provider_token:
+                    get_input: sms_provider_token
+            requirements:
+                - database: global_database_accounts_3
+                - cache: global_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: global.service.accounts:vX.Y.Z
+        global_database_accounts_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: accounts
+                database_user: accounts
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: global_dbms_3
+        global_dbms_3:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-global-dbms
+                dbms_password:
+                    get_input: dbms_password
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+        global_cache_redis_3:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: global-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+        global_minio_3:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: global-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key:
+                    get_input: minio_user
+                secret_key:
+                    get_input: minio_secret
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+        retailer_frontend_dashboard_3:
+            type: retailer.frontend.dashboard~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-dashboard
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_gateway_3]::.target::application_endpoint
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+        retailer_ingress_dashboard_3:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_dashboard_3
+                - host: virtual_machine_3
+        retailer_frontend_terminal_3:
+            type: retailer.frontend.terminal~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-frontend-terminal
+                application_port: 3000
+                application_protocol: http
+                logging_level: info
+                retailer_service_gateway_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_gateway_3]::.target::application_endpoint
+            requirements:
+                - retailer_service_gateway: retailer_service_gateway_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.frontend.dashboard:vX.Y.Z
+        retailer_ingress_terminal_3:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_frontend_terminal_3
+                - host: virtual_machine_3
+        retailer_service_gateway_3:
+            type: retailer.service.gateway~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-gateway
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_name:
+                    get_input: retailer_name
+                domain:
+                    get_input: domain
+                graphql_introspection: false
+                graphql_playground: false
+                has_error_masking: true
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                retailer_service_core_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_core_3]::.target::application_endpoint
+                retailer_service_jobs_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_jobs_3]::.target::application_endpoint
+                retailer_service_stores_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_stores_3]::.target::application_endpoint
+                retailer_service_products_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_products_3]::.target::application_endpoint
+                retailer_service_stocks_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_stocks_3]::.target::application_endpoint
+                retailer_service_orders_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_orders_3]::.target::application_endpoint
+                retailer_service_global_endpoint:
+                    eval: .::.requirements::[.name=retailer_service_global_3]::.target::application_endpoint
+            requirements:
+                - cache: retailer_cache_redis_3
+                - retailer_service_core: retailer_service_core_3
+                - retailer_service_jobs: retailer_service_jobs_3
+                - retailer_service_stores: retailer_service_stores_3
+                - retailer_service_products: retailer_service_products_3
+                - retailer_service_stocks: retailer_service_stocks_3
+                - retailer_service_orders: retailer_service_orders_3
+                - retailer_service_global: retailer_service_global_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.gateway:vX.Y.Z
+        retailer_ingress_gateway_3:
+            type: ingress~ingress::ansible@remote.machine
+            requirements:
+                - application: retailer_service_gateway_3
+                - host: virtual_machine_3
+        retailer_service_core_3:
+            type: retailer.service.core~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                coffee_enabled: false
+                payment_provider_endpoint:
+                    get_input: payment_provider_endpoint
+                payment_provider_token:
+                    get_input: payment_provider_token
+                payment_merchant_a_enabled: false
+                payment_merchant_b_enabled: false
+            requirements:
+                - cache: retailer_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.core:vX.Y.Z
+        retailer_service_jobs_3:
+            type: retailer.service.jobs~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-core
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+            requirements:
+                - cache: retailer_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.jobs:vX.Y.Z
+        retailer_service_stores_3:
+            type: retailer.service.stores~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stores
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: retailer_database_stores_3
+                - cache: retailer_cache_redis_3
+                - storage: retailer_storage_stores_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stores:vX.Y.Z
+        retailer_database_stores_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stores
+                database_user: stores
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_3
+        retailer_storage_stores_3:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: stores
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: retailer_minio_3
+        retailer_service_products_3:
+            type: retailer.service.products~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-products
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                import_enabled: false
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+                storage_name:
+                    eval: .::.requirements::[.name=storage]::.target::storage_name
+                storage_endpoint:
+                    eval: .::.requirements::[.name=storage]::.target::storage_endpoint
+                storage_token:
+                    eval: .::.requirements::[.name=storage]::.target::storage_token
+                storage_dialect:
+                    eval: .::.requirements::[.name=storage]::.target::storage_dialect
+            requirements:
+                - database: retailer_database_products_3
+                - cache: retailer_cache_redis_3
+                - storage: retailer_storage_products_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.products:vX.Y.Z
+        retailer_database_products_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: products
+                database_user: products
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_3
+        retailer_storage_products_3:
+            type: object.storage~object.storage::ansible@minio.server->docker.engine->remote.machine
+            properties:
+                storage_name: products
+                storage_token:
+                    get_input: storage_password
+                storage_dialect:
+                    eval: .::.requirements::[.name=host]::.target::storage_dialect
+            requirements:
+                - host: retailer_minio_3
+        retailer_service_stocks_3:
+            type: retailer.service.stocks~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-stocks
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: retailer_database_stocks_3
+                - cache: retailer_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_database_stocks_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: stocks
+                database_user: stocks
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_3
+        retailer_service_orders_3:
+            type: retailer.service.orders~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-orders
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                mysql_host:
+                    eval: .::.requirements::[.name=database]::.target::application_address
+                mysql_port:
+                    eval: .::.requirements::[.name=database]::.target::application_port
+                mysql_database:
+                    eval: .::.requirements::[.name=database]::.target::database_name
+                mysql_user:
+                    eval: .::.requirements::[.name=database]::.target::database_user
+                mysql_password:
+                    eval: .::.requirements::[.name=database]::.target::database_password
+                mysql_table: stores
+                mysql_ssl_mode:
+                    eval: .::.requirements::[.name=database]::.target::.requirements::[.name=host]::.target::dbms_ssl_mode
+            requirements:
+                - database: retailer_database_orders_3
+                - cache: retailer_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_database_orders_3:
+            type: mysql.database~mysql.database::ansible@mysql.dbms->docker.engine->remote.machine
+            properties:
+                database_name: orders
+                database_user: orders
+                database_password:
+                    get_input: database_password
+            requirements:
+                - host: retailer_dbms_3
+        retailer_service_global_3:
+            type: retailer.service.global~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-service-global
+                application_port: 4000
+                application_protocol: graphql
+                logging_level: info
+                retailer_cache_redis_endpoint:
+                    eval: .::.requirements::[.name=cache]::.target::application_endpoint
+                global_service_gateway_endpoint:
+                    get_input: global_service_gateway_3_endpoint
+                global_service_gateway_token:
+                    get_input: global_service_gateway_3_token
+            requirements:
+                - cache: retailer_cache_redis_3
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: retailer.service.stocks:vX.Y.Z
+        retailer_dbms_3:
+            type: mysql.dbms~mysql.dbms#dbms.image::compose@docker.engine->remote.machine
+            properties:
+                dbms_name: unfurl-technology-industry-retailer-dbms
+                dbms_password:
+                    get_input: dbms_password
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                dbms_image:
+                    type: dbms.image
+                    file: 5.7
+        retailer_cache_redis_3:
+            type: redis.server~redis.server#cache.image::compose@docker.engine->remote.machine
+            properties:
+                cache_name: retailer-cache-redis
+                cache_port: 6379
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                cache_image:
+                    type: cache.image
+                    file: 7.4.0
+        retailer_minio_3:
+            type: minio.server~service.component#docker.image::compose@docker.engine->remote.machine
+            properties:
+                application_name: retailer-minio-server
+                application_port: 9000
+                application_protocol: http
+                access_key:
+                    get_input: minio_user
+                secret_key:
+                    get_input: minio_secret
+            requirements:
+                - host: remote_docker_engine_3
+            artifacts:
+                docker_image:
+                    type: docker.image
+                    file: minio/minio:RELEASE.2024-08-29T01-40-52Z
+        remote_docker_engine_3:
+            type: docker.engine~docker.engine::ansible@remote.machine
+            requirements:
+                - host: virtual_machine_3
+        virtual_machine_3:
+            type: virtual.machine~virtual.machine#machine.image::terraform@openstack.provider
+            properties:
+                machine_name: unfurl-technology-boutique
+                ports:
+                    - '80'
+                    - '9100'
+                flavor: m1.medium
+                network:
+                    get_input: os_network
+                ssh_user:
+                    get_input: os_ssh_user
+                ssh_key_name:
+                    get_input: os_ssh_key_name
+                ssh_key_file:
+                    get_input: os_ssh_key_file
+            requirements:
+                - host: openstack_provider_3
+            artifacts:
+                machine_image:
+                    type: machine.image
+                    file: Ubuntu 22.04
+        openstack_provider_3:
+            type: openstack.provider
+            properties:
+                os_region_name:
+                    get_input: os_region_name
+                os_auth_type:
+                    get_input: os_auth_type
+                os_auth_url:
+                    get_input: os_auth_url
+                os_identity_api_version:
+                    get_input: os_identity_api_version
+                os_interface:
+                    get_input: os_interface
+                os_application_credential_id:
+                    get_input: os_application_credential_id
+                os_application_credential_secret:
+                    get_input: os_application_credential_secret
