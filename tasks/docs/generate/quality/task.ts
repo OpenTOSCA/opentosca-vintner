@@ -10,7 +10,8 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {TechnologyRule} from '#spec/technology-template'
 import Registry from '#technologies/plugins/rules/registry'
 import {METADATA} from '#technologies/plugins/rules/types'
-import {QUALITIES_FILENAME, QUALITY_LABEL, constructRuleName, constructScenarioName, toLabel} from '#technologies/utils'
+import {Scenario} from '#technologies/types'
+import {QUALITIES_FILENAME, QUALITY_LABEL, constructRuleName, toLabel} from '#technologies/utils'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 import path from 'path'
@@ -32,56 +33,22 @@ async function main() {
     files.storeYAML<TechnologyRule[]>(path.join(dir, QUALITIES_FILENAME), rules)
 
     /**
+     * Scenarios
+     */
+    const scenarios = Registry.scenarios
+
+    /**
      * SVGs
      */
     const svgs: {[key: string]: string} = {}
-    const promises = []
-    for (const [index, rule] of rules.entries()) {
-        const id = 'rule.' + rule.technology + '.' + (index + 1)
-        const template = generateTopology(rule)
-        const graph = new Graph(template)
-        const promise = puml.renderTopology(graph, {format: 'svg'}).then(svg => {
-            svgs[id] = svg
+    await Promise.all(
+        scenarios.map(async scenario => {
+            const template = generateTopology(scenario)
+            const graph = new Graph(template)
+            const svg = await puml.renderTopology(graph, {format: 'svg'})
+            svgs[scenario.key] = svg
         })
-        promises.push(promise)
-    }
-    await Promise.all(promises)
-
-    /**
-     * Scenarios
-     */
-    const scenarios: TechnologyRuleScenario[] = []
-    for (const [index, rule] of rules.entries()) {
-        assert.isDefined(rule.weight)
-        //assert.isDefined(rule.details)
-        assert.isDefined(rule.hosting)
-
-        const description = descriptions.find(it => it.id === rule.technology)
-        assert.isDefined(description)
-
-        const key = constructScenarioName(rule)
-
-        const entry = {
-            name: description.name,
-            quality: rule.weight,
-        }
-
-        const found = scenarios.find(it => it.key === key)
-
-        if (found) {
-            found.technologies.push(entry)
-        } else {
-            scenarios.push({
-                key,
-                component: rule.component,
-                operations: rule.operations,
-                artifact: rule.artifact,
-                hosting: rule.hosting,
-                svg: svgs['rule.' + rule.technology + '.' + (index + 1)],
-                technologies: [entry],
-            })
-        }
-    }
+    )
 
     /**
      * Groups
@@ -94,7 +61,7 @@ async function main() {
     await files.renderFile(
         path.join(__dirname, 'template.ejs'),
         {
-            data: rules,
+            rules,
             svgs,
             groups,
             utils,
@@ -114,20 +81,6 @@ async function main() {
     process.exit(0)
 }
 
-// TODO: get rid of this
-type TechnologyRuleScenario = {
-    key: string
-    component: string
-    operations?: string[]
-    artifact?: string
-    hosting: string[]
-    svg: string
-    technologies: {
-        name: string
-        quality: number
-    }[]
-}
-
 function toColor(weight: number) {
     const label = toLabel(weight)
 
@@ -144,8 +97,8 @@ function generateLink(type: string) {
     return `/normative#${type.replaceAll('.', '')}`
 }
 
-function generateTopology(rule: TechnologyRule) {
-    assert.isDefined(rule.hosting)
+function generateTopology(scenario: Scenario) {
+    assert.isDefined(scenario.hosting)
 
     const artifact_types: ArtifactTypeMap = {}
     const node_types: ArtifactTypeMap = {}
@@ -155,13 +108,13 @@ function generateTopology(rule: TechnologyRule) {
      * Component
      */
     const component: NodeTemplate = {
-        type: rule.component,
+        type: scenario.component,
     }
 
-    if (check.isDefined(rule.operations) && utils.isPopulated(rule.operations)) {
+    if (check.isDefined(scenario.operations) && utils.isPopulated(scenario.operations)) {
         component.interfaces = {
             [MANAGEMENT_INTERFACE]: {
-                operations: rule.operations.reduce<{[operation: string]: string}>((acc, cur) => {
+                operations: scenario.operations.reduce<{[operation: string]: string}>((acc, cur) => {
                     acc[cur] = 'implementation'
                     return acc
                 }, {}),
@@ -170,27 +123,27 @@ function generateTopology(rule: TechnologyRule) {
     }
 
     node_templates['component'] = component
-    node_types[rule.component] = {
+    node_types[scenario.component] = {
         metadata: {
-            [METADATA.VINTNER_LINK]: generateLink(rule.component),
+            [METADATA.VINTNER_LINK]: generateLink(scenario.component),
         },
     }
 
     /**
      * Artifact
      */
-    if (check.isDefined(rule.artifact)) {
+    if (check.isDefined(scenario.artifact)) {
         component.artifacts = {
             artifact: {
-                type: rule.artifact,
+                type: scenario.artifact,
                 file: 'dummy',
             },
         }
 
-        artifact_types[rule.artifact] = {
-            derived_from: rule.artifact,
+        artifact_types[scenario.artifact] = {
+            derived_from: scenario.artifact,
             metadata: {
-                [METADATA.VINTNER_LINK]: generateLink(rule.artifact),
+                [METADATA.VINTNER_LINK]: generateLink(scenario.artifact),
             },
         }
     }
@@ -198,7 +151,7 @@ function generateTopology(rule: TechnologyRule) {
     /**
      * Hosting
      */
-    rule.hosting.forEach((type, index) => {
+    scenario.hosting.forEach((type, index) => {
         const name = 'host ' + (index + 1)
 
         node_templates[name] = {type}

@@ -58,11 +58,11 @@ The node template <%- scenario.hosting.map((type, index) => type === "*" ? "is h
 The scenario does not require a specific hosting.
 <% } -%>
 
-<figure markdown><%- scenario.svg %></figure>
+<figure markdown><%- svgs[scenario.key] %></figure>
 
 <!-- TODO: add qualities back once user study is conducted -->
-<% scenario.technologies.forEach(technology => { %>
-!!! Info "<%= technology.name %> supports deploying this scenario"
+<% scenario.assessments.forEach(assessment => { %>
+!!! Info "<%= descriptions.find(it => it.id === assessment.technology)?.name ?? assessment.technology %> supports deploying this scenario"
 <% }) %>
 
 <% }) -%>
@@ -74,24 +74,30 @@ The scenario does not require a specific hosting.
 This appendix contains the deployment quality cards.
 
 <!-- TODO: add qualities back once user study is conducted -->
-<% data.forEach((rule, index) => { -%>
+<% rules.forEach((rule, index) => { -%>
 ### Rule #<%= index + 1 %>
 | Attribute | Value |
 | --- | --- |
 | Number | <%= index + 1 %> |
-| Identifier | <%= constructRuleName(rule) %> |
+| Rules | <%= constructRuleName(rule) %> |
+| Scenario | <%= constructRuleName(rule, {technology: false}) %> |
 | Component | <%= link(rule.component) %> |
 <% if (rule.artifact) {-%>
 | Artifact | <%= link(rule.artifact) %> |
+<% } -%>
+<% if (rule.operations && rule.operations.length !== 0) { -%>
+| Operations | <%= rule.operations.join(", ") %> |
 <% } -%>
 | Technology | <%= rule.technology %> |
 <% if (rule.hosting.length !== 0) {-%>
 | Hosting | <%= rule.hosting.map(link).join(" -> ") %> |
 <% } -%>
-| Graph |<figure markdown><%- svgs["rule." + rule.technology + "." + (index + 1)]%></figure>|
+| Topology |<figure markdown><%- svgs[constructRuleName(rule, {technology: false})]%></figure>|
 
 <% }) %>
 
+<!-- TODO: add appendix back once user study is conducted -->
+<% if (false) { %>
 ## Appendix B "YAML"
 
 This appendix contains the deployment qualities as YAML.
@@ -100,5 +106,7 @@ The rules are also available as [download](qualities.yaml){download=qualities.ya
 ```yaml linenums="1"
 --8<-- "variability4tosca/quality/qualities.yaml"
 ```
+<% } %>
+
 
 --8<-- "vacd.md"
