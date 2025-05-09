@@ -4,6 +4,7 @@ import {ElementEnricher} from '#enricher/elements'
 import Transformer from '#enricher/transformer'
 import Graph from '#graph/graph'
 import {ServiceTemplate} from '#spec/service-template'
+import performance from '#utils/performance'
 
 export type Options = {
     cleanTypes: boolean
@@ -27,7 +28,9 @@ export default class Enricher {
         /**
          * Element Enricher
          */
+        performance.start('enricher_run')
         new ElementEnricher(graph).run()
+        performance.stop('enricher_run')
 
         /**
          * Regenerate graph
@@ -37,6 +40,7 @@ export default class Enricher {
         /**
          * Condition Enricher
          */
+        performance.start('enricher_run')
         new ConditionEnricher(graph).run()
 
         /**
@@ -48,5 +52,6 @@ export default class Enricher {
          * Transformer
          */
         new Transformer(graph, {cleanTypes: this.options.cleanTypes}).run()
+        performance.stop('enricher_run')
     }
 }

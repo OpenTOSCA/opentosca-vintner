@@ -7,6 +7,7 @@ import {CAPABILITY_TYPE_ROOT, CapabilityType} from '#spec/capability-type'
 import {DATA_TYPE_ROOT, DataType} from '#spec/data-type'
 import {ENTITY_TYPE_ROOT, EntityType} from '#spec/entity-type'
 import {GROUP_TYPE_ROOT, GroupType} from '#spec/group-type'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {INTERFACE_TYPE_ROOT, InterfaceType} from '#spec/interface-type'
 import {NODE_TYPE_ROOT, NodeType} from '#spec/node-type'
 import {POLICY_TYPE_ROOT, PolicyType} from '#spec/policy-type'
@@ -23,8 +24,19 @@ export default class Inheritance {
         this.graph = graph
     }
 
-    hasArtifactDefinition(node: string, artifact: string) {
-        const walker = this.Walker<NodeType>(node, 'node_types', NODE_TYPE_ROOT)
+    hasManagementOperation(type: string, operation: string) {
+        const walker = this.Walker<NodeType>(type, 'node_types', NODE_TYPE_ROOT)
+
+        while (walker.has()) {
+            const next = walker.walk()
+            if (check.isDefined(next.type.interfaces?.[MANAGEMENT_INTERFACE]?.operations?.[operation])) return true
+        }
+
+        return false
+    }
+
+    hasArtifactDefinition(type: string, artifact: string) {
+        const walker = this.Walker<NodeType>(type, 'node_types', NODE_TYPE_ROOT)
 
         while (walker.has()) {
             const next = walker.walk()

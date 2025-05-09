@@ -1,3 +1,4 @@
+import {MANAGEMENT_OPERATIONS} from '#spec/interface-definition'
 import {NodeType} from '#spec/node-type'
 import {
     AnsibleSoftwareApplicationConfigureTasks,
@@ -23,6 +24,7 @@ class Generator extends GeneratorAbstract {
     component = 'software.component'
     technology = 'ansible'
     artifact = 'zip.archive'
+    operations = [MANAGEMENT_OPERATIONS.CREATE, MANAGEMENT_OPERATIONS.DELETE]
     hosting = ['*', 'remote.machine']
     weight = 1
     reason =

@@ -15,3 +15,5 @@ topology_template:
                   - override:
                         assign: override-assign
                         conditions: []
+                        prio: 0
+                        weight: 1

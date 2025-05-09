@@ -74,7 +74,7 @@ export default async function (options: BenchmarkOptions) {
                 measurements.push(duration)
             }
 
-            const median = utils.getMedianFromSorted(measurements.sort())
+            const median = utils.median(measurements)
             const templates = 4 * seed
             const result = {
                 IO: io,

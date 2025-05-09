@@ -9,3 +9,6 @@ url of <%= puml.toId(node) %> is [[ <%= puml.getLink(node) %> ]]
 <% node.artifacts.forEach(artifact => { -%>
 <%- include('artifact.template.ejs', {artifact}) %>
 <% }) -%>
+<% puml.getOperations(node).forEach(operation => { -%>
+<%- include('operation.template.ejs', {node, operation}) %>
+<% }) -%>

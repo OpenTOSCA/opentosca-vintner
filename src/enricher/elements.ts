@@ -38,7 +38,7 @@ export class ElementEnricher {
      * However, we might add a check that manually modeled technology assignments actually support the scenario.
      */
     private enrichImplementations() {
-        // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exists
+        // for backwards compatibility and testing purposed, continue if, e.g., no rules at all exist
         if (utils.isEmpty(this.graph.plugins.technology.filter(it => it.backwards()))) return
 
         for (const node of this.graph.nodes.filter(it => it.managed).filter(it => utils.isPopulated(it.technologies))) {

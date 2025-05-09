@@ -17,6 +17,7 @@ export default class Technology extends Element {
     readonly container: Node
     readonly weight: number
     readonly assign: string
+    readonly prio: number
 
     readonly defaultAlternative: boolean
 
@@ -38,6 +39,8 @@ export default class Technology extends Element {
         assert.isNumber(this.weight)
         if (this.weight < 0) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
         if (this.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
+
+        this.prio = data.raw.prio ?? 0
     }
 
     get toscaId(): TechnologyPresenceArguments {

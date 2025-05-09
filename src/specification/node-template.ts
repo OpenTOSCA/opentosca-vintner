@@ -3,6 +3,7 @@
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#DEFN_ENTITY_NODE_TEMPLATE}
  */
 import {ArtifactDefinition} from '#spec/artifact-definitions'
+import {InterfaceDefinitionMap} from '#spec/interface-definition'
 import {PropertyAssignmentList, PropertyAssignmentMap} from '#spec/property-assignments'
 import {TechnologyAssignment} from '#spec/technology-template'
 import {ElementType} from '#spec/type-assignment'
@@ -28,6 +29,7 @@ export type NodeTemplate = {
     anchor?: boolean
     technology?: TechnologyAssignment
     managed?: boolean
+    interfaces?: InterfaceDefinitionMap
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }

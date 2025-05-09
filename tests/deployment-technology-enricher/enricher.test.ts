@@ -7,7 +7,7 @@ import path from 'path'
 describe('deployment technology enricher', () => {
     it('test', async () => {
         const output = files.temporaryDirent() + '.yaml'
-        await Controller.utils.selectTechnologies({
+        await Controller.template.assign({
             template: path.join(__dirname, 'template.yaml'),
             output,
         })

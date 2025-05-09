@@ -1,6 +1,6 @@
 import * as check from '#check'
 import {NodeType} from '#spec/node-type'
-import {constructRuleName} from '#technologies/utils'
+import {constructRuleName, QUALITY_DEFAULT_WEIGHT} from '#technologies/utils'
 
 export enum METADATA {
     VINTNER_IGNORE = 'vintner_ignore',
@@ -22,6 +22,7 @@ export const ASTERISK = '*'
 export type ImplementationGenerator = {
     technology: string
     component: string
+    operations?: string[]
     artifact?: string
     hosting: string[]
     generate: (name: string, type: NodeType) => NodeType
@@ -41,9 +42,11 @@ export abstract class GeneratorAbstract implements ImplementationGenerator {
 
     abstract technology: string
     abstract component: string
-    abstract artifact?: string
-    abstract hosting: string[]
-    abstract weight: number
+
+    operations?: string[]
+    artifact?: string
+    hosting: string[] = []
+    weight: number = QUALITY_DEFAULT_WEIGHT
 
     abstract generate(name: string, type: NodeType): NodeType
 }

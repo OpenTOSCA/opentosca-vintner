@@ -38,13 +38,15 @@ topology_template:
                         conditions: []
               conditions: []
               technology:
-                  - terraform:
-                        assign: application~application::terraform@terraform_host
+                  - ansible:
+                        assign: application~application::ansible@ansible_host
                         conditions:
                             - and:
-                                  - relation_presence: [application, 1]
-                                  - node_presence: terraform_host
+                                  - relation_presence: [application, 0]
+                                  - node_presence: ansible_host
                               _generated: true
+                        weight: 1
+                        prio: 0
 
                   - terraform:
                         assign: application~application::terraform@ansible_terraform_host
@@ -53,14 +55,8 @@ topology_template:
                                   - relation_presence: [application, 2]
                                   - node_presence: ansible_terraform_host
                               _generated: true
-
-                  - ansible:
-                        assign: application~application::ansible@ansible_host
-                        conditions:
-                            - and:
-                                  - relation_presence: [application, 0]
-                                  - node_presence: ansible_host
-                              _generated: true
+                        weight: 1
+                        prio: 0
 
                   - ansible:
                         assign: application~application::ansible@ansible_terraform_host
@@ -69,6 +65,18 @@ topology_template:
                                   - relation_presence: [application, 2]
                                   - node_presence: ansible_terraform_host
                               _generated: true
+                        weight: 1
+                        prio: 0
+
+                  - terraform:
+                        assign: application~application::terraform@terraform_host
+                        conditions:
+                            - and:
+                                  - relation_presence: [application, 1]
+                                  - node_presence: terraform_host
+                              _generated: true
+                        weight: 1
+                        prio: 0
 
         - ansible_host:
               type:
@@ -99,6 +107,8 @@ topology_template:
                   - terraform:
                         assign: database~database::terraform
                         conditions: []
+                        weight: 1
+                        prio: 0
               requirements:
                   - host:
                         node: dbms
@@ -113,4 +123,6 @@ topology_template:
                   - terraform:
                         assign: dbms~dbms::terraform
                         conditions: []
+                        weight: 1
+                        prio: 0
               conditions: []

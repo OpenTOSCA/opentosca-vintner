@@ -88,6 +88,7 @@
       - docker.engine
       - local.machine
   weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: mysql.database
   hosting:
@@ -111,6 +112,7 @@
       - docker.engine
       - remote.machine
   weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: mysql.database
   hosting:
@@ -144,6 +146,7 @@
       - mysql.dbms
       - kubernetes.cluster
   weight: 0
+  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules
 - technology: terraform
   component: mysql.database
   hosting:
@@ -305,6 +308,7 @@
       - docker.engine
       - local.machine
   weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
@@ -328,6 +332,7 @@
       - docker.engine
       - remote.machine
   weight: 0
+  reason: One-time use docker container ("fake Kubernetes job") with imperative parts, while other technologies provide declarative modules.
 - technology: terraform
   component: object.storage
   hosting:
@@ -348,6 +353,7 @@
       - minio.server
       - kubernetes.cluster
   weight: 0
+  reason: Kubernetes Job with imperative parts, while declarative other technologies provide declarative modules
 - technology: terraform
   component: object.storage
   hosting:
@@ -486,7 +492,7 @@
   hosting:
       - gcp.cloudrun
   weight: 1
-  reason: The service component is hosted on GCP CloudRun. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module is not maintained and violates community standards.
+  reason: The service component is hosted on GCP CloudRun. Terraform provides an official provider for GCP. In contrast, the corresponding Ansible module does not provide resources for GCP CloudRun.
 - technology: ansible
   component: service.component
   artifact: docker.image
@@ -617,6 +623,9 @@
       - local.machine
   weight: 1
   reason: The software component is hosted on a local machine. Ansible is specialized for installing software components on local targets, while Terraform discourages from being used to manage such scenarios.
+  operations:
+      - create
+      - delete
 - technology: terraform
   component: software.component
   artifact: tar.archive
@@ -624,6 +633,9 @@
       - '*'
       - local.machine
   weight: 0
+  operations:
+      - create
+      - delete
 - technology: ansible
   component: software.component
   artifact: tar.archive
@@ -632,6 +644,9 @@
       - remote.machine
   weight: 1
   reason: The software component is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+  operations:
+      - create
+      - delete
 - technology: terraform
   component: software.component
   artifact: tar.archive
@@ -639,6 +654,9 @@
       - '*'
       - remote.machine
   weight: 0
+  operations:
+      - create
+      - delete
 - technology: ansible
   component: software.component
   artifact: zip.archive
@@ -647,6 +665,9 @@
       - local.machine
   weight: 1
   reason: The software component is hosted on a local machine. Ansible is specialized for installing software components on local targets, while Terraform discourages from being used to manage such scenarios.
+  operations:
+      - create
+      - delete
 - technology: terraform
   component: software.component
   artifact: zip.archive
@@ -654,6 +675,9 @@
       - '*'
       - local.machine
   weight: 0
+  operations:
+      - create
+      - delete
 - technology: ansible
   component: software.component
   artifact: zip.archive
@@ -662,6 +686,9 @@
       - remote.machine
   weight: 1
   reason: The software component is hosted on a remote machine. Ansible is specialized for installing software components on remote targets, while Terraform discourages from being used to manage such scenarios.
+  operations:
+      - create
+      - delete
 - technology: terraform
   component: software.component
   artifact: zip.archive
@@ -669,6 +696,9 @@
       - '*'
       - remote.machine
   weight: 0
+  operations:
+      - create
+      - delete
 - technology: ansible
   component: virtual.machine
   artifact: machine.image

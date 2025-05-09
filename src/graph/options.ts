@@ -687,12 +687,14 @@ class ChecksOptions extends BaseOptions {
 class SolverOptions extends BaseOptions {
     readonly topology: SolverTopologyOptions
     readonly technologies: SolverTechnologiesOptions
+    readonly scenarios: SolverScenariosOptions
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
         this.topology = new SolverTopologyOptions(serviceTemplate)
         this.technologies = new SolverTechnologiesOptions(serviceTemplate)
+        this.scenarios = new SolverScenariosOptions(serviceTemplate)
     }
 }
 
@@ -835,6 +837,21 @@ class SolverTechnologiesOptions extends BaseOptions {
     }
 }
 
+class SolverScenariosOptions extends BaseOptions {
+    readonly optimize: boolean
+    readonly unique: boolean
+
+    constructor(serviceTemplate: ServiceTemplate) {
+        super(serviceTemplate)
+
+        this.optimize = this.raw.optimization_scenarios ?? false
+        assert.isBoolean(this.optimize)
+
+        this.unique = this.raw.optimization_scenarios_unique ?? false
+        assert.isBoolean(this.unique)
+    }
+}
+
 class ConstraintsOptions extends BaseOptions {
     readonly constraints: boolean
 
@@ -967,6 +984,7 @@ export class NormalizationOptions extends BaseOptions {
 export class EnricherOptions extends BaseOptions {
     readonly inputCondition: boolean
     readonly technologies: boolean
+    readonly technologiesBestOnly: boolean
     readonly implementations: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
@@ -980,11 +998,13 @@ export class EnricherOptions extends BaseOptions {
              * Case: tosca_variability_1_0_rc_2, tosca_variability_1_0_rc_3
              */
             this.technologies = this.raw.enrich_technologies ?? true
+            this.technologiesBestOnly = this.raw.enrich_technologies_best_only ?? true
         } else {
             /**
              * Case: tosca_simple_yaml_1_3, tosca_variability_1_0, tosca_variability_1_0_rc_1
              */
             this.technologies = this.raw.enrich_technologies ?? false
+            this.technologiesBestOnly = this.raw.enrich_technologies_best_only ?? true
         }
         assert.isBoolean(this.technologies)
 

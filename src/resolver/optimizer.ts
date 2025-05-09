@@ -26,20 +26,18 @@ export default class Optimizer {
          * Optimize topology
          */
         if (this.graph.options.solver.topology.optimize) this.optimizeTopology()
+        if (this.graph.options.solver.topology.unique) this.ensureTopologyUniqueness()
 
         /**
-         * Check if there are multiple optimal topologies
+         * Optimize scenarios
          */
-        if (this.graph.options.solver.topology.unique) this.ensureTopologyUniqueness()
+        if (this.graph.options.solver.scenarios.optimize) this.optimizeScenarios()
+        if (this.graph.options.solver.scenarios.unique) this.ensureScenariosUniqueness()
 
         /**
          * Optimize technologies
          */
         if (this.graph.options.solver.technologies.optimize) this.optimizeTechnologies()
-
-        /**
-         * Check if there are multiple optimal technologies
-         */
         if (this.graph.options.solver.technologies.unique) this.ensureTechnologiesUniqueness()
 
         return this.current
@@ -98,6 +96,31 @@ export default class Optimizer {
         }
     }
 
+    private optimizeScenarios() {
+        /**
+         * Priority
+         */
+        const formulas = this.graph.technologies.map(it => it.id)
+        const weights = this.graph.technologies.map(it => it.prio)
+
+        this.optimize({min: true, formulas, weights})
+    }
+
+    private ensureScenariosUniqueness() {
+        /**
+         * Unique Scenario Priority Check
+         *
+         * Ensure that there is not another solution that has the same priority for one node template.
+         */
+        // TODO: this check does not seem to work properly (eg when the minimization above is disable)
+        const result = new Result(this.graph, this.current)
+        const present = result.getPresences('technology')
+        const other = this.minisat.solveAssuming(MiniSat.not(MiniSat.and(present)))
+        if (check.isDefined(other)) {
+            throw new Error(`There are multiple scenarios of the same priority for one node template possible`)
+        }
+    }
+
     /**
      * Optimize technologies
      */
@@ -130,7 +153,7 @@ export default class Optimizer {
                 ? true
                 : this.graph.options.solver.technologies.min
 
-            this.optimize({min, formulas: formulas, weights: weights})
+            this.optimize({min, formulas, weights})
         }
     }
 

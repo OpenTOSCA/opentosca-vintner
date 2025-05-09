@@ -13,6 +13,7 @@ import Loader from '#graph/loader'
 import std from '#std'
 import * as utils from '#utils/utils'
 import {expect} from 'chai'
+import jsonDiff from 'json-diff'
 import _ from 'lodash'
 import path from 'path'
 
@@ -102,6 +103,10 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 _.merge(expected, config.merge)
             }
 
+            const diff = jsonDiff.diffString(expected, result)
+            if (diff) {
+                std.log(diff)
+            }
             expect(result).to.deep.equal(expected)
         }
     }

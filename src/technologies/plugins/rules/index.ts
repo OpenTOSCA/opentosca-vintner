@@ -6,17 +6,21 @@ import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
-import {TechnologyRule, TechnologyTemplateMap} from '#spec/technology-template'
+import {TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
-import {DeploymentScenarioMatch, Scenario, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
+import {Match, Scenario, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
 import {
     constructImplementationName,
     constructRuleName,
     destructImplementationName,
     isGenerated,
+    isNormative,
+    sortRules,
+    toScenarios,
 } from '#technologies/utils'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
@@ -38,39 +42,11 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         const rules = this.graph.serviceTemplate.topology_template?.variability?.qualities
         if (check.isUndefined(rules)) return []
         assert.isObject(rules, 'Rules not loaded')
-        return rules
+        return rules.sort(sortRules)
     }
 
     getScenarios(filter: {technology?: string} = {}) {
-        const scenarios: Scenario[] = []
-        for (const rule of this.getRules()) {
-            assert.isDefined(rule.weight)
-            assert.isDefined(rule.hosting)
-
-            if (check.isDefined(filter.technology) && rule.technology !== filter.technology) continue
-
-            const key = constructRuleName(rule, {technology: false})
-
-            const assessment = {
-                technology: rule.technology,
-                quality: rule.weight,
-                reason: rule.reason,
-            }
-
-            const found = scenarios.find(it => it.key === key)
-            if (found) {
-                found.assessments.push(assessment)
-            } else {
-                scenarios.push({
-                    key,
-                    component: rule.component,
-                    artifact: rule.artifact,
-                    hosting: rule.hosting,
-                    assessments: [assessment],
-                })
-            }
-        }
-        return scenarios
+        return toScenarios(this.getRules(), filter)
     }
 
     backwards() {
@@ -147,55 +123,93 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     assign(node: Node): TechnologyTemplateMap[] {
-        // All rules
-        const rules = this.getRules()
-
-        // Early return if no rules
-        if (utils.isEmpty(rules)) return []
+        // All scenarios
+        const scenarios = this.getScenarios()
 
         // Match all deployment scenarios
-        const matches = rules.map(it => this.match(node, it)).flat(Infinity) as DeploymentScenarioMatch[]
+        const matches = scenarios.map(it => this.match(node, it)).flat(Infinity) as Match[]
 
-        // Minimal inheritance depth
-        const min = Math.min(...matches.map(it => it.prio))
-
-        // Prioritize matched scenarios based on inheritance depth
-        const prioritized = matches.filter(it => it.prio === min)
-
-        // Generate topology templates
+        // Generate technology templates
         const maps: TechnologyTemplateMap[] = []
-        for (const match of prioritized) {
-            // Implementation name
-            const implementation = constructImplementationName({
-                type: node.getType().name,
-                rule: match.rule,
-            })
+        for (let index = 0; index < matches.length; index++) {
+            // Match
+            const match = matches[index]
+            const prio = this.prio(node, match.scenario.component)
 
-            // Element conditions
-            const conditions = match.elements.map(it => it.presenceCondition)
-            conditions.forEach((it: any) => delete it._cached_element)
+            // Assessments
+            let assessments = match.scenario.assessments
 
-            // Add rule conditions
-            if (check.isDefined(match.rule.conditions)) {
-                conditions.push(...utils.toList(match.rule.conditions))
+            // Best assessment
+            if (this.graph.options.enricher.technologiesBestOnly) {
+                const max = Math.max(...match.scenario.assessments.map(it => it.quality))
+                const best = match.scenario.assessments.filter(it => it.quality === max)
+                assessments = best
             }
 
-            // Construct technology template
-            maps.push({
-                [match.rule.technology]: {
-                    conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
-                    weight: match.rule.weight,
-                    assign: match.rule.assign ?? implementation,
-                },
-            })
+            // Generate technology template for each assessment
+            for (const assessment of assessments) {
+                // Implementation name
+                const implementation = constructImplementationName({
+                    type: node.getType().name,
+                    rule: assessment._rule,
+                })
+
+                // Element conditions
+                const conditions = match.elements.map(it => it.presenceCondition)
+                conditions.forEach((it: any) => delete it._cached_element)
+
+                // Add rule conditions
+                if (check.isDefined(assessment._rule.conditions)) {
+                    conditions.push(...utils.toList(assessment._rule.conditions))
+                }
+
+                // Construct technology template
+                maps.push({
+                    [assessment.technology]: {
+                        conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
+                        weight: assessment.quality,
+                        prio,
+                        assign: assessment._rule.assign ?? implementation,
+                    },
+                })
+            }
         }
 
         return maps
     }
 
+    /**
+     * Test if there is a match
+     */
     test(node: Node, scenario: Scenario) {
+        return utils.isPopulated(this.match(node, scenario))
+    }
+
+    /**
+     * Return all matches
+     */
+    match(node: Node, scenario: Scenario): Match[] {
         // Must match component
-        if (!node.getType().isA(scenario.component)) return false
+        if (!node.getType().isA(scenario.component)) return []
+
+        // Must match management operations
+        if (check.isDefined(scenario.operations)) {
+            // Check for operations in template
+            const inTemplate = scenario.operations.every(
+                it => node.raw.interfaces?.[MANAGEMENT_INTERFACE].operations?.[it]
+            )
+
+            // Check for operations in type
+            const inType = scenario.operations.every(it =>
+                this.graph.inheritance.hasManagementOperation(node.getType().name, it)
+            )
+
+            // Normative types are always supported
+            const type = this.graph.inheritance.getNodeType(node.getType().name)
+            assert.isDefined(type)
+
+            if (!isNormative(type) && !inTemplate && !inType) return []
+        }
 
         // Must match artifact
         let artifacts: Artifact[] = []
@@ -214,7 +228,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             )
 
             // Ignore if artifact not matched
-            if (!hasArtifactInTemplate && !hasArtifactInType) return false
+            if (!hasArtifactInTemplate && !hasArtifactInType) return []
         }
 
         // Must match hosting
@@ -223,47 +237,8 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         if (!utils.isEmpty(scenario.hosting)) {
             this.search(node, utils.copy(scenario.hosting), [], hostings)
             // Ignore if hosting not matched
-            if (utils.isEmpty(hostings)) return false
-        }
-
-        return true
-    }
-
-    /**
-     * Return all matches
-     */
-    match(node: Node, rule: TechnologyRule): DeploymentScenarioMatch[] {
-        // Must match component
-        if (!node.getType().isA(rule.component)) return []
-
-        // Must match artifact
-        let artifacts: Artifact[] = []
-        if (check.isDefined(rule.artifact)) {
-            // Check for artifact in template
-            artifacts = node.artifacts.filter(it => {
-                assert.isDefined(rule.artifact)
-                return it.getType().isA(rule.artifact)
-            })
-            const hasArtifactInTemplate = utils.isPopulated(artifacts)
-
-            // Check for artifact in type (which are always present)
-            const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(node.getType().name, rule.artifact)
-
-            // Ignore if artifact not matched
-            if (!hasArtifactInTemplate && !hasArtifactInType) return []
-        }
-
-        // Must match hosting
-        const hostings: Element[][] = []
-        assert.isDefined(rule.hosting)
-        if (!utils.isEmpty(rule.hosting)) {
-            this.search(node, utils.copy(rule.hosting), [], hostings)
-            // Ignore if hosting not matched
             if (utils.isEmpty(hostings)) return []
         }
-
-        // Prio
-        const prio = this.prio(node, rule.component)
 
         // Does not require artifact and not hosting
         if (utils.isEmpty(artifacts) && utils.isEmpty(hostings))
@@ -271,8 +246,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 {
                     elements: [],
                     root: node,
-                    rule,
-                    prio,
+                    scenario,
                 },
             ]
 
@@ -282,8 +256,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 elements: it,
                 root: node,
                 hosting: it,
-                rule,
-                prio,
+                scenario,
             }))
         }
 
@@ -293,14 +266,13 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                 elements: [it],
                 root: node,
                 artifact: it,
-                rule,
-                prio,
+                scenario,
             }))
         }
 
         // Does require artifact and hosting
         if (!utils.isEmpty(artifacts) && !utils.isEmpty(hostings)) {
-            const matches: DeploymentScenarioMatch[] = []
+            const matches: Match[] = []
             for (const artifact of artifacts) {
                 for (const hosting of hostings) {
                     matches.push({
@@ -308,8 +280,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         root: node,
                         artifact,
                         hosting,
-                        rule,
-                        prio,
+                        scenario,
                     })
                 }
             }
@@ -320,9 +291,10 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     }
 
     /**
-     * Scenario prio is defined by the inheritance depth between the node type and the rule.component
+     * Scenario prio is defined by the inheritance depth between the node type and the scenario target component
      */
     private prioCache: {[key: string]: number | undefined} = {}
+
     prio(node: Node, target: string): number {
         const source = node.getType().name
         const key = `${source}::prio::${target}`

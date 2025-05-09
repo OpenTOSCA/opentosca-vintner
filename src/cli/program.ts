@@ -519,7 +519,7 @@ template
     .requiredOption('--template <string>', 'path to service template')
     .option('--punishment [number]', 'punishment for a missing or unsupported technology assignment')
     .option('--punish [boolean]', 'punish missing or unsupported technology assignment', true)
-    .option('--no-punish [boolean]', 'ignore missing or unsuppoted technology assignment')
+    .option('--no-punish [boolean]', 'ignore missing or unsupported technology assignment')
     .action(
         hae.exit(async options => {
             std.out(await Controller.template.quality(options))
@@ -1230,5 +1230,16 @@ study
     .action(
         hae.exit(async options => {
             await Controller.study.quality(options)
+        })
+    )
+
+study
+    .command('performance')
+    .description('conduct performance case study')
+    .requiredOption('--directories <string...>', '')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.performance(options)
         })
     )
