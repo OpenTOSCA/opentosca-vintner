@@ -43,6 +43,8 @@ export type ResolvingMeasurement = {
 
 // TODO: performance marks should be unique per run? for server mode ...
 
+// TODO: tikz
+
 export default async function (options: StudyOptions) {
     options.config = options.config ?? 'study.performance.yaml'
     assert.isTrue(options.experimental)
