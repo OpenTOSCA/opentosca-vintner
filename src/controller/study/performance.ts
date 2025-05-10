@@ -8,17 +8,18 @@ import jsonDiff from 'json-diff'
 import util from 'node:util'
 import path from 'path'
 
+export type StudyOptions = {
+    config?: string
+    experimental: Boolean
+}
+
 export type Config = {
     study: 'performance'
     applications: {
         dir: string
         name: string
     }[]
-}
-
-export type StudyOptions = {
-    config?: string
-    experimental: Boolean
+    runs: number
 }
 
 export type Measurement = {
@@ -39,11 +40,11 @@ export type ResolvingMeasurement = {
     variant: string
 } & TimeMeasurement
 
-// TODO: multiple runs? median
-
-// TODO: performance marks should be unique per run? for server mode ...
+// TODO: multiple runs and take median
 
 // TODO: tikz
+
+// TODO: performance marks should be unique per run? for server mode ...
 
 export default async function (options: StudyOptions) {
     options.config = options.config ?? 'study.performance.yaml'
