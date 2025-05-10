@@ -10,7 +10,7 @@ import path from 'path'
 
 export type Config = {
     study: 'performance'
-    application: {
+    applications: {
         dir: string
         name: string
     }[]
@@ -52,7 +52,7 @@ export default async function (options: StudyOptions) {
 
     const measurements: Measurement[] = []
 
-    for (const application of config.application) {
+    for (const application of config.applications) {
         /**
          * Setup
          */
