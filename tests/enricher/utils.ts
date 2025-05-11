@@ -17,6 +17,6 @@ export function EnricherTest(dir: string) {
         if (diff) std.log(diff)
         expect(result).to.deep.equal(expected)
 
-        await files.removeFile(output)
+        files.removeFile(output)
     })
 }

@@ -356,7 +356,7 @@ export async function removeDirent(it: string) {
     if (isDirectory(it)) {
         removeDirectory(it)
     } else {
-        await removeFile(it)
+        removeFile(it)
     }
 }
 
@@ -369,8 +369,15 @@ export function removeDirectory(directory: string) {
     fss.rmSync(resolved, {recursive: true, force: true})
 }
 
-export async function removeFile(file: string) {
-    fss.unlinkSync(path.resolve(file))
+export function removeFile(file: string, options: {silent?: boolean} = {}) {
+    options.silent = options.silent ?? false
+
+    try {
+        fss.unlinkSync(path.resolve(file))
+    } catch (e) {
+        if (options.silent) return
+        throw e
+    }
 }
 
 export function getDirectory(file: string) {
