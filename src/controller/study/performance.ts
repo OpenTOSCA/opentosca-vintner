@@ -67,7 +67,7 @@ export default async function (options: StudyOptions) {
          * Enrichment
          */
         data.push(
-            await collect(
+            await measure(
                 'enrichment',
                 async (context: Context) => {
                     std.log(day().toISOString(), application.name, 'enrichment', context.run)
@@ -98,7 +98,7 @@ export default async function (options: StudyOptions) {
          */
         for (const variant of variants) {
             data.push(
-                await collect(
+                await measure(
                     variant,
                     async (context: Context) => {
                         std.log(day().toISOString(), application.name, variant, context.run)
@@ -175,7 +175,7 @@ type Context = {
     run: number
 }
 
-async function collect(name: string, worker: (context: Context) => Promise<TimeMeasurement>, runs: number) {
+async function measure(name: string, worker: (context: Context) => Promise<TimeMeasurement>, runs: number) {
     const series: TimeSeries = {
         name,
         data: [],
