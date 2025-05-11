@@ -56,95 +56,83 @@ export default async function (options: StudyOptions) {
          * Setup
          */
         const data: TimeSeries[] = []
-        const workingDirectory = files.temporaryDirent()
-        files.copy(application.dir, workingDirectory)
-        const originalTemplateFile = path.join(workingDirectory, 'variable-service-template.yaml')
-        const enrichedTemplateFile = path.join(workingDirectory, 'variable-service-template-enriched.yaml')
-        const testsDirectory = path.join(workingDirectory, 'tests')
-        const variants = files.listDirectories(testsDirectory)
+        const tmp = files.temporaryDirent()
+        files.copy(application.dir, tmp)
+        const original = path.join(tmp, 'variable-service-template.yaml')
+        const enriched = path.join(tmp, 'variable-service-template-enriched.yaml')
+        const tests = path.join(tmp, 'tests')
+        const variants = files.listDirectories(tests)
 
         /**
          * Enrichment
          */
-        data.push(
-            await measure(
-                'enrichment',
-                async (context: Context) => {
-                    std.log(day().toISOString(), application.name, 'enrichment', context.run)
-                    files.removeFile(enrichedTemplateFile, {silent: true})
+        const enrich = async (context: Context) => {
+            std.log(day().toISOString(), application.name, 'enrichment', context.run)
 
-                    performance.start('enricher_total')
-                    await Controller.template.enrich({
-                        template: originalTemplateFile,
-                        output: enrichedTemplateFile,
-                    })
-                    performance.stop('enricher_total')
+            files.removeFile(enriched, {silent: true})
 
-                    const measurement: TimeMeasurement = {
-                        total: performance.duration('enricher_total'),
-                        work: performance.duration('enricher_run'),
-                    }
-                    performance.clear('enricher_total')
-                    performance.clear('enricher_run')
+            performance.start('enricher_total')
+            await Controller.template.enrich({
+                template: original,
+                output: enriched,
+            })
+            performance.stop('enricher_total')
 
-                    return measurement
-                },
-                config.runs
-            )
-        )
+            const measurement: TimeMeasurement = {
+                total: performance.duration('enricher_total'),
+                work: performance.duration('enricher_run'),
+            }
+            performance.clear('enricher_total')
+            performance.clear('enricher_run')
+
+            return measurement
+        }
+        data.push(await measure('enrichment', enrich, config.runs))
 
         /**
          * Resolving
          */
         for (const variant of variants) {
-            data.push(
-                await measure(
-                    variant,
-                    async (context: Context) => {
-                        std.log(day().toISOString(), application.name, variant, context.run)
+            const resolve = async (context: Context) => {
+                std.log(day().toISOString(), application.name, variant, context.run)
 
-                        const resolvedTemplateFile = path.join(
-                            workingDirectory,
-                            `variable-service-template.${variant}.yaml`
-                        )
-                        const resolvingInputsFile = path.join(testsDirectory, variant, 'inputs.yaml')
-                        const expectedTemplateFile = path.join(testsDirectory, variant, 'expected.yaml')
-                        files.removeFile(resolvedTemplateFile, {silent: true})
+                const resolved = path.join(tmp, `variable-service-template.${variant}.yaml`)
+                const inputs = path.join(tests, variant, 'inputs.yaml')
+                const expected = path.join(tests, variant, 'expected.yaml')
+                files.removeFile(resolved, {silent: true})
 
-                        performance.start('resolver_total')
-                        await Controller.template.resolve({
-                            template: enrichedTemplateFile,
-                            output: resolvedTemplateFile,
-                            inputs: resolvingInputsFile,
-                            enrich: false,
-                        })
-                        performance.stop('resolver_total')
+                performance.start('resolver_total')
+                await Controller.template.resolve({
+                    template: enriched,
+                    output: resolved,
+                    inputs: inputs,
+                    enrich: false,
+                })
+                performance.stop('resolver_total')
 
-                        const result = new Loader(resolvedTemplateFile).raw()
-                        const expected = new Loader(expectedTemplateFile).raw()
-                        // TODO: must merge things into it ...
-                        const diff = jsonDiff.diffString(expected, result)
-                        //if (diff) std.log(diff)
+                const result = new Loader(resolved).raw()
+                const expectedLoaded = new Loader(expected).raw()
+                // TODO: must merge things into it ...
+                const diff = jsonDiff.diffString(expectedLoaded, result)
+                //if (diff) std.log(diff)
 
-                        const measurement: TimeMeasurement = {
-                            total: performance.duration('resolver_total'),
-                            work: performance.duration('resolver_run'),
-                        }
-                        performance.clear('resolver_total')
-                        performance.clear('resolver_run')
+                const measurement: TimeMeasurement = {
+                    total: performance.duration('resolver_total'),
+                    work: performance.duration('resolver_run'),
+                }
+                performance.clear('resolver_total')
+                performance.clear('resolver_run')
 
-                        return measurement
-                    },
-                    config.runs
-                )
-            )
+                return measurement
+            }
+            data.push(await measure(variant, resolve, config.runs))
         }
 
         /**
          * Modeled Elements
          */
         const stats = await Controller.template.stats({
-            template: [originalTemplateFile],
+            template: [original],
             experimental: true,
         })
 
@@ -160,7 +148,7 @@ export default async function (options: StudyOptions) {
         /**
          * Cleanup
          */
-        files.removeDirectory(workingDirectory)
+        files.removeDirectory(tmp)
     }
 
     /**
