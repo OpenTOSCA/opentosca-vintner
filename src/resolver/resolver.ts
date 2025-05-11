@@ -16,7 +16,7 @@ export default class Resolver {
     }
 
     run() {
-        performance.start('resolver_run')
+        performance.start('resolver_work')
 
         /**
          * Validator
@@ -38,7 +38,7 @@ export default class Resolver {
          */
         new Transformer(this.graph).run()
 
-        performance.stop('resolver_run')
+        performance.stop('resolver_work')
     }
 
     optimize(options?: {all: boolean}) {

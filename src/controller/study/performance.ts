@@ -3,6 +3,7 @@ import Controller from '#controller'
 import * as files from '#files'
 import Loader from '#graph/loader'
 import std from '#std'
+import * as utils from '#utils'
 import day from '#utils/day'
 import performance from '#utils/performance'
 import jsonDiff from 'json-diff'
@@ -39,8 +40,6 @@ export type TimeMeasurement = {
     work: number
 }
 
-// TODO: tikz
-
 // TODO: performance marks should be unique per run? for server mode ...
 
 export default async function (options: StudyOptions) {
@@ -66,8 +65,8 @@ export default async function (options: StudyOptions) {
         /**
          * Enrichment
          */
-        const enrich = async (context: Context) => {
-            std.log(day().toISOString(), application.name, 'enrichment', context.run)
+        const enrich = async (run: Number) => {
+            std.log(day().toISOString(), application.name, 'enrichment', run)
 
             files.removeFile(enriched, {silent: true})
 
@@ -80,21 +79,21 @@ export default async function (options: StudyOptions) {
 
             const measurement: TimeMeasurement = {
                 total: performance.duration('enricher_total'),
-                work: performance.duration('enricher_run'),
+                work: performance.duration('enricher_work'),
             }
             performance.clear('enricher_total')
-            performance.clear('enricher_run')
+            performance.clear('enricher_work')
 
             return measurement
         }
-        data.push(await measure('enrichment', enrich, config.runs))
+        data.push(await measureTimeSeries('enrichment', enrich, config.runs))
 
         /**
          * Resolving
          */
         for (const variant of variants) {
-            const resolve = async (context: Context) => {
-                std.log(day().toISOString(), application.name, variant, context.run)
+            const resolve = async (run: number) => {
+                std.log(day().toISOString(), application.name, variant, run)
 
                 const resolved = path.join(tmp, `variable-service-template.${variant}.yaml`)
                 const inputs = path.join(tests, variant, 'inputs.yaml')
@@ -118,14 +117,14 @@ export default async function (options: StudyOptions) {
 
                 const measurement: TimeMeasurement = {
                     total: performance.duration('resolver_total'),
-                    work: performance.duration('resolver_run'),
+                    work: performance.duration('resolver_work'),
                 }
                 performance.clear('resolver_total')
-                performance.clear('resolver_run')
+                performance.clear('resolver_work')
 
                 return measurement
             }
-            data.push(await measure(variant, resolve, config.runs))
+            data.push(await measureTimeSeries(variant, resolve, config.runs))
         }
 
         /**
@@ -156,23 +155,101 @@ export default async function (options: StudyOptions) {
      */
     measurements.sort((a, b) => a.elements - b.elements)
 
+    /**
+     * Return data
+     */
     std.out(util.inspect(measurements, {depth: null, colors: true}))
+
+    /**
+     * Plot total enrichment
+     */
+    std.log('----------------------------------')
+    std.log('total enrichment')
+    std.log(plotEnrichment(measurements, 'total'))
+
+    /**
+     * Plot work enrichment
+     */
+    std.log('----------------------------------')
+    std.log('work enrichment')
+    std.log(plotEnrichment(measurements, 'work'))
+
+    /**
+     * Plot total resolving
+     */
+    std.log('----------------------------------')
+    std.log('total resolving')
+    std.log(plotResolving(measurements, 'total'))
+
+    /**
+     * Plot work resolving
+     */
+    std.log('----------------------------------')
+    std.log('work resolving')
+    std.log(plotResolving(measurements, 'work'))
 }
 
-type Context = {
-    run: number
-}
-
-async function measure(name: string, worker: (context: Context) => Promise<TimeMeasurement>, runs: number) {
+async function measureTimeSeries(name: string, worker: (run: number) => Promise<TimeMeasurement>, runs: number) {
     const series: TimeSeries = {
         name,
         data: [],
     }
 
     for (let run = 0; run < runs; run++) {
-        const measurement = await worker({run})
+        const measurement = await worker(run)
         series.data.push(measurement)
     }
 
     return series
+}
+
+function plotEnrichment(measurements: Measurement[], key: keyof TimeMeasurement) {
+    const coordinates: string[] = []
+    const labels: string[] = []
+
+    measurements.forEach(m => {
+        const series = m.data.find(it => it.name === 'enrichment')
+        assert.isDefined(series)
+
+        const value = utils.median(series.data.map(it => it[key]))
+        coordinates.push(`(${m.elements},${value})`)
+        labels.push(`\\node at (axis cs:${m.elements},${value}) {${m.application}};`)
+    })
+
+    return `
+\\addplot+[color=black, mark=square*, mark options={fill=black}] coordinates {
+    ${coordinates.join(' ')}
+};
+
+${labels.join('\n')}
+    `
+}
+
+function plotResolving(measurements: Measurement[], key: keyof TimeMeasurement) {
+    const dots: string[] = []
+    const coordinates: string[] = []
+    const labels: string[] = []
+
+    measurements.forEach(m => {
+        const series = m.data.filter(it => it.name !== 'enrichment')
+
+        const values = series.map(s => utils.median(s.data.map(it => it[key])))
+        values.forEach(it => dots.push(`(${m.elements},${it})`))
+
+        const value = utils.average(values)
+        coordinates.push(`(${m.elements},${value})`)
+        labels.push(`\\node at (axis cs:${m.elements},${value}) {${m.application}};`)
+    })
+
+    return `
+\\addplot+[color=black, mark=x, only marks, mark options={fill=black}] coordinates {
+    ${dots.join(' ')}
+};    
+
+\\addplot+[color=black, mark=square*, mark options={fill=black}] coordinates {
+    ${coordinates.join(' ')}
+};
+
+${labels.join('\n')}
+    `
 }

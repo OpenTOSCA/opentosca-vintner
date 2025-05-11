@@ -28,9 +28,9 @@ export default class Enricher {
         /**
          * Element Enricher
          */
-        performance.start('enricher_run')
+        performance.start('enricher_work')
         new ElementEnricher(graph).run()
-        performance.stop('enricher_run')
+        performance.stop('enricher_work')
 
         /**
          * Regenerate graph
@@ -40,7 +40,7 @@ export default class Enricher {
         /**
          * Condition Enricher
          */
-        performance.start('enricher_run')
+        performance.start('enricher_work')
         new ConditionEnricher(graph).run()
 
         /**
@@ -52,6 +52,6 @@ export default class Enricher {
          * Transformer
          */
         new Transformer(graph, {cleanTypes: this.options.cleanTypes}).run()
-        performance.stop('enricher_run')
+        performance.stop('enricher_work')
     }
 }
