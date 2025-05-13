@@ -100,7 +100,7 @@ node_types:
         properties:
             application_language:
                 type: string
-                default: nodejs18
+                default: nodejs20
         interfaces:
             management:
                 type: management
@@ -116,7 +116,7 @@ node_types:
         properties:
             application_language:
                 type: string
-                default: nodejs18
+                default: nodejs20
     python.runtime:
         derived_from: software.runtime
         description: The "python.runtime" node type manages the Python runtime, which is a software runtime that runs on a machine. It is capable of hosting Python components.
