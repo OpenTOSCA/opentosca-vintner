@@ -744,7 +744,7 @@ nodejs.service.component:
     properties:
         application_language:
             type: string
-            default: nodejs18
+            default: nodejs20
     interfaces:
         management:
             type: management
@@ -766,7 +766,7 @@ reactjs.service.component:
     properties:
         application_language:
             type: string
-            default: nodejs18
+            default: nodejs20
 ```
 
 #### python.runtime

@@ -230,7 +230,7 @@ node_types:
                                   copy:
                                       dest: '{{ tempdir_info.path }}/app.yaml'
                                       content: |
-                                          runtime: nodejs18
+                                          runtime: nodejs20
                                           service: {{ SELF.application_name }}
                                           instance_class: F1
                                           env_variables:
