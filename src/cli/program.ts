@@ -382,9 +382,10 @@ template
 
 template
     .command('enrich')
-    .description('enrich conditions')
+    .description('enrich service template')
     .requiredOption('--template <string>', 'path to variable service template')
     .requiredOption('--output <string>', 'path of the output')
+    .option('--pretty [boolean]', 'prettify output')
     .action(
         hae.exit(async options => {
             await Controller.template.enrich(options)
@@ -412,6 +413,7 @@ template
         'path to the variability inputs (supported: [YAML, FeatureIDE ExtendedXML, env: OPENTOSCA_VINTNER_VARIABILITY_INPUT_<NAME>)'
     )
     .requiredOption('--output <string>', 'path of the output')
+    .option('--pretty [boolean]', 'prettify output')
     .action(
         hae.exit(async options => {
             await Controller.template.resolve(options)

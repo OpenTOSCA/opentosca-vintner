@@ -1,5 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import {PERFORMANCE_RESOLVER_SAT} from '#controller/study/performance'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
@@ -12,6 +13,7 @@ import {LogicExpression, ValueExpression, VariabilityDefinition, VariabilityExpr
 import * as utils from '#utils'
 import day from '#utils/day'
 import {UnexpectedError} from '#utils/error'
+import performance from '#utils/performance'
 import _ from 'lodash'
 import MiniSat from 'logic-solver'
 import regression from 'regression'
@@ -61,6 +63,7 @@ export default class Solver {
         /**
          * Get initial solution
          */
+        performance.start(PERFORMANCE_RESOLVER_SAT)
         const solution = this.minisat.solve()
         if (check.isUndefined(solution)) throw new Error('Could not solve')
 
@@ -68,6 +71,7 @@ export default class Solver {
          * Optimize
          */
         const optimized = new Optimizer(this.graph, solution, this.minisat).run()
+        performance.stop(PERFORMANCE_RESOLVER_SAT)
 
         /**
          * Result

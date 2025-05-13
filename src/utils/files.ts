@@ -119,7 +119,11 @@ export function storeFile(file: string, data: string, options: {onlyIfChanged?: 
     return file
 }
 
-export function storeYAML<T>(file: string, data: T, options: {generated?: boolean; overwrite?: boolean} = {}) {
+export function storeYAML<T>(
+    file: string,
+    data: T,
+    options: {generated?: boolean; overwrite?: boolean; pretty?: boolean} = {}
+) {
     options.generated = options.generated ?? false
     options.overwrite = options.overwrite ?? true
 
@@ -134,7 +138,8 @@ export function storeYAML<T>(file: string, data: T, options: {generated?: boolea
 
 `.trimStart()
 
-    let output = toYAML(data)
+    let output = toYAML(data, {pretty: options.pretty})
+
     if (options.generated) {
         output = notice + output
     }
@@ -236,7 +241,10 @@ export function toLatex(obj: any, options: LatexOptions = {}) {
     return data.join('\n')
 }
 
-export function formatYAML(obj: any) {
+export function formatYAML(obj: any, options: {enabled?: boolean} = {}) {
+    options.enabled = options.enabled ?? true
+    if (!options.enabled) return obj
+
     return prettier.format(obj, {
         parser: 'yaml',
         endOfLine: 'lf',
@@ -250,7 +258,7 @@ export function formatYAML(obj: any) {
     })
 }
 
-export function toYAML(obj: any, options?: yaml.DumpOptions) {
+export function toYAML(obj: any, options?: {dump?: yaml.DumpOptions; pretty?: boolean}) {
     return formatYAML(
         yaml.dump(
             obj,
@@ -262,9 +270,10 @@ export function toYAML(obj: any, options?: yaml.DumpOptions) {
                         '!!null': 'empty',
                     },
                 },
-                options
+                options?.dump
             )
-        )
+        ),
+        {enabled: options?.pretty}
     )
 }
 

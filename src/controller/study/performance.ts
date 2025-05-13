@@ -10,6 +10,17 @@ import jsonDiff from 'json-diff'
 import util from 'node:util'
 import path from 'path'
 
+export const PERFORMANCE_ENRICHER_TOTAL = 'enricher_total'
+export const PERFORMANCE_ENRICHER_WRITE = 'enricher_write'
+export const PERFORMANCE_ENRICHER_READ = 'enricher_read'
+export const PERFORMANCE_ENRICHER_WORK = 'enricher_work'
+
+export const PERFORMANCE_RESOLVER_TOTAL = 'resolver_total'
+export const PERFORMANCE_RESOLVER_WRITE = 'resolver_write'
+export const PERFORMANCE_RESOLVER_READ = 'resolver_read'
+export const PERFORMANCE_RESOLVER_WORK = 'resolver_work'
+export const PERFORMANCE_RESOLVER_SAT = 'resolver_sat'
+
 export type StudyOptions = {
     config?: string
     experimental: Boolean
@@ -47,6 +58,9 @@ export type TimeSeries = {
 export type TimeMeasurement = {
     total: number
     work: number
+    read: number
+    write: number
+    sat?: number
 }
 
 // TODO: performance marks should be unique per run? for server mode ...
@@ -79,19 +93,24 @@ export default async function (options: StudyOptions) {
 
             files.removeFile(enriched, {silent: true})
 
-            performance.start('enricher_total')
+            performance.start(PERFORMANCE_ENRICHER_TOTAL)
             await Controller.template.enrich({
                 template: original,
                 output: enriched,
+                pretty: false,
             })
-            performance.stop('enricher_total')
+            performance.stop(PERFORMANCE_ENRICHER_TOTAL)
 
             const measurement: TimeMeasurement = {
-                total: performance.duration('enricher_total'),
-                work: performance.duration('enricher_work'),
+                total: performance.duration(PERFORMANCE_ENRICHER_TOTAL),
+                work: performance.duration(PERFORMANCE_ENRICHER_WORK),
+                read: performance.duration(PERFORMANCE_ENRICHER_READ),
+                write: performance.duration(PERFORMANCE_ENRICHER_WRITE),
             }
-            performance.clear('enricher_total')
-            performance.clear('enricher_work')
+            performance.clear(PERFORMANCE_ENRICHER_TOTAL)
+            performance.clear(PERFORMANCE_ENRICHER_WORK)
+            performance.clear(PERFORMANCE_ENRICHER_READ)
+            performance.clear(PERFORMANCE_ENRICHER_WRITE)
 
             return measurement
         }
@@ -109,14 +128,15 @@ export default async function (options: StudyOptions) {
                 const expected = path.join(tests, variant, 'expected.yaml')
                 files.removeFile(resolved, {silent: true})
 
-                performance.start('resolver_total')
+                performance.start(PERFORMANCE_RESOLVER_TOTAL)
                 await Controller.template.resolve({
                     template: enriched,
                     output: resolved,
                     inputs: inputs,
                     enrich: false,
+                    pretty: false,
                 })
-                performance.stop('resolver_total')
+                performance.stop(PERFORMANCE_RESOLVER_TOTAL)
 
                 const result = new Loader(resolved).raw()
                 const expectedLoaded = new Loader(expected).raw()
@@ -125,11 +145,17 @@ export default async function (options: StudyOptions) {
                 //if (diff) std.log(diff)
 
                 const measurement: TimeMeasurement = {
-                    total: performance.duration('resolver_total'),
-                    work: performance.duration('resolver_work'),
+                    total: performance.duration(PERFORMANCE_RESOLVER_TOTAL),
+                    work: performance.duration(PERFORMANCE_RESOLVER_WORK),
+                    read: performance.duration(PERFORMANCE_RESOLVER_READ),
+                    write: performance.duration(PERFORMANCE_RESOLVER_WRITE),
+                    sat: performance.duration(PERFORMANCE_RESOLVER_SAT),
                 }
-                performance.clear('resolver_total')
-                performance.clear('resolver_work')
+                performance.clear(PERFORMANCE_RESOLVER_TOTAL)
+                performance.clear(PERFORMANCE_RESOLVER_WORK)
+                performance.clear(PERFORMANCE_RESOLVER_READ)
+                performance.clear(PERFORMANCE_RESOLVER_WRITE)
+                performance.clear(PERFORMANCE_RESOLVER_SAT)
 
                 return measurement
             }
@@ -179,32 +205,39 @@ export default async function (options: StudyOptions) {
     std.out(util.inspect(measurements, {depth: null, colors: true}))
 
     /**
-     * Plot total enrichment
+     * Plot enrichment
      */
     std.log('----------------------------------')
-    std.log('total enrichment')
+    std.log('Enrichment Total')
     std.log(plotEnrichment(measurements, 'total'))
-
-    /**
-     * Plot work enrichment
-     */
     std.log('----------------------------------')
-    std.log('work enrichment')
+    std.log('Enrichment Work')
     std.log(plotEnrichment(measurements, 'work'))
+    std.log('----------------------------------')
+    std.log('Enrichment Read')
+    std.log(plotEnrichment(measurements, 'read'))
+    std.log('----------------------------------')
+    std.log('Enrichment Write')
+    std.log(plotEnrichment(measurements, 'write'))
 
     /**
-     * Plot total resolving
+     * Plot resolving
      */
     std.log('----------------------------------')
-    std.log('total resolving')
+    std.log('Resolving Total')
     std.log(plotResolving(measurements, 'total'))
-
-    /**
-     * Plot work resolving
-     */
     std.log('----------------------------------')
-    std.log('work resolving')
+    std.log('Resolving Work')
     std.log(plotResolving(measurements, 'work'))
+    std.log('----------------------------------')
+    std.log('Resolving Read')
+    std.log(plotResolving(measurements, 'read'))
+    std.log('----------------------------------')
+    std.log('Resolving Write')
+    std.log(plotResolving(measurements, 'write'))
+    std.log('----------------------------------')
+    std.log('Resolving SAT')
+    std.log(plotResolving(measurements, 'sat'))
 
     /**
      * Plot stats
@@ -236,7 +269,7 @@ function plotEnrichment(measurements: Measurement[], key: keyof TimeMeasurement)
         const series = m.data.find(it => it.name === 'enrichment')
         assert.isDefined(series)
 
-        const value = utils.median(series.data.map(it => it[key]))
+        const value = utils.median(series.data.map(it => it[key]!))
         coordinates.push(`(${m.stats.elements},${value})`)
         labels.push(`\\node at (axis cs:${m.stats.elements},${value}) {${m.application}};`)
     })
@@ -258,7 +291,7 @@ function plotResolving(measurements: Measurement[], key: keyof TimeMeasurement) 
     measurements.forEach(m => {
         const series = m.data.filter(it => it.name !== 'enrichment')
 
-        const values = series.map(s => utils.median(s.data.map(it => it[key])))
+        const values = series.map(s => utils.median(s.data.map(it => it[key]!)))
         values.forEach(it => dots.push(`(${m.stats.elements},${it})`))
 
         const value = utils.average(values)

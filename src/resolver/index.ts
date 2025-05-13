@@ -1,5 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import {PERFORMANCE_RESOLVER_READ} from '#controller/study/performance'
 import Enricher from '#enricher'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
@@ -8,6 +9,7 @@ import Resolver from '#resolver/resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import {InputAssignmentPreset} from '#spec/variability'
+import performance from '#utils/performance'
 
 export type ResolveOptions = {
     template: ServiceTemplate | string
@@ -46,7 +48,11 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
      * Service template
      */
     // TODO: where to load? inside enricher?
-    if (check.isString(options.template)) options.template = await new Loader(options.template, override).load()
+    if (check.isString(options.template)) {
+        performance.start(PERFORMANCE_RESOLVER_READ)
+        options.template = await new Loader(options.template, override).load()
+        performance.stop(PERFORMANCE_RESOLVER_READ)
+    }
 
     /**
      * Enricher

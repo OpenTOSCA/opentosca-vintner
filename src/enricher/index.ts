@@ -1,3 +1,4 @@
+import {PERFORMANCE_ENRICHER_WORK} from '#controller/study/performance'
 import {ConditionEnricher} from '#enricher/conditions'
 import {ConstraintEnricher} from '#enricher/constraints'
 import {ElementEnricher} from '#enricher/elements'
@@ -28,9 +29,9 @@ export default class Enricher {
         /**
          * Element Enricher
          */
-        performance.start('enricher_work')
+        performance.start(PERFORMANCE_ENRICHER_WORK)
         new ElementEnricher(graph).run()
-        performance.stop('enricher_work')
+        performance.stop(PERFORMANCE_ENRICHER_WORK)
 
         /**
          * Regenerate graph
@@ -40,7 +41,7 @@ export default class Enricher {
         /**
          * Condition Enricher
          */
-        performance.start('enricher_work')
+        performance.start(PERFORMANCE_ENRICHER_WORK)
         new ConditionEnricher(graph).run()
 
         /**
@@ -52,6 +53,6 @@ export default class Enricher {
          * Transformer
          */
         new Transformer(graph, {cleanTypes: this.options.cleanTypes}).run()
-        performance.stop('enricher_work')
+        performance.stop(PERFORMANCE_ENRICHER_WORK)
     }
 }
