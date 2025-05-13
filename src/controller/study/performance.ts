@@ -74,7 +74,7 @@ export default async function (options: StudyOptions) {
         /**
          * Enrichment
          */
-        const enrich = async (run: Number) => {
+        const enrich = async (run: number) => {
             std.log(day().toISOString(), application.name, 'enrichment', run)
 
             files.removeFile(enriched, {silent: true})
