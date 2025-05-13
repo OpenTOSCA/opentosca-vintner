@@ -49,7 +49,7 @@ const nodes: NodeTypeMap = {
         properties: {
             application_language: {
                 type: 'string',
-                default: 'nodejs18',
+                default: 'nodejs20',
             },
         },
         interfaces: {
@@ -73,7 +73,7 @@ const nodes: NodeTypeMap = {
             // TODO: which language?!
             application_language: {
                 type: 'string',
-                default: 'nodejs18',
+                default: 'nodejs20',
             },
         },
     },
