@@ -26,7 +26,16 @@ export type Config = {
 
 export type Measurement = {
     application: string
-    elements: number
+    stats: {
+        elements: number
+        components: number
+        relations: number
+        properties: number
+        artifacts: number
+        technologies: number
+        inputs: number
+        outputs: number
+    }
     data: TimeSeries[]
 }
 
@@ -140,7 +149,16 @@ export default async function (options: StudyOptions) {
          */
         measurements.push({
             application: application.name,
-            elements: stats.edmm_elements,
+            stats: {
+                elements: stats.edmm_elements,
+                components: stats.nodes,
+                relations: stats.relations,
+                properties: stats.properties,
+                artifacts: stats.artifacts,
+                technologies: stats.technologies,
+                inputs: stats.inputs,
+                outputs: stats.outputs,
+            },
             data,
         })
 
@@ -153,7 +171,7 @@ export default async function (options: StudyOptions) {
     /**
      * Sort measurements asc by number of elements
      */
-    measurements.sort((a, b) => a.elements - b.elements)
+    measurements.sort((a, b) => a.stats.elements - b.stats.elements)
 
     /**
      * Return data
@@ -187,6 +205,13 @@ export default async function (options: StudyOptions) {
     std.log('----------------------------------')
     std.log('work resolving')
     std.log(plotResolving(measurements, 'work'))
+
+    /**
+     * Plot stats
+     */
+    std.log('----------------------------------')
+    std.log('stats')
+    std.log(plotStats(measurements))
 }
 
 async function measureTimeSeries(name: string, worker: (run: number) => Promise<TimeMeasurement>, runs: number) {
@@ -212,8 +237,8 @@ function plotEnrichment(measurements: Measurement[], key: keyof TimeMeasurement)
         assert.isDefined(series)
 
         const value = utils.median(series.data.map(it => it[key]))
-        coordinates.push(`(${m.elements},${value})`)
-        labels.push(`\\node at (axis cs:${m.elements},${value}) {${m.application}};`)
+        coordinates.push(`(${m.stats.elements},${value})`)
+        labels.push(`\\node at (axis cs:${m.stats.elements},${value}) {${m.application}};`)
     })
 
     return `
@@ -234,11 +259,11 @@ function plotResolving(measurements: Measurement[], key: keyof TimeMeasurement) 
         const series = m.data.filter(it => it.name !== 'enrichment')
 
         const values = series.map(s => utils.median(s.data.map(it => it[key])))
-        values.forEach(it => dots.push(`(${m.elements},${it})`))
+        values.forEach(it => dots.push(`(${m.stats.elements},${it})`))
 
         const value = utils.average(values)
-        coordinates.push(`(${m.elements},${value})`)
-        labels.push(`\\node at (axis cs:${m.elements},${value}) {${m.application}};`)
+        coordinates.push(`(${m.stats.elements},${value})`)
+        labels.push(`\\node at (axis cs:${m.stats.elements},${value}) {${m.application}};`)
     })
 
     return `
@@ -252,4 +277,26 @@ function plotResolving(measurements: Measurement[], key: keyof TimeMeasurement) 
 
 ${labels.join('\n')}
     `
+}
+
+function plotStats(measurements: Measurement[]) {
+    const rows: string[] = []
+
+    measurements.forEach(m => {
+        const row =
+            [
+                m.application,
+                m.stats.elements,
+                m.stats.components,
+                m.stats.relations,
+                m.stats.properties,
+                m.stats.artifacts,
+                m.stats.technologies,
+                m.stats.inputs,
+                m.stats.outputs,
+            ].join(' & ') + ' \\\\ \n'
+        rows.push(row)
+    })
+
+    return rows.join('')
 }

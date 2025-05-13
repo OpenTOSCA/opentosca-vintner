@@ -8,12 +8,12 @@ applications:
       name: Online Boutique
 
     - dir: examples/unfurl-technology---industry---plus-maintenance-automated
-      name: Industry (1x)
+      name: smark
 
     - dir: examples/unfurl-technology---industry-double---plus-maintenance-automated
-      name: Industry (2x)
+      name: smark (2x)
 
     - dir: examples/unfurl-technology---industry-triple---plus-maintenance-automated
-      name: Industry (3x)
+      name: smark (3x)
 
-runs: 3
+runs: 1
