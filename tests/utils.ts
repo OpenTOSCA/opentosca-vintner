@@ -76,6 +76,7 @@ export function getDefaultTest(dir: string, vstdir?: string) {
                 output,
                 presets: utils.toList(config.presets),
                 enrich: true,
+                pretty: false,
             })
         }
 

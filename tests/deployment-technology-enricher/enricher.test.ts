@@ -14,11 +14,11 @@ describe('deployment technology enricher', () => {
 
         const result = await files.loadYAML(path.join(output))
         expect(result).to.deep.equal(await files.loadYAML(path.join(__dirname, 'expected.template.yaml')))
-        await files.removeFile(output)
+        files.removeFile(output)
 
         const reportPath = toReportPath(output)
         const report = await files.loadYAML(reportPath)
         expect(report).to.deep.equal(await files.loadYAML(path.join(__dirname, 'expected.report.yaml')))
-        await files.removeFile(reportPath)
+        files.removeFile(reportPath)
     })
 })

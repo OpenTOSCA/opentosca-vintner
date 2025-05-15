@@ -19,6 +19,9 @@ topology_template:
 
         gcp_project:
             type: string
+    outputs:
+        frontend_endpoint:
+            value: "{{ '::frontend_component::application_endpoint' | eval }}"
 
     node_templates:
         ###################################################

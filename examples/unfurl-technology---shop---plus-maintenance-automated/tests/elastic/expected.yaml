@@ -20,6 +20,10 @@ topology_template:
         gcp_project:
             type: string
 
+    outputs:
+        shop_endpoint:
+            value: "{{ '::shop::application_endpoint' | eval }}"
+
     node_templates:
         ###################################################
         #

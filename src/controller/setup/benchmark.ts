@@ -65,8 +65,8 @@ export default async function (options: BenchmarkOptions) {
                 if (io) {
                     size = files.getSize(input)
                     lines = files.countLines(input)
-                    await files.removeFile(input)
-                    await files.removeFile(output)
+                    files.removeFile(input)
+                    files.removeFile(output)
                 }
 
                 std.log(`Finished`, {io, seed, run, duration})

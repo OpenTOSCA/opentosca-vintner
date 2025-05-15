@@ -49,7 +49,7 @@ export class Asset {
     }
 
     async delete() {
-        await files.removeFile(this.getFile())
+        files.removeFile(this.getFile())
         return this
     }
 }

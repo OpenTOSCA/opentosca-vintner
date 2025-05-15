@@ -8,6 +8,7 @@ import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
 import {LogicExpression} from '#spec/variability'
+import {isNormative} from '#technologies/utils'
 import * as utils from '#utils'
 import Element from './element'
 import Group from './group'
@@ -100,28 +101,36 @@ export default class Type extends Element {
         return bratify(this.container.types.filter(it => it !== this))
     }
 
+    private _isA: {[name: string]: boolean | undefined} = {}
+
     isA(name: string) {
-        if (this.container.isArtifact()) {
-            return this.graph.inheritance.isArtifactType(this.name, name)
+        if (check.isUndefined(this._isA[name])) {
+            if (this.container.isArtifact()) {
+                this._isA[name] = this.graph.inheritance.isArtifactType(this.name, name)
+            }
+
+            if (this.container.isGroup()) {
+                this._isA[name] = this.graph.inheritance.isGroupType(this.name, name)
+            }
+
+            if (this.container.isNode()) {
+                this._isA[name] = this.graph.inheritance.isNodeType(this.name, name)
+            }
+
+            if (this.container.isPolicy()) {
+                this._isA[name] = this.graph.inheritance.isPolicyType(this.name, name)
+            }
+
+            if (this.container.isRelation()) {
+                this._isA[name] = this.graph.inheritance.isRelationshipType(this.name, name)
+            }
+
+            if (check.isUndefined(this._isA[name])) {
+                throw new Error(`${this.Display} does not support checking type inheritance`)
+            }
         }
 
-        if (this.container.isGroup()) {
-            return this.graph.inheritance.isGroupType(this.name, name)
-        }
-
-        if (this.container.isNode()) {
-            return this.graph.inheritance.isNodeType(this.name, name)
-        }
-
-        if (this.container.isPolicy()) {
-            return this.graph.inheritance.isPolicyType(this.name, name)
-        }
-
-        if (this.container.isRelation()) {
-            return this.graph.inheritance.isRelationshipType(this.name, name)
-        }
-
-        throw new Error(`${this.Display} does not support checking type inheritance`)
+        return this._isA[name]!
     }
 
     getDefinition() {
@@ -150,5 +159,43 @@ export default class Type extends Element {
 
     isType() {
         return true
+    }
+
+    private _isNormative?: boolean
+
+    isNormative() {
+        if (check.isUndefined(this._isNormative)) this._isNormative = isNormative(this)
+        return this._isNormative!
+    }
+
+    private _hasOperation: {[operation: string]: boolean | undefined} = {}
+
+    hasOperation(operation: string) {
+        if (check.isUndefined(this._hasOperation[operation])) {
+            if (this.container.isNode()) {
+                this._hasOperation[operation] = this.graph.inheritance.hasManagementOperation(this.name, operation)
+            }
+
+            if (check.isUndefined(this._hasOperation[operation])) {
+                throw new Error(`${this.Display} does not support checking for operation`)
+            }
+        }
+
+        return this._hasOperation[operation]!
+    }
+
+    private _hasArtifact: {[artifact: string]: boolean | undefined} = {}
+
+    hasArtifact(artifact: string) {
+        if (check.isUndefined(this._hasArtifact[artifact])) {
+            if (this.container.isNode()) {
+                this._hasArtifact[artifact] = this.graph.inheritance.hasArtifactDefinition(this.name, artifact)
+            }
+
+            if (check.isUndefined(this._hasArtifact[artifact])) {
+                throw new Error(`${this.Display} does not support checking for operation`)
+            }
+        }
+        return this._hasArtifact[artifact]!
     }
 }

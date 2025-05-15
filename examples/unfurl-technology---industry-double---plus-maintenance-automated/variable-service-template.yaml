@@ -122,6 +122,77 @@ topology_template:
         k8s_client_key_file:
             type: string
 
+    outputs:
+        - global_dashboard_endpoint:
+              value: "{{ '::global_frontend_dashboard::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: global_ingress_dashboard}}
+
+        - global_dashboard_endpoint:
+              value: "{{ '::global_ingress_dashboard::application_address' | eval }}"
+
+        - global_gateway_endpoint:
+              value: "{{ '::global_service_gateway::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: global_ingress_gateway}}
+
+        - global_gateway_endpoint:
+              value: "{{ '::global_ingress_gateway::application_address' | eval }}"
+
+        - retailer_dashboard_endpoint:
+              value: "{{ '::retailer_frontend_dashboard::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_dashboard}}
+
+        - retailer_dashboard_endpoint:
+              value: "{{ '::retailer_ingress_dashboard::application_address' | eval }}"
+
+        - retailer_terminal_endpoint:
+              value: "{{ '::retailer_frontend_terminal::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_terminal}}
+
+        - retailer_terminal_endpoint:
+              value: "{{ '::retailer_ingress_terminal::application_address' | eval }}"
+
+        - retailer_gateway_endpoint:
+              value: "{{ '::retailer_service_gateway::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_gateway}}
+
+        - retailer_gateway_endpoint:
+              value: "{{ '::retailer_ingress_gateway::application_address' | eval }}"
+
+        - global_dashboard_endpoint_2:
+              value: "{{ '::global_frontend_dashboard_2::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: global_ingress_dashboard_2}}
+
+        - global_dashboard_endpoint_2:
+              value: "{{ '::global_ingress_dashboard_2::application_address' | eval }}"
+
+        - global_gateway_endpoint_2:
+              value: "{{ '::global_service_gateway_2::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: global_ingress_gateway_2}}
+
+        - global_gateway_endpoint_2:
+              value: "{{ '::global_ingress_gateway_2::application_address' | eval }}"
+
+        - retailer_dashboard_endpoint_2:
+              value: "{{ '::retailer_frontend_dashboard_2::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_dashboard_2}}
+
+        - retailer_dashboard_endpoint_2:
+              value: "{{ '::retailer_ingress_dashboard_2::application_address' | eval }}"
+
+        - retailer_terminal_endpoint_2:
+              value: "{{ '::retailer_frontend_terminal_2::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_terminal_2}}
+
+        - retailer_terminal_endpoint_2:
+              value: "{{ '::retailer_ingress_terminal_2::application_address' | eval }}"
+
+        - retailer_gateway_endpoint_2:
+              value: "{{ '::retailer_service_gateway_2::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: retailer_ingress_gateway_2}}
+
+        - retailer_gateway_endpoint_2:
+              value: "{{ '::retailer_ingress_gateway_2::application_address' | eval }}"
+
     variability:
         expressions:
             has_info_logging: {equal: [{variability_input: logging}, INFO]}

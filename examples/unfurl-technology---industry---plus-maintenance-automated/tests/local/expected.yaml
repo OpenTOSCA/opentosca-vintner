@@ -50,6 +50,22 @@ topology_template:
         sms_provider_token:
             type: string
 
+    outputs:
+        global_dashboard_endpoint:
+            value: "{{ '::global_frontend_dashboard::application_endpoint' | eval }}"
+
+        global_gateway_endpoint:
+            value: "{{ '::global_service_gateway::application_endpoint' | eval }}"
+
+        retailer_dashboard_endpoint:
+            value: "{{ '::retailer_frontend_dashboard::application_endpoint' | eval }}"
+
+        retailer_terminal_endpoint:
+            value: "{{ '::retailer_frontend_terminal::application_endpoint' | eval }}"
+
+        retailer_gateway_endpoint:
+            value: "{{ '::retailer_service_gateway::application_endpoint' | eval }}"
+
     node_templates:
         ###################################################
         #

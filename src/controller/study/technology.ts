@@ -51,7 +51,7 @@ export type StudyTechnologyOptions = {
  *                  - expected.yaml
  *                  - inputs.yaml
  *                  - test.yaml
- *     - study.yaml
+ *     - study.technology.yaml
  *     - variable-service-template.yaml
  *
  * - unfurl-technology---${options.application}---plus-original-automated/
@@ -83,7 +83,7 @@ export default async function (options: StudyTechnologyOptions) {
     const templateFile = path.join(templateDir, 'variable-service-template.yaml')
     const testsDir = path.join(templateDir, 'tests')
 
-    const config = files.loadYAML<StudyConfig>(path.join(templateDir, 'study.yaml'))
+    const config = files.loadYAML<Config>(path.join(templateDir, 'study.technology.yaml'))
     assert.isDefined(config.study)
     assert.isDefined(config.originals)
     if (config.study !== 'technology') throw new Error(`Study "${config.study}" must be "technology"`)
@@ -305,8 +305,8 @@ export default async function (options: StudyTechnologyOptions) {
     console.log()
 }
 
-type StudyConfig = {
-    study: string
+type Config = {
+    study: 'technology'
     originals: string[]
 }
 

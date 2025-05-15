@@ -1,7 +1,9 @@
 import configurators from '#/configurators'
 import * as check from '#check'
+import {PERFORMANCE_RESOLVER_READ} from '#controller/study/performance'
 import {InputAssignmentMap} from '#spec/topology-template'
 import * as utils from '#utils'
+import performance from '#utils/performance'
 import * as _ from 'lodash'
 import process from 'process'
 
@@ -12,8 +14,10 @@ export default class Inputs {
         const inputs = utils.getPrefixedEnv('OPENTOSCA_VINTNER_VARIABILITY_INPUT_')
 
         if (check.isDefined(file)) {
+            performance.start(PERFORMANCE_RESOLVER_READ)
             const configurator = configurators.get(file)
             const data = await configurator.load(file)
+            performance.stop(PERFORMANCE_RESOLVER_READ)
             _.merge(inputs, data)
         }
 

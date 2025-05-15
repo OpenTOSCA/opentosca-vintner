@@ -1,0 +1,19 @@
+study: performance
+
+applications:
+    - dir: examples/unfurl-technology---shop---plus-maintenance-automated
+      name: Webshop
+
+    - dir: examples/unfurl-technology---boutique---plus-maintenance-automated
+      name: Online Boutique
+
+    - dir: examples/unfurl-technology---industry---plus-maintenance-automated
+      name: smark
+
+    - dir: examples/unfurl-technology---industry-double---plus-maintenance-automated
+      name: smark (2x)
+
+    - dir: examples/unfurl-technology---industry-triple---plus-maintenance-automated
+      name: smark (3x)
+
+runs: 10

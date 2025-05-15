@@ -65,6 +65,21 @@ topology_template:
         k8s_client_key_file:
             type: string
 
+    outputs:
+        - shop_endpoint:
+              value: "{{ '::shop_ansible::application_endpoint' | eval }}"
+              conditions: {not: {or: [{node_presence: shop_ingress_ansible}, {node_presence: shop_ingress_kubernetes}]}}
+
+        - shop_endpoint:
+              value: "{{ '::shop_terraform::application_endpoint' | eval }}"
+              conditions: {not: {or: [{node_presence: shop_ingress_ansible}, {node_presence: shop_ingress_kubernetes}]}}
+
+        - shop_endpoint:
+              value: "{{ '::shop_ingress_ansible::application_address' | eval }}"
+
+        - shop_endpoint:
+              value: "{{ '::shop_ingress_kubernetes::application_address' | eval }}"
+
     variability:
         inputs:
             env:

@@ -19,10 +19,10 @@ export default async function (options: TemplateUnimplementOptions) {
 
     const normative = NormativeTypes()
 
-    await files.removeFile(path.join(lib, normative.profile.yaml))
-    await files.removeFile(path.join(lib, normative.core.yaml))
-    await files.removeFile(path.join(lib, normative.extended.yaml))
-    await files.removeFile(path.join(lib, QUALITIES_FILENAME))
+    files.removeFile(path.join(lib, normative.profile.yaml))
+    files.removeFile(path.join(lib, normative.core.yaml))
+    files.removeFile(path.join(lib, normative.extended.yaml))
+    files.removeFile(path.join(lib, QUALITIES_FILENAME))
 
     for (const file of files.walkDirectory(lib, {extensions: YAML_EXTENSIONS})) {
         const templateString = files.loadFile(file)

@@ -53,6 +53,18 @@ topology_template:
         gcp_project:
             type: string
 
+    outputs:
+        - shop_endpoint:
+              value: "{{ '::shop_ansible::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: shop_ingress}}
+
+        - shop_endpoint:
+              value: "{{ '::shop_terraform::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: shop_ingress}}
+
+        - shop_endpoint:
+              value: "{{ '::shop_ingress::application_address' | eval }}"
+
     variability:
         inputs:
             env:

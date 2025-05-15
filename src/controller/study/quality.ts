@@ -13,6 +13,7 @@ export type StudyQualityOptions = {
 }
 
 export type Config = {
+    study: 'quality'
     dir: string
     groups: {id: string; application: string; variants: string[]}[]
 }
@@ -52,6 +53,7 @@ export default async function (options: StudyQualityOptions) {
      * Config
      */
     const config = files.loadYAML<Config>(options.config)
+    if (config.study !== 'quality') throw new Error(`Study "${config.study}" must be "quality"`)
 
     /**
      * Collect all submissions

@@ -65,6 +65,14 @@ topology_template:
         k8s_client_key_file:
             type: string
 
+    outputs:
+        - frontend_endpoint:
+              value: "{{ '::frontend_component::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: frontend_ingress}}
+
+        - frontend_endpoint:
+              value: "{{ '::frontend_ingress::application_address' | eval }}"
+
     variability:
         expressions:
             is_gcp: {equal: [{variability_input: env}, GCP]}

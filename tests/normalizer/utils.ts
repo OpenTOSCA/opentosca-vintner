@@ -9,6 +9,6 @@ export function NormalizerTest(dir: string) {
         await Controller.template.normalize({template: path.join(__dirname, dir, 'template.yaml'), output})
         const result = await files.loadYAML(path.join(output))
         expect(result).to.deep.equal(await files.loadYAML(path.join(__dirname, dir, 'expected.yaml')))
-        await files.removeFile(output)
+        files.removeFile(output)
     })
 }

@@ -24,7 +24,7 @@ describe('crypto', () => {
             signature,
         })
 
-        await files.removeFile(signature)
+        files.removeFile(signature)
     })
 
     it('import', async () => {
