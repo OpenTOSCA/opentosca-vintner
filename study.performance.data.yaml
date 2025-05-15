@@ -1,0 +1,1305 @@
+- application: Webshop
+  stats:
+      elements: 99
+      components: 14
+      relations: 20
+      properties: 41
+      artifacts: 4
+      technologies: 0
+      inputs: 20
+      outputs: 0
+  data:
+      - name: enrichment
+        data:
+            - total: 82
+              work: 28
+              read: 42
+              write: 8
+            - total: 52
+              work: 23
+              read: 23
+              write: 3
+            - total: 50
+              work: 21
+              read: 25
+              write: 2
+            - total: 47
+              work: 20
+              read: 23
+              write: 2
+            - total: 51
+              work: 23
+              read: 24
+              write: 2
+            - total: 48
+              work: 21
+              read: 23
+              write: 2
+            - total: 48
+              work: 21
+              read: 23
+              write: 2
+            - total: 49
+              work: 21
+              read: 24
+              write: 2
+            - total: 48
+              work: 21
+              read: 23
+              write: 2
+            - total: 55
+              work: 20
+              read: 30
+              write: 2
+      - name: elastic
+        data:
+            - total: 104
+              work: 79
+              read: 23
+              write: 0
+              sat: 14
+            - total: 48
+              work: 22
+              read: 25
+              write: 0
+              sat: 6
+            - total: 46
+              work: 19
+              read: 25
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 5
+            - total: 46
+              work: 19
+              read: 25
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 4
+            - total: 45
+              work: 19
+              read: 24
+              write: 0
+              sat: 5
+      - name: kubernetes
+        data:
+            - total: 43
+              work: 18
+              read: 23
+              write: 0
+              sat: 4
+            - total: 45
+              work: 19
+              read: 25
+              write: 0
+              sat: 5
+            - total: 44
+              work: 18
+              read: 24
+              write: 0
+              sat: 5
+            - total: 43
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 42
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+            - total: 42
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 44
+              work: 18
+              read: 25
+              write: 0
+              sat: 4
+            - total: 44
+              work: 19
+              read: 24
+              write: 0
+              sat: 4
+            - total: 45
+              work: 19
+              read: 24
+              write: 0
+              sat: 4
+            - total: 43
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+      - name: static
+        data:
+            - total: 42
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 42
+              work: 16
+              read: 25
+              write: 0
+              sat: 4
+            - total: 41
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+            - total: 41
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+            - total: 42
+              work: 16
+              read: 24
+              write: 0
+              sat: 4
+            - total: 43
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 42
+              work: 16
+              read: 24
+              write: 0
+              sat: 4
+            - total: 41
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+            - total: 44
+              work: 17
+              read: 25
+              write: 0
+              sat: 4
+            - total: 41
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+      - name: static-large
+        data:
+            - total: 42
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 41
+              work: 16
+              read: 24
+              write: 0
+              sat: 4
+            - total: 41
+              work: 17
+              read: 23
+              write: 0
+              sat: 4
+            - total: 43
+              work: 19
+              read: 23
+              write: 0
+              sat: 4
+            - total: 40
+              work: 16
+              read: 23
+              write: 0
+              sat: 4
+            - total: 43
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 45
+              work: 18
+              read: 26
+              write: 0
+              sat: 4
+            - total: 43
+              work: 17
+              read: 24
+              write: 0
+              sat: 4
+            - total: 41
+              work: 16
+              read: 23
+              write: 0
+              sat: 4
+            - total: 41
+              work: 16
+              read: 23
+              write: 0
+              sat: 4
+- application: Online Boutique
+  stats:
+      elements: 249
+      components: 25
+      relations: 65
+      properties: 123
+      artifacts: 16
+      technologies: 0
+      inputs: 20
+      outputs: 0
+  data:
+      - name: enrichment
+        data:
+            - total: 166
+              work: 96
+              read: 60
+              write: 6
+            - total: 166
+              work: 97
+              read: 60
+              write: 5
+            - total: 167
+              work: 96
+              read: 62
+              write: 6
+            - total: 167
+              work: 98
+              read: 61
+              write: 5
+            - total: 172
+              work: 100
+              read: 63
+              write: 6
+            - total: 167
+              work: 96
+              read: 62
+              write: 6
+            - total: 171
+              work: 99
+              read: 62
+              write: 7
+            - total: 166
+              work: 96
+              read: 62
+              write: 6
+            - total: 174
+              work: 97
+              read: 68
+              write: 6
+            - total: 166
+              work: 93
+              read: 62
+              write: 7
+      - name: gcp
+        data:
+            - total: 106
+              work: 40
+              read: 64
+              write: 0
+              sat: 12
+            - total: 98
+              work: 33
+              read: 63
+              write: 0
+              sat: 11
+            - total: 99
+              work: 33
+              read: 64
+              write: 0
+              sat: 11
+            - total: 101
+              work: 35
+              read: 64
+              write: 0
+              sat: 11
+            - total: 98
+              work: 33
+              read: 63
+              write: 0
+              sat: 11
+            - total: 96
+              work: 32
+              read: 63
+              write: 0
+              sat: 11
+            - total: 99
+              work: 33
+              read: 64
+              write: 0
+              sat: 11
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 98
+              work: 32
+              read: 64
+              write: 0
+              sat: 10
+            - total: 98
+              work: 31
+              read: 65
+              write: 0
+              sat: 11
+      - name: kubernetes
+        data:
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 11
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 10
+            - total: 96
+              work: 31
+              read: 63
+              write: 0
+              sat: 10
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 95
+              work: 31
+              read: 63
+              write: 0
+              sat: 10
+            - total: 98
+              work: 32
+              read: 64
+              write: 0
+              sat: 10
+            - total: 98
+              work: 31
+              read: 66
+              write: 0
+              sat: 11
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 10
+            - total: 96
+              work: 31
+              read: 63
+              write: 0
+              sat: 10
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 10
+      - name: os-large
+        data:
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 10
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 10
+            - total: 98
+              work: 33
+              read: 64
+              write: 0
+              sat: 11
+            - total: 96
+              work: 31
+              read: 63
+              write: 0
+              sat: 10
+            - total: 95
+              work: 30
+              read: 63
+              write: 0
+              sat: 10
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 97
+              work: 32
+              read: 63
+              write: 0
+              sat: 11
+            - total: 98
+              work: 30
+              read: 65
+              write: 0
+              sat: 10
+            - total: 105
+              work: 40
+              read: 63
+              write: 0
+              sat: 11
+      - name: os-medium
+        data:
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 11
+            - total: 98
+              work: 33
+              read: 63
+              write: 0
+              sat: 10
+            - total: 98
+              work: 33
+              read: 63
+              write: 0
+              sat: 11
+            - total: 98
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 99
+              work: 33
+              read: 63
+              write: 0
+              sat: 11
+            - total: 99
+              work: 33
+              read: 64
+              write: 0
+              sat: 11
+            - total: 99
+              work: 32
+              read: 65
+              write: 0
+              sat: 10
+            - total: 97
+              work: 31
+              read: 64
+              write: 0
+              sat: 10
+            - total: 96
+              work: 30
+              read: 64
+              write: 0
+              sat: 10
+            - total: 99
+              work: 33
+              read: 64
+              write: 0
+              sat: 11
+- application: smark
+  stats:
+      elements: 551
+      components: 52
+      relations: 150
+      properties: 290
+      artifacts: 23
+      technologies: 0
+      inputs: 36
+      outputs: 0
+  data:
+      - name: enrichment
+        data:
+            - total: 369
+              work: 283
+              read: 67
+              write: 15
+            - total: 365
+              work: 277
+              read: 69
+              write: 16
+            - total: 363
+              work: 276
+              read: 68
+              write: 16
+            - total: 355
+              work: 268
+              read: 67
+              write: 16
+            - total: 359
+              work: 274
+              read: 68
+              write: 15
+            - total: 361
+              work: 272
+              read: 71
+              write: 15
+            - total: 371
+              work: 271
+              read: 81
+              write: 15
+            - total: 355
+              work: 272
+              read: 66
+              write: 14
+            - total: 350
+              work: 269
+              read: 63
+              write: 15
+            - total: 350
+              work: 268
+              read: 65
+              write: 14
+      - name: customer
+        data:
+            - total: 146
+              work: 67
+              read: 74
+              write: 1
+              sat: 28
+            - total: 140
+              work: 64
+              read: 73
+              write: 1
+              sat: 27
+            - total: 139
+              work: 62
+              read: 74
+              write: 1
+              sat: 27
+            - total: 146
+              work: 67
+              read: 75
+              write: 1
+              sat: 26
+            - total: 139
+              work: 64
+              read: 72
+              write: 1
+              sat: 27
+            - total: 140
+              work: 63
+              read: 74
+              write: 1
+              sat: 26
+            - total: 140
+              work: 63
+              read: 73
+              write: 1
+              sat: 26
+            - total: 138
+              work: 62
+              read: 73
+              write: 1
+              sat: 27
+            - total: 140
+              work: 64
+              read: 73
+              write: 0
+              sat: 28
+            - total: 138
+              work: 63
+              read: 72
+              write: 1
+              sat: 27
+      - name: development
+        data:
+            - total: 141
+              work: 62
+              read: 76
+              write: 1
+              sat: 26
+            - total: 141
+              work: 66
+              read: 73
+              write: 1
+              sat: 27
+            - total: 139
+              work: 63
+              read: 74
+              write: 1
+              sat: 25
+            - total: 140
+              work: 63
+              read: 74
+              write: 1
+              sat: 26
+            - total: 137
+              work: 62
+              read: 72
+              write: 1
+              sat: 26
+            - total: 144
+              work: 66
+              read: 75
+              write: 1
+              sat: 27
+            - total: 141
+              work: 64
+              read: 74
+              write: 1
+              sat: 26
+            - total: 140
+              work: 64
+              read: 73
+              write: 1
+              sat: 26
+            - total: 141
+              work: 64
+              read: 73
+              write: 1
+              sat: 26
+            - total: 141
+              work: 65
+              read: 73
+              write: 1
+              sat: 26
+      - name: hyperscaler
+        data:
+            - total: 144
+              work: 67
+              read: 74
+              write: 1
+              sat: 31
+            - total: 142
+              work: 64
+              read: 75
+              write: 1
+              sat: 28
+            - total: 143
+              work: 66
+              read: 74
+              write: 1
+              sat: 27
+            - total: 139
+              work: 63
+              read: 74
+              write: 1
+              sat: 26
+            - total: 150
+              work: 74
+              read: 74
+              write: 1
+              sat: 28
+            - total: 143
+              work: 64
+              read: 77
+              write: 1
+              sat: 26
+            - total: 141
+              work: 65
+              read: 73
+              write: 1
+              sat: 26
+            - total: 141
+              work: 63
+              read: 75
+              write: 1
+              sat: 27
+            - total: 141
+              work: 63
+              read: 76
+              write: 1
+              sat: 27
+            - total: 139
+              work: 63
+              read: 73
+              write: 1
+              sat: 27
+      - name: local
+        data:
+            - total: 232
+              work: 154
+              read: 75
+              write: 1
+              sat: 119
+            - total: 235
+              work: 158
+              read: 75
+              write: 1
+              sat: 118
+            - total: 232
+              work: 155
+              read: 74
+              write: 1
+              sat: 119
+            - total: 237
+              work: 156
+              read: 78
+              write: 1
+              sat: 120
+            - total: 241
+              work: 164
+              read: 75
+              write: 1
+              sat: 127
+            - total: 233
+              work: 154
+              read: 76
+              write: 1
+              sat: 119
+            - total: 233
+              work: 153
+              read: 77
+              write: 0
+              sat: 118
+            - total: 232
+              work: 155
+              read: 74
+              write: 1
+              sat: 117
+            - total: 236
+              work: 160
+              read: 73
+              write: 1
+              sat: 124
+            - total: 234
+              work: 156
+              read: 75
+              write: 1
+              sat: 116
+- application: smark (2x)
+  stats:
+      elements: 1068
+      components: 104
+      relations: 300
+      properties: 580
+      artifacts: 46
+      technologies: 0
+      inputs: 38
+      outputs: 0
+  data:
+      - name: enrichment
+        data:
+            - total: 644
+              work: 543
+              read: 67
+              write: 30
+            - total: 638
+              work: 535
+              read: 68
+              write: 31
+            - total: 647
+              work: 542
+              read: 69
+              write: 31
+            - total: 637
+              work: 538
+              read: 66
+              write: 30
+            - total: 641
+              work: 542
+              read: 66
+              write: 30
+            - total: 650
+              work: 539
+              read: 77
+              write: 30
+            - total: 632
+              work: 534
+              read: 66
+              write: 29
+            - total: 624
+              work: 524
+              read: 65
+              write: 30
+            - total: 638
+              work: 540
+              read: 65
+              write: 30
+            - total: 643
+              work: 543
+              read: 65
+              write: 31
+      - name: customer
+        data:
+            - total: 214
+              work: 124
+              read: 86
+              write: 1
+              sat: 55
+            - total: 204
+              work: 120
+              read: 80
+              write: 1
+              sat: 54
+            - total: 201
+              work: 117
+              read: 79
+              write: 1
+              sat: 53
+            - total: 207
+              work: 118
+              read: 85
+              write: 1
+              sat: 53
+            - total: 209
+              work: 123
+              read: 83
+              write: 1
+              sat: 54
+            - total: 203
+              work: 119
+              read: 80
+              write: 1
+              sat: 53
+            - total: 202
+              work: 120
+              read: 79
+              write: 1
+              sat: 54
+            - total: 201
+              work: 116
+              read: 79
+              write: 1
+              sat: 53
+            - total: 199
+              work: 117
+              read: 78
+              write: 1
+              sat: 53
+            - total: 203
+              work: 119
+              read: 80
+              write: 1
+              sat: 54
+      - name: development
+        data:
+            - total: 200
+              work: 118
+              read: 78
+              write: 1
+              sat: 54
+            - total: 202
+              work: 119
+              read: 79
+              write: 1
+              sat: 53
+            - total: 202
+              work: 119
+              read: 79
+              write: 2
+              sat: 53
+            - total: 199
+              work: 117
+              read: 78
+              write: 2
+              sat: 53
+            - total: 199
+              work: 116
+              read: 79
+              write: 1
+              sat: 53
+            - total: 204
+              work: 120
+              read: 79
+              write: 2
+              sat: 54
+            - total: 202
+              work: 118
+              read: 80
+              write: 2
+              sat: 54
+            - total: 207
+              work: 124
+              read: 79
+              write: 2
+              sat: 59
+            - total: 206
+              work: 123
+              read: 79
+              write: 2
+              sat: 56
+            - total: 201
+              work: 118
+              read: 79
+              write: 1
+              sat: 54
+      - name: hyperscaler
+        data:
+            - total: 203
+              work: 120
+              read: 79
+              write: 1
+              sat: 56
+            - total: 209
+              work: 126
+              read: 79
+              write: 1
+              sat: 56
+            - total: 207
+              work: 122
+              read: 81
+              write: 1
+              sat: 56
+            - total: 205
+              work: 122
+              read: 80
+              write: 1
+              sat: 54
+            - total: 202
+              work: 118
+              read: 78
+              write: 1
+              sat: 55
+            - total: 217
+              work: 132
+              read: 80
+              write: 1
+              sat: 56
+            - total: 203
+              work: 119
+              read: 80
+              write: 1
+              sat: 55
+            - total: 209
+              work: 122
+              read: 83
+              write: 1
+              sat: 55
+            - total: 206
+              work: 121
+              read: 81
+              write: 1
+              sat: 57
+            - total: 209
+              work: 124
+              read: 81
+              write: 1
+              sat: 55
+      - name: local
+        data:
+            - total: 332
+              work: 249
+              read: 79
+              write: 1
+              sat: 184
+            - total: 327
+              work: 244
+              read: 80
+              write: 1
+              sat: 176
+            - total: 326
+              work: 240
+              read: 79
+              write: 1
+              sat: 178
+            - total: 329
+              work: 246
+              read: 79
+              write: 1
+              sat: 182
+            - total: 323
+              work: 240
+              read: 79
+              write: 1
+              sat: 178
+            - total: 323
+              work: 240
+              read: 80
+              write: 1
+              sat: 176
+            - total: 325
+              work: 239
+              read: 82
+              write: 1
+              sat: 176
+            - total: 326
+              work: 243
+              read: 79
+              write: 1
+              sat: 179
+            - total: 330
+              work: 248
+              read: 79
+              write: 1
+              sat: 185
+            - total: 323
+              work: 241
+              read: 79
+              write: 1
+              sat: 175
+- application: smark (3x)
+  stats:
+      elements: 1585
+      components: 156
+      relations: 450
+      properties: 870
+      artifacts: 69
+      technologies: 0
+      inputs: 40
+      outputs: 0
+  data:
+      - name: enrichment
+        data:
+            - total: 916
+              work: 798
+              read: 68
+              write: 46
+            - total: 933
+              work: 806
+              read: 66
+              write: 54
+            - total: 935
+              work: 814
+              read: 70
+              write: 46
+            - total: 938
+              work: 817
+              read: 72
+              write: 45
+            - total: 920
+              work: 796
+              read: 70
+              write: 47
+            - total: 952
+              work: 822
+              read: 79
+              write: 44
+            - total: 930
+              work: 816
+              read: 64
+              write: 43
+            - total: 929
+              work: 804
+              read: 68
+              write: 53
+            - total: 927
+              work: 808
+              read: 66
+              write: 45
+            - total: 932
+              work: 816
+              read: 67
+              write: 44
+      - name: customer
+        data:
+            - total: 277
+              work: 180
+              read: 92
+              write: 2
+              sat: 87
+            - total: 273
+              work: 174
+              read: 94
+              write: 2
+              sat: 81
+            - total: 266
+              work: 170
+              read: 91
+              write: 2
+              sat: 80
+            - total: 266
+              work: 170
+              read: 91
+              write: 2
+              sat: 81
+            - total: 267
+              work: 171
+              read: 92
+              write: 2
+              sat: 82
+            - total: 265
+              work: 170
+              read: 88
+              write: 2
+              sat: 81
+            - total: 270
+              work: 174
+              read: 90
+              write: 2
+              sat: 82
+            - total: 276
+              work: 180
+              read: 92
+              write: 2
+              sat: 84
+            - total: 268
+              work: 171
+              read: 91
+              write: 2
+              sat: 81
+            - total: 266
+              work: 172
+              read: 89
+              write: 2
+              sat: 81
+      - name: development
+        data:
+            - total: 273
+              work: 174
+              read: 93
+              write: 2
+              sat: 82
+            - total: 271
+              work: 174
+              read: 91
+              write: 2
+              sat: 81
+            - total: 267
+              work: 172
+              read: 90
+              write: 2
+              sat: 82
+            - total: 271
+              work: 175
+              read: 91
+              write: 2
+              sat: 82
+            - total: 273
+              work: 177
+              read: 90
+              write: 2
+              sat: 82
+            - total: 275
+              work: 178
+              read: 92
+              write: 2
+              sat: 82
+            - total: 270
+              work: 175
+              read: 90
+              write: 2
+              sat: 82
+            - total: 271
+              work: 175
+              read: 90
+              write: 3
+              sat: 86
+            - total: 267
+              work: 170
+              read: 91
+              write: 2
+              sat: 82
+            - total: 266
+              work: 170
+              read: 89
+              write: 2
+              sat: 80
+      - name: hyperscaler
+        data:
+            - total: 271
+              work: 174
+              read: 91
+              write: 2
+              sat: 85
+            - total: 277
+              work: 178
+              read: 94
+              write: 2
+              sat: 85
+            - total: 268
+              work: 171
+              read: 92
+              write: 2
+              sat: 83
+            - total: 270
+              work: 173
+              read: 91
+              write: 2
+              sat: 83
+            - total: 267
+              work: 172
+              read: 90
+              write: 2
+              sat: 84
+            - total: 270
+              work: 174
+              read: 91
+              write: 2
+              sat: 84
+            - total: 270
+              work: 175
+              read: 90
+              write: 2
+              sat: 85
+            - total: 272
+              work: 175
+              read: 92
+              write: 2
+              sat: 86
+            - total: 269
+              work: 173
+              read: 88
+              write: 2
+              sat: 83
+            - total: 270
+              work: 174
+              read: 91
+              write: 2
+              sat: 84
+      - name: local
+        data:
+            - total: 558
+              work: 465
+              read: 88
+              write: 2
+              sat: 375
+            - total: 556
+              work: 458
+              read: 94
+              write: 2
+              sat: 366
+            - total: 550
+              work: 453
+              read: 92
+              write: 2
+              sat: 364
+            - total: 559
+              work: 460
+              read: 94
+              write: 2
+              sat: 371
+            - total: 561
+              work: 466
+              read: 90
+              write: 2
+              sat: 375
+            - total: 562
+              work: 463
+              read: 91
+              write: 2
+              sat: 368
+            - total: 558
+              work: 461
+              read: 91
+              write: 2
+              sat: 368
+            - total: 556
+              work: 459
+              read: 92
+              write: 2
+              sat: 367
+            - total: 573
+              work: 474
+              read: 93
+              write: 2
+              sat: 382
+            - total: 551
+              work: 454
+              read: 92
+              write: 2
+              sat: 364
