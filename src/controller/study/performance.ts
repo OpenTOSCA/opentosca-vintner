@@ -1,5 +1,7 @@
 import * as assert from '#assert'
+import * as check from '#check'
 import Controller from '#controller'
+import {loadConfig} from '#controller/template/test'
 import * as files from '#files'
 import Loader from '#graph/loader'
 import std from '#std'
@@ -7,6 +9,7 @@ import * as utils from '#utils'
 import day from '#utils/day'
 import performance from '#utils/performance'
 import jsonDiff from 'json-diff'
+import _ from 'lodash'
 import util from 'node:util'
 import path from 'path'
 
@@ -81,7 +84,6 @@ export default async function (options: StudyOptions) {
         const tmp = files.temporaryDirent()
         files.copy(application.dir, tmp)
         const original = path.join(tmp, 'variable-service-template.yaml')
-        const enriched = path.join(tmp, 'variable-service-template-enriched.yaml')
         const tests = path.join(tmp, 'tests')
         const variants = files.listDirectories(tests)
 
@@ -91,12 +93,10 @@ export default async function (options: StudyOptions) {
         const enrich = async (run: number) => {
             std.log(day().toISOString(), application.name, 'enrichment', run)
 
-            files.removeFile(enriched, {silent: true})
-
             performance.start(PERFORMANCE_ENRICHER_TOTAL)
             await Controller.template.enrich({
                 template: original,
-                output: enriched,
+                output: path.join(tmp, `variable-service-template.enriched.${run}.yaml`),
                 pretty: false,
             })
             performance.stop(PERFORMANCE_ENRICHER_TOTAL)
@@ -123,14 +123,13 @@ export default async function (options: StudyOptions) {
             const resolve = async (run: number) => {
                 std.log(day().toISOString(), application.name, variant, run)
 
-                const resolved = path.join(tmp, `variable-service-template.${variant}.yaml`)
+                const resolved = path.join(tmp, `service-template.resolved.${variant}.${run}.yaml`)
                 const inputs = path.join(tests, variant, 'inputs.yaml')
-                const expected = path.join(tests, variant, 'expected.yaml')
-                files.removeFile(resolved, {silent: true})
+                const expected = path.join(tests, variant, `expected.yaml`)
 
                 performance.start(PERFORMANCE_RESOLVER_TOTAL)
                 await Controller.template.resolve({
-                    template: enriched,
+                    template: path.join(tmp, `variable-service-template.enriched.${run}.yaml`),
                     output: resolved,
                     inputs: inputs,
                     enrich: false,
@@ -138,11 +137,12 @@ export default async function (options: StudyOptions) {
                 })
                 performance.stop(PERFORMANCE_RESOLVER_TOTAL)
 
-                const result = new Loader(resolved).raw()
+                const resultLoaded = new Loader(resolved).raw()
                 const expectedLoaded = new Loader(expected).raw()
-                // TODO: must merge things into it ...
-                const diff = jsonDiff.diffString(expectedLoaded, result)
-                //if (diff) std.log(diff)
+                const testConfig = loadConfig(path.join(tests, variant))
+                if (check.isDefined(testConfig.merge)) _.merge(expectedLoaded, testConfig.merge)
+                const diff = jsonDiff.diffString(expectedLoaded, resultLoaded)
+                if (diff) std.log(diff)
 
                 const measurement: TimeMeasurement = {
                     total: performance.duration(PERFORMANCE_RESOLVER_TOTAL),
