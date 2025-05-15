@@ -1,4 +1,4 @@
-import {PERFORMANCE_RESOLVER_WORK} from '#controller/study/performance'
+import {PERFORMANCE_RESOLVER_EDM} from '#controller/study/performance'
 import Graph from '#graph/graph'
 import Checker from '#resolver/checker'
 import Solver from '#resolver/solver'
@@ -17,8 +17,6 @@ export default class Resolver {
     }
 
     run() {
-        performance.start(PERFORMANCE_RESOLVER_WORK)
-
         /**
          * Validator
          */
@@ -37,9 +35,9 @@ export default class Resolver {
         /**
          * Transformer
          */
+        performance.start(PERFORMANCE_RESOLVER_EDM)
         new Transformer(this.graph).run()
-
-        performance.stop(PERFORMANCE_RESOLVER_WORK)
+        performance.stop(PERFORMANCE_RESOLVER_EDM)
     }
 
     optimize(options?: {all: boolean}) {

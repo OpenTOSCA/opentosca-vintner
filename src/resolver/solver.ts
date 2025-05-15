@@ -1,6 +1,10 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {PERFORMANCE_RESOLVER_SAT} from '#controller/study/performance'
+import {
+    PERFORMANCE_RESOLVER_EDM,
+    PERFORMANCE_RESOLVER_SAT,
+    PERFORMANCE_RESOLVER_SOLVING,
+} from '#controller/study/performance'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
@@ -58,12 +62,14 @@ export default class Solver {
         if (this.solved) throw new Error('Has been already solved')
         this.solved = true
 
+        performance.start(PERFORMANCE_RESOLVER_SAT)
         this.transform()
+        performance.stop(PERFORMANCE_RESOLVER_SAT)
 
         /**
          * Get initial solution
          */
-        performance.start(PERFORMANCE_RESOLVER_SAT)
+        performance.start(PERFORMANCE_RESOLVER_SOLVING)
         const solution = this.minisat.solve()
         if (check.isUndefined(solution)) throw new Error('Could not solve')
 
@@ -71,7 +77,7 @@ export default class Solver {
          * Optimize
          */
         const optimized = new Optimizer(this.graph, solution, this.minisat).run()
-        performance.stop(PERFORMANCE_RESOLVER_SAT)
+        performance.stop(PERFORMANCE_RESOLVER_SOLVING)
 
         /**
          * Result
@@ -81,9 +87,11 @@ export default class Solver {
         /**
          * Assign presence to elements
          */
+        performance.start(PERFORMANCE_RESOLVER_EDM)
         for (const element of this.graph.elements) {
             element.present = result.isPresent(element)
         }
+        performance.stop(PERFORMANCE_RESOLVER_EDM)
 
         /**
          * Evaluate value expressions

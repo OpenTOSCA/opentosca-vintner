@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
+import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {NodeTemplate} from '#spec/node-template'
 import {LogicExpression, NodeDefaultConditionMode} from '#spec/variability'
 import std from '#std'
@@ -119,9 +120,14 @@ export default class Node extends Element {
 
     private _hosts?: Node[]
     get hosts(): Node[] {
-        if (check.isUndefined(this._hosts))
-            this._hosts = this.outgoing.filter(it => it.isHostedOn()).map(it => it.target)
+        if (check.isUndefined(this._hosts)) this._hosts = this.hostings.map(it => it.target)
         return this._hosts
+    }
+
+    private _hostings?: Relation[]
+    get hostings(): Relation[] {
+        if (check.isUndefined(this._hostings)) this._hostings = this.outgoing.filter(it => it.isHostedOn())
+        return this._hostings
     }
 
     get hasHost() {
@@ -136,7 +142,7 @@ export default class Node extends Element {
         return utils.isPopulated(this.outgoing)
     }
 
-    get hasArtifact() {
+    get hasAnyArtifact() {
         return utils.isPopulated(this.artifacts)
     }
 
@@ -145,9 +151,13 @@ export default class Node extends Element {
         if (this.types.length === 1) return this.types[0]
     }
 
+    private _type?: Type
     getType() {
-        if (this.types.length > 1) throw new Error(`${this.Display} has more than one type`)
-        return this.types[0]
+        if (check.isUndefined(this._type)) {
+            if (this.types.length > 1) throw new Error(`${this.Display} has more than one type`)
+            this._type = this.types[0]
+        }
+        return this._type!
     }
 
     getTypeSpecificConditionWrapper() {
@@ -199,11 +209,11 @@ export default class Node extends Element {
                 return conditions.push({has_outgoing_relation_naive: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'artifact' && this.hasArtifact) {
+            if (it === 'artifact' && this.hasAnyArtifact) {
                 return conditions.push({has_artifact: this.toscaId, _cached_element: this})
             }
 
-            if (it === 'artifactnaive' && this.hasArtifact) {
+            if (it === 'artifactnaive' && this.hasAnyArtifact) {
                 return conditions.push({has_artifact_naive: this.toscaId, _cached_element: this})
             }
         })
@@ -253,5 +263,31 @@ export default class Node extends Element {
 
     isEDMM() {
         return true
+    }
+
+    private _hasOperation: {[operation: string]: boolean | undefined} = {}
+    hasOperation(operation: string) {
+        if (check.isUndefined(this._hasOperation[operation])) {
+            const direct = check.isDefined(this.raw.interfaces?.[MANAGEMENT_INTERFACE].operations?.[operation])
+            this._hasOperation[operation] = direct ? direct : this.getType().hasOperation(operation)
+        }
+        return this._hasOperation[operation]!
+    }
+
+    private _getArtifacts: {[type: string]: Artifact[] | undefined} = {}
+    getArtifacts(type: string) {
+        if (check.isUndefined(this._getArtifacts[type])) {
+            this._getArtifacts[type] = this.artifacts.filter(it => it.getType().isA(type))
+        }
+        return this._getArtifacts[type]!
+    }
+
+    private _hasArtifact: {[type: string]: boolean | undefined} = {}
+    hasArtifact(type: string) {
+        if (check.isUndefined(this._hasArtifact[type])) {
+            const direct = utils.isPopulated(this.getArtifacts(type))
+            this._hasArtifact[type] = direct ? true : this.getType().hasArtifact(type)
+        }
+        return this._hasArtifact[type]!
     }
 }

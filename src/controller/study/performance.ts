@@ -16,13 +16,16 @@ import path from 'path'
 export const PERFORMANCE_ENRICHER_TOTAL = 'enricher_total'
 export const PERFORMANCE_ENRICHER_WRITE = 'enricher_write'
 export const PERFORMANCE_ENRICHER_READ = 'enricher_read'
-export const PERFORMANCE_ENRICHER_WORK = 'enricher_work'
+export const PERFORMANCE_ENRICHER_ELEMENTS = 'enricher_elements'
+export const PERFORMANCE_ENRICHER_CONDITIONS = 'enricher_conditions'
+export const PERFORMANCE_ENRICHER_CONSTRAINTS = 'enricher_constraints'
 
 export const PERFORMANCE_RESOLVER_TOTAL = 'resolver_total'
 export const PERFORMANCE_RESOLVER_WRITE = 'resolver_write'
 export const PERFORMANCE_RESOLVER_READ = 'resolver_read'
-export const PERFORMANCE_RESOLVER_WORK = 'resolver_work'
+export const PERFORMANCE_RESOLVER_SOLVING = 'resolver_solve'
 export const PERFORMANCE_RESOLVER_SAT = 'resolver_sat'
+export const PERFORMANCE_RESOLVER_EDM = 'resolver_edm'
 
 export type StudyOptions = {
     config?: string
@@ -60,10 +63,16 @@ export type TimeSeries = {
 
 export type TimeMeasurement = {
     total: number
-    work: number
     read: number
     write: number
+
+    elements?: number
+    conditions?: number
+    constraints?: number
+
     sat?: number
+    solve?: number
+    edm?: number
 }
 
 // TODO: performance marks should be unique per run? for server mode ...
@@ -103,14 +112,18 @@ export default async function (options: StudyOptions) {
 
             const measurement: TimeMeasurement = {
                 total: performance.duration(PERFORMANCE_ENRICHER_TOTAL),
-                work: performance.duration(PERFORMANCE_ENRICHER_WORK),
                 read: performance.duration(PERFORMANCE_ENRICHER_READ),
                 write: performance.duration(PERFORMANCE_ENRICHER_WRITE),
+                elements: performance.duration(PERFORMANCE_ENRICHER_ELEMENTS),
+                conditions: performance.duration(PERFORMANCE_ENRICHER_CONDITIONS),
+                constraints: performance.duration(PERFORMANCE_ENRICHER_CONSTRAINTS),
             }
             performance.clear(PERFORMANCE_ENRICHER_TOTAL)
-            performance.clear(PERFORMANCE_ENRICHER_WORK)
             performance.clear(PERFORMANCE_ENRICHER_READ)
             performance.clear(PERFORMANCE_ENRICHER_WRITE)
+            performance.clear(PERFORMANCE_ENRICHER_ELEMENTS)
+            performance.clear(PERFORMANCE_ENRICHER_CONDITIONS)
+            performance.clear(PERFORMANCE_ENRICHER_CONSTRAINTS)
 
             return measurement
         }
@@ -146,16 +159,18 @@ export default async function (options: StudyOptions) {
 
                 const measurement: TimeMeasurement = {
                     total: performance.duration(PERFORMANCE_RESOLVER_TOTAL),
-                    work: performance.duration(PERFORMANCE_RESOLVER_WORK),
                     read: performance.duration(PERFORMANCE_RESOLVER_READ),
                     write: performance.duration(PERFORMANCE_RESOLVER_WRITE),
                     sat: performance.duration(PERFORMANCE_RESOLVER_SAT),
+                    solve: performance.duration(PERFORMANCE_RESOLVER_SOLVING),
+                    edm: performance.duration(PERFORMANCE_RESOLVER_EDM),
                 }
                 performance.clear(PERFORMANCE_RESOLVER_TOTAL)
-                performance.clear(PERFORMANCE_RESOLVER_WORK)
                 performance.clear(PERFORMANCE_RESOLVER_READ)
                 performance.clear(PERFORMANCE_RESOLVER_WRITE)
                 performance.clear(PERFORMANCE_RESOLVER_SAT)
+                performance.clear(PERFORMANCE_RESOLVER_SOLVING)
+                performance.clear(PERFORMANCE_RESOLVER_EDM)
 
                 return measurement
             }
@@ -212,14 +227,20 @@ export default async function (options: StudyOptions) {
     std.log('Enrichment Total')
     std.log(plotEnrichment(measurements, 'total'))
     std.log('----------------------------------')
-    std.log('Enrichment Work')
-    std.log(plotEnrichment(measurements, 'work'))
-    std.log('----------------------------------')
     std.log('Enrichment Read')
     std.log(plotEnrichment(measurements, 'read'))
     std.log('----------------------------------')
     std.log('Enrichment Write')
     std.log(plotEnrichment(measurements, 'write'))
+    std.log('----------------------------------')
+    std.log('Enrichment Elements')
+    std.log(plotEnrichment(measurements, 'elements'))
+    std.log('----------------------------------')
+    std.log('Enrichment Conditions')
+    std.log(plotEnrichment(measurements, 'conditions'))
+    std.log('----------------------------------')
+    std.log('Enrichment Constraints')
+    std.log(plotEnrichment(measurements, 'constraints'))
 
     /**
      * Plot resolving
@@ -227,9 +248,6 @@ export default async function (options: StudyOptions) {
     std.log('----------------------------------')
     std.log('Resolving Total')
     std.log(plotResolving(measurements, 'total'))
-    std.log('----------------------------------')
-    std.log('Resolving Work')
-    std.log(plotResolving(measurements, 'work'))
     std.log('----------------------------------')
     std.log('Resolving Read')
     std.log(plotResolving(measurements, 'read'))
@@ -239,6 +257,12 @@ export default async function (options: StudyOptions) {
     std.log('----------------------------------')
     std.log('Resolving SAT')
     std.log(plotResolving(measurements, 'sat'))
+    std.log('----------------------------------')
+    std.log('Resolving Solve')
+    std.log(plotResolving(measurements, 'solve'))
+    std.log('----------------------------------')
+    std.log('Resolving EDM')
+    std.log(plotResolving(measurements, 'edm'))
 
     /**
      * Plot stats

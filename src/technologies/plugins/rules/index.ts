@@ -6,7 +6,6 @@ import Graph from '#graph/graph'
 import Node from '#graph/node'
 import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
-import {MANAGEMENT_INTERFACE} from '#spec/interface-definition'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
 import std from '#std'
@@ -18,7 +17,6 @@ import {
     constructRuleName,
     destructImplementationName,
     isGenerated,
-    isNormative,
     sortRules,
     toScenarios,
 } from '#technologies/utils'
@@ -45,8 +43,13 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return rules.sort(sortRules)
     }
 
+    private _scenarios: Scenario[] | undefined
+
     getScenarios(filter: {technology?: string} = {}) {
-        return toScenarios(this.getRules(), filter)
+        if (check.isUndefined(this._scenarios)) {
+            this._scenarios = toScenarios(this.getRules(), filter)
+        }
+        return this._scenarios
     }
 
     backwards() {
@@ -134,7 +137,10 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         for (let index = 0; index < matches.length; index++) {
             // Match
             const match = matches[index]
-            const prio = this.prio(node, match.scenario.component)
+
+            const prio = this.graph.options.solver.scenarios.optimize
+                ? this.prio(node, match.scenario.component)
+                : undefined
 
             // Assessments
             let assessments = match.scenario.assessments
@@ -192,50 +198,23 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         // Must match component
         if (!node.getType().isA(scenario.component)) return []
 
-        // Must match management operations
+        // Must match management operations (normative types are always supported)
         if (check.isDefined(scenario.operations)) {
-            // Check for operations in template
-            const inTemplate = scenario.operations.every(
-                it => node.raw.interfaces?.[MANAGEMENT_INTERFACE].operations?.[it]
-            )
-
-            // Check for operations in type
-            const inType = scenario.operations.every(it =>
-                this.graph.inheritance.hasManagementOperation(node.getType().name, it)
-            )
-
-            // Normative types are always supported
-            const type = this.graph.inheritance.getNodeType(node.getType().name)
-            assert.isDefined(type)
-
-            if (!isNormative(type) && !inTemplate && !inType) return []
+            if (!node.getType().isNormative() && !scenario.operations.every(it => node.hasOperation(it))) return []
         }
 
         // Must match artifact
         let artifacts: Artifact[] = []
         if (check.isDefined(scenario.artifact)) {
-            // Check for artifact in template
-            artifacts = node.artifacts.filter(it => {
-                assert.isDefined(scenario.artifact)
-                return it.getType().isA(scenario.artifact)
-            })
-            const hasArtifactInTemplate = utils.isPopulated(artifacts)
-
-            // Check for artifact in type (which are always present)
-            const hasArtifactInType = this.graph.inheritance.hasArtifactDefinition(
-                node.getType().name,
-                scenario.artifact
-            )
-
-            // Ignore if artifact not matched
-            if (!hasArtifactInTemplate && !hasArtifactInType) return []
+            if (!node.hasArtifact(scenario.artifact)) return []
+            artifacts = node.getArtifacts(scenario.artifact)
         }
 
         // Must match hosting
         const hostings: Element[][] = []
         assert.isDefined(scenario.hosting)
         if (!utils.isEmpty(scenario.hosting)) {
-            this.search(node, utils.copy(scenario.hosting), [], hostings)
+            this.search(node, Array.from(scenario.hosting), [], hostings)
             // Ignore if hosting not matched
             if (utils.isEmpty(hostings)) return []
         }
@@ -324,7 +303,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
         for (const host of node.hosts) {
             // TODO: should assert somewhere that there is at max one hosting between the two nodes!
-            const relation = node.outgoing.find(it => it.isHostedOn() && it.target === host)
+            const relation = node.hostings.find(it => it.target === host)
             assert.isDefined(relation)
 
             if (host.getType().isA(search)) {
