@@ -70,7 +70,6 @@ topology_template:
                                   - relation_presence: [first_host_host, 1]
                                   - node_presence: first_host_host_second_host
                               _generated: true
-                        prio: 0
                         weight: 1
                   - terraform:
                         assign: application~application::terraform@second_host
@@ -79,7 +78,6 @@ topology_template:
                                   - relation_presence: [application, 1]
                                   - node_presence: second_host
                               _generated: true
-                        prio: 0
                         weight: 1
               conditions: []
         - first_host:
