@@ -16,4 +16,4 @@ applications:
     - dir: examples/unfurl-technology---industry-triple---plus-maintenance-automated
       name: smark (3x)
 
-runs: 3
+runs: 10
