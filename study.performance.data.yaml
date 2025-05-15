@@ -1,32 +1,32 @@
 - application: Webshop
   stats:
-      elements: 99
+      elements: 101
       components: 14
       relations: 20
       properties: 41
       artifacts: 4
       technologies: 0
       inputs: 20
-      outputs: 0
+      outputs: 2
   data:
       - name: enrichment
         data:
-            - total: 61
-              read: 38
+            - total: 60
+              read: 37
               write: 7
               elements: 9
               conditions: 1
               constraints: 0
-            - total: 39
-              read: 24
+            - total: 37
+              read: 23
               write: 3
-              elements: 7
+              elements: 6
               conditions: 0
               constraints: 0
             - total: 35
               read: 23
               write: 2
-              elements: 7
+              elements: 6
               conditions: 0
               constraints: 0
             - total: 33
@@ -35,22 +35,28 @@
               elements: 6
               conditions: 0
               constraints: 0
-            - total: 35
-              read: 23
-              write: 2
-              elements: 6
-              conditions: 0
-              constraints: 0
             - total: 36
-              read: 24
+              read: 23
               write: 2
-              elements: 5
-              conditions: 1
+              elements: 7
+              conditions: 0
               constraints: 0
-            - total: 35
-              read: 24
+            - total: 34
+              read: 23
               write: 2
               elements: 5
+              conditions: 0
+              constraints: 0
+            - total: 34
+              read: 23
+              write: 2
+              elements: 5
+              conditions: 0
+              constraints: 0
+            - total: 34
+              read: 24
+              write: 2
+              elements: 4
               conditions: 0
               constraints: 0
             - total: 33
@@ -59,117 +65,87 @@
               elements: 6
               conditions: 0
               constraints: 0
-            - total: 33
+            - total: 34
               read: 23
-              write: 2
-              elements: 5
-              conditions: 0
-              constraints: 0
-            - total: 35
-              read: 24
               write: 2
               elements: 6
               conditions: 0
               constraints: 0
       - name: elastic
         data:
-            - total: 109
-              read: 25
+            - total: 113
+              read: 27
               write: 0
               sat: 9
               solve: 14
               edm: 0
+            - total: 54
+              read: 27
+              write: 0
+              sat: 9
+              solve: 6
+              edm: 0
             - total: 48
-              read: 24
+              read: 25
               write: 0
               sat: 8
-              solve: 6
+              solve: 5
+              edm: 0
+            - total: 44
+              read: 24
+              write: 0
+              sat: 7
+              solve: 4
               edm: 0
             - total: 46
               read: 24
               write: 0
-              sat: 7
+              sat: 9
               solve: 4
               edm: 0
-            - total: 44
-              read: 24
+            - total: 45
+              read: 25
               write: 0
               sat: 7
               solve: 4
               edm: 0
-            - total: 44
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 42
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 43
+            - total: 45
               read: 24
               write: 0
               sat: 6
               solve: 4
               edm: 0
-            - total: 44
+            - total: 45
               read: 24
               write: 0
               sat: 7
               solve: 4
+              edm: 0
+            - total: 44
+              read: 25
+              write: 0
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 44
+              read: 24
+              write: 0
+              sat: 7
+              solve: 5
               edm: 0
       - name: kubernetes
         data:
-            - total: 43
-              read: 24
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
+            - total: 47
               read: 25
               write: 0
               sat: 6
               solve: 4
               edm: 0
-            - total: 43
-              read: 25
+            - total: 47
+              read: 27
               write: 0
               sat: 6
-              solve: 4
+              solve: 5
               edm: 0
             - total: 44
               read: 25
@@ -177,10 +153,16 @@
               sat: 7
               solve: 4
               edm: 0
-            - total: 42
+            - total: 44
               read: 24
               write: 0
-              sat: 6
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 43
+              read: 24
+              write: 0
+              sat: 7
               solve: 4
               edm: 0
             - total: 41
@@ -192,13 +174,31 @@
             - total: 43
               read: 24
               write: 0
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 41
+              read: 23
+              write: 0
               sat: 6
+              solve: 4
+              edm: 0
+            - total: 41
+              read: 23
+              write: 0
+              sat: 6
+              solve: 4
+              edm: 0
+            - total: 41
+              read: 23
+              write: 0
+              sat: 7
               solve: 4
               edm: 0
       - name: static
         data:
-            - total: 41
-              read: 23
+            - total: 43
+              read: 24
               write: 0
               sat: 6
               solve: 4
@@ -209,64 +209,88 @@
               sat: 6
               solve: 4
               edm: 0
-            - total: 42
+            - total: 41
               read: 23
+              write: 0
+              sat: 6
+              solve: 4
+              edm: 0
+            - total: 47
+              read: 25
+              write: 0
+              sat: 4
+              solve: 4
+              edm: 0
+            - total: 43
+              read: 24
               write: 0
               sat: 7
               solve: 4
               edm: 0
-            - total: 44
+            - total: 42
+              read: 23
+              write: 0
+              sat: 6
+              solve: 4
+              edm: 0
+            - total: 42
+              read: 24
+              write: 0
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 46
               read: 25
+              write: 0
+              sat: 5
+              solve: 5
+              edm: 0
+            - total: 43
+              read: 24
               write: 0
               sat: 7
               solve: 4
               edm: 0
             - total: 42
               read: 24
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 42
-              read: 23
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 41
-              read: 23
               write: 0
               sat: 6
               solve: 4
               edm: 0
       - name: static-large
         data:
+            - total: 43
+              read: 25
+              write: 0
+              sat: 6
+              solve: 4
+              edm: 0
+            - total: 44
+              read: 24
+              write: 0
+              sat: 8
+              solve: 4
+              edm: 0
             - total: 42
+              read: 24
+              write: 0
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 45
+              read: 24
+              write: 0
+              sat: 7
+              solve: 4
+              edm: 0
+            - total: 41
               read: 24
               write: 0
               sat: 6
               solve: 4
               edm: 0
-            - total: 42
-              read: 24
+            - total: 45
+              read: 25
               write: 0
               sat: 6
               solve: 4
@@ -277,58 +301,34 @@
               sat: 6
               solve: 4
               edm: 0
-            - total: 43
+            - total: 41
+              read: 23
+              write: 0
+              sat: 6
+              solve: 4
+              edm: 0
+            - total: 41
               read: 23
               write: 0
               sat: 7
               solve: 4
               edm: 0
-            - total: 43
-              read: 24
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 7
-              solve: 4
-              edm: 0
             - total: 42
               read: 24
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 43
-              read: 25
-              write: 0
-              sat: 6
-              solve: 4
-              edm: 0
-            - total: 42
-              read: 25
               write: 0
               sat: 6
               solve: 4
               edm: 0
 - application: Online Boutique
   stats:
-      elements: 249
+      elements: 251
       components: 25
       relations: 65
       properties: 123
       artifacts: 16
       technologies: 0
       inputs: 20
-      outputs: 0
+      outputs: 2
   data:
       - name: enrichment
         data:
@@ -338,188 +338,218 @@
               elements: 24
               conditions: 1
               constraints: 0
-            - total: 93
+            - total: 94
               read: 58
               write: 6
               elements: 22
               conditions: 1
               constraints: 0
             - total: 95
-              read: 60
+              read: 59
               write: 6
-              elements: 24
-              conditions: 1
-              constraints: 0
-            - total: 96
-              read: 61
-              write: 5
               elements: 25
               conditions: 1
               constraints: 0
             - total: 97
+              read: 63
+              write: 5
+              elements: 25
+              conditions: 1
+              constraints: 0
+            - total: 96
               read: 62
               write: 6
               elements: 24
               conditions: 1
+              constraints: 0
+            - total: 96
+              read: 62
+              write: 6
+              elements: 24
+              conditions: 0
+              constraints: 0
+            - total: 96
+              read: 60
+              write: 6
+              elements: 25
+              conditions: 0
               constraints: 0
             - total: 95
-              read: 62
-              write: 6
-              elements: 23
-              conditions: 0
-              constraints: 0
-            - total: 94
-              read: 59
+              read: 61
               write: 5
-              elements: 26
+              elements: 24
               conditions: 0
               constraints: 0
-            - total: 98
-              read: 62
-              write: 5
-              elements: 27
-              conditions: 0
-              constraints: 0
-            - total: 102
-              read: 68
+            - total: 104
+              read: 69
               write: 6
               elements: 24
               conditions: 1
               constraints: 0
-            - total: 92
-              read: 58
+            - total: 90
+              read: 57
               write: 7
-              elements: 24
+              elements: 23
               conditions: 0
               constraints: 0
       - name: gcp
         data:
-            - total: 99
-              read: 62
+            - total: 100
+              read: 60
               write: 0
-              sat: 15
+              sat: 17
+              solve: 12
+              edm: 0
+            - total: 97
+              read: 63
+              write: 0
+              sat: 14
               solve: 11
               edm: 0
             - total: 98
+              read: 63
+              write: 0
+              sat: 10
+              solve: 11
+              edm: 0
+            - total: 103
               read: 64
               write: 0
               sat: 13
+              solve: 12
+              edm: 0
+            - total: 97
+              read: 63
+              write: 0
+              sat: 14
+              solve: 11
+              edm: 0
+            - total: 98
+              read: 62
+              write: 0
+              sat: 13
               solve: 11
               edm: 0
             - total: 96
-              read: 62
+              read: 63
               write: 0
-              sat: 14
+              sat: 13
               solve: 11
               edm: 0
             - total: 99
-              read: 65
+              read: 63
               write: 0
-              sat: 15
+              sat: 14
               solve: 10
               edm: 0
             - total: 96
-              read: 63
-              write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 95
-              read: 63
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
-            - total: 95
               read: 62
               write: 0
-              sat: 13
-              solve: 10
-              edm: 0
-            - total: 95
-              read: 63
-              write: 0
               sat: 14
-              solve: 10
-              edm: 0
-            - total: 97
-              read: 62
-              write: 0
-              sat: 15
               solve: 11
               edm: 0
-            - total: 97
-              read: 65
+            - total: 108
+              read: 64
               write: 0
-              sat: 13
-              solve: 10
+              sat: 16
+              solve: 11
               edm: 0
       - name: kubernetes
         data:
-            - total: 95
-              read: 62
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
-            - total: 93
-              read: 62
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
             - total: 96
+              read: 63
+              write: 0
+              sat: 14
+              solve: 10
+              edm: 0
+            - total: 98
+              read: 63
+              write: 0
+              sat: 15
+              solve: 10
+              edm: 0
+            - total: 100
+              read: 63
+              write: 0
+              sat: 16
+              solve: 11
+              edm: 0
+            - total: 97
+              read: 63
+              write: 0
+              sat: 14
+              solve: 10
+              edm: 0
+            - total: 98
               read: 63
               write: 0
               sat: 13
               solve: 11
               edm: 0
-            - total: 98
-              read: 65
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
             - total: 97
-              read: 64
+              read: 63
               write: 0
-              sat: 13
-              solve: 10
+              sat: 15
+              solve: 11
               edm: 0
-            - total: 95
+            - total: 96
               read: 62
               write: 0
               sat: 14
               solve: 10
               edm: 0
-            - total: 95
+            - total: 97
               read: 63
               write: 0
               sat: 13
               solve: 10
               edm: 0
-            - total: 96
+            - total: 99
+              read: 62
+              write: 0
+              sat: 10
+              solve: 11
+              edm: 0
+            - total: 97
               read: 63
               write: 0
               sat: 14
-              solve: 10
-              edm: 0
-            - total: 96
-              read: 64
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
-            - total: 96
-              read: 63
-              write: 0
-              sat: 14
-              solve: 10
+              solve: 11
               edm: 0
       - name: os-large
         data:
+            - total: 97
+              read: 63
+              write: 0
+              sat: 14
+              solve: 11
+              edm: 0
+            - total: 107
+              read: 63
+              write: 0
+              sat: 15
+              solve: 11
+              edm: 0
+            - total: 98
+              read: 64
+              write: 0
+              sat: 14
+              solve: 11
+              edm: 0
             - total: 98
               read: 63
+              write: 0
+              sat: 12
+              solve: 11
+              edm: 0
+            - total: 96
+              read: 63
+              write: 0
+              sat: 13
+              solve: 11
+              edm: 0
+            - total: 98
+              read: 65
               write: 0
               sat: 14
               solve: 11
@@ -528,66 +558,42 @@
               read: 63
               write: 0
               sat: 13
-              solve: 10
+              solve: 11
               edm: 0
-            - total: 96
-              read: 63
+            - total: 100
+              read: 64
               write: 0
-              sat: 14
+              sat: 16
               solve: 10
               edm: 0
-            - total: 95
-              read: 63
-              write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 96
-              read: 63
-              write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 95
-              read: 63
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
-            - total: 97
+            - total: 98
               read: 64
               write: 0
               sat: 13
               solve: 10
               edm: 0
-            - total: 95
+            - total: 98
               read: 63
               write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 95
-              read: 62
-              write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 97
-              read: 65
-              write: 0
-              sat: 13
-              solve: 10
+              sat: 12
+              solve: 11
               edm: 0
       - name: os-medium
         data:
-            - total: 100
-              read: 67
+            - total: 99
+              read: 63
               write: 0
               sat: 13
+              solve: 11
+              edm: 0
+            - total: 98
+              read: 63
+              write: 0
+              sat: 15
               solve: 10
               edm: 0
             - total: 96
-              read: 63
+              read: 62
               write: 0
               sat: 14
               solve: 11
@@ -595,1011 +601,1005 @@
             - total: 97
               read: 63
               write: 0
-              sat: 14
-              solve: 10
-              edm: 0
-            - total: 95
-              read: 63
-              write: 0
               sat: 13
               solve: 11
               edm: 0
-            - total: 98
-              read: 63
-              write: 0
-              sat: 13
-              solve: 11
-              edm: 0
-            - total: 97
+            - total: 99
               read: 63
               write: 0
               sat: 14
               solve: 11
               edm: 0
-            - total: 96
-              read: 63
-              write: 0
-              sat: 13
-              solve: 10
-              edm: 0
             - total: 98
-              read: 65
+              read: 62
               write: 0
-              sat: 14
+              sat: 15
               solve: 11
               edm: 0
-            - total: 98
+            - total: 99
               read: 64
               write: 0
               sat: 14
+              solve: 10
+              edm: 0
+            - total: 99
+              read: 63
+              write: 0
+              sat: 10
               solve: 11
               edm: 0
-            - total: 98
-              read: 66
+            - total: 99
+              read: 63
               write: 0
               sat: 13
               solve: 10
               edm: 0
+            - total: 96
+              read: 63
+              write: 0
+              sat: 14
+              solve: 11
+              edm: 0
 - application: smark
   stats:
-      elements: 551
+      elements: 561
       components: 52
       relations: 150
       properties: 290
       artifacts: 23
       technologies: 0
       inputs: 36
-      outputs: 0
+      outputs: 10
   data:
       - name: enrichment
         data:
-            - total: 147
+            - total: 150
+              read: 66
+              write: 15
+              elements: 57
+              conditions: 4
+              constraints: 0
+            - total: 146
+              read: 66
+              write: 15
+              elements: 58
+              conditions: 2
+              constraints: 0
+            - total: 143
+              read: 65
+              write: 15
+              elements: 57
+              conditions: 2
+              constraints: 0
+            - total: 143
+              read: 66
+              write: 15
+              elements: 57
+              conditions: 1
+              constraints: 0
+            - total: 144
+              read: 67
+              write: 15
+              elements: 56
+              conditions: 1
+              constraints: 0
+            - total: 144
               read: 67
               write: 15
               elements: 57
-              conditions: 2
-              constraints: 0
-            - total: 139
-              read: 62
-              write: 14
-              elements: 56
-              conditions: 2
-              constraints: 0
-            - total: 141
-              read: 64
-              write: 15
-              elements: 56
               conditions: 1
               constraints: 0
-            - total: 141
-              read: 65
+            - total: 147
+              read: 71
               write: 15
-              elements: 56
-              conditions: 1
-              constraints: 0
-            - total: 141
-              read: 65
-              write: 15
-              elements: 55
-              conditions: 1
-              constraints: 0
-            - total: 142
-              read: 64
-              write: 15
-              elements: 57
-              conditions: 1
-              constraints: 0
-            - total: 150
-              read: 74
-              write: 15
-              elements: 55
-              conditions: 1
-              constraints: 0
-            - total: 136
-              read: 63
-              write: 14
               elements: 54
               conditions: 1
               constraints: 0
-            - total: 137
-              read: 62
-              write: 14
-              elements: 55
+            - total: 140
+              read: 66
+              write: 16
+              elements: 52
               conditions: 1
               constraints: 0
-            - total: 137
-              read: 64
+            - total: 138
+              read: 63
+              write: 14
+              elements: 56
+              conditions: 1
+              constraints: 0
+            - total: 136
+              read: 62
               write: 14
               elements: 55
               conditions: 1
               constraints: 0
       - name: customer
         data:
-            - total: 147
-              read: 76
+            - total: 145
+              read: 74
               write: 1
               sat: 32
-              solve: 28
+              solve: 30
+              edm: 1
+            - total: 145
+              read: 74
+              write: 1
+              sat: 31
+              solve: 27
               edm: 1
             - total: 138
               read: 72
               write: 1
+              sat: 29
+              solve: 27
+              edm: 0
+            - total: 141
+              read: 73
+              write: 1
+              sat: 32
+              solve: 26
+              edm: 0
+            - total: 138
+              read: 72
+              write: 1
+              sat: 28
+              solve: 27
+              edm: 0
+            - total: 139
+              read: 73
+              write: 1
+              sat: 29
+              solve: 27
+              edm: 1
+            - total: 140
+              read: 73
+              write: 0
+              sat: 29
+              solve: 27
+              edm: 0
+            - total: 143
+              read: 73
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 0
+            - total: 138
+              read: 72
+              write: 1
+              sat: 29
+              solve: 27
+              edm: 1
+            - total: 144
+              read: 79
+              write: 1
+              sat: 29
+              solve: 27
+              edm: 0
+      - name: development
+        data:
+            - total: 138
+              read: 71
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 0
+            - total: 140
+              read: 72
+              write: 1
               sat: 30
+              solve: 27
+              edm: 1
+            - total: 141
+              read: 73
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 0
+            - total: 138
+              read: 72
+              write: 1
+              sat: 29
+              solve: 28
+              edm: 0
+            - total: 140
+              read: 72
+              write: 1
+              sat: 28
+              solve: 26
+              edm: 0
+            - total: 142
+              read: 73
+              write: 1
+              sat: 32
+              solve: 27
+              edm: 1
+            - total: 141
+              read: 74
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 1
+            - total: 143
+              read: 75
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 0
+            - total: 141
+              read: 72
+              write: 1
+              sat: 28
               solve: 26
               edm: 0
             - total: 140
               read: 73
               write: 1
-              sat: 28
+              sat: 31
+              solve: 26
+              edm: 1
+      - name: hyperscaler
+        data:
+            - total: 143
+              read: 71
+              write: 1
+              sat: 29
+              solve: 32
+              edm: 1
+            - total: 142
+              read: 72
+              write: 1
+              sat: 30
               solve: 27
               edm: 0
-            - total: 140
-              read: 74
+            - total: 139
+              read: 73
+              write: 1
+              sat: 29
+              solve: 26
+              edm: 0
+            - total: 139
+              read: 73
               write: 1
               sat: 29
               solve: 28
               edm: 1
-            - total: 138
-              read: 73
-              write: 0
-              sat: 28
-              solve: 26
-              edm: 1
-            - total: 138
-              read: 74
-              write: 1
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 137
-              read: 71
-              write: 1
-              sat: 29
-              solve: 27
-              edm: 0
             - total: 141
               read: 73
               write: 1
               sat: 31
-              solve: 29
-              edm: 0
-            - total: 136
-              read: 72
-              write: 1
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 137
-              read: 72
-              write: 0
-              sat: 28
-              solve: 26
-              edm: 0
-      - name: development
-        data:
-            - total: 139
-              read: 73
-              write: 1
-              sat: 30
-              solve: 26
-              edm: 1
-            - total: 138
-              read: 73
-              write: 1
-              sat: 29
-              solve: 26
-              edm: 0
-            - total: 138
-              read: 73
-              write: 1
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 137
-              read: 73
-              write: 1
-              sat: 29
-              solve: 26
-              edm: 1
-            - total: 137
-              read: 72
-              write: 1
-              sat: 29
               solve: 27
               edm: 1
-            - total: 140
-              read: 73
-              write: 1
-              sat: 29
-              solve: 27
-              edm: 1
-            - total: 139
-              read: 72
-              write: 1
-              sat: 29
-              solve: 27
-              edm: 1
-            - total: 139
-              read: 76
-              write: 0
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 138
-              read: 73
-              write: 1
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 137
-              read: 73
-              write: 1
-              sat: 28
-              solve: 27
-              edm: 0
-      - name: hyperscaler
-        data:
             - total: 141
               read: 73
               write: 1
-              sat: 28
-              solve: 31
-              edm: 0
+              sat: 29
+              solve: 26
+              edm: 1
             - total: 138
               read: 72
               write: 1
-              sat: 29
-              solve: 26
-              edm: 1
-            - total: 137
-              read: 73
-              write: 1
               sat: 28
-              solve: 26
-              edm: 0
-            - total: 139
-              read: 73
-              write: 1
-              sat: 29
-              solve: 28
+              solve: 27
               edm: 1
-            - total: 138
+            - total: 143
               read: 75
-              write: 0
-              sat: 28
-              solve: 26
-              edm: 0
-            - total: 137
-              read: 72
               write: 1
-              sat: 29
-              solve: 26
-              edm: 1
+              sat: 28
+              solve: 27
+              edm: 0
             - total: 139
               read: 73
               write: 1
               sat: 28
-              solve: 26
-              edm: 0
-            - total: 135
-              read: 71
-              write: 0
-              sat: 28
               solve: 27
               edm: 0
-            - total: 136
-              read: 72
-              write: 0
-              sat: 28
-              solve: 27
-              edm: 1
             - total: 138
-              read: 73
+              read: 72
               write: 1
               sat: 29
-              solve: 27
+              solve: 26
               edm: 0
       - name: local
         data:
-            - total: 231
-              read: 72
-              write: 1
-              sat: 28
-              solve: 119
-              edm: 1
             - total: 230
-              read: 74
-              write: 1
-              sat: 29
-              solve: 118
-              edm: 0
-            - total: 228
               read: 73
-              write: 1
-              sat: 28
-              solve: 118
-              edm: 0
-            - total: 234
-              read: 75
-              write: 1
-              sat: 32
-              solve: 118
-              edm: 0
-            - total: 229
-              read: 72
               write: 0
-              sat: 28
+              sat: 29
               solve: 119
-              edm: 1
-            - total: 230
+              edm: 0
+            - total: 238
+              read: 76
+              write: 1
+              sat: 28
+              solve: 121
+              edm: 0
+            - total: 232
               read: 73
+              write: 1
+              sat: 28
+              solve: 117
+              edm: 0
+            - total: 232
+              read: 72
               write: 1
               sat: 30
-              solve: 117
+              solve: 121
               edm: 1
-            - total: 232
-              read: 74
-              write: 0
-              sat: 29
-              solve: 120
-              edm: 1
-            - total: 230
-              read: 74
-              write: 1
-              sat: 28
-              solve: 117
-              edm: 1
-            - total: 232
-              read: 74
+            - total: 229
+              read: 73
               write: 1
               sat: 29
               solve: 118
-              edm: 1
+              edm: 0
             - total: 235
               read: 75
               write: 1
               sat: 29
               solve: 120
-              edm: 0
+              edm: 1
+            - total: 236
+              read: 74
+              write: 0
+              sat: 29
+              solve: 123
+              edm: 1
+            - total: 238
+              read: 74
+              write: 1
+              sat: 28
+              solve: 125
+              edm: 1
+            - total: 234
+              read: 73
+              write: 1
+              sat: 29
+              solve: 121
+              edm: 1
+            - total: 238
+              read: 76
+              write: 1
+              sat: 30
+              solve: 120
+              edm: 1
 - application: smark (2x)
   stats:
-      elements: 1068
+      elements: 1088
       components: 104
       relations: 300
       properties: 580
       artifacts: 46
       technologies: 0
       inputs: 38
-      outputs: 0
+      outputs: 20
   data:
       - name: enrichment
         data:
-            - total: 210
-              read: 66
-              write: 29
+            - total: 213
+              read: 68
+              write: 31
               elements: 105
               conditions: 2
               constraints: 0
-            - total: 215
-              read: 66
-              write: 31
-              elements: 109
-              conditions: 2
-              constraints: 0
-            - total: 217
+            - total: 216
               read: 70
-              write: 30
-              elements: 107
-              conditions: 3
-              constraints: 0
-            - total: 220
-              read: 67
-              write: 32
-              elements: 110
+              write: 31
+              elements: 106
               conditions: 2
               constraints: 0
-            - total: 218
-              read: 69
-              write: 31
+            - total: 216
+              read: 68
+              write: 30
               elements: 108
               conditions: 2
               constraints: 0
-            - total: 209
-              read: 66
+            - total: 225
+              read: 72
+              write: 36
+              elements: 107
+              conditions: 2
+              constraints: 1
+            - total: 216
+              read: 69
               write: 30
-              elements: 102
+              elements: 108
+              conditions: 3
+              constraints: 0
+            - total: 222
+              read: 76
+              write: 29
+              elements: 105
+              conditions: 3
+              constraints: 1
+            - total: 206
+              read: 64
+              write: 28
+              elements: 105
+              conditions: 3
+              constraints: 0
+            - total: 204
+              read: 63
+              write: 29
+              elements: 104
               conditions: 2
               constraints: 0
-            - total: 223
-              read: 77
+            - total: 210
+              read: 66
+              write: 29
+              elements: 106
+              conditions: 2
+              constraints: 0
+            - total: 215
+              read: 69
               write: 30
               elements: 107
               conditions: 3
               constraints: 0
-            - total: 206
-              read: 63
-              write: 28
-              elements: 106
-              conditions: 2
-              constraints: 0
-            - total: 207
-              read: 64
-              write: 28
-              elements: 106
-              conditions: 2
-              constraints: 0
-            - total: 214
-              read: 66
-              write: 33
-              elements: 107
-              conditions: 2
-              constraints: 0
       - name: customer
         data:
-            - total: 206
-              read: 79
+            - total: 217
+              read: 89
               write: 1
-              sat: 57
-              solve: 56
+              sat: 58
+              solve: 57
+              edm: 1
+            - total: 202
+              read: 80
+              write: 1
+              sat: 55
+              solve: 53
               edm: 1
             - total: 204
-              read: 78
-              write: 1
-              sat: 57
-              solve: 55
-              edm: 1
-            - total: 198
-              read: 79
-              write: 1
-              sat: 54
-              solve: 52
-              edm: 1
-            - total: 200
-              read: 79
-              write: 1
-              sat: 55
-              solve: 54
-              edm: 1
-            - total: 202
-              read: 80
-              write: 2
-              sat: 54
-              solve: 54
-              edm: 1
-            - total: 198
-              read: 78
-              write: 1
-              sat: 53
-              solve: 53
-              edm: 1
-            - total: 199
-              read: 77
-              write: 1
-              sat: 56
-              solve: 53
-              edm: 1
-            - total: 203
-              read: 82
-              write: 1
-              sat: 54
-              solve: 54
-              edm: 1
-            - total: 209
-              read: 83
-              write: 1
-              sat: 54
-              solve: 59
-              edm: 1
-            - total: 197
-              read: 76
-              write: 2
-              sat: 55
-              solve: 53
-              edm: 1
-      - name: development
-        data:
-            - total: 200
-              read: 78
-              write: 2
-              sat: 55
-              solve: 53
-              edm: 1
-            - total: 197
-              read: 77
-              write: 2
-              sat: 55
-              solve: 53
-              edm: 1
-            - total: 198
-              read: 77
-              write: 1
-              sat: 56
-              solve: 53
-              edm: 1
-            - total: 205
-              read: 83
-              write: 2
-              sat: 55
-              solve: 55
-              edm: 1
-            - total: 197
-              read: 77
-              write: 1
-              sat: 54
-              solve: 53
-              edm: 1
-            - total: 200
-              read: 78
-              write: 1
-              sat: 55
-              solve: 54
-              edm: 1
-            - total: 204
-              read: 79
-              write: 1
-              sat: 57
-              solve: 54
-              edm: 1
-            - total: 201
-              read: 79
-              write: 2
-              sat: 55
-              solve: 54
-              edm: 1
-            - total: 208
-              read: 78
-              write: 2
-              sat: 62
-              solve: 54
-              edm: 1
-            - total: 202
-              read: 79
-              write: 2
-              sat: 54
-              solve: 55
-              edm: 1
-      - name: hyperscaler
-        data:
-            - total: 205
               read: 80
               write: 1
-              sat: 55
-              solve: 57
-              edm: 1
-            - total: 202
-              read: 78
-              write: 1
-              sat: 55
-              solve: 57
-              edm: 1
-            - total: 203
-              read: 79
-              write: 2
-              sat: 55
-              solve: 57
-              edm: 1
-            - total: 203
-              read: 78
-              write: 1
-              sat: 56
-              solve: 56
-              edm: 1
-            - total: 203
-              read: 80
-              write: 1
-              sat: 55
-              solve: 56
-              edm: 1
-            - total: 203
-              read: 79
-              write: 1
-              sat: 56
-              solve: 56
+              sat: 51
+              solve: 53
               edm: 1
             - total: 207
               read: 80
               write: 1
               sat: 58
+              solve: 53
+              edm: 1
+            - total: 204
+              read: 79
+              write: 1
+              sat: 56
+              solve: 55
+              edm: 1
+            - total: 205
+              read: 79
+              write: 1
+              sat: 56
               solve: 56
               edm: 1
-            - total: 199
-              read: 77
+            - total: 203
+              read: 79
+              write: 2
+              sat: 52
+              solve: 53
+              edm: 1
+            - total: 207
+              read: 79
+              write: 1
+              sat: 52
+              solve: 56
+              edm: 1
+            - total: 207
+              read: 80
+              write: 1
+              sat: 57
+              solve: 52
+              edm: 2
+            - total: 205
+              read: 79
+              write: 1
+              sat: 57
+              solve: 55
+              edm: 1
+      - name: development
+        data:
+            - total: 206
+              read: 78
+              write: 2
+              sat: 54
+              solve: 57
+              edm: 1
+            - total: 200
+              read: 79
+              write: 1
+              sat: 54
+              solve: 54
+              edm: 1
+            - total: 200
+              read: 78
+              write: 1
+              sat: 54
+              solve: 55
+              edm: 1
+            - total: 200
+              read: 79
+              write: 1
+              sat: 54
+              solve: 53
+              edm: 1
+            - total: 201
+              read: 79
               write: 1
               sat: 55
               solve: 54
               edm: 1
+            - total: 200
+              read: 79
+              write: 2
+              sat: 54
+              solve: 54
+              edm: 1
             - total: 202
-              read: 78
+              read: 81
               write: 1
-              sat: 53
+              sat: 54
+              solve: 54
+              edm: 1
+            - total: 218
+              read: 81
+              write: 2
+              sat: 60
+              solve: 56
+              edm: 1
+            - total: 205
+              read: 79
+              write: 2
+              sat: 56
+              solve: 56
+              edm: 1
+            - total: 203
+              read: 80
+              write: 1
+              sat: 54
+              solve: 55
+              edm: 1
+      - name: hyperscaler
+        data:
+            - total: 208
+              read: 80
+              write: 3
+              sat: 58
+              solve: 55
+              edm: 1
+            - total: 206
+              read: 83
+              write: 1
+              sat: 54
               solve: 55
               edm: 1
             - total: 201
-              read: 78
+              read: 80
+              write: 1
+              sat: 54
+              solve: 55
+              edm: 1
+            - total: 201
+              read: 79
+              write: 1
+              sat: 55
+              solve: 55
+              edm: 1
+            - total: 203
+              read: 79
+              write: 1
+              sat: 52
+              solve: 55
+              edm: 1
+            - total: 204
+              read: 79
               write: 1
               sat: 55
               solve: 56
               edm: 1
-      - name: local
-        data:
-            - total: 320
-              read: 78
-              write: 1
-              sat: 54
-              solve: 174
-              edm: 1
-            - total: 324
-              read: 78
-              write: 1
-              sat: 53
-              solve: 179
-              edm: 1
-            - total: 317
-              read: 77
-              write: 1
-              sat: 53
-              solve: 174
-              edm: 1
-            - total: 323
+            - total: 203
               read: 79
               write: 1
-              sat: 54
-              solve: 177
-              edm: 1
-            - total: 328
-              read: 78
-              write: 1
-              sat: 53
-              solve: 178
-              edm: 1
-            - total: 324
-              read: 78
-              write: 1
               sat: 55
-              solve: 178
+              solve: 54
               edm: 1
+            - total: 206
+              read: 78
+              write: 1
+              sat: 56
+              solve: 58
+              edm: 1
+            - total: 204
+              read: 80
+              write: 1
+              sat: 56
+              solve: 55
+              edm: 1
+            - total: 214
+              read: 78
+              write: 1
+              sat: 57
+              solve: 56
+              edm: 1
+      - name: local
+        data:
             - total: 326
               read: 79
               write: 1
-              sat: 51
-              solve: 175
+              sat: 53
+              solve: 177
               edm: 1
-            - total: 325
-              read: 79
+            - total: 329
+              read: 80
               write: 1
-              sat: 55
+              sat: 57
               solve: 178
               edm: 1
-            - total: 320
-              read: 78
+            - total: 347
+              read: 82
               write: 1
-              sat: 54
+              sat: 58
+              solve: 183
+              edm: 1
+            - total: 327
+              read: 80
+              write: 1
+              sat: 55
               solve: 175
               edm: 1
-            - total: 320
-              read: 78
+            - total: 330
+              read: 82
               write: 1
-              sat: 54
-              solve: 175
+              sat: 55
+              solve: 179
+              edm: 1
+            - total: 332
+              read: 81
+              write: 1
+              sat: 52
+              solve: 177
+              edm: 1
+            - total: 345
+              read: 81
+              write: 1
+              sat: 61
+              solve: 178
+              edm: 1
+            - total: 337
+              read: 83
+              write: 1
+              sat: 57
+              solve: 178
+              edm: 1
+            - total: 331
+              read: 83
+              write: 1
+              sat: 56
+              solve: 177
+              edm: 1
+            - total: 332
+              read: 83
+              write: 1
+              sat: 57
+              solve: 177
               edm: 1
 - application: smark (3x)
   stats:
-      elements: 1585
+      elements: 1615
       components: 156
       relations: 450
       properties: 870
       artifacts: 69
       technologies: 0
       inputs: 40
-      outputs: 0
+      outputs: 30
   data:
       - name: enrichment
         data:
             - total: 283
-              read: 66
-              write: 43
-              elements: 161
-              conditions: 4
-              constraints: 0
-            - total: 282
-              read: 68
-              write: 45
-              elements: 157
+              read: 70
+              write: 44
+              elements: 158
               conditions: 3
               constraints: 0
-            - total: 287
+            - total: 290
               read: 70
-              write: 49
-              elements: 156
-              conditions: 4
-              constraints: 0
-            - total: 286
-              read: 70
-              write: 46
-              elements: 159
+              write: 48
+              elements: 160
               conditions: 3
               constraints: 0
             - total: 291
-              read: 72
-              write: 50
-              elements: 156
-              conditions: 4
-              constraints: 0
-            - total: 276
-              read: 66
-              write: 43
-              elements: 154
+              read: 70
+              write: 47
+              elements: 162
               conditions: 3
               constraints: 0
-            - total: 276
-              read: 68
-              write: 42
-              elements: 154
+            - total: 296
+              read: 69
+              write: 46
+              elements: 168
+              conditions: 3
+              constraints: 0
+            - total: 291
+              read: 76
+              write: 45
+              elements: 155
               conditions: 4
               constraints: 0
-            - total: 288
-              read: 66
-              write: 44
-              elements: 165
-              conditions: 5
+            - total: 285
+              read: 67
+              write: 45
+              elements: 161
+              conditions: 3
               constraints: 0
-            - total: 279
-              read: 65
-              write: 42
+            - total: 284
+              read: 67
+              write: 45
               elements: 159
               conditions: 4
               constraints: 0
-            - total: 278
-              read: 70
-              write: 42
-              elements: 155
+            - total: 286
+              read: 66
+              write: 45
+              elements: 162
               conditions: 3
+              constraints: 0
+            - total: 286
+              read: 68
+              write: 44
+              elements: 163
+              conditions: 3
+              constraints: 0
+            - total: 296
+              read: 78
+              write: 45
+              elements: 158
+              conditions: 5
               constraints: 0
       - name: customer
         data:
-            - total: 269
+            - total: 271
               read: 88
               write: 2
-              sat: 81
+              sat: 82
+              solve: 84
+              edm: 2
+            - total: 272
+              read: 92
+              write: 2
+              sat: 80
+              solve: 84
+              edm: 2
+            - total: 273
+              read: 91
+              write: 3
+              sat: 79
               solve: 83
               edm: 2
-            - total: 269
-              read: 91
+            - total: 267
+              read: 90
               write: 2
               sat: 81
               solve: 82
               edm: 2
-            - total: 263
+            - total: 269
               read: 91
               write: 2
-              sat: 78
+              sat: 76
+              solve: 81
+              edm: 1
+            - total: 267
+              read: 91
+              write: 2
+              sat: 82
               solve: 80
               edm: 2
-            - total: 262
-              read: 90
+            - total: 273
+              read: 89
+              write: 2
+              sat: 76
+              solve: 83
+              edm: 1
+            - total: 270
+              read: 91
+              write: 3
+              sat: 78
+              solve: 82
+              edm: 1
+            - total: 271
+              read: 92
+              write: 2
+              sat: 81
+              solve: 82
+              edm: 2
+            - total: 268
+              read: 88
+              write: 2
+              sat: 80
+              solve: 82
+              edm: 2
+      - name: development
+        data:
+            - total: 271
+              read: 91
+              write: 2
+              sat: 82
+              solve: 83
+              edm: 1
+            - total: 275
+              read: 94
               write: 2
               sat: 79
-              solve: 79
+              solve: 83
+              edm: 2
+            - total: 272
+              read: 91
+              write: 2
+              sat: 77
+              solve: 81
+              edm: 2
+            - total: 267
+              read: 89
+              write: 3
+              sat: 80
+              solve: 81
+              edm: 2
+            - total: 273
+              read: 92
+              write: 2
+              sat: 80
+              solve: 83
+              edm: 2
+            - total: 271
+              read: 92
+              write: 2
+              sat: 82
+              solve: 82
+              edm: 2
+            - total: 270
+              read: 91
+              write: 2
+              sat: 81
+              solve: 83
+              edm: 2
+            - total: 270
+              read: 93
+              write: 2
+              sat: 82
+              solve: 82
+              edm: 2
+            - total: 265
+              read: 89
+              write: 2
+              sat: 79
+              solve: 81
+              edm: 3
+            - total: 266
+              read: 89
+              write: 2
+              sat: 80
+              solve: 81
+              edm: 2
+      - name: hyperscaler
+        data:
+            - total: 274
+              read: 91
+              write: 2
+              sat: 83
+              solve: 84
+              edm: 3
+            - total: 272
+              read: 88
+              write: 2
+              sat: 82
+              solve: 85
+              edm: 3
+            - total: 269
+              read: 90
+              write: 2
+              sat: 81
+              solve: 84
+              edm: 2
+            - total: 265
+              read: 88
+              write: 2
+              sat: 80
+              solve: 83
               edm: 2
             - total: 267
               read: 90
               write: 2
               sat: 79
               solve: 84
-              edm: 3
-            - total: 262
-              read: 87
-              write: 2
-              sat: 77
-              solve: 80
-              edm: 3
-            - total: 265
-              read: 87
-              write: 2
-              sat: 80
-              solve: 80
               edm: 2
-            - total: 272
-              read: 88
+            - total: 270
+              read: 90
               write: 2
               sat: 81
-              solve: 86
+              solve: 84
               edm: 2
-            - total: 272
-              read: 87
-              write: 2
-              sat: 81
-              solve: 83
-              edm: 1
-            - total: 264
-              read: 88
-              write: 2
-              sat: 78
-              solve: 82
-              edm: 1
-      - name: development
-        data:
-            - total: 263
+            - total: 269
               read: 89
-              write: 2
-              sat: 78
-              solve: 80
-              edm: 1
-            - total: 266
-              read: 88
               write: 2
               sat: 80
-              solve: 82
+              solve: 84
               edm: 3
-            - total: 262
-              read: 89
-              write: 2
-              sat: 78
-              solve: 81
-              edm: 2
-            - total: 263
-              read: 88
-              write: 2
-              sat: 79
-              solve: 81
-              edm: 1
-            - total: 262
-              read: 88
-              write: 2
-              sat: 79
-              solve: 81
-              edm: 2
-            - total: 266
-              read: 88
-              write: 2
-              sat: 79
-              solve: 82
-              edm: 1
-            - total: 271
+            - total: 273
               read: 92
               write: 2
-              sat: 80
-              solve: 83
-              edm: 1
-            - total: 268
-              read: 88
-              write: 2
-              sat: 78
+              sat: 81
               solve: 84
-              edm: 2
-            - total: 264
-              read: 89
-              write: 2
-              sat: 79
-              solve: 80
-              edm: 2
-            - total: 266
-              read: 88
-              write: 2
-              sat: 80
-              solve: 83
-              edm: 2
-      - name: hyperscaler
-        data:
-            - total: 264
-              read: 87
-              write: 2
-              sat: 79
-              solve: 82
-              edm: 2
-            - total: 263
-              read: 89
-              write: 2
-              sat: 78
-              solve: 83
-              edm: 2
-            - total: 268
-              read: 87
-              write: 2
-              sat: 75
-              solve: 82
-              edm: 1
-            - total: 275
-              read: 89
-              write: 2
-              sat: 76
-              solve: 85
-              edm: 1
-            - total: 271
-              read: 89
-              write: 2
-              sat: 80
-              solve: 85
-              edm: 1
-            - total: 265
-              read: 89
-              write: 2
-              sat: 79
-              solve: 83
               edm: 2
             - total: 269
-              read: 86
+              read: 90
               write: 2
-              sat: 78
-              solve: 86
-              edm: 2
-            - total: 273
-              read: 94
-              write: 2
-              sat: 80
+              sat: 77
               solve: 84
               edm: 2
-            - total: 275
-              read: 89
+            - total: 278
+              read: 90
               write: 2
-              sat: 79
-              solve: 86
-              edm: 2
-            - total: 269
-              read: 91
-              write: 2
-              sat: 79
-              solve: 84
+              sat: 85
+              solve: 88
               edm: 2
       - name: local
         data:
-            - total: 575
-              read: 87
-              write: 2
-              sat: 79
-              solve: 385
-              edm: 2
-            - total: 565
-              read: 91
-              write: 2
-              sat: 79
-              solve: 378
-              edm: 2
-            - total: 564
-              read: 93
-              write: 2
-              sat: 78
-              solve: 378
-              edm: 2
             - total: 559
-              read: 89
+              read: 92
               write: 2
-              sat: 82
-              solve: 372
-              edm: 3
-            - total: 552
-              read: 87
-              write: 2
-              sat: 82
-              solve: 368
-              edm: 2
-            - total: 558
-              read: 89
-              write: 2
-              sat: 79
-              solve: 373
-              edm: 2
-            - total: 552
-              read: 89
-              write: 2
-              sat: 77
-              solve: 370
-              edm: 2
-            - total: 562
-              read: 89
-              write: 2
-              sat: 80
-              solve: 378
-              edm: 2
-            - total: 563
-              read: 89
-              write: 2
-              sat: 79
-              solve: 379
-              edm: 2
-            - total: 564
-              read: 93
-              write: 3
               sat: 78
               solve: 374
-              edm: 3
+              edm: 2
+            - total: 560
+              read: 89
+              write: 2
+              sat: 81
+              solve: 369
+              edm: 1
+            - total: 565
+              read: 89
+              write: 2
+              sat: 81
+              solve: 378
+              edm: 2
+            - total: 553
+              read: 88
+              write: 2
+              sat: 79
+              solve: 367
+              edm: 2
+            - total: 560
+              read: 90
+              write: 2
+              sat: 80
+              solve: 369
+              edm: 1
+            - total: 571
+              read: 89
+              write: 2
+              sat: 81
+              solve: 382
+              edm: 2
+            - total: 563
+              read: 90
+              write: 2
+              sat: 82
+              solve: 375
+              edm: 1
+            - total: 583
+              read: 91
+              write: 12
+              sat: 86
+              solve: 373
+              edm: 2
+            - total: 563
+              read: 94
+              write: 2
+              sat: 81
+              solve: 372
+              edm: 1
+            - total: 561
+              read: 93
+              write: 2
+              sat: 81
+              solve: 370
+              edm: 2

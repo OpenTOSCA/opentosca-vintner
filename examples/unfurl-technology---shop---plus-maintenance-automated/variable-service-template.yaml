@@ -65,6 +65,14 @@ topology_template:
         k8s_client_key_file:
             type: string
 
+    outputs:
+        - shop_endpoint:
+              value: "{{ '::shop::application_endpoint' | eval }}"
+              conditions: {not: {node_presence: shop_ingress}}
+
+        - shop_endpoint:
+              value: "{{ '::shop_ingress::application_address' | eval }}"
+
     variability:
         inputs:
             env:

@@ -44,6 +44,10 @@ topology_template:
         os_application_credential_secret:
             type: string
 
+    outputs:
+        frontend_endpoint:
+            value: "{{ '::frontend_ingress::application_address' | eval }}"
+
     node_templates:
         ###################################################
         #

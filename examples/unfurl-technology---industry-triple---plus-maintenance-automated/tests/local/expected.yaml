@@ -62,6 +62,52 @@ topology_template:
         sms_provider_token:
             type: string
 
+    outputs:
+        global_dashboard_endpoint:
+            value: "{{ '::global_frontend_dashboard::application_endpoint' | eval }}"
+
+        global_gateway_endpoint:
+            value: "{{ '::global_service_gateway::application_endpoint' | eval }}"
+
+        retailer_dashboard_endpoint:
+            value: "{{ '::retailer_frontend_dashboard::application_endpoint' | eval }}"
+
+        retailer_terminal_endpoint:
+            value: "{{ '::retailer_frontend_terminal::application_endpoint' | eval }}"
+
+        retailer_gateway_endpoint:
+            value: "{{ '::retailer_service_gateway::application_endpoint' | eval }}"
+
+        global_dashboard_endpoint_2:
+            value: "{{ '::global_frontend_dashboard_2::application_endpoint' | eval }}"
+
+        global_gateway_endpoint_2:
+            value: "{{ '::global_service_gateway_2::application_endpoint' | eval }}"
+
+        retailer_dashboard_endpoint_2:
+            value: "{{ '::retailer_frontend_dashboard_2::application_endpoint' | eval }}"
+
+        retailer_terminal_endpoint_2:
+            value: "{{ '::retailer_frontend_terminal_2::application_endpoint' | eval }}"
+
+        retailer_gateway_endpoint_2:
+            value: "{{ '::retailer_service_gateway_2::application_endpoint' | eval }}"
+
+        global_dashboard_endpoint_3:
+            value: "{{ '::global_frontend_dashboard_3::application_endpoint' | eval }}"
+
+        global_gateway_endpoint_3:
+            value: "{{ '::global_service_gateway_3::application_endpoint' | eval }}"
+
+        retailer_dashboard_endpoint_3:
+            value: "{{ '::retailer_frontend_dashboard_3::application_endpoint' | eval }}"
+
+        retailer_terminal_endpoint_3:
+            value: "{{ '::retailer_frontend_terminal_3::application_endpoint' | eval }}"
+
+        retailer_gateway_endpoint_3:
+            value: "{{ '::retailer_service_gateway_3::application_endpoint' | eval }}"
+
     node_templates:
         ###################################################
         #
