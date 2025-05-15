@@ -202,7 +202,8 @@ export default async function (options: StudyOptions) {
     /**
      * Return data
      */
-    std.out(util.inspect(measurements, {depth: null, colors: true}))
+    std.out(util.inspect(measurements, {depth: null, colors: false}))
+    files.storeYAML('study.performance.data.yaml', measurements)
 
     /**
      * Plot enrichment
