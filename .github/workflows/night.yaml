@@ -948,7 +948,6 @@ jobs:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
             EXAMPLE_OVERRIDE: unfurl-technology-shop-external
-            STUDY: technology
             ENV: K8S
             PORT: 80
         steps:
@@ -984,12 +983,6 @@ jobs:
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
-
-            - name: (VINTNER) Conduct study
-              uses: ./.github/actions/vintner-study
-              with:
-                  example: ${{ env.EXAMPLE }}
-                  study: ${{ env.STUDY }}
 
             - name: (VINTNER) Assign variability inputs
               run: |
@@ -1137,7 +1130,6 @@ jobs:
             ORCHESTRATOR: unfurl
             EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
             EXAMPLE_OVERRIDE: unfurl-technology-shop-vm
-            STUDY: technology
             ENV: OS
             PORT: 80
         steps:
@@ -1164,12 +1156,6 @@ jobs:
               uses: ./.github/actions/vintner-setup
               with:
                   orchestrator: ${{ env.ORCHESTRATOR }}
-
-            - name: (VINTNER) Conduct study
-              uses: ./.github/actions/vintner-study
-              with:
-                  example: ${{ env.EXAMPLE }}
-                  study: ${{ env.STUDY }}
 
             - name: (VINTNER) Assign variability inputs
               run: |
