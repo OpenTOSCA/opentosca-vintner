@@ -17,6 +17,8 @@ export function EnricherTest(dir: string) {
         if (diff) std.log(diff)
         expect(result).to.deep.equal(expected)
 
-        files.removeFile(output)
+        // TODO: remove this
+        console.log(output)
+        //files.removeFile(output)
     })
 }

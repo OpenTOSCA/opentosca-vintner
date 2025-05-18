@@ -4,7 +4,6 @@ import Artifact from '#graph/artifact'
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Node from '#graph/node'
-import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import {NodeType, NodeTypeMap} from '#spec/node-type'
 import {TechnologyTemplateMap} from '#spec/technology-template'
@@ -12,14 +11,7 @@ import std from '#std'
 import Registry from '#technologies/plugins/rules/registry'
 import {ASTERISK, METADATA} from '#technologies/plugins/rules/types'
 import {Match, Scenario, TechnologyPlugin, TechnologyPluginBuilder} from '#technologies/types'
-import {
-    constructImplementationName,
-    constructRuleName,
-    destructImplementationName,
-    isGenerated,
-    sortRules,
-    toScenarios,
-} from '#technologies/utils'
+import {constructImplementationName, constructRuleName, isGenerated, sortRules, toScenarios} from '#technologies/utils'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
 
@@ -30,6 +22,7 @@ export class TechnologyRulePluginBuilder implements TechnologyPluginBuilder {
 }
 
 export class TechnologyRulePlugin implements TechnologyPlugin {
+    id = 'rules'
     protected readonly graph: Graph
 
     constructor(graph: Graph) {
@@ -58,14 +51,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
     hasRules() {
         return utils.isPopulated(this.getRules())
-    }
-
-    uses(artifact: Artifact): Technology[] {
-        return artifact.container.technologies.filter(it => {
-            const deconstructed = destructImplementationName(it.assign)
-            if (check.isUndefined(deconstructed.artifact)) return false
-            return artifact.getType().isA(deconstructed.artifact)
-        })
     }
 
     implement(name: string, type: NodeType): NodeTypeMap {
@@ -130,7 +115,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         const scenarios = this.getScenarios()
 
         // Match all deployment scenarios
-        const matches = scenarios.map(it => this.match(node, it)).flat(Infinity) as Match[]
+        const matches = scenarios.filter(it => this.test(node, it))
 
         // Generate technology templates
         const maps: TechnologyTemplateMap[] = []
@@ -138,44 +123,41 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
             // Match
             const match = matches[index]
 
-            const prio = this.graph.options.solver.scenarios.optimize
-                ? this.prio(node, match.scenario.component)
-                : undefined
+            const prio = this.graph.options.solver.scenarios.optimize ? this.prio(node, match.component) : undefined
 
             // Assessments
-            let assessments = match.scenario.assessments
+            let assessments = match.assessments
 
             // Best assessment
             if (this.graph.options.enricher.technologiesBestOnly) {
-                const max = Math.max(...match.scenario.assessments.map(it => it.quality))
-                const best = match.scenario.assessments.filter(it => it.quality === max)
+                const max = Math.max(...match.assessments.map(it => it.quality))
+                const best = match.assessments.filter(it => it.quality === max)
                 assessments = best
             }
 
             // Generate technology template for each assessment
             for (const assessment of assessments) {
+                // TODO: also this this somewhere else
                 // Implementation name
                 const implementation = constructImplementationName({
                     type: node.getType().name,
                     rule: assessment._rule,
                 })
 
-                // Element conditions
-                const conditions = match.elements.map(it => it.presenceCondition)
-                conditions.forEach((it: any) => delete it._cached_element)
-
                 // Add rule conditions
-                if (check.isDefined(assessment._rule.conditions)) {
-                    conditions.push(...utils.toList(assessment._rule.conditions))
-                }
+                const conditions = check.isDefined(assessment._rule.conditions)
+                    ? andify(utils.toList(assessment._rule.conditions))
+                    : undefined
 
                 // Construct technology template
                 maps.push({
                     [assessment.technology]: {
-                        conditions: utils.isEmpty(conditions) ? conditions : andify(conditions),
+                        //conditions,
                         weight: assessment.quality,
                         prio,
                         assign: assessment._rule.assign ?? implementation,
+                        // TODO: optimize this
+                        scenario: match,
                     },
                 })
             }
@@ -194,6 +176,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     /**
      * Return all matches
      */
+    // TODO: cache this
     match(node: Node, scenario: Scenario): Match[] {
         // Must match component
         if (!node.getType().isA(scenario.component)) return []

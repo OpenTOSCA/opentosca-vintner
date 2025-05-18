@@ -4,6 +4,7 @@ import {
     VariabilityAlternative,
     VariabilityPointList,
 } from '#spec/variability'
+import {Scenario} from '#technologies/types'
 
 export type TechnologyAssignment = string | VariabilityPointList<TechnologyTemplate> | boolean
 
@@ -14,6 +15,7 @@ export type TechnologyTemplate = VariabilityAlternative & {
     weight?: number
     assign?: string
     prio?: number
+    scenario?: Scenario
 }
 
 export type TechnologyRule = {

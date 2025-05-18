@@ -110,7 +110,13 @@ export type NodeDefaultConditionMode =
     | 'incomingnaive-artifactnaive-host'
     | 'artifact-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
-export type TechnologyDefaultConditionMode = 'container' | 'other' | 'container-other'
+// TODO: docs
+export type TechnologyDefaultConditionMode =
+    | 'container'
+    | 'other'
+    | 'container-other'
+    | 'scenario'
+    | 'container-other-scenario'
 export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
 
 export type PropertyDefaultConditionModes = 'container' | 'consuming'
@@ -409,6 +415,8 @@ export type LogicExpression =
           // Generated
           _generated?: boolean
           _bratan?: boolean
+
+          _lost?: string
       }
     | string
     | boolean

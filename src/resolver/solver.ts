@@ -8,7 +8,6 @@ import {
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
-import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
@@ -642,10 +641,12 @@ export default class Solver {
         if (check.isDefined(expression.is_managed)) {
             const artifact = this.graph.getArtifact(expression.is_managed, {element, cached})
 
-            const technologies: Technology[] = []
-            for (const plugin of this.graph.plugins.technology) {
-                technologies.push(...plugin.uses(artifact))
-            }
+            const technologies = artifact.container.technologies.filter(it => {
+                const scenario = it.scenario
+                if (check.isUndefined(scenario)) return false
+                if (check.isUndefined(scenario.artifact)) return false
+                return artifact.getType().isA(scenario.artifact)
+            })
 
             return MiniSat.or(technologies.map(it => it.id))
         }
