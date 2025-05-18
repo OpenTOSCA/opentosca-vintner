@@ -56,6 +56,8 @@ topology_template:
 
         options:
             enrich_technologies: true
+            technology_pruning: true
+            technology_default_condition_mode: scenario
 
     node_templates:
         application:

@@ -160,7 +160,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         prio,
                         assign: assessment._rule.assign ?? implementation,
                         // PERFORMANCE: optimize this
-                        scenario: match,
+                        scenario,
                     },
                 })
             }

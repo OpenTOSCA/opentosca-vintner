@@ -5,6 +5,11 @@ node_types:
         derived_from: tosca.nodes.Root
 
 topology_template:
+    variability:
+        options:
+            technology_pruning: true
+            technology_default_condition_mode: scenario
+
     node_templates:
         - application:
               type:
@@ -14,5 +19,10 @@ topology_template:
               technology:
                   - override:
                         assign: override-assign
-                        conditions: []
+                        conditions: [{and: [], _generated: true}]
                         weight: 1
+                        scenario:
+                            key: application
+                            component: application
+                            hosting: []
+                            assessments: []

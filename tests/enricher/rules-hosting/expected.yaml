@@ -40,6 +40,11 @@ node_types:
             vintner_abstract: 'true'
 
 topology_template:
+    variability:
+        options:
+            technology_pruning: true
+            technology_default_condition_mode: scenario
+
     node_templates:
         - application:
               type:
@@ -71,6 +76,14 @@ topology_template:
                                   - node_presence: first_host_host_second_host
                               _generated: true
                         weight: 1
+                        scenario:
+                            key: application@first_host->first_host_host->first_host_host_second_host
+                            component: application
+                            hosting:
+                                - first_host
+                                - first_host_host
+                                - first_host_host_second_host
+                            assessments: []
                   - terraform:
                         assign: application~application::terraform@second_host
                         conditions:
@@ -79,6 +92,12 @@ topology_template:
                                   - node_presence: second_host
                               _generated: true
                         weight: 1
+                        scenario:
+                            key: application@second_host
+                            component: application
+                            hosting:
+                                - second_host
+                            assessments: []
               conditions: []
         - first_host:
               type:
