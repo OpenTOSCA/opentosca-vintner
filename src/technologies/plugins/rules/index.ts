@@ -159,7 +159,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                         weight: assessment.quality,
                         prio,
                         assign: assessment._rule.assign ?? implementation,
-                        // TODO: optimize this
+                        // PERFORMANCE: optimize this
                         scenario: match,
                     },
                 })
@@ -179,7 +179,7 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
     /**
      * Return all matches
      */
-    // TODO: cache this
+    // PERFORMANCE: cache this
     match(node: Node, scenario: Scenario): Match[] {
         // Must match component
         if (!node.getType().isA(scenario.component)) return []

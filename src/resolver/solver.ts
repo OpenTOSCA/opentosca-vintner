@@ -353,6 +353,7 @@ export default class Solver {
         return condition as ValueExpression
     }
 
+    // PERFORMANCE: optimize this with hashmap to access handlers
     private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): MiniSat.Operand {
         if (check.isString(expression)) return expression
         if (check.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
