@@ -137,7 +137,6 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
 
             // Generate technology template for each assessment
             for (const assessment of assessments) {
-                // TODO: also this this somewhere else
                 // Implementation name
                 const implementation = constructImplementationName({
                     type: node.getType().name,
@@ -149,10 +148,14 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
                     ? andify(utils.toList(assessment._rule.conditions))
                     : undefined
 
+                // Scenario (remove assessments for performance)
+                const scenario = utils.copy(match)
+                scenario.assessments = []
+
                 // Construct technology template
                 maps.push({
                     [assessment.technology]: {
-                        //conditions,
+                        conditions,
                         weight: assessment.quality,
                         prio,
                         assign: assessment._rule.assign ?? implementation,
