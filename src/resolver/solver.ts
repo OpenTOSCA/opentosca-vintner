@@ -642,10 +642,9 @@ export default class Solver {
             const artifact = this.graph.getArtifact(expression.is_managed, {element, cached})
 
             const technologies = artifact.container.technologies.filter(it => {
-                const scenario = it.scenario
-                if (check.isUndefined(scenario)) return false
-                if (check.isUndefined(scenario.artifact)) return false
-                return artifact.getType().isA(scenario.artifact)
+                if (check.isUndefined(it.scenario)) return false
+                if (check.isUndefined(it.scenario.artifact)) return false
+                return artifact.getType().isA(it.scenario.artifact)
             })
 
             return MiniSat.or(technologies.map(it => it.id))

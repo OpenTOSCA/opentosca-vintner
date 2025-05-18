@@ -110,7 +110,6 @@ export type NodeDefaultConditionMode =
     | 'incomingnaive-artifactnaive-host'
     | 'artifact-host'
 export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
-// TODO: docs
 export type TechnologyDefaultConditionMode =
     | 'container'
     | 'other'
