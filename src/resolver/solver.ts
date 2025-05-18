@@ -8,7 +8,6 @@ import {
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
-import Technology from '#graph/technology'
 import {andify} from '#graph/utils'
 import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
@@ -354,6 +353,7 @@ export default class Solver {
         return condition as ValueExpression
     }
 
+    // PERFORMANCE: optimize this with hashmap to access handlers
     private transformLogicExpression(expression: LogicExpression, context: ExpressionContext): MiniSat.Operand {
         if (check.isString(expression)) return expression
         if (check.isBoolean(expression)) return expression ? MiniSat.TRUE : MiniSat.FALSE
@@ -642,10 +642,11 @@ export default class Solver {
         if (check.isDefined(expression.is_managed)) {
             const artifact = this.graph.getArtifact(expression.is_managed, {element, cached})
 
-            const technologies: Technology[] = []
-            for (const plugin of this.graph.plugins.technology) {
-                technologies.push(...plugin.uses(artifact))
-            }
+            const technologies = artifact.container.technologies.filter(it => {
+                if (check.isUndefined(it.scenario)) return false
+                if (check.isUndefined(it.scenario.artifact)) return false
+                return artifact.getType().isA(it.scenario.artifact)
+            })
 
             return MiniSat.or(technologies.map(it => it.id))
         }

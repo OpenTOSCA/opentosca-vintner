@@ -4,7 +4,13 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import {andify, bratify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
-import {LogicExpression, TechnologyDefaultConditionMode, TechnologyPresenceArguments} from '#spec/variability'
+import {
+    ConditionsWrapper,
+    LogicExpression,
+    TechnologyDefaultConditionMode,
+    TechnologyPresenceArguments,
+} from '#spec/variability'
+import {Scenario} from '#technologies/types'
 import * as utils from '#utils'
 
 export const TECHNOLOGY_DEFAULT_WEIGHT = 1
@@ -18,6 +24,7 @@ export default class Technology extends Element {
     readonly weight: number
     readonly assign: string
     readonly prio: number
+    readonly scenario?: Scenario
 
     readonly defaultAlternative: boolean
 
@@ -41,6 +48,8 @@ export default class Technology extends Element {
         if (this.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
 
         this.prio = data.raw.prio ?? 0
+
+        this.scenario = data.raw.scenario
     }
 
     get toscaId(): TechnologyPresenceArguments {
@@ -84,30 +93,46 @@ export default class Technology extends Element {
     get getDefaultMode(): TechnologyDefaultConditionMode {
         return this.raw.default_condition_mode ?? this.graph.options.default.technologyDefaultConditionMode
     }
+
     getElementGenericCondition() {
-        const conditions: LogicExpression[] = []
+        const consistencies: LogicExpression[] = []
+        const semantics: LogicExpression[] = []
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'other'].includes(it))
+            if (!['container', 'other', 'scenario'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
-                return conditions.push(this.container.presenceCondition)
+                return consistencies.push(this.container.presenceCondition)
             }
+
+            if (it === 'scenario') {
+                if (check.isDefined(this.scenario)) {
+                    const matches = this.graph.technologyRulePlugin.match(this.container, this.scenario)
+                    return semantics.push({
+                        or: matches.map(jt => ({and: jt.elements.map(kt => kt.presenceCondition)})),
+                    })
+                }
+            }
+
             if (it === 'other') {
                 // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
-                return conditions.push(this.constructDefaultAlternativeCondition())
+                return consistencies.push(this.constructDefaultAlternativeCondition())
             }
         })
 
-        return [
-            {
-                conditions: andify(conditions),
-                consistency: true,
-                semantic: false,
-            },
-        ]
+        const wrappers: ConditionsWrapper[] = []
+
+        if (utils.isPopulated(consistencies)) {
+            wrappers.push({conditions: andify(consistencies), consistency: true, semantic: false})
+        }
+
+        if (utils.isPopulated(semantics)) {
+            wrappers.push({conditions: andify(semantics), consistency: false, semantic: true})
+        }
+
+        return wrappers
     }
 
     // Check if no other technology is present

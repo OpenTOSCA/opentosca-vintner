@@ -5,6 +5,11 @@ node_types:
         derived_from: tosca.nodes.Root
 
 topology_template:
+    variability:
+        options:
+            technology_pruning: true
+            technology_default_condition_mode: scenario
+
     node_templates:
         - application:
               type:
@@ -16,3 +21,8 @@ topology_template:
                         assign: application~application::terraform
                         conditions: [{and: [], _generated: true}]
                         weight: 1
+                        scenario:
+                            key: application
+                            component: application
+                            hosting: []
+                            assessments: []

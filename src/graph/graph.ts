@@ -24,6 +24,7 @@ import {
     RelationTypePresenceArguments,
     TechnologyPresenceArguments,
 } from '#spec/variability'
+import {TechnologyRulePlugin} from '#technologies/plugins/rules'
 import {TechnologyPlugin} from '#technologies/types'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -94,6 +95,16 @@ export default class Graph {
     constraints: LogicExpression[] = []
 
     plugins: {technology: TechnologyPlugin[]} = {technology: []}
+
+    private _technologyRulePlugin?: TechnologyRulePlugin
+    get technologyRulePlugin() {
+        if (check.isUndefined(this._technologyRulePlugin)) {
+            const plugin = this.plugins.technology.find(it => it.id === 'rules')
+            if (check.isUndefined(plugin)) throw new Error('Rule plugin not found')
+            this._technologyRulePlugin = plugin as unknown as TechnologyRulePlugin
+        }
+        return this._technologyRulePlugin
+    }
 
     constructor(serviceTemplate: ServiceTemplate) {
         this.serviceTemplate = serviceTemplate
@@ -679,6 +690,7 @@ export default class Graph {
                 weight: template.weight,
                 assign: template.assign,
                 prio: template.prio,
+                scenario: template.scenario,
             },
         })
     }

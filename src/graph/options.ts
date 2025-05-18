@@ -333,7 +333,9 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.technologyDefaultCondition)
 
         this.technologyDefaultConditionMode =
-            this.raw.technology_default_condition_mode ?? mode.technology_default_condition_mode ?? 'container-other'
+            this.raw.technology_default_condition_mode ??
+            mode.technology_default_condition_mode ??
+            'container-other-scenario'
         assert.isString(this.technologyDefaultConditionMode)
 
         this.technologyDefaultConsistencyCondition =

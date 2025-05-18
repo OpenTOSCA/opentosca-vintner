@@ -4,15 +4,15 @@ node_types:
     application:
         derived_from: tosca.nodes.Root
 
+    other:
+        derived_from: tosca.nodes.Root
+
 topology_template:
     variability:
         qualities:
             - component: application
               technology: terraform
-
-            - component: application
-              assign: override-assign
-              technology: override
+              hosting: [other]
 
         options:
             enrich_technologies: true
@@ -22,5 +22,14 @@ topology_template:
     node_templates:
         application:
             type: application
-            technology:
-                - override: {}
+            requirements:
+                - host: left
+                - host: right
+
+        left:
+            type: other
+            managed: false
+
+        right:
+            type: other
+            managed: false
