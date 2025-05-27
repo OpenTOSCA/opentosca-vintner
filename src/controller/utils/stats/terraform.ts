@@ -77,7 +77,10 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Conditions
      */
-    stats.conditions += Object.keys(model.locals ?? []).filter(it => isTernary(it)).length
+    stats.conditions += Object.values(utils.first(model.locals ?? [])).filter(it => {
+        return check.isString(it) && isTernary(it)
+    }).length
+    console.log(stats.conditions)
     stats.conditions += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         return (
