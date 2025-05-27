@@ -1190,6 +1190,19 @@ utils
         })
     )
 
+const stats = utils.command('stats')
+
+stats
+    .command('terraform')
+    .description('returns terraform stats')
+    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.terraform(options))
+        })
+    )
+
 /**
  * Query
  */

@@ -102,6 +102,15 @@ export function loadYAML<T>(file: string) {
     }
 }
 
+export function loadJSON<T>(file: string) {
+    try {
+        return JSON.parse(loadFile(file)) as T
+    } catch (e) {
+        std.log(`Could not load json file "${file}"`)
+        throw e
+    }
+}
+
 export function storeFile(file: string, data: string, options: {onlyIfChanged?: boolean; overwrite?: boolean} = {}) {
     options.onlyIfChanged = options.onlyIfChanged ?? false
     options.overwrite = options.overwrite ?? true
