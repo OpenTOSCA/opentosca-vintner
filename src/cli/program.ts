@@ -1324,3 +1324,14 @@ study
             await Controller.study.performance(options)
         })
     )
+
+study
+    .command('effort')
+    .description('conduct effort case study')
+    .requiredOption('--dir [string]')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.effort(options)
+        })
+    )
