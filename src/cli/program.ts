@@ -1258,6 +1258,17 @@ stats
         })
     )
 
+stats
+    .command('EJS')
+    .description('returns EJS stats')
+    .requiredOption('--template [string]', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.ejs(options))
+        })
+    )
+
 /**
  * Query
  */

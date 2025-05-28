@@ -95,11 +95,15 @@ export function loadFile(file: string) {
 
 export function loadYAML<T>(file: string) {
     try {
-        return yaml.load(loadFile(file)) as T
+        return parseYAML<T>(loadFile(file))
     } catch (e) {
         std.log(`Could not load yaml file "${file}"`)
         throw e
     }
+}
+
+export function parseYAML<T>(data: string) {
+    return yaml.load(data) as T
 }
 
 export function loadJSON<T>(file: string) {

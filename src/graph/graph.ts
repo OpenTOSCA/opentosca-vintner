@@ -136,7 +136,7 @@ export default class Graph {
         /**
          * Populator
          */
-        new Populator(this).run({full: options?.full})
+        new Populator(this, {full: options?.full}).run()
     }
 
     guessElement(data: string, context: Context = {}): Element {
