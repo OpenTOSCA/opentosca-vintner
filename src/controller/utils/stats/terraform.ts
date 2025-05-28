@@ -11,12 +11,14 @@ export type UtilsStatsTerraformOptions = {
 }
 
 type TerraformStats = {
+    models: number
     elements: number
     inputs: number
     components: number
     properties: number
     conditions: number
     relations: number
+    loc: number
 }
 
 export default async function (options: UtilsStatsTerraformOptions) {
@@ -27,19 +29,28 @@ export default async function (options: UtilsStatsTerraformOptions) {
      * Stats
      */
     const stats: TerraformStats = {
+        models: 0,
         elements: 0,
         inputs: 0,
         components: 0,
         properties: 0,
         conditions: 0,
         relations: 0,
+        loc: 0,
     }
 
     /**
      * Model
      */
-    const variables = await hcl2json<HCLVariables>(path.join(options.dir, 'variables.tf'))
-    const model = await hcl2json<HCLModel>(path.join(options.dir, 'model.tf'))
+    const variablesFile = path.join(options.dir, 'variables.tf')
+    const variables = await hcl2json<HCLVariables>(variablesFile)
+    stats.loc += files.countNotBlankLines(variablesFile)
+    stats.models++
+
+    const modelFile = path.join(options.dir, 'model.tf')
+    const model = await hcl2json<HCLModel>(modelFile)
+    stats.loc += files.countNotBlankLines(modelFile)
+    stats.models++
 
     /**
      * Inputs
@@ -77,17 +88,20 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Conditions
      */
-    stats.conditions += Object.values(utils.first(model.locals ?? [])).filter(it => {
-        return check.isString(it) && isTernary(it)
-    }).length
+    stats.conditions += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
+        if (check.isString(it)) {
+            return acc + countTernary(it)
+        }
+        return acc
+    }, 0)
     console.log(stats.conditions)
     stats.conditions += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         return (
             acc +
             Object.entries(module).reduce<number>((bbc, [key, value]) => {
-                if (check.isString(value) && isTernary(value)) {
-                    bbc++
+                if (check.isString(value)) {
+                    bbc += countTernary(value)
                 }
 
                 if (key === 'count') {
@@ -119,6 +133,10 @@ async function hcl2json<T>(file: string) {
     const result = files.loadJSON<T>(tmp)
     files.removeFile(tmp)
     return result
+}
+
+function countTernary(value: string) {
+    return isTernary(value) ? 2 : 0
 }
 
 function isTernary(value: string) {

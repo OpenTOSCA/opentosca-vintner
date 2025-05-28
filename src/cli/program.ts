@@ -1203,6 +1203,17 @@ stats
         })
     )
 
+stats
+    .command('ansible')
+    .description('returns ansible stats')
+    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.ansible(options))
+        })
+    )
+
 /**
  * Query
  */
