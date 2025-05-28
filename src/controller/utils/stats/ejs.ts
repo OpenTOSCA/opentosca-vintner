@@ -71,12 +71,13 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Conditions
      */
-    // TODO: this
+    stats.conditions += countIfs(ejs)
+    stats.conditions += countElses(ejs)
+    stats.conditions += countTernaries(ejs)
 
     /**
-     * Expressions
+     * No Expressions
      */
-    // TODO: this
 
     /**
      * No Mappings
@@ -91,4 +92,18 @@ export default async function (options: UtilsStatsEJSOptions) {
 function asServiceTemplate(raw: string): ServiceTemplate {
     const data = raw.replace(/<%=.*%>/g, 'DUMMY').replace(/<%.*%>/g, '')
     return files.parseYAML<ServiceTemplate>(data)
+}
+
+function countTernaries(ejs: string) {
+    return (ejs.match(/<%=.*?.*:.*%>/g) ?? []).length * 2
+}
+
+// TODO: multiply by effected elements?
+function countIfs(ejs: string) {
+    return (ejs.match(/<% if /g) ?? []).length
+}
+
+// TODO: multiply by effected elements?
+function countElses(ejs: string) {
+    return (ejs.match(/<% } else { %>/g) ?? []).length
 }
