@@ -17,6 +17,7 @@ import {
 
 export type NodeTemplate = {
     type: ElementType
+    directives?: string[]
     // TODO: wrap properties as variability point
     properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap

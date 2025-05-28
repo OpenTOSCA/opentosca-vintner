@@ -10,9 +10,10 @@ type EDMMStats = {
     models: number
     elements: number
     inputs: number
+    outputs: number
     components: number
     properties: number
-    conditions: number
+    variability: number
     relations: number
     loc: number
 }
@@ -36,9 +37,10 @@ export default async function (options: UtilsStatsEDMMOptions) {
         models: 1,
         elements: vdmmStats.edmm_elements,
         inputs: vdmmStats.inputs,
+        outputs: vdmmStats.outputs,
         components: vdmmStats.nodes,
         properties: vdmmStats.properties,
-        conditions: vdmmStats.edmm_elements_conditions_manual,
+        variability: vdmmStats.edmm_elements_conditions_manual,
         relations: vdmmStats.relations,
         loc: vdmmStats.locp,
     }

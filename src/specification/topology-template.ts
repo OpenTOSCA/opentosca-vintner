@@ -2,6 +2,7 @@
  * Topology Template
  * {@link https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html#_Toc26969450}
  */
+import {SubstitutionMappings} from '#spec/substitution-mappings'
 import {GroupTemplate} from './group-template'
 import {NodeTemplate} from './node-template'
 import {PolicyTemplate} from './policy-template'
@@ -23,6 +24,7 @@ export type TopologyTemplate = {
     variability?: VariabilityDefinition
     groups?: VariabilityPointObject<GroupTemplate>
     policies?: VariabilityPointList<PolicyTemplate>
+    substitution_mappings?: SubstitutionMappings
 }
 
 export type InputDefinitionMap = {[key: string]: InputDefinition}

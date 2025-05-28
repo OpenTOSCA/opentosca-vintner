@@ -14,9 +14,10 @@ type TerraformStats = {
     models: number
     elements: number
     inputs: number
+    outputs: number
     components: number
     properties: number
-    conditions: number
+    variability: number
     relations: number
     loc: number
 }
@@ -32,9 +33,10 @@ export default async function (options: UtilsStatsTerraformOptions) {
         models: 0,
         elements: 0,
         inputs: 0,
+        outputs: 0,
         components: 0,
         properties: 0,
-        conditions: 0,
+        variability: 0,
         relations: 0,
         loc: 0,
     }
@@ -88,14 +90,14 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Conditions
      */
-    stats.conditions += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
+    stats.variability += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
         if (check.isString(it)) {
             return acc + countTernary(it)
         }
         return acc
     }, 0)
-    console.log(stats.conditions)
-    stats.conditions += Object.values(model.module).reduce((acc, modules) => {
+    console.log(stats.variability)
+    stats.variability += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         return (
             acc +
@@ -118,7 +120,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Elements
      */
-    stats.elements += stats.inputs + stats.components + stats.properties + stats.relations
+    stats.elements += stats.inputs + stats.outputs + stats.components + stats.properties + stats.relations
 
     /**
      * Result

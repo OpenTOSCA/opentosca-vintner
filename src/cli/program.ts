@@ -1225,6 +1225,17 @@ stats
         })
     )
 
+stats
+    .command('TOSCA')
+    .description('returns TOSCA stats')
+    .requiredOption('--template [string]', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.tosca(options))
+        })
+    )
+
 /**
  * Query
  */

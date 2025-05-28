@@ -12,9 +12,10 @@ type TerraformStats = {
     models: number
     elements: number
     inputs: number
+    outputs: number
     components: number
     properties: number
-    conditions: number
+    variability: number
     relations: number
     loc: number
 }
@@ -30,9 +31,10 @@ export default async function (options: UtilsStatsAnsibleOptions) {
         models: 0,
         elements: 0,
         inputs: 0,
+        outputs: 0,
         components: 0,
         properties: 0,
-        conditions: 0,
+        variability: 0,
         relations: 0,
         loc: 0,
     }
@@ -81,7 +83,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Conditions
      */
-    stats.conditions += model.reduce((acc, play) => {
+    stats.variability += model.reduce((acc, play) => {
         // String interpolation in roles
         const roles = play.roles ?? []
         const countedRoles = roles.reduce<number>((bbc, role) => {
@@ -118,7 +120,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Elements
      */
-    stats.elements += stats.inputs + stats.components + stats.properties + stats.relations
+    stats.elements += stats.inputs + stats.outputs + stats.components + stats.properties + stats.relations
 
     /**
      * Result
