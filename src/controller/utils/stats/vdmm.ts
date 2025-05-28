@@ -1,0 +1,84 @@
+import * as assert from '#assert'
+import Controller from '#controller'
+import {Stats} from '#controller/utils/stats/utils'
+
+export type UtilsStatsVDMMOptions = {
+    template: string
+    experimental: boolean
+}
+
+export default async function (options: UtilsStatsVDMMOptions) {
+    assert.isDefined(options.template, 'Template not defined')
+    assert.isTrue(options.experimental)
+
+    /**
+     * VDMM Stats
+     */
+    const vdmmStats = await Controller.template.stats({
+        template: [options.template],
+        experimental: true,
+    })
+
+    /**
+     * Stats
+     */
+    const stats = new Stats()
+
+    /**
+     * Models
+     */
+    stats.models = 1
+
+    /**
+     * LOC
+     */
+    stats.loc = vdmmStats.locp
+
+    /**
+     * Inputs
+     */
+    stats.inputs = vdmmStats.inputs
+
+    /**
+     * Outputs
+     */
+    stats.outputs = vdmmStats.outputs
+
+    /**
+     * Components
+     */
+    stats.components = vdmmStats.nodes
+
+    /**
+     * Properties
+     */
+    stats.properties = vdmmStats.properties
+
+    /**
+     * Relations
+     */
+    stats.relations = vdmmStats.relations
+
+    /**
+     * Artifacts
+     */
+    stats.artifacts = vdmmStats.artifacts
+
+    /**
+     * Conditions
+     */
+    stats.conditions = vdmmStats.edmm_elements_conditions_manual
+
+    /**
+     * No Expressions
+     */
+
+    /**
+     * No Mappings
+     */
+
+    /**
+     * Result
+     */
+    return stats.propagate()
+}

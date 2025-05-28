@@ -9,6 +9,7 @@ export class Stats {
     properties = 0
     relations = 0
     artifacts = 0
+    technologies = 0
 
     variability = 0
     conditions = 0
@@ -16,7 +17,8 @@ export class Stats {
     mappings = 0
 
     propagate() {
-        this.elements = this.inputs + this.outputs + this.components + this.properties + this.relations
+        this.elements =
+            this.inputs + this.outputs + this.components + this.properties + this.relations + this.technologies
         this.variability = this.conditions + this.expressions + this.mappings
         return this
     }
