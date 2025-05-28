@@ -1,5 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import {Stats} from '#controller/utils/stats/utils'
 import * as files from '#files'
 import {Shell} from '#shell'
 import * as utils from '#utils'
@@ -10,18 +11,6 @@ export type UtilsStatsTerraformOptions = {
     experimental: boolean
 }
 
-type TerraformStats = {
-    models: number
-    elements: number
-    inputs: number
-    outputs: number
-    components: number
-    properties: number
-    variability: number
-    relations: number
-    loc: number
-}
-
 export default async function (options: UtilsStatsTerraformOptions) {
     assert.isDefined(options.dir, 'Path not defined')
     assert.isTrue(options.experimental)
@@ -29,20 +18,10 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Stats
      */
-    const stats: TerraformStats = {
-        models: 0,
-        elements: 0,
-        inputs: 0,
-        outputs: 0,
-        components: 0,
-        properties: 0,
-        variability: 0,
-        relations: 0,
-        loc: 0,
-    }
+    const stats = new Stats()
 
     /**
-     * Model
+     * Model, LOC
      */
     const variablesFile = path.join(options.dir, 'variables.tf')
     const variables = await hcl2json<HCLVariables>(variablesFile)
@@ -59,6 +38,10 @@ export default async function (options: UtilsStatsTerraformOptions) {
      */
     const inputs = Object.keys(variables.variable).length
     stats.inputs += inputs
+
+    /**
+     * No Outputs
+     */
 
     /**
      * Components
@@ -88,16 +71,15 @@ export default async function (options: UtilsStatsTerraformOptions) {
     }, 0)
 
     /**
-     * Conditions
+     * Conditions (only support simple ternary expressions)
      */
-    stats.variability += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
+    stats.conditions += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
         if (check.isString(it)) {
             return acc + countTernary(it)
         }
         return acc
     }, 0)
-    console.log(stats.variability)
-    stats.variability += Object.values(model.module).reduce((acc, modules) => {
+    stats.conditions += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         return (
             acc +
@@ -109,23 +91,23 @@ export default async function (options: UtilsStatsTerraformOptions) {
                 if (key === 'count') {
                     if (check.isString(value) && !isTernary(value)) bbc++
                 }
-
-                // We dont support other kind of variability
-
                 return bbc
             }, 0)
         )
     }, 0)
 
     /**
-     * Elements
+     * No Expressions
      */
-    stats.elements += stats.inputs + stats.outputs + stats.components + stats.properties + stats.relations
+
+    /**
+     * No Mappings
+     */
 
     /**
      * Result
      */
-    return stats
+    return stats.propagate()
 }
 
 async function hcl2json<T>(file: string) {

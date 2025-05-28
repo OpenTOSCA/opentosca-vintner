@@ -1,21 +1,10 @@
 import * as assert from '#assert'
 import Controller from '#controller'
+import {Stats} from '#controller/utils/stats/utils'
 
 export type UtilsStatsEDMMOptions = {
     template: string
     experimental: boolean
-}
-
-type EDMMStats = {
-    models: number
-    elements: number
-    inputs: number
-    outputs: number
-    components: number
-    properties: number
-    variability: number
-    relations: number
-    loc: number
 }
 
 export default async function (options: UtilsStatsEDMMOptions) {
@@ -33,20 +22,62 @@ export default async function (options: UtilsStatsEDMMOptions) {
     /**
      * Stats
      */
-    const stats: EDMMStats = {
-        models: 1,
-        elements: vdmmStats.edmm_elements,
-        inputs: vdmmStats.inputs,
-        outputs: vdmmStats.outputs,
-        components: vdmmStats.nodes,
-        properties: vdmmStats.properties,
-        variability: vdmmStats.edmm_elements_conditions_manual,
-        relations: vdmmStats.relations,
-        loc: vdmmStats.locp,
-    }
+    const stats = new Stats()
+
+    /**
+     * Models
+     */
+    stats.models = 1
+
+    /**
+     * LOC
+     */
+    stats.loc = vdmmStats.locp
+
+    /**
+     * Inputs
+     */
+    stats.inputs = vdmmStats.inputs
+
+    /**
+     * Outputs
+     */
+    stats.outputs = vdmmStats.outputs
+
+    /**
+     * Components
+     */
+    stats.components = vdmmStats.nodes
+
+    /**
+     * Properties
+     */
+    stats.properties = vdmmStats.properties
+
+    /**
+     * Relations
+     */
+    stats.relations = vdmmStats.relations
+
+    /**
+     * Artifacts
+     */
+    stats.artifacts = vdmmStats.artifacts
+
+    /**
+     * No Conditions
+     */
+
+    /**
+     * No Expressions
+     */
+
+    /**
+     * No Mappings
+     */
 
     /**
      * Result
      */
-    return stats
+    return stats.propagate()
 }

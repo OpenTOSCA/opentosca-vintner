@@ -1,23 +1,12 @@
 import * as assert from '#assert'
 import * as check from '#check'
+import {Stats} from '#controller/utils/stats/utils'
 import * as files from '#files'
 import path from 'path'
 
 export type UtilsStatsAnsibleOptions = {
     dir: string
     experimental: boolean
-}
-
-type TerraformStats = {
-    models: number
-    elements: number
-    inputs: number
-    outputs: number
-    components: number
-    properties: number
-    variability: number
-    relations: number
-    loc: number
 }
 
 export default async function (options: UtilsStatsAnsibleOptions) {
@@ -27,28 +16,22 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Stats
      */
-    const stats: TerraformStats = {
-        models: 0,
-        elements: 0,
-        inputs: 0,
-        outputs: 0,
-        components: 0,
-        properties: 0,
-        variability: 0,
-        relations: 0,
-        loc: 0,
-    }
+    const stats = new Stats()
 
     /**
-     * Model
+     * Models, LOC
      */
     const file = path.join(options.dir, 'playbook.yaml')
     const model = files.loadYAML<Playbook>(file)
-    stats.loc += files.countNotBlankLines(file)
     stats.models++
+    stats.loc += files.countNotBlankLines(file)
 
     /**
      * No Inputs
+     */
+
+    /**
+     * No Outputs
      */
 
     /**
@@ -81,15 +64,14 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     }, 0)
 
     /**
+     * No Artifacts
+     */
+
+    /**
      * Conditions
      */
-    stats.variability += model.reduce((acc, play) => {
-        // String interpolation in roles
+    stats.conditions += model.reduce((acc, play) => {
         const roles = play.roles ?? []
-        const countedRoles = roles.reduce<number>((bbc, role) => {
-            if (isExpressions(role.role)) bbc++
-            return bbc
-        }, 0)
 
         // Ternary in hosts
         const countedHosts = countTernary(play.hosts)
@@ -114,18 +96,31 @@ export default async function (options: UtilsStatsAnsibleOptions) {
             )
         }, 0)
 
-        return acc + countedRoles + countedHosts + countedWhens + countedVars
+        return acc + countedHosts + countedWhens + countedVars
     }, 0)
 
     /**
-     * Elements
+     * Expressions (string interpolation in role names)
      */
-    stats.elements += stats.inputs + stats.outputs + stats.components + stats.properties + stats.relations
+    stats.expressions += model.reduce((acc, play) => {
+        const roles = play.roles ?? []
+        return (
+            acc +
+            roles.reduce<number>((bbc, role) => {
+                if (isExpressions(role.role)) bbc++
+                return bbc
+            }, 0)
+        )
+    }, 0)
+
+    /**
+     * No Mappings
+     */
 
     /**
      * Result
      */
-    return stats
+    return stats.propagate()
 }
 
 type Playbook = Play[]

@@ -1,6 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
+import {Stats} from '#controller/utils/stats/utils'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 
@@ -8,20 +9,6 @@ export type UtilsStatsTOSCAOptions = {
     template: string
     experimental: boolean
 }
-
-type TOSCAStats = {
-    models: number
-    elements: number
-    inputs: number
-    outputs: number
-    components: number
-    properties: number
-    variability: number
-    relations: number
-    loc: number
-}
-
-// TODO: elements count is not correct? technology?
 
 export default async function (options: UtilsStatsTOSCAOptions) {
     assert.isDefined(options.template, 'Template not defined')
@@ -45,35 +32,74 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Stats
      */
-    const stats: TOSCAStats = {
-        models: 1,
-        elements: vdmmStats.edmm_elements,
-        inputs: vdmmStats.inputs,
-        outputs: vdmmStats.outputs,
-        components: vdmmStats.nodes,
-        properties: vdmmStats.properties,
-        variability: 0,
-        relations: vdmmStats.relations,
-        loc: vdmmStats.locp,
-    }
+    const stats = new Stats()
 
     /**
-     * Substitution Mapping (treated as left graph, mappings is glue graph and treated as variability)
+     * Models
+     */
+    stats.models = 1
+
+    /**
+     * LOC
+     */
+    stats.loc = vdmmStats.locp
+
+    /**
+     * Inputs
+     */
+    stats.inputs = vdmmStats.inputs
+
+    /**
+     * Outputs
+     */
+    stats.outputs = vdmmStats.outputs
+
+    /**
+     * Components
+     */
+    stats.components = vdmmStats.nodes
+
+    /**
+     * Properties
+     */
+    stats.properties = vdmmStats.properties
+
+    /**
+     * Relations
+     */
+    stats.relations = vdmmStats.relations
+
+    /**
+     * Artifacts
+     */
+    stats.artifacts = vdmmStats.artifacts
+
+    /**
+     * Conditions, Mappings
+     *
+     * Substitution mapping is treated as graph replacement rule as follows:
+     *      - left: component with node type and optional filters
+     *      - glue: properties, capabilities, and requirements mapping
+     *      - right: remaining elements
      */
     const substitution = template.topology_template?.substitution_mappings
     if (check.isDefined(substitution)) {
+        // Left
         stats.components++
-        stats.elements++
-        stats.variability += (substitution.substitution_filter?.properties ?? []).length
-        stats.variability += Object.keys(substitution.properties ?? {}).length
-        stats.variability += Object.keys(substitution.capabilities ?? {}).length
-        stats.variability += Object.keys(substitution.requirements ?? {}).length
+        stats.conditions += (substitution.substitution_filter?.properties ?? []).length
+
+        // Glue
+        stats.mappings += Object.keys(substitution.properties ?? {}).length
+        stats.mappings += Object.keys(substitution.capabilities ?? {}).length
+        stats.mappings += Object.keys(substitution.requirements ?? {}).length
+
+        // Right already covered by VDMMStats
     }
 
     /**
-     * Substitution Directive
+     * Expressions (substitution directive)
      */
-    stats.variability += graph.nodes.filter(it => {
+    stats.expressions += graph.nodes.filter(it => {
         const directives = it.raw.directives
         if (check.isDefined(directives)) {
             return directives.includes('substitute')
@@ -84,5 +110,5 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Result
      */
-    return stats
+    return stats.propagate()
 }
