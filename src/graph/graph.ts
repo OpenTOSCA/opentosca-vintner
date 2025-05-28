@@ -106,7 +106,7 @@ export default class Graph {
         return this._technologyRulePlugin
     }
 
-    constructor(serviceTemplate: ServiceTemplate) {
+    constructor(serviceTemplate: ServiceTemplate, options?: {full?: boolean}) {
         this.serviceTemplate = serviceTemplate
 
         /**
@@ -136,7 +136,7 @@ export default class Graph {
         /**
          * Populator
          */
-        new Populator(this).run()
+        new Populator(this).run({full: options?.full})
     }
 
     guessElement(data: string, context: Context = {}): Element {

@@ -1,5 +1,6 @@
 import _ansible from './ansible'
 import _edmm from './edmm'
+import _pattern from './pattern'
 import _terraform from './terraform'
 import _tosca from './tosca'
 import _vdmm from './vdmm'
@@ -10,4 +11,5 @@ export default {
     edmm: _edmm,
     vdmm: _vdmm,
     tosca: _tosca,
+    pattern: _pattern,
 }

@@ -27,7 +27,9 @@ export class Populator {
         this.graph = graph
     }
 
-    run() {
+    run(options: {full?: boolean}) {
+        options.full = options.full ?? true
+
         // Options
         this.graph.options = new Options(this.graph.serviceTemplate)
 
@@ -53,10 +55,10 @@ export class Populator {
         this.populateImports()
 
         // Input Consumers
-        this.populateConsumers()
+        if (options.full) this.populateConsumers()
 
         // Output Producers
-        this.populateProducers()
+        if (options.full) this.populateProducers()
 
         // Elements
         this.graph.elements = [

@@ -1247,6 +1247,17 @@ stats
         })
     )
 
+stats
+    .command('PATTERN')
+    .description('returns PATTERN stats')
+    .requiredOption('--template [string]', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.pattern(options))
+        })
+    )
+
 /**
  * Query
  */
