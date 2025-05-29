@@ -77,7 +77,6 @@ export default async function (options: UtilsStatsAnsibleOptions) {
         const countedHosts = countTernary(play.hosts)
 
         // Count in play or roles
-        // TODO: multiply count at play with effected roles?
         const countedWhens =
             countWhen(play) +
             roles.reduce((bbc, role) => {

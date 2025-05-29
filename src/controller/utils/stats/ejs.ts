@@ -98,12 +98,10 @@ function countTernaries(ejs: string) {
     return (ejs.match(/<%=.*?.*:.*%>/g) ?? []).length * 2
 }
 
-// TODO: multiply by effected elements?
 function countIfs(ejs: string) {
     return (ejs.match(/<% if /g) ?? []).length
 }
 
-// TODO: multiply by effected elements?
 function countElses(ejs: string) {
     return (ejs.match(/<% } else { %>/g) ?? []).length
 }

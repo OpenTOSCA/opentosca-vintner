@@ -14,8 +14,6 @@ export type StatsPulumiOptions = {
     experimental: boolean
 }
 
-// TODO: also read Pulumi.yaml
-
 export default async function (options: StatsPulumiOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
     assert.isTrue(options.experimental)
