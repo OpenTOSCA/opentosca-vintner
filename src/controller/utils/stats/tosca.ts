@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 
@@ -32,7 +32,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('TOSCA')
 
     /**
      * Models

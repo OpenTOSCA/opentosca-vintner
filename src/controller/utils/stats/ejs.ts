@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import {calculateStats} from '#controller/template/stats'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 
@@ -26,7 +26,7 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('EJS')
 
     /**
      * Models

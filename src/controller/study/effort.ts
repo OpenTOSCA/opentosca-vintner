@@ -1,7 +1,8 @@
 import * as assert from '#assert'
 import Controller from '#controller'
-import {Stats, StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
+import std from '#std'
 import * as utils from '#utils'
 import path from 'path'
 
@@ -10,116 +11,159 @@ export type StudyEffortOptions = {
     experimental: boolean
 }
 
-// TODO: this
-
 export default async function (options: StudyEffortOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
     assert.isTrue(options.experimental)
 
-    /**
-     * Ansible
-     */
-    const Ansible = await Controller.utils.stats.ansible({
-        dir: path.join(options.dir, 'Ansible', 'stage-X'),
-        experimental: true,
-    })
+    const store: Stats.Stats[][] = []
+    const stages = 5
+    for (let stage = 0; stage <= stages; stage++) {
+        const stageDir = 'stage-' + stage
+        store[stage] = []
 
-    /**
-     * EDMM
-     */
-    const edmmFiles = files.walkDirectory(path.join(options.dir, 'EDMM', 'stage-5'))
-    const EDMM = utils.sumObjects<StatsBuilder>(
-        await Promise.all(
-            edmmFiles.map(file =>
-                Controller.utils.stats.edmm({
-                    template: file,
-                    experimental: true,
-                })
+        /**
+         * Ansible
+         */
+        // TODO: stage dir
+        store[stage].push(
+            await Controller.utils.stats.ansible({
+                dir: path.join(options.dir, 'Ansible', 'stage-X'),
+                experimental: true,
+            })
+        )
+
+        /**
+         * EDMM
+         */
+        const edmmFiles = files.walkDirectory(path.join(options.dir, 'EDMM', stageDir))
+        store[stage].push(
+            Stats.sum(
+                await Promise.all(
+                    edmmFiles.map(file =>
+                        Controller.utils.stats.edmm({
+                            template: file,
+                            experimental: true,
+                        })
+                    )
+                )
             )
         )
-    )
 
-    /**
-     * EJS
-     */
-    const EJS = await Controller.utils.stats.ejs({
-        template: path.join(options.dir, 'EJS', 'stage-5', 'model.ejs'),
-        experimental: true,
-    })
+        /**
+         * EJS
+         */
+        store[stage].push(
+            await Controller.utils.stats.ejs({
+                template: path.join(options.dir, 'EJS', stageDir, 'model.ejs'),
+                experimental: true,
+            })
+        )
 
-    /**
-     * Pattern
-     */
-    let refinementFiles: string[] = []
-    const refinementsDir = path.join(options.dir, 'PATTERN', 'stage-X', 'lib', 'refinements')
-    if (files.isDirectory(refinementsDir)) refinementFiles = files.walkDirectory(refinementsDir)
-    const PATTERN = utils.sumObjects<Stats>([
-        await Controller.utils.stats.edmm({
-            template: path.join(options.dir, 'PATTERN', 'stage-X', 'model.yaml'),
-            experimental: true,
-        }),
-        ...(await Promise.all(
-            refinementFiles.map(file =>
-                Controller.utils.stats.pattern({
-                    template: file,
+        /**
+         * Pattern
+         */
+        // TODO: stage dir
+        let refinementFiles: string[] = []
+        const refinementsDir = path.join(options.dir, 'PATTERN', 'stage-X', 'lib', 'refinements')
+        if (files.isDirectory(refinementsDir)) refinementFiles = files.walkDirectory(refinementsDir)
+        store[stage].push(
+            Stats.sum([
+                await Controller.utils.stats.edmm({
+                    template: path.join(options.dir, 'PATTERN', 'stage-X', 'model.yaml'),
                     experimental: true,
-                })
-            )
-        )),
-    ])
+                }),
+                ...(await Promise.all(
+                    refinementFiles.map(file =>
+                        Controller.utils.stats.pattern({
+                            template: file,
+                            experimental: true,
+                        })
+                    )
+                )),
+            ])
+        )
 
-    /**
-     * Pulumi
-     */
-    const Pulumi = await Controller.utils.stats.pulumi({
-        dir: path.join(options.dir, 'Pulumi', 'stage-4'),
-        experimental: true,
-    })
+        /**
+         * Pulumi
+         */
+        store[stage].push(
+            await Controller.utils.stats.pulumi({
+                dir: path.join(options.dir, 'Pulumi', stageDir),
+                experimental: true,
+            })
+        )
 
-    /**
-     * Terraform
-     */
-    const Terraform = await Controller.utils.stats.terraform({
-        dir: path.join(options.dir, 'Terraform', 'stage-X'),
-        experimental: true,
-    })
+        /**
+         * Terraform
+         */
+        // TODO: stage dir
+        store[stage].push(
+            await Controller.utils.stats.terraform({
+                dir: path.join(options.dir, 'Terraform', 'stage-X'),
+                experimental: true,
+            })
+        )
 
-    /**
-     * TOSCA
-     */
-    const toscaFiles = [path.join(options.dir, 'TOSCA', 'stage-5', 'model.yaml')]
-    const substitutionsDir = path.join(options.dir, 'TOSCA', 'stage-5', 'lib', 'substitutions')
-    if (files.isDirectory(substitutionsDir)) toscaFiles.push(...files.walkDirectory(substitutionsDir))
-    const TOSCA = utils.sumObjects<StatsBuilder>(
-        await Promise.all(
-            toscaFiles.map(file =>
-                Controller.utils.stats.tosca({
-                    template: file,
-                    experimental: true,
-                })
+        /**
+         * TOSCA
+         */
+        const toscaFiles = [path.join(options.dir, 'TOSCA', stageDir, 'model.yaml')]
+        const substitutionsDir = path.join(options.dir, 'TOSCA', stageDir, 'lib', 'substitutions')
+        if (files.isDirectory(substitutionsDir)) toscaFiles.push(...files.walkDirectory(substitutionsDir))
+        store[stage].push(
+            Stats.sum(
+                await Promise.all(
+                    toscaFiles.map(file =>
+                        Controller.utils.stats.tosca({
+                            template: file,
+                            experimental: true,
+                        })
+                    )
+                )
             )
         )
-    )
+
+        /**
+         * VDMM
+         */
+        store[stage].push(
+            await Controller.utils.stats.vdmm({
+                template: path.join(options.dir, 'VDMM', stageDir, 'model.yaml'),
+                experimental: true,
+            })
+        )
+    }
 
     /**
-     * VDMM
+     * Diff
      */
-    const VDMM = await Controller.utils.stats.vdmm({
-        template: path.join(options.dir, 'VDMM', 'stage-5', 'model.yaml'),
-        experimental: true,
-    })
+    const diff: Stats.Stats[][] = []
+    for (let stage = 0; stage <= stages; stage++) {
+        const stats = store[stage]
+        diff[stage] = []
+
+        for (let index = 0; index < stats.length; index++) {
+            const current = stats[index]
+            if (stage === 0) {
+                diff[stage][index] = current
+            } else {
+                const previous = store[stage - 1][index]
+
+                if (previous.id !== current.id)
+                    throw new Error(`Previous has ${previous.id} but currently is ${current.id}`)
+
+                diff[stage][index] = Stats.diff(utils.copy([current, previous]))
+            }
+        }
+
+        std.log('Stage', stage, 'Total')
+        std.log(std.table(stats))
+        std.log('Stage', stage, 'Diff')
+        std.log(std.table(diff[stage]))
+    }
 
     /**
-     * Print
+     * Return data
      */
-    console.table([
-        {id: 'Ansible', ...Ansible},
-        {id: 'EDMM', ...EDMM},
-        {id: 'EJS', ...EJS},
-        {id: 'PATTERN', ...PATTERN},
-        {id: 'Pulumi', ...Pulumi},
-        {id: 'Terraform', ...Terraform},
-        {id: 'TOSCA', ...TOSCA},
-        {id: 'VDMM', ...VDMM},
-    ])
+    files.storeYAML('study.effort.data.yaml', {store, diff})
 }

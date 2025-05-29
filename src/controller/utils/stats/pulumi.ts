@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import * as utils from '#utils'
 import {UnexpectedError} from '#utils/error'
@@ -33,7 +33,7 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('Pulumi')
 
     /**
      * Models

@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {Shell} from '#shell'
 import * as utils from '#utils'
@@ -18,7 +18,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('Terraform')
 
     /**
      * Model, LOC

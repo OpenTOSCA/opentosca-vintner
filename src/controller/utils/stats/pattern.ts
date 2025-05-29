@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import {calculateStats, TemplateStats} from '#controller/template/stats'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TopologyTemplate} from '#spec/topology-template'
@@ -31,7 +31,7 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('PATTERN')
 
     /**
      * Models

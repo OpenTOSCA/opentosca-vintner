@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import path from 'path'
 
@@ -16,7 +16,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('Ansible')
 
     /**
      * Models, LOC

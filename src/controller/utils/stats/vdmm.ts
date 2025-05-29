@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import Controller from '#controller'
-import {StatsBuilder} from '#controller/utils/stats/stats'
+import * as Stats from '#controller/utils/stats/stats'
 
 export type UtilsStatsVDMMOptions = {
     template: string
@@ -22,7 +22,7 @@ export default async function (options: UtilsStatsVDMMOptions) {
     /**
      * Stats
      */
-    const stats = new StatsBuilder()
+    const stats = new Stats.Builder('VDMM')
 
     /**
      * Models

@@ -2128,6 +2128,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"console-table-printer@npm:^2.14.0":
+  version: 2.14.0
+  resolution: "console-table-printer@npm:2.14.0"
+  dependencies:
+    simple-wcswidth: ^1.0.1
+  checksum: 83bfdeaf457b378eac982b2ad438dc881ad18a79957980ce4d70b2e04095f46e843c6a7146d3766c7add522e3f865078877864ff916acb7d6a711b3e8188a658
+  languageName: node
+  linkType: hard
+
 "content-disposition@npm:0.5.4":
   version: 0.5.4
   resolution: "content-disposition@npm:0.5.4"
@@ -5795,6 +5804,7 @@ __metadata:
     chai-datetime: ^1.8.0
     cloc: ^1.98.0-cloc
     commander: ^12.1.0
+    console-table-printer: ^2.14.0
     cors: ^2.8.5
     cross-env: ^7.0.3
     dayjs: ^1.11.11
@@ -6982,6 +6992,13 @@ __metadata:
   dependencies:
     semver: ~7.0.0
   checksum: 1012e9b6c504e559a948078177b3eedbb9d7e4d15878e2bda56314d08db609ca5da485be4ac9f838759faae8057935ee0246fcdf63f1233c86bd9fecb2a5544b
+  languageName: node
+  linkType: hard
+
+"simple-wcswidth@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "simple-wcswidth@npm:1.0.1"
+  checksum: dc5bf4cb131d9c386825d1355add2b1ecc408b37dc2c2334edd7a1a4c9f527e6b594dedcdbf6d949bce2740c3a332e39af1183072a2d068e40d9e9146067a37f
   languageName: node
   linkType: hard
 
