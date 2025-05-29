@@ -112,7 +112,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
 
 async function hcl2json<T>(file: string) {
     const tmp = files.temporaryDirent()
-    const shell = new Shell()
+    const shell = new Shell(false, true)
     await shell.execute(['hcl2json', file, '>', tmp])
     const result = files.loadJSON<T>(tmp)
     files.removeFile(tmp)

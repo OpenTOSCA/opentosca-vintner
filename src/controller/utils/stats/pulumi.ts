@@ -61,7 +61,7 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Components
      */
-    stats.conditions += ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"]').length
+    stats.components += ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"]').length
 
     /**
      * Properties
@@ -100,7 +100,7 @@ export default async function (options: StatsPulumiOptions) {
         stats.conditions++
         if (check.isDefined(statement.alternate)) stats.conditions++
     })
-    stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length
+    stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * 2
 
     /**
      * No Expressions

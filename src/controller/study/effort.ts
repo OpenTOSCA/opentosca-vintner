@@ -20,14 +20,14 @@ export default async function (options: StudyEffortOptions) {
      * Ansible
      */
     const Ansible = await Controller.utils.stats.ansible({
-        dir: path.resolve(options.dir, 'Ansible', 'stage-X'),
+        dir: path.join(options.dir, 'Ansible', 'stage-X'),
         experimental: true,
     })
 
     /**
      * EDMM
      */
-    const edmmFiles = files.walkDirectory(path.resolve(options.dir, 'EDMM', 'stage-5'))
+    const edmmFiles = files.walkDirectory(path.join(options.dir, 'EDMM', 'stage-5'))
     const EDMM = utils.sumObjects<StatsBuilder>(
         await Promise.all(
             edmmFiles.map(file =>
@@ -43,7 +43,7 @@ export default async function (options: StudyEffortOptions) {
      * EJS
      */
     const EJS = await Controller.utils.stats.ejs({
-        template: path.resolve(options.dir, 'EJS', 'stage-5', 'model.ejs'),
+        template: path.join(options.dir, 'EJS', 'stage-5', 'model.ejs'),
         experimental: true,
     })
 
@@ -71,14 +71,16 @@ export default async function (options: StudyEffortOptions) {
     /**
      * Pulumi
      */
-    // TODO: Pulumi
-    const Pulumi = {}
+    const Pulumi = await Controller.utils.stats.pulumi({
+        dir: path.join(options.dir, 'Pulumi', 'stage-4'),
+        experimental: true,
+    })
 
     /**
      * Terraform
      */
     const Terraform = await Controller.utils.stats.terraform({
-        dir: path.resolve(options.dir, 'Terraform', 'stage-X'),
+        dir: path.join(options.dir, 'Terraform', 'stage-X'),
         experimental: true,
     })
 
