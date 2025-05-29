@@ -37,8 +37,8 @@ export class StatsBuilder {
     mappings = 0
 
     build(): Stats {
-        this.elements =
-            this.inputs + this.outputs + this.components + this.properties + this.relations + this.technologies
+        // TODO: add technologies
+        this.elements = this.inputs + this.outputs + this.components + this.properties + this.relations
         this.variability = this.conditions + this.expressions + this.mappings
 
         return {

@@ -2,6 +2,7 @@ import _ansible from './ansible'
 import _edmm from './edmm'
 import _ejs from './ejs'
 import _pattern from './pattern'
+import _pulumi from './pulumi'
 import _terraform from './terraform'
 import _tosca from './tosca'
 import _vdmm from './vdmm'
@@ -14,4 +15,5 @@ export default {
     tosca: _tosca,
     pattern: _pattern,
     ejs: _ejs,
+    pulumi: _pulumi,
 }

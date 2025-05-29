@@ -1269,6 +1269,17 @@ stats
         })
     )
 
+stats
+    .command('pulumi')
+    .description('returns Pulumi stats')
+    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.stats.pulumi(options))
+        })
+    )
+
 /**
  * Query
  */
