@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {Stats} from '#controller/utils/stats/utils'
+import {StatsBuilder} from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {Shell} from '#shell'
 import * as utils from '#utils'
@@ -18,7 +18,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Stats
      */
-    const stats = new Stats()
+    const stats = new StatsBuilder()
 
     /**
      * Model, LOC
@@ -107,7 +107,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Result
      */
-    return stats.propagate()
+    return stats.build()
 }
 
 async function hcl2json<T>(file: string) {

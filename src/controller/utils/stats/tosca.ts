@@ -1,7 +1,7 @@
 import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
-import {Stats} from '#controller/utils/stats/utils'
+import {StatsBuilder} from '#controller/utils/stats/stats'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
 
@@ -32,7 +32,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Stats
      */
-    const stats = new Stats()
+    const stats = new StatsBuilder()
 
     /**
      * Models
@@ -110,5 +110,5 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Result
      */
-    return stats.propagate()
+    return stats.build()
 }

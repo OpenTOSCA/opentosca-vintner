@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import Controller from '#controller'
-import {Stats} from '#controller/utils/stats/utils'
+import {StatsBuilder} from '#controller/utils/stats/stats'
 
 export type UtilsStatsEDMMOptions = {
     template: string
@@ -22,7 +22,7 @@ export default async function (options: UtilsStatsEDMMOptions) {
     /**
      * Stats
      */
-    const stats = new Stats()
+    const stats = new StatsBuilder()
 
     /**
      * Models
@@ -79,5 +79,5 @@ export default async function (options: UtilsStatsEDMMOptions) {
     /**
      * Result
      */
-    return stats.propagate()
+    return stats.build()
 }

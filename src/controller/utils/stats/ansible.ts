@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import {Stats} from '#controller/utils/stats/utils'
+import {StatsBuilder} from '#controller/utils/stats/stats'
 import * as files from '#files'
 import path from 'path'
 
@@ -16,7 +16,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Stats
      */
-    const stats = new Stats()
+    const stats = new StatsBuilder()
 
     /**
      * Models, LOC
@@ -121,7 +121,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Result
      */
-    return stats.propagate()
+    return stats.build()
 }
 
 type Playbook = Play[]

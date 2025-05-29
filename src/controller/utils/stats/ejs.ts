@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import {calculateStats} from '#controller/template/stats'
-import {Stats} from '#controller/utils/stats/utils'
+import {StatsBuilder} from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 
@@ -26,7 +26,7 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Stats
      */
-    const stats = new Stats()
+    const stats = new StatsBuilder()
 
     /**
      * Models
@@ -86,7 +86,7 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Result
      */
-    return stats.propagate()
+    return stats.build()
 }
 
 function asServiceTemplate(raw: string): ServiceTemplate {
