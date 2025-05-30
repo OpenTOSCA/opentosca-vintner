@@ -68,10 +68,6 @@ export default async function (options: StudyEffortOptions) {
         if (files.isDirectory(refinementsDir)) refinementFiles = files.walkDirectory(refinementsDir)
         store[stage].push(
             Stats.sum([
-                await Controller.utils.stats.edmm({
-                    template: path.join(options.dir, 'PATTERN', 'stage-X', 'model.yaml'),
-                    experimental: true,
-                }),
                 ...(await Promise.all(
                     refinementFiles.map(file =>
                         Controller.utils.stats.pattern({
@@ -80,6 +76,10 @@ export default async function (options: StudyEffortOptions) {
                         })
                     )
                 )),
+                await Controller.utils.stats.edmm({
+                    template: path.join(options.dir, 'PATTERN', 'stage-X', 'model.yaml'),
+                    experimental: true,
+                }),
             ])
         )
 
@@ -165,5 +165,5 @@ export default async function (options: StudyEffortOptions) {
     /**
      * Return data
      */
-    files.storeYAML('study.effort.data.yaml', {store, diff})
+    files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {store, diff})
 }
