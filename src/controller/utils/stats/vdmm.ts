@@ -70,8 +70,9 @@ export default async function (options: UtilsStatsVDMMOptions) {
     stats.conditions = vdmmStats.edmm_elements_conditions_manual
 
     /**
-     * No Expressions
+     * Expressions
      */
+    stats.expressions += vdmmStats.anchors
 
     /**
      * No Mappings

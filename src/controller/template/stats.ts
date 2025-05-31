@@ -34,6 +34,7 @@ export type TemplateStats = {
     edmm_elements_conditions_generated: number
     loc: number
     locp: number
+    anchors: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -94,6 +95,8 @@ export function calculateStats(
 
         loc: files.countLines(file),
         locp: files.countNotBlankLines(file),
+
+        anchors: graph.nodes.filter(it => it.anchor).length,
     }
 
     /**
