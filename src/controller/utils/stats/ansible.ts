@@ -21,14 +21,20 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Models, LOC
      */
-    const file = path.join(options.dir, 'playbook.yaml')
-    const model = files.loadYAML<Playbook>(file)
+    const argsFile = path.join(options.dir, 'meta', 'argument_specs.yaml')
+    const args = files.loadYAML<ArgumentSpecs>(argsFile)
     stats.models++
-    stats.loc += files.countNotBlankLines(file)
+    stats.loc += files.countNotBlankLines(argsFile)
+
+    const modelFile = path.join(options.dir, 'playbook.yaml')
+    const model = files.loadYAML<Playbook>(modelFile)
+    stats.models++
+    stats.loc += files.countNotBlankLines(modelFile)
 
     /**
-     * No Inputs
+     * Inputs
      */
+    stats.inputs += Object.keys(args.argument_specs.playbook.options).length
 
     /**
      * No Outputs
@@ -121,6 +127,14 @@ export default async function (options: UtilsStatsAnsibleOptions) {
      * Result
      */
     return stats.build()
+}
+
+type ArgumentSpecs = {
+    argument_specs: {
+        playbook: {
+            options: {[key: string]: any}
+        }
+    }
 }
 
 type Playbook = Play[]
