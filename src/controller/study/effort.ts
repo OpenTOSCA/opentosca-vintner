@@ -54,7 +54,7 @@ export default async function (options: StudyEffortOptions) {
          */
         store[stage].push(
             await Controller.utils.stats.ejs({
-                template: path.join(options.dir, 'EJS', stageDir, 'model.ejs'),
+                dir: path.join(options.dir, 'EJS', stageDir),
                 experimental: true,
             })
         )

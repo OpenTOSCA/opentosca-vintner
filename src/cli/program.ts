@@ -1261,7 +1261,7 @@ stats
 stats
     .command('EJS')
     .description('returns EJS stats')
-    .requiredOption('--template [string]', 'template')
+    .requiredOption('--dir [string]', 'directory')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {

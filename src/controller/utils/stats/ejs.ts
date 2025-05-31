@@ -3,25 +3,18 @@ import {calculateStats} from '#controller/template/stats'
 import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import * as TS from '@typescript-eslint/parser'
+import * as ESQuery from 'esquery'
+import path from 'path'
 
 export type UtilsStatsEJSOptions = {
-    template: string
+    dir: string
     experimental: boolean
 }
 
 export default async function (options: UtilsStatsEJSOptions) {
-    assert.isDefined(options.template, 'Template not defined')
+    assert.isDefined(options.dir, 'Directory not defined')
     assert.isTrue(options.experimental)
-
-    /**
-     * EJS
-     */
-    const ejs = files.loadFile(options.template)
-
-    /**
-     * VDMM Stats
-     */
-    const vdmmStats = calculateStats(asServiceTemplate(ejs), options.template, {full: false})
 
     /**
      * Stats
@@ -29,14 +22,22 @@ export default async function (options: UtilsStatsEJSOptions) {
     const stats = new Stats.Builder('EJS')
 
     /**
-     * Models
+     * Models, LOC
      */
-    stats.models = 1
+    const inputsFile = path.join(options.dir, 'types.ts')
+    const inputsAST = TS.parse(files.loadFile(inputsFile), {})
+    stats.models += 1
+    stats.loc = +files.countNotBlankLines(inputsFile)
+
+    const ejsFile = path.join(options.dir, 'model.ejs')
+    const ejs = files.loadFile(ejsFile)
+    stats.models += 1
+    stats.loc = +files.countNotBlankLines(ejsFile)
 
     /**
-     * LOC
+     * VDMM Stats
      */
-    stats.loc = files.countNotBlankLines(options.template)
+    const vdmmStats = calculateStats(asServiceTemplate(ejs), ejsFile, {full: false})
 
     /**
      * Inputs
@@ -76,8 +77,10 @@ export default async function (options: UtilsStatsEJSOptions) {
     stats.conditions += countTernaries(ejs)
 
     /**
-     * No Expressions
+     * Expressions
      */
+    stats.expressions += ESQuery.query(inputsAST as any, 'TSPropertySignature').length
+    stats.expressions += countAssignments(ejs)
 
     /**
      * No Mappings
@@ -90,12 +93,15 @@ export default async function (options: UtilsStatsEJSOptions) {
 }
 
 function asServiceTemplate(raw: string): ServiceTemplate {
-    const data = raw.replace(/<%=.*%>/g, 'DUMMY').replace(/<%.*%>/g, '')
+    const data = raw
+        .replace(/<%=.*%>/g, 'DUMMY')
+        .replace(/<%.*%>/g, '')
+        .replace(/<%.*tosca_definitions_version/gs, 'tosca_definitions_version')
     return files.parseYAML<ServiceTemplate>(data)
 }
 
 function countTernaries(ejs: string) {
-    return (ejs.match(/<%=.*?.*:.*%>/g) ?? []).length * 2
+    return (ejs.match(/=.*?.*:/g) ?? []).length * 2
 }
 
 function countIfs(ejs: string) {
@@ -104,4 +110,8 @@ function countIfs(ejs: string) {
 
 function countElses(ejs: string) {
     return (ejs.match(/<% } else { %>/g) ?? []).length
+}
+
+function countAssignments(ejs: string) {
+    return (ejs.match(/<%=\s*([^%?]*?)\s*%>/g) ?? []).length
 }

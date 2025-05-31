@@ -110,13 +110,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
      */
     stats.expressions += model.reduce((acc, play) => {
         const roles = play.roles ?? []
-        return (
-            acc +
-            roles.reduce<number>((bbc, role) => {
-                if (isExpressions(role.role)) bbc++
-                return bbc
-            }, 0)
-        )
+        return acc + roles.reduce<number>((bbc, role) => bbc + countExpressions(role.role), 0)
     }, 0)
 
     /**
@@ -168,6 +162,6 @@ function isTernary(value: string) {
     return new RegExp(/\{\{.*if.*else.*}}/).test(value)
 }
 
-function isExpressions(value: string) {
-    return new RegExp(/.*\{\{.*}}.*/).test(value)
+function countExpressions(value: string) {
+    return (value.match(/\{\{/) ?? []).length
 }

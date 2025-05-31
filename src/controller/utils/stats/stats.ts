@@ -19,13 +19,12 @@ export type Stats = {
     mappings: number
 }
 
-export class Builder implements Stats {
+export class Builder implements Omit<Stats, 'elements' | 'variability'> {
     id: string
 
     models = 0
     loc = 0
 
-    elements = 0
     inputs = 0
     outputs = 0
     components = 0
@@ -35,7 +34,6 @@ export class Builder implements Stats {
     // TODO: technologies
     technologies = NaN
 
-    variability = 0
     conditions = 0
     expressions = 0
     mappings = 0
@@ -45,15 +43,12 @@ export class Builder implements Stats {
     }
 
     build(): Stats {
-        // TODO: add technologies
-        this.elements = this.inputs + this.outputs + this.components + this.properties + this.relations
-        this.variability = this.conditions + this.expressions + this.mappings
-
         return {
             id: this.id,
             models: this.models,
             loc: this.loc,
-            elements: this.elements,
+            // TODO: add technologies
+            elements: this.inputs + this.outputs + this.components + this.properties + this.relations,
             inputs: this.inputs,
             outputs: this.outputs,
             components: this.components,
@@ -61,7 +56,7 @@ export class Builder implements Stats {
             relations: this.relations,
             artifacts: this.artifacts,
             technologies: this.technologies,
-            variability: this.variability,
+            variability: this.conditions + this.expressions + this.mappings,
             conditions: this.conditions,
             expressions: this.expressions,
             mappings: this.mappings,

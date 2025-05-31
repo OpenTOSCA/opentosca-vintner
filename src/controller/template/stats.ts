@@ -35,6 +35,7 @@ export type TemplateStats = {
     loc: number
     locp: number
     anchors: number
+    variability_inputs: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -97,6 +98,7 @@ export function calculateStats(
         locp: files.countNotBlankLines(file),
 
         anchors: graph.nodes.filter(it => it.anchor).length,
+        variability_inputs: Object.keys(graph.serviceTemplate.topology_template?.variability?.inputs ?? {}).length,
     }
 
     /**

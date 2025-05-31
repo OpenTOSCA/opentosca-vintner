@@ -73,6 +73,7 @@ export default async function (options: UtilsStatsVDMMOptions) {
      * Expressions
      */
     stats.expressions += vdmmStats.anchors
+    stats.expressions += vdmmStats.variability_inputs
 
     /**
      * No Mappings
