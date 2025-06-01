@@ -1,3 +1,4 @@
+import _featuremodel from './feature-model'
 import _key from './key'
 import _nonce from './nonce'
 import _normative from './normative'
@@ -12,4 +13,5 @@ export default {
     rules: _rules,
     scenarios: _scenarios,
     stats: _stats,
+    featuremodel: _featuremodel,
 }

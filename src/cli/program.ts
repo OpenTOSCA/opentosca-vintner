@@ -1190,12 +1190,22 @@ utils
         })
     )
 
+utils
+    .command('feature-model')
+    .description('returns deployment scenarios')
+    .requiredOption('--path <string>', 'path to feature model')
+    .action(
+        hae.exit(async options => {
+            std.out(JSON.stringify(await Controller.utils.featuremodel(options)))
+        })
+    )
+
 const stats = utils.command('stats')
 
 stats
     .command('terraform')
     .description('returns terraform stats')
-    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--dir <string>', 'directory')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1206,7 +1216,7 @@ stats
 stats
     .command('ansible')
     .description('returns ansible stats')
-    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--dir <string>', 'directory')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1217,7 +1227,7 @@ stats
 stats
     .command('EDMM')
     .description('returns EDMM stats')
-    .requiredOption('--template [string]', 'template')
+    .requiredOption('--template <string>', 'template')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1228,7 +1238,7 @@ stats
 stats
     .command('VDMM')
     .description('returns VDMM stats')
-    .requiredOption('--template [string]', 'template')
+    .requiredOption('--template <string>', 'template')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1239,7 +1249,7 @@ stats
 stats
     .command('TOSCA')
     .description('returns TOSCA stats')
-    .requiredOption('--template [string]', 'template')
+    .requiredOption('--template <string>', 'template')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1250,7 +1260,7 @@ stats
 stats
     .command('PATTERN')
     .description('returns PATTERN stats')
-    .requiredOption('--template [string]', 'template')
+    .requiredOption('--template <string>', 'template')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1261,7 +1271,7 @@ stats
 stats
     .command('EJS')
     .description('returns EJS stats')
-    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--dir <string>', 'directory')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
@@ -1272,7 +1282,7 @@ stats
 stats
     .command('pulumi')
     .description('returns Pulumi stats')
-    .requiredOption('--dir [string]', 'directory')
+    .requiredOption('--dir <string>', 'directory')
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
