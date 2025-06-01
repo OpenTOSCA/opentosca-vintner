@@ -31,8 +31,7 @@ export class Builder implements Omit<Stats, 'elements' | 'variability'> {
     properties = 0
     relations = 0
     artifacts = 0
-    // TODO: technologies
-    technologies = NaN
+    technologies = 0
 
     conditions = 0
     expressions = 0
@@ -47,8 +46,18 @@ export class Builder implements Omit<Stats, 'elements' | 'variability'> {
             id: this.id,
             models: this.models,
             loc: this.loc,
-            // TODO: add technologies
-            elements: this.inputs + this.outputs + this.components + this.properties + this.relations,
+
+            /**
+             * Topology
+             */
+            elements:
+                this.inputs +
+                this.outputs +
+                this.components +
+                this.properties +
+                this.relations +
+                this.artifacts +
+                this.technologies,
             inputs: this.inputs,
             outputs: this.outputs,
             components: this.components,
@@ -56,6 +65,10 @@ export class Builder implements Omit<Stats, 'elements' | 'variability'> {
             relations: this.relations,
             artifacts: this.artifacts,
             technologies: this.technologies,
+
+            /**
+             * Variability
+             */
             variability: this.conditions + this.expressions + this.mappings,
             conditions: this.conditions,
             expressions: this.expressions,

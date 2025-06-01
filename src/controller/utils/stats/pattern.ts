@@ -74,6 +74,11 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     stats.artifacts = vdmmStats.artifacts
 
     /**
+     * Technologies
+     */
+    stats.technologies = vdmmStats.technologies
+
+    /**
      * No Conditions
      */
 

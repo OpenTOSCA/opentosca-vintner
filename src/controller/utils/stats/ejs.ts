@@ -70,6 +70,11 @@ export default async function (options: UtilsStatsEJSOptions) {
     stats.artifacts = vdmmStats.artifacts
 
     /**
+     * Technologies
+     */
+    stats.technologies = vdmmStats.technologies
+
+    /**
      * Conditions
      */
     stats.conditions += countIfs(ejs)

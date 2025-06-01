@@ -73,6 +73,14 @@ export default async function (options: UtilsStatsTerraformOptions) {
     }, 0)
 
     /**
+     * No Artifacts
+     */
+
+    /**
+     * No Technologies
+     */
+
+    /**
      * Conditions (only support simple ternary expressions)
      */
     stats.conditions += Object.values(locals).reduce<number>((acc, it) => {

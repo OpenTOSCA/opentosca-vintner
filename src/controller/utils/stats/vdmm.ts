@@ -65,6 +65,11 @@ export default async function (options: UtilsStatsVDMMOptions) {
     stats.artifacts = vdmmStats.artifacts
 
     /**
+     * Technologies
+     */
+    stats.technologies = vdmmStats.technologies
+
+    /**
      * Conditions
      */
     stats.conditions = vdmmStats.edmm_elements_conditions_manual

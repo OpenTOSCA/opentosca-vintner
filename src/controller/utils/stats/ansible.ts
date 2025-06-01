@@ -74,6 +74,10 @@ export default async function (options: UtilsStatsAnsibleOptions) {
      */
 
     /**
+     * No Technologies
+     */
+
+    /**
      * Conditions
      */
     stats.conditions += model.reduce((acc, play) => {

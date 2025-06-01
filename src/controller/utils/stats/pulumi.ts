@@ -91,6 +91,10 @@ export default async function (options: StatsPulumiOptions) {
      */
 
     /**
+     * No Technologies
+     */
+
+    /**
      * Conditions
      */
     ESQuery.query(AST as any, 'IfStatement').forEach(it => {

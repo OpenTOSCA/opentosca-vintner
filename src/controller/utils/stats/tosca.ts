@@ -75,6 +75,10 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     stats.artifacts = vdmmStats.artifacts
 
     /**
+     * No Technologies (its part of the scenario encoded in the node type)
+     */
+
+    /**
      * Conditions, Mappings
      *
      * Substitution mapping is treated as graph replacement rule as follows:
