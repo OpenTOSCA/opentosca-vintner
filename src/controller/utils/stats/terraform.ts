@@ -33,6 +33,8 @@ export default async function (options: UtilsStatsTerraformOptions) {
     stats.loc += files.countNotBlankLines(modelFile)
     stats.models++
 
+    const locals = utils.first(model.locals ?? []) ?? {}
+
     /**
      * Inputs
      */
@@ -51,7 +53,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Properties
      */
-    stats.properties += Object.keys(utils.first(model.locals ?? [])).length
+    stats.properties += Object.keys(locals).length
     stats.properties += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         const ignore = ['source', 'count', 'host', 'depends_on']
@@ -73,7 +75,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Conditions (only support simple ternary expressions)
      */
-    stats.conditions += Object.values(utils.first(model.locals ?? [])).reduce<number>((acc, it) => {
+    stats.conditions += Object.values(locals).reduce<number>((acc, it) => {
         if (check.isString(it)) {
             return acc + countTernary(it)
         }

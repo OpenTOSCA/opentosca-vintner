@@ -101,11 +101,10 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Terraform
          */
-        // TODO: stage dir
         std.log('Terraform ...')
         store[stage].push(
             await Controller.utils.stats.terraform({
-                dir: path.join(options.dir, 'Terraform', 'stage-X'),
+                dir: path.join(options.dir, 'Terraform', stageDir),
                 experimental: true,
             })
         )

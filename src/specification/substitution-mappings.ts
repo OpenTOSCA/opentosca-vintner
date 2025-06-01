@@ -1,6 +1,6 @@
 /**
  * Substitution Mappings
- * {@link "3.8.13 Substitution mapping"}
+ * {@link search for "3.8.13 Substitution mapping" at https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/os/TOSCA-Simple-Profile-YAML-v1.3-os.html}
  */
 
 export type SubstitutionMappings = {
