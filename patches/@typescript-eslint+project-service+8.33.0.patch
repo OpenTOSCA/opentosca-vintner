@@ -1,0 +1,12 @@
+diff --git a/node_modules/@typescript-eslint/project-service/package.json b/node_modules/@typescript-eslint/project-service/package.json
+index 5be7e8b..451ab39 100644
+--- a/node_modules/@typescript-eslint/project-service/package.json
++++ b/node_modules/@typescript-eslint/project-service/package.json
+@@ -2,6 +2,7 @@
+   "name": "@typescript-eslint/project-service",
+   "version": "8.33.0",
+   "description": "Standalone TypeScript project service wrapper for linting.",
++  "main": "./dist/index.js",
+   "files": [
+     "dist",
+     "!*.tsbuildinfo",
