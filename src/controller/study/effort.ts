@@ -15,18 +15,21 @@ export default async function (options: StudyEffortOptions) {
     assert.isDefined(options.dir, 'Directory not defined')
     assert.isTrue(options.experimental)
 
-    const store: Stats.Stats[][] = []
+    const total: Stats.Stats[][] = []
+    const diff: Stats.Stats[][] = []
+
     const stages = 5
     for (let stage = 0; stage <= stages; stage++) {
         std.log('Stage', stage)
         const stageDir = 'stage-' + stage
-        store[stage] = []
+        total[stage] = []
+        diff[stage] = []
 
         /**
          * Ansible
          */
         std.log('Ansible ...')
-        store[stage].push(
+        total[stage].push(
             await Controller.utils.stats.ansible({
                 dir: path.join(options.dir, 'Ansible', stageDir),
                 experimental: true,
@@ -38,7 +41,7 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('EDMM ...')
         const edmmFiles = files.walkDirectory(path.join(options.dir, 'EDMM', stageDir))
-        store[stage].push(
+        total[stage].push(
             Stats.sum(
                 await Promise.all(
                     edmmFiles.map(file =>
@@ -55,7 +58,7 @@ export default async function (options: StudyEffortOptions) {
          * EJS
          */
         std.log('EJS ...')
-        store[stage].push(
+        total[stage].push(
             await Controller.utils.stats.ejs({
                 dir: path.join(options.dir, 'EJS', stageDir),
                 experimental: true,
@@ -70,7 +73,7 @@ export default async function (options: StudyEffortOptions) {
         let refinementFiles: string[] = []
         const refinementsDir = path.join(options.dir, 'PATTERN', 'stage-X', 'lib', 'refinements')
         if (files.isDirectory(refinementsDir)) refinementFiles = files.walkDirectory(refinementsDir)
-        store[stage].push(
+        total[stage].push(
             Stats.sum([
                 ...(await Promise.all(
                     refinementFiles.map(file =>
@@ -91,7 +94,7 @@ export default async function (options: StudyEffortOptions) {
          * Pulumi
          */
         std.log('Pulumi ...')
-        store[stage].push(
+        total[stage].push(
             await Controller.utils.stats.pulumi({
                 dir: path.join(options.dir, 'Pulumi', stageDir),
                 experimental: true,
@@ -102,7 +105,7 @@ export default async function (options: StudyEffortOptions) {
          * Terraform
          */
         std.log('Terraform ...')
-        store[stage].push(
+        total[stage].push(
             await Controller.utils.stats.terraform({
                 dir: path.join(options.dir, 'Terraform', stageDir),
                 experimental: true,
@@ -116,7 +119,7 @@ export default async function (options: StudyEffortOptions) {
         const toscaFiles = [path.join(options.dir, 'TOSCA', stageDir, 'model.yaml')]
         const substitutionsDir = path.join(options.dir, 'TOSCA', stageDir, 'lib', 'substitutions')
         if (files.isDirectory(substitutionsDir)) toscaFiles.push(...files.walkDirectory(substitutionsDir))
-        store[stage].push(
+        total[stage].push(
             Stats.sum(
                 await Promise.all(
                     toscaFiles.map(file =>
@@ -133,7 +136,7 @@ export default async function (options: StudyEffortOptions) {
          * VDMM
          */
         std.log('VDMM ...')
-        store[stage].push(
+        total[stage].push(
             await Controller.utils.stats.vdmm({
                 template: path.join(options.dir, 'VDMM', stageDir, 'model.yaml'),
                 experimental: true,
@@ -141,23 +144,16 @@ export default async function (options: StudyEffortOptions) {
         )
 
         std.log('')
-    }
 
-    /**
-     * Diff
-     */
-    // TODO: already calc this above
-    const diff: Stats.Stats[][] = []
-    for (let stage = 0; stage <= stages; stage++) {
-        const stats = store[stage]
-        diff[stage] = []
-
-        for (let index = 0; index < stats.length; index++) {
-            const current = stats[index]
+        /**
+         * Diff
+         */
+        for (let index = 0; index < total[stage].length; index++) {
+            const current = total[stage][index]
             if (stage === 0) {
                 diff[stage][index] = current
             } else {
-                const previous = store[stage - 1][index]
+                const previous = total[stage - 1][index]
 
                 if (previous.id !== current.id)
                     throw new Error(`Previous has ${previous.id} but currently is ${current.id}`)
@@ -167,7 +163,7 @@ export default async function (options: StudyEffortOptions) {
         }
 
         std.log('Stage', stage, 'Total')
-        std.log(std.table(stats))
+        std.log(std.table(total[stage]))
         std.log('Stage', stage, 'Diff')
         std.log(std.table(diff[stage]))
     }
@@ -175,5 +171,5 @@ export default async function (options: StudyEffortOptions) {
     /**
      * Return data
      */
-    files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {store, diff})
+    files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {store: total, diff})
 }

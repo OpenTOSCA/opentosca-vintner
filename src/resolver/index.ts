@@ -16,6 +16,7 @@ export type ResolveOptions = {
     presets?: string[]
     inputs?: InputAssignmentMap | string
     enrich: boolean
+    edmm?: boolean
 }
 
 export type ResolveResult = {
@@ -32,7 +33,7 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     /**
      * Resolver
      */
-    new Resolver(graph, inputs).run()
+    new Resolver(graph, inputs).run({edmm: options.edmm})
 
     return {
         inputs: inputs,

@@ -5,6 +5,7 @@ import MiniSat from 'logic-solver'
 
 export type FeatureModelOptions = {
     path: string
+    format?: string
 }
 
 export default async function (options: FeatureModelOptions) {
@@ -23,7 +24,7 @@ export default async function (options: FeatureModelOptions) {
         minisat.forbid(solution.getFormula())
     }
 
-    return solutions
+    const result = solutions
         .map(it => {
             return {
                 id: Object.entries(it.getMap())
@@ -34,6 +35,9 @@ export default async function (options: FeatureModelOptions) {
             }
         })
         .sort((a, b) => a.id.localeCompare(b.id))
+
+    options.format = options.format ?? 'yaml'
+    return files.toFormat(result, options.format)
 }
 
 function walkFeature(feature: Feature, minisat: MiniSat.Solver) {

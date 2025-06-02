@@ -11,6 +11,7 @@ export type TemplateResolveOptions = {
     output: string
     enrich?: boolean
     pretty?: boolean
+    edmm?: boolean
 }
 
 export default async function (options: TemplateResolveOptions) {
@@ -22,6 +23,7 @@ export default async function (options: TemplateResolveOptions) {
         inputs: options.inputs,
         presets: options.presets,
         enrich: options.enrich ?? false,
+        edmm: options.edmm ?? false,
     })
 
     performance.start(PERFORMANCE_RESOLVER_WRITE)

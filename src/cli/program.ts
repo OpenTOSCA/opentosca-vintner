@@ -414,6 +414,7 @@ template
     )
     .requiredOption('--output <string>', 'path of the output')
     .option('--pretty [boolean]', 'prettify output')
+    .option('--edmm [boolean]', 'edmm compatibility, e.g., use node_template.technology')
     .action(
         hae.exit(async options => {
             await Controller.template.resolve(options)
@@ -1194,9 +1195,21 @@ utils
     .command('feature-model')
     .description('returns deployment scenarios')
     .requiredOption('--path <string>', 'path to feature model')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
     .action(
         hae.exit(async options => {
-            std.out(JSON.stringify(await Controller.utils.featuremodel(options)))
+            std.out(await Controller.utils.featuremodel(options))
+        })
+    )
+
+utils
+    .command('compare-yaml')
+    .description('returns if YAMLs diff')
+    .requiredOption('--first <string>', 'path to feature model')
+    .requiredOption('--second <string>', 'path to feature model')
+    .action(
+        hae.exit(async options => {
+            await Controller.utils.compareyaml(options)
         })
     )
 
