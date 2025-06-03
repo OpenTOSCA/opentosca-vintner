@@ -37,12 +37,12 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Models
      */
-    stats.models = 1
+    stats.models += 1
 
     /**
      * LOC
      */
-    stats.loc = vdmmStats.locp
+    stats.loc += vdmmStats.locp
 
     /**
      * Inputs
@@ -101,7 +101,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     }
 
     /**
-     * Expressions (substitution directive)
+     * Expressions (substitution directive, type definitions)
      */
     stats.expressions += graph.nodes.filter(it => {
         const directives = it.raw.directives
@@ -110,6 +110,11 @@ export default async function (options: UtilsStatsTOSCAOptions) {
         }
         return false
     }).length
+    stats.expressions += vdmmStats.node_type_definitions
+    stats.expressions += vdmmStats.node_type_property_definitions
+    stats.expressions += vdmmStats.node_type_attribute_definitions
+    stats.expressions += vdmmStats.node_type_capability_definitions
+    stats.expressions += vdmmStats.node_type_requirement_definitions
 
     /**
      * Result

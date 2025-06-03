@@ -23,9 +23,11 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * VDMM Stats
      */
+    const det = asServiceTemplate(refinement.detector)
+    const ref = asServiceTemplate(refinement.solution)
     const vdmmStats = utils.sumObjects<TemplateStats>([
-        calculateStats(asServiceTemplate(refinement.detector), options.template, {full: false}),
-        calculateStats(asServiceTemplate(refinement.solution), options.template, {full: false}),
+        calculateStats(det, det, options.template, {full: false}),
+        calculateStats(ref, ref, options.template, {full: false}),
     ])
 
     /**

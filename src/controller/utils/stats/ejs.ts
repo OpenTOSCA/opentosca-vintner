@@ -37,7 +37,8 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * VDMM Stats
      */
-    const vdmmStats = calculateStats(asServiceTemplate(ejs), ejsFile, {full: false})
+    const template = asServiceTemplate(ejs)
+    const vdmmStats = calculateStats(template, template, ejsFile, {full: false})
 
     /**
      * Inputs

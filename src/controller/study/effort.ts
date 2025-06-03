@@ -116,9 +116,14 @@ export default async function (options: StudyEffortOptions) {
          * TOSCA
          */
         std.log('TOSCA ...')
-        const toscaFiles = [path.join(options.dir, 'TOSCA', stageDir, 'model.yaml')]
-        const substitutionsDir = path.join(options.dir, 'TOSCA', stageDir, 'lib', 'substitutions')
-        if (files.isDirectory(substitutionsDir)) toscaFiles.push(...files.walkDirectory(substitutionsDir))
+        const toscaBase = path.join(options.dir, 'TOSCA', stageDir)
+        const toscaLib = path.join(toscaBase, 'lib')
+        const toscaFiles = [path.join(toscaBase, 'model.yaml')]
+        if (files.isDirectory(toscaLib)) {
+            toscaFiles.push(path.join(toscaLib, 'other.yaml'))
+            toscaFiles.push(path.join(toscaLib, 'webshop.yaml'))
+            toscaFiles.push(...files.walkDirectory(path.join(toscaLib, 'substitutions')))
+        }
         total[stage].push(
             Stats.sum(
                 await Promise.all(

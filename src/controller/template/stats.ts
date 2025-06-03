@@ -36,6 +36,14 @@ export type TemplateStats = {
     locp: number
     anchors: number
     variability_inputs: number
+} & NodeTypeStats
+
+type NodeTypeStats = {
+    node_type_definitions: number
+    node_type_property_definitions: number
+    node_type_attribute_definitions: number
+    node_type_capability_definitions: number
+    node_type_requirement_definitions: number
 }
 
 export default async function (options: TemplateStatsOptions) {
@@ -47,9 +55,11 @@ export default async function (options: TemplateStatsOptions) {
     return utils.sumObjects<TemplateStats>(
         await Promise.all(
             options.template.map(async file => {
-                const template = await new Loader(file).load()
+                const loader = new Loader(file)
+                const raw = loader.raw()
+                const template = await loader.load()
 
-                return calculateStats(template, file, {guessTechnologies: options.guessTechnologies})
+                return calculateStats(template, raw, file, {guessTechnologies: options.guessTechnologies})
             })
         )
     )
@@ -57,6 +67,7 @@ export default async function (options: TemplateStatsOptions) {
 
 export function calculateStats(
     template: ServiceTemplate,
+    raw: ServiceTemplate,
     file: string,
     options: {guessTechnologies?: boolean; full?: boolean}
 ) {
@@ -99,6 +110,8 @@ export function calculateStats(
 
         anchors: graph.nodes.filter(it => it.anchor).length,
         variability_inputs: Object.keys(graph.serviceTemplate.topology_template?.variability?.inputs ?? {}).length,
+
+        ...calculateNodeTypeStats(raw),
     }
 
     /**
@@ -180,4 +193,25 @@ function countGeneratedConditions(element: Element) {
     })
 
     return count
+}
+
+function calculateNodeTypeStats(template: ServiceTemplate): NodeTypeStats {
+    return utils.sumObjects<NodeTypeStats>([
+        {
+            node_type_definitions: 0,
+            node_type_property_definitions: 0,
+            node_type_attribute_definitions: 0,
+            node_type_capability_definitions: 0,
+            node_type_requirement_definitions: 0,
+        },
+        ...Object.values(template.node_types ?? {}).map(
+            (type): NodeTypeStats => ({
+                node_type_definitions: 1,
+                node_type_property_definitions: Object.keys(type.properties ?? {}).length,
+                node_type_attribute_definitions: Object.keys(type.attributes ?? {}).length,
+                node_type_capability_definitions: Object.keys(type.capabilities ?? {}).length,
+                node_type_requirement_definitions: Object.keys(type.requirements ?? {}).length,
+            })
+        ),
+    ])
 }
