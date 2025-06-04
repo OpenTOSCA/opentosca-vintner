@@ -1,12 +1,12 @@
 diff --git a/node_modules/@typescript-eslint/visitor-keys/package.json b/node_modules/@typescript-eslint/visitor-keys/package.json
-index bd18f88..d2a6422 100644
+index 89aafa9..319cdfb 100644
 --- a/node_modules/@typescript-eslint/visitor-keys/package.json
 +++ b/node_modules/@typescript-eslint/visitor-keys/package.json
 @@ -2,6 +2,7 @@
    "name": "@typescript-eslint/visitor-keys",
-   "version": "8.33.0",
+   "version": "8.33.1",
    "description": "Visitor keys used to help traverse the TypeScript-ESTree AST",
-+  "main": "./dist/index.js",
++  "main": "index.js",
    "files": [
      "dist",
      "!*.tsbuildinfo",
