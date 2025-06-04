@@ -47,7 +47,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Inputs
      */
-    stats.inputs = vdmmStats.inputs
+    stats.inputs = graph.inputs.map(it => it.name).filter(Stats.isNotFeature).length
 
     /**
      * Outputs
@@ -62,6 +62,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Properties
      */
+    // TODO: filter for features
     stats.properties = vdmmStats.properties
 
     /**
@@ -101,7 +102,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     }
 
     /**
-     * Expressions (substitution directive, type definitions)
+     * Expressions (substitution directive, type definitions, deployment inputs as variability inputs)
      */
     stats.expressions += graph.nodes.filter(it => {
         const directives = it.raw.directives
@@ -110,11 +111,14 @@ export default async function (options: UtilsStatsTOSCAOptions) {
         }
         return false
     }).length
+
     stats.expressions += vdmmStats.node_type_definitions
     stats.expressions += vdmmStats.node_type_property_definitions
     stats.expressions += vdmmStats.node_type_attribute_definitions
     stats.expressions += vdmmStats.node_type_capability_definitions
     stats.expressions += vdmmStats.node_type_requirement_definitions
+
+    stats.expressions += graph.inputs.map(it => it.name).filter(Stats.isFeature).length
 
     /**
      * Result

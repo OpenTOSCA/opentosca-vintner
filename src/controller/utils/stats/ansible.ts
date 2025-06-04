@@ -34,7 +34,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Inputs
      */
-    stats.inputs += Object.keys(args.argument_specs.playbook.options).length
+    stats.inputs += Object.keys(args.argument_specs.playbook.options).filter(Stats.isNotFeature).length
 
     /**
      * No Outputs
@@ -109,12 +109,13 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     }, 0)
 
     /**
-     * Expressions (string interpolation in role names)
+     * Expressions (string interpolation in role names, variability inputs)
      */
     stats.expressions += model.reduce((acc, play) => {
         const roles = play.roles ?? []
         return acc + roles.reduce<number>((bbc, role) => bbc + countExpressions(role.role), 0)
     }, 0)
+    stats.expressions += Object.keys(args.argument_specs.playbook.options).filter(Stats.isFeature).length
 
     /**
      * No Mappings

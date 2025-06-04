@@ -38,8 +38,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Inputs
      */
-    const inputs = Object.keys(variables.variable).length
-    stats.inputs += inputs
+    stats.inputs += Object.keys(variables.variable).filter(Stats.isNotFeature).length
 
     /**
      * No Outputs
@@ -110,8 +109,9 @@ export default async function (options: UtilsStatsTerraformOptions) {
     }, 0)
 
     /**
-     * No Expressions
+     * Expressions (deployment inputs as variability inputs)
      */
+    stats.expressions += Object.keys(variables.variable).filter(Stats.isFeature).length
 
     /**
      * No Mappings
