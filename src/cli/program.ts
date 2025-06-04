@@ -1362,8 +1362,11 @@ study
 study
     .command('effort')
     .description('conduct effort case study')
-    .requiredOption('--dir [string]')
+    .requiredOption('--dir <string>')
+    .option('--objects [strings...]', 'objects')
     .requiredOption('--experimental', 'enable experimental feature')
+    .option('--write', 'store output')
+    .option('--no-write', 'store output')
     .action(
         hae.exit(async options => {
             await Controller.study.effort(options)

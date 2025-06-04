@@ -66,7 +66,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     stats.relations += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
 
-        acc += module.depends_on?.length ?? 0
+        acc += (module.depends_on ?? []).length
         acc += module.host ? 1 : 0
 
         return acc
@@ -85,7 +85,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
      */
     stats.conditions += Object.values(locals).reduce<number>((acc, it) => {
         if (check.isString(it)) {
-            return acc + countTernary(it)
+            return acc + countCondition(it)
         }
         return acc
     }, 0)
@@ -94,13 +94,16 @@ export default async function (options: UtilsStatsTerraformOptions) {
         return (
             acc +
             Object.entries(module).reduce<number>((bbc, [key, value]) => {
-                if (check.isString(value)) {
-                    bbc += countTernary(value)
+                if (check.isString(value) && isTernary(value)) {
+                    bbc += countCondition(value)
                 }
 
                 if (key === 'count') {
-                    if (check.isString(value) && !isTernary(value)) bbc++
+                    if (check.isString(value) && !isTernary(value)) {
+                        bbc += countCondition(value)
+                    }
                 }
+
                 return bbc
             }, 0)
         )
@@ -129,8 +132,8 @@ async function hcl2json<T>(file: string) {
     return result
 }
 
-function countTernary(value: string) {
-    return isTernary(value) ? 2 : 0
+function countCondition(value: string) {
+    return isTernary(value) ? Stats.Weights.ternary : Stats.Weights.reference
 }
 
 function isTernary(value: string) {

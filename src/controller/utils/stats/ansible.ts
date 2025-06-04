@@ -62,11 +62,10 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     }, 0)
 
     /**
-     * Relations (hosted on relations, conditional hosts count twice)
+     * Relations (hosted on relations)
      */
     stats.relations += model.reduce((acc, play) => {
-        const t = isTernary(play.hosts) ? 1 : 0
-        return acc + (play.roles ?? []).length + t
+        return acc + (play.roles ?? []).length
     }, 0)
 
     /**
@@ -155,11 +154,11 @@ type Vars = {
 }
 
 function countWhen(thing: {when?: string}) {
-    return check.isDefined(thing.when) ? 1 : 0
+    return check.isDefined(thing.when) ? Stats.Weights.reference : 0
 }
 
 function countTernary(value: string) {
-    return isTernary(value) ? 2 : 0
+    return isTernary(value) ? Stats.Weights.ternary : 0
 }
 
 function isTernary(value: string) {
@@ -167,5 +166,5 @@ function isTernary(value: string) {
 }
 
 function countExpressions(value: string) {
-    return (value.match(/\{\{/) ?? []).length
+    return (value.match(/\{\{/) ?? []).length * Stats.Weights.reference
 }

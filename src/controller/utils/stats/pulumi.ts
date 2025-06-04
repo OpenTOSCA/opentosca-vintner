@@ -78,12 +78,7 @@ export default async function (options: StatsPulumiOptions) {
         const property = it as any as ESTree.Property
         const value = property.value
         if (value.type !== 'ArrayExpression') throw new UnexpectedError()
-        value.elements.forEach(ot => {
-            assert.isDefined(ot)
-            if (ot.type === 'Identifier') return stats.relations++
-            if (ot.type === 'ConditionalExpression') return (stats.relations += 2)
-            throw new Error(`Node of type "${ot.type}" not supported`)
-        })
+        stats.relations += value.elements.length
     })
 
     /**
@@ -99,10 +94,10 @@ export default async function (options: StatsPulumiOptions) {
      */
     ESQuery.query(AST as any, 'IfStatement').forEach(it => {
         const statement = it as any as ESTree.IfStatement
-        stats.conditions++
-        if (check.isDefined(statement.alternate)) stats.conditions++
+        stats.conditions += Stats.Weights.if_then
+        if (check.isDefined(statement.alternate)) stats.conditions += Stats.Weights.if_else
     })
-    stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * 2
+    stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * Stats.Weights.ternary
 
     /**
      * No Expressions

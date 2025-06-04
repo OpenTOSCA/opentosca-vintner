@@ -4,12 +4,15 @@ import * as Stats from '#controller/utils/stats/stats'
 
 export type UtilsStatsEDMMOptions = {
     template: string
+    id?: string
     experimental: boolean
 }
 
 export default async function (options: UtilsStatsEDMMOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
+
+    options.id = options.id ?? 'EDMM'
 
     /**
      * VDMM Stats
@@ -22,7 +25,7 @@ export default async function (options: UtilsStatsEDMMOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('EDMM')
+    const stats = new Stats.Builder(options.id)
 
     /**
      * Models

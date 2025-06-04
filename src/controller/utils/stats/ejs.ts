@@ -86,7 +86,7 @@ export default async function (options: UtilsStatsEJSOptions) {
      * Expressions
      */
     stats.expressions += ESQuery.query(inputsAST as any, 'TSPropertySignature').length
-    stats.expressions += countAssignments(ejs)
+    stats.expressions += countReferences(ejs)
 
     /**
      * No Mappings
@@ -107,17 +107,17 @@ function asServiceTemplate(raw: string): ServiceTemplate {
 }
 
 function countTernaries(ejs: string) {
-    return (ejs.match(/=.*?.*:/g) ?? []).length * 2
+    return (ejs.match(/=.*?.*:/g) ?? []).length * Stats.Weights.ternary
 }
 
 function countIfs(ejs: string) {
-    return (ejs.match(/<% if /g) ?? []).length
+    return (ejs.match(/<% if /g) ?? []).length * Stats.Weights.if_then
 }
 
 function countElses(ejs: string) {
-    return (ejs.match(/<% } else { %>/g) ?? []).length
+    return (ejs.match(/<% } else { %>/g) ?? []).length * Stats.Weights.if_else
 }
 
-function countAssignments(ejs: string) {
-    return (ejs.match(/<%=\s*([^%?]*?)\s*%>/g) ?? []).length
+function countReferences(ejs: string) {
+    return (ejs.match(/<%=\s*([^%?]*?)\s*%>/g) ?? []).length * Stats.Weights.reference
 }

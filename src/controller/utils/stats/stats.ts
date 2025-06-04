@@ -1,3 +1,15 @@
+export enum Weights {
+    // TODO: local variable, attribute assignment, ...?
+    assignment = 1,
+    reference = 1,
+    if_then = 2,
+    if_else = 1,
+    if_then_else = Weights.if_then + Weights.if_else,
+    ternary = Weights.if_then_else,
+}
+
+export type Map = {[key: string]: Stats}
+
 export type Stats = {
     id: string
 
@@ -14,6 +26,7 @@ export type Stats = {
     technologies: number
 
     variability: number
+    // TODO: omit conditions in favor of expressions
     conditions: number
     expressions: number
     mappings: number
