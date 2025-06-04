@@ -1367,6 +1367,7 @@ study
     .requiredOption('--experimental', 'enable experimental feature')
     .option('--write', 'store output')
     .option('--no-write', 'store output')
+    .option('--simple', 'simple log')
     .action(
         hae.exit(async options => {
             await Controller.study.effort(options)

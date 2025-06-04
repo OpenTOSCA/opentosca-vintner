@@ -11,6 +11,7 @@ export type StudyEffortOptions = {
     objects?: string[]
     experimental: boolean
     write?: boolean
+    simple?: boolean
 }
 
 enum ID {
@@ -30,6 +31,7 @@ export default async function (options: StudyEffortOptions) {
 
     options.objects = options.objects ?? Object.values(ID)
     options.write = options.write ?? true
+    options.simple = options.simple ?? false
 
     const total: Stats.Map[] = []
     const diff: Stats.Map[] = []
@@ -195,13 +197,13 @@ export default async function (options: StudyEffortOptions) {
          * Total
          */
         std.log('Stage', stage, 'Total')
-        std.log(toTable(total[stage]))
+        std.log(toTable(total[stage], options.simple))
 
         /**
          * Diff
          */
         std.log('Stage', stage, 'Diff')
-        std.log(toTable(diff[stage]))
+        std.log(toTable(diff[stage], options.simple))
     }
 
     /**
@@ -209,7 +211,7 @@ export default async function (options: StudyEffortOptions) {
      */
     std.log('')
     std.log('Sum Diff')
-    std.log(toTable(sum))
+    std.log(toTable(sum, options.simple))
 
     /**
      * Return data
@@ -217,7 +219,17 @@ export default async function (options: StudyEffortOptions) {
     if (options.write) files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {store: total, diff, sum})
 }
 
-function toTable(map: Stats.Map): string {
+function toTable(map: Stats.Map, simple: boolean): string {
     const table = Object.values(map)
-    return std.table(table)
+    return std.table(
+        simple
+            ? table.map(stat => ({
+                  id: stat.id,
+                  models: stat.models,
+                  loc: stat.loc,
+                  elements: stat.elements,
+                  variability: stat.variability,
+              }))
+            : table
+    )
 }
