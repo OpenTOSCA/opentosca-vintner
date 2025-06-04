@@ -109,7 +109,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     }, 0)
 
     /**
-     * Expressions (deployment inputs as variability inputs)
+     * Expressions (feature deployment inputs as variability inputs)
      */
     stats.expressions += Object.keys(variables.variable).filter(Stats.isFeature).length
 

@@ -63,7 +63,6 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * Properties
      */
-    // TODO: filter for feature
     stats.properties = vdmmStats.properties
 
     /**

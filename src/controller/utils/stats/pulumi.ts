@@ -64,7 +64,6 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Properties
      */
-    // TODO: filter for features
     stats.properties += utils.sum(
         ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"] > :nth-child(2)').map(it => {
             const object = it as any as ESTree.ObjectExpression
@@ -101,7 +100,7 @@ export default async function (options: StatsPulumiOptions) {
     stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * Stats.Weights.ternary
 
     /**
-     * Expressions (deployment inputs as variability inputs)
+     * Expressions (feature deployment inputs as variability inputs)
      */
     stats.expressions += Object.keys(config.config).filter(Stats.isFeature).length
 

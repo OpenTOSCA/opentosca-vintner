@@ -4,6 +4,7 @@ import Controller from '#controller'
 import * as Stats from '#controller/utils/stats/stats'
 import Graph from '#graph/graph'
 import Loader from '#graph/loader'
+import {hotfixBratans} from '#resolver'
 
 export type UtilsStatsTOSCAOptions = {
     template: string
@@ -18,7 +19,8 @@ export default async function (options: UtilsStatsTOSCAOptions) {
      * Graph
      */
     const loader = new Loader(options.template)
-    const template = await loader.load()
+    const template = loader.raw()
+    hotfixBratans(template)
     const graph = new Graph(template)
 
     /**
@@ -62,8 +64,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Properties
      */
-    // TODO: filter for features
-    stats.properties = vdmmStats.properties
+    stats.properties = graph.properties.map(it => it.name).filter(Stats.isNotFeature).length
 
     /**
      * Relations
@@ -102,7 +103,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     }
 
     /**
-     * Expressions (substitution directive, type definitions, deployment inputs as variability inputs)
+     * Expressions (substitution directive, type definitions, feature deployment inputs as variability inputs, feature properties as variability passthrough)
      */
     stats.expressions += graph.nodes.filter(it => {
         const directives = it.raw.directives
@@ -119,6 +120,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     stats.expressions += vdmmStats.node_type_requirement_definitions
 
     stats.expressions += graph.inputs.map(it => it.name).filter(Stats.isFeature).length
+    stats.expressions += graph.properties.map(it => it.name).filter(Stats.isFeature).length
 
     /**
      * Result
