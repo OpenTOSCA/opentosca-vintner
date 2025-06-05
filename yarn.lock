@@ -2753,6 +2753,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-chai-friendly@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "eslint-plugin-chai-friendly@npm:1.0.1"
+  peerDependencies:
+    eslint: ">=3.0.0"
+  checksum: 44034bf4073c7106948978a524383313447a706946deb87c3ebffd7dfe53cce03dd76bd86f43f0edb130604d1cfc210f28a9a935da3a7bf97d16e319f4427fcd
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-check-file@npm:^2.6.2":
   version: 2.8.0
   resolution: "eslint-plugin-check-file@npm:2.8.0"
@@ -5754,6 +5763,7 @@ __metadata:
     ejs: ^3.1.10
     eslint: ^8.38.0
     eslint-config-prettier: ^8.8.0
+    eslint-plugin-chai-friendly: ^1.0.1
     eslint-plugin-check-file: ^2.6.2
     eslint-plugin-import: ^2.27.5
     esquery: ^1.6.0

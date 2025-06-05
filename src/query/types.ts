@@ -49,9 +49,9 @@ export type PathExpression = {
 
 export type PredicateExpression = {
     type: 'Predicate'
-    a: Object
+    a: object
     operator?: string
-    b?: Object
+    b?: object
 }
 
 export type RelationshipExpression = {

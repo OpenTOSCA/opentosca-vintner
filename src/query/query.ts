@@ -19,7 +19,7 @@ import {
 } from './types'
 
 export type QueryResults = {[name: string]: QueryResult}
-export type QueryResult = Object
+export type QueryResult = object
 
 /**
  * This class resolves Queries4TOSCA expressions
@@ -50,7 +50,7 @@ export class Query {
      * @param context The node that contains the query
      * @param template The template that contains the query
      */
-    resolveFromTemplate(query: string, context: string, template: ServiceTemplate): Object {
+    resolveFromTemplate(query: string, context: string, template: ServiceTemplate): object {
         this.currentTemplate = template
         this.startingContext = context
         return this.evaluateSelect(template, parse(query, 'Select'))
@@ -98,7 +98,7 @@ export class Query {
      * or a NodeTemplateMap as a result of a MATCH statement
      * @param expression The SELECT expression to evaluate
      */
-    private evaluateSelect(data: Object, expression: SelectExpression): Object {
+    private evaluateSelect(data: object, expression: SelectExpression): object {
         const results = []
         for (const p of expression.path) {
             let result = data
@@ -135,7 +135,7 @@ export class Query {
      * @param data The result data
      * @param returnVal The ReturnExpression that specifies key-value pairs to include
      */
-    private evaluateReturn(data: Object, returnVal: ReturnExpression): Object {
+    private evaluateReturn(data: object, returnVal: ReturnExpression): object {
         if (Array.isArray(data)) {
             const resultArray: any[] = []
             let i = 0
@@ -250,7 +250,7 @@ export class Query {
         return result
     }
 
-    evaluatePredicate(key: string, data: Object, predicate: PredicateExpression): boolean {
+    evaluatePredicate(key: string, data: object, predicate: PredicateExpression): boolean {
         const {a, operator, b} = predicate
         if (operator == null) {
             return this.evaluateCondition(key, data, a as ConditionExpression)
@@ -274,7 +274,7 @@ export class Query {
      * @param data The data to evaluate the condition on
      * @param condition The condition to check against the data
      */
-    private evaluateCondition(key: string, data: Object, condition: ConditionExpression): boolean {
+    private evaluateCondition(key: string, data: object, condition: ConditionExpression): boolean {
         const {variable, value, operator} = condition
         if (condition.type == 'Existence') {
             const exists = this.resolvePath(variable, data) != null
@@ -322,9 +322,9 @@ export class Query {
      * @param data Data for which all children should be returned
      * @param condition Optional condition that all elements in the result set need to fulfill
      */
-    private evaluateFilter(data: Object, condition: PredicateExpression): Object {
+    private evaluateFilter(data: object, condition: PredicateExpression): object {
         if (Array.isArray(data)) {
-            const result: Object[] = []
+            const result: object[] = []
             const keys = this.currentKeys
             this.currentKeys = []
             for (let i = 0; i < data.length; i++) {
@@ -335,11 +335,11 @@ export class Query {
             }
             return result.length > 1 ? result : result[0]
         } else {
-            return this.evaluatePredicate(this.currentKeys[0], data, condition)
+            return this.evaluatePredicate(this.currentKeys[0], data, condition) as unknown as object
         }
     }
 
-    private evaluateStep(data: Object, path: string): Object {
+    private evaluateStep(data: object, path: string): object {
         if (Array.isArray(data)) {
             let result = []
             if (path == 'name') {
@@ -356,7 +356,7 @@ export class Query {
             return result.length > 1 ? result : result[0]
         } else {
             if (path == 'name') {
-                return this.currentKeys[0]
+                return this.currentKeys[0] as unknown as object
             } else if (path == 'relationship') {
                 const name = this.resolvePath(path, data)
                 this.currentKeys = [name]
@@ -367,7 +367,7 @@ export class Query {
         }
     }
 
-    private evaluateArrayAccess(data: Object, index: number): Object {
+    private evaluateArrayAccess(data: object, index: number): object {
         if (Array.isArray(data)) {
             this.currentKeys = [this.currentKeys[index]]
             return data[index] || {}

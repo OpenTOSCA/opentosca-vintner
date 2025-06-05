@@ -1,9 +1,9 @@
-export enum Weights {
-    reference = 1,
-    if_then = 2,
-    if_else = 1,
-    if_then_else = Weights.if_then + Weights.if_else,
-    ternary = Weights.if_then_else,
+export class Weights {
+    static readonly reference = 1
+    static readonly if_then = 2
+    static readonly if_else = 1
+    static readonly if_then_else = Weights.if_then + Weights.if_else
+    static readonly ternary = Weights.if_then_else
 }
 
 export function isFeature(value: string) {

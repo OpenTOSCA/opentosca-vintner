@@ -16,10 +16,10 @@ export default class Artifact extends Element {
     readonly container: Node
 
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
 
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
 
     constructor(data: {name: string; raw: ExtendedArtifactDefinition; container: Node; index: number}) {
         super()

@@ -21,16 +21,16 @@ export default class Node extends Element {
     readonly raw: NodeTemplate
 
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
     readonly relations: Relation[] = []
     readonly ingoing: Relation[] = []
     readonly outgoing: Relation[] = []
-    readonly outgoingMap: Map<String, Relation[]> = new Map()
+    readonly outgoingMap: Map<string, Relation[]> = new Map()
     readonly groups: Group[] = []
     readonly artifacts: Artifact[] = []
-    readonly artifactsMap: Map<String, Artifact[]> = new Map()
+    readonly artifactsMap: Map<string, Artifact[]> = new Map()
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
     readonly technologies: Technology[] = []
 
     readonly weight: number = 1

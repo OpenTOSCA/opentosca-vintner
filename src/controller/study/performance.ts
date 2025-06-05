@@ -29,7 +29,7 @@ export const PERFORMANCE_RESOLVER_EDM = 'resolver_edm'
 
 export type StudyOptions = {
     config?: string
-    experimental: Boolean
+    experimental: boolean
 }
 
 export type Config = {
