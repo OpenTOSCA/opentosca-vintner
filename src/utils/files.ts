@@ -196,6 +196,7 @@ export function toFormat(obj: any, format: string, options: {latex?: LatexOption
 
 export type LatexOptions = {
     headers?: string[]
+    index?: boolean
 }
 
 export type CSVOptions = {
@@ -209,6 +210,9 @@ export function toCSV(obj: any, options: CSVOptions = {}) {
 
 export function toLatex(obj: any, options: LatexOptions = {}) {
     assert.isArray(obj)
+
+    options.index = options.index ?? true
+
     // TODO: this is dirty
     const list = obj as {[key: string]: any}[]
 
@@ -229,14 +233,14 @@ export function toLatex(obj: any, options: LatexOptions = {}) {
      * Header
      */
     data.push('\\toprule')
-    data.push('index & ' + Array.from(keys).join(' & ') + '\\\\')
+    data.push((options.index ? 'index & ' : '') + Array.from(keys).join(' & ') + '\\\\')
     data.push('\\midrule')
 
     /**
      * Entries
      */
     list.forEach((item, index) => {
-        const tmp = [index]
+        const tmp = options.index ? [index] : []
         for (const key of keys) {
             const raw = item[key]
             // TODO: not latex safe

@@ -198,18 +198,21 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('Stage', stage, 'Total')
         std.log(toTable(total[stage], options.simple))
+        std.log(toLatex(total[stage]))
 
         /**
          * Diff
          */
         std.log('Stage', stage, 'Diff')
         std.log(toTable(diff[stage], options.simple))
+        std.log(toLatex(diff[stage]))
 
         /**
          * Sum
          */
         std.log('Stage', stage, 'Sum')
         std.log(toTable(sum, options.simple))
+        std.log(toLatex(sum))
     }
 
     /**
@@ -225,10 +228,17 @@ function toTable(map: Stats.Map, simple: boolean): string {
             ? table.map(stat => ({
                   id: stat.id,
                   models: stat.models,
-                  loc: stat.loc,
                   elements: stat.elements,
                   variability: stat.variability,
+                  loc: stat.loc,
               }))
             : table
     )
+}
+
+function toLatex(map: Stats.Map): string {
+    return files.toLatex(Object.values(map), {
+        headers: ['id', 'models', 'elements', 'variability', 'loc'],
+        index: false,
+    })
 }
