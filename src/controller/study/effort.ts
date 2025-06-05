@@ -204,14 +204,13 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('Stage', stage, 'Diff')
         std.log(toTable(diff[stage], options.simple))
-    }
 
-    /**
-     * Diff
-     */
-    std.log('')
-    std.log('Sum Diff')
-    std.log(toTable(sum, options.simple))
+        /**
+         * Sum
+         */
+        std.log('Stage', stage, 'Sum')
+        std.log(toTable(sum, options.simple))
+    }
 
     /**
      * Return data
