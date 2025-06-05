@@ -138,7 +138,7 @@ export default class Artifact extends Element {
         }
     }
 
-    isArtifact() {
+    isArtifact(): this is Artifact {
         return true
     }
 

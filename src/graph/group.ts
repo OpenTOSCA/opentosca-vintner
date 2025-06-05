@@ -111,7 +111,7 @@ export default class Group extends Element {
         return {group_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
     }
 
-    isGroup() {
+    isGroup(): this is Group {
         return true
     }
 }

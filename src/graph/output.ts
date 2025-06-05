@@ -77,7 +77,7 @@ export default class Output extends Element {
         return bratify(this.graph.outputsMap.get(this.name)!.filter(it => it !== this))
     }
 
-    isOutput() {
+    isOutput(): this is Output {
         return true
     }
 

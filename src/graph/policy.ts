@@ -100,7 +100,7 @@ export default class Policy extends Element {
         return {policy_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
     }
 
-    isPolicy() {
+    isPolicy(): this is Policy {
         return true
     }
 }

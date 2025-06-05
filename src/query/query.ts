@@ -369,7 +369,7 @@ export class Query {
 
     private evaluateArrayAccess(data: Object, index: number): Object {
         if (Array.isArray(data)) {
-            this.currentKeys = [this.currentKeys[index]] || ''
+            this.currentKeys = [this.currentKeys[index]]
             return data[index] || {}
         } else {
             return index == 0 ? data : {}

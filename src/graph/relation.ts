@@ -163,7 +163,7 @@ export default class Relation extends Element {
         return new RegExp(/^(.*_)?connection(_.*)?$/).test(this.name)
     }
 
-    isRelation() {
+    isRelation(): this is Relation {
         return true
     }
 

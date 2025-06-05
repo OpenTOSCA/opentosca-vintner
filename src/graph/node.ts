@@ -257,7 +257,7 @@ export default class Node extends Element {
         return {node_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
     }
 
-    isNode() {
+    isNode(): this is Node {
         return true
     }
 
