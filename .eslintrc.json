@@ -2,12 +2,7 @@
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint", "check-file", "chai-friendly"],
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "plugin:chai-friendly/recommended"
-    ],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
     "rules": {
         "@typescript-eslint/no-unused-expressions": "off",
         "chai-friendly/no-unused-expressions": "error",
