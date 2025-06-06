@@ -24,6 +24,16 @@
     "bin": {
         "vintner": "./build/cli/index.js"
     },
+    "pkg": {
+        "targets": [
+            "node18-alpine-x64",
+            "node18-linux-x64",
+            "node18-linux-arm64",
+            "node18-win-x64"
+        ],
+        "outputPath": "dist",
+        "assets": "build/assets/**/*"
+    },
     "files": [
         "patches",
         "build",
