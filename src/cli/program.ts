@@ -1216,7 +1216,7 @@ utils
 /**
  * Stats
  */
-const stats = program.command('stats')
+const stats = program.command('stats').description('stats for various models')
 
 stats
     .command('terraform')
