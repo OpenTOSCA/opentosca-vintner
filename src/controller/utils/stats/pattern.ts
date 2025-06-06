@@ -38,7 +38,7 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * Models
      */
-    stats.models = 1
+    stats.files = 1
 
     /**
      * LOC

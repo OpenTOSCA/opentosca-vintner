@@ -23,12 +23,12 @@ export default async function (options: UtilsStatsAnsibleOptions) {
      */
     const argsFile = path.join(options.dir, 'meta', 'argument_specs.yaml')
     const args = files.loadYAML<ArgumentSpecs>(argsFile)
-    stats.models++
+    stats.files++
     stats.loc += files.countNotBlankLines(argsFile)
 
     const modelFile = path.join(options.dir, 'playbook.yaml')
     const model = files.loadYAML<Playbook>(modelFile)
-    stats.models++
+    stats.files++
     stats.loc += files.countNotBlankLines(modelFile)
 
     /**

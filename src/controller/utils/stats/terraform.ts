@@ -26,12 +26,12 @@ export default async function (options: UtilsStatsTerraformOptions) {
     const variablesFile = path.join(options.dir, 'variables.tf')
     const variables = await hcl2json<HCLVariables>(variablesFile)
     stats.loc += files.countNotBlankLines(variablesFile)
-    stats.models++
+    stats.files++
 
     const modelFile = path.join(options.dir, 'model.tf')
     const model = await hcl2json<HCLModel>(modelFile)
     stats.loc += files.countNotBlankLines(modelFile)
-    stats.models++
+    stats.files++
 
     const locals = utils.first(model.locals ?? []) ?? {}
 

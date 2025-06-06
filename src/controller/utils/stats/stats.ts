@@ -21,7 +21,7 @@ export type Map = {[key: string]: Stats}
 export type Stats = {
     id: string
 
-    models: number
+    files: number
     loc: number
 
     elements: number
@@ -43,7 +43,7 @@ export type Stats = {
 export class Builder implements Omit<Stats, 'elements' | 'variability'> {
     id: string
 
-    models = 0
+    files = 0
     loc = 0
 
     inputs = 0
@@ -65,7 +65,7 @@ export class Builder implements Omit<Stats, 'elements' | 'variability'> {
     build(): Stats {
         return {
             id: this.id,
-            models: this.models,
+            files: this.files,
             loc: this.loc,
 
             /**
@@ -103,7 +103,7 @@ export function sum(stats: Stats[]) {
     const others = stats.slice(1)
 
     for (const other of others) {
-        first.models += other.models
+        first.files += other.files
         first.loc += other.loc
         first.elements += other.elements
         first.inputs += other.inputs
@@ -126,7 +126,7 @@ export function diff(stats: Stats[]) {
     const others = stats.slice(1)
 
     for (const other of others) {
-        first.models -= other.models
+        first.files -= other.files
         first.loc -= other.loc
         first.elements -= other.elements
         first.inputs -= other.inputs

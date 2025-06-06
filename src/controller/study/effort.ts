@@ -15,13 +15,13 @@ export type StudyEffortOptions = {
 }
 
 enum ID {
-    ansible = 'Ansible',
     edmm = 'EDMM',
-    ejs = 'EJS',
-    pattern = 'PATTERN',
-    pulumi = 'Pulumi',
+    ansible = 'Ansible',
     terraform = 'Terraform',
     tosca = 'TOSCA',
+    pattern = 'PATTERN',
+    pulumi = 'Pulumi',
+    ejs = 'EJS',
     vdmm = 'VDMM',
 }
 
@@ -46,17 +46,6 @@ export default async function (options: StudyEffortOptions) {
         diff[stage] = {}
 
         /**
-         * Ansible
-         */
-        if (options.objects.includes(ID.ansible)) {
-            std.log(`${ID.ansible} ...`)
-            total[stage][ID.ansible] = await Controller.utils.stats.ansible({
-                dir: path.join(options.dir, ID.ansible, stageDir),
-                experimental: true,
-            })
-        }
-
-        /**
          * EDMM
          */
         if (options.objects.includes(ID.edmm)) {
@@ -75,14 +64,50 @@ export default async function (options: StudyEffortOptions) {
         }
 
         /**
-         * EJS
+         * Ansible
          */
-        if (options.objects.includes(ID.ejs)) {
-            std.log(`${ID.ejs} ...`)
-            total[stage][ID.ejs] = await Controller.utils.stats.ejs({
-                dir: path.join(options.dir, ID.ejs, stageDir),
+        if (options.objects.includes(ID.ansible)) {
+            std.log(`${ID.ansible} ...`)
+            total[stage][ID.ansible] = await Controller.utils.stats.ansible({
+                dir: path.join(options.dir, ID.ansible, stageDir),
                 experimental: true,
             })
+        }
+
+        /**
+         * Terraform
+         */
+        if (options.objects.includes(ID.terraform)) {
+            std.log(`${ID.terraform} ...`)
+            total[stage][ID.terraform] = await Controller.utils.stats.terraform({
+                dir: path.join(options.dir, ID.terraform, stageDir),
+                experimental: true,
+            })
+        }
+
+        /**
+         * TOSCA
+         */
+        if (options.objects.includes(ID.tosca)) {
+            std.log(`${ID.tosca} ...`)
+            const toscaBase = path.join(options.dir, ID.tosca, stageDir)
+            const toscaLib = path.join(toscaBase, 'lib')
+            const toscaFiles = [path.join(toscaBase, 'model.yaml')]
+            if (files.isDirectory(toscaLib)) {
+                toscaFiles.push(path.join(toscaLib, 'other.yaml'))
+                toscaFiles.push(path.join(toscaLib, 'webshop.yaml'))
+                toscaFiles.push(...files.walkDirectory(path.join(toscaLib, 'substitutions')))
+            }
+            total[stage][ID.tosca] = Stats.sum(
+                await Promise.all(
+                    toscaFiles.map(file =>
+                        Controller.utils.stats.tosca({
+                            template: file,
+                            experimental: true,
+                        })
+                    )
+                )
+            )
         }
 
         /**
@@ -123,39 +148,14 @@ export default async function (options: StudyEffortOptions) {
         }
 
         /**
-         * Terraform
+         * EJS
          */
-        if (options.objects.includes(ID.terraform)) {
-            std.log(`${ID.terraform} ...`)
-            total[stage][ID.terraform] = await Controller.utils.stats.terraform({
-                dir: path.join(options.dir, ID.terraform, stageDir),
+        if (options.objects.includes(ID.ejs)) {
+            std.log(`${ID.ejs} ...`)
+            total[stage][ID.ejs] = await Controller.utils.stats.ejs({
+                dir: path.join(options.dir, ID.ejs, stageDir),
                 experimental: true,
             })
-        }
-
-        /**
-         * TOSCA
-         */
-        if (options.objects.includes(ID.tosca)) {
-            std.log(`${ID.tosca} ...`)
-            const toscaBase = path.join(options.dir, ID.tosca, stageDir)
-            const toscaLib = path.join(toscaBase, 'lib')
-            const toscaFiles = [path.join(toscaBase, 'model.yaml')]
-            if (files.isDirectory(toscaLib)) {
-                toscaFiles.push(path.join(toscaLib, 'other.yaml'))
-                toscaFiles.push(path.join(toscaLib, 'webshop.yaml'))
-                toscaFiles.push(...files.walkDirectory(path.join(toscaLib, 'substitutions')))
-            }
-            total[stage][ID.tosca] = Stats.sum(
-                await Promise.all(
-                    toscaFiles.map(file =>
-                        Controller.utils.stats.tosca({
-                            template: file,
-                            experimental: true,
-                        })
-                    )
-                )
-            )
         }
 
         /**
@@ -198,6 +198,7 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('Stage', stage, 'Total')
         std.log(toTable(total[stage], options.simple))
+        std.log('Stage', stage, 'Total')
         std.log(toLatex(total[stage]))
 
         /**
@@ -205,6 +206,7 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('Stage', stage, 'Diff')
         std.log(toTable(diff[stage], options.simple))
+        std.log('Stage', stage, 'Diff')
         std.log(toLatex(diff[stage]))
 
         /**
@@ -212,6 +214,7 @@ export default async function (options: StudyEffortOptions) {
          */
         std.log('Stage', stage, 'Sum')
         std.log(toTable(sum, options.simple))
+        std.log('Stage', stage, 'Sum')
         std.log(toLatex(sum))
     }
 
@@ -227,7 +230,7 @@ function toTable(map: Stats.Map, simple: boolean): string {
         simple
             ? table.map(stat => ({
                   id: stat.id,
-                  models: stat.models,
+                  files: stat.files,
                   elements: stat.elements,
                   variability: stat.variability,
                   loc: stat.loc,
@@ -238,7 +241,7 @@ function toTable(map: Stats.Map, simple: boolean): string {
 
 function toLatex(map: Stats.Map): string {
     return files.toLatex(Object.values(map), {
-        headers: ['id', 'models', 'elements', 'variability', 'loc'],
+        headers: ['id', 'elements', 'variability', 'files', 'loc'],
         index: false,
     })
 }

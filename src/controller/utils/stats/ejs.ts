@@ -26,12 +26,12 @@ export default async function (options: UtilsStatsEJSOptions) {
      */
     const inputsFile = path.join(options.dir, 'types.ts')
     const inputsAST = TS.parse(files.loadFile(inputsFile), {})
-    stats.models += 1
+    stats.files += 1
     stats.loc = +files.countNotBlankLines(inputsFile)
 
     const ejsFile = path.join(options.dir, 'model.ejs')
     const ejs = files.loadFile(ejsFile)
-    stats.models += 1
+    stats.files += 1
     stats.loc = +files.countNotBlankLines(ejsFile)
 
     /**

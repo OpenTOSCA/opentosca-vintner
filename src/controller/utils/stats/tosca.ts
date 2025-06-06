@@ -39,7 +39,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Models
      */
-    stats.models += 1
+    stats.files += 1
 
     /**
      * LOC

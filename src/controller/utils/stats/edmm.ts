@@ -30,7 +30,7 @@ export default async function (options: UtilsStatsEDMMOptions) {
     /**
      * Models
      */
-    stats.models = 1
+    stats.files = 1
 
     /**
      * LOC

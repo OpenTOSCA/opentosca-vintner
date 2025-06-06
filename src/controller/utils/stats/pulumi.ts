@@ -38,8 +38,8 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Models
      */
-    stats.models++
-    stats.models++
+    stats.files++
+    stats.files++
 
     /**
      * LOC
