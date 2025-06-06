@@ -62,7 +62,7 @@ export default async function (options: StatsPulumiOptions) {
     stats.components += ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"]').length
 
     /**
-     * Properties
+     * Properties (resource names as compensation for variable names, properties)
      */
     stats.properties += ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"] > :nth-child(1)').length
     stats.properties += utils.sum(
