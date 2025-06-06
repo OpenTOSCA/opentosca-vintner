@@ -1213,7 +1213,10 @@ utils
         })
     )
 
-const stats = utils.command('stats')
+/**
+ * Stats
+ */
+const stats = program.command('stats')
 
 stats
     .command('terraform')
@@ -1222,7 +1225,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.terraform(options))
+            std.out(await Controller.stats.terraform(options))
         })
     )
 
@@ -1233,7 +1236,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.ansible(options))
+            std.out(await Controller.stats.ansible(options))
         })
     )
 
@@ -1244,7 +1247,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.edmm(options))
+            std.out(await Controller.stats.edmm(options))
         })
     )
 
@@ -1255,7 +1258,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.vdmm(options))
+            std.out(await Controller.stats.vdmm(options))
         })
     )
 
@@ -1266,7 +1269,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.tosca(options))
+            std.out(await Controller.stats.tosca(options))
         })
     )
 
@@ -1277,7 +1280,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.pattern(options))
+            std.out(await Controller.stats.pattern(options))
         })
     )
 
@@ -1288,7 +1291,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.ejs(options))
+            std.out(await Controller.stats.ejs(options))
         })
     )
 
@@ -1299,7 +1302,7 @@ stats
     .requiredOption('--experimental', 'enable experimental feature')
     .action(
         hae.exit(async options => {
-            std.out(await Controller.utils.stats.pulumi(options))
+            std.out(await Controller.stats.pulumi(options))
         })
     )
 

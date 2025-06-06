@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import Controller from '#controller'
-import * as Stats from '#controller/utils/stats/stats'
+import * as Stats from '#controller/stats/stats'
 import * as files from '#files'
 import std from '#std'
 import * as utils from '#utils'
@@ -54,7 +54,7 @@ export default async function (options: StudyEffortOptions) {
             total[stage][ID.edmm] = Stats.sum(
                 await Promise.all(
                     edmmFiles.map(file =>
-                        Controller.utils.stats.edmm({
+                        Controller.stats.edmm({
                             template: file,
                             experimental: true,
                         })
@@ -68,7 +68,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(ID.ansible)) {
             std.log(`${ID.ansible} ...`)
-            total[stage][ID.ansible] = await Controller.utils.stats.ansible({
+            total[stage][ID.ansible] = await Controller.stats.ansible({
                 dir: path.join(options.dir, ID.ansible, stageDir),
                 experimental: true,
             })
@@ -79,7 +79,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(ID.terraform)) {
             std.log(`${ID.terraform} ...`)
-            total[stage][ID.terraform] = await Controller.utils.stats.terraform({
+            total[stage][ID.terraform] = await Controller.stats.terraform({
                 dir: path.join(options.dir, ID.terraform, stageDir),
                 experimental: true,
             })
@@ -101,7 +101,7 @@ export default async function (options: StudyEffortOptions) {
             total[stage][ID.tosca] = Stats.sum(
                 await Promise.all(
                     toscaFiles.map(file =>
-                        Controller.utils.stats.tosca({
+                        Controller.stats.tosca({
                             template: file,
                             experimental: true,
                         })
@@ -122,13 +122,13 @@ export default async function (options: StudyEffortOptions) {
                 ...(await Promise.all(
                     refinementFiles.map(
                         async file =>
-                            await Controller.utils.stats.pattern({
+                            await Controller.stats.pattern({
                                 template: file,
                                 experimental: true,
                             })
                     )
                 )),
-                await Controller.utils.stats.edmm({
+                await Controller.stats.edmm({
                     template: path.join(options.dir, ID.pattern, stageDir, 'model.yaml'),
                     id: ID.pattern,
                     experimental: true,
@@ -141,7 +141,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(ID.pulumi)) {
             std.log(`${ID.pulumi} ...`)
-            total[stage][ID.pulumi] = await Controller.utils.stats.pulumi({
+            total[stage][ID.pulumi] = await Controller.stats.pulumi({
                 dir: path.join(options.dir, ID.pulumi, stageDir),
                 experimental: true,
             })
@@ -152,7 +152,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(ID.ejs)) {
             std.log(`${ID.ejs} ...`)
-            total[stage][ID.ejs] = await Controller.utils.stats.ejs({
+            total[stage][ID.ejs] = await Controller.stats.ejs({
                 dir: path.join(options.dir, ID.ejs, stageDir),
                 experimental: true,
             })
@@ -163,7 +163,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(ID.vdmm)) {
             std.log(`${ID.vdmm} ...`)
-            total[stage][ID.vdmm] = await Controller.utils.stats.vdmm({
+            total[stage][ID.vdmm] = await Controller.stats.vdmm({
                 template: path.join(options.dir, ID.vdmm, stageDir, 'model.yaml'),
                 experimental: true,
             })

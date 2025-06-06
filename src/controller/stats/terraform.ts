@@ -1,6 +1,6 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import * as Stats from '#controller/utils/stats/stats'
+import * as Stats from '#controller/stats/stats'
 import * as files from '#files'
 import {Shell} from '#shell'
 import * as utils from '#utils'

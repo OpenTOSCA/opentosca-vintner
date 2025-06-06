@@ -1,15 +1,18 @@
 import * as assert from '#assert'
 import Controller from '#controller'
-import * as Stats from '#controller/utils/stats/stats'
+import * as Stats from '#controller/stats/stats'
 
-export type UtilsStatsVDMMOptions = {
+export type UtilsStatsEDMMOptions = {
     template: string
+    id?: string
     experimental: boolean
 }
 
-export default async function (options: UtilsStatsVDMMOptions) {
+export default async function (options: UtilsStatsEDMMOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
+
+    options.id = options.id ?? 'EDMM'
 
     /**
      * VDMM Stats
@@ -22,7 +25,7 @@ export default async function (options: UtilsStatsVDMMOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('VDMM')
+    const stats = new Stats.Builder(options.id)
 
     /**
      * Models
@@ -70,15 +73,12 @@ export default async function (options: UtilsStatsVDMMOptions) {
     stats.technologies = vdmmStats.technologies
 
     /**
-     * Conditions
+     * No Conditions
      */
-    stats.conditions = vdmmStats.edmm_elements_conditions_manual
 
     /**
-     * Expressions
+     * No Expressions
      */
-    stats.expressions += vdmmStats.anchors
-    stats.expressions += vdmmStats.variability_inputs
 
     /**
      * No Mappings

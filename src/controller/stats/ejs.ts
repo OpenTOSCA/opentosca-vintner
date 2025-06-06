@@ -1,6 +1,6 @@
 import * as assert from '#assert'
+import * as Stats from '#controller/stats/stats'
 import {calculateStats} from '#controller/template/stats'
-import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
 import * as TS from '@typescript-eslint/parser'

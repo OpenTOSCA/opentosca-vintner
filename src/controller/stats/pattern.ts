@@ -1,6 +1,6 @@
 import * as assert from '#assert'
+import * as Stats from '#controller/stats/stats'
 import {calculateStats, TemplateStats} from '#controller/template/stats'
-import * as Stats from '#controller/utils/stats/stats'
 import * as files from '#files'
 import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {TopologyTemplate} from '#spec/topology-template'
