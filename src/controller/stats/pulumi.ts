@@ -64,6 +64,7 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Properties
      */
+    stats.properties += ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"] > :nth-child(1)').length
     stats.properties += utils.sum(
         ESQuery.query(AST as any, 'NewExpression[callee.object.name="lib"] > :nth-child(2)').map(it => {
             const object = it as any as ESTree.ObjectExpression
