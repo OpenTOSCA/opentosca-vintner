@@ -77,8 +77,9 @@ export default async function (options: UtilsStatsEDMMOptions) {
      */
 
     /**
-     * No Expressions
+     * Expressions
      */
+    stats.expressions = vdmmStats.behaviours
 
     /**
      * No Mappings

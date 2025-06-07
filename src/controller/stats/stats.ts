@@ -14,7 +14,7 @@ export function isNotFeature(value: string) {
     return !isFeature(value)
 }
 
-export const Features = ['analytics', 'analytics_advanced', 'analytics_enterprise', 'elastic']
+export const Features = ['analytics', 'analytics_advanced', 'analytics_enterprise', 'elastic', 'deployment_quality']
 
 export type Map = {[key: string]: Stats}
 

@@ -31,6 +31,7 @@ export type NodeTemplate = {
     technology?: TechnologyAssignment
     managed?: boolean
     interfaces?: InterfaceDefinitionMap
+    behaviours?: string[]
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }

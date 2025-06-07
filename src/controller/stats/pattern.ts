@@ -87,6 +87,7 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * No Expressions
      */
+    stats.expressions = vdmmStats.behaviours
 
     /**
      * Mappings

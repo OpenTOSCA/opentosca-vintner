@@ -36,6 +36,7 @@ export type TemplateStats = {
     locp: number
     anchors: number
     variability_inputs: number
+    behaviours: number
 } & NodeTypeStats
 
 type NodeTypeStats = {
@@ -110,6 +111,7 @@ export function calculateStats(
 
         anchors: graph.nodes.filter(it => it.anchor).length,
         variability_inputs: Object.keys(graph.serviceTemplate.topology_template?.variability?.inputs ?? {}).length,
+        behaviours: utils.sum(graph.nodes.map(it => (it.raw.behaviours ?? []).length)),
 
         ...calculateNodeTypeStats(raw),
     }
