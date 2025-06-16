@@ -91,7 +91,7 @@ export default async function (options: StatsPulumiOptions) {
      */
 
     /**
-     * Conditions (if, ternary, optional chain)
+     * Conditions (if, ternary, optional chain, input descriptions)
      */
     ESQuery.query(AST as any, 'IfStatement').forEach(it => {
         const statement = it as any as ESTree.IfStatement
@@ -101,6 +101,9 @@ export default async function (options: StatsPulumiOptions) {
     stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * Stats.Weights.ternary
     stats.conditions +=
         ESQuery.query(AST as any, 'MemberExpression[optional=true]').length * Stats.Weights.optional_chain
+    stats.conditions += Object.keys(config.config)
+        .filter(Stats.isNotFeature)
+        .filter(it => check.isDefined(config.config[it].description)).length
 
     /**
      * Expressions (feature deployment inputs as variability inputs)
@@ -123,5 +126,10 @@ export default async function (options: StatsPulumiOptions) {
 type ConfigFile = {
     name: string
     runtime: string
-    config: {[key: string]: any}
+    config: {
+        [key: string]: {
+            type: string
+            description: string
+        }
+    }
 }

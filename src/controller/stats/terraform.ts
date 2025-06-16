@@ -80,7 +80,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
      */
 
     /**
-     * Conditions (only support simple ternary expressions)
+     * Conditions (only support simple ternary expressions, input validation blocks)
      */
     stats.conditions += Object.values(locals).reduce<number>((acc, it) => {
         if (check.isString(it)) {
@@ -107,6 +107,9 @@ export default async function (options: UtilsStatsTerraformOptions) {
             }, 0)
         )
     }, 0)
+    stats.conditions += Object.keys(variables.variable)
+        .filter(Stats.isNotFeature)
+        .filter(it => check.isDefined(utils.first(variables.variable[it]).validation)).length
 
     /**
      * Expressions (feature deployment inputs as variability inputs)
@@ -163,6 +166,6 @@ type HCLModel = {
 
 type HCLVariables = {
     variable: {
-        [variable: string]: {type: string}[]
+        [variable: string]: {type: string; validation: any}[]
     }
 }
