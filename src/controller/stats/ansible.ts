@@ -1,6 +1,5 @@
 import * as assert from '#assert'
 import * as check from '#check'
-import Controller from '#controller'
 import * as Stats from '#controller/stats/stats'
 import * as files from '#files'
 import path from 'path'
@@ -22,14 +21,20 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Models, LOC
      */
+    const argsFile = path.join(options.dir, 'meta', 'argument_specs.yaml')
+    const args = files.loadYAML<ArgumentSpecs>(argsFile)
+    stats.files++
+    stats.loc += files.countNotBlankLines(argsFile)
+
     const modelFile = path.join(options.dir, 'playbook.yaml')
     const model = files.loadYAML<Playbook>(modelFile)
     stats.files++
     stats.loc += files.countNotBlankLines(modelFile)
 
     /**
-     * No Inputs
+     * Inputs
      */
+    stats.inputs += Object.keys(args.argument_specs.playbook.options).filter(Stats.isNotFeature).length
 
     /**
      * No Outputs
@@ -72,7 +77,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
      */
 
     /**
-     * Conditions
+     * Conditions (ternaries, when, input descriptions)
      */
     stats.conditions += model.reduce((acc, play) => {
         const roles = play.roles ?? []
@@ -102,6 +107,9 @@ export default async function (options: UtilsStatsAnsibleOptions) {
 
         return acc + countedHosts + countedWhens + countedVars
     }, 0)
+    stats.conditions += Object.keys(args.argument_specs.playbook.options)
+        .filter(Stats.isNotFeature)
+        .filter(it => check.isDefined(args.argument_specs.playbook.options[it].description)).length
 
     /**
      * Expressions (string interpolation in role names, variability inputs)
@@ -110,24 +118,29 @@ export default async function (options: UtilsStatsAnsibleOptions) {
         const roles = play.roles ?? []
         return acc + roles.reduce<number>((bbc, role) => bbc + countExpressions(role.role), 0)
     }, 0)
+    stats.expressions += Object.keys(args.argument_specs.playbook.options).filter(Stats.isFeature).length
 
     /**
      * No Mappings
      */
 
     /**
-     * Description
-     */
-    const descriptionStats = await Controller.stats.description({
-        template: path.join(options.dir, 'description.yaml'),
-        id: 'Ansible',
-        experimental: true,
-    })
-
-    /**
      * Result
      */
-    return Stats.sum([stats.build(), descriptionStats])
+    return stats.build()
+}
+
+type ArgumentSpecs = {
+    argument_specs: {
+        playbook: {
+            options: {
+                [key: string]: {
+                    type: string
+                    description: string
+                }
+            }
+        }
+    }
 }
 
 type Playbook = Play[]
