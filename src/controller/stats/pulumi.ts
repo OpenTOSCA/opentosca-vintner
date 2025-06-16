@@ -91,7 +91,7 @@ export default async function (options: StatsPulumiOptions) {
      */
 
     /**
-     * Conditions
+     * Conditions (if, ternary, optional chain)
      */
     ESQuery.query(AST as any, 'IfStatement').forEach(it => {
         const statement = it as any as ESTree.IfStatement
@@ -99,11 +99,16 @@ export default async function (options: StatsPulumiOptions) {
         if (check.isDefined(statement.alternate)) stats.conditions += Stats.Weights.if_else
     })
     stats.conditions += ESQuery.query(AST as any, 'ConditionalExpression').length * Stats.Weights.ternary
+    stats.conditions +=
+        ESQuery.query(AST as any, 'MemberExpression[optional=true]').length * Stats.Weights.optional_chain
 
     /**
      * Expressions (feature deployment inputs as variability inputs)
      */
     stats.expressions += Object.keys(config.config).filter(Stats.isFeature).length
+    stats.expressions +=
+        ESQuery.query(AST as any, 'AssignmentExpression > MemberExpression > Identifier[name="_lookup"]').length *
+        Stats.Weights.store
 
     /**
      * No Mappings

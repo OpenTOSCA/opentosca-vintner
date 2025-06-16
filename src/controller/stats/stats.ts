@@ -4,6 +4,8 @@ export class Weights {
     static readonly if_else = 1
     static readonly if_then_else = Weights.if_then + Weights.if_else
     static readonly ternary = Weights.if_then_else
+    static readonly optional_chain = 1
+    static readonly store = 1
 }
 
 export function isFeature(value: string) {
