@@ -87,6 +87,8 @@ export default async function (options: UtilsStatsTOSCAOptions) {
      *      - left: component with node type and optional filters
      *      - glue: properties, capabilities, and requirements mapping
      *      - right: remaining elements
+     *
+     * Input descriptions are also treated as conditions
      */
     const substitution = template.topology_template?.substitution_mappings
     if (check.isDefined(substitution)) {
@@ -101,6 +103,11 @@ export default async function (options: UtilsStatsTOSCAOptions) {
 
         // Right already covered by VDMMStats
     }
+
+    stats.conditions += graph.inputs
+        .map(it => it.name)
+        .filter(Stats.isNotFeature)
+        .filter(it => check.isDefined(graph.getInput(it).raw.description)).length
 
     /**
      * Expressions (substitution directive, type definitions, feature deployment inputs as variability inputs, feature properties as variability passthrough)
