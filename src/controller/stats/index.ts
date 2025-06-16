@@ -1,4 +1,5 @@
 import _ansible from './ansible'
+import _description from './description'
 import _edmm from './edmm'
 import _ejs from './ejs'
 import _pattern from './pattern'
@@ -16,4 +17,5 @@ export default {
     pattern: _pattern,
     ejs: _ejs,
     pulumi: _pulumi,
+    description: _description,
 }

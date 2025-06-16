@@ -1230,6 +1230,17 @@ stats
     )
 
 stats
+    .command('description')
+    .description('returns description stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.description(options))
+        })
+    )
+
+stats
     .command('ansible')
     .description('returns ansible stats')
     .requiredOption('--dir <string>', 'directory')
