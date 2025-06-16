@@ -1,9 +1,11 @@
 import * as assert from '#assert'
-import Controller from '#controller'
+import * as check from '#check'
 import * as Stats from '#controller/stats/stats'
 import {calculateStats} from '#controller/template/stats'
 import * as files from '#files'
 import {ServiceTemplate} from '#spec/service-template'
+import * as TS from '@typescript-eslint/parser'
+import * as ESQuery from 'esquery'
 import path from 'path'
 
 export type UtilsStatsEJSOptions = {
@@ -23,6 +25,15 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Models, LOC
      */
+
+    const inputsFile = path.join(options.dir, 'types.ts')
+    const inputsExists = files.exists(inputsFile)
+    const inputsAST = inputsExists ? TS.parse(files.loadFile(inputsFile), {}) : undefined
+    if (check.isDefined(inputsAST)) {
+        stats.files += 1
+        stats.loc = +files.countNotBlankLines(inputsFile)
+    }
+
     const ejsFile = path.join(options.dir, 'model.ejs')
     const ejs = files.loadFile(ejsFile)
     stats.files += 1
@@ -79,6 +90,7 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Expressions
      */
+    stats.expressions += check.isDefined(inputsAST) ? ESQuery.query(inputsAST as any, 'TSPropertySignature').length : 0
     stats.expressions += countReferences(ejs)
 
     /**
@@ -86,22 +98,9 @@ export default async function (options: UtilsStatsEJSOptions) {
      */
 
     /**
-     * Description
-     */
-    let descriptionStats: Stats.Stats | undefined
-    const descriptionFile = path.join(options.dir, 'description.yaml')
-    if (files.exists(descriptionFile)) {
-        descriptionStats = await Controller.stats.description({
-            template: path.join(options.dir, 'description.yaml'),
-            id: 'Ansible',
-            experimental: true,
-        })
-    }
-
-    /**
      * Result
      */
-    return descriptionStats ? Stats.sum([stats.build(), descriptionStats]) : stats.build()
+    return stats.build()
 }
 
 function asServiceTemplate(raw: string): ServiceTemplate {
