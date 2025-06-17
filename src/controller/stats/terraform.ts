@@ -18,7 +18,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('Terraform')
+    const stats = new Stats.Builder(Stats.ID.terraform)
 
     /**
      * Model, LOC

@@ -34,7 +34,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('TOSCA')
+    const stats = new Stats.Builder(Stats.ID.tosca)
 
     /**
      * Models

@@ -16,7 +16,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('Ansible')
+    const stats = new Stats.Builder(Stats.ID.ansible)
 
     /**
      * Models, LOC

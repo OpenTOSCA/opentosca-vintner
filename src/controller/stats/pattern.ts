@@ -33,7 +33,7 @@ export default async function (options: UtilsStatsPATTERNOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('PATTERN')
+    const stats = new Stats.Builder(Stats.ID.pattern)
 
     /**
      * Models

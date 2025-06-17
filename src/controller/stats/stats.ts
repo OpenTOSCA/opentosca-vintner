@@ -1,3 +1,15 @@
+export enum ID {
+    edmm = 'EDMM',
+    ansible = 'Ansible',
+    terraform = 'Terraform',
+    tosca_fm = 'TOSCA-FM',
+    tosca = 'TOSCA',
+    pattern = 'PATTERN',
+    pulumi = 'Pulumi',
+    ejs = 'EJS',
+    vdmm = 'VDMM',
+}
+
 export class Weights {
     static readonly reference = 1
     static readonly if_then = 2

@@ -20,7 +20,7 @@ export default async function (options: UtilsStatsEJSOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('EJS')
+    const stats = new Stats.Builder(Stats.ID.ejs)
 
     /**
      * Models, LOC

@@ -12,7 +12,7 @@ export default async function (options: UtilsStatsEDMMOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
 
-    options.id = options.id ?? 'EDMM'
+    options.id = options.id ?? Stats.ID.edmm
 
     /**
      * VDMM Stats

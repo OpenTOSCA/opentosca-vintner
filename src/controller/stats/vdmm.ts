@@ -22,7 +22,7 @@ export default async function (options: UtilsStatsVDMMOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('VDMM')
+    const stats = new Stats.Builder(Stats.ID.vdmm)
 
     /**
      * Models

@@ -33,7 +33,7 @@ export default async function (options: StatsPulumiOptions) {
     /**
      * Stats
      */
-    const stats = new Stats.Builder('Pulumi')
+    const stats = new Stats.Builder(Stats.ID.pulumi)
 
     /**
      * Models

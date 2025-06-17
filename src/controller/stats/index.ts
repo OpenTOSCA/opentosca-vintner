@@ -6,6 +6,7 @@ import _pattern from './pattern'
 import _pulumi from './pulumi'
 import _terraform from './terraform'
 import _tosca from './tosca'
+import _toscafm from './tosca-fm'
 import _vdmm from './vdmm'
 
 export default {
@@ -18,4 +19,5 @@ export default {
     ejs: _ejs,
     pulumi: _pulumi,
     description: _description,
+    toscafm: _toscafm,
 }
