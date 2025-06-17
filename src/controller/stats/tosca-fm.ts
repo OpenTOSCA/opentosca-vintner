@@ -25,7 +25,6 @@ export default async function (options: UtilsStatsTOSCAFMOptions) {
               full: false,
           })
         : undefined
-    console.log(mappingStats)
 
     /**
      * Service Template

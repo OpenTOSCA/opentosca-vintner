@@ -196,10 +196,12 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Total
          */
-        std.log('Stage', stage, 'Total')
-        std.log(toTable(total[stage], options.simple))
-        std.log('Stage', stage, 'Total')
-        std.log(toLatex(total[stage]))
+        if (!options.simple) {
+            std.log('Stage', stage, 'Total')
+            std.log(toTable(total[stage], options.simple))
+            std.log('Stage', stage, 'Total')
+            std.log(toLatex(total[stage]))
+        }
 
         /**
          * Diff
@@ -212,10 +214,12 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Sum
          */
-        std.log('Stage', stage, 'Sum')
-        std.log(toTable(sum, options.simple))
-        std.log('Stage', stage, 'Sum')
-        std.log(toLatex(sum))
+        if (!options.simple || stage === stages) {
+            std.log('Stage', stage, 'Sum')
+            std.log(toTable(sum, options.simple))
+            std.log('Stage', stage, 'Sum')
+            std.log(toLatex(sum))
+        }
     }
 
     /**
