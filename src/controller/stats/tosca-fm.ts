@@ -22,6 +22,7 @@ export default async function (options: UtilsStatsTOSCAFMOptions) {
         ? await Controller.stats.tosca({
               template: mappingFile,
               experimental: true,
+              full: false,
           })
         : undefined
     console.log(mappingStats)
@@ -33,6 +34,7 @@ export default async function (options: UtilsStatsTOSCAFMOptions) {
     const templateStats = await Controller.stats.tosca({
         template: templateFile,
         experimental: true,
+        full: false,
     })
 
     /**

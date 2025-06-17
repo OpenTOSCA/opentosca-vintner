@@ -8,12 +8,14 @@ import {hotfixBratans} from '#resolver'
 
 export type UtilsStatsTOSCAOptions = {
     template: string
+    full?: boolean
     experimental: boolean
 }
 
 export default async function (options: UtilsStatsTOSCAOptions) {
     assert.isDefined(options.template, 'Template not defined')
     assert.isTrue(options.experimental)
+    options.full = options.full ?? true
 
     /**
      * Graph
@@ -21,7 +23,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     const loader = new Loader(options.template)
     const template = loader.raw()
     hotfixBratans(template)
-    const graph = new Graph(template)
+    const graph = new Graph(template, {full: options.full})
 
     /**
      * VDMM Stats
@@ -29,6 +31,7 @@ export default async function (options: UtilsStatsTOSCAOptions) {
     const vdmmStats = await Controller.template.stats({
         template: [options.template],
         experimental: true,
+        full: options.full,
     })
 
     /**

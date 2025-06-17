@@ -13,6 +13,7 @@ export type TemplateStatsOptions = {
     template: string[]
     experimental?: boolean
     guessTechnologies?: boolean
+    full?: boolean
 }
 
 export type TemplateStats = {
@@ -60,7 +61,10 @@ export default async function (options: TemplateStatsOptions) {
                 const raw = loader.raw()
                 const template = await loader.load()
 
-                return calculateStats(template, raw, file, {guessTechnologies: options.guessTechnologies})
+                return calculateStats(template, raw, file, {
+                    guessTechnologies: options.guessTechnologies,
+                    full: options.full,
+                })
             })
         )
     )
