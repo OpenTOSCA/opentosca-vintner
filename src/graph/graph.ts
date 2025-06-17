@@ -119,6 +119,7 @@ export default class Graph {
                 TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_1,
                 TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2,
                 TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_3,
+                TOSCA_DEFINITIONS_VERSION.TOSCA_2_0,
             ].includes(this.serviceTemplate.tosca_definitions_version)
         )
             throw new Error('Unsupported TOSCA definitions version')

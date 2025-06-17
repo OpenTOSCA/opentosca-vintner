@@ -20,6 +20,7 @@ export enum TOSCA_DEFINITIONS_VERSION {
     TOSCA_VARIABILITY_1_0_RC_1 = 'tosca_variability_1_0_rc_1',
     TOSCA_VARIABILITY_1_0_RC_2 = 'tosca_variability_1_0_rc_2',
     TOSCA_VARIABILITY_1_0_RC_3 = 'tosca_variability_1_0_rc_3',
+    TOSCA_2_0 = 'tosca_2_0',
 }
 
 export type ServiceTemplate = {

@@ -234,12 +234,6 @@ export class Populator {
             const [name, raw] = utils.firstEntry(map)
             assert.isObject(raw, `Requirement assignment "${name}" of "${node.display}" not normalized`)
 
-            if (check.isObject(raw.relationship)) {
-                throw new Error(
-                    `Relation "${name}" of "${node.display}" contains a relationship template which is currently not supported`
-                )
-            }
-
             const relation = new Relation({
                 name,
                 container: node,
