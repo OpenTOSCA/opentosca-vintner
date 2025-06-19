@@ -22,17 +22,19 @@ export default async function (options: StudyEffortOptions) {
     options.write = options.write ?? true
     options.simple = options.simple ?? false
 
-    const total: Stats.Map[] = []
-    const diff: Stats.Map[] = []
-    const sum: Stats.Map = {}
+    const totalByStage: Stats.Map[] = []
+    const diffByStage: Stats.Map[] = []
+
+    const diffByObject: {[key: string]: Stats.List} = {}
+    const sumByObject: Stats.Map = {}
 
     const stages = 5
     for (let stage = 0; stage <= stages; stage++) {
         std.log('')
         std.log('Stage', stage)
         const stageDir = 'stage-' + stage
-        total[stage] = {}
-        diff[stage] = {}
+        totalByStage[stage] = {}
+        diffByStage[stage] = {}
 
         /**
          * EDMM
@@ -40,7 +42,7 @@ export default async function (options: StudyEffortOptions) {
         if (options.objects.includes(Stats.ID.edmm)) {
             std.log(`${Stats.ID.edmm} ...`)
             const edmmFiles = files.walkDirectory(path.join(options.dir, Stats.ID.edmm, stageDir))
-            total[stage][Stats.ID.edmm] = Stats.sum(
+            totalByStage[stage][Stats.ID.edmm] = Stats.sum(
                 await Promise.all(
                     edmmFiles.map(file =>
                         Controller.stats.edmm({
@@ -57,7 +59,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.ansible)) {
             std.log(`${Stats.ID.ansible} ...`)
-            total[stage][Stats.ID.ansible] = await Controller.stats.ansible({
+            totalByStage[stage][Stats.ID.ansible] = await Controller.stats.ansible({
                 dir: path.join(options.dir, Stats.ID.ansible, stageDir),
                 experimental: true,
             })
@@ -68,7 +70,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.terraform)) {
             std.log(`${Stats.ID.terraform} ...`)
-            total[stage][Stats.ID.terraform] = await Controller.stats.terraform({
+            totalByStage[stage][Stats.ID.terraform] = await Controller.stats.terraform({
                 dir: path.join(options.dir, Stats.ID.terraform, stageDir),
                 experimental: true,
             })
@@ -79,7 +81,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.tosca_fm)) {
             std.log(`${Stats.ID.tosca_fm} ...`)
-            total[stage][Stats.ID.tosca_fm] = await Controller.stats.toscafm({
+            totalByStage[stage][Stats.ID.tosca_fm] = await Controller.stats.toscafm({
                 dir: path.join(options.dir, Stats.ID.tosca_fm, stageDir),
                 experimental: true,
             })
@@ -98,7 +100,7 @@ export default async function (options: StudyEffortOptions) {
                 toscaFiles.push(path.join(toscaLib, 'webshop.yaml'))
                 toscaFiles.push(...files.walkDirectory(path.join(toscaLib, 'substitutions')))
             }
-            total[stage][Stats.ID.tosca] = Stats.sum(
+            totalByStage[stage][Stats.ID.tosca] = Stats.sum(
                 await Promise.all(
                     toscaFiles.map(file =>
                         Controller.stats.tosca({
@@ -118,7 +120,7 @@ export default async function (options: StudyEffortOptions) {
             let refinementFiles: string[] = []
             const refinementsDir = path.join(options.dir, Stats.ID.pattern, stageDir, 'lib', 'refinements')
             if (files.isDirectory(refinementsDir)) refinementFiles = files.walkDirectory(refinementsDir)
-            total[stage][Stats.ID.pattern] = Stats.sum([
+            totalByStage[stage][Stats.ID.pattern] = Stats.sum([
                 ...(await Promise.all(
                     refinementFiles.map(
                         async file =>
@@ -141,7 +143,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.pulumi)) {
             std.log(`${Stats.ID.pulumi} ...`)
-            total[stage][Stats.ID.pulumi] = await Controller.stats.pulumi({
+            totalByStage[stage][Stats.ID.pulumi] = await Controller.stats.pulumi({
                 dir: path.join(options.dir, Stats.ID.pulumi, stageDir),
                 experimental: true,
             })
@@ -152,7 +154,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.ejs)) {
             std.log(`${Stats.ID.ejs} ...`)
-            total[stage][Stats.ID.ejs] = await Controller.stats.ejs({
+            totalByStage[stage][Stats.ID.ejs] = await Controller.stats.ejs({
                 dir: path.join(options.dir, Stats.ID.ejs, stageDir),
                 experimental: true,
             })
@@ -163,7 +165,7 @@ export default async function (options: StudyEffortOptions) {
          */
         if (options.objects.includes(Stats.ID.vdmm)) {
             std.log(`${Stats.ID.vdmm} ...`)
-            total[stage][Stats.ID.vdmm] = await Controller.stats.vdmm({
+            totalByStage[stage][Stats.ID.vdmm] = await Controller.stats.vdmm({
                 template: path.join(options.dir, Stats.ID.vdmm, stageDir, 'model.yaml'),
                 experimental: true,
             })
@@ -173,22 +175,24 @@ export default async function (options: StudyEffortOptions) {
          * Diff
          */
         for (const id of Object.values(Stats.ID).filter(it => options.objects!.includes(it))) {
-            const currentTotal = total[stage][id]
+            const currentTotal = totalByStage[stage][id]
             if (stage === 0) {
-                diff[stage][id] = currentTotal
+                diffByStage[stage][id] = currentTotal
+                diffByObject[id] = [currentTotal]
             } else {
-                const previousTotal = total[stage - 1][id]
+                const previousTotal = totalByStage[stage - 1][id]
 
                 if (previousTotal.id !== currentTotal.id)
                     throw new Error(`Previous has ${previousTotal.id} but currently is ${currentTotal.id}`)
 
                 const currentDiff = Stats.diff(utils.copy([currentTotal, previousTotal]))
-                diff[stage][id] = currentDiff
+                diffByStage[stage][id] = currentDiff
+                diffByObject[id].push(utils.copy(diffByStage[stage][id]))
 
                 if (stage === 1) {
-                    sum[id] = currentDiff
+                    sumByObject[id] = currentDiff
                 } else {
-                    sum[id] = Stats.sum(utils.copy([currentDiff, sum[id]]))
+                    sumByObject[id] = Stats.sum(utils.copy([currentDiff, sumByObject[id]]))
                 }
             }
         }
@@ -196,39 +200,81 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Total
          */
-        if (!options.simple) {
-            std.log('Stage', stage, 'Total')
-            std.log(toTable(total[stage], options.simple))
-            std.log('Stage', stage, 'Total')
-            std.log(toLatex(total[stage]))
-        }
+        std.log('Stage', stage, 'Total')
+        std.log(toTableByStage(totalByStage[stage], options.simple))
+        std.log('Stage', stage, 'Total')
+        std.log(toLatexByStage(totalByStage[stage]))
 
         /**
          * Diff
          */
         std.log('Stage', stage, 'Diff')
-        std.log(toTable(diff[stage], options.simple))
+        std.log(toTableByStage(diffByStage[stage], options.simple))
         std.log('Stage', stage, 'Diff')
-        std.log(toLatex(diff[stage]))
+        std.log(toLatexByStage(diffByStage[stage]))
 
         /**
          * Sum
          */
-        if (!options.simple || stage === stages) {
-            std.log('Stage', stage, 'Sum')
-            std.log(toTable(sum, options.simple))
-            std.log('Stage', stage, 'Sum')
-            std.log(toLatex(sum))
-        }
+        std.log('Stage', stage, 'Sum')
+        std.log(toTableByStage(sumByObject, options.simple))
+        std.log('Stage', stage, 'Sum')
+        std.log(toLatexByStage(sumByObject))
+    }
+
+    std.log()
+    std.log()
+    std.log()
+    std.log()
+    std.log('---------------------------------------------------------------------------------------------------')
+    std.log()
+    std.log()
+    std.log()
+    std.log()
+    for (const id of Object.values(options.objects)) {
+        std.log(`${id} ...`)
+
+        const data = diffByObject[id]
+        const sum = sumByObject[id]
+
+        const table = data.map((stats, index) => ({stage: 'S' + index, ...stats}))
+        //table.push({stage: '0 - ' + stages, ... })
+        //table.push({stage: '1 - ' + stages, ...sum})
+
+        std.log(
+            std.table(
+                options.simple
+                    ? table.map(stat => ({
+                          stage: stat.stage,
+                          files: stat.files,
+                          elements: stat.elements,
+                          variability: stat.variability,
+                          loc: stat.loc,
+                      }))
+                    : table
+            )
+        )
+
+        std.log(
+            files.toLatex(table, {
+                headers: ['stage', 'elements', 'variability', 'files', 'loc'],
+                index: false,
+            })
+        )
     }
 
     /**
      * Return data
      */
-    if (options.write) files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {store: total, diff, sum})
+    if (options.write)
+        files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {
+            store: totalByStage,
+            diff: diffByStage,
+            sum: sumByObject,
+        })
 }
 
-function toTable(map: Stats.Map, simple: boolean): string {
+function toTableByStage(map: Stats.Map, simple: boolean): string {
     const table = Object.values(map)
     return std.table(
         simple
@@ -243,7 +289,7 @@ function toTable(map: Stats.Map, simple: boolean): string {
     )
 }
 
-function toLatex(map: Stats.Map): string {
+function toLatexByStage(map: Stats.Map): string {
     return files.toLatex(Object.values(map), {
         headers: ['id', 'elements', 'variability', 'files', 'loc'],
         index: false,

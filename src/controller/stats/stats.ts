@@ -32,6 +32,8 @@ export const Features = ['analytics', 'analytics_advanced', 'analytics_enterpris
 
 export type Map = {[key: string]: Stats}
 
+export type List = Stats[]
+
 export type Stats = {
     id: string
 
