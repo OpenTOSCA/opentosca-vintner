@@ -162,6 +162,9 @@ function countConditionsInPreamble(template: ServiceTemplate) {
 function countManualConditions(element: Element) {
     let count = 0
 
+    // Dont count them at default alternative since the [false] workaround?! is overriden in enrichment
+    if (element.defaultAlternative) return count
+
     element.conditions.forEach(it => {
         if (!check.isObject(it)) {
             count++
