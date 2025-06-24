@@ -109,17 +109,24 @@ export type NodeDefaultConditionMode =
     | 'incomingnaive-artifact-host'
     | 'incomingnaive-artifactnaive-host'
     | 'artifact-host'
-export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
+export type RelationDefaultConditionMode = 'source-target-default' | 'source' | 'target' | 'default'
 export type TechnologyDefaultConditionMode =
     | 'container'
     | 'other'
     | 'container-other'
     | 'scenario'
     | 'container-other-scenario'
+    | 'container-other-scenario-default'
+    | 'default'
 export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'default' | 'container-managed-default'
 
-export type PropertyDefaultConditionModes = 'container' | 'consuming'
-export type PropertyDefaultConditionMode = `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+export type PropertyDefaultConditionModes = 'container' | 'consuming' | 'default'
+export type PropertyDefaultConditionMode =
+    | PropertyDefaultConditionModes
+    | `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+    | `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+
+export type OutputDefaultConditionMode = 'produced' | 'default' | 'produced-default'
 
 export type DefaultOptions = {
     default_condition?: boolean

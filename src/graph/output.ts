@@ -1,4 +1,6 @@
+import {andify} from '#graph/utils'
 import {OutputDefinition} from '#spec/topology-template'
+import {ConditionsWrapper, LogicExpression, OutputDefaultConditionMode} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 
@@ -56,14 +58,39 @@ export default class Output extends Element {
         return this.raw.semantic_pruning ?? this.raw.pruning ?? this.graph.options.pruning.outputSemanticPruning
     }
 
+    get getDefaultMode(): OutputDefaultConditionMode {
+        return this.raw.default_condition_mode ?? this.graph.options.default.outputDefaultConditionMode
+    }
+
     getElementGenericCondition() {
-        return [
-            {
-                conditions: {is_produced: this.toscaId, _cached_element: this},
-                consistency: false,
-                semantic: true,
-            },
-        ]
+        const consistencies: LogicExpression[] = []
+        const semantics: LogicExpression[] = []
+
+        const mode = this.getDefaultMode
+        mode.split('-').forEach(it => {
+            if (!['produced', 'default'].includes(it))
+                throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
+
+            if (it === 'produced') {
+                return semantics.push({is_produced: this.toscaId, _cached_element: this})
+            }
+
+            if (it === 'default' && this.defaultAlternativePruningConditionAllowed) {
+                return consistencies.push(this.constructDefaultAlternativeCondition())
+            }
+        })
+
+        const wrappers: ConditionsWrapper[] = []
+
+        if (utils.isPopulated(consistencies)) {
+            wrappers.push({conditions: andify(consistencies), consistency: true, semantic: false})
+        }
+
+        if (utils.isPopulated(semantics)) {
+            wrappers.push({conditions: andify(semantics), consistency: false, semantic: true})
+        }
+
+        return wrappers
     }
 
     constructPresenceCondition() {

@@ -121,7 +121,7 @@ export default class Relation extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['source', 'target'].includes(it))
+            if (!['source', 'target', 'default'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'source') {
@@ -129,6 +129,10 @@ export default class Relation extends Element {
             }
             if (it === 'target') {
                 return conditions.push(this.target.presenceCondition)
+            }
+
+            if (it === 'default' && this.defaultAlternativePruningConditionAllowed) {
+                return conditions.push(this.constructDefaultAlternativeCondition())
             }
         })
 

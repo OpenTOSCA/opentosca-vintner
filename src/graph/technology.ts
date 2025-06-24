@@ -100,7 +100,7 @@ export default class Technology extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'other', 'scenario'].includes(it))
+            if (!['container', 'other', 'scenario', 'default'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
@@ -118,6 +118,10 @@ export default class Technology extends Element {
 
             if (it === 'other') {
                 // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+                return consistencies.push(this.constructDefaultAlternativeCondition())
+            }
+
+            if (it === 'default' && this.defaultAlternativePruningConditionAllowed) {
                 return consistencies.push(this.constructDefaultAlternativeCondition())
             }
         })

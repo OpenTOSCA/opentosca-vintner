@@ -8,6 +8,7 @@ import {NodeTemplate} from './node-template'
 import {PolicyTemplate} from './policy-template'
 import {RelationshipTemplateMap} from './relationship-template'
 import {
+    OutputDefaultConditionMode,
     ValueExpression,
     VariabilityAlternative,
     VariabilityDefinition,
@@ -44,4 +45,6 @@ export type InputAssignmentValue = string | number | boolean | InputAssignmentVa
 export type OutputDefinitionMap = {[key: string]: OutputDefinition}
 export type OutputDefinition = {
     value: any
-} & VariabilityAlternative
+} & VariabilityAlternative & {
+        default_condition_mode?: OutputDefaultConditionMode
+    }

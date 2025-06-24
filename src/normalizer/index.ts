@@ -7,6 +7,7 @@ import {
     ARTIFACT_DEFINITION_DEFAULT_TYPE,
     ArtifactDefinitionList,
     ArtifactDefinitionMap,
+    ExtendedArtifactDefinition,
 } from '#spec/artifact-definitions'
 import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
 import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
@@ -102,8 +103,10 @@ export default class Normalizer {
         }, [])
 
         // Automatic default alternative
-        const scopes = utils.groupBy(outputs, utils.firstKey)
-        Object.values(scopes).forEach(group => this.automaticDefault(group.map(utils.firstValue)))
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(outputs, utils.firstKey)
+            Object.values(scopes).forEach(group => this.automaticDefault(group.map(utils.firstValue)))
+        }
 
         this.serviceTemplate.topology_template!.outputs = outputs
     }
@@ -147,8 +150,10 @@ export default class Normalizer {
         })
 
         // Automatic default alternative
-        const scopes = utils.groupBy(template.properties, utils.firstKey)
-        Object.values(scopes).forEach(scope => this.automaticDefault(scope.map(utils.firstValue)))
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.properties, utils.firstKey)
+            Object.values(scopes).forEach(scope => this.automaticDefault(scope.map(utils.firstValue)))
+        }
     }
 
     private normalizeRelationships() {
@@ -240,28 +245,12 @@ export default class Normalizer {
         }
 
         // Automatic default alternative
-        const scopes = utils.groupBy(template.requirements as RequirementAssignmentList, utils.firstKey)
-        Object.values(scopes).forEach(scope =>
-            this.automaticDefault(scope.map(utils.firstValue) as ExtendedRequirementAssignment[])
-        )
-    }
-
-    // TODO: make this configurable via option
-    private automaticDefault(templates: VariabilityAlternative[]) {
-        if (templates.length === 1) return
-
-        const already = templates.filter(ot => check.isTrue(ot.default_alternative))
-        if (utils.isPopulated(already)) return
-
-        const candidates = templates.filter(ot => {
-            if (check.isDefined(ot.conditions)) return false
-            if (check.isDefined(ot.default_alternative)) return false
-            return true
-        })
-        if (candidates.length !== 1) return
-
-        const candidate = utils.first(candidates)
-        candidate.default_alternative = true
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.requirements as RequirementAssignmentList, utils.firstKey)
+            Object.values(scopes).forEach(scope =>
+                this.automaticDefault(scope.map(utils.firstValue) as ExtendedRequirementAssignment[])
+            )
+        }
     }
 
     private normalizeArtifacts(template: NodeTemplate) {
@@ -278,12 +267,12 @@ export default class Normalizer {
         template.artifacts.forEach(it => this.normalizeArtifact(it))
 
         // Automatic default alternative
-        /**
-        const scopes = utils.groupBy(template.artifacts as ArtifactDefinitionList, utils.firstKey)
-        Object.values(scopes).forEach(scope =>
-            this.automaticDefault(scope.map(utils.firstValue) as ExtendedArtifactDefinition[])
-        )
-            **/
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.artifacts as ArtifactDefinitionList, utils.firstKey)
+            Object.values(scopes).forEach(scope =>
+                this.automaticDefault(scope.map(utils.firstValue) as ExtendedArtifactDefinition[])
+            )
+        }
     }
 
     private normalizeArtifact(map: ArtifactDefinitionMap) {
@@ -346,7 +335,9 @@ export default class Normalizer {
         })
 
         // Automatic default alternative
-        this.automaticDefault(template.technology.map(utils.firstValue))
+        if (this.options.automaticDefaultAlternatives) {
+            this.automaticDefault(template.technology.map(utils.firstValue))
+        }
     }
 
     private normalizeTechnologyRules() {
@@ -415,6 +406,23 @@ export default class Normalizer {
         for (const [name, type] of Object.entries(this.serviceTemplate.relationship_types ?? {})) {
             if (check.isUndefined(type.derived_from)) type.derived_from = RELATIONSHIP_TYPE_ROOT
         }
+    }
+
+    private automaticDefault(templates: VariabilityAlternative[]) {
+        if (templates.length === 1) return
+
+        const already = templates.filter(ot => check.isTrue(ot.default_alternative))
+        if (utils.isPopulated(already)) return
+
+        const candidates = templates.filter(ot => {
+            if (check.isDefined(ot.conditions)) return false
+            if (check.isDefined(ot.default_alternative)) return false
+            return true
+        })
+        if (candidates.length !== 1) return
+
+        const candidate = utils.first(candidates)
+        candidate.default_alternative = true
     }
 
     private cleanVariabilityDefinition() {

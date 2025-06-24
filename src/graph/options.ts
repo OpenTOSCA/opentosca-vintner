@@ -4,6 +4,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {
     ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
+    OutputDefaultConditionMode,
     PropertyDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
@@ -69,6 +70,7 @@ class DefaultOptions extends BaseOptions {
     readonly inputDefaultSemanticCondition: boolean
 
     readonly outputDefaultCondition: boolean
+    readonly outputDefaultConditionMode: OutputDefaultConditionMode
     readonly outputDefaultConsistencyCondition: boolean
     readonly outputDefaultSemanticCondition: boolean
 
@@ -173,6 +175,10 @@ class DefaultOptions extends BaseOptions {
             this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
         assert.isBoolean(this.outputDefaultCondition)
 
+        this.outputDefaultConditionMode =
+            this.raw.artifact_default_condition_mode ?? this.v3 ? 'produced' : 'produced-default'
+        assert.isString(this.outputDefaultConditionMode)
+
         this.outputDefaultConsistencyCondition =
             this.raw.output_default_consistency_condition ??
             mode.output_default_consistency_condition ??
@@ -193,7 +199,7 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.relationDefaultCondition)
 
         this.relationDefaultConditionMode =
-            this.raw.relation_default_condition_mode ?? mode.relation_default_condition_mode ?? 'source-target'
+            this.raw.relation_default_condition_mode ?? mode.relation_default_condition_mode ?? 'source-target-default'
         assert.isString(this.relationDefaultConditionMode)
 
         this.relationDefaultConsistencyCondition =
@@ -293,7 +299,9 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.propertyDefaultCondition)
 
         this.propertyDefaultConditionMode =
-            this.raw.property_default_condition_mode ?? mode.property_default_condition_mode ?? 'container-consuming'
+            this.raw.property_default_condition_mode ??
+            mode.property_default_condition_mode ??
+            'container-consuming-default'
         assert.isString(this.propertyDefaultConditionMode)
 
         this.propertyDefaultConsistencyCondition =
@@ -337,7 +345,7 @@ class DefaultOptions extends BaseOptions {
         this.technologyDefaultConditionMode =
             this.raw.technology_default_condition_mode ??
             mode.technology_default_condition_mode ??
-            'container-other-scenario'
+            'container-other-scenario-default'
         assert.isString(this.technologyDefaultConditionMode)
 
         this.technologyDefaultConsistencyCondition =
@@ -980,6 +988,9 @@ class ConstraintsOptions extends BaseOptions {
 }
 
 export class NormalizationOptions extends BaseOptions {
+    // TODO: make this configurable
+    readonly automaticDefaultAlternatives = false
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
     }

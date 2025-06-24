@@ -405,9 +405,14 @@ export class Populator {
                 const alternative = properties.find(it => it.defaultAlternative)
                 if (check.isDefined(alternative)) return
 
+                // TODO: skip if "default" pruning condition?
+                const already = properties.find(it => it.value === VINTNER_UNDEFINED)
+                if (check.isDefined(already)) return
+
                 const some = properties[0]
                 assert.isDefined(some)
 
+                // TODO: default vs pruning
                 /**
                  * Could use default value as defined in property definition
                  * But we do not utilize default values in property definitions in VDMM.
@@ -415,9 +420,9 @@ export class Populator {
                  */
                 const raw = {
                     value: VINTNER_UNDEFINED,
-                    default_alternative: true,
-                    implied: true,
-                    pruning: true,
+                    //default_alternative: true,
+                    //implied: true,
+                    //pruning: true,
                 }
 
                 const property = new Property({
