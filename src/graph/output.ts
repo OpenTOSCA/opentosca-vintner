@@ -1,6 +1,4 @@
-import {bratify} from '#graph/utils'
 import {OutputDefinition} from '#spec/topology-template'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 
@@ -73,8 +71,8 @@ export default class Output extends Element {
     }
 
     // Check if no other output having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.graph.outputsMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.graph.outputsMap.get(this.name)!
     }
 
     isOutput(): this is Output {

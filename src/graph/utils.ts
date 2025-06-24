@@ -78,3 +78,9 @@ export function generatify(expression: LogicExpression) {
     expression._generated = true
     return expression
 }
+
+export function isManual(expression: LogicExpression) {
+    // This also includes _bratan
+    if (check.isObject(expression)) return !expression._generated
+    return true
+}

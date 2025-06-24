@@ -267,7 +267,9 @@ class DefaultOptions extends BaseOptions {
             assert.isString(this.artifactDefaultConditionMode)
         } else {
             this.artifactDefaultConditionMode =
-                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container-managed'
+                this.raw.artifact_default_condition_mode ??
+                mode.artifact_default_condition_mode ??
+                'container-managed-default'
             assert.isString(this.artifactDefaultConditionMode)
         }
 

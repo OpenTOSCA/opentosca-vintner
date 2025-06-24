@@ -7,7 +7,6 @@ import {
     ARTIFACT_DEFINITION_DEFAULT_TYPE,
     ArtifactDefinitionList,
     ArtifactDefinitionMap,
-    ExtendedArtifactDefinition,
 } from '#spec/artifact-definitions'
 import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
 import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
@@ -279,10 +278,12 @@ export default class Normalizer {
         template.artifacts.forEach(it => this.normalizeArtifact(it))
 
         // Automatic default alternative
+        /**
         const scopes = utils.groupBy(template.artifacts as ArtifactDefinitionList, utils.firstKey)
         Object.values(scopes).forEach(scope =>
             this.automaticDefault(scope.map(utils.firstValue) as ExtendedArtifactDefinition[])
         )
+            **/
     }
 
     private normalizeArtifact(map: ArtifactDefinitionMap) {

@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
-import {andify, bratify} from '#graph/utils'
+import {andify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
 import {
     ConditionsWrapper,
@@ -135,9 +135,8 @@ export default class Technology extends Element {
         return wrappers
     }
 
-    // Check if no other technology is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.technologies.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.technologies
     }
 
     constructPresenceCondition(): LogicExpression {

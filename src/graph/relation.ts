@@ -1,5 +1,5 @@
 import * as check from '#check'
-import {andify, bratify} from '#graph/utils'
+import {andify} from '#graph/utils'
 import {ExtendedRequirementAssignment} from '#spec/node-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {LogicExpression, RelationDefaultConditionMode} from '#spec/variability'
@@ -139,9 +139,8 @@ export default class Relation extends Element {
         return {relation_presence: this.toscaId, _cached_element: this}
     }
 
-    // Check if no other relation having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.source.outgoingMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.source.outgoingMap.get(this.name)!
     }
 
     getTypeCondition(type: Type): LogicExpression {

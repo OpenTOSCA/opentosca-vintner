@@ -3,6 +3,7 @@ import * as check from '#check'
 import Import from '#graph/import'
 import Output from '#graph/output'
 import Technology from '#graph/technology'
+import {bratify, isManual} from '#graph/utils'
 import {ConditionsWrapper, LogicExpression, VariabilityAlternative} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
@@ -123,8 +124,12 @@ export default abstract class Element {
 
     defaultAlternative = false
 
-    constructDefaultAlternativeCondition(): LogicExpression | undefined {
-        return undefined
+    get defaultAlternativeScope(): Element[] {
+        return []
+    }
+
+    constructDefaultAlternativeCondition(): LogicExpression {
+        return bratify(this.defaultAlternativeScope.filter(it => it !== this))
     }
 
     protected _defaultAlternativeCondition?: LogicExpression
@@ -134,6 +139,17 @@ export default abstract class Element {
         if (check.isUndefined(this._defaultAlternativeCondition))
             this._defaultAlternativeCondition = this.constructDefaultAlternativeCondition()
         return this._defaultAlternativeCondition
+    }
+
+    get defaultAlternativePruningConditionAllowed() {
+        const scope = this.defaultAlternativeScope
+        if (scope.length === 1) return false
+
+        const candidates = scope.filter(it => check.isUndefined(it.conditions.find(isManual)))
+        if (candidates.length !== 1) return false
+
+        const candidate = utils.first(candidates)
+        return candidate === this
     }
 
     get defaultEnabled() {

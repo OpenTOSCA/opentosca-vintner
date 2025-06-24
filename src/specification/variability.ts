@@ -116,7 +116,7 @@ export type TechnologyDefaultConditionMode =
     | 'container-other'
     | 'scenario'
     | 'container-other-scenario'
-export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
+export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'default' | 'container-managed-default'
 
 export type PropertyDefaultConditionModes = 'container' | 'consuming'
 export type PropertyDefaultConditionMode = `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`

@@ -5,6 +5,8 @@ topology_template:
         options:
             expected_artifact_check: false
             type_default_condition: true
+            artifact_default_condition_mode: container-default
+            artifact_default_condition: true
     node_templates:
         node_one:
             type: node

@@ -1,6 +1,6 @@
 import * as check from '#check'
 import Input from '#graph/input'
-import {andify, bratify} from '#graph/utils'
+import {andify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
@@ -122,9 +122,8 @@ export default class Property extends Element {
         return this.container.getPropertyCondition(this)
     }
 
-    // Check if no other property having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.propertiesMap.get(this.name)!
     }
 
     /**
