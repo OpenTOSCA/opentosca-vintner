@@ -2,7 +2,7 @@ import {PERFORMANCE_RESOLVER_EDM} from '#controller/study/performance'
 import Graph from '#graph/graph'
 import Checker from '#resolver/checker'
 import Solver from '#resolver/solver'
-import Transformer from '#resolver/transformer'
+import Transformer, {TransformerOptions} from '#resolver/transformer'
 import Validator from '#resolver/validator'
 import {InputAssignmentMap} from '#spec/topology-template'
 import performance from '#utils/performance'
@@ -16,7 +16,7 @@ export default class Resolver {
         this.inputs = inputs
     }
 
-    run() {
+    run(options: TransformerOptions) {
         /**
          * Validator
          */
@@ -36,7 +36,7 @@ export default class Resolver {
          * Transformer
          */
         performance.start(PERFORMANCE_RESOLVER_EDM)
-        new Transformer(this.graph).run()
+        new Transformer(this.graph, {edmm: options.edmm}).run()
         performance.stop(PERFORMANCE_RESOLVER_EDM)
     }
 

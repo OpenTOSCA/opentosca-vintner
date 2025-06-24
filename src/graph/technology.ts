@@ -144,7 +144,7 @@ export default class Technology extends Element {
         return {technology_presence: this.toscaId, _cached_element: this}
     }
 
-    isTechnology() {
+    isTechnology(): this is Technology {
         return true
     }
 

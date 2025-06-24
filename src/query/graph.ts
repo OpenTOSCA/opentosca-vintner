@@ -9,7 +9,7 @@ import Queue from '#utils/queue'
 import {PredicateExpression} from './types'
 
 type Node = {
-    data: Object
+    data: object
     relationships: Relationship[]
 }
 

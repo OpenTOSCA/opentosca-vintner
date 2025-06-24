@@ -31,7 +31,7 @@ export default class Relation extends Element {
 
     readonly groups: Group[] = []
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
 
     private _relationship?: Relationship
     set relationship(relationship: Relationship) {
@@ -49,7 +49,7 @@ export default class Relation extends Element {
     }
 
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
 
     constructor(data: {name: string; raw: ExtendedRequirementAssignment; container: Node; index: number}) {
         super()
@@ -163,7 +163,7 @@ export default class Relation extends Element {
         return new RegExp(/^(.*_)?connection(_.*)?$/).test(this.name)
     }
 
-    isRelation() {
+    isRelation(): this is Relation {
         return true
     }
 

@@ -157,7 +157,7 @@ export default class Type extends Element {
         throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
-    isType() {
+    isType(): this is Type {
         return true
     }
 

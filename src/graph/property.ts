@@ -135,7 +135,7 @@ export default class Property extends Element {
         return this.raw.implied ?? true
     }
 
-    isProperty() {
+    isProperty(): this is Property {
         return true
     }
 

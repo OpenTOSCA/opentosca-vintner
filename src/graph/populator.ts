@@ -20,11 +20,17 @@ import {TechnologyRulePluginBuilder} from '#technologies/plugins/rules'
 import * as utils from '#utils'
 import {NotImplementedError, UnexpectedError} from '#utils/error'
 
+export type PopulatorOptions = {full?: boolean}
+
 export class Populator {
     graph: Graph
+    options: PopulatorOptions
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: PopulatorOptions) {
         this.graph = graph
+
+        options.full = options.full ?? true
+        this.options = options
     }
 
     run() {
@@ -53,10 +59,10 @@ export class Populator {
         this.populateImports()
 
         // Input Consumers
-        this.populateConsumers()
+        if (this.options.full) this.populateConsumers()
 
         // Output Producers
-        this.populateProducers()
+        if (this.options.full) this.populateProducers()
 
         // Elements
         this.graph.elements = [
@@ -207,15 +213,17 @@ export class Populator {
         }
 
         // Assign ingoing relations to nodes and assign target to relation
-        this.graph.relations.forEach(relation => {
-            const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
-            const target = this.graph.nodesMap.get(targetName)
-            assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
+        if (this.options.full) {
+            this.graph.relations.forEach(relation => {
+                const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
+                const target = this.graph.nodesMap.get(targetName)
+                assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
 
-            relation.target = target
-            target.ingoing.push(relation)
-            target.relations.push(relation)
-        })
+                relation.target = target
+                target.ingoing.push(relation)
+                target.relations.push(relation)
+            })
+        }
     }
 
     private populateRelations(node: Node, template: NodeTemplate) {
@@ -225,12 +233,6 @@ export class Populator {
         for (const [index, map] of template.requirements.entries()) {
             const [name, raw] = utils.firstEntry(map)
             assert.isObject(raw, `Requirement assignment "${name}" of "${node.display}" not normalized`)
-
-            if (check.isObject(raw.relationship)) {
-                throw new Error(
-                    `Relation "${name}" of "${node.display}" contains a relationship template which is currently not supported`
-                )
-            }
 
             const relation = new Relation({
                 name,

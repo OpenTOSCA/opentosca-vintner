@@ -38,11 +38,11 @@ export function toMap(list: {name: string; value: string}[]) {
 }
 
 export function firstValue<V>(map: {[key: string]: V}): V {
-    return Object.values(map).values().next().value
+    return Object.values(map).values().next().value!
 }
 
 export function firstKey<V>(map: {[key: string]: V}): string {
-    return Object.keys(map).values().next().value
+    return Object.keys(map).values().next().value!
 }
 
 export function firstEntry<V>(map: {[key: string]: V}): [string, V] {

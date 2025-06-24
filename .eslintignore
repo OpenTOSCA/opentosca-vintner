@@ -6,6 +6,7 @@ node_modules
 **/*.min.js
 **/*.min.css
 
-docs/docs/assets/javascripts/tablesort-controller.js
+docs/docs/assets/javascripts/*
+docs/site/assets/javascripts/*
 
 examples

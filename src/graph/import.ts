@@ -25,7 +25,7 @@ export default class Import extends Element {
         return {import_presence: this.toscaId, _cached_element: this}
     }
 
-    isImport() {
+    isImport(): this is Import {
         return true
     }
 }

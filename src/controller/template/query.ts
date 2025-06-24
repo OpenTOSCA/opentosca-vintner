@@ -77,7 +77,7 @@ export class TemplateQueryResolver {
         return resolvedTemplate
     }
 
-    private runQuery(context: string, query: string): Object {
+    private runQuery(context: string, query: string): object {
         const queryResult = this.resolver.resolveFromTemplate(query, getParentNode(context), this.serviceTemplate)
         if (!queryResult)
             throw new Error(

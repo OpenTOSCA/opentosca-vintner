@@ -1022,6 +1022,7 @@ function getPruningMode(options: BaseOptions) {
         [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_1]: 'manual',
         [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_2]: 'semantic-loose',
         [TOSCA_DEFINITIONS_VERSION.TOSCA_VARIABILITY_1_0_RC_3]: 'semantic-loose',
+        [TOSCA_DEFINITIONS_VERSION.TOSCA_2_0]: 'manual',
     }
     const defaultMode = defaultModes[options.serviceTemplate.tosca_definitions_version]
     assert.isDefined(defaultMode, `Default mode for "${options.serviceTemplate.tosca_definitions_version}" unknown`)

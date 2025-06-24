@@ -1,3 +1,5 @@
+import _compareyaml from './compare-yaml'
+import _featuremodel from './feature-model'
 import _key from './key'
 import _nonce from './nonce'
 import _normative from './normative'
@@ -10,4 +12,6 @@ export default {
     normative: _normative,
     rules: _rules,
     scenarios: _scenarios,
+    featuremodel: _featuremodel,
+    compareyaml: _compareyaml,
 }

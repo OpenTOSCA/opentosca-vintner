@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
+
 import Graph from '#graph/graph'
 import {TOSCA_DEFINITIONS_VERSION} from '#spec/service-template'
 import {expect} from 'chai'

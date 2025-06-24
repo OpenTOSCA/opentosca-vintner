@@ -78,7 +78,7 @@ export default class Input extends Element {
         return bratify(this.graph.inputsMap.get(this.name)!.filter(it => it !== this))
     }
 
-    isInput() {
+    isInput(): this is Input {
         return true
     }
 

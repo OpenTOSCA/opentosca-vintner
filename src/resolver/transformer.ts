@@ -16,13 +16,19 @@ import {ElementType} from '#spec/type-assignment'
 import {VINTNER_UNDEFINED} from '#spec/variability'
 import * as utils from '#utils'
 
+export type TransformerOptions = {
+    edmm?: boolean
+}
+
 export default class Transformer {
     private readonly graph: Graph
     private readonly topology: TopologyTemplate
+    private readonly options: TransformerOptions
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: TransformerOptions) {
         this.graph = graph
         this.topology = graph.serviceTemplate.topology_template || {}
+        this.options = options
     }
 
     run() {
@@ -68,7 +74,9 @@ export default class Transformer {
         delete raw.weight
         delete raw.implies
         delete raw.implied
-        delete raw.technology
+        if (!this.options.edmm || utils.isEmpty(raw.technology)) {
+            delete raw.technology
+        }
         delete raw.managed
         delete raw.anchor
     }
@@ -279,7 +287,11 @@ export default class Transformer {
         const technology = element.technologies.find(it => it.present)
         if (check.isUndefined(technology)) throw new Error(`${element.Display} has no present technology`)
 
-        template.type = technology.assign
+        if (this.options.edmm) {
+            template.technology = technology.name
+        } else {
+            template.type = technology.assign
+        }
     }
 
     private transformProperties(
