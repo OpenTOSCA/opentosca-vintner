@@ -117,7 +117,7 @@ export default class Technology extends Element {
             }
 
             if (it === 'other') {
-                // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+                // Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
                 return consistencies.push(this.constructDefaultAlternativeCondition())
             }
 

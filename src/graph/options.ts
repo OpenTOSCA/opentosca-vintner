@@ -985,7 +985,6 @@ class ConstraintsOptions extends BaseOptions {
 
 export class NormalizationOptions extends BaseOptions {
     readonly automaticDefaultAlternatives: boolean
-
     readonly fallbackPropertyDefaultAlternative: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
