@@ -144,6 +144,7 @@ export default abstract class Element {
     get defaultAlternativePruningConditionAllowed() {
         const scope = this.defaultAlternativeScope
         if (scope.length === 1) return false
+        if (scope.length === 0) return false
 
         const candidates = scope.filter(it => check.isUndefined(it.conditions.find(isManual)))
         if (candidates.length !== 1) return false

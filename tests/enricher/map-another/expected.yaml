@@ -13,12 +13,21 @@ topology_template:
                   - key_one:
                         value:
                             some_key: some_value
+                        conditions: []
+                  - key_one:
+                        value: VINTNER_UNDEFINED
+                        implied: true
                         conditions:
+                            - node_presence: node_one
+                              _generated: true
                             - not:
                                   or:
                                       - node_property_presence:
                                             - node_one
                                             - 0
+                                      - node_property_presence:
+                                            - node_one
+                                            - 1
                               _bratan: true
               technology: []
               conditions: []

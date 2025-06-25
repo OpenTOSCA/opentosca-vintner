@@ -402,29 +402,32 @@ export class Populator {
         if (this.graph.serviceTemplate?.topology_template?.variability?.options?.bratans_unknown !== true) {
             // Ensure that there is only one default property per property name
             element.propertiesMap.forEach(properties => {
-                const alternative = properties.find(it => it.defaultAlternative)
-                if (check.isDefined(alternative)) return
-
-                // TODO: skip if "default" pruning condition?
-                const already = properties.find(it => it.value === VINTNER_UNDEFINED)
-                if (check.isDefined(already)) return
+                if (this.graph.options.v3) {
+                    const already = properties.find(it => it.value === VINTNER_UNDEFINED)
+                    if (check.isDefined(already)) return
+                } else {
+                    const alternative = properties.find(it => it.defaultAlternative)
+                    if (check.isDefined(alternative)) return
+                }
 
                 const some = properties[0]
                 assert.isDefined(some)
 
-                // TODO: default vs pruning
                 /**
                  * Could use default value as defined in property definition
                  * But we do not utilize default values in property definitions in VDMM.
                  * They are still used once deployed since we remove VINTNER_UNDEFINED later.
                  */
-                const raw = {
-                    value: VINTNER_UNDEFINED,
-                    //default_alternative: true,
-                    //implied: true,
-                    //pruning: true,
-                }
-
+                const raw = this.graph.options.v3
+                    ? {
+                          value: VINTNER_UNDEFINED,
+                      }
+                    : {
+                          value: VINTNER_UNDEFINED,
+                          default_alternative: true,
+                          implied: true,
+                          pruning: true,
+                      }
                 const property = new Property({
                     name: some.name,
                     container: some.container,

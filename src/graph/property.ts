@@ -1,6 +1,6 @@
 import * as check from '#check'
 import Input from '#graph/input'
-import {andify, isManual} from '#graph/utils'
+import {andify, bratify} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
@@ -118,24 +118,13 @@ export default class Property extends Element {
                 this.value === VINTNER_UNDEFINED ||
                 (it === 'default' && this.defaultAlternativePruningConditionAllowed)
             ) {
-                // TODO: what about this?!
-                //                     bratify(this.defaultAlternativeScope.filter(ot => ot !== this && ot.value !== VINTNER_UNDEFINED))
-                return conditions.push(this.constructDefaultAlternativeCondition())
+                return conditions.push(
+                    bratify(this.defaultAlternativeScope.filter(ot => ot !== this && ot.value !== VINTNER_UNDEFINED))
+                )
             }
         })
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
-    }
-
-    get defaultAlternativePruningConditionAllowed() {
-        const scope = this.defaultAlternativeScope
-        if (scope.length === 1) return false
-
-        const candidates = scope.filter(it => check.isUndefined(it.conditions.find(isManual)))
-        if (candidates.length !== 1) return false
-
-        const candidate = utils.first(candidates)
-        return candidate === this
     }
 
     constructPresenceCondition() {
@@ -143,7 +132,7 @@ export default class Property extends Element {
     }
 
     get defaultAlternativeScope() {
-        return this.container.propertiesMap.get(this.name)!.filter(it => it.value !== VINTNER_UNDEFINED)
+        return this.container.propertiesMap.get(this.name)!
     }
 
     /**
