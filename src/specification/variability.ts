@@ -60,7 +60,8 @@ export type SolverOptions = {
 }
 
 export type NormalizationOptions = {
-    technology_required?: boolean
+    automatic_default_alternatives?: boolean
+    fallback_property_default_alternative?: boolean
 }
 
 export type EnricherOptions = {
@@ -109,17 +110,24 @@ export type NodeDefaultConditionMode =
     | 'incomingnaive-artifact-host'
     | 'incomingnaive-artifactnaive-host'
     | 'artifact-host'
-export type RelationDefaultConditionMode = 'source-target' | 'source' | 'target'
+export type RelationDefaultConditionMode = 'source-target-default' | 'source-target' | 'source' | 'target' | 'default'
 export type TechnologyDefaultConditionMode =
     | 'container'
     | 'other'
     | 'container-other'
     | 'scenario'
     | 'container-other-scenario'
-export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'container-managed'
+    | 'container-other-scenario-default'
+    | 'default'
+export type ArtifactDefaultConditionMode = 'container' | 'managed' | 'default' | 'container-managed-default'
 
-export type PropertyDefaultConditionModes = 'container' | 'consuming'
-export type PropertyDefaultConditionMode = `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+export type PropertyDefaultConditionModes = 'container' | 'consuming' | 'default'
+export type PropertyDefaultConditionMode =
+    | PropertyDefaultConditionModes
+    | `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+    | `${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}-${PropertyDefaultConditionModes}`
+
+export type OutputDefaultConditionMode = 'produced' | 'default' | 'produced-default'
 
 export type DefaultOptions = {
     default_condition?: boolean
@@ -134,6 +142,7 @@ export type DefaultOptions = {
     node_default_semantic_condition?: boolean
 
     output_default_condition?: boolean
+    output_default_condition_mode?: OutputDefaultConditionMode
     output_default_consistency_condition?: boolean
     output_default_semantic_condition?: boolean
 

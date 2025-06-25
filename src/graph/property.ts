@@ -1,13 +1,13 @@
 import * as check from '#check'
 import Input from '#graph/input'
-import {andify, bratify} from '#graph/utils'
+import {andify, bratify, isManual} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {ConditionalPropertyAssignmentValue, PropertyAssignmentValue} from '#spec/property-assignments'
 import {RelationshipTemplate} from '#spec/relationship-template'
-import {LogicExpression, PropertyDefaultConditionMode, ValueExpression} from '#spec/variability'
+import {LogicExpression, PropertyDefaultConditionMode, ValueExpression, VINTNER_UNDEFINED} from '#spec/variability'
 import * as utils from '#utils'
 import Artifact from './artifact'
 import Element from './element'
@@ -102,7 +102,7 @@ export default class Property extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'consuming'].includes(it))
+            if (!['container', 'consuming', 'default'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
@@ -113,18 +113,40 @@ export default class Property extends Element {
                 if (utils.isEmpty(this.consuming)) return
                 return conditions.push({or: this.consuming.map(consumed => consumed.presenceCondition)})
             }
+
+            if (
+                this.value === VINTNER_UNDEFINED ||
+                (it === 'default' && this.defaultAlternativePruningConditionAllowed)
+            ) {
+                return conditions.push(
+                    bratify(this.defaultAlternativeScope.filter(ot => ot !== this && ot.value !== VINTNER_UNDEFINED))
+                )
+            }
         })
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
+    }
+
+    get defaultAlternativePruningConditionAllowed() {
+        const scope = this.defaultAlternativeScope
+        if (scope.length === 1) return false
+        if (scope.length === 0) return false
+
+        const candidates = scope
+            .filter(it => check.isUndefined(it.conditions.find(isManual)))
+            .filter(it => it.value !== VINTNER_UNDEFINED)
+        if (candidates.length !== 1) return false
+
+        const candidate = utils.first(candidates)
+        return candidate === this
     }
 
     constructPresenceCondition() {
         return this.container.getPropertyCondition(this)
     }
 
-    // Check if no other property having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.propertiesMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.propertiesMap.get(this.name)!
     }
 
     /**

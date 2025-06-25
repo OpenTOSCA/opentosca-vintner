@@ -4,6 +4,7 @@ import {ServiceTemplate, TOSCA_DEFINITIONS_VERSION} from '#spec/service-template
 import {
     ArtifactDefaultConditionMode,
     NodeDefaultConditionMode,
+    OutputDefaultConditionMode,
     PropertyDefaultConditionMode,
     RelationDefaultConditionMode,
     TechnologyDefaultConditionMode,
@@ -69,6 +70,7 @@ class DefaultOptions extends BaseOptions {
     readonly inputDefaultSemanticCondition: boolean
 
     readonly outputDefaultCondition: boolean
+    readonly outputDefaultConditionMode: OutputDefaultConditionMode
     readonly outputDefaultConsistencyCondition: boolean
     readonly outputDefaultSemanticCondition: boolean
 
@@ -173,6 +175,10 @@ class DefaultOptions extends BaseOptions {
             this.raw.output_default_condition ?? mode.output_default_condition ?? this.defaultCondition
         assert.isBoolean(this.outputDefaultCondition)
 
+        this.outputDefaultConditionMode =
+            this.raw.output_default_condition_mode ?? (this.v3 ? 'produced-default' : 'produced')
+        assert.isString(this.outputDefaultConditionMode)
+
         this.outputDefaultConsistencyCondition =
             this.raw.output_default_consistency_condition ??
             mode.output_default_consistency_condition ??
@@ -193,7 +199,9 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.relationDefaultCondition)
 
         this.relationDefaultConditionMode =
-            this.raw.relation_default_condition_mode ?? mode.relation_default_condition_mode ?? 'source-target'
+            this.raw.relation_default_condition_mode ??
+            mode.relation_default_condition_mode ??
+            (this.v3 ? 'source-target-default' : 'source-target')
         assert.isString(this.relationDefaultConditionMode)
 
         this.relationDefaultConsistencyCondition =
@@ -261,15 +269,11 @@ class DefaultOptions extends BaseOptions {
             this.raw.artifact_default_condition ?? mode.artifact_default_condition ?? this.defaultCondition
         assert.isBoolean(this.artifactDefaultCondition)
 
-        if (this.v1 || this.v2) {
-            this.artifactDefaultConditionMode =
-                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container'
-            assert.isString(this.artifactDefaultConditionMode)
-        } else {
-            this.artifactDefaultConditionMode =
-                this.raw.artifact_default_condition_mode ?? mode.artifact_default_condition_mode ?? 'container-managed'
-            assert.isString(this.artifactDefaultConditionMode)
-        }
+        this.artifactDefaultConditionMode =
+            this.raw.artifact_default_condition_mode ??
+            mode.artifact_default_condition_mode ??
+            (this.v3 ? 'container-managed-default' : 'container')
+        assert.isString(this.artifactDefaultConditionMode)
 
         this.artifactDefaultConsistencyCondition =
             this.raw.artifact_default_consistency_condition ??
@@ -291,7 +295,9 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.propertyDefaultCondition)
 
         this.propertyDefaultConditionMode =
-            this.raw.property_default_condition_mode ?? mode.property_default_condition_mode ?? 'container-consuming'
+            this.raw.property_default_condition_mode ??
+            mode.property_default_condition_mode ??
+            (this.v3 ? 'container-consuming-default' : 'container-consuming')
         assert.isString(this.propertyDefaultConditionMode)
 
         this.propertyDefaultConsistencyCondition =
@@ -335,7 +341,7 @@ class DefaultOptions extends BaseOptions {
         this.technologyDefaultConditionMode =
             this.raw.technology_default_condition_mode ??
             mode.technology_default_condition_mode ??
-            'container-other-scenario'
+            (this.v3 ? 'container-other-scenario-default' : 'container-other-scenario')
         assert.isString(this.technologyDefaultConditionMode)
 
         this.technologyDefaultConsistencyCondition =
@@ -978,8 +984,18 @@ class ConstraintsOptions extends BaseOptions {
 }
 
 export class NormalizationOptions extends BaseOptions {
+    readonly automaticDefaultAlternatives: boolean
+    readonly fallbackPropertyDefaultAlternative: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
+
+        this.automaticDefaultAlternatives = this.raw.automatic_default_alternatives ?? false
+        assert.isBoolean(this.automaticDefaultAlternatives)
+
+        this.fallbackPropertyDefaultAlternative =
+            this.raw.fallback_property_default_alternative ?? (this.v3 ? false : true)
+        assert.isBoolean(this.fallbackPropertyDefaultAlternative)
     }
 }
 

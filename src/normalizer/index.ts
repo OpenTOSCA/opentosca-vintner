@@ -7,6 +7,7 @@ import {
     ARTIFACT_DEFINITION_DEFAULT_TYPE,
     ArtifactDefinitionList,
     ArtifactDefinitionMap,
+    ExtendedArtifactDefinition,
 } from '#spec/artifact-definitions'
 import {ARTIFACT_TYPE_ROOT} from '#spec/artifact-type'
 import {CAPABILITY_TYPE_ROOT} from '#spec/capability-type'
@@ -14,7 +15,12 @@ import {DATA_TYPE_ROOT} from '#spec/data-type'
 import {GroupTemplateMap} from '#spec/group-template'
 import {GROUP_TYPE_ROOT} from '#spec/group-type'
 import {INTERFACE_TYPE_ROOT} from '#spec/interface-type'
-import {NodeTemplate, NodeTemplateMap} from '#spec/node-template'
+import {
+    ExtendedRequirementAssignment,
+    NodeTemplate,
+    NodeTemplateMap,
+    RequirementAssignmentList,
+} from '#spec/node-template'
 import {NODE_TYPE_ROOT} from '#spec/node-type'
 import {POLICY_TYPE_ROOT} from '#spec/policy-type'
 import {PropertyAssignmentList, PropertyAssignmentValue} from '#spec/property-assignments'
@@ -22,7 +28,7 @@ import {RELATIONSHIP_TYPE_ROOT} from '#spec/relationship-type'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputDefinitionMap, OutputDefinitionMap} from '#spec/topology-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {VariabilityPointList, VariabilityPointObject} from '#spec/variability'
+import {VariabilityAlternative, VariabilityPointList, VariabilityPointObject} from '#spec/variability'
 import {QUALITY_DEFAULT_WEIGHT, constructImplementationName} from '#technologies/utils'
 import * as utils from '#utils'
 
@@ -88,12 +94,21 @@ export default class Normalizer {
     private normalizeOutputs() {
         if (check.isUndefined(this.serviceTemplate.topology_template?.outputs)) return
 
-        this.serviceTemplate.topology_template!.outputs = this.getFromVariabilityPointMap(
-            this.serviceTemplate.topology_template!.outputs
-        ).reduce<OutputDefinitionMap[]>((list, map) => {
+        // Normalize
+        const outputs = this.getFromVariabilityPointMap(this.serviceTemplate.topology_template!.outputs).reduce<
+            OutputDefinitionMap[]
+        >((list, map) => {
             list.push(map)
             return list
         }, [])
+
+        // Automatic default alternative
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(outputs, utils.firstKey)
+            Object.values(scopes).forEach(group => this.automaticDefault(group.map(utils.firstValue)))
+        }
+
+        this.serviceTemplate.topology_template!.outputs = outputs
     }
 
     private getFromVariabilityPointMap<T>(data?: VariabilityPointObject<T>): {[name: string]: T}[] {
@@ -133,6 +148,12 @@ export default class Normalizer {
                 it[propertyName] = {value}
             }
         })
+
+        // Automatic default alternative
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.properties, utils.firstKey)
+            Object.values(scopes).forEach(scope => this.automaticDefault(scope.map(utils.firstValue)))
+        }
     }
 
     private normalizeRelationships() {
@@ -222,6 +243,14 @@ export default class Normalizer {
             const [relationName, assignment] = utils.firstEntry(map)
             map[relationName] = check.isString(assignment) ? {node: assignment} : assignment
         }
+
+        // Automatic default alternative
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.requirements as RequirementAssignmentList, utils.firstKey)
+            Object.values(scopes).forEach(scope =>
+                this.automaticDefault(scope.map(utils.firstValue) as ExtendedRequirementAssignment[])
+            )
+        }
     }
 
     private normalizeArtifacts(template: NodeTemplate) {
@@ -236,6 +265,14 @@ export default class Normalizer {
         }
 
         template.artifacts.forEach(it => this.normalizeArtifact(it))
+
+        // Automatic default alternative
+        if (this.options.automaticDefaultAlternatives) {
+            const scopes = utils.groupBy(template.artifacts as ArtifactDefinitionList, utils.firstKey)
+            Object.values(scopes).forEach(scope =>
+                this.automaticDefault(scope.map(utils.firstValue) as ExtendedArtifactDefinition[])
+            )
+        }
     }
 
     private normalizeArtifact(map: ArtifactDefinitionMap) {
@@ -296,6 +333,11 @@ export default class Normalizer {
                     rule: {component: type, technology: technologyName},
                 })
         })
+
+        // Automatic default alternative
+        if (this.options.automaticDefaultAlternatives) {
+            this.automaticDefault(template.technology.map(utils.firstValue))
+        }
     }
 
     private normalizeTechnologyRules() {
@@ -366,6 +408,23 @@ export default class Normalizer {
         }
     }
 
+    private automaticDefault(templates: VariabilityAlternative[]) {
+        if (templates.length === 1) return
+
+        const already = templates.filter(ot => check.isTrue(ot.default_alternative))
+        if (utils.isPopulated(already)) return
+
+        const candidates = templates.filter(ot => {
+            if (check.isDefined(ot.conditions)) return false
+            if (check.isDefined(ot.default_alternative)) return false
+            return true
+        })
+        if (candidates.length !== 1) return
+
+        const candidate = utils.first(candidates)
+        candidate.default_alternative = true
+    }
+
     private cleanVariabilityDefinition() {
         const topology = this.serviceTemplate.topology_template
 
@@ -374,7 +433,7 @@ export default class Normalizer {
 
         // Delete normalization options
         if (check.isDefined(topology.variability.options)) {
-            delete topology.variability.options.technology_required
+            delete topology.variability.options.automatic_default_alternatives
         }
 
         // Remove empty options

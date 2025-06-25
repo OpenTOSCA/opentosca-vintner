@@ -79,6 +79,7 @@ export default class Transformer {
         }
         delete raw.managed
         delete raw.anchor
+        delete raw.persistent
     }
 
     private transformNodes() {

@@ -1,0 +1,24 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    node_templates:
+        node_one:
+            type: node
+            artifacts:
+                artifact_one_one:
+                    type: artifact_b
+
+        node_two:
+            type: node
+            artifacts:
+                artifact_two_one:
+                    type: artifact
+
+        node_three:
+            type: node
+            artifacts:
+                artifact_three_one:
+                    type: artifact
+
+        node_four:
+            type: node
