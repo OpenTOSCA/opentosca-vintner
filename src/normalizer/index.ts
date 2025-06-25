@@ -433,7 +433,7 @@ export default class Normalizer {
 
         // Delete normalization options
         if (check.isDefined(topology.variability.options)) {
-            delete topology.variability.options.technology_required
+            delete topology.variability.options.automatic_default_alternatives
         }
 
         // Remove empty options

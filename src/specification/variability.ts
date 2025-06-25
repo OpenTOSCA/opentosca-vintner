@@ -60,7 +60,9 @@ export type SolverOptions = {
 }
 
 export type NormalizationOptions = {
-    technology_required?: boolean
+    automatic_default_alternatives?: boolean
+    // TODO: this
+    fallback_property_default_alternative?: boolean
 }
 
 export type EnricherOptions = {

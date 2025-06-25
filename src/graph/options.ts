@@ -176,7 +176,7 @@ class DefaultOptions extends BaseOptions {
         assert.isBoolean(this.outputDefaultCondition)
 
         this.outputDefaultConditionMode =
-            this.raw.output_default_condition_mode ?? (this.v3 ? 'produced' : 'produced-default')
+            this.raw.output_default_condition_mode ?? (this.v3 ? 'produced-default' : 'produced')
         assert.isString(this.outputDefaultConditionMode)
 
         this.outputDefaultConsistencyCondition =
@@ -984,11 +984,19 @@ class ConstraintsOptions extends BaseOptions {
 }
 
 export class NormalizationOptions extends BaseOptions {
-    // TODO: make this configurable
-    readonly automaticDefaultAlternatives = false
+    readonly automaticDefaultAlternatives: boolean
+
+    readonly fallbackPropertyDefaultAlternative: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
+
+        this.automaticDefaultAlternatives = this.raw.automatic_default_alternatives ?? false
+        assert.isBoolean(this.automaticDefaultAlternatives)
+
+        this.fallbackPropertyDefaultAlternative =
+            this.raw.fallback_property_default_alternative ?? (this.v3 ? false : true)
+        assert.isBoolean(this.fallbackPropertyDefaultAlternative)
     }
 }
 
