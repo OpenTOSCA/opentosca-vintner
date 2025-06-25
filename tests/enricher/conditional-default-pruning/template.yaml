@@ -1,0 +1,23 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+topology_template:
+    node_templates:
+        source:
+            type: source
+            managed: false
+            conditions: {equal: [value, value]}
+            requirements:
+                - relation: target
+
+        target:
+            type: target
+            managed: false
+            properties:
+                - key:
+                      value: first
+                - key:
+                      value: second
+                      conditions: false
+            artifacts:
+                artifact:
+                    file: /some/artifact

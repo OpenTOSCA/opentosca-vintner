@@ -1,6 +1,6 @@
 import * as check from '#check'
 import Input from '#graph/input'
-import {andify, bratify} from '#graph/utils'
+import {andify, bratify, isManual} from '#graph/utils'
 import {ArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
@@ -125,6 +125,20 @@ export default class Property extends Element {
         })
 
         return [{conditions: andify(conditions), consistency: true, semantic: false}]
+    }
+
+    get defaultAlternativePruningConditionAllowed() {
+        const scope = this.defaultAlternativeScope
+        if (scope.length === 1) return false
+        if (scope.length === 0) return false
+
+        const candidates = scope
+            .filter(it => check.isUndefined(it.conditions.find(isManual)))
+            .filter(it => it.value !== VINTNER_UNDEFINED)
+        if (candidates.length !== 1) return false
+
+        const candidate = utils.first(candidates)
+        return candidate === this
     }
 
     constructPresenceCondition() {
