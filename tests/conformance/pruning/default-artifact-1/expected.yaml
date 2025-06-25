@@ -1,0 +1,10 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+topology_template:
+    node_templates:
+        node_one:
+            type: node_one
+            artifacts:
+                key_one:
+                    type: any
+                    file: value_one_three

@@ -5,9 +5,4 @@ topology_template:
         node_one:
             type: node_one
             properties:
-                key_one: value_one_three
-
-        node_two:
-            type: node_two
-            properties:
-                key_two: value_two_two
+                key_one: value_one_two
