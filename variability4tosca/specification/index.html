@@ -1133,6 +1133,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#normalizer-options" class="md-nav__link">
+    Normalizer Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#constraints-options" class="md-nav__link">
     Constraints Options
   </a>
@@ -2016,6 +2023,20 @@
     <li class="md-nav__item">
       <a href="../tests/test-artifacts-container-presence-present/" class="md-nav__link">
         artifacts-container-presence-present
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-artifacts-default-alternative-automatic/" class="md-nav__link">
+        artifacts-default-alternative-automatic
       </a>
     </li>
   
@@ -5388,20 +5409,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../tests/test-properties-default-alternative-false/" class="md-nav__link">
-        properties-default-alternative-false
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../tests/test-properties-default-alternative/" class="md-nav__link">
         properties-default-alternative
       </a>
@@ -5852,6 +5859,90 @@
     <li class="md-nav__item">
       <a href="../tests/test-pruning-charlie-pruning/" class="md-nav__link">
         pruning-charlie-pruning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-artifact-1/" class="md-nav__link">
+        pruning-default-artifact-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-artifact-2/" class="md-nav__link">
+        pruning-default-artifact-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-artifact-3/" class="md-nav__link">
+        pruning-default-artifact-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-property-1/" class="md-nav__link">
+        pruning-default-property-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-property-2/" class="md-nav__link">
+        pruning-default-property-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tests/test-pruning-default-property-3/" class="md-nav__link">
+        pruning-default-property-3
       </a>
     </li>
   
@@ -8441,6 +8532,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#normalizer-options" class="md-nav__link">
+    Normalizer Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#constraints-options" class="md-nav__link">
     Constraints Options
   </a>
@@ -9259,6 +9357,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Enable default condition for outputs (consistency and semantic).</td>
 </tr>
 <tr>
+<td>output_default_condition_mode</td>
+<td>false</td>
+<td>List(produced &#124; default, -)</td>
+<td>produced</td>
+<td>Configure the default condition for outputs.</td>
+</tr>
+<tr>
 <td>output_default_consistency_condition</td>
 <td>false</td>
 <td>Boolean</td>
@@ -9282,7 +9387,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <tr>
 <td>relation_default_condition_mode</td>
 <td>false</td>
-<td>List(source &#124; target, -)</td>
+<td>List(source &#124; target &#124; default, -)</td>
 <td>source-target</td>
 <td>Configure the default condition for relations.</td>
 </tr>
@@ -9359,7 +9464,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <tr>
 <td>artifact_default_condition_mode</td>
 <td>false</td>
-<td>List(container &#124; technology, -)</td>
+<td>List(container &#124; technology &#124; default, -)</td>
 <td>container</td>
 <td>Configure the default condition for artifacts.</td>
 </tr>
@@ -9387,7 +9492,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <tr>
 <td>property_default_condition_mode</td>
 <td>false</td>
-<td>List(container &#124; consuming, -)</td>
+<td>List(container &#124; consuming &#124; default, -)</td>
 <td>container-consuming</td>
 <td>Configure the default condition for properties.</td>
 </tr>
@@ -9436,7 +9541,7 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <tr>
 <td>technology_default_condition_mode</td>
 <td>false</td>
-<td>List(container &#124; other, -)</td>
+<td>List(container &#124; other &#124; default, -)</td>
 <td>container-other-scenario</td>
 <td>Configure the default condition for (deployment) technologies.</td>
 </tr>
@@ -9999,6 +10104,35 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 </tr>
 </tbody>
 </table>
+<h3 id="normalizer-options">Normalizer Options<a class="headerlink" href="#normalizer-options" title="Permanent link">&para;</a></h3>
+<p>The following options are used to configure the normalizer.</p>
+<table>
+<thead>
+<tr>
+<th>Keyname</th>
+<th>Mandatory</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>automatic_default_alternatives</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable if default alternatives should be automatically selected.</td>
+</tr>
+<tr>
+<td>fallback_property_default_alternative</td>
+<td>false</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable if fallback properties should use default alternative flags.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="constraints-options">Constraints Options<a class="headerlink" href="#constraints-options" title="Permanent link">&para;</a></h3>
 <p><em>This is an experimental feature.</em></p>
 <p>The following options are used to configure constraints.</p>
@@ -10208,7 +10342,14 @@ Also, pruning modes consider input and output pruning.</p>
 <span class="normal"><a href="#__codelineno-4-19">19</a></span>
 <span class="normal"><a href="#__codelineno-4-20">20</a></span>
 <span class="normal"><a href="#__codelineno-4-21">21</a></span>
-<span class="normal"><a href="#__codelineno-4-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
+<span class="normal"><a href="#__codelineno-4-22">22</a></span>
+<span class="normal"><a href="#__codelineno-4-23">23</a></span>
+<span class="normal"><a href="#__codelineno-4-24">24</a></span>
+<span class="normal"><a href="#__codelineno-4-25">25</a></span>
+<span class="normal"><a href="#__codelineno-4-26">26</a></span>
+<span class="normal"><a href="#__codelineno-4-27">27</a></span>
+<span class="normal"><a href="#__codelineno-4-28">28</a></span>
+<span class="normal"><a href="#__codelineno-4-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">semantic-loose</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nt">node_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incomingnaive-artifact-host</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nt">optimization_topology</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">min</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nt">optimization_topology_unique</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -10229,7 +10370,14 @@ Also, pruning modes consider input and output pruning.</p>
 <a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="nt">enrich_technologies</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="nt">enrich_technologies_best_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="nt">enrich_implementations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23"></a><span class="nt">relation_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source-target-default</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24"></a><span class="nt">artifact_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-managed-default</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25"></a><span class="nt">output_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">produced-default</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26"></a><span class="nt">property_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-consuming-default</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27"></a><span class="nt">technology_default_condition_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">container-other-scenario-default</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28"></a>
+<a id="__codelineno-4-29" name="__codelineno-4-29"></a><span class="nt">fallback_property_default_alternative</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="default-conditions">Default Conditions<a class="headerlink" href="#default-conditions" title="Permanent link">&para;</a></h2>
 <p>There are element-generic default conditions and type-specific default conditions.
@@ -10328,7 +10476,7 @@ However, type-specific default conditions are defined per type, e.g., node type,
 </tbody>
 </table>
 <p>Thereby, we define a consistency condition a condition which targets the consistency of the metamodel, thus, ensuring that the metamodel can be correctly parsed, e.g., a property must have a container.
-In contrast,  a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.</p>
+In contrast, a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.</p>
 <p>Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.</p>
 <table>
@@ -10400,6 +10548,12 @@ The following default conditions can be chosen instead of the ones introduced ab
 <td>true</td>
 <td>false</td>
 <td>Check if the consumed property or input is present.</td>
+</tr>
+<tr>
+<td>Element (default)</td>
+<td>true</td>
+<td>false</td>
+<td>Check if no other elements in scope is present.</td>
 </tr>
 </tbody>
 </table>
@@ -12709,7 +12863,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 24, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 25, 2025</span>
       
     
   </small>
