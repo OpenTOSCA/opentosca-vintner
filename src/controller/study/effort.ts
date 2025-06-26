@@ -96,8 +96,6 @@ export default async function (options: StudyEffortOptions) {
             const toscaLib = path.join(toscaBase, 'lib')
             const toscaFiles = [path.join(toscaBase, 'model.yaml')]
             if (files.isDirectory(toscaLib)) {
-                toscaFiles.push(path.join(toscaLib, 'other.yaml'))
-                toscaFiles.push(path.join(toscaLib, 'webshop.yaml'))
                 toscaFiles.push(...files.walkDirectory(path.join(toscaLib, 'substitutions')))
             }
             totalByStage[stage][Stats.ID.tosca] = Stats.sum(

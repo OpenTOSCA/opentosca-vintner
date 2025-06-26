@@ -52,7 +52,6 @@ export default async function (options: UtilsStatsTerraformOptions) {
     /**
      * Properties
      */
-    stats.properties += Object.keys(locals).length
     stats.properties += Object.values(model.module).reduce((acc, modules) => {
         const module = utils.first(modules)
         const ignore = ['source', 'count', 'host', 'depends_on']
