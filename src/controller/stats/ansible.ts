@@ -62,11 +62,8 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     }, 0)
 
     /**
-     * Relations (hosted on relations)
+     * No Relations
      */
-    stats.relations += model.reduce((acc, play) => {
-        return acc + (play.roles ?? []).length
-    }, 0)
 
     /**
      * No Artifacts

@@ -50,7 +50,6 @@ export type Stats = {
     technologies: number
 
     variability: number
-    // TODO: omit conditions in favor of expressions
     conditions: number
     expressions: number
     mappings: number

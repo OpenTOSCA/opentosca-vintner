@@ -123,11 +123,13 @@ export default async function (options: UtilsStatsTOSCAOptions) {
         return false
     }).length
 
+    /**
     stats.expressions += vdmmStats.node_type_definitions
     stats.expressions += vdmmStats.node_type_property_definitions
     stats.expressions += vdmmStats.node_type_attribute_definitions
     stats.expressions += vdmmStats.node_type_capability_definitions
     stats.expressions += vdmmStats.node_type_requirement_definitions
+    **/
 
     stats.expressions += graph.inputs.map(it => it.name).filter(Stats.isFeature).length
     stats.expressions += graph.properties.map(it => it.name).filter(Stats.isFeature).length
