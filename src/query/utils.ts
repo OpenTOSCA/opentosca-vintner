@@ -105,7 +105,7 @@ function getPropertyOrAttribute(
     template: ServiceTemplate,
     toscaPath: string[],
     context: string
-): Object {
+): object {
     let result =
         toscaPath[0] == 'SELF'
             ? resolvePath(template.topology_template?.node_templates, getParentNode(context))
@@ -124,7 +124,7 @@ function getPropertyOrAttribute(
  * @param node The current node
  * @param relName The name of the capability or requirement
  */
-function getRelationship(template: ServiceTemplate, node: Object, relName: string): Object | null {
+function getRelationship(template: ServiceTemplate, node: object, relName: string): object | null {
     if (check.isArray(template.topology_template?.node_templates)) throw new Error(`Node templates must not be a list`)
 
     const reqs: [] = resolvePath(node, 'requirements') || []

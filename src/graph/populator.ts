@@ -20,11 +20,17 @@ import {TechnologyRulePluginBuilder} from '#technologies/plugins/rules'
 import * as utils from '#utils'
 import {NotImplementedError, UnexpectedError} from '#utils/error'
 
+export type PopulatorOptions = {full?: boolean}
+
 export class Populator {
     graph: Graph
+    options: PopulatorOptions
 
-    constructor(graph: Graph) {
+    constructor(graph: Graph, options: PopulatorOptions) {
         this.graph = graph
+
+        options.full = options.full ?? true
+        this.options = options
     }
 
     run() {
@@ -53,10 +59,10 @@ export class Populator {
         this.populateImports()
 
         // Input Consumers
-        this.populateConsumers()
+        if (this.options.full) this.populateConsumers()
 
         // Output Producers
-        this.populateProducers()
+        if (this.options.full) this.populateProducers()
 
         // Elements
         this.graph.elements = [
@@ -207,15 +213,17 @@ export class Populator {
         }
 
         // Assign ingoing relations to nodes and assign target to relation
-        this.graph.relations.forEach(relation => {
-            const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
-            const target = this.graph.nodesMap.get(targetName)
-            assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
+        if (this.options.full) {
+            this.graph.relations.forEach(relation => {
+                const targetName = check.isString(relation.raw) ? relation.raw : relation.raw.node
+                const target = this.graph.nodesMap.get(targetName)
+                assert.isDefined(target, `Target "${targetName}" of ${relation.display} does not exist`)
 
-            relation.target = target
-            target.ingoing.push(relation)
-            target.relations.push(relation)
-        })
+                relation.target = target
+                target.ingoing.push(relation)
+                target.relations.push(relation)
+            })
+        }
     }
 
     private populateRelations(node: Node, template: NodeTemplate) {
@@ -225,12 +233,6 @@ export class Populator {
         for (const [index, map] of template.requirements.entries()) {
             const [name, raw] = utils.firstEntry(map)
             assert.isObject(raw, `Requirement assignment "${name}" of "${node.display}" not normalized`)
-
-            if (check.isObject(raw.relationship)) {
-                throw new Error(
-                    `Relation "${name}" of "${node.display}" contains a relationship template which is currently not supported`
-                )
-            }
 
             const relation = new Relation({
                 name,
@@ -400,8 +402,10 @@ export class Populator {
         if (this.graph.serviceTemplate?.topology_template?.variability?.options?.bratans_unknown !== true) {
             // Ensure that there is only one default property per property name
             element.propertiesMap.forEach(properties => {
-                const alternative = properties.find(it => it.defaultAlternative)
-                if (check.isDefined(alternative)) return
+                const already = this.graph.options.normalization.fallbackPropertyDefaultAlternative
+                    ? properties.find(it => it.defaultAlternative)
+                    : properties.find(it => it.value === VINTNER_UNDEFINED)
+                if (check.isDefined(already)) return
 
                 const some = properties[0]
                 assert.isDefined(some)
@@ -411,13 +415,16 @@ export class Populator {
                  * But we do not utilize default values in property definitions in VDMM.
                  * They are still used once deployed since we remove VINTNER_UNDEFINED later.
                  */
-                const raw = {
-                    value: VINTNER_UNDEFINED,
-                    default_alternative: true,
-                    implied: true,
-                    pruning: true,
-                }
-
+                const raw = this.graph.options.normalization.fallbackPropertyDefaultAlternative
+                    ? {
+                          value: VINTNER_UNDEFINED,
+                          default_alternative: true,
+                          implied: true,
+                          pruning: true,
+                      }
+                    : {
+                          value: VINTNER_UNDEFINED,
+                      }
                 const property = new Property({
                     name: some.name,
                     container: some.container,

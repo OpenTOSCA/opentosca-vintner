@@ -3,7 +3,7 @@ import Element from '#graph/element'
 import Node from '#graph/node'
 import Property from '#graph/property'
 import Type from '#graph/type'
-import {andify, bratify} from '#graph/utils'
+import {andify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {ArtifactDefaultConditionMode, ConditionsWrapper, LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
@@ -16,10 +16,10 @@ export default class Artifact extends Element {
     readonly container: Node
 
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
 
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
 
     constructor(data: {name: string; raw: ExtendedArtifactDefinition; container: Node; index: number}) {
         super()
@@ -87,7 +87,7 @@ export default class Artifact extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'managed'].includes(it))
+            if (!['container', 'managed', 'default'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
@@ -102,6 +102,10 @@ export default class Artifact extends Element {
              */
             if (it === 'managed') {
                 return semantics.push({is_managed: 'SELF', _cached_element: this})
+            }
+
+            if (it === 'default' && this.defaultAlternativePruningConditionAllowed) {
+                return consistencies.push(this.constructDefaultAlternativeCondition())
             }
         })
 
@@ -122,9 +126,8 @@ export default class Artifact extends Element {
         return {artifact_presence: this.toscaId, _cached_element: this}
     }
 
-    // Check if no other artifact having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.artifactsMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.artifactsMap.get(this.name)!
     }
 
     getTypeCondition(type: Type): LogicExpression {
@@ -138,7 +141,7 @@ export default class Artifact extends Element {
         }
     }
 
-    isArtifact() {
+    isArtifact(): this is Artifact {
         return true
     }
 

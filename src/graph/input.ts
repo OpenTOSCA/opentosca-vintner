@@ -1,7 +1,5 @@
 import Property from '#graph/property'
-import {bratify} from '#graph/utils'
 import {InputDefinition} from '#spec/topology-template'
-import {LogicExpression} from '#spec/variability'
 import * as utils from '#utils'
 import Element from './element'
 
@@ -73,12 +71,11 @@ export default class Input extends Element {
         return {input_presence: this.toscaId, _cached_element: this}
     }
 
-    // Check if no other input having the same name is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.graph.inputsMap.get(this.name)!.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.graph.inputsMap.get(this.name)!
     }
 
-    isInput() {
+    isInput(): this is Input {
         return true
     }
 

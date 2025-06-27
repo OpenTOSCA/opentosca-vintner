@@ -214,25 +214,25 @@ Run the following command, to count the lines of code in the `src` folder.
 cloc src
 ```
 
-The following output has been generated for the commit `3c6d29df6b7fb52b39d46ffe179e6800b60c4398` on September 5th, 2024.
+The following output has been generated for the commit `13dd86474f5524d20e075db6c2937ab1b2d3ffcb` on June 26th, 2025.
 
 ```text linenums="1"
-     376 text files.
-     339 unique files.                                          
-      39 files ignored.
+     493 text files.
+     426 unique files.                                          
+      69 files ignored.
 
-github.com/AlDanial/cloc v 1.98  T=0.12 s (2936.0 files/s, 260917.4 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.15 s (2831.6 files/s, 265841.3 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-TypeScript                     301           3529           2116          23146
-YAML                             9             79              0            757
-Bourne Shell                    21             77             80            250
-EJS                              6             11              0             66
+TypeScript                     386           4438           2846          31368
+YAML                            10             79              0            758
+Bourne Shell                    21             78             80            251
+EJS                              7             11              0             71
 Python                           1              4              0             10
 CSV                              1              0              0              1
 -------------------------------------------------------------------------------
-SUM:                           339           3700           2196          24230
+SUM:                           426           4610           2926          32459
 -------------------------------------------------------------------------------
 ```
 

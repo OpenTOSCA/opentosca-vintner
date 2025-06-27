@@ -17,6 +17,7 @@ import {
 
 export type NodeTemplate = {
     type: ElementType
+    directives?: string[]
     // TODO: wrap properties as variability point
     properties?: PropertyAssignmentMap | PropertyAssignmentList
     attributes?: AttributeAssignmentMap
@@ -30,6 +31,7 @@ export type NodeTemplate = {
     technology?: TechnologyAssignment
     managed?: boolean
     interfaces?: InterfaceDefinitionMap
+    behaviours?: string[]
 } & VariabilityAlternative & {
         default_condition_mode?: NodeDefaultConditionMode
     }

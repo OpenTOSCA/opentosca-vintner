@@ -414,6 +414,7 @@ template
     )
     .requiredOption('--output <string>', 'path of the output')
     .option('--pretty [boolean]', 'prettify output')
+    .option('--edmm [boolean]', 'edmm compatibility, e.g., use node_template.technology')
     .action(
         hae.exit(async options => {
             await Controller.template.resolve(options)
@@ -1190,6 +1191,132 @@ utils
         })
     )
 
+utils
+    .command('feature-model')
+    .description('returns deployment scenarios')
+    .requiredOption('--path <string>', 'path to feature model')
+    .addOption(new Option('--format [string]', 'output format').default('yaml').choices(['yaml', 'json']))
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.utils.featuremodel(options))
+        })
+    )
+
+utils
+    .command('compare-yaml')
+    .description('returns if YAMLs diff')
+    .requiredOption('--first <string>', 'path to feature model')
+    .requiredOption('--second <string>', 'path to feature model')
+    .action(
+        hae.exit(async options => {
+            await Controller.utils.compareyaml(options)
+        })
+    )
+
+/**
+ * Stats
+ */
+const stats = program.command('stats').description('stats for various models')
+
+stats
+    .command('terraform')
+    .description('returns terraform stats')
+    .requiredOption('--dir <string>', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.terraform(options))
+        })
+    )
+
+stats
+    .command('description')
+    .description('returns description stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.description(options))
+        })
+    )
+
+stats
+    .command('ansible')
+    .description('returns ansible stats')
+    .requiredOption('--dir <string>', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.ansible(options))
+        })
+    )
+
+stats
+    .command('EDMM')
+    .description('returns EDMM stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.edmm(options))
+        })
+    )
+
+stats
+    .command('VDMM')
+    .description('returns VDMM stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.vdmm(options))
+        })
+    )
+
+stats
+    .command('TOSCA')
+    .description('returns TOSCA stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.tosca(options))
+        })
+    )
+
+stats
+    .command('PATTERN')
+    .description('returns PATTERN stats')
+    .requiredOption('--template <string>', 'template')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.pattern(options))
+        })
+    )
+
+stats
+    .command('EJS')
+    .description('returns EJS stats')
+    .requiredOption('--dir <string>', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.ejs(options))
+        })
+    )
+
+stats
+    .command('pulumi')
+    .description('returns Pulumi stats')
+    .requiredOption('--dir <string>', 'directory')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .action(
+        hae.exit(async options => {
+            std.out(await Controller.stats.pulumi(options))
+        })
+    )
+
 /**
  * Query
  */
@@ -1243,5 +1370,20 @@ study
     .action(
         hae.exit(async options => {
             await Controller.study.performance(options)
+        })
+    )
+
+study
+    .command('effort')
+    .description('conduct effort case study')
+    .requiredOption('--dir <string>')
+    .option('--objects [strings...]', 'objects')
+    .requiredOption('--experimental', 'enable experimental feature')
+    .option('--write', 'store output')
+    .option('--no-write', 'store output')
+    .option('--simple', 'simple log')
+    .action(
+        hae.exit(async options => {
+            await Controller.study.effort(options)
         })
     )

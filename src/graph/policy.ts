@@ -16,9 +16,9 @@ export default class Policy extends Element {
 
     readonly targets: (Node | Group)[] = []
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
 
     constructor(data: {name: string; raw: PolicyTemplate; index: number}) {
         super()
@@ -100,7 +100,7 @@ export default class Policy extends Element {
         return {policy_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
     }
 
-    isPolicy() {
+    isPolicy(): this is Policy {
         return true
     }
 }

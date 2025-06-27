@@ -11,9 +11,11 @@ import * as stream from 'stream'
 
 export class Shell {
     private readonly wsl: boolean
+    protected readonly silent: boolean
 
-    constructor(wsl = false) {
+    constructor(wsl = false, silent = false) {
         this.wsl = wsl
+        this.silent = silent
     }
 
     /**
@@ -77,14 +79,16 @@ export class Shell {
 
             const command = parts.join(' ')
 
-            std.log(
-                utils.joinNotNull([
-                    'Executing',
-                    this.wsl ? 'on WSL' : 'locally',
-                    check.isDefined(options.cwd) ? `in directory "${options.cwd}"` : undefined,
-                    `the command "${command}"`,
-                ])
-            )
+            if (!this.silent) {
+                std.log(
+                    utils.joinNotNull([
+                        'Executing',
+                        this.wsl ? 'on WSL' : 'locally',
+                        check.isDefined(options.cwd) ? `in directory "${options.cwd}"` : undefined,
+                        `the command "${command}"`,
+                    ])
+                )
+            }
 
             let child: ChildProcessByStdio<stream.Writable, null, null>
             if (this.wsl) {
@@ -111,7 +115,7 @@ export class Shell {
             })
 
             child.on('close', code => {
-                std.log(`Command exited with code ${code}`)
+                if (!this.silent) std.log(`Command exited with code ${code}`)
 
                 if (code === 0) {
                     resolve(code)

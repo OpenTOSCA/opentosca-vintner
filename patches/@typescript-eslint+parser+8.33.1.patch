@@ -1,0 +1,12 @@
+diff --git a/node_modules/@typescript-eslint/parser/package.json b/node_modules/@typescript-eslint/parser/package.json
+index a334a66..878ff41 100644
+--- a/node_modules/@typescript-eslint/parser/package.json
++++ b/node_modules/@typescript-eslint/parser/package.json
+@@ -2,6 +2,7 @@
+   "name": "@typescript-eslint/parser",
+   "version": "8.33.1",
+   "description": "An ESLint custom parser which leverages TypeScript ESTree",
++  "main": "index.js",
+   "files": [
+     "dist",
+     "!*.tsbuildinfo",

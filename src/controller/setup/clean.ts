@@ -6,7 +6,7 @@ import env from '#utils/env'
 import * as os from 'os'
 import path from 'path'
 
-export type SetupCleanOptions = {force: Boolean}
+export type SetupCleanOptions = {force: boolean}
 
 export default async function (options: SetupCleanOptions) {
     // Ensure no templates or instances exist

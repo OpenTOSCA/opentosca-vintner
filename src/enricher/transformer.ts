@@ -149,6 +149,11 @@ export default class Transformer {
             delete this.topology.variability.options.type_default_consistency_condition
             delete this.topology.variability.options.type_default_semantic_condition
 
+            delete this.topology.variability.options.output_default_condition
+            delete this.topology.variability.options.output_default_condition_mode
+            delete this.topology.variability.options.output_default_consistency_condition
+            delete this.topology.variability.options.output_default_semantic_condition
+
             // Delete pruning options
             delete this.topology.variability.options.pruning
             delete this.topology.variability.options.consistency_pruning
@@ -181,6 +186,10 @@ export default class Transformer {
             delete this.topology.variability.options.type_pruning
             delete this.topology.variability.options.type_consistency_pruning
             delete this.topology.variability.options.type_semantic_pruning
+
+            delete this.topology.variability.options.output_pruning
+            delete this.topology.variability.options.output_consistency_pruning
+            delete this.topology.variability.options.output_semantic_pruning
 
             // Delete constraints options
             delete this.topology.variability.options.relation_source_constraint

@@ -1,13 +1,11 @@
 import * as check from '#check'
 import Artifact from '#graph/artifact'
-import {bratify} from '#graph/utils'
 import {ExtendedArtifactDefinition} from '#spec/artifact-definitions'
 import {GroupTemplate} from '#spec/group-template'
 import {NodeTemplate} from '#spec/node-template'
 import {PolicyTemplate} from '#spec/policy-template'
 import {RelationshipTemplate} from '#spec/relationship-template'
 import {TypeAssignment} from '#spec/type-assignment'
-import {LogicExpression} from '#spec/variability'
 import {isNormative} from '#technologies/utils'
 import * as utils from '#utils'
 import Element from './element'
@@ -96,9 +94,8 @@ export default class Type extends Element {
         return this.container.getTypeCondition(this)
     }
 
-    // Check if no other type is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.types.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.types
     }
 
     private _isA: {[name: string]: boolean | undefined} = {}
@@ -157,7 +154,7 @@ export default class Type extends Element {
         throw new Error(`${this.Display} does not support checking type inheritance`)
     }
 
-    isType() {
+    isType(): this is Type {
         return true
     }
 

@@ -148,10 +148,11 @@ The following options are used to configure the default conditions of elements.
 | node_default_consistency_condition       | false     | Boolean                                                                                               | false                    | Enable default consistency condition for nodes.                                    |
 | node_default_semantic_condition          | false     | Boolean                                                                                               | false                    | Enable default semantic condition for nodes.                                       |
 | output_default_condition                 | false     | Boolean                                                                                               | false                    | Enable default condition for outputs (consistency and semantic).                   |
+| output_default_condition_mode            | false     | List(produced &#124; default, -)                                                                      | produced                 | Configure the default condition for outputs.                                       |
 | output_default_consistency_condition     | false     | Boolean                                                                                               | false                    | Enable default consistency condition for outputs.                                  |
 | output_default_semantic_condition        | false     | Boolean                                                                                               | false                    | Enable default semantic condition for outputs.                                     |
 | relation_default_condition               | false     | Boolean                                                                                               | false                    | Enable default condition for relations (consistency and semantic).                 |
-| relation_default_condition_mode          | false     | List(source &#124; target, -)                                                                         | source-target            | Configure the default condition for relations.                                     |
+| relation_default_condition_mode          | false     | List(source &#124; target &#124; default, -)                                                          | source-target            | Configure the default condition for relations.                                     |
 | relation_default_consistency_condition   | false     | Boolean                                                                                               | false                    | Enable default semantic condition for relations.                                   |
 | relation_default_semantic_condition      | false     | Boolean                                                                                               | false                    | Enable default consistency condition for relations.                                |
 | relation_default_implied                 | false     | Boolean                                                                                               | false                    | Enable default implication for relations. Does not apply for hosting relations.    |
@@ -162,18 +163,18 @@ The following options are used to configure the default conditions of elements.
 | group_default_consistency_condition      | false     | Boolean                                                                                               | false                    | Enable default consistency condition for groups.                                   |
 | group_default_semantic_condition         | false     | Boolean                                                                                               | false                    | Enable default semantic condition for groups.                                      |
 | artifact_default_condition               | false     | Boolean                                                                                               | false                    | Enable default condition for artifacts (consistency and semantic).                 |
-| artifact_default_condition_mode          | false     | List(container &#124; technology, -)                                                                  | container                | Configure the default condition for artifacts.                                     |
+| artifact_default_condition_mode          | false     | List(container &#124; technology &#124; default, -)                                                   | container                | Configure the default condition for artifacts.                                     |
 | artifact_default_consistency_condition   | false     | Boolean                                                                                               | false                    | Enable default consistency condition for artifacts.                                |
 | artifact_default_semantic_condition      | false     | Boolean                                                                                               | false                    | Enable default semantic condition for artifacts.                                   |
 | property_default_condition               | false     | Boolean                                                                                               | false                    | Enable default condition for properties (consistency and semantic).                |
-| property_default_condition_mode          | false     | List(container &#124; consuming, -)                                                                   | container-consuming      | Configure the default condition for properties.                                    |
+| property_default_condition_mode          | false     | List(container &#124; consuming &#124; default, -)                                                    | container-consuming      | Configure the default condition for properties.                                    |
 | property_default_consistency_condition   | false     | Boolean                                                                                               | false                    | Enable default consistency condition for properties.                               |
 | property_default_semantic_condition      | false     | Boolean                                                                                               | false                    | Enable default semantic condition for properties.                                  |
 | type_default_condition                   | false     | Boolean                                                                                               | false                    | Enable default condition for types (consistency and semantic).                     |
 | type_default_consistency_condition       | false     | Boolean                                                                                               | false                    | Enable default consistency condition for types.                                    |
 | type_default_semantic_condition          | false     | Boolean                                                                                               | false                    | Enable default semantic condition for types.                                       |
 | technology_default_condition             | false     | Boolean                                                                                               | false                    | Enable default condition for (deployment) technologies (consistency and semantic). |
-| technology_default_condition_mode        | false     | List(container &#124; other, -)                                                                       | container-other-scenario | Configure the default condition for (deployment) technologies.                     |
+| technology_default_condition_mode        | false     | List(container &#124; other &#124; default, -)                                                        | container-other-scenario | Configure the default condition for (deployment) technologies.                     |
 | technology_default_consistency_condition | false     | Boolean                                                                                               | false                    | Enable default consistency condition for technologies.                             |
 | technology_default_semantic_condition    | false     | Boolean                                                                                               | false                    | Enable default semantic condition for technologies.                                |
 
@@ -276,6 +277,16 @@ The following options are used to configure the enricher.
 | enrich_implementations        | false     | Boolean | false   | Enable if implementations are enriched.                                                                               |
 
 
+### Normalizer Options
+
+The following options are used to configure the normalizer.
+
+| Keyname                               | Mandatory | Type    | Default  | Description                                                         |
+|---------------------------------------|-----------|---------|----------|---------------------------------------------------------------------|
+| automatic_default_alternatives        | false     | Boolean | false    | Enable if default alternatives should be automatically selected.    |
+| fallback_property_default_alternative | false     | Boolean | true     | Enable if fallback properties should use default alternative flags. |
+
+
 ### Constraints Options
 
 _This is an experimental feature._
@@ -365,7 +376,14 @@ checks: false
 enrich_technologies: true
 enrich_technologies_best_only: true
 enrich_implementations: true
-artifact_default_condition_mode: container-managed
+
+relation_default_condition_mode: source-target-default
+artifact_default_condition_mode: container-managed-default
+output_default_condition_mode: produced-default
+property_default_condition_mode: container-consuming-default
+technology_default_condition_mode: container-other-scenario-default
+
+fallback_property_default_alternative: false
 ```
 
 
@@ -396,7 +414,7 @@ The following element-generic default conditions can be assigned to elements.
 | Root                                    | true        | true     | The default condition of element always holds.                                     |
 
 Thereby, we define a consistency condition a condition which targets the consistency of the metamodel, thus, ensuring that the metamodel can be correctly parsed, e.g., a property must have a container.
-In contrast,  a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.
+In contrast, a semantic condition targets semantic aspect of elements or the type system, e.g., a node without incoming relations is not used and can be removed.
 
 Depending on the context, other default conditions are more applicable.
 The following default conditions can be chosen instead of the ones introduced above.
@@ -413,6 +431,7 @@ The following default conditions can be chosen instead of the ones introduced ab
 | Relation (target)                            | true        | false    | Check if the target of the relation is present.                                |
 | Artifact (managed)                           | false       | true     | Check if the artifact is managed by any technology.                            |
 | Property (consuming)                         | true        | false    | Check if the consumed property or input is present.                            |
+| Element (default)                            | true        | false    | Check if no other elements in scope is present.                                |
 
 
 ### Type-Specific Default Conditions

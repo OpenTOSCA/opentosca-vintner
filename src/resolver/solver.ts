@@ -8,7 +8,7 @@ import {
 import Element from '#graph/element'
 import Graph from '#graph/graph'
 import Property from '#graph/property'
-import {andify} from '#graph/utils'
+import {andify, isManual} from '#graph/utils'
 import Optimizer from '#resolver/optimizer'
 import {Result, ResultMap} from '#resolver/result'
 import {InputAssignmentMap, InputAssignmentValue} from '#spec/topology-template'
@@ -273,16 +273,7 @@ export default class Solver {
             this.minisat.require(
                 MiniSat.equiv(
                     element.manualId,
-                    this.transformLogicExpression(
-                        andify(
-                            conditions.filter(it => {
-                                // This also includes _bratan
-                                if (check.isObject(it)) return !it._generated
-                                return true
-                            })
-                        ),
-                        {element}
-                    )
+                    this.transformLogicExpression(andify(conditions.filter(isManual)), {element})
                 )
             )
         }

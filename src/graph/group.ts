@@ -16,10 +16,10 @@ export default class Group extends Element {
 
     readonly members: (Node | Relation)[] = []
     readonly properties: Property[] = []
-    readonly propertiesMap: Map<String, Property[]> = new Map()
+    readonly propertiesMap: Map<string, Property[]> = new Map()
     readonly variability: boolean = false
     readonly types: Type[] = []
-    readonly typesMap: Map<String, Type[]> = new Map()
+    readonly typesMap: Map<string, Type[]> = new Map()
 
     constructor(data: {name: string; raw: GroupTemplate}) {
         super()
@@ -111,7 +111,7 @@ export default class Group extends Element {
         return {group_property_presence: [this.toscaId, property.index ?? property.name], _cached_element: property}
     }
 
-    isGroup() {
+    isGroup(): this is Group {
         return true
     }
 }

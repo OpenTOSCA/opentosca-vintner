@@ -3,7 +3,6 @@ tosca_definitions_version: tosca_variability_1_0_rc_3
 topology_template:
     variability:
         options:
-            technology_required: false
             enrich_technologies: false
             enrich_implementations: false
             unique_technology_constraint: false

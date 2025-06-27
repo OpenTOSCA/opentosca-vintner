@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import Element from '#graph/element'
 import Node from '#graph/node'
-import {andify, bratify} from '#graph/utils'
+import {andify} from '#graph/utils'
 import {TechnologyTemplate} from '#spec/technology-template'
 import {
     ConditionsWrapper,
@@ -100,7 +100,7 @@ export default class Technology extends Element {
 
         const mode = this.getDefaultMode
         mode.split('-').forEach(it => {
-            if (!['container', 'other', 'scenario'].includes(it))
+            if (!['container', 'other', 'scenario', 'default'].includes(it))
                 throw new Error(`${this.Display} has unknown mode "${mode}" as default condition`)
 
             if (it === 'container') {
@@ -117,7 +117,11 @@ export default class Technology extends Element {
             }
 
             if (it === 'other') {
-                // TODO: Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+                // Cant use this.defaultAlternativeCondition since it checks for this.alternative ...
+                return consistencies.push(this.constructDefaultAlternativeCondition())
+            }
+
+            if (it === 'default' && this.defaultAlternativePruningConditionAllowed) {
                 return consistencies.push(this.constructDefaultAlternativeCondition())
             }
         })
@@ -135,16 +139,15 @@ export default class Technology extends Element {
         return wrappers
     }
 
-    // Check if no other technology is present
-    constructDefaultAlternativeCondition(): LogicExpression {
-        return bratify(this.container.technologies.filter(it => it !== this))
+    get defaultAlternativeScope() {
+        return this.container.technologies
     }
 
     constructPresenceCondition(): LogicExpression {
         return {technology_presence: this.toscaId, _cached_element: this}
     }
 
-    isTechnology() {
+    isTechnology(): this is Technology {
         return true
     }
 
