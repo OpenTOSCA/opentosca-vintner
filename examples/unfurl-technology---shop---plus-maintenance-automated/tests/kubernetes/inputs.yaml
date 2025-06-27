@@ -1,4 +1,0 @@
-env: KUBERNETES
-tier: LARGE
-optional_feature: true
-premium_feature: true

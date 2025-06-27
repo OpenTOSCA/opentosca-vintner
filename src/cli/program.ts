@@ -1341,17 +1341,6 @@ program
 const study = program.command('study').description('conduct case studies')
 
 study
-    .command('technology')
-    .description('conduct technology case study')
-    .requiredOption('--application <string>', 'application name, e.g., boutique or shop')
-    .requiredOption('--experimental', 'enable experimental feature')
-    .action(
-        hae.exit(async options => {
-            await Controller.study.technology(options)
-        })
-    )
-
-study
     .command('quality')
     .description('conduct quality study')
     .option('--config [string]')

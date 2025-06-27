@@ -64,7 +64,7 @@ git lfs pull
 Next, we make a copy of the Variability4TOSCA template.
 
 ```shell linenums="1"
-cp -R examples/unfurl-technology---boutique---plus-maintenance-automated /tmp/boutique-model
+cp -R examples/unfurl-technology---boutique /tmp/boutique-model
 ```
 
 
