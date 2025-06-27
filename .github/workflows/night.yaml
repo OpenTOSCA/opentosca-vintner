@@ -946,7 +946,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE: unfurl-technology---shop
             EXAMPLE_OVERRIDE: unfurl-technology-shop-external
             ENV: K8S
             PORT: 80
@@ -1040,7 +1040,7 @@ jobs:
         runs-on: ubuntu-22.04
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE: unfurl-technology---shop
             EXAMPLE_OVERRIDE: unfurl-technology-shop
             ENV: GCP
             PORT: 80
@@ -1128,7 +1128,7 @@ jobs:
         if: ${{ !cancelled() }}
         env:
             ORCHESTRATOR: unfurl
-            EXAMPLE: unfurl-technology---shop---plus-maintenance-automated
+            EXAMPLE: unfurl-technology---shop
             EXAMPLE_OVERRIDE: unfurl-technology-shop-vm
             ENV: OS
             PORT: 80

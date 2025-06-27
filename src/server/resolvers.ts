@@ -725,17 +725,6 @@ resolvers.post(
  */
 
 /**
- * Study
- */
-resolvers.post(
-    '/study/technology',
-    hae.express(async (req, res, next) => {
-        const study = await Controller.study.technology(req.body)
-        res.json({study})
-    })
-)
-
-/**
  * SPE
  */
 resolvers.post(
