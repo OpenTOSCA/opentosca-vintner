@@ -10,8 +10,6 @@ export type UtilsStatsAnsibleOptions = {
     experimental: boolean
 }
 
-// TODO: count host vars
-
 export default async function (options: UtilsStatsAnsibleOptions) {
     assert.isDefined(options.dir, 'Path not defined')
     assert.isTrue(options.experimental)
