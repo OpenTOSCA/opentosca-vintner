@@ -2,6 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import * as Stats from '#controller/stats/stats'
 import * as files from '#files'
+import * as utils from '#utils'
 import path from 'path'
 
 export type UtilsStatsAnsibleOptions = {
@@ -30,6 +31,16 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     const model = files.loadYAML<Playbook>(modelFile)
     stats.files++
     stats.loc += files.countNotBlankLines(modelFile)
+
+    const hostVars: Vars[] = []
+    const hostVarDir = path.join(options.dir, 'host_vars')
+    if (files.isDirectory(hostVarDir)) {
+        for (const host of files.walkDirectory(hostVarDir)) {
+            stats.files += hostVars.length
+            stats.loc += files.countNotBlankLines(host)
+            hostVars.push(files.loadYAML<Vars>(host))
+        }
+    }
 
     /**
      * Inputs
@@ -60,6 +71,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
             }, 0)
         )
     }, 0)
+    stats.properties += utils.sum(hostVars.map(it => Object.values(it).length))
 
     /**
      * No Relations
