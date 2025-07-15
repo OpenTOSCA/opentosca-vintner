@@ -103,7 +103,7 @@ export default async function (options: UtilsStatsAnsibleOptions) {
     )
     stats.conditions += Object.keys(args)
         .filter(Stats.isNotFeature)
-        .filter(it => check.isDefined(args[it].description)).length
+        .filter(it => check.isDefined(args[it].description) || check.isDefined(args[it].required)).length
 
     /**
      * Expressions (string interpolation in role names, variability inputs)
@@ -180,6 +180,7 @@ type Options = {[key: string]: Option}
 type Option = {
     type: string
     description?: string
+    required?: boolean
     options?: Options
 }
 
