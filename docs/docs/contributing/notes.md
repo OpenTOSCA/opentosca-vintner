@@ -256,6 +256,11 @@ The following links are used in publications.
 - https://vintner.opentosca.org/variability4tosca/guides/artifacts
 - https://vintner.opentosca.org/variability4tosca/guides/pruning
 - https://vintner.opentosca.org/variability4tosca/guides/modes
+- https://vintner.opentosca.org/normative
+- https://vintner.opentosca.org/variability4tosca/quality
+- https://vintner.opentosca.org/installation
+- https://vintner.opentosca.org/interface
+- https://vintner.opentosca.org/variability4tosca/guides/technology
 
 
 ## Typical Reasons for UNSAT 

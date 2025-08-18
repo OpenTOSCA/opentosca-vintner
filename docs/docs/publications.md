@@ -11,6 +11,34 @@ This document holds a list of selected publications.
 
 [//]: # (Using APA Style at https://www.bibtex.com/c/bibtex-to-apa-converter)
 
+## A Method for the Quality-Aware Automated Selection of Deployment Technologies
+
+> Stötzner, M., Krieger, N., Speth, S., Weller, M., Becker, S., Weder, B., Soldani, S., & Morlock, V. (2025). A Method for the Quality-Aware Automated Selection of Deployment Technologies. Software: Practice and Experience, 1–22. doi:10.1002/spe.70012
+
+- Software: Practice and Experience (SPE)
+- [https://doi.org/10.1002/spe.70012](https://doi.org/10.1002/spe.70012){target=_blank}
+- {{ repo_link('examples ', 'Models of the Case Study') }} (Relevant models start with "unfurl-technology")
+- [Assets on Zenodo](https://doi.org/10.5281/zenodo.10664900){target=_blank}
+- {{ tag_link('publication-stoetzner-2025-deployment-quality') }}
+
+{% raw %}
+```bibtex linenums="1"
+@article{Stoetzner2025_DeploymentQuality,
+    Title         = {{A Method for the Quality-Aware Automated Selection of Deployment Technologies}},
+    Author        = {St{\"o}tzner, Miles and Krieger, Niklas and Speth, Sandro and Weller, Marcel and Becker, Steffen and Weder, Benjamin and Soldani, Jacopo and Morlock, Valentin},
+    Year          = 2025,
+    Month         = aug,
+    Journal       = {Software: Practice and Experience},
+    Publisher     = {Wiley},
+    Pages         = {1--22},
+    Doi           = {10.1002/spe.70012},
+    url           = {https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.70012},
+    projects      = {SofDCar,OpenTOSCA}
+}
+```
+{% endraw %}
+
+
 ## Hosting-Aware Pruning of Components in Deployment Models
 
 > Stötzner M, Speth S, Becker S. Hosting-Aware Pruning of Components in Deployment Models. In: Proceedings of the 14th International Conference on Cloud Computing and Services Science (CLOSER 2024). SciTePress; 2024:149-158. doi:10.5220/0012671900003711
