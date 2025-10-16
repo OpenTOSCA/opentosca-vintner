@@ -219,11 +219,12 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Sum
          */
+        const enrichedSum = enrichSumTable(sumByObject)
         std.log()
         std.log('Stage', stage, 'Sum')
-        std.log(toTableByStage(sumByObject, options.simple))
+        std.log(toTableByStage(enrichedSum, options.simple))
         std.log('Stage', stage, 'Sum')
-        std.log(toLatexByStage(sumByObject))
+        std.log(toLatexByStage(enrichedSum))
     }
 
     std.log()
@@ -298,4 +299,52 @@ function toLatexByStage(map: Stats.Map): string {
         headers: ['id', 'elements', 'variability', 'files', 'loc'],
         index: false,
     })
+}
+
+function enrichSumTable(data: Stats.Map): Stats.Map {
+    const enriched: Stats.Map = {}
+
+    const vdmm = data[Stats.ID.vdmm]
+
+    for (const other of Object.values(data)) {
+        if (other.id === Stats.ID.vdmm) {
+            enriched[other.id] = vdmm
+            continue
+        }
+
+        enriched[other.id] = {
+            id: other.id,
+            files: prettyBenefit(vdmm.files, other.files),
+            loc: prettyBenefit(vdmm.loc, other.loc),
+
+            elements: prettyBenefit(vdmm.elements, other.elements),
+            inputs: prettyBenefit(vdmm.inputs, other.inputs),
+            outputs: prettyBenefit(vdmm.outputs, other.outputs),
+            components: prettyBenefit(vdmm.components, other.components),
+            properties: prettyBenefit(vdmm.properties, other.properties),
+            relations: prettyBenefit(vdmm.relations, other.relations),
+            artifacts: prettyBenefit(vdmm.artifacts, other.artifacts),
+            technologies: prettyBenefit(vdmm.technologies, other.technologies),
+
+            variability: prettyBenefit(vdmm.variability, other.variability),
+            conditions: prettyBenefit(vdmm.conditions, other.conditions),
+            expressions: prettyBenefit(vdmm.expressions, other.expressions),
+            mappings: prettyBenefit(vdmm.mappings, other.mappings),
+        }
+    }
+
+    return enriched
+}
+
+function prettyBenefit(vdmm: number, other: number): number {
+    return `${other} (${benefit(vdmm, other)})` as unknown as number
+}
+
+function benefit(vdmm: number, other: number): string {
+    if (vdmm === 0 && other === 0) return '0\\%'
+    if (other === 0) return 'N/A'
+    const reduction = -1 * Math.floor(((other - vdmm) / other) * 100)
+    const abs = Math.abs(reduction)
+    const sign = reduction > 0 ? '+' : '\\textminus'
+    return `${sign}${abs}\\%`
 }
