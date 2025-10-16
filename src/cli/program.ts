@@ -1371,6 +1371,7 @@ study
     .option('--write', 'store output')
     .option('--no-write', 'store output')
     .option('--simple', 'simple log')
+    .requiredOption('--output <string>', 'path of the output')
     .action(
         hae.exit(async options => {
             await Controller.study.effort(options)

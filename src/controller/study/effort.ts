@@ -12,6 +12,7 @@ export type StudyEffortOptions = {
     experimental: boolean
     write?: boolean
     simple?: boolean
+    output?: string
 }
 
 export default async function (options: StudyEffortOptions) {
@@ -21,6 +22,7 @@ export default async function (options: StudyEffortOptions) {
     options.objects = options.objects ?? Object.values(Stats.ID)
     options.write = options.write ?? true
     options.simple = options.simple ?? false
+    options.output = options.output ? path.resolve(options.output) : path.join(options.dir, 'study.effort.data.yaml')
 
     const totalByStage: Stats.Map[] = []
     const diffByStage: Stats.Map[] = []
@@ -30,7 +32,7 @@ export default async function (options: StudyEffortOptions) {
 
     const stages = 5
     for (let stage = 0; stage <= stages; stage++) {
-        std.log('')
+        std.log()
         std.log('Stage', stage)
         const stageDir = 'stage-' + stage
         totalByStage[stage] = {}
@@ -198,14 +200,17 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Total
          */
+        std.log()
         std.log('Stage', stage, 'Total')
         std.log(toTableByStage(totalByStage[stage], options.simple))
         std.log('Stage', stage, 'Total')
         std.log(toLatexByStage(totalByStage[stage]))
+        std.log()
 
         /**
          * Diff
          */
+        std.log()
         std.log('Stage', stage, 'Diff')
         std.log(toTableByStage(diffByStage[stage], options.simple))
         std.log('Stage', stage, 'Diff')
@@ -214,6 +219,7 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Sum
          */
+        std.log()
         std.log('Stage', stage, 'Sum')
         std.log(toTableByStage(sumByObject, options.simple))
         std.log('Stage', stage, 'Sum')
@@ -228,8 +234,8 @@ export default async function (options: StudyEffortOptions) {
     std.log()
     std.log()
     std.log()
-    std.log()
     for (const id of Object.values(options.objects)) {
+        std.log()
         std.log(`${id} ...`)
 
         const data = diffByObject[id]
@@ -265,7 +271,7 @@ export default async function (options: StudyEffortOptions) {
      * Return data
      */
     if (options.write)
-        files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {
+        files.storeYAML(options.output, {
             store: totalByStage,
             diff: diffByStage,
             sum: sumByObject,
