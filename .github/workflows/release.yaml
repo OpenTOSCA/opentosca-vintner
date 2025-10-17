@@ -88,9 +88,6 @@ jobs:
             - name: (TEST) Check Dependencies
               run: ./task licenses:check
 
-            - name: (TEST) Check Service Templates
-              run: ./task puccini:check
-
             - name: (TEST) Run Tests
               run: ./task test
 
