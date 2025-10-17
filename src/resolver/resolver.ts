@@ -1,6 +1,7 @@
-import {PERFORMANCE_RESOLVER_EDM} from '#controller/study/performance'
+import {PERFORMANCE_RESOLVER_EDM, PERFORMANCE_RESOLVER_REPORT} from '#controller/study/performance'
 import Graph from '#graph/graph'
 import Checker from '#resolver/checker'
+import Reporter from '#resolver/reporter'
 import Solver from '#resolver/solver'
 import Transformer, {TransformerOptions} from '#resolver/transformer'
 import Validator from '#resolver/validator'
@@ -33,11 +34,20 @@ export default class Resolver {
         new Checker(this.graph).run()
 
         /**
+         * Reporter
+         */
+        performance.start(PERFORMANCE_RESOLVER_REPORT)
+        const report = new Reporter(this.graph).run()
+        performance.stop(PERFORMANCE_RESOLVER_REPORT)
+
+        /**
          * Transformer
          */
         performance.start(PERFORMANCE_RESOLVER_EDM)
         new Transformer(this.graph, {edmm: options.edmm}).run()
         performance.stop(PERFORMANCE_RESOLVER_EDM)
+
+        return report
     }
 
     optimize(options?: {all: boolean}) {

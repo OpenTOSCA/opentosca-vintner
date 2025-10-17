@@ -415,6 +415,7 @@ template
     .requiredOption('--output <string>', 'path of the output')
     .option('--pretty [boolean]', 'prettify output')
     .option('--edmm [boolean]', 'edmm compatibility, e.g., use node_template.technology')
+    .option('--report [boolean]', 'also generate report')
     .action(
         hae.exit(async options => {
             await Controller.template.resolve(options)

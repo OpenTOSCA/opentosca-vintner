@@ -9,6 +9,7 @@ import Resolver from '#resolver/resolver'
 import {ServiceTemplate} from '#spec/service-template'
 import {InputAssignmentMap} from '#spec/topology-template'
 import {InputAssignmentPreset} from '#spec/variability'
+import {Report} from '#technologies/types'
 import performance from '#utils/performance'
 
 export type ResolveOptions = {
@@ -22,6 +23,7 @@ export type ResolveOptions = {
 export type ResolveResult = {
     inputs: InputAssignmentMap
     template: ServiceTemplate
+    report: Report
 }
 
 export async function run(options: ResolveOptions): Promise<ResolveResult> {
@@ -33,11 +35,12 @@ export async function run(options: ResolveOptions): Promise<ResolveResult> {
     /**
      * Resolver
      */
-    new Resolver(graph, inputs).run({edmm: options.edmm})
+    const report = new Resolver(graph, inputs).run({edmm: options.edmm})
 
     return {
         inputs: inputs,
         template: graph.serviceTemplate,
+        report,
     }
 }
 
