@@ -7,8 +7,8 @@ export default {
         console.error(...data)
     },
     table: (data: any) => {
-        const table = new Table({defaultColumnOptions: {alignment: 'left'}})
-        table.addRows(data, {color: 'green'})
+        const table = new Table({defaultColumnOptions: {alignment: 'left'}, shouldDisableColors: true})
+        table.addRows(data)
         return table.render()
     },
 }

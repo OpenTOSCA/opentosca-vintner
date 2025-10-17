@@ -12,6 +12,7 @@ export type StudyEffortOptions = {
     experimental: boolean
     write?: boolean
     simple?: boolean
+    output?: string
 }
 
 export default async function (options: StudyEffortOptions) {
@@ -21,6 +22,7 @@ export default async function (options: StudyEffortOptions) {
     options.objects = options.objects ?? Object.values(Stats.ID)
     options.write = options.write ?? true
     options.simple = options.simple ?? false
+    options.output = options.output ? path.resolve(options.output) : path.join(options.dir, 'study.effort.data.yaml')
 
     const totalByStage: Stats.Map[] = []
     const diffByStage: Stats.Map[] = []
@@ -30,7 +32,7 @@ export default async function (options: StudyEffortOptions) {
 
     const stages = 5
     for (let stage = 0; stage <= stages; stage++) {
-        std.log('')
+        std.log()
         std.log('Stage', stage)
         const stageDir = 'stage-' + stage
         totalByStage[stage] = {}
@@ -198,14 +200,17 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Total
          */
+        std.log()
         std.log('Stage', stage, 'Total')
         std.log(toTableByStage(totalByStage[stage], options.simple))
         std.log('Stage', stage, 'Total')
         std.log(toLatexByStage(totalByStage[stage]))
+        std.log()
 
         /**
          * Diff
          */
+        std.log()
         std.log('Stage', stage, 'Diff')
         std.log(toTableByStage(diffByStage[stage], options.simple))
         std.log('Stage', stage, 'Diff')
@@ -214,10 +219,12 @@ export default async function (options: StudyEffortOptions) {
         /**
          * Sum
          */
+        const enrichedSum = enrichSumTable(sumByObject)
+        std.log()
         std.log('Stage', stage, 'Sum')
-        std.log(toTableByStage(sumByObject, options.simple))
+        std.log(toTableByStage(enrichedSum, options.simple))
         std.log('Stage', stage, 'Sum')
-        std.log(toLatexByStage(sumByObject))
+        std.log(toLatexByStage(enrichedSum))
     }
 
     std.log()
@@ -228,8 +235,8 @@ export default async function (options: StudyEffortOptions) {
     std.log()
     std.log()
     std.log()
-    std.log()
     for (const id of Object.values(options.objects)) {
+        std.log()
         std.log(`${id} ...`)
 
         const data = diffByObject[id]
@@ -265,7 +272,7 @@ export default async function (options: StudyEffortOptions) {
      * Return data
      */
     if (options.write)
-        files.storeYAML(path.join(options.dir, 'study.effort.data.yaml'), {
+        files.storeYAML(options.output, {
             store: totalByStage,
             diff: diffByStage,
             sum: sumByObject,
@@ -292,4 +299,52 @@ function toLatexByStage(map: Stats.Map): string {
         headers: ['id', 'elements', 'variability', 'files', 'loc'],
         index: false,
     })
+}
+
+function enrichSumTable(data: Stats.Map): Stats.Map {
+    const enriched: Stats.Map = {}
+
+    const vdmm = data[Stats.ID.vdmm]
+
+    for (const other of Object.values(data)) {
+        if (other.id === Stats.ID.vdmm) {
+            enriched[other.id] = vdmm
+            continue
+        }
+
+        enriched[other.id] = {
+            id: other.id,
+            files: prettyBenefit(vdmm.files, other.files),
+            loc: prettyBenefit(vdmm.loc, other.loc),
+
+            elements: prettyBenefit(vdmm.elements, other.elements),
+            inputs: prettyBenefit(vdmm.inputs, other.inputs),
+            outputs: prettyBenefit(vdmm.outputs, other.outputs),
+            components: prettyBenefit(vdmm.components, other.components),
+            properties: prettyBenefit(vdmm.properties, other.properties),
+            relations: prettyBenefit(vdmm.relations, other.relations),
+            artifacts: prettyBenefit(vdmm.artifacts, other.artifacts),
+            technologies: prettyBenefit(vdmm.technologies, other.technologies),
+
+            variability: prettyBenefit(vdmm.variability, other.variability),
+            conditions: prettyBenefit(vdmm.conditions, other.conditions),
+            expressions: prettyBenefit(vdmm.expressions, other.expressions),
+            mappings: prettyBenefit(vdmm.mappings, other.mappings),
+        }
+    }
+
+    return enriched
+}
+
+function prettyBenefit(vdmm: number, other: number): number {
+    return `${other} (${benefit(vdmm, other)})` as unknown as number
+}
+
+function benefit(vdmm: number, other: number): string {
+    if (vdmm === 0 && other === 0) return '0\\%'
+    if (other === 0) return '+INF\\%'
+    const reduction = -1 * Math.floor(((other - vdmm) / other) * 100)
+    const abs = Math.abs(reduction)
+    const sign = reduction > 0 ? '+' : '\\textminus'
+    return `${sign}${abs}\\%`
 }

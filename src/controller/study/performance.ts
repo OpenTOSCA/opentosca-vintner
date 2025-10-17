@@ -26,6 +26,7 @@ export const PERFORMANCE_RESOLVER_READ = 'resolver_read'
 export const PERFORMANCE_RESOLVER_SOLVING = 'resolver_solve'
 export const PERFORMANCE_RESOLVER_SAT = 'resolver_sat'
 export const PERFORMANCE_RESOLVER_EDM = 'resolver_edm'
+export const PERFORMANCE_RESOLVER_REPORT = 'resolver_report'
 
 export type StudyOptions = {
     config?: string
@@ -73,6 +74,7 @@ export type TimeMeasurement = {
     sat?: number
     solve?: number
     edm?: number
+    report?: number
 }
 
 // TODO: performance marks should be unique per run? for server mode ...
@@ -147,6 +149,7 @@ export default async function (options: StudyOptions) {
                     inputs: inputs,
                     enrich: false,
                     pretty: false,
+                    report: true,
                 })
                 performance.stop(PERFORMANCE_RESOLVER_TOTAL)
 
@@ -164,6 +167,7 @@ export default async function (options: StudyOptions) {
                     sat: performance.duration(PERFORMANCE_RESOLVER_SAT),
                     solve: performance.duration(PERFORMANCE_RESOLVER_SOLVING),
                     edm: performance.duration(PERFORMANCE_RESOLVER_EDM),
+                    report: performance.duration(PERFORMANCE_RESOLVER_REPORT),
                 }
                 performance.clear(PERFORMANCE_RESOLVER_TOTAL)
                 performance.clear(PERFORMANCE_RESOLVER_READ)
@@ -171,6 +175,7 @@ export default async function (options: StudyOptions) {
                 performance.clear(PERFORMANCE_RESOLVER_SAT)
                 performance.clear(PERFORMANCE_RESOLVER_SOLVING)
                 performance.clear(PERFORMANCE_RESOLVER_EDM)
+                performance.clear(PERFORMANCE_RESOLVER_REPORT)
 
                 return measurement
             }
@@ -263,6 +268,9 @@ export default async function (options: StudyOptions) {
     std.log('----------------------------------')
     std.log('Resolving EDM')
     std.log(plotResolving(measurements, 'edm'))
+    std.log('----------------------------------')
+    std.log('Resolving Report')
+    std.log(plotResolving(measurements, 'report'))
 
     /**
      * Plot stats
