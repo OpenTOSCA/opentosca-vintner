@@ -342,7 +342,7 @@ function prettyBenefit(vdmm: number, other: number): number {
 
 function benefit(vdmm: number, other: number): string {
     if (vdmm === 0 && other === 0) return '0\\%'
-    if (other === 0) return '+INF'
+    if (other === 0) return '+INF\\%'
     const reduction = -1 * Math.floor(((other - vdmm) / other) * 100)
     const abs = Math.abs(reduction)
     const sign = reduction > 0 ? '+' : '\\textminus'
