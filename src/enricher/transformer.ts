@@ -9,6 +9,7 @@ import * as utils from '#utils'
 
 export type Options = {
     cleanTypes: boolean
+    cleanQualities: boolean
 }
 
 export default class Transformer {
@@ -16,7 +17,7 @@ export default class Transformer {
     private readonly topology: TopologyTemplate
     private readonly options: Options
 
-    constructor(graph: Graph, options: Options = {cleanTypes: true}) {
+    constructor(graph: Graph, options: Options = {cleanTypes: true, cleanQualities: true}) {
         this.graph = graph
         this.topology = graph.serviceTemplate.topology_template || {}
         this.options = options
@@ -98,7 +99,8 @@ export default class Transformer {
         if (check.isUndefined(this.topology.variability)) return
 
         // Delete technology assignment rules
-        delete this.topology.variability.qualities
+
+        if (this.options.cleanQualities) delete this.topology.variability.qualities
 
         // Delete type-specific conditions variability definition
         delete this.topology.variability.type_specific_conditions

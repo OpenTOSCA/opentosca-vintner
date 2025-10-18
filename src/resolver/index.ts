@@ -62,7 +62,7 @@ export async function load(options: ResolveOptions, override?: Partial<ServiceTe
      * Enricher
      */
     // TODO: maybe enriching should not happen here ...
-    if (options.enrich) await new Enricher(options.template, {cleanTypes: false}).run()
+    if (options.enrich) await new Enricher(options.template, {cleanTypes: false, cleanQualities: false}).run()
 
     /**
      * Inputs

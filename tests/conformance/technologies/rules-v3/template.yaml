@@ -36,10 +36,10 @@ topology_template:
               hosting: [another_terraform_host]
 
             - component: database
-              technology: [terraform]
+              technology: terraform
 
             - component: dbms
-              technology: [terraform]
+              technology: terraform
 
             - component: application
               technology: ansible

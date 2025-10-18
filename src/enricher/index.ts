@@ -13,13 +13,14 @@ import performance from '#utils/performance'
 
 export type Options = {
     cleanTypes: boolean
+    cleanQualities: boolean
 }
 
 export default class Enricher {
     private readonly serviceTemplate: ServiceTemplate
     private readonly options: Options
 
-    constructor(serviceTemplate: ServiceTemplate, options: Options = {cleanTypes: true}) {
+    constructor(serviceTemplate: ServiceTemplate, options: Options = {cleanTypes: true, cleanQualities: true}) {
         this.serviceTemplate = serviceTemplate
         this.options = options
     }
@@ -59,6 +60,6 @@ export default class Enricher {
         /**
          * Transformer
          */
-        new Transformer(graph, {cleanTypes: this.options.cleanTypes}).run()
+        new Transformer(graph, {cleanTypes: this.options.cleanTypes, cleanQualities: this.options.cleanQualities}).run()
     }
 }

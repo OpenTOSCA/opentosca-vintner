@@ -15,7 +15,7 @@ describe('minisat', () => {
 
         const template = await new Loader(file).load()
 
-        await new Enricher(template, {cleanTypes: false}).run()
+        await new Enricher(template, {cleanTypes: false, cleanQualities: false}).run()
 
         hotfixBratans(template)
 
