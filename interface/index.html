@@ -14110,7 +14110,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="71:5"><input checked="checked" id="__tabbed_71_1" name="__tabbed_71" type="radio" /><input id="__tabbed_71_2" name="__tabbed_71" type="radio" /><input id="__tabbed_71_3" name="__tabbed_71" type="radio" /><input id="__tabbed_71_4" name="__tabbed_71" type="radio" /><input id="__tabbed_71_5" name="__tabbed_71" type="radio" /><div class="tabbed-labels"><label for="__tabbed_71_1">CLI</label><label for="__tabbed_71_2">cURL</label><label for="__tabbed_71_3">JavaScript</label><label for="__tabbed_71_4">Python</label><label for="__tabbed_71_5">Kotlin</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-312-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-312-1" name="__codelineno-312-1"></a>vintner<span class="w"> </span>study<span class="w"> </span>effort<span class="w"> </span>--dir<span class="w"> </span><span class="si">${</span><span class="nv">DIR</span><span class="si">}</span><span class="w"> </span>--experimental<span class="w"> </span><span class="si">${</span><span class="nv">EXPERIMENTAL</span><span class="si">}</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-312-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-312-1" name="__codelineno-312-1"></a>vintner<span class="w"> </span>study<span class="w"> </span>effort<span class="w"> </span>--dir<span class="w"> </span><span class="si">${</span><span class="nv">DIR</span><span class="si">}</span><span class="w"> </span>--experimental<span class="w"> </span><span class="si">${</span><span class="nv">EXPERIMENTAL</span><span class="si">}</span><span class="w"> </span>--output<span class="w"> </span><span class="si">${</span><span class="nv">OUTPUT</span><span class="si">}</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -14119,7 +14119,7 @@
 <span class="normal"><a href="#__codelineno-313-3">3</a></span>
 <span class="normal"><a href="#__codelineno-313-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-313-1" name="__codelineno-313-1"></a>curl<span class="w"> </span>--header<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-313-2" name="__codelineno-313-2"></a><span class="w">        </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-313-3" name="__codelineno-313-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">&#39;{&quot;dir&quot;: &quot;${DIR}&quot;, &quot;experimental&quot;: &quot;${EXPERIMENTAL}&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-313-3" name="__codelineno-313-3"></a><span class="w">        </span>--data<span class="w"> </span><span class="s1">&#39;{&quot;dir&quot;: &quot;${DIR}&quot;, &quot;experimental&quot;: &quot;${EXPERIMENTAL}&quot;, &quot;output&quot;: &quot;${OUTPUT}&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-313-4" name="__codelineno-313-4"></a><span class="w">        </span><span class="si">${</span><span class="nv">SERVER_ADDRESS</span><span class="si">}</span>/study/effort
 </code></pre></div></td></tr></table></div>
 </div>
@@ -14128,11 +14128,13 @@
 <span class="normal"><a href="#__codelineno-314-2">2</a></span>
 <span class="normal"><a href="#__codelineno-314-3">3</a></span>
 <span class="normal"><a href="#__codelineno-314-4">4</a></span>
-<span class="normal"><a href="#__codelineno-314-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-314-1" name="__codelineno-314-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;axios&quot;</span><span class="p">)</span>
+<span class="normal"><a href="#__codelineno-314-5">5</a></span>
+<span class="normal"><a href="#__codelineno-314-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-314-1" name="__codelineno-314-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;axios&quot;</span><span class="p">)</span>
 <a id="__codelineno-314-2" name="__codelineno-314-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;/study/effort&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-314-3" name="__codelineno-314-3"></a><span class="w">    </span><span class="nx">dir</span><span class="o">:</span><span class="w"> </span><span class="nx">DIR</span><span class="p">,</span>
-<a id="__codelineno-314-4" name="__codelineno-314-4"></a><span class="w">    </span><span class="nx">experimental</span><span class="o">:</span><span class="w"> </span><span class="nx">EXPERIMENTAL</span>
-<a id="__codelineno-314-5" name="__codelineno-314-5"></a><span class="p">})</span>
+<a id="__codelineno-314-4" name="__codelineno-314-4"></a><span class="w">    </span><span class="nx">experimental</span><span class="o">:</span><span class="w"> </span><span class="nx">EXPERIMENTAL</span><span class="p">,</span>
+<a id="__codelineno-314-5" name="__codelineno-314-5"></a><span class="w">    </span><span class="nx">output</span><span class="o">:</span><span class="w"> </span><span class="nx">OUTPUT</span>
+<a id="__codelineno-314-6" name="__codelineno-314-6"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -14140,11 +14142,13 @@
 <span class="normal"><a href="#__codelineno-315-2">2</a></span>
 <span class="normal"><a href="#__codelineno-315-3">3</a></span>
 <span class="normal"><a href="#__codelineno-315-4">4</a></span>
-<span class="normal"><a href="#__codelineno-315-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-315-1" name="__codelineno-315-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="normal"><a href="#__codelineno-315-5">5</a></span>
+<span class="normal"><a href="#__codelineno-315-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-315-1" name="__codelineno-315-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <a id="__codelineno-315-2" name="__codelineno-315-2"></a><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span> <span class="o">+</span> <span class="s2">&quot;/study/effort&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
 <a id="__codelineno-315-3" name="__codelineno-315-3"></a>    <span class="s2">&quot;dir&quot;</span><span class="p">:</span> <span class="n">DIR</span><span class="p">,</span>
-<a id="__codelineno-315-4" name="__codelineno-315-4"></a>    <span class="s2">&quot;experimental&quot;</span><span class="p">:</span> <span class="n">EXPERIMENTAL</span>
-<a id="__codelineno-315-5" name="__codelineno-315-5"></a><span class="p">})</span>
+<a id="__codelineno-315-4" name="__codelineno-315-4"></a>    <span class="s2">&quot;experimental&quot;</span><span class="p">:</span> <span class="n">EXPERIMENTAL</span><span class="p">,</span>
+<a id="__codelineno-315-5" name="__codelineno-315-5"></a>    <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="n">OUTPUT</span>
+<a id="__codelineno-315-6" name="__codelineno-315-6"></a><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -14152,11 +14156,13 @@
 <span class="normal"><a href="#__codelineno-316-2">2</a></span>
 <span class="normal"><a href="#__codelineno-316-3">3</a></span>
 <span class="normal"><a href="#__codelineno-316-4">4</a></span>
-<span class="normal"><a href="#__codelineno-316-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-316-1" name="__codelineno-316-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
+<span class="normal"><a href="#__codelineno-316-5">5</a></span>
+<span class="normal"><a href="#__codelineno-316-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-316-1" name="__codelineno-316-1"></a><span class="k">import</span><span class="w"> </span><span class="nn">khttp.post</span>
 <a id="__codelineno-316-2" name="__codelineno-316-2"></a><span class="n">post</span><span class="p">(</span><span class="n">SERVER_ADDRESS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;/study/effort&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="o">=</span><span class="n">mapOf</span><span class="p">(</span>
 <a id="__codelineno-316-3" name="__codelineno-316-3"></a><span class="w">    </span><span class="s">&quot;dir&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">DIR</span><span class="p">,</span>
-<a id="__codelineno-316-4" name="__codelineno-316-4"></a><span class="w">    </span><span class="s">&quot;experimental&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">EXPERIMENTAL</span>
-<a id="__codelineno-316-5" name="__codelineno-316-5"></a><span class="p">))</span>
+<a id="__codelineno-316-4" name="__codelineno-316-4"></a><span class="w">    </span><span class="s">&quot;experimental&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">EXPERIMENTAL</span><span class="p">,</span>
+<a id="__codelineno-316-5" name="__codelineno-316-5"></a><span class="w">    </span><span class="s">&quot;output&quot;</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">OUTPUT</span>
+<a id="__codelineno-316-6" name="__codelineno-316-6"></a><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
 </div>
 </div>
@@ -14206,6 +14212,12 @@
 <td>false</td>
 <td></td>
 <td>simple log</td>
+</tr>
+<tr>
+<td>output</td>
+<td>true</td>
+<td>string</td>
+<td>path of the output</td>
 </tr>
 </tbody>
 </table>
@@ -15534,6 +15546,12 @@
 <td>false</td>
 <td>boolean</td>
 <td>edmm compatibility, e.g., use node_template.technology</td>
+</tr>
+<tr>
+<td>report</td>
+<td>false</td>
+<td>boolean</td>
+<td>also generate report</td>
 </tr>
 </tbody>
 </table>
@@ -17031,7 +17049,7 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 17, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 18, 2025</span>
       
     
   </small>
