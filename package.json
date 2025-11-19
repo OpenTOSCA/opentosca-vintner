@@ -59,7 +59,7 @@
         "extract-zip": "^2.0.1",
         "friendly-node-cron": "^1.5.0",
         "fs-extra": "^11.2.0",
-        "glob": "^10.4.1",
+        "glob": "^10.5.0",
         "http-errors": "^2.0.0",
         "is-wsl": "^2.2.0",
         "js-ini": "^1.6.0",
