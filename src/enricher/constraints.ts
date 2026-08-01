@@ -259,5 +259,22 @@ export class ConstraintEnricher {
                 }
             }
         }
+
+        /**
+         * Ensure that at least one node is present
+         */
+        if (this.graph.options.constraints.requiredNode) {
+            this.graph.addConstraint({or: this.graph.nodes.map(it => it.id)})
+        }
+
+        /**
+         * Ensure that at least one root node is present
+         */
+        if (this.graph.options.constraints.requiredRoot) {
+            for (const node of this.graph.nodes.filter(it => !it.anchor).filter(it => utils.isEmpty(it.ingoing))) {
+                const antecedent = {and: [node.manualId, {or: node.hostLeafs.map(it => it.id)}]}
+                this.graph.addConstraint({implies: [antecedent, node.id]})
+            }
+        }
     }
 }

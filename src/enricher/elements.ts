@@ -22,6 +22,17 @@ export class ElementEnricher {
          * Enrich technologies
          */
         if (this.graph.options.enricher.technologies) this.enrichTechnologies()
+
+        /**
+         * Enrich anchors
+         */
+        if (this.graph.options.enricher.anchors) {
+            if (!this.graph.nodes.find(it => it.anchor)) {
+                for (const node of this.graph.nodes.filter(it => utils.isEmpty(it.ingoing))) {
+                    node.raw.anchor = true
+                }
+            }
+        }
     }
 
     private getTechnologyCandidates(node: Node) {

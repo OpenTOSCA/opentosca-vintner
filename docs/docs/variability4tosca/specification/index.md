@@ -275,6 +275,7 @@ The following options are used to configure the enricher.
 | enrich_technologies           | false     | Boolean | false   | Enable if technologies are enriched.                                                                                  |
 | enrich_technologies_best_only | false     | Boolean | false   | Enable if only best technoloiges are enriched.                                                                        |
 | enrich_implementations        | false     | Boolean | false   | Enable if implementations are enriched.                                                                               |
+| enrich_anchors                | false     | Boolean | false   | Enable to enrich anchor components.                                                                                   |
 
 
 ### Normalizer Options
@@ -293,26 +294,28 @@ _This is an experimental feature._
 
 The following options are used to configure constraints.
 
-| Keyname                                | Mandatory | Type     | Default | Description                                                      |
-|----------------------------------------|-----------|----------|---------|------------------------------------------------------------------|
-| constraints                            | false     | Boolean  | false   | Enable all constraints.                                          |
-| relation_source_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
-| relation_target_constraint             | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
-| relation_enhanced_implication_mode     | false     | Boolean  | true    | Enable enhanced implied relations.                               |
-| artifact_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
-| property_container_constraint          | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
-| type_container_constraint              | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
-| required_hosting_constraint               | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
-| single_hosting_constraint | false     | Boolean  | false   | Enable the constraint regarding present single hosting.          |
-| required_technology_constraint         | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
-| unique_property_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
-| unique_artifact_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
-| unique_input_constraint                | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
-| unique_output_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
-| unique_relation_constraint             | false     | Boolean  | false   | Enable the constraint regarding unique relation names.           |
-| unique_scenario_constraint           | false     | Boolean  | false   | Enable the constraint regarding unique scenarios.          |
-| required_artifact_constraint           | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
-| required_incoming_relation_constraint  | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
+| Keyname                               | Mandatory | Type     | Default | Description                                                      |
+|---------------------------------------|-----------|----------|---------|------------------------------------------------------------------|
+| constraints                           | false     | Boolean  | false   | Enable all constraints.                                          |
+| relation_source_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation sources.        |
+| relation_target_constraint            | false     | Boolean  | false   | Enable the constraint regarding present relation targets.        |
+| relation_enhanced_implication_mode    | false     | Boolean  | true    | Enable enhanced implied relations.                               |
+| artifact_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of artifacts.  |
+| property_container_constraint         | false     | Boolean  | false   | Enable the constraint regarding present container of properties. |
+| type_container_constraint             | false     | Boolean  | false   | Enable the constraint regarding present containers of types.     |
+| required_hosting_constraint           | false     | Boolean  | false   | Enable the constraint regarding present hosting stack.           |
+| single_hosting_constraint             | false     | Boolean  | false   | Enable the constraint regarding present single hosting.          |
+| required_technology_constraint        | false     | Boolean  | false   | Enable the constraint regarding technologies.                    |
+| unique_property_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique property names.           |
+| unique_artifact_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique artifact names.           |
+| unique_input_constraint               | false     | Boolean  | false   | Enable the constraint regarding unique deployment input names.   |
+| unique_output_constraint              | false     | Boolean  | false   | Enable the constraint regarding unique deployment output names.  |
+| unique_relation_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique relation names.           |
+| unique_scenario_constraint            | false     | Boolean  | false   | Enable the constraint regarding unique scenarios.                |
+| required_artifact_constraint          | false     | Boolean  | false   | Enable the constraint regarding required artifact.               |
+| required_incoming_relation_constraint | false     | Boolean  | false   | Enable the constraint regarding required incoming relation.      |
+| required_node_constraint              | false     | Boolean  | false   | Enable the constraint regarding required node constraint.        |
+| required_root_constraint              | false     | Boolean  | false   | Enable the constraint regarding required root constraint.        |
 
 ### Pruning Modes
 

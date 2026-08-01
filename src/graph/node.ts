@@ -124,6 +124,26 @@ export default class Node extends Element {
         return this._hosts
     }
 
+    private _hostLeafs?: Node[]
+    get hostLeafs(): Node[] {
+        if (check.isUndefined(this._hostLeafs)) {
+            this._hostLeafs = []
+            this.collectHostLeafs(this)
+            this._hostLeafs = [...new Set(this._hostLeafs)]
+        }
+        return this._hostLeafs
+    }
+
+    private collectHostLeafs(node: Node) {
+        assert.isDefined(this._hostLeafs)
+
+        if (!node.hasHost) return this._hostLeafs.push(node)
+
+        for (const host of node.hosts) {
+            this.collectHostLeafs(host)
+        }
+    }
+
     private _hostings?: Relation[]
     get hostings(): Relation[] {
         if (check.isUndefined(this._hostings)) this._hostings = this.outgoing.filter(it => it.isHostedOn())

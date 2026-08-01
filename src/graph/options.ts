@@ -885,6 +885,9 @@ class ConstraintsOptions extends BaseOptions {
     readonly requiredArtifact: boolean
     readonly requiredIncomingRelation: boolean
 
+    readonly requiredNode: boolean
+    readonly requiredRoot: boolean
+
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
 
@@ -980,6 +983,12 @@ class ConstraintsOptions extends BaseOptions {
 
         this.requiredArtifact = this.raw.required_artifact_constraint ?? this.constraints
         assert.isBoolean(this.requiredArtifact)
+
+        this.requiredNode = this.raw.required_node_constraint ?? this.raw.constraints ?? false
+        assert.isBoolean(this.requiredNode)
+
+        this.requiredRoot = this.raw.required_root_constraint ?? this.raw.constraints ?? false
+        assert.isBoolean(this.requiredRoot)
     }
 }
 
@@ -1004,6 +1013,7 @@ export class EnricherOptions extends BaseOptions {
     readonly technologies: boolean
     readonly technologiesBestOnly: boolean
     readonly implementations: boolean
+    readonly anchors: boolean
 
     constructor(serviceTemplate: ServiceTemplate) {
         super(serviceTemplate)
@@ -1028,6 +1038,9 @@ export class EnricherOptions extends BaseOptions {
 
         this.implementations = this.raw.enrich_implementations ?? true
         assert.isBoolean(this.implementations)
+
+        this.anchors = this.raw.enrich_anchors ?? false
+        assert.isBoolean(this.anchors)
     }
 }
 
