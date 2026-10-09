@@ -8280,7 +8280,7 @@ The specification is under active development and is not backwards compatible wi
 <p>A <code>FROM</code> statement is used to denote which templates or instances the query should be executed on. It
 starts with the literal <code>FROM</code>, followed by a space and the keyword <code>templates</code> or <code>instances</code>. Afterward, either a file path needs to be provided, or an asterisk
 can be used to select all service templates or instances, respectively.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>From = &quot;FROM&quot; (&quot;instances&quot; | &quot;templates&quot;) (&quot;/&quot; | &quot;.&quot;) (&quot;*&quot; | filePath)
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>From = "FROM" ("instances" | "templates") ("/" | ".") ("*" | filePath)
 </code></pre></div></td></tr></table></div>
 <h3 id="select">SELECT<a class="headerlink" href="#select" title="Permanent link">&para;</a></h3>
 <p><code>SELECT</code> statements are used to select elements from a template. They are denoted by the keyword
@@ -8289,14 +8289,14 @@ described in detail later. They can start with the special keywords <code>Group<
 name of an element, or a dot to select everything. Afterward, a series of mapping steps, filters,
 or array accesses can be used. Lastly, there is an optional return structure.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
-<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>Select = &quot;SELECT&quot; Path (&quot;,&quot; Path)*
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a>Path = (Group | Policy | Step | &quot;.&quot;) (ArrayAccess | Map | Filter)* ReturnClause?
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>Select = "SELECT" Path ("," Path)*
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
 </code></pre></div></td></tr></table></div>
 <h3 id="match">MATCH<a class="headerlink" href="#match" title="Permanent link">&para;</a></h3>
 <p><code>MATCH</code> statements are used to search for a pattern inside the nodes of a service template. A pattern
 consists of at least one node, along with any number of additional nodes and relationships. 
 The syntax for denoting nodes and relationships is described in detail later.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>Match = &quot;MATCH&quot; Node (Relationship Node)*
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>Match = "MATCH" Node (Relationship Node)*
 </code></pre></div></td></tr></table></div>
 <h3 id="comments">Comments<a class="headerlink" href="#comments" title="Permanent link">&para;</a></h3>
 <p>Single-line comments begin with two forward slashes and extend to the end of the current line.
@@ -8392,8 +8392,8 @@ The following expressions can be used.</p>
 <span class="normal"><a href="#__codelineno-4-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>node_templates.localhost       // Selecting a node directly by name
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a>node_templates.localhost.#     // Selecting attributes of a node
 <a id="__codelineno-4-3" name="__codelineno-4-3"></a>node_templates.*               // Selecting all nodes
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a>GROUP(my-group)                // Selecting all nodes in group &#39;my-group&#39;
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a>POLICY(my-policy)              // Selecting all nodes targeted by policy &#39;my-policy&#39;
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a>GROUP(my-group)                // Selecting all nodes in group 'my-group'
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a>POLICY(my-policy)              // Selecting all nodes targeted by policy 'my-policy'
 </code></pre></div></td></tr></table></div>
 <h3 id="predicates">Predicates<a class="headerlink" href="#predicates" title="Permanent link">&para;</a></h3>
 <p>Elements can be filtered by putting a condition in square brackets. Strings need to be surrounded by single or double quotes,
@@ -8447,9 +8447,9 @@ The following operators can be used.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
 <span class="normal"><a href="#__codelineno-5-2">2</a></span>
 <span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>node_templates.*[type=&#39;textfile&#39;]       // equality
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a>node_templates.*[name!=&#39;localhost&#39;]     // inequality
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a>node_templates.*[name=~&#39;^local&#39;]        // regular expression
+<span class="normal"><a href="#__codelineno-5-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a>node_templates.*[type='textfile']       // equality
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>node_templates.*[name!='localhost']     // inequality
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>node_templates.*[name=~'^local']        // regular expression
 <a id="__codelineno-5-4" name="__codelineno-5-4"></a>node_templates.*[properties]            // existence of field properties
 </code></pre></div></td></tr></table></div>
 <h3 id="array-access">Array Access<a class="headerlink" href="#array-access" title="Permanent link">&para;</a></h3>
@@ -8466,8 +8466,8 @@ return an empty result.</p>
 true if both predicates evaluate to true, <code>OR</code> returns true if at least one of the predicates
 evaluates to true.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>node_templates.*[type=&#39;textfile&#39; AND name=&#39;first&#39;]
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a>node_templates.*[name=&#39;first&#39; OR name=&#39;second&#39;]
+<span class="normal"><a href="#__codelineno-7-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a>node_templates.*[type='textfile' AND name='first']
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a>node_templates.*[name='first' OR name='second']
 </code></pre></div></td></tr></table></div>
 <h3 id="return-structures">Return Structures<a class="headerlink" href="#return-structures" title="Permanent link">&para;</a></h3>
 <p>By default, the output that is returned will always consist of the value at the current context specified
@@ -8484,7 +8484,7 @@ single key-value pair, with the name of each individual node as the key, and the
 as the value.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
 <span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>node_templates.*{&#39;Node Name&#39;: name, &#39;Node Type&#39;: type}  // Using custom key names
+<span class="normal"><a href="#__codelineno-8-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>node_templates.*{'Node Name': name, 'Node Type': type}  // Using custom key names
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a>node_templates.*{name, type}                            // Short form
 <a id="__codelineno-8-3" name="__codelineno-8-3"></a>node_templates.*{name: type}                            // List of node names mapped to type
 </code></pre></div></td></tr></table></div>
@@ -8500,8 +8500,8 @@ given to the node, otherwise they are anonymous and cannot be referenced in the 
 described above. Selecting a node template can be seen as the equivalent of a <code>SELECT</code>
 clause that implicitly starts at the path <code>node_templates.*</code>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
-<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>([type=&#39;textfile&#39;])   // anonymous node template with filter
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a>(n [type=&#39;textfile&#39;]) // node template with variable n and filter
+<span class="normal"><a href="#__codelineno-10-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>([type='textfile'])   // anonymous node template with filter
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>(n [type='textfile']) // node template with variable n and filter
 </code></pre></div></td></tr></table></div>
 <p>Relationships can be specified between nodes. They are connected to nodes via dashes or arrows
 to denote undirected or directed relationships, respectively. An incoming relationship means that
@@ -8519,7 +8519,7 @@ using the same filter syntax. In order to do this, they need to be surrounded by
 in the middle of the arrow.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
 <span class="normal"><a href="#__codelineno-12-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>(a)-{r}-&gt;(b)                // relationship with variable r
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a>(a)-{r [name=&#39;host&#39;]}-&gt;(b)  // relationship with symbolic name host and variable r
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>(a)-{r [name='host']}-&gt;(b)  // relationship with symbolic name host and variable r
 </code></pre></div></td></tr></table></div>
 <p>It is also possible to search for node templates connected over multiple relationships by specifying a
 cardinality. This can be accomplished by putting an asterisk at the end of a relationship, followed
@@ -8598,57 +8598,57 @@ optionally by a number or a range.</p>
 <a id="__codelineno-14-3" name="__codelineno-14-3"></a>  Expression = FromExpression Select
 <a id="__codelineno-14-4" name="__codelineno-14-4"></a>  MatchExpression = FromExpression Match Select
 <a id="__codelineno-14-5" name="__codelineno-14-5"></a>
-<a id="__codelineno-14-6" name="__codelineno-14-6"></a>  FromExpression = &quot;FROM&quot; (&quot;instances&quot; | &quot;templates&quot;) (&quot;/&quot; | &quot;.&quot;) (asterisk | filePath)
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a>  FromExpression = "FROM" ("instances" | "templates") ("/" | ".") (asterisk | filePath)
 <a id="__codelineno-14-7" name="__codelineno-14-7"></a>
-<a id="__codelineno-14-8" name="__codelineno-14-8"></a>  Select = &quot;SELECT&quot; Path (&quot;,&quot; Path)*
-<a id="__codelineno-14-9" name="__codelineno-14-9"></a>  Path = (Group | Policy | Step | &quot;.&quot;) (ArrayAccess | Map | Filter)* ReturnClause?
-<a id="__codelineno-14-10" name="__codelineno-14-10"></a>  Map = &quot;.&quot; Step
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a>  Select = "SELECT" Path ("," Path)*
+<a id="__codelineno-14-9" name="__codelineno-14-9"></a>  Path = (Group | Policy | Step | ".") (ArrayAccess | Map | Filter)* ReturnClause?
+<a id="__codelineno-14-10" name="__codelineno-14-10"></a>  Map = "." Step
 <a id="__codelineno-14-11" name="__codelineno-14-11"></a>  Filter = PredicateExpression
 <a id="__codelineno-14-12" name="__codelineno-14-12"></a>  Step = shortcut? (asterisk | ident)
-<a id="__codelineno-14-13" name="__codelineno-14-13"></a>  ArrayAccess = &quot;[&quot; integer &quot;]&quot;
-<a id="__codelineno-14-14" name="__codelineno-14-14"></a>  ReturnClause = &quot;{&quot; KeyValuePair (&quot;,&quot; KeyValuePair)* &quot;}&quot;
-<a id="__codelineno-14-15" name="__codelineno-14-15"></a>  KeyValuePair = Variable &quot;:&quot; Variable --complex
+<a id="__codelineno-14-13" name="__codelineno-14-13"></a>  ArrayAccess = "[" integer "]"
+<a id="__codelineno-14-14" name="__codelineno-14-14"></a>  ReturnClause = "{" KeyValuePair ("," KeyValuePair)* "}"
+<a id="__codelineno-14-15" name="__codelineno-14-15"></a>  KeyValuePair = Variable ":" Variable --complex
 <a id="__codelineno-14-16" name="__codelineno-14-16"></a>               | Variable              --simple
-<a id="__codelineno-14-17" name="__codelineno-14-17"></a>  Group = &quot;GROUP&quot; &quot;(&quot; ident &quot;)&quot;
-<a id="__codelineno-14-18" name="__codelineno-14-18"></a>  Policy = &quot;POLICY&quot; &quot;(&quot; ident &quot;)&quot;
+<a id="__codelineno-14-17" name="__codelineno-14-17"></a>  Group = "GROUP" "(" ident ")"
+<a id="__codelineno-14-18" name="__codelineno-14-18"></a>  Policy = "POLICY" "(" ident ")"
 <a id="__codelineno-14-19" name="__codelineno-14-19"></a>
-<a id="__codelineno-14-20" name="__codelineno-14-20"></a>  PredicateExpression = &quot;[&quot; Predicate &quot;]&quot;
+<a id="__codelineno-14-20" name="__codelineno-14-20"></a>  PredicateExpression = "[" Predicate "]"
 <a id="__codelineno-14-21" name="__codelineno-14-21"></a>  Predicate = Predicate logic Predicate -- multi
 <a id="__codelineno-14-22" name="__codelineno-14-22"></a>            | Condition -- single
 <a id="__codelineno-14-23" name="__codelineno-14-23"></a>  Condition = negation Value comparison literal -- comparison
 <a id="__codelineno-14-24" name="__codelineno-14-24"></a>            | negation Value -- existence
 <a id="__codelineno-14-25" name="__codelineno-14-25"></a>
-<a id="__codelineno-14-26" name="__codelineno-14-26"></a>  Match = &quot;MATCH&quot; Node (Relationship Node)*
-<a id="__codelineno-14-27" name="__codelineno-14-27"></a>  Node = &quot;(&quot; ident? PredicateExpression? &quot;)&quot;
+<a id="__codelineno-14-26" name="__codelineno-14-26"></a>  Match = "MATCH" Node (Relationship Node)*
+<a id="__codelineno-14-27" name="__codelineno-14-27"></a>  Node = "(" ident? PredicateExpression? ")"
 <a id="__codelineno-14-28" name="__codelineno-14-28"></a>  Relationship = arrowLeft arrowRight --simple
-<a id="__codelineno-14-29" name="__codelineno-14-29"></a>               | arrowLeft &quot;{&quot; ident? PredicateExpression? Cardinality? &quot;}&quot; arrowRight --cond
-<a id="__codelineno-14-30" name="__codelineno-14-30"></a>  Cardinality = asterisk integer &quot;..&quot; integer --range
-<a id="__codelineno-14-31" name="__codelineno-14-31"></a>              | asterisk &quot;..&quot; integer --max
-<a id="__codelineno-14-32" name="__codelineno-14-32"></a>              | asterisk integer &quot;..&quot; --min
+<a id="__codelineno-14-29" name="__codelineno-14-29"></a>               | arrowLeft "{" ident? PredicateExpression? Cardinality? "}" arrowRight --cond
+<a id="__codelineno-14-30" name="__codelineno-14-30"></a>  Cardinality = asterisk integer ".." integer --range
+<a id="__codelineno-14-31" name="__codelineno-14-31"></a>              | asterisk ".." integer --max
+<a id="__codelineno-14-32" name="__codelineno-14-32"></a>              | asterisk integer ".." --min
 <a id="__codelineno-14-33" name="__codelineno-14-33"></a>              | asterisk integer --exact
 <a id="__codelineno-14-34" name="__codelineno-14-34"></a>              | asterisk --unlimited
 <a id="__codelineno-14-35" name="__codelineno-14-35"></a>  Variable = literal | path | ident
 <a id="__codelineno-14-36" name="__codelineno-14-36"></a>  Value = shortcut? (path | literal)
 <a id="__codelineno-14-37" name="__codelineno-14-37"></a>
-<a id="__codelineno-14-38" name="__codelineno-14-38"></a>  negation = &quot;!&quot; | &quot;&quot;
-<a id="__codelineno-14-39" name="__codelineno-14-39"></a>  arrowLeft = &quot;&lt;-&quot; | &quot;-&quot;
-<a id="__codelineno-14-40" name="__codelineno-14-40"></a>  arrowRight = &quot;-&gt;&quot; | &quot;-&quot;
-<a id="__codelineno-14-41" name="__codelineno-14-41"></a>  asterisk = &quot;*&quot;
-<a id="__codelineno-14-42" name="__codelineno-14-42"></a>  comparison = &quot;=~&quot; | &quot;=&quot; | &quot;!=&quot; | &quot;&gt;=&quot; | &quot;&lt;=&quot; | &quot;&gt;&quot; | &quot;&lt;&quot;
-<a id="__codelineno-14-43" name="__codelineno-14-43"></a>  ident = letter (alnum | &quot;_&quot; | &quot;-&quot;)*
-<a id="__codelineno-14-44" name="__codelineno-14-44"></a>  logic = &quot;AND&quot; | &quot;OR&quot;
-<a id="__codelineno-14-45" name="__codelineno-14-45"></a>  path = letter (alnum | &quot;_&quot; | &quot;-&quot; | &quot;.&quot;)*
+<a id="__codelineno-14-38" name="__codelineno-14-38"></a>  negation = "!" | ""
+<a id="__codelineno-14-39" name="__codelineno-14-39"></a>  arrowLeft = "&lt;-" | "-"
+<a id="__codelineno-14-40" name="__codelineno-14-40"></a>  arrowRight = "-&gt;" | "-"
+<a id="__codelineno-14-41" name="__codelineno-14-41"></a>  asterisk = "*"
+<a id="__codelineno-14-42" name="__codelineno-14-42"></a>  comparison = "=~" | "=" | "!=" | "&gt;=" | "&lt;=" | "&gt;" | "&lt;"
+<a id="__codelineno-14-43" name="__codelineno-14-43"></a>  ident = letter (alnum | "_" | "-")*
+<a id="__codelineno-14-44" name="__codelineno-14-44"></a>  logic = "AND" | "OR"
+<a id="__codelineno-14-45" name="__codelineno-14-45"></a>  path = letter (alnum | "_" | "-" | ".")*
 <a id="__codelineno-14-46" name="__codelineno-14-46"></a>  filePath = (~space any)*
 <a id="__codelineno-14-47" name="__codelineno-14-47"></a>  literal = string | float | integer | bool
-<a id="__codelineno-14-48" name="__codelineno-14-48"></a>  bool = &quot;true&quot; | &quot;false&quot; | &quot;TRUE&quot; | &quot;FALSE&quot;
-<a id="__codelineno-14-49" name="__codelineno-14-49"></a>  shortcut = &quot;@&quot; | &quot;#&quot; | &quot;$&quot; | &quot;%&quot;
+<a id="__codelineno-14-48" name="__codelineno-14-48"></a>  bool = "true" | "false" | "TRUE" | "FALSE"
+<a id="__codelineno-14-49" name="__codelineno-14-49"></a>  shortcut = "@" | "#" | "$" | "%"
 <a id="__codelineno-14-50" name="__codelineno-14-50"></a>  string
-<a id="__codelineno-14-51" name="__codelineno-14-51"></a>    = &quot;&#39;&quot; (~&quot;&#39;&quot; any)* &quot;&#39;&quot;
-<a id="__codelineno-14-52" name="__codelineno-14-52"></a>    | &quot;\&quot;&quot; (~&quot;\&quot;&quot; any)* &quot;\&quot;&quot;
+<a id="__codelineno-14-51" name="__codelineno-14-51"></a>    = "'" (~"'" any)* "'"
+<a id="__codelineno-14-52" name="__codelineno-14-52"></a>    | "\"" (~"\"" any)* "\""
 <a id="__codelineno-14-53" name="__codelineno-14-53"></a>  integer = digit+
-<a id="__codelineno-14-54" name="__codelineno-14-54"></a>  float   = digit? &quot;.&quot; digit+
-<a id="__codelineno-14-55" name="__codelineno-14-55"></a>  singleComment = &quot;//&quot; (~&quot;\n&quot; any)*
-<a id="__codelineno-14-56" name="__codelineno-14-56"></a>  multiComment = &quot;/*&quot; (~&quot;*/&quot; any)* &quot;*/&quot;
+<a id="__codelineno-14-54" name="__codelineno-14-54"></a>  float   = digit? "." digit+
+<a id="__codelineno-14-55" name="__codelineno-14-55"></a>  singleComment = "//" (~"\n" any)*
+<a id="__codelineno-14-56" name="__codelineno-14-56"></a>  multiComment = "/*" (~"*/" any)* "*/"
 <a id="__codelineno-14-57" name="__codelineno-14-57"></a>  space := singleComment | multiComment | ...
 <a id="__codelineno-14-58" name="__codelineno-14-58"></a>}
 </code></pre></div></td></tr></table></div>
@@ -8673,7 +8673,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 18, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 9, 2026</span>
       
     
   </small>

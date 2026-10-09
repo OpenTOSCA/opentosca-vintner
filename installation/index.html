@@ -8282,14 +8282,14 @@
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">powershell</span> <span class="n">-Command</span> <span class="s2">&quot;&amp; {Invoke-WebRequest -Uri &#39;https://vintner.opentosca.org/install.ps1&#39; -UseBasicParsing | Invoke-Expression}&quot;</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">powershell</span> <span class="n">-Command</span> <span class="s2">"&amp; {Invoke-WebRequest -Uri 'https://vintner.opentosca.org/install.ps1' -UseBasicParsing | Invoke-Expression}"</span>
 </code></pre></div></td></tr></table></div>
 <p>Install a specific version as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">&quot;https://vintner.opentosca.org/install.ps1&quot;</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">$env:VERSION</span> <span class="p">=</span> <span class="s2">&quot;DESIRED_VERSION&quot;</span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="s2">"https://vintner.opentosca.org/install.ps1"</span> <span class="n">-OutFile</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">$env:VERSION</span> <span class="p">=</span> <span class="s2">"DESIRED_VERSION"</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="p">.\</span><span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nb">Remove-Item</span> <span class="n">install</span><span class="p">.</span><span class="n">ps1</span>
 </code></pre></div></td></tr></table></div>
@@ -8374,7 +8374,7 @@ Vintner is executed as follows.</p>
 </code></pre></div></td></tr></table></div>
 <p>On Linux, we set an alias to directly use Vintner as command in the terminal on the docker host.
 To persist the alias, add the alias, e.g., to <code>~/.bashrc</code> (requires reloading the session).</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">vintner</span><span class="o">=</span><span class="s2">&quot;docker exec -it vintner vintner&quot;</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="nb">alias</span><span class="w"> </span><span class="nv">vintner</span><span class="o">=</span><span class="s2">"docker exec -it vintner vintner"</span>
 </code></pre></div></td></tr></table></div>
 <p>Now, Vintner is available as follows.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>vintner<span class="w"> </span>--version
@@ -8462,12 +8462,12 @@ We recommend to do this manually.</p>
 <span class="normal"><a href="#__codelineno-23-4">4</a></span>
 <span class="normal"><a href="#__codelineno-23-5">5</a></span>
 <span class="normal"><a href="#__codelineno-23-6">6</a></span>
-<span class="normal"><a href="#__codelineno-23-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">&quot;$env:USERPROFILE\bin&quot;</span>
+<span class="normal"><a href="#__codelineno-23-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
 <a id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-Path</span> <span class="nv">$userBin</span><span class="p">))</span> <span class="p">{</span>
-<a id="__codelineno-23-3" name="__codelineno-23-3"></a>    <span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">&quot;$env:USERPROFILE\bin&quot;</span>
-<a id="__codelineno-23-4" name="__codelineno-23-4"></a>    <span class="nv">$userPath</span> <span class="p">=</span> <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
-<a id="__codelineno-23-5" name="__codelineno-23-5"></a>    <span class="nv">$newPath</span> <span class="p">=</span> <span class="s2">&quot;$userPath$userBin;&quot;</span>
-<a id="__codelineno-23-6" name="__codelineno-23-6"></a>    <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="nv">$newPath</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3"></a>    <span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">"$env:USERPROFILE\bin"</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4"></a>    <span class="nv">$userPath</span> <span class="p">=</span> <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5"></a>    <span class="nv">$newPath</span> <span class="p">=</span> <span class="s2">"$userPath$userBin;"</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6"></a>    <span class="no">[System.Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="nv">$newPath</span><span class="p">,</span> <span class="no">[System.EnvironmentVariableTarget]</span><span class="p">::</span><span class="n">User</span><span class="p">)</span>
 <a id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="p">}</span>
 </code></pre></div></td></tr></table></div>
 <p>Next, install vintner.</p>
@@ -8476,7 +8476,7 @@ We recommend to do this manually.</p>
 <span class="normal"><a href="#__codelineno-24-3">3</a></span>
 <span class="normal"><a href="#__codelineno-24-4">4</a></span>
 <span class="normal"><a href="#__codelineno-24-5">5</a></span>
-<span class="normal"><a href="#__codelineno-24-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">&quot;$env:USERPROFILE\bin&quot;</span>
+<span class="normal"><a href="#__codelineno-24-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="nv">$userBin</span> <span class="p">=</span> <span class="s2">"$env:USERPROFILE\bin"</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="nb">Invoke-WebRequest</span> <span class="n">-URI</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">opentosca</span><span class="p">/</span><span class="n">opentosca-vintner</span><span class="p">/</span><span class="n">releases</span><span class="p">/</span><span class="n">download</span><span class="p">/</span><span class="n">latest</span><span class="p">/</span><span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span> <span class="n">-OutFile</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
 <a id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="n">tar</span> <span class="n">-xf</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
 <a id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="nb">Remove-Item</span> <span class="n">vintner-win-x64</span><span class="p">.</span><span class="n">exe</span><span class="p">.</span><span class="n">xz</span>
@@ -8563,10 +8563,10 @@ We assume that <code>vintner-linux-x64</code> is present in the current working 
 <span class="normal"><a href="#__codelineno-29-4">4</a></span>
 <span class="normal"><a href="#__codelineno-29-5">5</a></span>
 <span class="normal"><a href="#__codelineno-29-6">6</a></span>
-<span class="normal"><a href="#__codelineno-29-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>gpg: assuming signed data in &#39;vintner-linux-x64&#39;
+<span class="normal"><a href="#__codelineno-29-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1"></a>gpg: assuming signed data in 'vintner-linux-x64'
 <a id="__codelineno-29-2" name="__codelineno-29-2"></a>gpg: Signature made Sun Oct 23 19:12:56 2022 UTC
 <a id="__codelineno-29-3" name="__codelineno-29-3"></a>gpg:                using RSA key 4BB862B810B792CC072D59DB964183A1485881AD
-<a id="__codelineno-29-4" name="__codelineno-29-4"></a>gpg: Good signature from &quot;vintner-release&quot; [unknown]
+<a id="__codelineno-29-4" name="__codelineno-29-4"></a>gpg: Good signature from "vintner-release" [unknown]
 <a id="__codelineno-29-5" name="__codelineno-29-5"></a>gpg: WARNING: This key is not certified with a trusted signature!
 <a id="__codelineno-29-6" name="__codelineno-29-6"></a>gpg:          There is no indication that the signature belongs to the owner.
 <a id="__codelineno-29-7" name="__codelineno-29-7"></a>Primary key fingerprint: 4BB8 62B8 10B7 92CC 072D  59DB 9641 83A1 4858 81AD
@@ -8690,7 +8690,7 @@ The public key is also available as <a href="https://vintner.opentosca.org/vintn
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 18, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 9, 2026</span>
       
     
   </small>

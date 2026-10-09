@@ -10102,6 +10102,13 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>false</td>
 <td>Enable if implementations are enriched.</td>
 </tr>
+<tr>
+<td>enrich_anchors</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable to enrich anchor components.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="normalizer-options">Normalizer Options<a class="headerlink" href="#normalizer-options" title="Permanent link">&para;</a></h3>
@@ -10272,6 +10279,20 @@ However, pruning of nodes is explicitly set by <code>node_pruning</code>, thus, 
 <td>Boolean</td>
 <td>false</td>
 <td>Enable the constraint regarding required incoming relation.</td>
+</tr>
+<tr>
+<td>required_node_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding required node constraint.</td>
+</tr>
+<tr>
+<td>required_root_constraint</td>
+<td>false</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable the constraint regarding required root constraint.</td>
 </tr>
 </tbody>
 </table>
@@ -12798,7 +12819,7 @@ The identifier of an element is constructed as follows.</p>
 <p>Each element has a display representation that is unique per (variable) service template.
 This display system is required since some conditional elements, such as artifacts, can have non-unique names.
 The display representation of an element is constructed as follows.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-32-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1"></a>&lt;Element Type&gt; &quot;&lt;Element Name&gt;[@&lt;Element Index&gt;]&quot;[ of &lt;Element Container Display&gt;]
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-32-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1"></a>&lt;Element Type&gt; "&lt;Element Name&gt;[@&lt;Element Index&gt;]"[ of &lt;Element Container Display&gt;]
 </code></pre></div></td></tr></table></div>
 <p>Available element types are <code>Node</code>, <code>Relation</code>, <code>Property</code>, <code>Group</code>, <code>Policy</code>, <code>Artifact</code>, <code>Input</code>, <code>Output</code>, <code>Technology</code>, <code>Type</code>, and <code>Import</code>.</p>
 <p>For example, consider the given variable service template.</p>
@@ -12863,7 +12884,7 @@ and assume any risks associated with Your exercise of permissions under this Lic
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 18, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 9, 2026</span>
       
     
   </small>

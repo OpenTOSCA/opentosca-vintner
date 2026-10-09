@@ -8046,9 +8046,9 @@ Inside a <code>SELECT</code> statement, we can enter a path to the data that we 
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="s2">    SELECT .&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="s2">    SELECT ."</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8128,9 +8128,9 @@ The following command returns the contents of the <code>localhost</code> node.</
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="s2">    SELECT node_templates.localhost&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="s2">    SELECT node_templates.localhost"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8151,9 +8151,9 @@ The following command returns the contents of the <code>localhost</code> node.</
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
 <span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="s2">    SELECT node_templates.*&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="s2">    SELECT node_templates.*"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8187,9 +8187,9 @@ The following command will return only nodes of type <code>textfile</code>.</p>
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
 <span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="s2">    SELECT node_templates.*[type=&#39;textfile&#39;]&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="s2">    SELECT node_templates.*[type='textfile']"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8216,9 +8216,9 @@ The following command will return only the <code>content</code> property of the 
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
 <span class="normal"><a href="#__codelineno-10-2">2</a></span>
-<span class="normal"><a href="#__codelineno-10-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="s2">    SELECT node_templates.first{&#39;Type&#39;: type, &#39;Text&#39;: properties.content}&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="s2">    SELECT node_templates.first{'Type': type, 'Text': properties.content}"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8236,9 +8236,9 @@ Note the lack of quotation marks - we are using a value from the template for bo
 <div class="tabbed-block">
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
 <span class="normal"><a href="#__codelineno-12-2">2</a></span>
-<span class="normal"><a href="#__codelineno-12-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="s2">    SELECT node_templates.*{name: type}&quot;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="s2">    SELECT node_templates.*{name: type}"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8257,10 +8257,10 @@ The following statement will return all nodes that have a requirement fulfilled 
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
 <span class="normal"><a href="#__codelineno-14-2">2</a></span>
 <span class="normal"><a href="#__codelineno-14-3">3</a></span>
-<span class="normal"><a href="#__codelineno-14-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;\</span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a>vintner<span class="w"> </span>query<span class="w"> </span>--query<span class="w"> </span><span class="s2">"\</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="s2">    FROM templates.getting-started \</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="s2">    MATCH ([name=&#39;localhost&#39;])&lt;--(node) \</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="s2">    SELECT node&quot;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="s2">    MATCH ([name='localhost'])&lt;--(node) \</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="s2">    SELECT node"</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <div class="tabbed-block">
@@ -8289,7 +8289,7 @@ In a more complex scenario, it would be possible, e.g., to dynamically access th
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 18, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 9, 2026</span>
       
     
   </small>
