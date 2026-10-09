@@ -69,6 +69,7 @@ export type EnricherOptions = {
     enrich_technologies?: boolean
     enrich_technologies_best_only?: boolean
     enrich_implementations?: boolean
+    enrich_anchors?: boolean
 }
 
 export type ConstraintsOptions = {
@@ -94,6 +95,9 @@ export type ConstraintsOptions = {
 
     required_artifact_constraint?: boolean
     required_incoming_relation_constraint?: boolean
+
+    required_node_constraint?: boolean
+    required_root_constraint?: boolean
 }
 
 // In reality, this is "NodeDefaultConditionMode(-NodeDefaultConditionMode)*" tho
