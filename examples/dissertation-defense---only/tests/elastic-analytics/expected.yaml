@@ -1,0 +1,37 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        gcp_credentials:
+            type: string
+            default: secret
+
+    node_templates:
+        shop:
+            type: application
+            requirements:
+                - analytics: analytics
+                - host: gcp
+            #artifacts:
+            #    archive:
+            #        type: zip.archive
+            #        file: files/shop.core.zip
+
+        analytics:
+            type: application
+            properties:
+                mode: 'BASIC'
+            requirements:
+                - host: gcp
+            #artifacts:
+            #    - archive:
+            #          type: zip.archive
+            #          file: files/analytics.zip
+
+        gcp:
+            type: application
+            properties:
+                gcp_credentials: {get_input: gcp_credentials}

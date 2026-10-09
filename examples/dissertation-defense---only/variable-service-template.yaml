@@ -1,0 +1,105 @@
+tosca_definitions_version: tosca_variability_1_0_rc_3
+
+imports:
+    - lib/types.yaml
+
+topology_template:
+    inputs:
+        os_credentials:
+            type: string
+            default: secret
+
+        gcp_credentials:
+            type: string
+            default: secret
+
+    outputs:
+        input:
+            type: string
+            value: {get_property: [virtual_machine, public_address]}
+
+    variability:
+        inputs:
+            free:
+                type: boolean
+                default: true
+
+            elastic:
+                type: boolean
+                default: false
+
+            shop_core:
+                type: boolean
+                default: true
+
+            shop_extended:
+                type: boolean
+                default: false
+
+            analytics:
+                type: boolean
+                default: false
+
+            analytics_advanced:
+                type: boolean
+                default: false
+
+        options:
+            optimization_technologies_mode: weight
+            required_technology_constraint: false
+            checks: false
+            enrich_technologies: false
+            enrich_implementations: false
+
+    node_templates:
+        shop:
+            type: application
+            anchor: true
+            requirements:
+                - analytics:
+                      node: analytics
+                      conditions: {variability_input: analytics}
+                - host: virtual_machine
+                - host: gcp
+            artifacts:
+                - archive:
+                      type: zip.archive
+                      file: files/shop.core.zip
+                      conditions: {variability_input: shop_core}
+                - archive:
+                      type: zip.archive
+                      file: files/shop.extended.zip
+                      conditions: {variability_input: shop_extended}
+
+        analytics:
+            type: application
+            properties:
+                - mode: 'BASIC'
+                - mode:
+                      value: 'ADVANCED'
+                      conditions: {variability_input: analytics_advanced}
+            requirements:
+                - host: gcp
+            artifacts:
+                - archive:
+                      type: zip.archive
+                      file: files/analytics.zip
+
+        virtual_machine:
+            type: application
+            properties:
+                public_address: some_value
+            requirements:
+                - host: openstack
+
+        openstack:
+            conditions: {variability_input: free}
+            type: application
+            properties:
+                - os_credentials: {get_input: os_credentials}
+
+        gcp:
+            conditions: {variability_input: elastic}
+            type: application
+            properties:
+                - gcp_credentials: {get_input: gcp_credentials}
