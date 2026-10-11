@@ -2141,7 +2141,7 @@ node_types:
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -2596,7 +2596,7 @@ node_types:
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -4662,7 +4662,7 @@ node_types:
                                         fi
 
                                         # Extract deployment artifact
-                                        unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
+                                        unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -5085,7 +5085,7 @@ node_types:
                                                     fi
 
                                                     # Extract deployment artifact
-                                                    unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=tar.archive]::extra_opts" | eval | map_value }}
+                                                    unzip /tmp/artifact-recommendation.component -d {{ SELF.application_directory }} {{ ".artifacts::*::[.type=zip.archive]::extra_opts" | eval | map_value }}
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner

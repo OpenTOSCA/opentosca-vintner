@@ -232,7 +232,7 @@ export function SourceArchiveExtraOpts(type: string) {
 export function BashUnarchiveSourceArchiveFile(name: string, type: string) {
     if (type === 'zip.archive') {
         return `unzip /tmp/artifact-${name} -d {{ SELF.application_directory }} ${SourceArchiveExtraOpts(
-            'tar.archive'
+            'zip.archive'
         )}`
     }
 
