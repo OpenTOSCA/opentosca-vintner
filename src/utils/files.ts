@@ -6,7 +6,6 @@ import Queue from '#utils/queue'
 import archiver from 'archiver'
 import axios from 'axios'
 import * as ejs from 'ejs'
-import extract from 'extract-zip'
 import * as fss from 'fs'
 import * as fse from 'fs-extra'
 import * as ini from 'js-ini'
@@ -19,8 +18,11 @@ import path from 'path'
 // TODO: fix import problem
 // @ts-ignore
 import * as prettier from 'prettier'
+import {Readable} from 'stream'
+import {pipeline} from 'stream/promises'
 import * as syncDirectory from 'sync-directory'
 import xml2js from 'xml2js'
+import yauzl from 'yauzl'
 import * as utils from './utils'
 
 export const ASSETS_DIR = path.resolve(__dirname, '..', 'assets')
@@ -419,7 +421,42 @@ export function getName(file: string) {
 }
 
 export async function extractArchive(source: string, target: string) {
-    await extract(source, {dir: target})
+    const root = path.resolve(target)
+    const zip = await new Promise<yauzl.ZipFile>((resolve, reject) =>
+        yauzl.open(path.resolve(source), {lazyEntries: true}, (error, file) => (error ? reject(error) : resolve(file)))
+    )
+
+    try {
+        await new Promise<void>((resolve, reject) => {
+            zip.on('error', reject)
+            zip.on('end', resolve)
+            zip.on('entry', (entry: yauzl.Entry) =>
+                extractArchiveEntry(zip, entry, root).then(() => zip.readEntry(), reject)
+            )
+            zip.readEntry()
+        })
+    } finally {
+        zip.close()
+    }
+}
+
+async function extractArchiveEntry(zip: yauzl.ZipFile, entry: yauzl.Entry, root: string) {
+    const file = path.resolve(root, entry.fileName)
+    if (!file.startsWith(root + path.sep)) throw new Error(`Archive entry "${entry.fileName}" escapes "${root}"`)
+
+    const mode = (entry.externalFileAttributes >>> 16) & 0o177777
+    if ((mode & 0o170000) === 0o120000) throw new Error(`Archive entry "${entry.fileName}" is a symbolic link`)
+
+    if (entry.fileName.endsWith('/')) {
+        await fss.promises.mkdir(file, {recursive: true})
+        return
+    }
+
+    await fss.promises.mkdir(path.dirname(file), {recursive: true})
+    const stream = await new Promise<Readable>((resolve, reject) =>
+        zip.openReadStream(entry, (error, readable) => (error ? reject(error) : resolve(readable)))
+    )
+    await pipeline(stream, fss.createWriteStream(file, {mode: mode & 0o777 || 0o644}))
 }
 
 export async function createArchive(source: string, target: string) {
@@ -458,6 +495,7 @@ export async function download(source: string, target: string = temporaryDirent(
                     resolve(target)
                 })
             })
+            .catch(reject)
     })
 }
 
