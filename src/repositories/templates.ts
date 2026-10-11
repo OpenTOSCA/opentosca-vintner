@@ -76,14 +76,10 @@ export class Template {
 
         if (files.isFile(options.path)) {
             if (check.isDefined(options.key)) {
-                options.signature = options.signature ?? crypto.signatureFile(options.path)
-                const key = new Asset(options.key)
-                if (!key.exists()) throw new Error(`Key "${key.getName()}" does not exist`)
-
-                await Controller.template.verify({
+                await this.verify({
                     template: options.path,
-                    signature: options.signature,
-                    key: key.getFile(),
+                    signature: options.signature ?? crypto.signatureFile(options.path),
+                    key: options.key,
                 })
             }
             await files.extractArchive(options.path, this.getTemplateDirectory())
@@ -91,17 +87,40 @@ export class Template {
         }
 
         if (files.isDirectory(options.path)) {
+            if (check.isDefined(options.key)) throw new Error(`Signature verification is only supported for archives`)
             files.copy(options.path, this.getTemplateDirectory())
             return this
         }
 
         if (files.isLink(options.path)) {
             const file = await files.download(options.path)
+            if (check.isDefined(options.key)) {
+                await this.verify({
+                    template: file,
+                    signature: options.signature ?? crypto.signatureFile(options.path),
+                    key: options.key,
+                })
+            }
             await files.extractArchive(file, this.getTemplateDirectory())
             return this
         }
 
         throw new Error(`Path ${options.path} is neither a file, a directory nor a HTTP(S) link`)
+    }
+
+    /**
+     * Verifies the signature of the template archive.
+     * The signature might be a local file or a HTTP(S) link.
+     */
+    private async verify(options: {template: string; signature: string; key: string}) {
+        const key = new Asset(options.key)
+        if (!key.exists()) throw new Error(`Key "${key.getName()}" does not exist`)
+
+        await Controller.template.verify({
+            template: options.template,
+            signature: files.isLink(options.signature) ? await files.download(options.signature) : options.signature,
+            key: key.getFile(),
+        })
     }
 
     getVariableServiceTemplatePath() {
