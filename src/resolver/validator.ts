@@ -49,15 +49,14 @@ export default class Validator {
      */
     private isTargeted(name: string, inputs: VariabilityInputDefinitionMap) {
         for (const [_, input] of Object.entries(inputs)) {
-            const targets = utils.toList(
-                input.mandatory ??
-                    input.optional ??
-                    input.choices ??
-                    input.alternatives ??
-                    input.requires ??
-                    input.excludes ??
-                    []
-            )
+            const targets = [
+                input.mandatory,
+                input.optional,
+                input.choices,
+                input.alternatives,
+                input.requires,
+                input.excludes,
+            ].flatMap(it => (check.isDefined(it) ? utils.toList(it) : []))
             if (targets.includes(name)) return true
         }
         return false
@@ -103,7 +102,7 @@ export default class Validator {
              * Optional: Any of Optional => Input
              */
             if (check.isDefined(input.optional)) {
-                if (check.isString(input.optional)) input.mandatory = [input.optional]
+                if (check.isString(input.optional)) input.optional = [input.optional]
                 assert.isArray(input.optional)
                 input.optional.forEach(it => assert.isString(it))
 
@@ -156,7 +155,7 @@ export default class Validator {
 
                 for (const right of input.excludes) {
                     assert.isString(right)
-                    const constraint = MiniSat.implies(name, MiniSat.not(input.excludes))
+                    const constraint = MiniSat.implies(name, MiniSat.not(right))
                     this.minisat.require(constraint)
                 }
             }
