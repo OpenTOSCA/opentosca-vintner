@@ -6,7 +6,6 @@ export type AssetsImportOptions = {name?: string; file?: string; content?: strin
 
 export default async function (options: AssetsImportOptions) {
     assert.isDefined(options.name, 'Name not defined')
-    assert.isName(options.name)
 
     const asset = new Asset(options.name)
     if (asset.exists()) throw new Error(`Asset ${options.name} already exists`)

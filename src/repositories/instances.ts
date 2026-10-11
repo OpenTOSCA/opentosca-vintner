@@ -1,4 +1,5 @@
 import {InstanceStateMachine, STATES} from '#/machines/instance'
+import * as assert from '#assert'
 import * as check from '#check'
 import * as files from '#files'
 import Loader from '#graph/loader'
@@ -22,7 +23,10 @@ export type InstanceInfo = {
 
 export class Instances {
     static all() {
-        return files.listDirectories(Instances.getInstancesDirectory()).map(name => new Instance(name))
+        return files
+            .listDirectories(Instances.getInstancesDirectory())
+            .filter(name => check.isName(name))
+            .map(name => new Instance(name))
     }
 
     static getInstancesDirectory() {
@@ -40,6 +44,7 @@ export class Instance {
     readonly machine: InstanceStateMachine
 
     constructor(name: string) {
+        assert.isName(name)
         this._name = name
         this.machine = new InstanceStateMachine(this)
     }

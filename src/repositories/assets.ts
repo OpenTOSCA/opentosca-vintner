@@ -1,3 +1,5 @@
+import * as assert from '#assert'
+import * as check from '#check'
 import * as files from '#files'
 import * as utils from '#utils'
 import env from '#utils/env'
@@ -5,7 +7,10 @@ import path from 'path'
 
 export class Assets {
     static all() {
-        return files.listDirectories(Assets.getDirectory()).map(name => new Asset(name))
+        return files
+            .listDirectories(Assets.getDirectory())
+            .filter(name => check.isName(name))
+            .map(name => new Asset(name))
     }
 
     static getDirectory() {
@@ -21,6 +26,7 @@ export class Asset {
     private readonly _name: string
 
     constructor(name: string) {
+        assert.isName(name)
         this._name = name
     }
 

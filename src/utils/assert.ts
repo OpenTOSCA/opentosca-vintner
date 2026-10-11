@@ -65,7 +65,9 @@ export function isObject(element: unknown, msg?: string): asserts element is obj
 
 export function isName(name: string) {
     if (!check.isName(name))
-        throw new Error(`Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed.`)
+        throw new Error(
+            `Name "${name}" not allowed. Only small characters, numbers, hyphens, and dots are allowed. The first character must be a small character or number.`
+        )
 }
 
 export function isDate(element: Dayjs) {

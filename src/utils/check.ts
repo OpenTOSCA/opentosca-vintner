@@ -42,8 +42,11 @@ export function isDate(element: Dayjs): element is Dayjs {
     return day(element).isValid()
 }
 
+/**
+ * Names are used as directory names, hence, must not start with a dot or hyphen, e.g., ".", "..", or "-rf"
+ */
 export function isName(name: string) {
-    return name.match(/^[a-z-0-9.]+$/)
+    return /^[a-z0-9][a-z0-9.-]*$/.test(name)
 }
 
 export function isLinux() {
