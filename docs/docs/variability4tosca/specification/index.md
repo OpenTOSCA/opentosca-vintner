@@ -343,7 +343,7 @@ optimization_technologies: max
 optimization_technologies_mode: weight-count
 required_technology_constraint: true
 required_hosting_constraint: true
-single_hosting_constraint: true
+single_hosting_constraint: false
 relation_default_implied: true
 unconsumed_input_check: false
 unproduced_output_check: false
@@ -367,7 +367,7 @@ optimization_technologies_mode: weight-count
 optimization_technologies_unique: false
 required_technology_constraint: true
 required_hosting_constraint: true
-single_hosting_constraint: true
+single_hosting_constraint: false
 unique_property_constraint: true
 unique_artifact_constraint: true
 unique_input_constraint: true
