@@ -1,7 +1,7 @@
 import * as check from '#check'
 import * as files from '#files'
 import {Instance} from '#repositories/instances'
-import {Shell} from '#shell'
+import {quoteDirectory, Raw, raw, Shell} from '#shell'
 import std from '#std'
 import * as utils from '#utils'
 import _ from 'lodash'
@@ -31,18 +31,20 @@ export const xOperaWSLDefaults: xOperaWSLConfig = xOperaNativeDefaults
 
 export class xOpera implements Orchestrator {
     private readonly config: xOperaConfig
-    private readonly binary: string
+    private readonly binary: Raw
     private readonly shell: Shell
 
     constructor(config: xOperaConfig) {
         this.config = config
-        this.binary = utils.joinNotNull(
-            [
-                this.config.venv ? `cd ${this.config.dir}` : undefined,
-                this.config.venv ? '. .venv/bin/activate' : undefined,
-                'opera',
-            ],
-            ' && '
+        this.binary = raw(
+            utils.joinNotNull(
+                [
+                    this.config.venv ? `cd ${quoteDirectory(this.config.dir)}` : undefined,
+                    this.config.venv ? '. .venv/bin/activate' : undefined,
+                    'opera',
+                ],
+                ' && '
+            )
         )
         this.shell = new Shell(config.wsl)
     }
@@ -152,7 +154,7 @@ export class xOpera implements Orchestrator {
     }
 
     async debug(instance: Instance, options: OrchestratorDebugOptions) {
-        const command = [this.binary, options.command]
+        const command = [this.binary, raw(options.command)]
         const env = {
             INSTANCE_DATA_DIR: this.shell.resolve(instance.getDataDirectory()),
         }

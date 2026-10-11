@@ -2,7 +2,7 @@ import * as assert from '#assert'
 import * as check from '#check'
 import * as Stats from '#controller/stats/stats'
 import * as files from '#files'
-import {Shell} from '#shell'
+import {raw, Shell} from '#shell'
 import * as utils from '#utils'
 import path from 'path'
 
@@ -128,7 +128,7 @@ export default async function (options: UtilsStatsTerraformOptions) {
 async function hcl2json<T>(file: string) {
     const tmp = files.temporaryDirent()
     const shell = new Shell(false, true)
-    await shell.execute(['hcl2json', file, '>', tmp])
+    await shell.execute(['hcl2json', file, raw('>'), tmp])
     const result = files.loadJSON<T>(tmp)
     files.removeFile(tmp)
     return result

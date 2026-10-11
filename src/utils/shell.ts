@@ -9,6 +9,47 @@ import {ChildProcessByStdio, spawn} from 'child_process'
 import path from 'path'
 import * as stream from 'stream'
 
+/**
+ * Command part which is passed to the shell as it is, i.e., without quoting.
+ * Use this only for trusted shell syntax, e.g., "&&" or ">".
+ */
+export class Raw {
+    readonly value: string
+
+    constructor(value: string) {
+        this.value = value
+    }
+}
+
+export function raw(value: string) {
+    return new Raw(value)
+}
+
+/**
+ * Quotes a command part such that the shell treats it as a single argument
+ */
+export function quote(part: string | Raw) {
+    if (part instanceof Raw) return part.value
+    if (/^[\w/.:=@%+,-]+$/.test(part)) return part
+    return `'${part.replace(/'/g, `'\\''`)}'`
+}
+
+/**
+ * Quotes a directory but keeps a leading "~" for tilde expansion
+ */
+export function quoteDirectory(directory: string) {
+    if (directory === '~') return directory
+    if (directory.startsWith('~/')) return '~/' + quote(directory.slice(2))
+    return quote(directory)
+}
+
+function environment(env: {[key: string]: string}) {
+    return Object.entries(env).map(([key, value]) => {
+        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) throw new Error(`Environment variable "${key}" not allowed`)
+        return raw(`${key}=${quote(value)}`)
+    })
+}
+
 export class Shell {
     private readonly wsl: boolean
     protected readonly silent: boolean
@@ -54,14 +95,9 @@ export class Shell {
 
         assert.isDefined(options.file, 'File is not defined')
         const resolved = this.resolve(options.file)
-        const command = [resolved]
 
-        // Set environment
-        for (const env of Object.entries(options.env)) {
-            command.unshift(`${env[0]}=${env[1]}`)
-        }
-
-        // Use "sudo" (after setting environment)
+        // Set environment and use "sudo" (after setting environment)
+        const command = [...environment(options.env), resolved]
         if (options.sudo) command.unshift('sudo')
 
         // Execute script
@@ -69,15 +105,10 @@ export class Shell {
         await this.execute(command)
     }
 
-    async execute(parts: string[], options: {cwd?: string; env?: {[key: string]: string}} = {}) {
+    async execute(parts: (string | Raw)[], options: {cwd?: string; env?: {[key: string]: string}} = {}) {
         return new Promise((resolve, reject) => {
             // Set environment
-            options.env = options.env ?? {}
-            for (const env of Object.entries(options.env)) {
-                parts.unshift(`${env[0]}=${env[1]}`)
-            }
-
-            const command = parts.join(' ')
+            const command = [...environment(options.env ?? {}), ...parts].map(quote).join(' ')
 
             if (!this.silent) {
                 std.log(

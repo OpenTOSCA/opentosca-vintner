@@ -2,7 +2,7 @@ import * as check from '#check'
 import * as files from '#files'
 import {ASSETS_DIR} from '#files'
 import {Instance} from '#repositories/instances'
-import {Shell} from '#shell'
+import {quoteDirectory, Raw, raw, Shell} from '#shell'
 import * as utils from '#utils'
 import platform from '#utils/platform'
 import path from 'path'
@@ -31,18 +31,20 @@ export const UnfurlWSLDefaults: UnfurlWSLConfig = UnfurlNativeDefaults
 
 export class Unfurl implements Orchestrator {
     private readonly config: UnfurlConfig
-    private readonly binary: string
+    private readonly binary: Raw
     private readonly shell: Shell
 
     constructor(config: UnfurlConfig) {
         this.config = config
-        this.binary = utils.joinNotNull(
-            [
-                this.config.venv ? `cd ${this.config.dir}` : undefined,
-                this.config.venv ? '. .venv/bin/activate' : undefined,
-                'unfurl',
-            ],
-            ' && '
+        this.binary = raw(
+            utils.joinNotNull(
+                [
+                    this.config.venv ? `cd ${quoteDirectory(this.config.dir)}` : undefined,
+                    this.config.venv ? '. .venv/bin/activate' : undefined,
+                    'unfurl',
+                ],
+                ' && '
+            )
         )
         this.shell = new Shell(config.wsl)
     }
@@ -80,7 +82,8 @@ export class Unfurl implements Orchestrator {
             this.binary,
             'deploy',
             '--approve',
-            '--jobexitcode error',
+            '--jobexitcode',
+            'error',
             this.shell.resolve(instance.getDataDirectory()),
         ]
         if (options?.verbose) command.push('--verbose')
@@ -99,7 +102,8 @@ export class Unfurl implements Orchestrator {
             this.binary,
             'undeploy',
             '--approve',
-            '--jobexitcode error',
+            '--jobexitcode',
+            'error',
             this.shell.resolve(instance.getDataDirectory()),
         ]
         if (options?.verbose) command.push('--verbose')
@@ -118,7 +122,8 @@ export class Unfurl implements Orchestrator {
             this.binary,
             'deploy',
             '--approve',
-            '--jobexitcode error',
+            '--jobexitcode',
+            'error',
             this.shell.resolve(instance.getDataDirectory()),
         ]
         if (options?.verbose) command.push('--verbose')
@@ -126,7 +131,7 @@ export class Unfurl implements Orchestrator {
     }
 
     async debug(instance: Instance, options: OrchestratorDebugOptions) {
-        const command = [this.binary, options.command]
+        const command = [this.binary, raw(options.command)]
         const env = {
             INSTANCE_DATA_DIR: this.shell.resolve(instance.getDataDirectory()),
         }
