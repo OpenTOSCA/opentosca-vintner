@@ -525,7 +525,7 @@ resolvers.post(
 resolvers.post(
     '/instances/deploy',
     hae.express(async (req, res, next) => {
-        await Controller.instances.undeploy(req.body)
+        await Controller.instances.deploy(req.body)
         res.json({})
     })
 )
@@ -533,7 +533,7 @@ resolvers.post(
 resolvers.post(
     '/instances/outputs',
     hae.express(async (req, res, next) => {
-        await Controller.instances.undeploy(req.body)
+        await Controller.instances.outputs(req.body)
         res.json({})
     })
 )
@@ -541,7 +541,7 @@ resolvers.post(
 resolvers.post(
     '/instances/continue',
     hae.express(async (req, res, next) => {
-        await Controller.instances.undeploy(req.body)
+        await Controller.instances.continue(req.body)
         res.json({})
     })
 )
