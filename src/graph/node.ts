@@ -46,14 +46,7 @@ export default class Node extends Element {
          * Get weight
          */
         if (check.isDefined(data.raw.weight)) {
-            if (check.isBoolean(data.raw.weight)) {
-                this.weight = data.raw.weight ? 1 : 0
-            }
-
-            assert.isNumber(
-                data.raw.weight,
-                `Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`
-            )
+            assert.isNumber(data.raw.weight, `Weight "${data.raw.weight}" of ${this.display} is not a number`)
 
             if (data.raw.weight < 0)
                 throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
