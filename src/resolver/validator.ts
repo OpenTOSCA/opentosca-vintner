@@ -49,15 +49,14 @@ export default class Validator {
      */
     private isTargeted(name: string, inputs: VariabilityInputDefinitionMap) {
         for (const [_, input] of Object.entries(inputs)) {
-            const targets = utils.toList(
-                input.mandatory ??
-                    input.optional ??
-                    input.choices ??
-                    input.alternatives ??
-                    input.requires ??
-                    input.excludes ??
-                    []
-            )
+            const targets = [
+                input.mandatory,
+                input.optional,
+                input.choices,
+                input.alternatives,
+                input.requires,
+                input.excludes,
+            ].flatMap(it => (check.isDefined(it) ? utils.toList(it) : []))
             if (targets.includes(name)) return true
         }
         return false
