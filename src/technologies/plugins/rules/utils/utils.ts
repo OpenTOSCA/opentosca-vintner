@@ -296,7 +296,7 @@ export function BashCreateApplicationEnvironment(type: NodeType) {
     return `
 cat <<EOF > {{ SELF.application_directory }}/.env
 ${ApplicationEnvironment(type)}
-EOF>>
+EOF
 `.trim()
 }
 
@@ -313,7 +313,7 @@ export function BashCopyManagementOperation(operation: MANAGEMENT_OPERATIONS) {
     return `
 cat <<EOF > {{ SELF.application_directory }}/.vintner/${operation}.sh
 ${ManagementOperation(operation)}
-EOF>>
+EOF
 chmod +x {{ SELF.application_directory }}/.vintner/${operation}.sh
 `.trim()
 }
