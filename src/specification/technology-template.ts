@@ -12,7 +12,7 @@ export type TechnologyTemplateMap = {[technology: string]: TechnologyTemplate}
 
 export type TechnologyTemplate = VariabilityAlternative & {
     default_condition_mode?: TechnologyDefaultConditionMode
-    weight?: number
+    weight?: number | boolean
     assign?: string
     prio?: number
     scenario?: Scenario
