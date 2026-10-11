@@ -332,6 +332,10 @@ export default class Normalizer {
                     type,
                     rule: {component: type, technology: technologyName},
                 })
+
+            // Weight: true is 1 and false is 0
+            if (check.isBoolean(technologyTemplate.weight))
+                technologyTemplate.weight = technologyTemplate.weight ? 1 : 0
         })
 
         // Automatic default alternative
