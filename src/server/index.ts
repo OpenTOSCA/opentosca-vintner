@@ -2,7 +2,6 @@ import * as check from '#check'
 import std from '#std'
 import death from '#utils/death'
 import hae from '#utils/hae'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import express, {ErrorRequestHandler, Express} from 'express'
 import http from 'http'
@@ -20,7 +19,7 @@ class Server {
         this.express = express()
         this.express.use(cors())
         this.express.set('json spaces', 2)
-        this.express.use(bodyParser.json())
+        this.express.use(express.json())
         this.express.get('/favicon.ico', (req, res) => res.status(204))
         this.express.use(resolvers)
 

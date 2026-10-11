@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node18/tsconfig.json",
+    "extends": "@tsconfig/node22/tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
@@ -38,6 +38,7 @@
             "#normative": ["src/normative"]
         },
         "outDir": "build",
+        "types": ["node", "mocha"],
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": false,
         "useUnknownInCatchVariables": false,

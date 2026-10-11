@@ -7,4 +7,4 @@ tags:
 
 This document holds tags used throughout this documentation.
 
-[TAGS]
+<!-- material/tags -->

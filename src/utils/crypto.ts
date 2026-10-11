@@ -2,7 +2,6 @@ import * as check from '#check'
 import {UnexpectedError} from '#utils/error'
 import crypto from 'crypto'
 import * as fs from 'fs'
-import {v4 as uuid4} from 'uuid'
 
 export function checksum(data: {content: string}) {
     const hash = crypto.createHash('sha256')
@@ -60,7 +59,7 @@ export async function verify(data: {
 }
 
 export function generateNonce() {
-    return uuid4()
+    return crypto.randomUUID()
 }
 
 export function generateKey(): Promise<{public: string; private: string}> {
