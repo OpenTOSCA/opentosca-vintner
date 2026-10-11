@@ -150,6 +150,6 @@ export default async function (options: TemplateImplementOptions) {
             continue
         }
 
-        files.storeYAML(file, resultString)
+        files.storeFile(file, resultString)
     }
 }
