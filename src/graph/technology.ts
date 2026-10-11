@@ -42,8 +42,9 @@ export default class Technology extends Element {
         this.conditions = check.isDefined(data.raw.default_alternative) ? [false] : utils.toList(data.raw.conditions)
         this.defaultAlternative = data.raw.default_alternative ?? false
 
-        this.weight = data.raw.weight ?? TECHNOLOGY_DEFAULT_WEIGHT
-        assert.isNumber(this.weight)
+        const weight = data.raw.weight ?? TECHNOLOGY_DEFAULT_WEIGHT
+        this.weight = check.isBoolean(weight) ? (weight ? 1 : 0) : weight
+        assert.isNumber(this.weight, `Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
         if (this.weight < 0) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
         if (this.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
 
