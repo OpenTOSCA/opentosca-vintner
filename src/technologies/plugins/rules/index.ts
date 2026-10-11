@@ -36,13 +36,15 @@ export class TechnologyRulePlugin implements TechnologyPlugin {
         return rules.sort(sortRules)
     }
 
-    private _scenarios: Scenario[] | undefined
+    // Cached per filter (key "" is used if no technology is given)
+    private readonly _scenarios: {[technology: string]: Scenario[]} = {}
 
     getScenarios(filter: {technology?: string} = {}) {
-        if (check.isUndefined(this._scenarios)) {
-            this._scenarios = toScenarios(this.getRules(), filter)
+        const key = filter.technology ?? ''
+        if (check.isUndefined(this._scenarios[key])) {
+            this._scenarios[key] = toScenarios(this.getRules(), filter)
         }
-        return this._scenarios
+        return this._scenarios[key]
     }
 
     backwards() {
