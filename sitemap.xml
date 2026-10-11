@@ -1057,6 +1057,14 @@
          <lastmod>2026-10-11</lastmod>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-inputs-unconsumed-input-check-unproduced-output-check/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-inputs-unconsumed-input-check/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-inputs-unique-input-constraint-sat-other/</loc>
          <lastmod>2026-10-11</lastmod>
     </url>
