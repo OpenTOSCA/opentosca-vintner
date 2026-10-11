@@ -226,7 +226,7 @@ export function indent(value: string, spaces = 4) {
     const padding = ' '.repeat(spaces)
     return value
         .split('\n')
-        .map(line => padding + line)
+        .map(line => (line === '' ? line : padding + line))
         .join('\n')
 }
 

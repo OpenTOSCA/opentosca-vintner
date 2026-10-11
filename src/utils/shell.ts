@@ -97,7 +97,7 @@ export class Shell {
                 child.stdin.end()
             } else {
                 child = spawn(command, {
-                    shell: '/usr/bin/bash',
+                    shell: 'bash',
                     stdio: ['pipe', process.stderr, process.stderr],
                     cwd: options.cwd,
                 })

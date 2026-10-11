@@ -8,8 +8,6 @@ export const insideWorkflow = process.env.CI === 'true'
 export const integrationTestsEnabled = insideWorkflow || process.env.ENABLE_INTEGRATION_TESTS === 'true'
 
 export async function initSetup() {
-    // TODO: set vintner home to not nuke local setups
-
     // Setup filesystem
     await Controller.setup.reset({force: true})
 
