@@ -38,7 +38,6 @@ export default async function (options: InstancesCreateOptions) {
      * Action
      */
     async function action() {
-        assert.isName(instance.getName())
         if (instance.exists()) throw new Error(`Instance ${options.instance} already exists`)
         if (!template.exists()) throw new Error(`Template ${options.instance} does not exist`)
         instance.create(template, utils.now())

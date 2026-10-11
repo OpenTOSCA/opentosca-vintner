@@ -1,3 +1,4 @@
+import * as assert from '#assert'
 import * as check from '#check'
 import Controller from '#controller'
 import * as crypto from '#crypto'
@@ -11,7 +12,10 @@ import path from 'path'
 
 export class Templates {
     static all() {
-        return files.listDirectories(Templates.getTemplatesDirectory()).map(name => new Template(name))
+        return files
+            .listDirectories(Templates.getTemplatesDirectory())
+            .filter(name => check.isName(name))
+            .map(name => new Template(name))
     }
 
     static getTemplatesDirectory() {
@@ -27,6 +31,7 @@ export class Template {
     private readonly _name: string
 
     constructor(name: string) {
+        assert.isName(name)
         this._name = name
     }
 
