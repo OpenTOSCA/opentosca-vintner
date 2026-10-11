@@ -1,6 +1,6 @@
 import * as files from '#files'
 import Loader from '#graph/loader'
-import glob from 'glob'
+import {globSync} from 'glob'
 import os from 'os'
 import path from 'path'
 import {TemplatesRepository} from './index'
@@ -22,7 +22,7 @@ export class WineryTemplatesRepository implements TemplatesRepository {
             .split(path.sep)
             .join(path.posix.sep)
         // use glob to recursively search all files named 'ServiceTemplate.tosca' within the repo
-        return glob.sync(searchPattern).map(v => ({
+        return globSync(searchPattern).map(v => ({
             name: v.split('/')[v.split('/').length - 2],
             template: new Loader(v).raw(),
         }))
