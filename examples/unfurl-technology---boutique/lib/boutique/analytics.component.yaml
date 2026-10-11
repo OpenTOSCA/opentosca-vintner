@@ -1322,7 +1322,7 @@ node_types:
                                         CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                         RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                         DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                        EOF>>
+                                        EOF
 
                                         # Download deployment artifact if required
                                         if [[ "{{ ".artifacts::*::[.type=tar.archive]::file" | eval }}" == http* ]]; then 
@@ -1352,7 +1352,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                         # Execute operation
@@ -1391,7 +1391,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                         # Execute operation
@@ -1413,7 +1413,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                         # Execute operation
@@ -1775,7 +1775,7 @@ node_types:
                                                     CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                                     RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
+                                                    EOF
 
                                                     # Download deployment artifact if required
                                                     if [[ "{{ ".artifacts::*::[.type=tar.archive]::file" | eval }}" == http* ]]; then 
@@ -1804,7 +1804,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                                     # Execute operation
@@ -1841,7 +1841,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                                     # Execute operation
@@ -1862,7 +1862,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                                     # Execute operation
@@ -2152,7 +2152,7 @@ node_types:
                                         CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                         RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                         DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                        EOF>>
+                                        EOF
 
                                         # Download deployment artifact if required
                                         if [[ "{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}" == http* ]]; then 
@@ -2182,7 +2182,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                         # Execute operation
@@ -2221,7 +2221,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                         # Execute operation
@@ -2243,7 +2243,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                         # Execute operation
@@ -2609,7 +2609,7 @@ node_types:
                                                     CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                                     RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
+                                                    EOF
 
                                                     # Download deployment artifact if required
                                                     if [[ "{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}" == http* ]]; then 
@@ -2638,7 +2638,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                                     # Execute operation
@@ -2675,7 +2675,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                                     # Execute operation
@@ -2696,7 +2696,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                                     # Execute operation
@@ -3153,7 +3153,7 @@ node_types:
                                         CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                         RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                         DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                        EOF>>
+                                        EOF
 
                                         # Create vintner directory
                                         mkdir -p {{ SELF.application_directory }}/.vintner
@@ -3164,7 +3164,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                         # Execute operation
@@ -3183,7 +3183,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                         # Execute operation
@@ -3202,7 +3202,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                         # Execute operation
@@ -3221,7 +3221,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                         # Execute operation
@@ -3240,7 +3240,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                         # Execute operation
@@ -3581,7 +3581,7 @@ node_types:
                                                     CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                                     RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
+                                                    EOF
 
                                                     # Create vintner directory
                                                     mkdir -p {{ SELF.application_directory }}/.vintner
@@ -3592,7 +3592,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                                     # Execute operation
@@ -3610,7 +3610,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                                     # Execute operation
@@ -3628,7 +3628,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                                     # Execute operation
@@ -3646,7 +3646,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                                     # Execute operation
@@ -3664,7 +3664,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                                     # Execute operation
@@ -3919,7 +3919,7 @@ node_types:
                                         CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                         RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                         DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                        EOF>>
+                                        EOF
 
                                         # Download deployment artifact if required
                                         if [[ "{{ ".artifacts::*::[.type=tar.archive]::file" | eval }}" == http* ]]; then 
@@ -3938,7 +3938,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                         # Execute operation
@@ -3957,7 +3957,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                         # Execute operation
@@ -3982,7 +3982,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                         # Execute operation
@@ -4007,7 +4007,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                         # Execute operation
@@ -4026,7 +4026,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                         # Execute operation
@@ -4340,7 +4340,7 @@ node_types:
                                                     CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                                     RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
+                                                    EOF
 
                                                     # Download deployment artifact if required
                                                     if [[ "{{ ".artifacts::*::[.type=tar.archive]::file" | eval }}" == http* ]]; then 
@@ -4359,7 +4359,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                                     # Execute operation
@@ -4377,7 +4377,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                                     # Execute operation
@@ -4401,7 +4401,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                                     # Execute operation
@@ -4425,7 +4425,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                                     # Execute operation
@@ -4443,7 +4443,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                                     # Execute operation
@@ -4685,7 +4685,7 @@ node_types:
                                         CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                         RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                         DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                        EOF>>
+                                        EOF
 
                                         # Download deployment artifact if required
                                         if [[ "{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}" == http* ]]; then 
@@ -4704,7 +4704,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                         # Execute operation
@@ -4723,7 +4723,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                         # Execute operation
@@ -4748,7 +4748,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                         # Execute operation
@@ -4773,7 +4773,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                         # Execute operation
@@ -4792,7 +4792,7 @@ node_types:
                                         set -e
 
                                         {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                        EOF>>
+                                        EOF
                                         chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                         # Execute operation
@@ -5110,7 +5110,7 @@ node_types:
                                                     CHECKOUT_SERVICE_ADDR="{{ SELF.CHECKOUT_SERVICE_ADDR }}"
                                                     RECOMMENDATION_SERVICE_ADDR="{{ SELF.RECOMMENDATION_SERVICE_ADDR }}"
                                                     DISABLE_PROFILER="{{ SELF.disable_profiler }}"
-                                                    EOF>>
+                                                    EOF
 
                                                     # Download deployment artifact if required
                                                     if [[ "{{ ".artifacts::*::[.type=zip.archive]::file" | eval }}" == http* ]]; then 
@@ -5129,7 +5129,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_create == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_create) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/create.sh
 
                                                     # Execute operation
@@ -5147,7 +5147,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_configure == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_configure) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/configure.sh
 
                                                     # Execute operation
@@ -5171,7 +5171,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_start == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_start) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/start.sh
 
                                                     # Execute operation
@@ -5195,7 +5195,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_stop == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_stop) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/stop.sh
 
                                                     # Execute operation
@@ -5213,7 +5213,7 @@ node_types:
                                                     set -e
 
                                                     {{ (SELF._management_delete == "VINTNER_MANAGEMENT_OPERATION_UNDEFINED" ) | ternary("echo 0", SELF._management_delete) }}
-                                                    EOF>>
+                                                    EOF
                                                     chmod +x {{ SELF.application_directory }}/.vintner/delete.sh
 
                                                     # Execute operation
