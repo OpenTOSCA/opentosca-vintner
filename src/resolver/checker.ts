@@ -166,7 +166,7 @@ export default class Checker {
         }
 
         // Ensure that inputs are consumed
-        if (this.graph.options.checks.unproducedOutput) {
+        if (this.graph.options.checks.unconsumedInput) {
             for (const input of inputs) {
                 if (input.consumers.every(it => !it.present)) throw new Error(`${input.Display} is not consumed`)
             }
