@@ -1897,7 +1897,27 @@
          <lastmod>2026-10-11</lastmod>
     </url>
     <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-excludes-throw/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-excludes/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
          <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-no-constraints/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-optional-throw/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-optional/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://vintner.opentosca.org/variability4tosca/tests/test-variability-inputs-requires-excludes-targeted/</loc>
          <lastmod>2026-10-11</lastmod>
     </url>
     <url>
