@@ -46,15 +46,15 @@ export default class Node extends Element {
          * Get weight
          */
         if (check.isDefined(data.raw.weight)) {
-            const weight = check.isBoolean(data.raw.weight) ? (data.raw.weight ? 1 : 0) : data.raw.weight
+            // Note, boolean weights are normalized to numbers by the normalizer
+            assert.isNumber(data.raw.weight, `Weight "${data.raw.weight}" of ${this.display} is not a number`)
 
-            assert.isNumber(weight, `Weight "${data.raw.weight}" of ${this.display} is not a number or boolean`)
+            if (data.raw.weight < 0)
+                throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
 
-            if (weight < 0) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is a negative number`)
+            if (data.raw.weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
 
-            if (weight > 1) throw new Error(`Weight "${data.raw.weight}" of ${this.display} is larger than 1`)
-
-            this.weight = weight
+            this.weight = data.raw.weight
         }
     }
 

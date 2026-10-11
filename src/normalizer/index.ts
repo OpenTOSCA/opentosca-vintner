@@ -232,6 +232,9 @@ export default class Normalizer {
             // Technologies
             this.normalizeTechnologies(template)
 
+            // Weight: true is 1 and false is 0
+            if (check.isBoolean(template.weight)) template.weight = template.weight ? 1 : 0
+
             list.push(map)
             return list
         }, [])
