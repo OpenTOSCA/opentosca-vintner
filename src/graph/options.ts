@@ -952,7 +952,7 @@ class ConstraintsOptions extends BaseOptions {
             this.requiredHosting = this.raw.required_hosting_constraint ?? this.raw.constraints ?? true
             assert.isBoolean(this.requiredHosting)
 
-            this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints ?? true
+            this.singleHosting = this.raw.single_hosting_constraint ?? this.constraints
             assert.isBoolean(this.singleHosting)
 
             this.requiredTechnology = this.raw.required_technology_constraint ?? this.raw.constraints ?? true
