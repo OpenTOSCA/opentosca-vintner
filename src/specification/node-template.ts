@@ -24,7 +24,7 @@ export type NodeTemplate = {
     requirements?: VariabilityPointList<RequirementAssignment>
     capabilities?: CapabilityAssignmentMap
     artifacts?: VariabilityPointObject<ArtifactDefinition>
-    weight?: number
+    weight?: number | boolean
     // deprecated
     persistent?: boolean
     anchor?: boolean

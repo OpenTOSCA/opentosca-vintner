@@ -1,0 +1,1 @@
+description: Boolean weights are mapped to 1 (true) and 0 (false), hence, the minimal topology contains the node with weight "false".

@@ -1,0 +1,19 @@
+tosca_definitions_version: tosca_variability_1_0
+
+topology_template:
+    variability:
+        options:
+            type_default_condition: true
+            optimization_topology: min
+            optimization_topology_unique: true
+
+    node_templates:
+        heavy:
+            type: heavy
+            weight: true
+            conditions: {not: {node_presence: light}}
+
+        light:
+            type: light
+            weight: false
+            conditions: {not: {node_presence: heavy}}
